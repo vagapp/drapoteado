@@ -1,0 +1,118 @@
+page-reporte-modal {
+
+    .ReportGrid{
+        display: -webkit-flex;
+        display: flex;
+        flex-flow: column;
+        border-bottom: 1px solid lightgray;
+    }
+
+    .reporte_header{
+        display: -webkit-flex;
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+    }
+    
+    .reporte_header .modalPage_header, .reporte_header .modalPage_toolbar{
+        width: 50% !important;
+        min-width: 700px !important;
+    }
+
+    .reporte_header .modalPage_toolbar{
+        text-align: right !important;
+        display: -webkit-box;
+        display: flex;
+        flex-flow: space-around;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        
+    }
+    
+
+    
+    .ReporteRow_head{
+        border-top: 1px solid gray;
+        background-color: #F6F6F6;
+        padding: 15px 30px 15px 30px;
+    }
+    
+    .ReporteRow_head .rbh_span{
+        margin:15px;
+    }
+
+    .ReporteRow_Services{
+        padding: 30px;
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+        width: 100%;
+        border-bottom: 1px solid lightgray;
+    }
+
+    .ReporteRow_Services .rpr_service{
+        width: 25%;
+        min-width: 200px;
+    }
+
+    .rbh_span_toolbar .generalButton{
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 0;
+    }
+
+    .ReporteRow_Totals{
+        padding: 0px 30px 0px 30px;
+        display: -webkit-flex;
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .ReporteRow_Totals div{
+        padding: 30px 0px 30px 0px;
+
+    }
+
+    .rrt_left{
+        width: 20%;
+        min-width: 300px; 
+        border-right: 1px solid lightgray;
+    }
+
+    .rrt_right{
+        margin-left: 30px;
+    }
+
+    .resumen_totales{
+        display:-webkit-flex;
+        display:flex;
+        justify-content: center;
+        flex-flow: row;
+        flex-wrap: wrap;
+        padding:5px;
+        border-bottom: 1px solid lightgray;
+    }
+
+    .resumen_totales .totalespan{
+        margin: 20px;
+    }
+
+    .Totales_Ingreso, .Totales_Caja{
+        display:-webkit-flex;
+        display:flex;
+        justify-content: center;
+        flex-flow: row;
+        flex-wrap: wrap;
+        padding:5px;
+        border-bottom: 1px solid lightgray;
+    }
+
+    .toin_span{
+        margin: 20px; 
+    }
+
+
+
+}

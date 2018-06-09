@@ -1,0 +1,175 @@
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { UserDataProvider, servicios } from '../../providers/user-data/user-data';
+import { Citas } from '../../providers/user-data/citas';
+
+/**
+ * Generated class for the ReporteModalPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+
+@IonicPage()
+@Component({
+  selector: 'page-reporte-modal',
+  templateUrl: 'reporte-modal.html',
+})
+export class ReporteModalPage {
+  reportDateFrom:string;
+  reportDateTo:string;
+  doctoresFilter:number[];
+  cajaFilter:number[];
+  recepcionFilter:number[];
+  citas:Citas[];
+  servicios: servicios[];
+
+  noCitas:number;
+  noShow:number;
+  noCancel:number;
+  duracionTotalMs:number;
+  duracionTotalStr:string;
+  
+  total:number;
+  totalefectivo:number;
+	totalTarjeta:number;
+	totalCheques:number;
+	totalcuentas:number;
+  totalAdeudo:number;
+  costoTotal:number;
+
+  caja:number;
+	cajaefectivo:number;
+	cajaTarjeta:number;
+	cajaCheques:number;
+	cajacuentas:number;
+  cajaAdeudo:number;
+    
+
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public userData: UserDataProvider,
+  ) {
+    this.reset();
+    this.setDefaultTodayFilter();
+    this.loadReport();
+  }
+
+  ionViewDidLoad() {
+    
+  }
+
+  reset(){
+    this.citas = new Array();
+    this.duracionTotalMs = 0;
+    this.duracionTotalStr="00:00";
+    this.noCitas = 0;
+    this.noShow = 0;
+    this.noCancel = 0;
+    this.total = 0;
+    this.totalefectivo = 0;
+    this.totalTarjeta = 0;
+    this.totalCheques = 0;
+    this.totalcuentas = 0;
+    this.totalAdeudo = 0;
+    this.costoTotal = 0;
+    this.caja = 0;
+    this.cajaefectivo = 0;
+    this.cajaTarjeta = 0;
+    this.cajaCheques = 0;
+    this.cajacuentas = 0;
+    this.cajaAdeudo = 0;
+  }
+
+  setDefaultTodayFilter(){
+    //let date = new Date();
+    //this.reportDateFrom = (date.getMonth()+1)+"/"+date.getDate()+"/"+date.getFullYear();
+    this.reportDateFrom = "5/14/2018";
+    this.reportDateTo = this.reportDateFrom;
+    this.doctoresFilter = this.userData.getDoctoresSimpleArray();
+    this.cajaFilter = new Array();
+    this.recepcionFilter = new Array();
+  }
+
+  loadReport(){
+    console.log("cargando citas de reporte");
+    let dis = this;
+    this.userData.getCitas(this.reportDateFrom,this.reportDateTo,this.doctoresFilter,this.cajaFilter,this.recepcionFilter).subscribe(
+      (val)=>{
+        let aux_results = Object.keys(val).map(function (key) { return val[key]; });
+        aux_results.forEach(function(element){
+          let aux_cita = new Citas();
+          aux_cita.setData(element);
+          if(aux_cita.checkState(UserDataProvider.STATE_CANCELADA)){
+            dis.noCancel++;
+            dis.noCitas++;
+          }
+          if(aux_cita.checkState(UserDataProvider.STATE_FINALIZADA)){
+            dis.noShow++;
+            dis.noCitas++;
+            if(aux_cita.duracionMs) dis.duracionTotalMs += aux_cita.duracionMs;
+            if(aux_cita.costo) dis.costoTotal = aux_cita.costo;
+            if(aux_cita.cobro)dis.total+= aux_cita.cobro;
+            if(aux_cita.cobroEfectivo)dis.totalefectivo+=aux_cita.cobroEfectivo;
+	          if(aux_cita.cobroTarjeta)dis.totalTarjeta+=aux_cita.cobroTarjeta;
+            if(aux_cita.cobroCheque)dis.totalCheques+=aux_cita.cobroCheque;
+	          dis.totalcuentas+=100;
+            dis.totalAdeudo+=100;
+            dis.citas.push(aux_cita);
+          }
+       });
+       this.setduracionTotalStr();
+       this.cargarServicios();
+       console.log("citas obtenidas por el reporte",this.citas);
+      },
+       response => {
+         console.log(response.error.text);
+         console.log("POST call in error", response);
+         this.userData.logout();
+       }
+      );
+  }
+
+  cargarServicios(){
+    console.log("cargando servicios");
+    this.servicios = new Array();
+    let aux_arr = new Array();
+    aux_arr[0]= this.userData.getDoctoresSimpleArray()
+    this.userData.getServicios(aux_arr).subscribe(
+      (val)=>{
+         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
+         let dis  = this;
+         aux_results.forEach(function(element) {
+          dis.servicios.push(element);          
+        });
+        dis.citas.forEach(cita => {
+          cita.setAddedServices(dis.servicios);
+        });
+        
+      },
+        response => {
+          console.log("POST call in error", response);
+        },
+        () => {
+          console.log("citas w services added",this.citas);
+          console.log("loadedServices",this.servicios);
+      });
+       
+      }
+
+      setduracionTotalStr(){
+        console.log("totalmscount",this.duracionTotalMs);
+        let dsm_seconds = this.duracionTotalMs / 1000;
+        let dsm_minutes = dsm_seconds / 60;
+        dsm_seconds = dsm_seconds - (dsm_minutes * 60);
+        let dsm_seconds_str = ""+dsm_seconds;
+        let dsm_minutes_str = ""+dsm_minutes;
+        while(dsm_minutes_str.length < 2) dsm_minutes_str = "0"+dsm_minutes_str;
+        while(dsm_seconds_str.length < 2) dsm_seconds_str = "0"+dsm_seconds_str;
+        this.duracionTotalStr = dsm_minutes_str+":"+dsm_seconds_str;
+        console.log(this.duracionTotalStr);
+      }
+
+
+}

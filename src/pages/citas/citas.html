@@ -1,0 +1,51 @@
+<!--
+  Generated template for the CitasPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<header></header>
+<ion-content padding>
+  <div class="modalPage_header">
+    <div class="modalPage_logo"><img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/></div>
+    <div class="modalPage_title">
+      <span class="spanBlock midFont"><b>Citas Programadas</b></span>
+      <span class="spanBlock midSubFont">Revisa y administra tus citas</span>
+    </div>
+      <button class="bgColorSecondary generalButton floatRight" (click)="openNuevaCita()">Agregar Nueva</button>
+  </div>
+  <div class="Citas_grid result_wrapper">
+    <table class="results_table">
+        <thead>
+            <tr>
+                <th>no</th>
+                <th>Paciente</th>
+                <th *ngIf="userData.subAccount">Doctor</th>
+                <th *ngIf="userData.subAccount">Tipo de Servicio</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th></th>
+             </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cita of this.userData.citas">
+                <td>01</td>
+                <td>{{cita.data.field_paciente.und[0].value}}</td>
+                <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}} / cita.doctor_alias</td>
+                <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">General</td>
+                <td><span class="fontSecondary">{{cita.data.field_date.und[0].value.date}}</span> - <span class="fontHigh">{{cita.data.field_date.und[0].value.time}}</span></td>
+                <td>{{cita.getStateString()}}</td>
+                <td class="toolCol">
+                  <ion-icon name="menu" (click)="editCita(cita.data)" *ngIf="this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION]);"></ion-icon>
+                  <button  *ngIf="cita.checkState(userData.STATE_PENDIENTE) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION])" (click)="updateStatePop(cita, this.userData.STATE_CONFIRMADA)"  class="bgColorSecondary generalButton tableButton">Confirmar</button>
+                  <button  *ngIf="cita.checkState(userData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Activar</button>
+                  <button  *ngIf="cita.checkState(userData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Ver Progreso</button>
+                  <button  *ngIf="cita.checkState(userData.STATE_COBRO) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR, this.userData.TIPO_CAJA, this.userData.TIPO_CAJAYRECEPCION])" (click)="openProgreso(cita);" class="bgColorSecondary generalButton tableButton">Cobrar</button>
+                  <button class="bgColorPrimary generalButton tableButton">Eliminar</button>
+                </td>
+             </tr>
+        </tbody>
+    </table>
+  </div>
+<footer></footer>
+</ion-content>

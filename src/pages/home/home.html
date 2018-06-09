@@ -1,18 +1,198 @@
-<ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Home</ion-title>
-  </ion-navbar>
-</ion-header>
+<header></header>
+<ion-content class="contentdown">
+    
+  <div class="section_grid">
+        <div class="section">
+                <span class="spanBlock bigFont"><span class="fontPrimary"><b>Bienvenido</b></span> <span class="">{{this.userData.userData.name}} </span><span class="rol_title" *ngIf="userData.rol !== 'doctor'" >({{this.userData.rol}})</span></span>
+                <span class="spanBlock bigSubFont">En que podemos ayudarte hoy:</span>
+        </div>
+        <div class="section" >
+                        <div class="section_content">
+                              <span class="spanBlock bigSubFont">Citas Programadas para Hoy: <span class="fontPrimary">{{userData.citasParaHoy}}</span></span>
+                        </div>
+                       <div class="section_button">
+                        <button class="generalButton bgColorSecondary" (click)="openReportModal()">Resumen</button>
+                        </div>
+        </div>
 
-<ion-content padding>
-  <h3>Ionic Menu Starter</h3>
+                <!-- Citas activas -->
+              <div class="section" *ngFor="let citaActiva of this.userData.citasActivas">
+                        <span class="spanBlock bigSubFont fontHigh">Cita Activa</span>
+                        <span *ngIf="citaActiva" class="spanBlock bigSubFont"><b>{{citaActiva.data.field_paciente.und[0].value}}</b></span>
+              <div class="section_button">
+              <button *ngIf="citaActiva && citaActiva.checkState(userData.STATE_ACTIVA)"  class="generalButton bgColorHigh" (click)="iniciarCita(citaActiva)">Ver Progreso</button>
+              </div>
+              </div>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+              
+                <div class="section" *ngFor="let nextCita of this.userData.nextCitas">
+                          <span class="spanBlock bigSubFont">Proxima Cita</span>
+                          <span *ngIf="nextCita" class="spanBlock bigSubFont"><b>{{nextCita.data.field_paciente.und[0].value}}</b></span>
+                          <span *ngIf="!nextCita" class="spanBlock bigSubFont"><b>No hay citas proximas</b></span>
+                          <span *ngIf="nextCita && ( nextCita.checkState(userData.STATE_PENDIENTE) || nextCita.checkState(userData.STATE_CONFIRMADA))"  class="spanBlock bigSubFont">Inicia en <span class="fontPrimary">{{nextCita.untilText}}</span></span>
+                          <span *ngIf="nextCita && nextCita.checkState(userData.STATE_ACTIVA)"  class="spanBlock bigSubFont">Cita Activa</span>
+                         
+                <div class="section_button">
+                <button *ngIf="nextCita && nextCita.checkState(userData.STATE_PENDIENTE)"  class="generalButton bgColorSecondary" (click)="confirmarCita(nextCita)">Confirmar</button>
+                <button *ngIf="nextCita && nextCita.checkState(userData.STATE_CONFIRMADA)"  class="generalButton bgColorSecondary" (click)="iniciarCita(nextCita)">Iniciar Consulta</button>
+                <button *ngIf="nextCita && nextCita.checkState(userData.STATE_ACTIVA)"  class="generalButton bgColorSecondary" (click)="iniciarCita(nextCita)">Ver Progreso</button>
+                </div>
+                </div>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+                <div class="section" *ngFor="let cita of userData.citasCloser" >
+                                <span class="spanBlock bigSubFont">Cita Cercana</span>
+                                <span *ngIf="cita" class="spanBlock bigSubFont"><b>{{cita.data.field_paciente.und[0].value}}</b></span>
+                                <span *ngIf="!cita" class="spanBlock bigSubFont"><b>No hay citas proximas</b></span>
+                                <span *ngIf="cita && cita.checkState(userData.STATE_PENDIENTE)"  class="spanBlock bigSubFont">Inicia en <span class="fontPrimary">{{cita.untilText}}</span></span>
+                                <span *ngIf="cita && cita.checkState(userData.STATE_ACTIVA)"  class="spanBlock bigSubFont">Cita Activa</span>
+                               
+                      <div class="section_button">
+                                <button *ngIf="cita && cita.checkState(userData.STATE_PENDIENTE)"  class="generalButton bgColorSecondary" (click)="confirmarCita(cita)">Confirmar</button>
+                                <button *ngIf="cita && cita.checkState(userData.STATE_CONFIRMADA)"  class="generalButton bgColorSecondary" (click)="iniciarCita(cita)">Iniciar Consulta</button>
+                      <button *ngIf="cita && cita.checkState(userData.STATE_ACTIVA)"  class="generalButton bgColorSecondary" (click)="iniciarCita(cita)">Ver Progreso</button>
+                      </div>
+                </div>
+
+                <div class="section" *ngIf="userData.showReception" >
+                <div class="section_content button_section_content" (click)="openNuevaCita()">
+                                                <div class="section_icon button_icon">
+                                                        <img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/>
+                                                </div>
+                                                <div class="section_text midFont">
+                                                  <span class="spanBlock midMainFont">Nueva Cita</span>
+                                                </div>
+                                                </div>
+                </div>
+
+                <div class="section" *ngIf="userData.showReception">
+                                <div class="section_dates">
+                                      <span class="spanBlock midFont">Nombre del Doctor</span>
+                                      <span class="spanBlock midFont"><b>Nombre del Paciente</b></span>
+                                      <span class="spanBlock midFont description">Description</span>
+                                </div>
+                                <div class="section_button">
+                                <button class="generalButton bgColorSecondary" (click)="openReportModal()">Notificar</button>
+                                <button class="generalButton bgColorPrimary" (click)="openReportModal()">Cancelar</button>
+                                </div>
+                </div>
+
+                <div class="section" *ngIf="userData.showReception">
+                        <div class="section_dates">
+                                <span class="spanBlock midFont">Nombre del Doctor</span>
+                                <span class="spanBlock midFont"><b>Nombre del Paciente</b></span>
+                                <span class="spanBlock midFont description">Description</span>
+                        </div>
+                        <div class="section_button">
+                                <button class="generalButton bgColorHigh" (click)="openProgreso()">Cobrar</button>
+                        </div>
+                </div>
+
+  <div class="section" *ngIf="userData.rol === 'doctor'">
+      <div class="section_content">
+    <div class="section_icon">
+            <img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/>
+    </div>
+    <div class="section_text midFont">
+      <span class="spanBlock midMainFont">Alta de Servicios y Costos</span>
+      <span class="spanBlock midSubFont">Administra, agrega o elimina servicios para
+          tus consultas. </span>
+    </div>
+    </div>
+    <div class="section_button">
+    <button class="generalButton bgColorPrimary" (click)="openServicios()">Ir</button>
+    </div>
+  </div>
+
+
+  <div class="section"  *ngIf="userData.rol === 'doctor'">
+        <div class="section_content">
+      <div class="section_icon">
+              <img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/>
+      </div>
+      <div class="section_text midFont">
+        <span class="spanBlock midMainFont">Alta de Usuarios</span>
+        <span class="spanBlock midSubFont">Da de alta a los usuarios que utilizarán
+                esta aplicación en recepción, caja y recepción&caja
+                si la misma persona. </span>
+        
+      </div>
+      </div>
+      <div class="section_button">
+      <button class="generalButton bgColorPrimary" (click)="openUsuarios()">Ir</button>
+      </div>
+    </div>
+
+    
+
+    <div class="section">
+            <div class="section_content">
+          <div class="section_icon">
+                  <img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/>
+          </div>
+          <div class="section_text midFont">
+            <span class="spanBlock midMainFont">Citas Programada</span>
+            <span class="spanBlock midSubFont">Revisa y administra tus citas programadas. </span>
+            
+          </div>
+          </div>
+          <div class="section_button">
+          <button class="generalButton bgColorPrimary" (click)="openCitas()">Ir</button>
+          </div>
+        </div>
+
+        
+
+
+        <div class="section">
+                <div class="section_content">
+              <div class="section_icon">
+                      <img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/>
+              </div>
+              <div class="section_text midFont">
+                <span class="spanBlock midMainFont">Reportes</span>
+                <span class="spanBlock midSubFont">Genera y exporta el reporte de tus
+                        actividades. </span>
+                
+              </div>
+              </div>
+              <div class="section_button">
+              <button class="generalButton bgColorPrimary" (click)="openReportes()">Ir</button>
+              </div>
+            </div>
+
+            
+
+            <div class="section"  *ngIf="userData.rol === 'doctor'">
+                    <div class="section_content">
+                  <div class="section_icon">
+                          <img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/>
+                  </div>
+                  <div class="section_text midFont">
+                    <span class="spanBlock midMainFont">Mis Datos</span>
+                    <span class="spanBlock midSubFont">Configura tus datos personales y métodos
+                            de pago. </span>
+                    
+                  </div>
+                  </div>
+                  <div class="section_button">
+                  <button class="generalButton bgColorPrimary">Ir</button>
+                  </div>
+                </div>
+
+                <div class="section"  *ngIf="userData.rol === 'doctor'">
+                        <div class="section_content">
+                      <div class="section_icon">
+                              <img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/>
+                      </div>
+                      <div class="section_text midFont">
+                        <span class="spanBlock midMainFont">Facturación</span>
+                        <span class="spanBlock midSubFont">Configura tus datos personales y métodos de pago.</span>
+                      </div>
+                      </div>
+                      <div class="section_button">
+                      <button class="generalButton bgColorPrimary" (click)="openFacturacion()">Ir</button>
+                      </div>
+                    </div>
+    </div>
 </ion-content>
+

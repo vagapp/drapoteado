@@ -1,0 +1,39 @@
+<!--
+  Generated template for the ServiciosPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<header></header>
+<ion-content padding class="drap_content">
+  <div class="modalPage_header">
+    <div class="modalPage_logo"><img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/></div>
+    <div class="modalPage_title">
+      <span class="spanBlock midFont"><b>Alta de Servicios y Costos</b></span>
+      <span class="spanBlock midSubFont">Administra, agrega o elimina servicios para tus consultas. </span>
+    </div>
+      <button class="bgColorSecondary generalButton floatRight" (click)="openNuevoservicio()">Agregar Nuevo</button>
+  </div>
+  <div class="Citas_grid result_wrapper">
+    <table class="results_table">
+        <thead>
+            <tr>
+                <th>Servicio</th>
+                <th>Costo</th>
+                <th></th>
+             </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let servicio of this.servicios">
+                <td><b>{{servicio.Nid}}</b> {{servicio.title}}</td>
+                <td class="fontSecondary">${{servicio.costo}}</td>
+                <td class="toolCol">
+                  <ion-icon name="menu" class="icon_drapo" (click)="editServicio(servicio)"></ion-icon>
+                  <button class="bgColorPrimary generalButton tableButton" (click)="deleteServicio(servicio)">Eliminar</button>
+                </td>
+             </tr>
+        </tbody>
+    </table>
+  </div>
+<footer></footer>
+</ion-content>

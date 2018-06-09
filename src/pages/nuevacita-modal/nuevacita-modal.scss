@@ -1,0 +1,33 @@
+page-nuevacita-modal {
+   
+
+
+
+ 
+
+    .nuevaCita_form{
+        padding: 50px;
+        margin-right: 5%;
+        margin-left: 5%;
+    }
+
+    .ncf_buttonsection{
+        text-align: center;
+    }
+
+    .nuevacita_dates{
+        display: -webkit-flex;
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+ 
+    .nuevacita_dates .ModalInput_input{
+        width: 50%;
+        padding: 20px;
+    }
+
+
+}

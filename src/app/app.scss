@@ -14,3 +14,456 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+ion-content{
+    color:#4D4D4D !important;
+}
+
+
+.main_logo{
+    max-width: 200px;
+    max-height: 200px;
+    height: auto;
+    width: auto;
+}
+.contentdown{
+    margin-top: 80px;
+}
+
+.lightFont{
+    font-weight: 200;   
+}
+
+.bigFont{
+    font-size: 4.5rem;
+}
+
+.bigSubFont{
+    font-size: 3rem;
+    font-weight: 100;
+}
+
+.midFont{
+    font-size: 2.2rem;
+}
+
+.largeFont{
+    font-size: 2.6rem;
+}
+
+.midMainFont{
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+
+.midSubFont{
+    font-size: 1.9rem;
+    color: gray;
+    font-weight: 100;
+}
+
+.section_grid{
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.fontPrimary{
+    color: #C1272D;
+}
+
+.fontSecondary{
+    color: #94BA3A;
+}
+
+.fontHigh{
+    color: #6DB5DE;
+}
+
+
+
+
+.section{
+    position:relative;
+    display: inline-flex;
+    height: 260px;
+    min-width: 500px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+}
+
+.section_content{
+    display: flex;
+}
+
+.section_text{
+    display: inline-block;
+    text-align: left;
+    justify-content: center;
+    align-items: center;
+    -webkit-flex: 2;  /* Safari 6.1+ */
+    -ms-flex: 2;  /* IE 10 */    
+    flex: 2;
+}
+
+.section_icon{
+    -webkit-flex: 1;  /* Safari 6.1+ */
+    -ms-flex: 1;  /* IE 10 */    
+    flex: 1;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width:140px;
+}
+
+.section_icon img{
+    background-color: black;
+    height: 100px;
+    width: 100px;
+}
+
+.button_section_content{
+    cursor: pointer;
+}
+
+.section_dates{
+    margin-bottom: 30px;
+}
+
+.section_dates .spanBlock{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.button_section_content .section_text{
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.button_icon img{
+    background-color: black;
+    height: 75px !important;
+    width: 75px !important;
+}
+
+.spanBlock{
+    display: block;
+    width: 100%;
+}
+
+.centered{
+    text-align: center;
+}
+
+.bgColorPrimary{
+    background-color: #C1272D;
+    color: white;
+}
+
+.bgColorSecondary{
+    background-color:#94BA3A;
+    color: white;
+}
+
+.bgColorHigh{
+    background-color:#6DB5DE;
+    color: white;
+}
+
+.section_button{
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+}
+
+.ModalInput_input{
+    font-size: 2rem !important;
+}
+
+.ModalInput_input b{
+    display: block;
+    padding-left: 20px;
+}
+
+.icon_drapo{
+    cursor: pointer;
+}
+
+.ModalInput_input input{
+    width: 100%;
+    margin: 15px;
+    background: #F2F2F2;
+    padding: 15px;
+    border:none;
+    border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
+border: 0px solid #000000;
+} 
+
+.ModalInput_input select{
+    width: 100%;
+    margin: 15px;
+    background: #F2F2F2;
+    padding: 15px;
+    border:none;
+    border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
+border: 0px solid #000000;
+}
+
+.titleFont{
+    font-size: 8rem;
+}
+
+.titleFontSpan{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:white;
+}
+
+.generalButton{
+    padding: 15px 30px;
+    min-width: 100px;
+    margin: 10px;
+    margin-top: 25px;
+    font-size: 2.2rem;
+    border-radius: 13px 13px 13px 13px;
+    -moz-border-radius: 13px 13px 13px 13px;
+    -webkit-border-radius: 13px 13px 13px 13px;
+    border: 0px solid #000000;
+}
+
+.tableButton{
+    font-size: 1.8rem;
+    padding: 10px !important;
+}
+
+.largeButton{
+    padding: 15px 50px;
+}
+
+.spanLink{
+    color: white;
+    cursor: pointer;
+}
+
+.blueLink{
+    color:#53B3E1;
+}
+
+.nuevoservicioModal .modal-wrapper{
+    height: 60% !important;
+    top: 20% !important;
+}
+
+.modalPage_header{
+    display: -webkit-flex;
+    display: flex;
+    flex: row;
+    flex-wrap: wrap;
+    padding:30px;
+    align-items: center;
+}
+
+.modalPage_toolbar{
+    display: -webkit-flex;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+    width: 40%;
+    min-width: 800px;
+}
+
+.modalPage_toolbar_long{
+    width: 60%;
+    min-width: 800px;
+}
+
+.floatRight{
+    position: absolute;
+    right: 50px;
+}
+
+.modalPage_logo{
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+    background-color: black;
+}
+
+.dateright{
+    text-align: center;
+}
+
+.modalPage_header div{
+    margin: 7px; 
+}
+
+.smallModal .modalPage_logo{
+    height: 70px;
+    width: 70px;
+}
+
+
+.results_table{
+    width: 100%;
+    font-size: 2rem;
+}
+
+.result_wrapper{
+    padding: 20px;
+}
+.results_table th{
+    text-align: left;
+}
+
+.results_table thead{
+    background-color: #F6F6F6;
+}
+
+.results_table th, .results_table td{
+    padding-left: 20px;
+    height: 60px;
+}
+
+.toolCol{
+    text-align: right;
+}
+
+.modalPage_header{
+    border-bottom: 1px solid lightgray;
+    
+}
+
+.smallModal .modal-wrapper{
+    width: 60%;
+    height: 80%;
+    min-width: 1000px;
+    left: 20%;
+    top: 10%;
+}
+
+.modalContent{
+    padding: 30px;
+}
+
+.CitaDetail_header{
+    border-bottom: 1px solid lightgrey;
+}
+
+.CitaDetailSections{
+    display: -webkit-flex;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+}
+
+.CitaDetailSection{
+    display:inline-block;
+    width: 49%;
+    min-width: 360px;
+    padding: 30px;
+    position: relative;
+}
+
+.drap_content{
+    margin-top: 50px;
+}
+
+.borderRight{
+    border-right: 1px solid lightgray;
+}
+
+.midAlign{
+    text-align: center;
+}
+
+.CitaDetailSection b{
+    margin-bottom:10px;
+}
+
+.CitaDetailSections{
+    border-bottom: 1px solid lightgrey;
+}
+
+.CitaDetail_services .registerInput{
+    margin: 20px;
+}
+
+.CitaDetail_services select{
+    width: 90% !important;
+}
+
+.registerInput .input{
+    background:#F2F2F2;
+}
+
+.registerInput .label {
+    color:#4D4D4D;
+    font-weight: 600;
+}
+
+.registerInput{
+    font-size: 2rem !important;
+    text-align: right;
+}
+.registerInput input{
+   
+    margin: 15px;
+    background: #F2F2F2;
+    padding: 15px;
+    border:none;
+    border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
+border: 0px solid #000000;
+} 
+.registerInput b{
+    color: #4D4D4D;
+    font-weight: 600;
+}
+
+.registerInput .input_select{
+    width: 80%;
+    padding: 15px;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border: 0px solid #000000;
+}
+
+
+@media screen and (min-width: 600px) {
+    .section{
+        width: 30%;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .bigModal .modal-wrapper{
+        min-width: 1000px;
+        width: 80%;
+        height: 80%;
+        left: 10%;
+        top: 10%;
+    }
+}
+
+
+.ModalInput_input .radio_input .input, .ModalInput_input .radio_input b{
+display:inline;
+}
+
+
+

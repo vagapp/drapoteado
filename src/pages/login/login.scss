@@ -1,0 +1,59 @@
+page-login {
+    .loginContent{
+        background: url(https://vagapp.mx/themes/nortec/img/background-pink.svg);
+        background-position: center;
+        background-size: cover;
+        display: flex;
+        flex-flow: column;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .login_form{
+        width: 80%;
+        text-align: center;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+    }
+
+    .login_form ion-list{
+        width: 80%;
+        margin:0;
+    }
+
+    .login_form .spanLink{
+        text-align: right;
+        width: 80%;
+    }
+
+    .loginInput{
+        min-width: 300px;
+        margin-top: 20px;
+        padding: 10px;
+        padding-right: 30px;
+        padding-left: 30px;
+        border-radius: 24px 24px 24px 24px;
+        -moz-border-radius: 24px 24px 24px 24px;
+        -webkit-border-radius: 24px 24px 24px 24px;
+        border: 0px solid #000000;
+    }
+
+   .modal-wrapper{
+        width: 20000px !important;
+    }
+
+    .modal-wrapper{
+        width: 20000px !important;
+    }
+   
+        @media screen and (min-width: 1000px) {
+            .modal-wrapper{
+                min-width: 1000px;
+            }
+        }
+    
+
+}

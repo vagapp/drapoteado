@@ -1,0 +1,39 @@
+<!--
+  Generated template for the UsuariosPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<header></header>
+<ion-content padding class="drap_content">
+  <div class="modalPage_header">
+    <div class="modalPage_logo"><img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/></div>
+    <div class="modalPage_title">
+      <span class="spanBlock midFont"><b>Alta de Usuarios</b></span>
+      <span class="spanBlock midSubFont">Da de alta a los usuarios que utilizarán esta aplicación en recepción, caja y Recepción & Caja si la misma persona)</span>
+    </div>
+      <button class="bgColorSecondary generalButton floatRight" (click)="openNuevousuario()">Agregar Nuevo</button>
+  </div>
+  <div class="Citas_grid result_wrapper">
+    <table class="results_table">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Tipo de Usuario</th>
+                <th></th>
+             </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of this.usersd">
+                <td><b>01</b>{{user.name}}</td>
+                <td class="fontHight">{{this.userData.getTipoUsuarioString(user.field_tipo_de_usuario.und[0])}}</td>
+                <td class="toolCol">
+                  <ion-icon (click)="editUsuario(user)" name="menu"></ion-icon>
+                  <button (click)="deleteUsuario(user)" class="bgColorPrimary generalButton tableButton">Eliminar</button>
+                </td>
+             </tr>
+        </tbody>
+    </table>
+  </div>
+<footer></footer>
+</ion-content>

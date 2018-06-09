@@ -1,0 +1,15 @@
+<!-- Generated template for the HeaderComponent component -->
+<div >
+  <ion-header >
+    <ion-navbar color="primary">
+      <ion-title><ion-icon name="menu"></ion-icon> <span class="lightFont">DR</span>AP</ion-title>
+      <ion-buttons right class="menu_buttons" *ngIf="this.userData.userData.name !== null">
+      <button ion-button>Alertas <span>10</span></button>
+      <button ion-button>{{this.userData.userData.name}} <ion-icon name="menu"></ion-icon></button>
+      </ion-buttons>
+      <button ion-button end menuToggle>
+            <ion-icon name="menu"></ion-icon>
+          </button>
+    </ion-navbar>
+  </ion-header>
+</div>

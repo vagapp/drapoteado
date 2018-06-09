@@ -1,0 +1,96 @@
+<!--
+  Generated template for the ProgresocitaModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content padding>
+    <div class="modalPage_header">
+        <div class="modalPage_logo"><img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/></div>
+        <div class="modalPage_title">
+          <span class="spanBlock midFont"><b>Progreso de la Cita</b></span>
+        </div>
+        <div class="dateright floatRight">
+           <span class="spanBlock"><span class=" fontSecondary midFont">{{activeCita.data.field_date.und[0].value.date}}</span><span class="fontHigh midFont">{{activeCita.data.field_date.und[0].value.time}}</span></span>
+          </div>
+      </div>
+      <div class="CitaDetail_Content">
+        <div class="CitaDetail_header">
+            <table class="results_table">
+                <thead>
+                    <tr>
+                        <th>no</th>
+                        <th>Paciente</th>
+                        <th *ngIf="!(userData.checkUserPermission([userData.TIPO_DOCTOR]))">Doctor</th>
+                     </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01</td>
+                        <td>{{this.activeCita.data.field_paciente.und[0].value}}</td>
+                        <td *ngIf="!(userData.checkUserPermission([userData.TIPO_DOCTOR]))">{{this.activeCita.data.doctor_name}}/ {{this.activeCita.data.doctor_alias}}</td>
+                     </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="CitaDetailSections">
+          <div class="CitaDetailSection borderRight">
+            <b class="midFont">Servicios</b>
+            
+              <div class="CitaDetail_services" >
+                    <div class="progreso_service" *ngFor="let added of activeCita.addedServices">
+                    <b>{{added.Nid}}</b>
+                    {{added.title}} - <span class="fontSecondary">${{added.costo}}</span>
+                  </div>
+                  </div>
+                  <div class="CitaDetail_services" *ngIf="this.activeCita.checkState(userData.STATE_ACTIVA) && userData.checkUserPermission([userData.TIPO_DOCTOR])">
+                    <div class="registerInput">
+                      <select [(ngModel)]="selectedService"  name="selectedService" class="input_select input" >
+                          <option selected disabled value="0">Select</option>
+                          <option *ngFor="let service of this.available_services" value="{{service.Nid}}">{{service.title}}</option>
+                        </select>
+                      </div>
+                      <div class="midAlign">
+                            <div class="register_button_section">
+                            <button (click)="addService()"  class="bgColorSecondary generalButton">Agregar</button>
+                            </div>
+                          </div>
+                  </div>
+
+            </div>
+            <div class="CitaDetailSection midFont">
+              <b>Costo de la Cita</b>
+              <span *ngIf="this.activeCita.checkState(this.userData.STATE_ACTIVA)" class="floatRight"><span class="fontSecondary">${{this.costoCita}}</span> <ion-icon name="menu"></ion-icon> </span>
+              <span *ngIf="this.activeCita.checkState(this.userData.STATE_COBRO)" class="floatRight"><span class="fontSecondary">${{this.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
+              costo
+              <div *ngIf="this.activeCita.checkState(userData.STATE_COBRO) && userData.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA])">
+              <b>Formas de Pago</b>
+              <div class="ModalInput_input">
+                    Efectivo
+                    <input [(ngModel)]="this.cobroEfectivo" type="text"/>
+                </div>
+                <div class="ModalInput_input">
+                    Tarjeta
+                    <input [(ngModel)]="this.cobroTarjeta" type="text"/>
+                </div>
+                <div class="ModalInput_input"> 
+                    Cheque
+                    <input [(ngModel)]="this.cobroCheque" type="text"/>
+                </div>
+                <span *ngIf="this.CantidadRestante > 0" class="spanBlock midAlign fontPrimary">
+                    faltan ${{this.CantidadRestante}}
+                </span>
+                <span *ngIf="this.CantidadRestante < 0" class="spanBlock midAlign fontHigh">
+                        Restan ${{(this.CantidadRestante * -1)}}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="midAlign">
+            <div class="register_button_section">
+            <button  *ngIf="this.activeCita.checkState(userData.STATE_ACTIVA)"  (click)="finalizar()" class="bgColorPrimary generalButton">Finalizar Cita</button>
+            <button  *ngIf="this.activeCita.checkState(userData.STATE_COBRO)" (click)="pagada()" class="bgColorPrimary generalButton">Marcar como pagada</button>
+            </div>
+          </div>
+      </div>
+</ion-content>

@@ -1,0 +1,164 @@
+page-register-modal {
+    
+    .register_contet_head{
+        border-bottom: 1px solid #a0a0a059;
+        text-align: center;
+        padding: 55px 10px;
+        margin-bottom: 10px;
+    }
+
+
+    .rfsFlex{
+        display: -webkit-flex;
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+        padding: 20px 10% 20px 10%;
+    }
+
+    .radio_group_wrapper{
+        text-align: center;
+    }
+
+    .radio_group{
+        color: black;
+        display: -webkit-flex;
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+ 
+    .rfsFlex .registerInput,.rfsFlex .ubication_det{
+        width: 50%;
+    }
+
+    .ubication_det{
+        display: -webkit-inline-flex;
+        display: inline-flex;
+        justify-content: right;
+        align-items: center;
+    }
+
+    .rfsFlex .registerInput input{
+        width: 55%;
+        text-align: left;
+    }
+
+    
+    .rfsFlex .registerInput .input_select{
+        width: 55% !important;
+        padding: 15px;
+        margin: 15px;
+    }
+
+    
+    .ubdet_input{
+        text-align:  right;
+    }
+    
+    .ubdet_input input{
+        width: 40%;
+        margin-left: 10px;
+        background:#F2F2F2;
+        padding: 15px;
+        border-radius: 10px 10px 10px 10px;
+        -moz-border-radius: 10px 10px 10px 10px;
+        -webkit-border-radius: 10px 10px 10px 10px;
+        border: 0px solid #000000;
+    }
+
+    .ubdet_input b{
+        font-size: 2rem !important;
+        color: #4D4D4D;
+        font-weight: 600;
+    }
+
+
+
+ 
+
+    .register_group .registerInput input{
+        width: 75%;
+        text-align: left;
+    }
+
+   
+
+    .list-md .item-block .item-inner{
+        border:none;
+        margin: 20px;
+    }
+
+    
+
+    .group_sect{
+        width: 100%;
+        font-size: 2rem !important;
+        display: -webkit-flex;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }
+    
+    .group_sect_element{
+        width: 30%;
+        min-width: 200px;
+    }
+
+    .register_form_section{
+        border-bottom: 1px solid #a0a0a059;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+   
+
+    .plan_twosided{
+        display: -webkit-flex;
+        display: flex;
+        flex-wrap: wrap;
+        flex-flow: row;
+    }
+
+    .plan_twosided .reg_plan_section{
+        width: 49%;
+        min-width: 800px;
+        text-align: center;
+    }
+
+    .plan_span{
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    .rps_lefFont{
+        text-align: left !important;
+    }
+
+    .register_button_section{
+        text-align: center;
+    }
+
+    .register_button_section a{
+        float: right;
+    }
+
+    .register_last{
+        padding: 50px;
+    }
+
+    .bluelink_wrapper{
+        width:100%;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    .blueLink{
+        float: right;
+        cursor: pointer;
+    }
+
+    
+
+}

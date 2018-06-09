@@ -1,6 +1,6 @@
 {
   "name": "DRAP",
-  "app_id": "",
+  "app_id": "9567080c",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
