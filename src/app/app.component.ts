@@ -66,9 +66,15 @@ export class MyApp {
               console.log(val);
               this.userData.setUserData(val);
               this.userData.cargarPlanes();
-              this.rootPage = HomePage;
+              this.userData.cargarSubscription();
+              let moveinterval = setInterval(() =>{
+                if(this.userData.subscription !== null){
+                this.rootPage = HomePage;
+                this.splashScreen.hide();
+                clearInterval(moveinterval);
+              }
+              },500);
             },  () => {
-              this.splashScreen.hide();
           });
           }else{
             console.log("not logged in.");

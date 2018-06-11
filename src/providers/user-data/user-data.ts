@@ -5,6 +5,7 @@ import { Citas } from './citas';
 import { Doctores } from './doctores';
 import {Subject} from 'rxjs/Subject';
 import { planes } from './planes';
+import { subscriptions } from './subscriptions';
 
 
 /*
@@ -29,7 +30,13 @@ export class UserDataProvider {
   citasCobrar:Citas[]; // citas por cobrar
   citasActivas:Citas[];  //cita activa
   citasParaHoy:number = 0; //numero de citas pendientes para hoy.
+
+  /**
+   * datos de planes y suscripciones
+  */
+  subscription:subscriptions = null;
   planes:planes[]; //planes que ofrece drap.
+  are_planes_set:boolean = false;
 
   doctores:Doctores[];
  
@@ -224,13 +231,12 @@ export class UserDataProvider {
 
   threadloop(){
     console.log("loopMs",this.loopMs);
-    setInterval(() => { 
+    setInterval(() => {
       if(this.userData.uid && this.userData.uid != 0){
       this.cargarCitas();
     }
    }, this.loopMs);
   }
-
   login(username:string, password:string){
     let body = JSON.stringify({"username":username,"password":password});
     console.log(body);
@@ -692,16 +698,54 @@ export class UserDataProvider {
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
         let dis = this;
         aux_results.forEach(function(element){
-          if(!this.checkForPlanUpdate(element)){
+          if(!dis.checkForPlanUpdate(element)){
           let aux_plan = new planes();
           aux_plan.setData(element);
           dis.planes.push(aux_plan);
           }
         });
         console.log(this.planes);
+        this.are_planes_set = true;
       });
     return observer;
   }
+
+  cargarSubscription(){
+    this.subscription = null;
+    let nidFilter = "?args[0]=all";
+    if(Number(this.userData.field_sub_id.und[0].value) !== Number(0)) nidFilter="?args[0]="+this.userData.field_sub_id.und[0].value;
+    let url = this.urlbase+'appoint/rest_suscripciones.json'+nidFilter;
+    console.log("url",url);
+    let headers = new HttpHeaders(
+      {'Content-Type':'application/json; charset=utf-8',
+      'X-CSRF-Token': ""+this.sessionData.token,
+      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
+    });
+    let observer = this.http.get(url,{headers});
+    observer.subscribe(
+      (val)=>{
+        let aux_results = Object.keys(val).map(function (key) { return val[key]; });
+        let dis = this;
+        aux_results.forEach(function(element){
+          //create a suscription object. and fill it.
+          dis.subscription = new subscriptions();
+          dis.subscription.setData(element);
+          //dis.subscription.setPlanFromList(dis.planes);
+        });
+        console.log(this.subscription);
+        let setPlan_interval = setInterval(()=>{
+          console.log("waiting for planes");
+          
+          if(this.subscription.is_plan_set){
+            console.log("planes are set");
+            console.log("added plan is",this.subscription.plan);
+            clearInterval(setPlan_interval)
+          }
+        },500);
+      });
+    return observer;
+  }
+
 
   /**
    * returns true if it updates a plan,
@@ -735,11 +779,45 @@ export class UserDataProvider {
     return ret;
   }
 
-  checkUserPermission( permision:Array<number> ){
+  /**
+   * CheckUserFeature resolves if a feature should appear for this user giving the user roles (permision) and the user plan suscriptions (suscriptions)
+   * and has been created to simplify the check on features that requiere both.
+  */
+  checkUserFeature( permision:Array<number>,suscriptions:Array<number>):boolean{
+    let ret = false;
+    let permisioncheck = false;
+    let suscriptionscheck = false;
+    if(permision === null || permision === undefined || permision.length === 0){ permisioncheck = true;}
+    else{permisioncheck = this.checkUserPermission(permision);}
+    if(suscriptions === null || suscriptions === undefined || suscriptions.length === 0){ suscriptionscheck = true;}
+    else{suscriptionscheck = this.checkUserSuscription(suscriptions);}
+    if(permisioncheck && suscriptionscheck){ ret = true; }
+    return ret;
+  }
+
+  checkUserPermission( permision:Array<number> ):boolean{
     let ret = false;
     for(let i=0; i< this.userData.field_tipo_de_usuario.und.length; i++){
       if (permision.indexOf(parseInt(this.userData.field_tipo_de_usuario.und[i].value)) > -1) {ret = true; break;}
     }
+    return ret;
+  }
+
+    /**
+     * la suscripcion debe resultar false si:
+     * el usuario no tiene guardado un id de suscripcion en su data, o esta es 0
+     * la suscripcion que carga el usuario esta inactiva.
+    */
+  checkUserSuscription( suscriptions:Array<number>):boolean{
+    let ret = false;
+    //si la subscripcion no esta activa (expiro, no ha sido pagada etc) retorna false
+    if(Number(this.userData.field_sub_id) === Number(0) || this.subscription === null){return false;}
+    if(Number(this.subscription.field_active) === Number(0)){return false;}
+    if(suscriptions.indexOf(this.subscription.field_plan_sus) > -1){ret = true;}
+    /*for(let i=0; i< this.userData.field_sub_id.und.length; i++){
+      
+      //if(suscriptions.indexOf(parseInt(this.userData.field_sub_id.und[i].value)) > -1) {ret = true; break;}
+    }*/
     return ret;
   }
 
@@ -934,7 +1012,6 @@ export class UserDataProvider {
         field_codigo:{und:[{ value:""}]},
         field_doctores:{und:[0]},
         field_sub_id:{und:[0]}
-        
     }
   }
 }

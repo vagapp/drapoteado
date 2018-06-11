@@ -13,7 +13,19 @@
       <span class="spanBlock midSubFont">Verifica los datos de tu suscripción.</span>
     </div>
   </div>
+  <div class="fact_subs_info">
+    <div class="fact_myplan">
+      <span class="myplan_block">Plan activo: {{userData.suscripción.Plan.title}}</span>
+      <span class="myplan_block">noDoctores usados:</span>
+      <span class="myplan_block">noSubcuentas usadas:</span>
+    </div>
+  </div>
+  <div class="fact_planes_info">
 
+  </div>
+<div class="fact_page_content">
+  <div class="fact_payment_methods">
+  <div class="fact_pmethod"></div>
   <form action="/" method="post" id="payment-form">
     
     <div class="form-row">
@@ -28,5 +40,6 @@
   <button ion-button block large>Add Card</button>
     
   </form>
-
+  </div>
+</div>
 </ion-content>
