@@ -3,7 +3,7 @@
     
   <div class="section_grid">
         <div class="section">
-                <span class="spanBlock bigFont"><span class="fontPrimary"><b>Bienvenido</b></span> <span class="">{{this.userData.userData.name}} </span><span class="rol_title" *ngIf="userData.rol !== 'doctor'" >({{this.userData.rol}})</span></span>
+                <span class="spanBlock bigFont"><span class="fontPrimary"><b>Bienvenido</b></span> <span class="">{{this.userData.userData.name}} </span><span class="rol_title" *ngIf="this.userData.checkUserFeature([this.userData.TIPO_CAJA,this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);" >({{this.userData.rol}})</span></span>
                 <span class="spanBlock bigSubFont">En que podemos ayudarte hoy:</span>
         </div>
         <div class="section" >
@@ -87,7 +87,7 @@
                         </div>
                 </div>
 
-  <div class="section" *ngIf="userData.rol === 'doctor'">
+  <div class="section" *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR],[this.userData.PLAN_ANY],false);">
       <div class="section_content">
     <div class="section_icon">
             <img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/>
@@ -104,7 +104,7 @@
   </div>
 
 
-  <div class="section"  *ngIf="userData.rol === 'doctor'">
+  <div class="section"  *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR],[this.userData.PLAN_ANY],false);">
         <div class="section_content">
       <div class="section_icon">
               <img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/>
@@ -162,7 +162,7 @@
 
             
 
-            <div class="section"  *ngIf="userData.rol === 'doctor'">
+            <div class="section"  *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR],null,false);">
                     <div class="section_content">
                   <div class="section_icon">
                           <img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/>
@@ -179,7 +179,7 @@
                   </div>
                 </div>
 
-                <div class="section"  *ngIf="userData.rol === 'doctor'">
+                <div class="section"  *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR],null,false);">
                         <div class="section_content">
                       <div class="section_icon">
                               <img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/>

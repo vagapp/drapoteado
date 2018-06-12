@@ -12,6 +12,7 @@ import { UsuariosPage } from '../pages/usuarios/usuarios';
 import { ReportesPage } from '../pages/reportes/reportes';
 import { UserDataProvider } from '../providers/user-data/user-data';
 import { Storage } from '@ionic/storage';
+import { FacturacionPage } from '../pages/facturacion/facturacion';
 
 @Component({
   templateUrl: 'app.html'
@@ -69,9 +70,14 @@ export class MyApp {
               this.userData.cargarSubscription();
               let moveinterval = setInterval(() =>{
                 if(this.userData.subscription !== null){
+                  if(Number(this.userData.subscription.field_active) === 0){
+                    this.rootPage=FacturacionPage;
+                    clearInterval(moveinterval);
+                  }else{
                 this.rootPage = HomePage;
                 this.splashScreen.hide();
                 clearInterval(moveinterval);
+                  }
               }
               },500);
             },  () => {

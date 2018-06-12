@@ -14,10 +14,13 @@
     </div>
   </div>
   <div class="fact_subs_info">
-    <div class="fact_myplan">
-      <span class="myplan_block">Plan activo: {{userData.suscripción.Plan.title}}</span>
+    <div class="fact_myplan" *ngIf="userData.subscription !== null && userData.subscription.plan !== null">
+      <span class="myplan_block">Plan activo: {{userData.subscription.plan.title}}</span>
       <span class="myplan_block">noDoctores usados:</span>
       <span class="myplan_block">noSubcuentas usadas:</span>
+    </div>
+    <div class="fact_myplan" *ngIf="userData.subscription === null || userData.subscription.plan === null">
+        <span class="myplan_block">Usted no cuenta con un plan activo.</span>
     </div>
   </div>
   <div class="fact_planes_info">

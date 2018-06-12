@@ -6,6 +6,7 @@ import { Doctores } from './doctores';
 import {Subject} from 'rxjs/Subject';
 import { planes } from './planes';
 import { subscriptions } from './subscriptions';
+import { Debugger } from './debugger';
 
 
 /*
@@ -34,7 +35,7 @@ export class UserDataProvider {
   /**
    * datos de planes y suscripciones
   */
-  subscription:subscriptions = null;
+  subscription:subscriptions = subscriptions.getEmptySuscription();
   planes:planes[]; //planes que ofrece drap.
   are_planes_set:boolean = false;
 
@@ -51,11 +52,13 @@ export class UserDataProvider {
   public static TIPO_RECEPCION = 2;
   public static TIPO_CAJA = 3;
   public static TIPO_CAJAYRECEPCION = 4;
+  public static TIPO_ANY = -1;
 
   get TIPO_DOCTOR(){return UserDataProvider.TIPO_DOCTOR;}
   get TIPO_RECEPCION(){return UserDataProvider.TIPO_RECEPCION;}
   get TIPO_CAJA(){return UserDataProvider.TIPO_CAJA;}
   get TIPO_CAJAYRECEPCION(){return UserDataProvider.TIPO_CAJAYRECEPCION;}
+  get TIPO_ANY(){return UserDataProvider.TIPO_ANY;}
 
   //estados de cita:
   public static STATE_PENDIENTE = 0;
@@ -72,8 +75,14 @@ export class UserDataProvider {
   get STATE_FINALIZADA(){return UserDataProvider.STATE_FINALIZADA;}
   get STATE_CANCELADA(){return UserDataProvider.STATE_CANCELADA;}
 
+  //suscripciones planes cons
+  public static PLAN_ANY = -1;
+
+  get PLAN_ANY(){return UserDataProvider.PLAN_ANY;}
+
   //AuthObservable
   AuthSubject:Subject<any> = new Subject();
+  susSubject:Subject<any> = new Subject();
   
   sessionData = {
     sessid:false,
@@ -116,7 +125,8 @@ export class UserDataProvider {
     private http: HttpClient,
     private storage: Storage,
   ) {
-    console.log('Hello UserDataProvider Provider');
+
+    Debugger.log(['Hello UserDataProvider Provider']);
     this.doctores = new Array();
     this.setup();
     this.subAccount = false;
@@ -208,7 +218,11 @@ export class UserDataProvider {
     this.userData.field_forma_pago = val['field_forma_pago'];
     this.userData.tutorial_state = val['field_tutorial_state'];
     this.userData.field_doctores = val['field_doctores'];
+    if(val['field_sub_id'].length != 0){
     this.userData.field_sub_id = val['field_sub_id'];
+    }else{
+      this.userData.field_sub_id.und[0].value = "0";
+    }
     if(this.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
       //si es un doctor agregarse a si mismo a la lista de doctores.
       let aux_doc = new Doctores(this);
@@ -711,9 +725,9 @@ export class UserDataProvider {
   }
 
   cargarSubscription(){
-    this.subscription = null;
     let nidFilter = "?args[0]=all";
-    if(Number(this.userData.field_sub_id.und[0].value) !== Number(0)) nidFilter="?args[0]="+this.userData.field_sub_id.und[0].value;
+    if(Number(this.userData.field_sub_id.und[0].value) === Number(0)){
+    nidFilter="?args[0]="+this.userData.field_sub_id.und[0].value;
     let url = this.urlbase+'appoint/rest_suscripciones.json'+nidFilter;
     console.log("url",url);
     let headers = new HttpHeaders(
@@ -744,6 +758,12 @@ export class UserDataProvider {
         },500);
       });
     return observer;
+  }else{
+    this.subscription = subscriptions.getEmptySuscription();
+    this.subscription.is_plan_set = true;
+    this.susSubject.next(0);
+    return false;
+  }
   }
 
 
@@ -783,20 +803,29 @@ export class UserDataProvider {
    * CheckUserFeature resolves if a feature should appear for this user giving the user roles (permision) and the user plan suscriptions (suscriptions)
    * and has been created to simplify the check on features that requiere both.
   */
-  checkUserFeature( permision:Array<number>,suscriptions:Array<number>):boolean{
+  checkUserFeature( permision:Array<number>,suscriptions:Array<number>, debug:boolean = false):boolean{
+    Debugger.log(["check for feature"],debug);
+    Debugger.log(["permissions",permision],debug);
+    Debugger.log(["vs",this.userData.field_tipo_de_usuario],debug);
+    Debugger.log(["suscriptions",suscriptions],debug);
+    Debugger.log(["vs",this.subscription,],debug);
     let ret = false;
     let permisioncheck = false;
     let suscriptionscheck = false;
     if(permision === null || permision === undefined || permision.length === 0){ permisioncheck = true;}
-    else{permisioncheck = this.checkUserPermission(permision);}
+    else{permisioncheck = this.checkUserPermission(permision,debug);}
     if(suscriptions === null || suscriptions === undefined || suscriptions.length === 0){ suscriptionscheck = true;}
-    else{suscriptionscheck = this.checkUserSuscription(suscriptions);}
+    else{suscriptionscheck = this.checkUserSuscription(suscriptions,debug);}
     if(permisioncheck && suscriptionscheck){ ret = true; }
     return ret;
   }
 
-  checkUserPermission( permision:Array<number> ):boolean{
+  checkUserPermission( permision:Array<number> , debug:boolean = false):boolean{
     let ret = false;
+    Debugger.log([`checking permissions ${permision} vs ${this.userData.field_tipo_de_usuario}`],debug);
+    //checking for ANY
+    if(permision.indexOf(UserDataProvider.TIPO_ANY) > -1 && this.userData.field_tipo_de_usuario.und.length > 0){ return true;}
+    //regular check
     for(let i=0; i< this.userData.field_tipo_de_usuario.und.length; i++){
       if (permision.indexOf(parseInt(this.userData.field_tipo_de_usuario.und[i].value)) > -1) {ret = true; break;}
     }
@@ -808,14 +837,17 @@ export class UserDataProvider {
      * el usuario no tiene guardado un id de suscripcion en su data, o esta es 0
      * la suscripcion que carga el usuario esta inactiva.
     */
-  checkUserSuscription( suscriptions:Array<number>):boolean{
+  checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean{
     let ret = false;
+    Debugger.log([`checking suscriptions ${suscriptions} vs ${this.subscription}`],debug);
     //si la subscripcion no esta activa (expiro, no ha sido pagada etc) retorna false
     if(Number(this.userData.field_sub_id) === Number(0) || this.subscription === null){return false;}
     if(Number(this.subscription.field_active) === Number(0)){return false;}
+    // checking for ANY, automatically returns true since we checked for not 0 or null up here
+    if(suscriptions.indexOf(UserDataProvider.PLAN_ANY) > -1){ return true;}
+    //regular check
     if(suscriptions.indexOf(this.subscription.field_plan_sus) > -1){ret = true;}
     /*for(let i=0; i< this.userData.field_sub_id.und.length; i++){
-      
       //if(suscriptions.indexOf(parseInt(this.userData.field_sub_id.und[i].value)) > -1) {ret = true; break;}
     }*/
     return ret;

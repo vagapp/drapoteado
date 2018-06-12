@@ -16,7 +16,6 @@ export class subscriptions{
     field_active:number = null; //wether is paid or not
     field_next_cobro:string = null; //when is time to pay again bby gime that mony.
     is_plan_set:boolean = false;
-
     constructor(){
 
     }
@@ -42,5 +41,13 @@ export class subscriptions{
            }
        });
        return ret; 
+    }
+
+    static getEmptySuscription(){
+        let aux_sus = new subscriptions();
+        aux_sus.field_active = 0;
+        aux_sus.is_plan_set = false;
+        aux_sus.plan = null;
+        return aux_sus;
     }
 }

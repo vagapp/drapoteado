@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { UserDataProvider } from '../../providers/user-data/user-data';
 
 declare var Stripe;
 
@@ -10,7 +11,6 @@ declare var Stripe;
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-facturacion',
   templateUrl: 'facturacion.html',
@@ -20,8 +20,11 @@ export class FacturacionPage {
   card: any;
 
   constructor(
+    public userData: UserDataProvider,
     public navCtrl: NavController, 
-    public navParams: NavParams) {
+    public navParams: NavParams,
+   
+  ) {
   }
 
   ionViewDidLoad() {
