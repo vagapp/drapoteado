@@ -161,8 +161,6 @@ getUserByCode(){
           );
 
      });
-   
-
     },
      response => {
        console.log("POST call in error", response);

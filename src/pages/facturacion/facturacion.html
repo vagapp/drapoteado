@@ -13,22 +13,28 @@
       <span class="spanBlock midSubFont">Verifica los datos de tu suscripción.</span>
     </div>
   </div>
-  <div class="fact_subs_info">
+  <div class="fact_page_wrapper">
+  <div class="fact_subs_info fact_section">
     <div class="fact_myplan" *ngIf="userData.subscription !== null && userData.subscription.plan !== null">
       <span class="myplan_block">Plan activo: {{userData.subscription.plan.title}}</span>
       <span class="myplan_block">noDoctores usados:</span>
       <span class="myplan_block">noSubcuentas usadas:</span>
     </div>
-    <div class="fact_myplan" *ngIf="userData.subscription === null || userData.subscription.plan === null">
-        <span class="myplan_block">Usted no cuenta con un plan activo.</span>
+    <div class="fact_myplan noplan" *ngIf="userData.subscription === null || userData.subscription.plan === null">
+        <span class="fact_label">Usted no cuenta con un plan activo, seleccione un plan.</span>
+        <div *ngFor="let factplan of this.userData.planes" [class.selectedplan]="factplan.css_fact_selected" class="fact_pna_item" (click)="selectPlan(factplan);">
+          {{factplan.title}}
+        </div>
     </div>
   </div>
-  <div class="fact_planes_info">
-
-  </div>
-<div class="fact_page_content">
+<div class="fact_page_content fact_section">
   <div class="fact_payment_methods">
-  <div class="fact_pmethod"></div>
+    <span class="fact_label">seleccione un metodo de pago:</span>
+    <div *ngFor="let src of this.sources" (click)="selectCard(src)"   [class.selectedsrc]="src.selected" class="fact_src_unit">
+      {{src.brand}} **** **** **** {{src.last4}}
+    </div>
+  <span class="fact_label">agregar un metodo de pago:</span>
+  <div class="forwrapper">
   <form action="/" method="post" id="payment-form">
     
     <div class="form-row">
@@ -40,9 +46,16 @@
       <div id="card-errors" role="alert"></div>
     </div>
 
-  <button ion-button block large>Add Card</button>
-    
+  <button ion-button block large>Agregar Tarjeta</button>
   </form>
+  </div>
+  </div>
+</div>
+</div>
+<div class="checkout">
+  <div class="details"></div>
+  <div class="button_section">
+      <button (click)="suscribirse()" ion-button block large>Suscribirse</button>
   </div>
 </div>
 </ion-content>

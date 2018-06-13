@@ -24,4 +24,60 @@ page-facturacion {
       .StripeElement--webkit-autofill {
         background-color: #fefde5 !important;
       }
+
+      .fact_myplan .myplan_block{
+        width: 100%;
+        height: 50px;
+        font-size: 2.5rem;
+        padding-left: 30px;
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+      }
+
+      .fact_page_wrapper{
+        display: flex;
+        width: 100%;
+        flex-flow: row;
+        flex-wrap: wrap;
+      }
+
+      .fact_section{
+        display: flex;
+        justify-content:center;
+        width: 49%;
+        min-width: 300px;
+      }
+
+      .fact_payment_methods, .fact_myplan {
+        width: 100%;
+        padding: 40px;
+    }
+
+    .fact_src_unit, .fact_pna_item{
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1.5rem;
+      background-color: lightgray;
+      padding-left: 30px;
+      cursor: pointer;
+  }
+  
+  .selectedsrc, .selectedplan{
+      background-color:  #94BA3A;
+  }
+
+  .forwrapper{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .forwrapper form{
+    width: 60%;
+    min-width: 300px
+  }
 }

@@ -9,6 +9,8 @@ export class planes{
     field_no_subcuentas:number = null;
     field_stripe_id:string = null;
 
+    css_fact_selected:boolean = false;
+
     constructor(){
 
     }

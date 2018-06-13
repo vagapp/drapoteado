@@ -229,7 +229,7 @@ export class UserDataProvider {
     }
     this.userData.field_planholder = val['field_planholder'];
     this.userData.field_stripe_customer_id = val['field_stripe_customer_id'];
-    if(val['field_sub_id'].length != 0){
+    if(val['field_src_json_info'].length != 0){
       this.userData.field_src_json_info = val['field_src_json_info'];
     }else{
       this.userData.field_src_json_info.und = new Array();
@@ -757,6 +757,14 @@ export class UserDataProvider {
   }
 
 
+  setcssplanselected( factplan:planes ){
+    this.planes.forEach(plan => {
+      plan.css_fact_selected = false;
+    });
+    factplan.css_fact_selected = true;
+  }
+
+
   /**
    * returns true if it updates a plan,
    * returns false if no plan found for this input data nid
@@ -969,7 +977,7 @@ export class UserDataProvider {
   
   updateUser(){
     //cloning userData to modify it safely.
-    //let aux_userData = JSON.parse(JSON.stringify(this.userData));
+    let aux_userData = JSON.parse(JSON.stringify(this.userData));
     
     //aux_userData.field_tipo_de_usuario.und = new Array();
     /*for(let i = 0;i<this.userData.field_tipo_de_usuario.und.length;i++){
@@ -978,16 +986,13 @@ export class UserDataProvider {
     for(let i = 0;i<this.userData.field_tipo_de_usuario.und.length;i++){
       aux_userData.field_tipo_de_usuario.und.push(this.userData.field_tipo_de_usuario.und[i].value);
     }*/
-    let aux_userData = {...this.userData};
     aux_userData.field_tipo_de_usuario = UserDataProvider.cleanUserDataReferenceField(this.userData.field_tipo_de_usuario);
     aux_userData.field_sub_id = UserDataProvider.cleanUserDataReferenceField(this.userData.field_sub_id);
     if( Number(this.userData.field_sub_id.und[0].value) === Number(0) ){
       delete aux_userData.field_sub_id;
     }
-   
-    
     console.log("updateUser saving userdata clone",aux_userData);
-    this.updateUserd(aux_userData);
+    return this.updateUserd(aux_userData);
     /*if(this.userData.name != null){
       let body = JSON.stringify(this.userData);
       console.log("updating user",body);
