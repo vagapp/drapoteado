@@ -44,7 +44,6 @@ export class MyApp {
       { title: 'Reportes', component: ReportesPage },
       { title: 'Login', component: LoginPage }
     ];
-
   }
 
   initializeApp() {
@@ -136,6 +135,18 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+  
+  openHomePage(){this.nav.setRoot(HomePage);}
+  openCitasPage(){this.nav.setRoot(CitasPage);}
+  openServiciosPage(){this.nav.setRoot(ServiciosPage);}
+  openUsuariosPage(){this.nav.setRoot(UsuariosPage);}
+  openReportesPage(){this.nav.setRoot(ReportesPage);}
+  openFacturacionPage(){this.nav.setRoot(FacturacionPage);}
+  
+  
+  
+  
+  
 
 
 }

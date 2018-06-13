@@ -118,7 +118,11 @@ export class UserDataProvider {
     field_forma_pago: {und: [{value: ""}]},
     tutorial_state: {und: [{value: "0"}]},
     field_doctores: {und:[]},
-    field_sub_id:{und:[{value: "0"}]}
+    //valores de suscripcion
+    field_sub_id:{und:[{value: "0"}]},
+    field_planholder:{und:[{value: true}]},
+    field_stripe_customer_id:{und:[{value: ""}]},
+    field_src_json_info:{und:[{value: ""}]}
 }
 
   constructor(
@@ -223,6 +227,14 @@ export class UserDataProvider {
     }else{
       this.userData.field_sub_id.und[0].value = "0";
     }
+    this.userData.field_planholder = val['field_planholder'];
+    this.userData.field_stripe_customer_id = val['field_stripe_customer_id'];
+    if(val['field_sub_id'].length != 0){
+      this.userData.field_src_json_info = val['field_src_json_info'];
+    }else{
+      this.userData.field_src_json_info.und = new Array();
+    }
+    
     if(this.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
       //si es un doctor agregarse a si mismo a la lista de doctores.
       let aux_doc = new Doctores(this);
@@ -332,7 +344,10 @@ export class UserDataProvider {
           field_forma_pago: {und: [{value: ""}]},
           tutorial_state: {und: [{value: "0"}]},
           field_doctores:{und:[]},
-          field_sub_id:{und:[]}
+          field_sub_id:{und:[]},
+          field_planholder:{und:[{value: true}]},
+          field_stripe_customer_id: {und:[{value: ""}]},
+          field_src_json_info: {und:[{value: ""}]}
       }
         console.log(this.userData);
         this.AuthSubject.next(this.userData.uid);
@@ -368,32 +383,6 @@ export class UserDataProvider {
   }
 
 
-  updateUser(){
-    if(this.userData.name != null){
-      let body = JSON.stringify(this.userData);
-      console.log(body);
-      let url = this.urlbase+'appoint/user/'+this.userData.uid;
-      let headers = new HttpHeaders(
-        {'Content-Type':'application/json; charset=utf-8',
-        'X-CSRF-Token': ""+this.sessionData.token,
-        'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-      });
-      let register_observer = this.http.put(url,body,{headers});
-      register_observer.subscribe(
-        (val) => {
-            console.log("POST call successful value returned in body", val);
-        },
-        response => {
-            console.log("POST call in error", response);
-        },
-        () => {
-            console.log("The POST observable is now completed.");
-        });
-        return register_observer;
-    }else{
-      return false;
-    }
-  }
 
   //Service Methods
   generateNewService( newService ){return this.generateNewNode(newService);}
@@ -747,15 +736,16 @@ export class UserDataProvider {
           //dis.subscription.setPlanFromList(dis.planes);
         });
         console.log(this.subscription);
+        if(!(this.subscription.field_plan_sus === null)){
         let setPlan_interval = setInterval(()=>{
           console.log("waiting for planes");
-          
           if(this.subscription.is_plan_set){
             console.log("planes are set");
             console.log("added plan is",this.subscription.plan);
             clearInterval(setPlan_interval)
           }
         },500);
+      }
       });
     return observer;
   }else{
@@ -964,6 +954,7 @@ export class UserDataProvider {
 
   updateUserd( userd ){
     let body = JSON.stringify(userd);
+    console.log("updating userd body ",body);
     let url = this.urlbase+'appoint/user/'+userd.uid;
     let headers = new HttpHeaders(
       {'Content-Type':'application/json; charset=utf-8',
@@ -973,6 +964,67 @@ export class UserDataProvider {
     let observer = this.http.put(url,body,{headers});
     observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
+  }
+
+  
+  updateUser(){
+    //cloning userData to modify it safely.
+    //let aux_userData = JSON.parse(JSON.stringify(this.userData));
+    
+    //aux_userData.field_tipo_de_usuario.und = new Array();
+    /*for(let i = 0;i<this.userData.field_tipo_de_usuario.und.length;i++){
+      aux_userData.field_tipo_de_usuario.und.push(this.userData.field_tipo_de_usuario.und[i].value);
+    }
+    for(let i = 0;i<this.userData.field_tipo_de_usuario.und.length;i++){
+      aux_userData.field_tipo_de_usuario.und.push(this.userData.field_tipo_de_usuario.und[i].value);
+    }*/
+    let aux_userData = {...this.userData};
+    aux_userData.field_tipo_de_usuario = UserDataProvider.cleanUserDataReferenceField(this.userData.field_tipo_de_usuario);
+    aux_userData.field_sub_id = UserDataProvider.cleanUserDataReferenceField(this.userData.field_sub_id);
+    if( Number(this.userData.field_sub_id.und[0].value) === Number(0) ){
+      delete aux_userData.field_sub_id;
+    }
+   
+    
+    console.log("updateUser saving userdata clone",aux_userData);
+    this.updateUserd(aux_userData);
+    /*if(this.userData.name != null){
+      let body = JSON.stringify(this.userData);
+      console.log("updating user",body);
+      let url = this.urlbase+'appoint/user/'+this.userData.uid;
+      let headers = new HttpHeaders(
+        {'Content-Type':'application/json; charset=utf-8',
+        'X-CSRF-Token': ""+this.sessionData.token,
+        'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
+      });
+      let register_observer = this.http.put(url,body,{headers});
+      register_observer.subscribe(
+        (val) => {
+            console.log("POST call successful value returned in body", val);
+        },
+        response => {
+            console.log("POST call in error", response);
+        },
+        () => {
+            console.log("The POST observable is now completed.");
+        });
+        return register_observer;
+    }else{
+      return false;
+    }*/
+  }
+
+
+/**
+ * Drupal aveces te manda un formato bien raro que no sirve para actualizar los datos, hay que limpiar esos campos
+*/
+  static cleanUserDataReferenceField( field ){
+    let aux_field:{und:any[]} = {und:[]};
+    aux_field.und = new Array();
+    for(let i = 0;i<field.und.length;i++){
+      aux_field.und.push(field.und[i].value);
+    }
+    return aux_field;
   }
 
   
@@ -1043,7 +1095,10 @@ export class UserDataProvider {
         tutorial_state:{und:[{ value:0}]},
         field_codigo:{und:[{ value:""}]},
         field_doctores:{und:[0]},
-        field_sub_id:{und:[0]}
+        field_sub_id:{und:[0]},
+        field_planholder:{und:[{value: true}]},
+        field_stripe_customer_id:{und:[{value: ""}]},
+        field_src_json_info:{und:[{value: ""}]}
     }
   }
 }
@@ -1113,5 +1168,8 @@ export interface userd{
     field_codigo:{und:[{ value:string}]},
     field_doctores:{und:number[]},
     field_sub_id:{und:number[]},
+    field_planholder:{und:[{ value:boolean}]},
+    field_stripe_customer_id:{und:[{ value:string}]},
+    field_src_json_info:{und:[{ value:string}]},
 }
 

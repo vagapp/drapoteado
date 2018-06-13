@@ -51,9 +51,7 @@ export class FacturacionPage {
     };
 
     this.card = elements.create('card', { style: style });
-
     this.card.mount('#card-element');
-
     this.card.addEventListener('change', event => {
       var displayError = document.getElementById('card-errors');
       if (event.error) {
@@ -73,8 +71,12 @@ export class FacturacionPage {
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
-          console.log(result);
+          console.log("result source added");
+          //console.log(JSON.stringify(result));
+          this.userData.userData.field_src_json_info['und'].push({value: result.source.id});
+          console.log( this.userData.userData.field_src_json_info);
         }
+        this.userData.updateUser();
       });
     });
   }
