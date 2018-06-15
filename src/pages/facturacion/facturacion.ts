@@ -4,6 +4,7 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
 import { sources } from '../../providers/user-data/sources';
 import { Debugger } from '../../providers/user-data/debugger';
 import { planes } from '../../providers/user-data/planes';
+import { subscriptions } from '../../providers/user-data/subscriptions';
 
 declare var Stripe;
 
@@ -47,17 +48,44 @@ export class FacturacionPage {
     this.selected_plan = input_plan;
     this.userData.setcssplanselected(input_plan);
   }
-
+  
   suscribirse(){
     Debugger.log(['suscribirse']);
-    if(this.selectCard === null){
+    Debugger.log(["card seleccionado",this.selected_source]);
+    if(this.selected_source === null){
       Debugger.log(['NO HAZ ELEGIDO METODO DE PAGO']);
+      return false;
     }
+    Debugger.log(["plan seleccionado",this.selected_plan]);
     if(this.selected_plan === null){
       Debugger.log(['NO HAZ ELEGIDO PLAN']);
+      return false;
     }
     Debugger.log(['validation passed como hacer una suscripcion por stripe = 0']);
-    
+    if(this.userData.subscription.nid === null){
+      Debugger.log(['new subscription']);
+      let aux_sus = subscriptions.getEmptySuscription();
+      aux_sus.plan = this.selected_plan;
+      aux_sus.field_plan_sus = this.selected_plan.nid;
+      aux_sus.field_plan_holder = this.userData.userData.uid;
+      aux_sus.field_doctores = new Array();
+      aux_sus.field_doctores.push(this.userData.userData.uid);
+      aux_sus.field_stripe_src_sus_id = this.selected_source.src_id;
+      aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
+      this.userData.generateNewSus(aux_sus).subscribe((val)=>{
+        Debugger.log(['we got this',val]);
+        this.userData.subscription.nid = val['nid'];
+        this.userData.userData.field_sub_id["und"][0]['value'] =  val['nid'];
+        this.userData.updateUser().subscribe(
+          (val)=>{
+            Debugger.log(['se guardo el stripe sub_id en usuario']);
+          }
+        );
+        Debugger.log(['subs updated to this, update user please',this.userData.subscription.nid]); 
+      });
+    }else{
+      Debugger.log(['UPDATE SUSCRIPTION NOT IMPLEMENTED YET']);
+    }
   }
 
   loadSources(){

@@ -407,6 +407,19 @@ export class UserDataProvider {
     return observer;
   }
 
+  //SUBSCRIPTION METHODS
+  
+  generateNewSus( suscription ){return this.generateNewNode(suscription.getData());}
+  updateSus( suscription ){return this.updateNode(suscription.getData());}
+  deletesSus( suscription ){return this.deleteNode(suscription.getData());}
+  generateUserSuscription(){
+    this.generateNewSus(this.subscription);
+  }
+  updateUserSuscription(){
+    this.updateSus(this.subscription);
+  }
+
+
   //CITAS METHODS
   generateNewCita( newCita ){return this.generateNewNode(newCita);}
   updateCita( cita ){return this.updateNode(cita);}
@@ -644,7 +657,9 @@ export class UserDataProvider {
 
     //General Node Management
   generateNewNode( newNode ){
+    Debugger.log(['saving node ',newNode]);
     let body = JSON.stringify(newNode);
+    Debugger.log(['saving node json',body]);
     let url = this.urlbase+'appoint/node/';
     let headers = new HttpHeaders(
       {'Content-Type':'application/json; charset=utf-8',

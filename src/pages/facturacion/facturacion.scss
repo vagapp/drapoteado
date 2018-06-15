@@ -80,4 +80,21 @@ page-facturacion {
     width: 60%;
     min-width: 300px
   }
+
+  .checkout{
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap; 
+  }
+
+  .checkout div{
+    display: inline-block;
+    min-width: 300px;
+    width: 75%;
+  }
+
+  .checkout .button_section{
+    width: 20%
+  }
+
 }

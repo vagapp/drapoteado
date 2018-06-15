@@ -55,7 +55,7 @@
 <div class="checkout">
   <div class="details"></div>
   <div class="button_section">
-      <button (click)="suscribirse()" ion-button block large>Suscribirse</button>
+      <button (click)="suscribirse()" [disabled]="this.selectCard === null || this.selectPlan === null" ion-button block large>Suscribirse</button>
   </div>
 </div>
 </ion-content>
