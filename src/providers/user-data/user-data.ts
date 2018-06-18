@@ -35,7 +35,7 @@ export class UserDataProvider {
   /**
    * datos de planes y suscripciones
   */
-  subscription:subscriptions = subscriptions.getEmptySuscription();
+  subscription:subscriptions = null;
   planes:planes[]; //planes que ofrece drap.
   are_planes_set:boolean = false;
 
@@ -119,7 +119,7 @@ export class UserDataProvider {
     tutorial_state: {und: [{value: "0"}]},
     field_doctores: {und:[]},
     //valores de suscripcion
-    field_sub_id:{und:[{value: "0"}]},
+    field_sub_id:{und:[0]},
     field_planholder:{und:[{value: true}]},
     field_stripe_customer_id:{und:[{value: ""}]},
     field_src_json_info:{und:[{value: ""}]}
@@ -222,10 +222,13 @@ export class UserDataProvider {
     this.userData.field_forma_pago = val['field_forma_pago'];
     this.userData.tutorial_state = val['field_tutorial_state'];
     this.userData.field_doctores = val['field_doctores'];
+    Debugger.log(["checking this out subs id",val['field_sub_id']]);
     if(val['field_sub_id'].length != 0){
-    this.userData.field_sub_id = val['field_sub_id'];
+    this.userData.field_sub_id.und[0] = val['field_sub_id']['und'][0]['nid'];
+    Debugger.log(["set a",this.userData.field_sub_id]);
     }else{
-      this.userData.field_sub_id.und[0].value = "0";
+      this.userData.field_sub_id.und[0] = 0;
+      Debugger.log(["set b",this.userData.field_sub_id]);
     }
     this.userData.field_planholder = val['field_planholder'];
     this.userData.field_stripe_customer_id = val['field_stripe_customer_id'];
@@ -730,8 +733,9 @@ export class UserDataProvider {
 
   cargarSubscription(){
     let nidFilter = "?args[0]=all";
-    if(Number(this.userData.field_sub_id.und[0].value) === Number(0)){
-    nidFilter="?args[0]="+this.userData.field_sub_id.und[0].value;
+    console.log("userdata sub id",this.userData.field_sub_id);
+    if(Number(this.userData.field_sub_id.und[0]) !== Number(0)){
+    nidFilter="?args[0]="+this.userData.field_sub_id.und[0];
     let url = this.urlbase+'appoint/rest_suscripciones.json'+nidFilter;
     console.log("url",url);
     let headers = new HttpHeaders(
@@ -746,11 +750,13 @@ export class UserDataProvider {
         let dis = this;
         aux_results.forEach(function(element){
           //create a suscription object. and fill it.
-          dis.subscription = new subscriptions();
-          dis.subscription.setData(element);
+          //dis.subscription = new subscriptions();
+          let aux_subs = new subscriptions();
+          aux_subs.setData(element);
+          dis.subscription = aux_subs;
           //dis.subscription.setPlanFromList(dis.planes);
         });
-        console.log(this.subscription);
+        console.log("subscription",this.subscription);
         if(!(this.subscription.field_plan_sus === null)){
         let setPlan_interval = setInterval(()=>{
           console.log("waiting for planes");
@@ -764,6 +770,7 @@ export class UserDataProvider {
       });
     return observer;
   }else{
+    console.log("no subscription loaded");
     this.subscription = subscriptions.getEmptySuscription();
     this.subscription.is_plan_set = true;
     this.susSubject.next(0);
@@ -854,7 +861,7 @@ export class UserDataProvider {
     let ret = false;
     Debugger.log([`checking suscriptions ${suscriptions} vs ${this.subscription}`],debug);
     //si la subscripcion no esta activa (expiro, no ha sido pagada etc) retorna false
-    if(Number(this.userData.field_sub_id) === Number(0) || this.subscription === null){return false;}
+    if(Number(this.userData.field_sub_id.und[0]) === Number(0) || this.subscription === null){return false;}
     if(Number(this.subscription.field_active) === Number(0)){return false;}
     // checking for ANY, automatically returns true since we checked for not 0 or null up here
     if(suscriptions.indexOf(UserDataProvider.PLAN_ANY) > -1){ return true;}
@@ -1003,7 +1010,7 @@ export class UserDataProvider {
     }*/
     aux_userData.field_tipo_de_usuario = UserDataProvider.cleanUserDataReferenceField(this.userData.field_tipo_de_usuario);
     aux_userData.field_sub_id = UserDataProvider.cleanUserDataReferenceField(this.userData.field_sub_id);
-    if( Number(this.userData.field_sub_id.und[0].value) === Number(0) ){
+    if( Number(this.userData.field_sub_id.und[0]) === Number(0) ){
       delete aux_userData.field_sub_id;
     }
     console.log("updateUser saving userdata clone",aux_userData);

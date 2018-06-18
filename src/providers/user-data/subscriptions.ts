@@ -35,7 +35,7 @@ export class subscriptions{
         this.field_subusuarios = input_data['field_subusuarios'];
         this.field_invitation_code = input_data['field_invitation_code'];
         this.field_group_name = input_data['field_group_name'];
-        this.field_active = input_data['field_active'];
+        this.field_active = input_data['field_active']['value'];
         this.field_next_cobro = input_data['field_next_cobro'];
         this.field_stripe_sus_id = input_data['field_stripe_sus_id'];
         this.field_stripe_src_sus_id = input_data['field_stripe_src_sus_id'];
