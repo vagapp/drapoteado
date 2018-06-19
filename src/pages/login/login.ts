@@ -4,6 +4,7 @@ import { RegisterModalPage } from '../register-modal/register-modal';
 import { UserDataProvider  } from '../../providers/user-data/user-data';
 import { HomePage } from '../home/home';
 import { ToastController } from 'ionic-angular';
+import { Debugger } from '../../providers/user-data/debugger';
 
 /**
  * Generated class for the LoginPage page.
@@ -48,7 +49,30 @@ export class LoginPage {
     login_observer.subscribe(
       (val) => {
           console.log("sucess login on login view");
-          this.navCtrl.push(HomePage, {});
+          console.log("logged in as", val['user']['name']);
+            this.userData.setSessionData(val);
+            //this doesnt give the complete info of the user. need to request the user info.
+            this.userData.requestUserData(val['user']['uid']).subscribe((val)=>{
+              //val['user'] = user_aux;
+              console.log(val);
+              this.userData.setUserData(val);
+              this.userData.cargarPlanes();
+              this.userData.cargarSubscription();
+              let moveinterval = setInterval(() =>{
+                if(this.userData.subscription !== null){
+                  Debugger.log(["check of suscription",this.userData.subscription]);
+                  if(Number(this.userData.subscription.field_active) === 0){
+                  this.navCtrl.setRoot(HomePage, {});
+                  clearInterval(moveinterval);
+                  }else{
+                  this.navCtrl.setRoot(HomePage, {});
+                  clearInterval(moveinterval);
+                  }
+              }
+              },500);
+            },  () => {
+          });
+          
       },
       response => {
           console.log("POST call in error", response);

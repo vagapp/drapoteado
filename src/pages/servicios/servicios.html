@@ -7,7 +7,7 @@
 <header></header>
 <ion-content padding class="drap_content">
   <div class="modalPage_header">
-    <div class="modalPage_logo"><img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/></div>
+    <div class="modalPage_logo"><img src="assets/imgs/servicios.svg"/></div>
     <div class="modalPage_title">
       <span class="spanBlock midFont"><b>Alta de Servicios y Costos</b></span>
       <span class="spanBlock midSubFont">Administra, agrega o elimina servicios para tus consultas. </span>
@@ -28,7 +28,7 @@
                 <td><b>{{servicio.Nid}}</b> {{servicio.title}}</td>
                 <td class="fontSecondary">${{servicio.costo}}</td>
                 <td class="toolCol">
-                  <ion-icon name="menu" class="icon_drapo" (click)="editServicio(servicio)"></ion-icon>
+                  <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="editServicio(servicio)"/>
                   <button class="bgColorPrimary generalButton tableButton" (click)="deleteServicio(servicio)">Eliminar</button>
                 </td>
              </tr>

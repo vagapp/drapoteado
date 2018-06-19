@@ -7,7 +7,7 @@
 <ion-content>
   <div class="reporte_header">
 <div class="modalPage_header">
-  <div class="modalPage_logo"><img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/></div>
+  <div class="modalPage_logo"><img src="assets/imgs/reportes.svg"/></div>
   <div class="modalPage_title">
     <span class="spanBlock midFont"><b>Resumen Diaro</b></span>
     <span class="spanBlock midSubFont">Resumen de tu actvidad durante el día de hoy</span>
@@ -39,7 +39,7 @@
     <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"><b>Doctor:</b> {{cita.doctor_name}}/{{cita.doctor_alias}}</span>
     <span class="rbh_span midFont"><b>Duración</b> <span class="fontHigh">{{cita.duracionText}}</span></span>
     <span class="rbh_span_toolbar">
-        <a class="edit_icon"></a>
+        <img src="assets/imgs/editar.svg" class="drap_edit_icon" />
         <button class="bgColorPrimary generalButton">Eliminar</button>
     </span>
   </div>

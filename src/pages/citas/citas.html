@@ -7,7 +7,7 @@
 <header></header>
 <ion-content padding>
   <div class="modalPage_header">
-    <div class="modalPage_logo"><img src="https://vagapp.mx/themes/nortec/img/logo-intro.svg"/></div>
+    <div class="modalPage_logo"><img src="assets/imgs/citas.svg"/></div>
     <div class="modalPage_title">
       <span class="spanBlock midFont"><b>Citas Programadas</b></span>
       <span class="spanBlock midSubFont">Revisa y administra tus citas</span>
@@ -36,7 +36,7 @@
                 <td><span class="fontSecondary">{{cita.data.field_date.und[0].value.date}}</span> - <span class="fontHigh">{{cita.data.field_date.und[0].value.time}}</span></td>
                 <td>{{cita.getStateString()}}</td>
                 <td class="toolCol">
-                  <ion-icon name="menu" (click)="editCita(cita.data)" *ngIf="this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION]);"></ion-icon>
+                  <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="editCita(cita.data)" *ngIf="this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION]);"/>
                   <button  *ngIf="cita.checkState(userData.STATE_PENDIENTE) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION])" (click)="updateStatePop(cita, this.userData.STATE_CONFIRMADA)"  class="bgColorSecondary generalButton tableButton">Confirmar</button>
                   <button  *ngIf="cita.checkState(userData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Activar</button>
                   <button  *ngIf="cita.checkState(userData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Ver Progreso</button>

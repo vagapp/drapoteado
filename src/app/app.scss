@@ -120,7 +120,6 @@ ion-content{
 }
 
 .section_icon img{
-    background-color: black;
     height: 100px;
     width: 100px;
 }
@@ -299,7 +298,19 @@ border: 0px solid #000000;
     height: 100px;
     width: 100px;
     display: inline-block;
-    background-color: black;
+}
+
+.drap_edit_icon{
+    max-width: 20px;
+    max-height: 20px;
+    cursor: pointer;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.toolCol .icon_drapo {
+    max-width: 15px;
+    max-height: 15px;
 }
 
 .dateright{

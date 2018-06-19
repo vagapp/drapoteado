@@ -2,13 +2,13 @@
 <div >
   <ion-header >
     <ion-navbar color="primary">
-      <ion-title><ion-icon name="menu"></ion-icon> <span class="lightFont">DR</span>AP</ion-title>
+      <ion-title><img src="assets/imgs/logo-blanco.svg" class="header_logo_drap"/></ion-title>
       <ion-buttons right class="menu_buttons" *ngIf="this.userData.checkUserFeature([this.userData.TIPO_ANY],[this.userData.PLAN_ANY],false);">
-      <button ion-button>Alertas <span>10</span></button>
-      <button ion-button>{{this.userData.userData.name}} <ion-icon name="menu"></ion-icon></button>
+      <!--<button ion-button>Alertas <span>10</span></button>-->
+      <button ion-button>{{this.userData.userData.name}} <img src="assets/imgs/flecha-blanca.svg" class="header_flecha_blanca" /></button>
       </ion-buttons>
       <button *ngIf="this.userData.checkUserFeature([this.userData.TIPO_ANY],[this.userData.PLAN_ANY],false);" ion-button end menuToggle >
-            <ion-icon name="menu"></ion-icon>
+            <img src="assets/imgs/menu.svg" class="header_menu_drap" />
           </button>
     </ion-navbar>
   </ion-header>
