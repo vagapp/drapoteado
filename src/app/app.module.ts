@@ -29,7 +29,13 @@ import { FooterComponent } from '../components/footer/footer';
 import { UserDataProvider } from '../providers/user-data/user-data';
 import {HttpClientModule} from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
+import { HTTP } from '@ionic-native/http';
+
 import { IonicStorageModule } from '@ionic/storage';
+
+import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
+import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
+import { Platform } from 'ionic-angular';
 
 @NgModule({
   declarations: [
@@ -56,6 +62,7 @@ import { IonicStorageModule } from '@ionic/storage';
   imports: [
     BrowserModule,
     HttpClientModule,
+    NativeHttpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
   ],
@@ -84,7 +91,10 @@ import { IonicStorageModule } from '@ionic/storage';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserDataProvider,
-    HttpClient
+    HttpClient,
+    {provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
+    
+    
   ]
 })
 export class AppModule {}

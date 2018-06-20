@@ -32,7 +32,7 @@ export class MyApp {
     public splashScreen: SplashScreen,
     public userData: UserDataProvider,
     private storage: Storage,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
   ) {
     this.initializeApp();
 
@@ -49,6 +49,7 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      Debugger.log(['platform redy']);
      
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -58,6 +59,7 @@ export class MyApp {
         //sometimes this runs faster so it should be assigned here.
         this.userData.sessionData.token = val['token'];
         this.userData.checkConnect().subscribe((val)=>{
+          Debugger.log(['checkConnect val',val]);
           if(val['user']['uid'] != 0){
             console.log("logged in as", val['user']['name']);
             this.userData.setSessionData(val);
@@ -89,7 +91,11 @@ export class MyApp {
             this.splashScreen.hide();
           }
         });
-    });
+    }, response => {
+      console.log("POST call in error", JSON.stringify(response));
+  },() => {
+    console.log("The POST observable is now completed.");
+});
     });
   }
 

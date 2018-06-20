@@ -4,5 +4,11 @@
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "proxies": [
+    {
+      "path": "/backend",
+      "proxyUrl": "http://vmi118470.contaboserver.net/~drapp/backend"
+    }
+  ]
 }

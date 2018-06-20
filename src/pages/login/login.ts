@@ -75,11 +75,14 @@ export class LoginPage {
           
       },
       response => {
-          console.log("POST call in error", response);
-          console.log("show error");
+          Debugger.log(["POST call in error", JSON.stringify(response)]);
+          /*if(response.error.lenght > 0){
           response.error.forEach(element => {
             this.presentToast(element);
           });
+          }else{
+            //this.presentToast();
+          }*/
       },
       () => {
           loader.dismiss();

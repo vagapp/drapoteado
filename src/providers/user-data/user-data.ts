@@ -92,6 +92,8 @@ export class UserDataProvider {
   }
 
   urlbase:string = "http://vmi118470.contaboserver.net/~drapp/backend/";
+  //urlbase:string = "https://servidor.nortecsoluciones.com/~drapp/backend/";
+  //urlbase:string = 'http://localhost:8100/backend/';
     userData = {
     uid:0,
     name:"",
@@ -129,7 +131,6 @@ export class UserDataProvider {
     private http: HttpClient,
     private storage: Storage,
   ) {
-
     Debugger.log(['Hello UserDataProvider Provider']);
     this.doctores = new Array();
     this.setup();
@@ -146,7 +147,9 @@ export class UserDataProvider {
   requestToken(){
     let url = this.urlbase+'appoint/user/token';
     let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8'});
+      {
+        'Content-Type':'application/json; charset=utf-8'
+      });
     let observer = this.http.post(url,"",{headers})
     observer.subscribe((val)=>{
      this.sessionData.token = val['token'];
@@ -269,9 +272,11 @@ export class UserDataProvider {
   login(username:string, password:string){
     let body = JSON.stringify({"username":username,"password":password});
     console.log(body);
-    let url = this.urlbase+'appoint/user/login';
-    let headers = new HttpHeaders({'Content-Type':'application/json; charset=utf-8',
-    'X-CSRF-Token': ""+this.sessionData.token,});
+    //let url = this.urlbase+'appoint/user/login';
+    let url = this.urlbase+'endpoint_test_forjson.php';
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json; charset=utf-8',
+      'X-CSRF-Token': ""+this.sessionData.token,});
     let login_observer = this.http.post(url,body,{headers});
     login_observer.subscribe(
       (val) => {
