@@ -33,6 +33,9 @@ import { HTTP } from '@ionic-native/http';
 
 import { IonicStorageModule } from '@ionic/storage';
 
+
+import { HttpModule } from '@angular/http';
+
 import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
 import { Platform } from 'ionic-angular';
@@ -63,6 +66,7 @@ import { Platform } from 'ionic-angular';
     BrowserModule,
     HttpClientModule,
     NativeHttpModule,
+    HttpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
   ],
@@ -92,9 +96,7 @@ import { Platform } from 'ionic-angular';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserDataProvider,
     HttpClient,
-    {provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
-    
-    
+    //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })
 export class AppModule {}

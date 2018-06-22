@@ -54,6 +54,8 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
+      this.splashScreen.show();
+      
       this.userData.requestToken().subscribe((val) => {
         //request token for this session, then check if conected to system connect.
         //sometimes this runs faster so it should be assigned here.
@@ -75,9 +77,11 @@ export class MyApp {
                   Debugger.log(["check of suscription",this.userData.subscription]);
                   if(Number(this.userData.subscription.field_active) === 0){
                   this.rootPage=FacturacionPage;
+                  this.splashScreen.hide();
                   clearInterval(moveinterval);
                   }else{
                   this.rootPage = HomePage;
+                  this.userData.cargarListaReportes();
                   this.splashScreen.hide();
                   clearInterval(moveinterval);
                   }
@@ -96,6 +100,7 @@ export class MyApp {
   },() => {
     console.log("The POST observable is now completed.");
 });
+
     });
   }
 

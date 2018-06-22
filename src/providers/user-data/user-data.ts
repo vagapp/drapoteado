@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
+
+import { HTTP } from '@ionic-native/http';
+import { Http } from '@angular/http';
+
 import { Storage } from '@ionic/storage';
 import { Citas } from './citas';
 import { Doctores } from './doctores';
@@ -7,6 +11,7 @@ import {Subject} from 'rxjs/Subject';
 import { planes } from './planes';
 import { subscriptions } from './subscriptions';
 import { Debugger } from './debugger';
+import { reportes } from './reportes';
 
 
 /*
@@ -31,6 +36,11 @@ export class UserDataProvider {
   citasCobrar:Citas[]; // citas por cobrar
   citasActivas:Citas[];  //cita activa
   citasParaHoy:number = 0; //numero de citas pendientes para hoy.
+
+
+  //datos para reportes
+  reportes:reportes[] = new Array();
+  todayReport:reportes = null;
 
   /**
    * datos de planes y suscripciones
@@ -130,6 +140,8 @@ export class UserDataProvider {
   constructor(
     private http: HttpClient,
     private storage: Storage,
+    private httpn: HTTP,
+    private Http: Http,
   ) {
     Debugger.log(['Hello UserDataProvider Provider']);
     this.doctores = new Array();
@@ -145,17 +157,20 @@ export class UserDataProvider {
   }
 
   requestToken(){
-    let url = this.urlbase+'appoint/user/token';
-    let headers = new HttpHeaders(
-      {
-        'Content-Type':'application/json; charset=utf-8'
-      });
+    let url = this.urlbase+'appoint/user/token.json';
+  
+    
+  let headers = new HttpHeaders(
+    {
+      'Content-Type':'application/json; charset=utf-8'
+    });
     let observer = this.http.post(url,"",{headers})
     observer.subscribe((val)=>{
      this.sessionData.token = val['token'];
      console.log("token updated",this.sessionData.token);
     });
-   return observer;
+    return observer;
+  
   }
 
   checkConnect(){
@@ -173,7 +188,7 @@ export class UserDataProvider {
   }
 
 
-
+s
   requestUserData(uid){
     console.log("tryna fetch userdata",uid );
     //recovers user data from the user uid
@@ -273,13 +288,14 @@ export class UserDataProvider {
     let body = JSON.stringify({"username":username,"password":password});
     console.log(body);
     //let url = this.urlbase+'appoint/user/login';
-    let url = this.urlbase+'endpoint_test_forjson.php';
+    let url = this.urlbase+'appoint/user/login';
     let headers = new HttpHeaders({
-      'Content-Type':'application/json; charset=utf-8',
+      'Content-Type':'application/json;charset=utf-8',
       'X-CSRF-Token': ""+this.sessionData.token,});
     let login_observer = this.http.post(url,body,{headers});
     login_observer.subscribe(
       (val) => {
+        Debugger.log(['data obtained on login',val]);
         //will implement custom data for login since it is very sensible that it is done in less connections and fastest as posible. login gives much more information than a simple user/uid request.
         this.sessionData.sessid = val['sessid'];
         this.sessionData.session_name = val['session_name'];
@@ -287,7 +303,7 @@ export class UserDataProvider {
         this.userData.uid = val['user']['uid'];
         this.userData.name = val['user']['name'];
         this.userData.pass = val['user']['pass'];
-        this.userData.mail = val['user']['mail'];
+        this.userData.mail = val['user']['mail'];   
         this.userData.status = val['user']['status'];
         this.userData.roles = val['user']['roles'];
         this.userData.field_tipo_de_usuario = val['user']['field_tipo_de_usuario'];
@@ -309,8 +325,8 @@ export class UserDataProvider {
         this.userData.field_forma_pago = val['user']['field_forma_pago'];
         this.userData.tutorial_state = val['user']['field_tutorial_state'];
         this.userData.field_doctores = val['user']['field_doctores'];
+        this.AuthSubject.next(this.userData.uid);
       });
-      this.AuthSubject.next(this.userData.uid);
       return login_observer;
   }
 
@@ -318,7 +334,7 @@ export class UserDataProvider {
     let body="";
     let url = this.urlbase+'appoint/user/logout';
     let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
+      {'Content-Type':'application/json',
       'X-CSRF-Token': ""+this.sessionData.token,
       'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
     });
@@ -428,6 +444,150 @@ export class UserDataProvider {
   }
 
 
+  //REPORTES METHODS
+  cargarListaReportes(){
+    if(this.todayReport === null || this.todayReport.nid ===null){
+      this.getTodayReport();
+    }
+
+    let moveinterval = setInterval(() =>{
+      if(this.todayReport === null || this.todayReport.nid === null){
+        Debugger.log(['waiting for today report']);
+      }else{
+        let aux_reportes = this.getReportes().subscribe(
+          (val) => {
+            let aux_results = Object.keys(val).map(function (key) { return val[key]; });
+            aux_results.forEach(result => {
+              //buscar el elemento comparando nids en los resultados, si no existe crearlo
+              let found = 0;
+              if( Number(this.todayReport.nid) ===  Number(result['nid']) ){
+                found = 1;
+                this.todayReport.setData(result);
+              }else{
+              this.reportes.forEach(element => {
+                if( Number(result['nid']) === Number(element.nid) ){
+                  Debugger.log(['se encontro reporte para actualziar',element.nid]);
+                  element.setData(result);
+                  found = 1;
+                }
+              });
+            }
+            if(found === 0){
+              let aux_rep = new reportes();
+              aux_rep.setData(result);
+              this.reportes.push(aux_rep);
+            }
+            });
+          }
+        );
+        clearInterval(moveinterval);
+      }
+    },500);
+   
+    
+  }
+
+  getTodayReport(){
+    Debugger.log(['gettint today report mami']);
+    let observer = this.getReportes(1).subscribe(
+      (val) => {
+        Debugger.log(['reporte de hoy resultado',val]);
+        let aux_results = Object.keys(val).map(function (key) { return val[key]; });
+        if(aux_results.length > 0){
+          Debugger.log(['se obtuvo dialyreport',aux_results]);
+          if(this.todayReport === null){
+            this.todayReport = new reportes();
+            this.todayReport.setData(aux_results[0]);
+          }else{
+            this.todayReport.setData(aux_results[0]);
+          }
+        }else{
+          this.generateTodayReport();
+        }
+      },response => {
+        console.log(response.error.text);
+        console.log("POST call in error", response);
+        //this.logout();
+      }
+    );
+    return observer;
+  }
+
+  getReportes( dialy:number = -1, date:string = UserDataProvider.getTodayDateTimeStringsFormated().datestring , uid:number = this.userData.uid){
+    this.userData.uid;
+    let filter = `?args[0]=${uid}`;
+    let extrafilters = `&args[1]=${date}${dialy === -1?'':`&args[2]=${dialy}`}`;
+    let url = this.urlbase+'appoint/rest_reportes.json'+filter+extrafilters;
+    Debugger.log(["url",url]);
+    let headers = new HttpHeaders(
+      {'Content-Type':'application/json; charset=utf-8',
+      'X-CSRF-Token': ""+this.sessionData.token,
+      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
+    });
+    let observer = this.http.get(url,{headers});
+    observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
+    return observer;
+  }
+
+  generateTodayReport(){
+    const uax_treport = new reportes();
+    uax_treport.author_uid = this.userData.uid;
+    uax_treport.doctores = this.getDoctoresSimpleArray();
+    const todaydatestrings = UserDataProvider.getTodayDateTimeStrings();
+    uax_treport.datefrom_date = todaydatestrings.datestring;
+    uax_treport.datefrom_time = todaydatestrings.timestring;
+    uax_treport.dateTo_date = todaydatestrings.datestring;
+    uax_treport.dateTo_time = todaydatestrings.timestring;
+    uax_treport.dialy = true;
+    this.generateNewNode(uax_treport.getData()).subscribe(
+      (val)=>{
+        let aux_results = Object.keys(val).map(function (key) { return val[key]; });
+        Debugger.log(['returned created node report',aux_results]);
+        uax_treport.nid = aux_results['nid'];
+        this.todayReport = uax_treport;
+        Debugger.log(['today report generated final',this.todayReport]);
+        this.cargarListaReportes();
+      }
+    );
+  }
+
+  deleteReport(report){
+    if( Number(this.todayReport.nid) === Number(report.nid)){
+      this.todayReport = null;
+    }
+    this.reportes = this.reportes.filter(element => {
+      return Number(element.nid) !== Number(report.nid);
+    });
+    Debugger.log(['reportes filtered',this.reportes]);
+    Debugger.log(['NOW DELETE REPORT FROM DATABASE MF']);
+    /*let observable = this.deleteNode(report.getData());
+    observable.subscribe(
+      (val) => {
+        this.cargarListaReportes();
+      }
+    );
+    return observable*/
+  }
+
+  static getTodayDateTimeStrings(){
+    let date = new Date();
+    let datestring = `${(date.getMonth()+1)}/${date.getDate()}/${date.getFullYear()}`;
+    let timestring =  `${date.getHours()}:${date.getMinutes()}:00`;
+    datestring = "5/14/2018"; //testing*/
+    timestring = "08:00:00"; //testing*/
+    return {"datestring":datestring,"timestring":timestring};
+  }
+
+  static getTodayDateTimeStringsFormated(){
+    let date = new Date();
+    let datestring = `${date.getFullYear()}-${(date.getMonth()+1)}-${date.getDate()}`;
+    let timestring = `${date.getHours()}:${date.getMinutes()}:00`;
+    datestring = "2018-05-14"; //testing*/
+    timestring = "08:00:00"; //testing*/
+    return {"datestring":datestring,"timestring":timestring};
+  }
+
+
   //CITAS METHODS
   generateNewCita( newCita ){return this.generateNewNode(newCita);}
   updateCita( cita ){return this.updateNode(cita);}
@@ -444,15 +604,9 @@ export class UserDataProvider {
   cargarCitas(){
     console.log("cargando citas");
     let date = new Date();
-    let datestring = (date.getMonth()+1)+"/"+date.getDate()+"/"+date.getFullYear();
-    let timestring =  date.getHours()+":"+date.getMinutes();
-    datestring = "5/14/2018"; //testing
-    timestring = "08:00"; //testing
-    console.log("datestring ",datestring);
-    //this.citas = new Array();
-    /*let aux_arr = new Array();
-    aux_arr[0]= this.userData.uid;*/
-    //let aux_citasparahoy = 0;
+    let datestrings = UserDataProvider.getTodayDateTimeStrings();
+    let datestring = datestrings.datestring;
+    let timestring = datestrings.timestring;
     console.log("simple array got",this.getDoctoresSimpleArray());
     let dis = this;
     this.getCitas(datestring,datestring,this.getDoctoresSimpleArray(),new Array(),new Array()).subscribe(
@@ -470,7 +624,6 @@ export class UserDataProvider {
         //aux_citasparahoy++;
        });
        //this.citasParaHoy = aux_citasparahoy;
-       
        console.log(dis.citas);
        //this.nextCitas = new Array();
        this.doctores.forEach(doctor => {
@@ -480,7 +633,6 @@ export class UserDataProvider {
        this.getCitasActivas();
        this.getCitasPendientes();
        this.getCitasParaHoy();
-       
        //this.setCitas();
        //this.getNextCita();
        //console.log("doctores resultado",this.doctores);

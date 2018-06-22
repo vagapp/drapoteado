@@ -24,13 +24,13 @@
              </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr *ngFor="let report of this.userData.reportes">
                 <td>01</td>
-                <td class="fontSecondary">00/00/0000</td>
+                <td class="fontSecondary">{{report.datefrom_date}}</td>
                 <td class="toolCol">
                   <img src="assets/imgs/ver.svg" class="icon_drapo">
                   <img src="assets/imgs/editar.svg" class="icon_drapo">
-                  <button class="bgColorSecondary generalButton tableButton">Exportar</button>
+                  <!--<button class="bgColorSecondary generalButton tableButton">Exportar</button>-->
                   <button class="bgColorPrimary generalButton tableButton">Eliminar</button>
                 </td>
              </tr>
