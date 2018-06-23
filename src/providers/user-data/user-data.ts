@@ -449,12 +449,11 @@ s
     if(this.todayReport === null || this.todayReport.nid ===null){
       this.getTodayReport();
     }
-
     let moveinterval = setInterval(() =>{
       if(this.todayReport === null || this.todayReport.nid === null){
         Debugger.log(['waiting for today report']);
       }else{
-        let aux_reportes = this.getReportes().subscribe(
+        this.getReportes().subscribe(
           (val) => {
             let aux_results = Object.keys(val).map(function (key) { return val[key]; });
             aux_results.forEach(result => {
@@ -472,6 +471,7 @@ s
                 }
               });
             }
+            Debugger.log(['is report found?',found]);
             if(found === 0){
               let aux_rep = new reportes();
               aux_rep.setData(result);
@@ -504,6 +504,7 @@ s
         }else{
           this.generateTodayReport();
         }
+       Debugger.log(['al final el reporte de hoy es:',this.todayReport]); 
       },response => {
         console.log(response.error.text);
         console.log("POST call in error", response);
@@ -513,7 +514,7 @@ s
     return observer;
   }
 
-  getReportes( dialy:number = -1, date:string = UserDataProvider.getTodayDateTimeStringsFormated().datestring , uid:number = this.userData.uid){
+  getReportes( dialy:number = -1, date:string = UserDataProvider.getTodayDateTimeStringsSearchFormat().datestring , uid:number = this.userData.uid){
     this.userData.uid;
     let filter = `?args[0]=${uid}`;
     let extrafilters = `&args[1]=${date}${dialy === -1?'':`&args[2]=${dialy}`}`;
@@ -533,7 +534,7 @@ s
     const uax_treport = new reportes();
     uax_treport.author_uid = this.userData.uid;
     uax_treport.doctores = this.getDoctoresSimpleArray();
-    const todaydatestrings = UserDataProvider.getTodayDateTimeStrings();
+    const todaydatestrings = UserDataProvider.getTodayDateTimeStringsSaveFormat();
     uax_treport.datefrom_date = todaydatestrings.datestring;
     uax_treport.datefrom_time = todaydatestrings.timestring;
     uax_treport.dateTo_date = todaydatestrings.datestring;
@@ -555,35 +556,36 @@ s
     if( Number(this.todayReport.nid) === Number(report.nid)){
       this.todayReport = null;
     }
-    this.reportes = this.reportes.filter(element => {
-      return Number(element.nid) !== Number(report.nid);
-    });
+    var index = this.reportes.indexOf(report);
+    this.reportes.splice(index, 1);    
     Debugger.log(['reportes filtered',this.reportes]);
     Debugger.log(['NOW DELETE REPORT FROM DATABASE MF']);
-    /*let observable = this.deleteNode(report.getData());
+    let observable = this.deleteNode(report.getData());
     observable.subscribe(
       (val) => {
         this.cargarListaReportes();
       }
     );
-    return observable*/
+    return observable
   }
 
-  static getTodayDateTimeStrings(){
+
+
+  static getTodayDateTimeStringsSaveFormat(){
     let date = new Date();
-    let datestring = `${(date.getMonth()+1)}/${date.getDate()}/${date.getFullYear()}`;
-    let timestring =  `${date.getHours()}:${date.getMinutes()}:00`;
-    datestring = "5/14/2018"; //testing*/
-    timestring = "08:00:00"; //testing*/
+    let datestring = `${date.getDate()}/${(date.getMonth()+1)}/${date.getFullYear()}`;
+    let timestring =  `${date.getHours()}:${date.getMinutes()}`;
+    datestring = "14/05/2018"; //testing*/
+    timestring = "08:00"; //testing*/
     return {"datestring":datestring,"timestring":timestring};
   }
 
-  static getTodayDateTimeStringsFormated(){
+  static getTodayDateTimeStringsSearchFormat(){
     let date = new Date();
-    let datestring = `${date.getFullYear()}-${(date.getMonth()+1)}-${date.getDate()}`;
-    let timestring = `${date.getHours()}:${date.getMinutes()}:00`;
-    datestring = "2018-05-14"; //testing*/
-    timestring = "08:00:00"; //testing*/
+    let datestring = `${(date.getMonth()+1)}/${date.getDate()}/${date.getFullYear()}`;
+    let timestring = `${date.getHours()}:${date.getMinutes()}`;
+    datestring = "05/14/2018"; //testing*/
+    timestring = "08:00"; //testing*/
     return {"datestring":datestring,"timestring":timestring};
   }
 
@@ -601,10 +603,10 @@ s
     return this.updateCita( cita.data );
   }
   
-  cargarCitas(){
+  cargarCitas( logoutonerror = true ){
     console.log("cargando citas");
     let date = new Date();
-    let datestrings = UserDataProvider.getTodayDateTimeStrings();
+    let datestrings = UserDataProvider.getTodayDateTimeStringsSearchFormat();
     let datestring = datestrings.datestring;
     let timestring = datestrings.timestring;
     console.log("simple array got",this.getDoctoresSimpleArray());
@@ -638,8 +640,9 @@ s
        //console.log("doctores resultado",this.doctores);
       },
        response => {
-         console.log(response.error.text);
-         console.log("POST call in error", response);
+         //console.log(response.error.text);
+         Debugger.log(["POST call in error", response]);
+         if(logoutonerror)
          this.logout();
        }
       );

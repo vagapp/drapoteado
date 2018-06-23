@@ -58,6 +58,7 @@ export class NuevacitaModalPage {
       this.newCita.field_cita_doctor.und[0]=this.userData.userData.uid;
       this.newCita.field_cita_recepcion.und[0]=this.userData.userData.uid;
       this.newCita.field_cita_caja.und[0]="_none";
+      this.newCita.field_servicios_cita.und = [];
     }
     this.userData.generateNewCita( this.newCita ).subscribe(
     (val)=>{

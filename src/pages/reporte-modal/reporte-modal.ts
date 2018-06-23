@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { UserDataProvider, servicios } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
+import { reportes } from '../../providers/user-data/reportes';
+import { Debugger } from '../../providers/user-data/debugger';
 
 /**
  * Generated class for the ReporteModalPage page.
@@ -16,14 +18,14 @@ import { Citas } from '../../providers/user-data/citas';
   templateUrl: 'reporte-modal.html',
 })
 export class ReporteModalPage {
-  reportDateFrom:string;
+  /*reportDateFrom:string;
   reportDateTo:string;
   doctoresFilter:number[];
   cajaFilter:number[];
-  recepcionFilter:number[];
-  citas:Citas[];
-  servicios: servicios[];
-
+  recepcionFilter:number[];*/
+  //citas:Citas[];
+  //servicios: servicios[];
+  actualrepot:reportes = null;
   noCitas:number;
   noShow:number;
   noCancel:number;
@@ -52,8 +54,9 @@ export class ReporteModalPage {
     public userData: UserDataProvider,
   ) {
     this.reset();
-    this.setDefaultTodayFilter();
-    this.loadReport();
+    this.setReport();
+    //this.setDefaultTodayFilter();
+    this.loadReport( false );
   }
 
   ionViewDidLoad() {
@@ -61,7 +64,8 @@ export class ReporteModalPage {
   }
 
   reset(){
-    this.citas = new Array();
+    this.actualrepot = new reportes();
+    this.actualrepot.citas = new Array();
     this.duracionTotalMs = 0;
     this.duracionTotalStr="00:00";
     this.noCitas = 0;
@@ -82,20 +86,34 @@ export class ReporteModalPage {
     this.cajaAdeudo = 0;
   }
 
+  setReport(){
+    console.log('loadingservice', this.navParams.get('reporte'));
+    let aux_repo = this.navParams.get('reporte');
+    if(aux_repo){
+      this.actualrepot = aux_repo;
+    }else{
+      this.actualrepot = this.userData.todayReport;
+    }
+    if (this.actualrepot === null){
+     Debugger.log(['cagamos']);
+    }
+    Debugger.log(['reporte cargado es',this.actualrepot]);
+  }
+
   setDefaultTodayFilter(){
     //let date = new Date();
     //this.reportDateFrom = (date.getMonth()+1)+"/"+date.getDate()+"/"+date.getFullYear();
-    this.reportDateFrom = "5/14/2018";
+    /*this.reportDateFrom = "5/14/2018";
     this.reportDateTo = this.reportDateFrom;
     this.doctoresFilter = this.userData.getDoctoresSimpleArray();
     this.cajaFilter = new Array();
-    this.recepcionFilter = new Array();
+    this.recepcionFilter = new Array();*/
   }
 
-  loadReport(){
+  loadReport( logoutonerrror = true ){
     console.log("cargando citas de reporte");
     let dis = this;
-    this.userData.getCitas(this.reportDateFrom,this.reportDateTo,this.doctoresFilter,this.cajaFilter,this.recepcionFilter).subscribe(
+    this.userData.getCitas(this.actualrepot.reportDateFrom,this.actualrepot.reportDateTo,this.actualrepot.doctoresFilter,this.actualrepot.cajaFilter,this.actualrepot.recepcionFilter).subscribe(
       (val)=>{
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
         aux_results.forEach(function(element){
@@ -116,16 +134,16 @@ export class ReporteModalPage {
             if(aux_cita.cobroCheque)dis.totalCheques+=aux_cita.cobroCheque;
 	          dis.totalcuentas+=100;
             dis.totalAdeudo+=100;
-            dis.citas.push(aux_cita);
+            dis.actualrepot.citas.push(aux_cita);
           }
        });
        this.setduracionTotalStr();
        this.cargarServicios();
-       console.log("citas obtenidas por el reporte",this.citas);
+       console.log("citas obtenidas por el reporte",this.actualrepot.citas);
       },
        response => {
-         console.log(response.error.text);
          console.log("POST call in error", response);
+         if(logoutonerrror)
          this.userData.logout();
        }
       );
@@ -133,7 +151,7 @@ export class ReporteModalPage {
 
   cargarServicios(){
     console.log("cargando servicios");
-    this.servicios = new Array();
+    this.actualrepot.servicios = new Array();
     let aux_arr = new Array();
     aux_arr[0]= this.userData.getDoctoresSimpleArray()
     this.userData.getServicios(aux_arr).subscribe(
@@ -141,10 +159,10 @@ export class ReporteModalPage {
          let aux_results = Object.keys(val).map(function (key) { return val[key]; });
          let dis  = this;
          aux_results.forEach(function(element) {
-          dis.servicios.push(element);          
+          dis.actualrepot.servicios.push(element);          
         });
-        dis.citas.forEach(cita => {
-          cita.setAddedServices(dis.servicios);
+        dis.actualrepot.citas.forEach(cita => {
+          cita.setAddedServices(dis.actualrepot.servicios);
         });
         
       },
@@ -152,8 +170,8 @@ export class ReporteModalPage {
           console.log("POST call in error", response);
         },
         () => {
-          console.log("citas w services added",this.citas);
-          console.log("loadedServices",this.servicios);
+          console.log("citas w services added",this.actualrepot.citas);
+          console.log("loadedServices",this.actualrepot.servicios);
       });
        
       }

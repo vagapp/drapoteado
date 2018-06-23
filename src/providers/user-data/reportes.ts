@@ -15,9 +15,18 @@ export class reportes{
     dateTo_date:string = null;
     dateTo_time:string = null;
     dialy:boolean = true; //si es un reporte diario autogenerado
-    citas:Citas[];
+    citas:Citas[] = new Array();
+    servicios: servicios[] = new Array();
     constructor(){
     }
+
+
+    get reportDateFrom():string{ return `${(this.datefrom.getMonth()+1)}/${this.datefrom.getDate()}/${this.datefrom.getFullYear()}`;}
+    get reportDateTo():string{ return `${(this.dateTo.getMonth()+1)}/${this.dateTo.getDate()}/${this.dateTo.getFullYear()}`;}
+    get doctoresFilter():number[]{ return this.doctores; }
+    get cajaFilter():number[]{ return this.cajas; }
+    get recepcionFilter():number[]{ return this.recepciones; }
+
     setData(input_data){
         Debugger.log(["input_data en reportes",input_data]);
         this.nid = input_data['nid'];
@@ -54,8 +63,8 @@ export class reportes{
         ret =  {
             Nid:this.nid,
             type:"reportes",
-            field_datefrom:{und:[{value:[{date:this.datefrom_date},{time:this.datefrom_time}]}]},
-            field_dateto:{und:[{value:[{date:this.dateTo_date},{time:this.dateTo_time}]}]}, 
+            field_datefrom:{und:[{value:{date:this.datefrom_date,time:this.datefrom_time}}]},
+            field_dateto:{und:[{value:{date:this.dateTo_date,time:this.dateTo_time}}]},
             field_doctores:{und:[]},
             field_cajas:{und:[]},
             field_recepciones:{und:[]},
