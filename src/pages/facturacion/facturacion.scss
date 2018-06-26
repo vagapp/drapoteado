@@ -97,4 +97,22 @@ page-facturacion {
     width: 20%
   }
 
+  .myplan_doctor{
+    display: block;
+    color: #6DB5DE;
+    padding-left: 50px;
+    font-size: 1.5em;
+    font-weight: 800;
+  }
+
+  .myplan_explain{
+    display: block;
+    padding-left: 50px;
+  }
+
+  .delete_doctor{
+    color:red !important;
+    font-size: 0.6em;
+  }
+
 }

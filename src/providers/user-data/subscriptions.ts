@@ -13,6 +13,8 @@ export class subscriptions{
     field_plan_sus:number=null //nid del plan
     field_plan_holder:number=null; //uid
     field_doctores:number[]=null; //array of doctor uids
+    field_doctores_json:string = null; //a json with requiered info about doctors.
+    field_doctores_info:any[] = null;
     field_subusuarios:number[]=null; //array of sub acound uids
     field_invitation_code:string = null;//String to enter this suscription
     field_group_name:string = null; // group name, just an accesory
@@ -22,17 +24,20 @@ export class subscriptions{
     field_stripe_sus_id:string = null;
     field_stripe_src_sus_id:string = null;
     field_stripe_cus_sub_id:string = null;
+    noSubcuentas:number = 0;
+
 
     constructor(){
     }
 
     setData(input_data){
         console.log("tryna assign input data to subscription",input_data);
-        this.nid = input_data['Nid'];
+        this.nid = input_data['nid'];
         this.field_plan_sus = input_data['field_plan_sus'];
         this.field_plan_holder = input_data['field_plan_holder'];
-        this.field_doctores = input_data['field_doctores'];
-        this.field_subusuarios = input_data['field_subusuarios'];
+        this.field_doctores = null;
+        this.field_doctores_json = input_data['field_doctores_json'];
+        this.field_subusuarios = null; 
         this.field_invitation_code = input_data['field_invitation_code'];
         this.field_group_name = input_data['field_group_name'];
         this.field_active = input_data['field_active']['value'];
@@ -40,25 +45,29 @@ export class subscriptions{
         this.field_stripe_sus_id = input_data['field_stripe_sus_id'];
         this.field_stripe_src_sus_id = input_data['field_stripe_src_sus_id'];
         this.field_stripe_cus_sub_id = input_data['field_stripe_cus_sub_id'];
+        this.field_doctores_info = new Array();
+        if(input_data['field_doctores']){
+            this.field_doctores = new Array();
+            input_data['field_doctores'].forEach(element => {
+                this.field_doctores.push(element['uid']);
+            });
+        }
+        if(input_data['field_subusuarios']){
+            this.field_subusuarios = new Array();
+            input_data['field_subusuarios'].forEach(element => {
+                this.field_subusuarios.push(element['uid']);
+            });
+        }
+        this.field_doctores_info = JSON.parse(this.field_doctores_json);
+        if(this.field_subusuarios)
+        this.noSubcuentas = this.field_subusuarios.length;
     }
 
     getData():any{
+        Debugger.log(['tryna get data from',this]);
         let ret = null;
         if(this.nid !== null){
         ret =  {
-            /*Nid:this.nid,
-            type:"suscripcion",
-            field_plan_sus:{und:[{value:this.field_plan_sus}]}, 
-            field_plan_holder:this.field_plan_holder,
-            field_doctores:this.field_doctores,
-            field_subusuarios:this.field_subusuarios,
-            field_invitation_code:this.field_invitation_code,
-            field_group_name:this.field_group_name,
-            field_active:this.field_active,
-            //field_next_cobro:this.field_next_cobro,
-            field_stripe_sus_id:this.field_stripe_sus_id,
-            field_stripe_src_sus_id:this.field_stripe_src_sus_id,
-            field_stripe_cus_sub_id:this.field_stripe_cus_sub_id,*/
             Nid:this.nid,
             type:"suscripcion",
             field_plan_sus:{und:[this.field_plan_sus]}, 
@@ -73,12 +82,12 @@ export class subscriptions{
             field_stripe_src_sus_id:{und:[{value:this.field_stripe_src_sus_id}]}, 
             field_stripe_cus_sub_id:{und:[{value:this.field_stripe_cus_sub_id}]}, 
         }
-        if(this.field_doctores !== null){
+        if(this.field_doctores){
             this.field_doctores.forEach(element => {
             ret.field_doctores.und.push(element);
         });
         }
-        if(this.field_subusuarios !== null){
+        if(this.field_subusuarios){
         this.field_subusuarios.forEach(element => {
             ret.field_subusuarios.und.push(element);
         });
@@ -119,9 +128,11 @@ export class subscriptions{
        input_planes.forEach(plan => {
            if(plan.checkNid(this.field_plan_sus)){
                this.plan = plan;
-               return true;
+               this.is_plan_set = true;
+               ret = this.is_plan_set;
            }
        });
+       Debugger.log(['returning plan found and set', this.is_plan_set]);
        return ret; 
     }
 

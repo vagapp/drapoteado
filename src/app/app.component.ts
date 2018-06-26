@@ -50,15 +50,19 @@ export class MyApp {
   initializeApp() {
     this.platform.ready().then(() => {
       Debugger.log(['platform redy']);
+      let loading = this.loadingCtrl.create({
+        content: 'Bienvenido'
+      });
+      loading.present();
      
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
-      this.splashScreen.show();
       
       this.userData.requestToken().subscribe((val) => {
         //request token for this session, then check if conected to system connect.
         //sometimes this runs faster so it should be assigned here.
+        this.userData.cargarPlanes();
         this.userData.sessionData.token = val['token'];
         this.userData.checkConnect().subscribe((val)=>{
           Debugger.log(['checkConnect val',val]);
@@ -70,19 +74,26 @@ export class MyApp {
               //val['user'] = user_aux;
               console.log(val);
               this.userData.setUserData(val);
-              this.userData.cargarPlanes();
               this.userData.cargarSubscription();
               let moveinterval = setInterval(() =>{
-                if(this.userData.subscription !== null){
+                Debugger.log(['checking initiation']);
+                Debugger.log(['planes set',this.userData.are_planes_set]);
+                Debugger.log(['planes set',this.userData.planes]);
+                Debugger.log(['subscription',this.userData.subscription]);
+                if(
+                  this.userData.are_planes_set && 
+                  this.userData.subscription !== null && 
+                  this.userData.subscription.is_plan_set
+                ){
                   Debugger.log(["check of suscription",this.userData.subscription]);
                   if(Number(this.userData.subscription.field_active) === 0){
                   this.rootPage=FacturacionPage;
-                  this.splashScreen.hide();
+                  loading.dismiss();
                   clearInterval(moveinterval);
                   }else{
                   this.rootPage = HomePage;
                   this.userData.cargarListaReportes();
-                  this.splashScreen.hide();
+                  loading.dismiss();
                   clearInterval(moveinterval);
                   }
               }
@@ -92,7 +103,7 @@ export class MyApp {
           }else{
             console.log("not logged in.");
             this.rootPage = LoginPage;
-            this.splashScreen.hide();
+            loading.dismiss();
           }
         });
     }, response => {

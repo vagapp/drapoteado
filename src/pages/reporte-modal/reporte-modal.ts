@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { UserDataProvider, servicios } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { reportes } from '../../providers/user-data/reportes';
@@ -18,6 +18,8 @@ import { Debugger } from '../../providers/user-data/debugger';
   templateUrl: 'reporte-modal.html',
 })
 export class ReporteModalPage {
+
+  reportloaded:boolean = false;
   /*reportDateFrom:string;
   reportDateTo:string;
   doctoresFilter:number[];
@@ -52,11 +54,23 @@ export class ReporteModalPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public userData: UserDataProvider,
+    public loadingCtrl: LoadingController
   ) {
+    let loading = this.loadingCtrl.create({
+      content: 'Cargando Reporte...'
+    });
+    loading.present();
     this.reset();
     this.setReport();
     //this.setDefaultTodayFilter();
     this.loadReport( false );
+    let loadinter = setInterval(() => {
+      if(this.reportloaded){
+        loading.dismiss();
+        clearInterval(loadinter);
+      }
+     
+    }, 500);
   }
 
   ionViewDidLoad() {
@@ -164,7 +178,7 @@ export class ReporteModalPage {
         dis.actualrepot.citas.forEach(cita => {
           cita.setAddedServices(dis.actualrepot.servicios);
         });
-        
+        this.reportloaded = true;
       },
         response => {
           console.log("POST call in error", response);

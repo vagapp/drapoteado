@@ -885,7 +885,7 @@ s
           dis.planes.push(aux_plan);
           }
         });
-        console.log(this.planes);
+        Debugger.log(['planes are',this.planes]);
         this.are_planes_set = true;
       });
     return observer;
@@ -893,11 +893,12 @@ s
 
   cargarSubscription(){
     let nidFilter = "?args[0]=all";
-    console.log("userdata sub id",this.userData.field_sub_id);
+    Debugger.log(["userdata sub id",this.userData.field_sub_id]);
     if(Number(this.userData.field_sub_id.und[0]) !== Number(0)){
-    nidFilter="?args[0]="+this.userData.field_sub_id.und[0];
-    let url = this.urlbase+'appoint/rest_suscripciones.json'+nidFilter;
-    console.log("url",url);
+    //nidFilter="?args[0]="+this.userData.field_sub_id.und[0];
+    let filter=`?args[0]=all&?args[1]=${this.userData.uid}&args[2]=${this.userData.uid}`;
+    let url = this.urlbase+'appoint/rest_suscripciones.json'+filter;
+    Debugger.log(["url",url]);
     let headers = new HttpHeaders(
       {'Content-Type':'application/json; charset=utf-8',
       'X-CSRF-Token': ""+this.sessionData.token,
@@ -906,24 +907,21 @@ s
     let observer = this.http.get(url,{headers});
     observer.subscribe(
       (val)=>{
+        Debugger.log(['subscription raw cal',val]);
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
-        let dis = this;
-        aux_results.forEach(function(element){
-          //create a suscription object. and fill it.
-          //dis.subscription = new subscriptions();
-          let aux_subs = new subscriptions();
-          aux_subs.setData(element);
-          dis.subscription = aux_subs;
-          //dis.subscription.setPlanFromList(dis.planes);
-        });
-        console.log("subscription",this.subscription);
-        if(!(this.subscription.field_plan_sus === null)){
+        let aux_subs = new subscriptions();
+        aux_subs.setData(aux_results[0]);
+          Debugger.log(["subscription",aux_subs]);
+        if(!(aux_subs.field_plan_sus === null)){
         let setPlan_interval = setInterval(()=>{
-          console.log("waiting for planes");
-          if(this.subscription.is_plan_set){
-            console.log("planes are set");
-            console.log("added plan is",this.subscription.plan);
-            clearInterval(setPlan_interval)
+          Debugger.log(["waiting for planes"]);
+          aux_subs.is_plan_set = aux_subs.setPlanFromList(this.planes);
+          Debugger.log(['subs is plan set',aux_subs.is_plan_set]);
+          if(aux_subs.is_plan_set){
+            Debugger.log(["planes are set"]);
+            Debugger.log(["added plan is",aux_subs.plan]);
+            this.subscription = aux_subs;
+            clearInterval(setPlan_interval);
           }
         },500);
       }
@@ -934,7 +932,7 @@ s
     this.subscription = subscriptions.getEmptySuscription();
     this.subscription.is_plan_set = true;
     this.susSubject.next(0);
-    return false;
+    return null;
   }
   }
 
@@ -997,6 +995,16 @@ s
     if(suscriptions === null || suscriptions === undefined || suscriptions.length === 0){ suscriptionscheck = true;}
     else{suscriptionscheck = this.checkUserSuscription(suscriptions,debug);}
     if(permisioncheck && suscriptionscheck){ ret = true; }
+    return ret;
+  }
+
+
+  checkUserPlanHolder():boolean{
+    let ret = false;
+    Debugger.log(['checking plan holder',this.subscription.field_plan_holder],false);
+    if(this.subscription && this.subscription.field_plan_holder){
+    ret = this.userData.uid === this.subscription.field_plan_holder;
+  }
     return ret;
   }
 

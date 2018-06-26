@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { sources } from '../../providers/user-data/sources';
 import { Debugger } from '../../providers/user-data/debugger';
@@ -30,6 +30,8 @@ export class FacturacionPage {
     public userData: UserDataProvider,
     public navCtrl: NavController, 
     public navParams: NavParams,
+    public loadingCtrl:LoadingController,
+    public alertCtrl: AlertController
   ) {
   }
 
@@ -88,6 +90,53 @@ export class FacturacionPage {
     }
   }
 
+  popRemoveDoctorSus( uid ){
+    let alert = this.alertCtrl.create({
+      title: 'Remover Doctor',
+      message: '¿esta seguro que desea remover este doctor de la subscripción?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+           
+          }
+        },
+        {
+          text: 'Si',
+          handler: () => { 
+            this.removeDoctorSus(uid);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  removeDoctorSus( uid ){
+    if(this.userData.userData.uid === uid){
+      return false;
+    }
+    let loading = this.loadingCtrl.create({
+      content: 'Eliminando usuario'
+    });
+    loading.present();
+    Debugger.log(['removing ',uid]);
+    Debugger.log(['index of uid',this.userData.subscription.field_doctores.indexOf(uid)]);
+    if(this.userData.subscription.field_doctores.indexOf(uid) >= 0){
+    this.userData.subscription.field_doctores.splice(this.userData.subscription.field_doctores.indexOf(uid), 1);
+    }
+    Debugger.log(['userData after removing doctor',this.userData.subscription.field_doctores]);
+    this.userData.updateSus(this.userData.subscription).subscribe(
+      (val) =>{
+        Debugger.log(['response from deleting doctor on subs',val]);
+        this.userData.cargarSubscription().subscribe((val)=>{
+        loading.dismiss();
+        });
+      }
+    );
+  }
+
   loadSources(){
     Debugger.log(['loading srcs']);
     let old_selected = this.selected_source;
@@ -102,6 +151,7 @@ export class FacturacionPage {
   }
 
   setupStripe(){
+    if(this.userData.subscription === null || this.userData.subscription.plan === null){
     let elements = this.stripe.elements();
     var style = {
       base: {
@@ -161,4 +211,6 @@ export class FacturacionPage {
       });
     });
   }
+}
+
 }

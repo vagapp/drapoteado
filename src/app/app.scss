@@ -62,11 +62,13 @@ ion-content{
 }
 
 .section_grid{
-    display: flex;
-    flex-flow: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;   
+    /*flex-flow: row;*/
+    /*flex-wrap: wrap;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    margin-bottom: 150px;
 }
 
 .fontPrimary{
@@ -88,7 +90,7 @@ ion-content{
     position:relative;
     display: inline-flex;
     height: 260px;
-    min-width: 500px;
+    min-width: 400px;
     text-align: center;
     align-items: center;
     justify-content: center;
@@ -457,7 +459,7 @@ border: 0px solid #000000;
 
 @media screen and (min-width: 600px) {
     .section{
-        width: 30%;
+        /*width: 30%;*/
     }
 }
 
@@ -471,6 +473,19 @@ border: 0px solid #000000;
     }
 }
 
+@media screen and (max-width: 1350px){
+    .section_grid{
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+@media screen and (max-width: 860px){
+    .section_grid{
+        grid-template-columns: 1fr;
+    }
+
+}
 
 .ModalInput_input .radio_input .input, .ModalInput_input .radio_input b{
 display:inline;
