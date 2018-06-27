@@ -11,7 +11,7 @@ import { ServiciosPage } from '../pages/servicios/servicios';
 import { UsuariosPage } from '../pages/usuarios/usuarios';
 import { ReportesPage } from '../pages/reportes/reportes';
 import { UserDataProvider } from '../providers/user-data/user-data';
-import { Storage } from '@ionic/storage';
+//import { Storage } from '@ionic/storage';
 import { FacturacionPage } from '../pages/facturacion/facturacion';
 import { Debugger } from '../providers/user-data/debugger';
 
@@ -32,7 +32,7 @@ export class MyApp {
     public statusBar: StatusBar, 
     public splashScreen: SplashScreen,
     public userData: UserDataProvider,
-    private storage: Storage,
+    //private storage: Storage,
     public loadingCtrl: LoadingController,
   ) {
     this.initializeApp();
@@ -126,13 +126,13 @@ export class MyApp {
     });
   }
 
-  initCheckSession(){
+  /*initCheckSession(){
     let loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
     console.log("initCheckSession",this.userData.sessionData);
     if(!this.userData.sessionData.sessid){
-      this.storage.get('sessionData').then((val) => {
+      //this.storage.get('sessionData').then((val) => {
         if(!val){
           console.log("no session");
           loading.dismiss();
@@ -153,7 +153,7 @@ export class MyApp {
             () => {
                 //console.log("The POST observable is now completed.");
                 loading.dismiss();
-            });*/
+            });
           //this.splashScreen.hide();
           
         }
@@ -163,7 +163,7 @@ export class MyApp {
       loading.dismiss();
       //this.splashScreen.hide();
   }
-}
+}*/
 
   openPage(page) {
     // Reset the content nav to have just this page

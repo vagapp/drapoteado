@@ -89,7 +89,7 @@
             <span class="ubdet_input"> <b>C.P</b> <input [(ngModel)]="this.userData.userData.field_codigo_postal.und[0].value"  type="text"/></span>
         </div>
         <div class="registerInput">
-            <b>Ciudad o Localidad:</b><input [(ngModel)]="this.userData.userData.field_ciudad.und[0].value"  type="text"/>
+            <b>Ciudad:</b><input [(ngModel)]="this.userData.userData.field_ciudad.und[0].value"  type="text"/>
         </div>
         <div class="registerInput">
             <b>Colonia:</b><input [(ngModel)]="this.userData.userData.field_colonia.und[0].value"  type="text"/>
@@ -98,7 +98,7 @@
             <b>País:</b><input [(ngModel)]="this.userData.userData.field_pais.und[0].value"  type="text"/>
         </div>
         <div class="registerInput">
-            <b>Delegación o Municipio:</b><input [(ngModel)]="this.userData.userData.field_municipio.und[0].value"  type="text"/>
+            <b>Municipio o Del.:</b><input [(ngModel)]="this.userData.userData.field_municipio.und[0].value"  type="text"/>
         </div>
         <div class="registerInput">
           <b>Estado:</b>
@@ -149,7 +149,7 @@
     <button class="bgColorPrimary generalButton" (click)="actionRegister()" >Registrarme</button>
     </div>
     <div class="bluelink_wrapper">
-    <a class="blueLink midFont">¡Ya Tengo una Cuenta!</a>
+    <a class="blueLink midFont" (click)="this.dismiss();">¡Ya Tengo una Cuenta!</a>
   </div>
   </div>
   </div>

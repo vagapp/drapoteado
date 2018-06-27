@@ -4,6 +4,7 @@ import { NavController } from 'ionic-angular';
 import { LoginPage } from '../../pages/login/login';
 import { Debugger } from '../../providers/user-data/debugger';
 import { FacturacionPage } from '../../pages/facturacion/facturacion';
+import { HomePage } from '../../pages/home/home';
 
 /**
  * Generated class for the HeaderComponent component.
@@ -49,6 +50,12 @@ export class HeaderComponent {
       if(Number(val) === Number(0) ) 
         this.navCtrl.setRoot(LoginPage);
     });
+  }
+
+  goHome(){
+    /*if(this.userData.checkUserFeature([])){
+    this.navCtrl.setRoot(HomePage);
+    }*/
   }
 
   

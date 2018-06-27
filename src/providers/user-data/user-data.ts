@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { HTTP } from '@ionic-native/http';
 import { Http } from '@angular/http';
 
-import { Storage } from '@ionic/storage';
+//import { Storage } from '@ionic/storage';
 import { Citas } from './citas';
 import { Doctores } from './doctores';
 import {Subject} from 'rxjs/Subject';
@@ -141,7 +141,7 @@ export class UserDataProvider {
 
   constructor(
     private http: HttpClient,
-    private storage: Storage,
+    //private storage: Storage,
     private httpn: HTTP,
     private Http: Http,
   ) {
@@ -398,13 +398,19 @@ s
   }
 
 
-  register(){
-    let body = JSON.stringify(this.userData);
-    console.log(body);
+  register( data = null){
+    let aux_registerdata = null;
+    if(data){
+      aux_registerdata = data;
+    }else{
+      aux_registerdata = this.userData;
+    } 
+    let body = JSON.stringify(aux_registerdata);
+    Debugger.log(['register data sending',body]);
     let url = this.urlbase+'appoint/user/register';
     let headers = new HttpHeaders({'Content-Type':'application/json; charset=utf-8'});
     let register_observer = this.http.post(url,body,{headers});
-    register_observer.subscribe(
+    /*register_observer.subscribe(
       (val) => {
           console.log("POST call successful value returned in body", val);
       },
@@ -413,7 +419,7 @@ s
       },
       () => {
           console.log("The POST observable is now completed.");
-      });
+      });*/
       return register_observer;
   
   }

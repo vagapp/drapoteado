@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalOptions, ModalController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalOptions, ModalController, LoadingController, AlertController } from 'ionic-angular';
 import { RegisterModalPage } from '../register-modal/register-modal';
 import { UserDataProvider  } from '../../providers/user-data/user-data';
 import { HomePage } from '../home/home';
@@ -30,6 +30,7 @@ export class LoginPage {
     public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
+    public alertCtrl: AlertController,
   ) {
   }
 
@@ -41,6 +42,10 @@ export class LoginPage {
     console.log("tryna login");
     console.log(this.username);
     console.log(this.password);
+    let loading = this.loadingCtrl.create({
+      content: 'Entrando...'
+    });
+    loading.present();
     let login_observer = this.userData.login(this.username,this.password);
     let loader = this.loadingCtrl.create({
       content: ""
@@ -63,9 +68,11 @@ export class LoginPage {
                   Debugger.log(["check of suscription",this.userData.subscription]);
                   if(Number(this.userData.subscription.field_active) === 0){
                   this.navCtrl.setRoot(HomePage, {});
+                  loading.dismiss();
                   clearInterval(moveinterval);
                   }else{
                   this.navCtrl.setRoot(HomePage, {});
+                  loading.dismiss();
                   clearInterval(moveinterval);
                   }
               }
@@ -76,13 +83,8 @@ export class LoginPage {
       },
       response => {
           Debugger.log(["POST call in error", JSON.stringify(response)]);
-          /*if(response.error.lenght > 0){
-          response.error.forEach(element => {
-            this.presentToast(element);
-          });
-          }else{
-            //this.presentToast();
-          }*/
+          this.presentAlert('Usuario o contraseña incorrectos','Error');
+          loading.dismiss();
       },
       () => {
           loader.dismiss();
@@ -96,14 +98,16 @@ export class LoginPage {
     Modal.present({});
   }
 
-  presentToast(msg) {
-    let toast = this.toastCtrl.create({
-      message: msg,
-      duration: 6000,
-      position: 'top'
-    });
-    toast.present();
+  presentAlert(msg:string,title:string){
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: msg,
+      buttons: ['Ok']
+      });
+      alert.present();
   }
+
+
   
     
 
