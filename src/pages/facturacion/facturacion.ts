@@ -5,6 +5,7 @@ import { sources } from '../../providers/user-data/sources';
 import { Debugger } from '../../providers/user-data/debugger';
 import { planes } from '../../providers/user-data/planes';
 import { subscriptions } from '../../providers/user-data/subscriptions';
+import { HomePage } from '../home/home';
 
 declare var Stripe;
 
@@ -25,6 +26,9 @@ export class FacturacionPage {
   selected_source:sources = null;
   selected_plan:planes = null;
   card: any;
+  invitationCode:string = null;
+  invitationshow:boolean = false;
+
 
   constructor(
     public userData: UserDataProvider,
@@ -36,6 +40,7 @@ export class FacturacionPage {
   }
 
   ionViewDidLoad() {
+    Debugger.log(['facturation checks',this.userData.subscription]);
     this.setupStripe();
     this.loadSources();
   }
@@ -88,6 +93,60 @@ export class FacturacionPage {
     }else{
       Debugger.log(['UPDATE SUSCRIPTION NOT IMPLEMENTED YET']);
     }
+  }
+
+
+  invitationSub(){
+    if(this.invitationCode.localeCompare('all') === 0){
+      Debugger.log(['all not permited']);
+      return false;
+    }
+    let loading = this.loadingCtrl.create({
+      content: 'Buscando codigo...'
+    });
+    loading.present();
+    Debugger.log(['joining with',this.invitationCode]);
+    
+    this.userData.cargarSubscription(this.invitationCode).subscribe(
+      (val)=>{
+        if(this.userData.error_sub_is_full){
+          this.userData.error_sub_is_full = false;
+          loading.dismiss();
+          let alert = this.alertCtrl.create({
+          title: 'Error',
+          subTitle: 'No es posible unirse a esta subscripción, se ha alcanzado el limite de doctores',
+          buttons: ['Ok']
+          });
+          alert.present();
+          
+          }else{
+        if(this.userData.subscription.nid !== null){
+          this.userData.subscription.field_doctores.push(this.userData.userData.uid);
+          Debugger.log(['loeaded subscription',this.userData.subscription]);
+          this.userData.updateSus(this.userData.subscription).subscribe((val=>{
+            Debugger.log(['updated subscription received',val]);
+            loading.dismiss();
+            this.navCtrl.setRoot(HomePage);
+          }));
+        
+      }else{
+        loading.dismiss();
+        let alert = this.alertCtrl.create({
+          title: 'Nada',
+          subTitle: 'Codigo no encontrado',
+          buttons: ['Ok']
+        });
+        alert.present();
+      }
+    }
+    }
+    );
+  
+  }
+
+
+  showInvitation(){
+    this.invitationshow = !this.invitationshow;
   }
 
   popRemoveDoctorSus( uid ){

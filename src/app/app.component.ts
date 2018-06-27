@@ -23,6 +23,7 @@ export class MyApp {
 
   rootPage: any = LoginPage;
   token: string;
+  connectcomp:boolean=false;
 
   pages: Array<{title: string, component: any}>;
 
@@ -64,8 +65,10 @@ export class MyApp {
         //sometimes this runs faster so it should be assigned here.
         this.userData.cargarPlanes();
         this.userData.sessionData.token = val['token'];
+        this.connectcomp = false;
         this.userData.checkConnect().subscribe((val)=>{
           Debugger.log(['checkConnect val',val]);
+          this.connectcomp = true;
           if(val['user']['uid'] != 0){
             console.log("logged in as", val['user']['name']);
             this.userData.setSessionData(val);
@@ -106,6 +109,14 @@ export class MyApp {
             loading.dismiss();
           }
         });
+        setTimeout( ()=>{
+          Debugger.log(['connectTimeout is',this.connectcomp]);
+          if(!this.connectcomp){
+            Debugger.log(['CONECT TIMEOUT']);
+            this.userData.logout();
+            window.location.reload();
+          }
+        },25000);
     }, response => {
       console.log("POST call in error", JSON.stringify(response));
   },() => {

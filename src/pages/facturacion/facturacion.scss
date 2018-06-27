@@ -115,4 +115,25 @@ page-facturacion {
     font-size: 0.6em;
   }
 
+  .access_code_opt, .acesss_code_show{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 35px;
+    padding-right: 60px;
+  }
+
+  .access_code_opt_link{
+    color: #6DB5DE;
+    display:inline-block;
+    font-size: 1.5em;
+  }
+
+  .acesss_code_show_input{
+    width: 400px;
+    margin-left:50px;
+    margin-right: 50px;
+  }
+
 }

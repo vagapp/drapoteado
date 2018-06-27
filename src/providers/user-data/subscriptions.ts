@@ -25,12 +25,17 @@ export class subscriptions{
     field_stripe_src_sus_id:string = null;
     field_stripe_cus_sub_id:string = null;
     noSubcuentas:number = 0;
+    isDocfull:boolean = true;
+    isSubFull:boolean = true;
 
 
     constructor(){
     }
 
-    setData(input_data){
+    setData(input_data):boolean{
+        let ret = false;
+        if(!input_data) return ret;
+        ret = true;
         console.log("tryna assign input data to subscription",input_data);
         this.nid = input_data['nid'];
         this.field_plan_sus = input_data['field_plan_sus'];
@@ -61,6 +66,7 @@ export class subscriptions{
         this.field_doctores_info = JSON.parse(this.field_doctores_json);
         if(this.field_subusuarios)
         this.noSubcuentas = this.field_subusuarios.length;
+        return ret;
     }
 
     getData():any{
@@ -130,10 +136,26 @@ export class subscriptions{
                this.plan = plan;
                this.is_plan_set = true;
                ret = this.is_plan_set;
+               this.checkfullness();
            }
        });
        Debugger.log(['returning plan found and set', this.is_plan_set]);
        return ret; 
+    }
+    
+    checkfullness(){
+        Debugger.log(['checking fullness from plan',this.plan]);
+        if(this.plan && this.plan.nid){
+            if(this.field_doctores){
+                if(this.field_doctores.length >= this.plan.field_no_doctores){ this.isDocfull = true;}else{this.isDocfull=false;}
+                }else{this.isDocfull=false;}
+            if(this.field_subusuarios){
+                if(this.field_subusuarios.length >= this.plan.field_no_subcuentas){ this.isSubFull = true;}else{this.isSubFull=false;}
+            }else{this.isSubFull=false;}
+        }else{
+            this.isDocfull = true;
+            this.isSubFull = true;
+        }
     }
 
     static getEmptySuscription(){

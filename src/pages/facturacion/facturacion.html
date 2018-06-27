@@ -14,8 +14,14 @@
     </div>
   </div>
   <div class="fact_page_wrapper">
+    <div *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])" class="access_code_opt"><span (click)="showInvitation();" class="access_code_opt_link">Tengo un codigo de invitación</span></div>
+    <div *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY]) && invitationshow" class="acesss_code_show"><ion-item class="acesss_code_show_input">
+        <ion-input placeholder="Codigo de invitacion" [(ngModel)]="invitationCode"></ion-input>
+      </ion-item>
+      <button class="generalButton largeButton bgColorPrimary" (click)="invitationSub()" >Enviar</button>  
+    </div>
   <div class="fact_subs_info fac_tsection">
-    <div class="fact_myplan" *ngIf="userData.subscription !== null && userData.subscription.plan !== null">
+    <div class="fact_myplan" *ngIf="userData.checkUserSuscription([userData.PLAN_ANY])">
       <span class="myplan_block">Plan activo: {{userData.subscription.plan.title}}</span>
       <span *ngIf="this.userData.checkUserPlanHolder()">
       <span class="myplan_block">Codigo de invitacion: {{userData.subscription.field_invitation_code}}</span>
@@ -28,15 +34,15 @@
           <span class="myplan_block">Usted esta afiliado a una subscripcion administrada por otro usuario</span>
       </span>
     </div>
-    <div class="fact_myplan noplan" *ngIf="userData.subscription === null || userData.subscription.plan === null">
+    <div class="fact_myplan noplan" *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])">
         <span class="fact_label">Usted no cuenta con un plan activo, seleccione un plan.</span>
         <div *ngFor="let factplan of this.userData.planes" [class.selectedplan]="factplan.css_fact_selected" class="fact_pna_item" (click)="selectPlan(factplan);">
-          {{factplan.title}}
+          {{factplan.title}} 
         </div>
     </div>
   </div>
 <div class="fact_page_content fact_section">
-  <div class="fact_payment_methods" *ngIf="userData.subscription === null || userData.subscription.plan === null">
+  <div class="fact_payment_methods" *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])">
     <span class="fact_label">seleccione un metodo de pago:</span>
     <div *ngFor="let src of this.sources" (click)="selectCard(src)"   [class.selectedsrc]="src.selected" class="fact_src_unit">
       {{src.brand}} **** **** **** {{src.last4}}

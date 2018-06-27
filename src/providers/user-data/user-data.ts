@@ -37,6 +37,7 @@ export class UserDataProvider {
   citasActivas:Citas[];  //cita activa
   citasParaHoy:number = 0; //numero de citas pendientes para hoy.
 
+  error_sub_is_full:boolean = false;
 
   //datos para reportes
   reportes:reportes[] = new Array();
@@ -54,6 +55,7 @@ export class UserDataProvider {
 
   //loop and options:
   loopMs:number = 60000; //Milisegundos que tarde en actualizar las citas.
+  loopSusMs:number = 60000; //millisegundos que tarda en actualizar la suscripcion.
   ShowCitaUntilMs:Number = (60*60*1000); //Milisegundos para que deben quedarle a una cita para que se muestre en la pantalla de inicio, (si va a empezar en tantos ms o menos aparece)
 
   //VARIABLES STATICAS, y osea se necesitan getters porque los html no pueden acceder a las variables static que pedo
@@ -174,7 +176,7 @@ export class UserDataProvider {
   }
 
   checkConnect(){
-    console.log('checkConnect');
+    Debugger.log(['checkConnect']);
     let url = this.urlbase+'appoint/system/connect.json';
     let headers = new HttpHeaders(
       {'Content-Type':'application/json; charset=utf-8',
@@ -182,7 +184,10 @@ export class UserDataProvider {
     });
     let observer = this.http.post(url,"",{headers})
     observer.subscribe((val)=>{
-     console.log(val);
+     console.log('connect ret',val);
+    },(error)=>{
+      Debugger.log(['ERROR WHILE CONNECT']);
+      this.logout();
     });
     return observer;
   }
@@ -281,8 +286,15 @@ s
     setInterval(() => {
       if(this.userData.uid && this.userData.uid != 0){
       this.cargarCitas();
+      
     }
    }, this.loopMs);
+   setInterval(() => {
+    if(this.userData.uid && this.userData.uid != 0){
+      Debugger.log(['Auto updatingSuscription']);
+    this.cargarSubscription();
+  }
+ }, this.loopSusMs);
   }
   login(username:string, password:string){
     let body = JSON.stringify({"username":username,"password":password});
@@ -891,14 +903,19 @@ s
     return observer;
   }
 
-  cargarSubscription(){
+  cargarSubscription( code:string = null){
     let nidFilter = "?args[0]=all";
     Debugger.log(["userdata sub id",this.userData.field_sub_id]);
     if(Number(this.userData.field_sub_id.und[0]) !== Number(0)){
     //nidFilter="?args[0]="+this.userData.field_sub_id.und[0];
-    let filter=`?args[0]=all&?args[1]=${this.userData.uid}&args[2]=${this.userData.uid}`;
+    let filter = "";
+    if(code){
+    filter=`?args[0]=all&args[1]=all&args[2]=all&args[3]=${code}`;
+    }else{
+    filter=`?args[0]=all&${this.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false)?`args[1]=${this.userData.uid}`:'args[1]=all'}&${(!this.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false))?`args[2]=${this.userData.uid}`:'args[2]=all'}&args[3]=all`;
+    }
     let url = this.urlbase+'appoint/rest_suscripciones.json'+filter;
-    Debugger.log(["url",url]);
+    Debugger.log(["suscription filtered url",url]);
     let headers = new HttpHeaders(
       {'Content-Type':'application/json; charset=utf-8',
       'X-CSRF-Token': ""+this.sessionData.token,
@@ -908,10 +925,15 @@ s
     observer.subscribe(
       (val)=>{
         Debugger.log(['subscription raw cal',val]);
-        let aux_results = Object.keys(val).map(function (key) { return val[key]; });
+        let aux_results = Object.keys(val).map(function(key) { return val[key]; });
         let aux_subs = new subscriptions();
-        aux_subs.setData(aux_results[0]);
-          Debugger.log(["subscription",aux_subs]);
+        if(!aux_subs.setData(aux_results[0])){
+          Debugger.log(['no subscription found']);
+          aux_subs.is_plan_set = true; //no sub no plan
+          this.subscription = aux_subs;
+          this.susSubject.next(0);
+        }else{
+          Debugger.log(["subscription found",aux_subs]);
         if(!(aux_subs.field_plan_sus === null)){
         let setPlan_interval = setInterval(()=>{
           Debugger.log(["waiting for planes"]);
@@ -920,10 +942,14 @@ s
           if(aux_subs.is_plan_set){
             Debugger.log(["planes are set"]);
             Debugger.log(["added plan is",aux_subs.plan]);
-            this.subscription = aux_subs;
+            let toadd = true;
+            Debugger.log(['checking is sub is full before adding to this user',aux_subs.isDocfull]);
+            if(code && aux_subs.isDocfull){ toadd = false; this.error_sub_is_full = true; this.susSubject.next(0);}
+            if(toadd)this.subscription = aux_subs;
             clearInterval(setPlan_interval);
           }
         },500);
+      }
       }
       });
     return observer;
