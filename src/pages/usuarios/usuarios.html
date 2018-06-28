@@ -25,7 +25,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let user of this.usersd">
-                <td><b>01</b>{{user.name}}</td>
+                <td><b>{{user.uid}}</b>{{user.name}}</td>
                 <td class="fontHight">{{this.userData.getTipoUsuarioString(user.field_tipo_de_usuario.und[0])}}</td>
                 <td class="toolCol">
                   <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="editUsuario(user)">

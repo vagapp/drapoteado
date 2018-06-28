@@ -11,7 +11,7 @@
                               <span class="spanBlock bigSubFont">Citas Programadas para Hoy: <span class="fontPrimary">{{userData.citasParaHoy}}</span></span>
                         </div>
                        <div class="section_button">
-                        <button class="generalButton bgColorSecondary" (click)="openReportModal()">Resumen</button>
+                        <button class="generalButton bgColorSecondary" (click)="openReportModal(this.userData.todayReport)">Resumen</button>
                         </div>
         </div>
 
@@ -29,7 +29,8 @@
                           <span class="spanBlock bigSubFont">Proxima Cita</span>
                           <span *ngIf="nextCita" class="spanBlock bigSubFont"><b>{{nextCita.data.field_paciente.und[0].value}}</b></span>
                           <span *ngIf="!nextCita" class="spanBlock bigSubFont"><b>No hay citas proximas</b></span>
-                          <span *ngIf="nextCita && ( nextCita.checkState(userData.STATE_PENDIENTE) || nextCita.checkState(userData.STATE_CONFIRMADA))"  class="spanBlock bigSubFont">Inicia en <span class="fontPrimary">{{nextCita.untilText}}</span></span>
+                          <span *ngIf="nextCita && ( nextCita.checkState(userData.STATE_PENDIENTE) || nextCita.checkState(userData.STATE_CONFIRMADA)) && !nextCita.retrasada "  class="spanBlock bigSubFont">Inicia en <span class="fontPrimary">{{nextCita.untilText}}</span></span>
+                          <span *ngIf="nextCita && ( nextCita.checkState(userData.STATE_PENDIENTE) || nextCita.checkState(userData.STATE_CONFIRMADA)) && nextCita.retrasada "  class="spanBlock bigSubFont">Debió iniciar <span class="fontPrimary">{{nextCita.untilText}}</span></span>
                           <span *ngIf="nextCita && nextCita.checkState(userData.STATE_ACTIVA)"  class="spanBlock bigSubFont">Cita Activa</span>
                          
                 <div class="section_button">
@@ -42,8 +43,8 @@
                 <div class="section" *ngFor="let cita of userData.citasCloser" >
                                 <span class="spanBlock bigSubFont">Cita Cercana</span>
                                 <span *ngIf="cita" class="spanBlock bigSubFont"><b>{{cita.data.field_paciente.und[0].value}}</b></span>
-                                <span *ngIf="!cita" class="spanBlock bigSubFont"><b>No hay citas proximas</b></span>
-                                <span *ngIf="cita && cita.checkState(userData.STATE_PENDIENTE)"  class="spanBlock bigSubFont">Inicia en <span class="fontPrimary">{{cita.untilText}}</span></span>
+                                <span *ngIf="cita && cita.checkState(userData.STATE_PENDIENTE) && !cita.retrasada"  class="spanBlock bigSubFont">Inicia en <span class="fontPrimary">{{cita.untilText}}</span></span>
+                                <span *ngIf="cita && cita.checkState(userData.STATE_PENDIENTE) && cita.retrasada"  class="spanBlock bigSubFont">Debió iniciar <span class="fontPrimary">{{cita.untilText}}</span></span>
                                 <span *ngIf="cita && cita.checkState(userData.STATE_ACTIVA)"  class="spanBlock bigSubFont">Cita Activa</span>
                                
                       <div class="section_button">

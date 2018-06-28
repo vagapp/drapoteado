@@ -1,29 +1,29 @@
-/*import { serviciosData, UserDataProvider } from "./user-data";
+import { UserDataProvider } from "./user-data";
+import { Debugger } from "./debugger";
 
 export class servicios{
-    data:serviciosData;
+    Nid:number = null;
+    Uid:number = null;
+    type:string = null;
+    title:string = null;
+    costo:number = null;
+    body:string  = null;
+    field_costo_servicio:number  = null;
+    field_doctor_uid:number  = null;
 
     constructor(){
-        this.init();
+      
     }
-
-    init(){
-        this.data = UserDataProvider.getEmptyServicio();
-    }
-
+    
     setData( data_input ){
-        this.data = UserDataProvider.getEmptyCita();
-        this.data.Nid = data_input.Nid;
-        this.Nid = data_input.Nid;
-        this.data.doctor_name = data_input.doctor_name;
-        this.data.doctor_alias = data_input.doctor_alias;
-        this.data.field_paciente.und[0].value = data_input.field_paciente;
-        this.data.field_email.und[0].email = data_input.field_email;
-        this.data.field_telefono.und[0].value = data_input.field_telefono;
-        this.data.field_cita_doctor.und[0] = data_input.doctor_uid;
-        this.data.field_cita_caja.und[0] = data_input.caja_uid;
-        this.data.field_cita_recepcion.und[0] = data_input.recepcion_uid;
-        this.data.field_estado.und[0].value = data_input.field_estado;
-        this.setDate(data_input.field_date.value);
+        Debugger.log(['']);
+        this.Nid = data_input['Nid'];
+        this.Uid = data_input['Uid'];
+        this.type = data_input['type'];
+        this.title = data_input['title'];
+        this.costo = data_input['costo'];
+        this.body = data_input['body'];
+        this.field_costo_servicio = data_input['field_costo_servicio'];
+        this.field_doctor_uid = data_input['field_doctor_uid'];
       }
-}*/
+}

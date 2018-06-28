@@ -593,8 +593,8 @@ s
     let date = new Date();
     let datestring = `${date.getDate()}/${(date.getMonth()+1)}/${date.getFullYear()}`;
     let timestring =  `${date.getHours()}:${date.getMinutes()}`;
-    datestring = "14/05/2018"; //testing*/
-    timestring = "08:00"; //testing*/
+    //datestring = "14/05/2018"; //testing*/
+    //timestring = "08:00"; //testing*/
     return {"datestring":datestring,"timestring":timestring};
   }
 
@@ -602,8 +602,8 @@ s
     let date = new Date();
     let datestring = `${(date.getMonth()+1)}/${date.getDate()}/${date.getFullYear()}`;
     let timestring = `${date.getHours()}:${date.getMinutes()}`;
-    datestring = "05/14/2018"; //testing*/
-    timestring = "08:00"; //testing*/
+    //datestring = "05/14/2018"; //testing*/
+    //timestring = "08:00"; //testing*/
     return {"datestring":datestring,"timestring":timestring};
   }
 
@@ -737,7 +737,9 @@ s
       doctor.citasPendientes.forEach(cita => {
           this.citasPendientes.push(cita);
           if(cita.CloserThanMs(this.ShowCitaUntilMs)){
-            this.citasCloser.push(cita);
+            if(this.nextCitas.indexOf(cita) === -1){
+              this.citasCloser.push(cita);
+            }
           }
       });
     });

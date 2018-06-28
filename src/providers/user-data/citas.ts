@@ -1,4 +1,5 @@
 import { citasData, UserDataProvider, servicios } from '../../providers/user-data/user-data';
+import { Debugger } from './debugger';
 
 export class Citas{
     Nid:number;
@@ -110,7 +111,11 @@ export class Citas{
             //set time until this date:
             this.getUntilMs();
             this.getUntilTimeString();
-            console.log("Ms until this date: ", this.untilMs);
+            Debugger.log(["Ms until this date: ", this.untilMs]);
+            if(this.untilMs < 0){
+                this.retrasada=true;
+                Debugger.log(['esta cita esta retrasada']);
+            }
     }
 
 
@@ -148,7 +153,8 @@ export class Citas{
     }
 
     setDuracionMs(){
-        let now = new Date('2018/5/14 01:35:00Z');
+        //let now = new Date('2018/5/14 01:35:00Z');
+        let now = new Date();
         if(this.startDate && this.endDate){
             this.duracionMs = (this.endDate.getTime() - this.startDate.getTime());
         }else if( this.startDate){
@@ -173,21 +179,34 @@ export class Citas{
      **/
 
     getUntilMs():number{
-        let now = new Date('2018/5/14 01:35:00Z');
+        //let now = new Date('2018/5/14 01:35:00Z');
+        let now = new Date();
         this.untilMs = ( this.date.getTime() - now.getTime() );
         return this.untilMs;
     }
 
     getUntilTimeString():string{
         let ret = null;
-        let minutes = this.untilMs/(60*1000);
+        let negative = false;
+        let aux_untilMs = this.untilMs;
+        Debugger.log(['entering get until time string with ',aux_untilMs]);
+        if(this.untilMs < 0){
+            Debugger.log(['untilMs es negativo']);
+            negative = true;
+            aux_untilMs = aux_untilMs*-1;
+        }
+        Debugger.log(['untilMs af neg check',aux_untilMs]);
+        let minutes = aux_untilMs/(60*1000);
         let hours = Math.floor(minutes/(60));
-        minutes = ( minutes - (hours * 60));
+        minutes = Math.floor(( minutes - (hours * 60)));
         let stringHours = ""+hours;
         let stringMinutes = ""+minutes;
         while(stringHours.length < 2){stringHours = "0"+stringHours;}
         while(stringMinutes.length < 2){stringMinutes = "0"+stringMinutes;}
         ret = stringHours+":"+stringMinutes;
+        if(negative){
+            ret = `hace ${ret}`;
+        }
         this.untilText = ret;
         return ret;
     }
