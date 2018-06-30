@@ -21,7 +21,10 @@ export class reportes{
     }
 
 
-    get reportDateFrom():string{ return `${(this.datefrom.getMonth()+1)}/${this.datefrom.getDate()}/${this.datefrom.getFullYear()}`;}
+    get reportDateFrom():string{ 
+        Debugger.log(['reportDateFrom',this.datefrom]);
+        return `${(this.datefrom.getMonth()+1)}/${this.datefrom.getDate()}/${this.datefrom.getFullYear()}`;
+    }
     get reportDateTo():string{ return `${(this.dateTo.getMonth()+1)}/${this.dateTo.getDate()}/${this.dateTo.getFullYear()}`;}
     get doctoresFilter():number[]{ return this.doctores; }
     get cajaFilter():number[]{ return this.cajas; }
@@ -118,7 +121,10 @@ export class reportes{
     }
 
     cargarCitas(){
-        Debugger.log(["cargar Citas not implemented"]);
+        Debugger.log(["cargar Citas not implemented"]);    
     }
+
+
+    
 
 }

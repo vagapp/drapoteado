@@ -40,7 +40,7 @@ export class ProgresocitaModalPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProgresocitaModalPage');
-    this.cargarServicios();
+    //this.cargarServicios();
   }
 
 

@@ -152,7 +152,8 @@ export class ReporteModalPage {
           }
        });
        this.setduracionTotalStr();
-       this.cargarServicios();
+       //this.cargarServicios();
+        this.reportloaded = true;
        console.log("citas obtenidas por el reporte",this.actualrepot.citas);
       },
        response => {

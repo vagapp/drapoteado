@@ -1,6 +1,7 @@
 import { citasData, UserDataProvider, servicios } from '../../providers/user-data/user-data';
 import { Debugger } from './debugger';
 
+
 export class Citas{
     Nid:number;
     date: Date;
@@ -17,6 +18,7 @@ export class Citas{
     duracionText:string;
     serviceDataSet:boolean = false; //describe si los servicios de la cita han sido seteados cuando esta activa, evitando que se actualicen externamente.
     cobroDataSet:boolean = false; //describe si los cobros de la cita han sido seteados cuando esta en cobro, evitando que se actualicen externamente.
+    reporteServicios:any[] = new Array();
     
     constructor(){
         this.init();
@@ -50,7 +52,7 @@ export class Citas{
      * Sets Data from a result of the citas view on drupal.
      **/
     setData( data_input ){
-        console.log("setData",data_input);
+        console.log("setData on cita",data_input);
           this.data = UserDataProvider.getEmptyCita();
           this.data.Nid = data_input.Nid;
           this.Nid = data_input.Nid;
@@ -69,6 +71,7 @@ export class Citas{
           this.data.field_cobro_efectivo.und[0].value = data_input.field_cobro_efectivo;
           this.data.field_cobro_tarjeta.und[0].value = data_input.field_cobro_tarjeta;
           this.data.field_costo_sobrescribir.und[0].value = data_input.field_costo_sobrescribir;
+          if(data_input['field_servicios_json'])this.setServiciosReport(data_input['field_servicios_json']['value']);
           this.setDate(data_input.field_date.value);
           this.setDurationDates(data_input.field_hora_inicio,data_input.field_hora_final);
           console.log("savedData",this.data);
@@ -93,6 +96,12 @@ export class Citas{
         //and this is saved later
     }
 
+
+    setServiciosReport( input_data ){
+        this.reporteServicios =  JSON.parse(input_data);
+        Debugger.log(['added reportservicios', this.reporteServicios]);
+    }
+
   
     
     /**
@@ -101,16 +110,23 @@ export class Citas{
      *   a date object is requiered to process it.
      **/
     
-    setDate( date_input ){
+    setDate( date_input , onutc:boolean = false ){
             //Got date on utc so adding a Z to set it on utc and use getUTCDate to bypass any timezone
-            this.date = new Date(date_input+'Z');
-            console.log("cita UTC date is: "+this.data);
+            Debugger.log(["cita setdate input: "+date_input]);
+            if(onutc){
+                this.date = new Date(date_input);
+            }else{
+                this.date = new Date(date_input+'Z');
+            }
+            Debugger.log(["cita UTC date is: "+this.date]);
             //set data date fields on the format requiered by inputs:
             this.data.field_date.und[0].value.date = this.date.getUTCDate()+'/'+(this.date.getUTCMonth()+1)+'/'+this.date.getUTCFullYear();
             this.data.field_date.und[0].value.time = this.date.getUTCHours()+":"+this.date.getUTCMinutes();
+            Debugger.log(['set date is',this.data.field_date]);
             //set time until this date:
             this.getUntilMs();
             this.getUntilTimeString();
+            Debugger.log(['set date is after',this.data.field_date]);
             Debugger.log(["Ms until this date: ", this.untilMs]);
             if(this.untilMs < 0){
                 this.retrasada=true;
@@ -307,6 +323,16 @@ export class Citas{
       save(){
           console.log("saving this cita");
       }
+
+
+      getDatetimeFormat():string{
+        let ret = "";
+        let datestring = `${this.date.getDate()}/${(this.date.getMonth()+1)}/${this.date.getFullYear()}`;
+        let timestring =  `${this.date.getHours()}:${this.date.getMinutes()}`;
+        ret = `${datestring}T${timestring}`;
+        return ret;
+      }
+    
 
 
 }

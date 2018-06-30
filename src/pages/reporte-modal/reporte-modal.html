@@ -45,7 +45,7 @@
   </div>
   <div class="ReporteRow_Services">
     <b class="rpr_service midFont"> Servicios </b>
-    <span *ngFor="let servicio of cita.addedServices" class="rpr_service midFont"> {{servicio.title}} <span class="fontSecondary">${{servicio.costo}}</span></span>
+    <span *ngFor="let servicio of cita.reporteServicios" class="rpr_service midFont"> {{servicio.title}} <span class="fontSecondary">${{servicio.costo}}</span></span>
   </div>
   <div class="ReporteRow_Totals">
     <div class="rrt_left midFont"> <b>Costo</b> <span class="fontPrimary">${{cita.costo}}</span> </div>

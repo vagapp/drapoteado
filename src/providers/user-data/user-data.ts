@@ -54,7 +54,7 @@ export class UserDataProvider {
  
 
   //loop and options:
-  loopMs:number = 60000; //Milisegundos que tarde en actualizar las citas.
+  loopMs:number = 600000; //Milisegundos que tarde en actualizar las citas.
   loopSusMs:number = 60000; //millisegundos que tarda en actualizar la suscripcion.
   ShowCitaUntilMs:Number = (60*60*1000); //Milisegundos para que deben quedarle a una cita para que se muestre en la pantalla de inicio, (si va a empezar en tantos ms o menos aparece)
 
@@ -532,12 +532,15 @@ s
     return observer;
   }
 
-  getReportes( dialy:number = -1, date:string = UserDataProvider.getTodayDateTimeStringsSearchFormat().datestring , uid:number = this.userData.uid){
+  getReportes( dialy:number = -1, date:string = UserDataProvider.getTodayDateTimeStringsSearchFormat('reportes').datestring , uid:number = this.userData.uid){
     this.userData.uid;
     let filter = `?args[0]=${uid}`;
     let extrafilters = `&args[1]=${date}${dialy === -1?'':`&args[2]=${dialy}`}`;
     let url = this.urlbase+'appoint/rest_reportes.json'+filter+extrafilters;
-    Debugger.log(["url",url]);
+    if(dialy !== -1){
+      Debugger.log(['get reportes dialy is set to',dialy]);
+    }
+    Debugger.log(["get reportes url url",url]);
     let headers = new HttpHeaders(
       {'Content-Type':'application/json; charset=utf-8',
       'X-CSRF-Token': ""+this.sessionData.token,
@@ -598,12 +601,19 @@ s
     return {"datestring":datestring,"timestring":timestring};
   }
 
-  static getTodayDateTimeStringsSearchFormat(){
+  static getTodayDateTimeStringsSearchFormat( where:string = null ){
     let date = new Date();
     let datestring = `${(date.getMonth()+1)}/${date.getDate()}/${date.getFullYear()}`;
+    //let datestring = `${date.getFullYear()}/${(date.getMonth()+1)}/${date.getDate()}`;
     let timestring = `${date.getHours()}:${date.getMinutes()}`;
+    Debugger.log(['where is ',where]);
+    if( where && where.localeCompare('reportes') === 0){
+      Debugger.log(['es en reportes']);
+      datestring = `${date.getFullYear()}-${(date.getMonth()+1)}-${date.getDate()}`;
+    }
     //datestring = "05/14/2018"; //testing*/
     //timestring = "08:00"; //testing*/
+    Debugger.log(['getting today date for search format: ', {"datestring":datestring,"timestring":timestring}]);
     return {"datestring":datestring,"timestring":timestring};
   }
 

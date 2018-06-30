@@ -16,32 +16,37 @@
       <form>
           <div class="ModalInput_input">
               <b>Nombre del paciente</b>
-              <input [(ngModel)]="this.newCita.field_paciente.und[0].value" name="field_paciente" type="text"/>
+              <input [(ngModel)]="this.cita.data.field_paciente.und[0].value" name="field_paciente" type="text"/>
           </div>
           <div class="ModalInput_input" *ngIf="!(this.userData.userData.field_tipo_de_usuario.und[0].value == 1)">
                 <b>Doctor:</b>
-              <select [(ngModel)]="this.newCita.field_cita_doctor.und[0].value"  name="field_cita_doctor" class="input_select input">
+              <select [(ngModel)]="this.cita.data.field_cita_doctor.und[0].value"  name="field_cita_doctor" class="input_select input">
                   <option *ngIf="!(this.userData.userData.field_tipo_de_usuario.und[0].value == 1)" selected disabled value="0" >SELECT</option>
                   <option *ngIf="this.userData.userData.field_tipo_de_usuario.und[0].value == 1" selected disabled value="{{this.userData.userData.uid}}">{{this.userData.userData.name}}</option>
                 </select>
               </div>
           <div class="ModalInput_input">
               <b>Email</b>
-              <input [(ngModel)]="this.newCita.field_email.und[0].email"  name="field_email"  type="text"/>
+              <input [(ngModel)]="this.cita.data.field_email.und[0].email"  name="field_email"  type="text"/>
           </div>
           <div class="ModalInput_input">
               <b>Télefono</b>
-              <input [(ngModel)]="this.newCita.field_telefono.und[0].value" name="field_telefono" type="text"/>
+              <input [(ngModel)]="this.cita.data.field_telefono.und[0].value" name="field_telefono" type="text"/>
           </div>
           <div class="nuevacita_dates">
-              <div class="ModalInput_input">
+                <ion-item>
+                        <ion-label>Fecha</ion-label>
+                        <ion-datetime displayFormat="DD/MM/YYYY HH:mm" format="YYYY-MM-DDTHH:mm" Format="YYYY-MM-DDTHH:mm" [(ngModel)]="selectedDate" name="selectedDate"></ion-datetime>
+                      </ion-item>
+                
+              <!--<div class="ModalInput_input">
                   <b>Fecha</b>
                   <input [(ngModel)]="this.newCita.field_date.und[0].value.date" name="date"  type="text" placeholder="00/00/0000"/>
               </div>
               <div class="ModalInput_input">
                   <b>Hora</b>
                   <input [(ngModel)]="this.newCita.field_date.und[0].value.time" name="time" type="text" placeholder="00:00"/>
-              </div>
+              </div>-->
           </div>
           <div class="ncf_buttonsection">
           <button class="generalButton bgColorSecondary" (click)="createCita();" *ngIf="this.isnew">Agregar</button>

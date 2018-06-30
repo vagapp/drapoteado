@@ -38,7 +38,7 @@
             <b class="midFont">Servicios</b>
             
               <div class="CitaDetail_services" >
-                    <div class="progreso_service" *ngFor="let added of activeCita.addedServices">
+                    <div class="progreso_service" *ngFor="let added of activeCita.reporteServicios">
                     <b>{{added.Nid}}</b>
                     {{added.title}} - <span class="fontSecondary">${{added.costo}}</span>
                   </div>
