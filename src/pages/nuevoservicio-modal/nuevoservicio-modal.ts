@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController, ViewController } from 'ionic-angular';
-import { UserDataProvider, servicios } from '../../providers/user-data/user-data';
+import { UserDataProvider, serviciosd } from '../../providers/user-data/user-data';
 
 /**
  * Generated class for the NuevoservicioModalPage page.
@@ -15,7 +15,7 @@ import { UserDataProvider, servicios } from '../../providers/user-data/user-data
   templateUrl: 'nuevoservicio-modal.html',
 })
 export class NuevoservicioModalPage {
-  newService:servicios;
+  newService:serviciosd;
   isnew:boolean;
 
   constructor(

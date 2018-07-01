@@ -1,5 +1,7 @@
 import { Citas } from "./citas";
 import { UserDataProvider } from "./user-data";
+import { servicios } from "./servicios";
+import { Debugger } from "./debugger";
 
 export class Doctores{
     Uid:number = null;
@@ -10,6 +12,7 @@ export class Doctores{
     citasCobrar:Citas[]; // citas por cobrar
     citaActiva:Citas = null //cita activa
     citasParaHoy:number = 0; //numero de citas pendientes para hoy.
+    servicios:servicios[];
 
     public constructor(public userData: UserDataProvider){
         this.citas = new Array();
@@ -22,6 +25,25 @@ export class Doctores{
         let ret = false;
         if(!this.citaActiva){this.citaActiva = cita; ret = true;}
         return ret;
+    }
+
+
+    setServicios( input_servicios:any[] ):boolean{
+      let ret = true;
+      //let aux_serv_arr = new Array();
+      input_servicios.forEach(serv => {
+       if(this.servicios.indexOf(serv) === -1 && Number(serv.Uid) === Number(this.Uid)){
+         this.servicios.push(serv);
+         Debugger.log([`servicio nuevo agregado a doc ${this.Uid}`,serv]);
+       }
+      });
+      return ret;
+    }
+
+    removeServicioFromLists(servicio:servicios){
+      var index = this.servicios.indexOf(servicio);
+      if(index !== -1)this.servicios.splice(index, 1);
+      Debugger.log([`removing servicio ${servicio.Nid} from list`,this.servicios]);
     }
 
 

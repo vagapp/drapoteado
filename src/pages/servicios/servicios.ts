@@ -54,14 +54,15 @@ export class ServiciosPage {
       (val)=>{
          let aux_results = Object.keys(val).map(function (key) { return val[key]; });
          let dis  = this;
-         aux_results.forEach(function(element) {
-          dis.servicios.push(element);
+         aux_results.forEach((element) => {
+          this.servicios.push(element);
         },
-        response => {
-          console.log("POST call in error", response);
-        }
+        
       );
         console.log(dis.servicios);
+      },
+      response => {
+        console.log("POST call in error", response);
       }
     );
   }

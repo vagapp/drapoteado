@@ -7,6 +7,7 @@ import { Http } from '@angular/http';
 //import { Storage } from '@ionic/storage';
 import { Citas } from './citas';
 import { Doctores } from './doctores';
+import { servicios } from './servicios';
 import {Subject} from 'rxjs/Subject';
 import { planes } from './planes';
 import { subscriptions } from './subscriptions';
@@ -50,7 +51,8 @@ export class UserDataProvider {
   planes:planes[]; //planes que ofrece drap.
   are_planes_set:boolean = false;
 
-  doctores:Doctores[];
+  doctores:Doctores[] = new Array();
+  servicios:servicios[] = new Array();
  
 
   //loop and options:
@@ -145,7 +147,7 @@ export class UserDataProvider {
     private httpn: HTTP,
     private Http: Http,
   ) {
-    Debugger.log(['Hello UserDataProvider Provider']);
+    Debugger.log(['Hello UserDataProvider Provider',false]);
     this.doctores = new Array();
     this.setup();
     this.subAccount = false;
@@ -176,7 +178,7 @@ export class UserDataProvider {
   }
 
   checkConnect(){
-    Debugger.log(['checkConnect']);
+    Debugger.log(['checkConnect',false]);
     let url = this.urlbase+'appoint/system/connect.json';
     let headers = new HttpHeaders(
       {'Content-Type':'application/json; charset=utf-8',
@@ -186,7 +188,7 @@ export class UserDataProvider {
     observer.subscribe((val)=>{
      console.log('connect ret',val);
     },(error)=>{
-      Debugger.log(['ERROR WHILE CONNECT']);
+      Debugger.log(['ERROR WHILE CONNECT',false]);
       this.logout();
     });
     return observer;
@@ -195,7 +197,7 @@ export class UserDataProvider {
 
 s
   requestUserData(uid){
-    console.log("tryna fetch userdata",uid );
+    //console.log("tryna fetch userdata",uid );
     //recovers user data from the user uid
       let url = this.urlbase+'appoint/user/'+uid;
       let headers = new HttpHeaders(
@@ -209,17 +211,17 @@ s
 
 
   setSessionData(val){
-    console.log('setting sessionData',val);
+    //console.log('setting sessionData',val);
     this.sessionData.sessid = val['sessid'];
     this.sessionData.session_name = val['session_name'];
     if(val['token']){
-      console.log("updating token");
+      //console.log("updating token");
     this.sessionData.token = val['token'];
   }
   }
 
   setUserData(val){
-    console.log('setting user data',val);
+    //console.log('setting user data',val);
     this.userData.uid = val['uid'];
     this.userData.name = val['name'];
     this.userData.pass = val['pass'];
@@ -273,8 +275,10 @@ s
           this.doctores.push(aux_doc);
         }
       }
-    console.log("doctores encontrados",this.doctores);
-    console.log('filled userData',this.userData);
+    Debugger.log(["doctores encontrados",this.doctores]);
+    Debugger.log(["cargar servicios y recargar servicios en un loop"]);
+    this.cargarServicios();
+    //console.log('filled userData',this.userData);
   }
 
   setup(){
@@ -449,6 +453,41 @@ s
     return observer;
   }
 
+  cargarServicios(){
+    this.getServicios(this.getDoctoresSimpleArray()).subscribe(
+      (val)=>{
+        let aux_results = Object.keys(val).map(function (key) { return val[key]; });
+         aux_results.forEach((result_servicio) => {
+           Debugger.log(['cargando servicio',result_servicio]);
+          let found = false;
+          this.servicios.forEach(servicio => {
+            if(Number(servicio.Nid) === Number(result_servicio['Nid'])){
+              servicio.setData(result_servicio);
+              found = true;
+            }
+          });
+          if( !found ){
+            let aux_serv = new servicios();
+            aux_serv.setData(result_servicio);
+            this.servicios.push(aux_serv);
+          }
+        }
+      );
+      this.doctores.forEach(doc => {
+        doc.setServicios(this.servicios);
+      });
+        console.log(this.servicios);
+      });
+  }
+
+  removeServicioFromLists(servicio:servicios){
+    var index = this.servicios.indexOf(servicio);
+    if(index !== -1)this.servicios.splice(index, 1);
+    this.doctores.forEach(doc => {
+      doc.removeServicioFromLists(servicio);
+    }); 
+  }
+
   //SUBSCRIPTION METHODS
   
   generateNewSus( suscription ){return this.generateNewNode(suscription.getData());}
@@ -578,7 +617,7 @@ s
       this.todayReport = null;
     }
     var index = this.reportes.indexOf(report);
-    this.reportes.splice(index, 1);    
+    if(index !== -1)this.reportes.splice(index, 1);    
     Debugger.log(['reportes filtered',this.reportes]);
     Debugger.log(['NOW DELETE REPORT FROM DATABASE MF']);
     let observable = this.deleteNode(report.getData());
@@ -658,9 +697,10 @@ s
        //this.nextCitas = new Array();
        this.doctores.forEach(doctor => {
          doctor.setCitas(dis.citas);
+         Debugger.log(['citas seteadas para este doctor',doctor.citas]);
        });
-       this.getNextcitas();
        this.getCitasActivas();
+       this.getNextcitas();
        this.getCitasPendientes();
        this.getCitasParaHoy();
        //this.setCitas();
@@ -747,7 +787,7 @@ s
       doctor.citasPendientes.forEach(cita => {
           this.citasPendientes.push(cita);
           if(cita.CloserThanMs(this.ShowCitaUntilMs)){
-            if(this.nextCitas.indexOf(cita) === -1){
+            if(this.nextCitas.indexOf(cita) === -1 && this.citasActivas.indexOf(cita) === -1){
               this.citasCloser.push(cita);
             }
           }
@@ -1294,7 +1334,7 @@ s
   }
 
   static getEmptyServicio(){
-    return <servicios>{ 
+    return <serviciosd>{ 
       Nid:null,
       Uid:0,
       type:'servicio',
@@ -1342,7 +1382,7 @@ s
   }
 }
 
-export interface servicios{
+export interface serviciosd{
   Nid:number;
   Uid:number;
   type:string,

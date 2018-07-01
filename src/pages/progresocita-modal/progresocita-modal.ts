@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ViewController, AlertController } from 'ionic-angular';
-import { UserDataProvider, servicios } from '../../providers/user-data/user-data';
+import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
+import { servicios } from '../../providers/user-data/servicios';
+import { Doctores } from '../../providers/user-data/doctores';
 
 /**
  * Generated class for the ProgresocitaModalPage page.
@@ -17,13 +19,13 @@ import { Citas } from '../../providers/user-data/citas';
 })
 export class ProgresocitaModalPage {
   activeCita: Citas;
-  servicios: servicios[];
   available_services: servicios[];
   selectedService:number;
   costoCita:number;
   cobroEfectivo:number=0;
   cobroTarjeta:number=0;
   cobroCheque:number=0;
+  activeCitaDoc:Doctores;
 
   get CantidadRestante(){ return 0+ ( (Number(this.activeCita.costo)) - (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) ) ); }
 
@@ -35,6 +37,7 @@ export class ProgresocitaModalPage {
     public alertCtrl: AlertController
   ) {
     this.activeCita = navParams.get('cita');
+    this.activeCitaDoc = this.userData.getDoctorOFCita(this.activeCita);
     console.log("opening progreso of", this.activeCita);
   }
 
@@ -45,6 +48,9 @@ export class ProgresocitaModalPage {
 
 
   cargarServicios(){
+    this.activeCita.setAddedServices(this.activeCitaDoc.servicios);
+    this.available_services = this.activeCita.getServiciosAvailable(this.activeCitaDoc.servicios);
+    /*
     console.log("cargando servicios");
     this.servicios = new Array();
     let aux_arr = new Array();
@@ -67,7 +73,7 @@ export class ProgresocitaModalPage {
           console.log(this.servicios);
           console.log(this.available_services);
       });
-       
+       */
       }
   
       addService(){
@@ -79,7 +85,7 @@ export class ProgresocitaModalPage {
             if(Number(element.Nid) === Number(this.selectedService)  ) aux_servicio = element;
           });
            if(this.activeCita.addServicio(aux_servicio)){
-              this.available_services = this.activeCita.getServiciosAvailable(this.servicios);
+              this.available_services = this.activeCita.getServiciosAvailable(this.activeCitaDoc.servicios);
               this.calcularCosto();
            }
         }
