@@ -24,7 +24,7 @@
              </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let servicio of this.servicios">
+            <tr *ngFor="let servicio of this.userData.doctores[0].servicios">
                 <td><b>{{servicio.Nid}}</b> {{servicio.title}}</td>
                 <td class="fontSecondary">${{servicio.costo}}</td>
                 <td class="toolCol">

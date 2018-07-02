@@ -454,6 +454,7 @@ s
   }
 
   cargarServicios(){
+    Debugger.log(['cargando servicios']);
     this.getServicios(this.getDoctoresSimpleArray()).subscribe(
       (val)=>{
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
@@ -473,9 +474,11 @@ s
           }
         }
       );
+      Debugger.log(['user data servicios',this.servicios]);
       this.doctores.forEach(doc => {
         doc.setServicios(this.servicios);
       });
+      Debugger.log(['doctores at end of cargarservicios',this.doctores]);
         console.log(this.servicios);
       });
   }
@@ -510,10 +513,13 @@ s
       if(this.todayReport === null || this.todayReport.nid === null){
         Debugger.log(['waiting for today report']);
       }else{
-        this.getReportes().subscribe(
+        Debugger.log([`today report found, getting reportes`]);
+        this.getReportes( -1, 'all' ).subscribe(
           (val) => {
+            Debugger.log([`get reportes got`,val]);
             let aux_results = Object.keys(val).map(function (key) { return val[key]; });
             aux_results.forEach(result => {
+              Debugger.log([`buscando generar reporte `,result]);
               //buscar el elemento comparando nids en los resultados, si no existe crearlo
               let found = 0;
               if( Number(this.todayReport.nid) ===  Number(result['nid']) ){
@@ -591,6 +597,7 @@ s
   }
 
   generateTodayReport(){
+    Debugger.log(['creating today rerport']);
     const uax_treport = new reportes();
     uax_treport.author_uid = this.userData.uid;
     uax_treport.doctores = this.getDoctoresSimpleArray();
@@ -604,7 +611,7 @@ s
       (val)=>{
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
         Debugger.log(['returned created node report',aux_results]);
-        uax_treport.nid = aux_results['nid'];
+        uax_treport.nid = aux_results[0];
         this.todayReport = uax_treport;
         Debugger.log(['today report generated final',this.todayReport]);
         this.cargarListaReportes();
@@ -671,6 +678,7 @@ s
   }
   
   cargarCitas( logoutonerror = true ){
+    let ret = null;
     console.log("cargando citas");
     let date = new Date();
     let datestrings = UserDataProvider.getTodayDateTimeStringsSearchFormat();
@@ -678,7 +686,7 @@ s
     let timestring = datestrings.timestring;
     console.log("simple array got",this.getDoctoresSimpleArray());
     let dis = this;
-    this.getCitas(datestring,datestring,this.getDoctoresSimpleArray(),new Array(),new Array()).subscribe(
+    ret = this.getCitas(datestring,datestring,this.getDoctoresSimpleArray(),new Array(),new Array()).subscribe(
       (val)=>{
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
         aux_results.forEach(function(element){
@@ -714,6 +722,7 @@ s
          this.logout();
        }
       );
+      return ret;
   }
 //este metodo ya no se usa fue reemplazado cuando se incluyo una clase para manejar docotores para simplificar manejar varios doctores
 //se usa el metodo setCitas de la clase doctores por cada doctor en la lista de doctores y se le manda como parametro la lista de citas.
@@ -1091,6 +1100,15 @@ s
   }
     return ret;
   }
+
+  checkSusSubaccountsFull(){
+    let ret = false;
+    if(this.subscription && this.subscription.nid !== null){
+      ret = this.subscription.isSubFull;
+    }
+    return ret;
+  }
+  
 
   checkUserPermission( permision:Array<number> , debug:boolean = false):boolean{
     let ret = false;

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
 import { NuevoservicioModalPage } from '../nuevoservicio-modal/nuevoservicio-modal';
 import { ModalController } from 'ionic-angular';
-import { UserDataProvider, servicios } from '../../providers/user-data/user-data';
+import { UserDataProvider } from '../../providers/user-data/user-data';
+import { servicios } from '../../providers/user-data/servicios';
 
 
 
@@ -20,7 +21,7 @@ import { UserDataProvider, servicios } from '../../providers/user-data/user-data
 })
 export class ServiciosPage {
   
-  servicios:servicios[];
+  //servicios:servicios[];
 
   constructor(
     public navCtrl: NavController, 
@@ -30,7 +31,7 @@ export class ServiciosPage {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
   ) {
-    this.servicios = new Array();
+    //this.servicios = new Array();
   }
 
   ionViewDidLoad() {
@@ -46,7 +47,8 @@ export class ServiciosPage {
   }
 
   cargarServicios(){
-    console.log("cargando servicios");
+    this.userData.cargarServicios();
+    /*console.log("cargando servicios");
     this.servicios = new Array();
     let aux_arr = new Array();
     aux_arr[0]= this.userData.userData.uid;
@@ -64,11 +66,11 @@ export class ServiciosPage {
       response => {
         console.log("POST call in error", response);
       }
-    );
+    );*/
   }
 
   editServicio( edit_servicio ){
-    let Modal = this.modalCtrl.create(NuevoservicioModalPage,{ servicio: edit_servicio } , { cssClass: "smallModal nuevoservicioModal" });
+    let Modal = this.modalCtrl.create(NuevoservicioModalPage,{ servicio: edit_servicio.getData() } , { cssClass: "smallModal nuevoservicioModal" });
     Modal.onDidDismiss(data => {
       this.cargarServicios();
     });
@@ -93,9 +95,7 @@ export class ServiciosPage {
             //console.log('Buy clicked');
             this.userData.deleteService(delete_servicio).subscribe(
               (val)=>{
-                  console.log(val);
-                  this.presentToast("Servicio Eliminado");
-                  this.cargarServicios();
+                 this.userData.removeServicioFromLists(delete_servicio);
                 }
             );
           }

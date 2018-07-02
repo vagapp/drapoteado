@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ToastController, LoadingController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { NuevacitaModalPage } from '../nuevacita-modal/nuevacita-modal';
 import { UserDataProvider } from '../../providers/user-data/user-data';
@@ -34,6 +34,7 @@ export class CitasPage {
     public userData:UserDataProvider,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController
   ) {
     //this.citas = new Array();
   }
@@ -88,9 +89,13 @@ export class CitasPage {
    
 
     updateStateRequest ( cita, state ) {
+      let loader = this.loadingCtrl.create({
+        content: "actualizando"
+      });
+      loader.present();
       this.userData.updateCitaState(cita,state).subscribe(
         (val)=>{
-          this.presentToast("completado");
+          loader.dismiss();
           this.cargarCitas();
         },
         response => {
@@ -120,6 +125,10 @@ export class CitasPage {
 
 
     iniciarCita( cita:Citas ){
+      let loader = this.loadingCtrl.create({
+        content: "actualizando"
+      });
+      loader.present();
       let aux_doc = this.userData.getDoctorOFCita(cita);
       console.log("tryin to open cita progreso",cita);
       if(cita.checkState(UserDataProvider.STATE_ACTIVA)){
@@ -127,6 +136,7 @@ export class CitasPage {
       }else{
         if(aux_doc.citaActiva){
           this.presentAlert("Ocupado","Este doctor esta ocupado con una cita Activa");
+          loader.dismiss();
           return 0;
         }
       let alert = this.alertCtrl.create({
@@ -142,8 +152,16 @@ export class CitasPage {
           {
             text: 'Si',
             handler: () => { 
-              this.userData.updateCitaState( cita , UserDataProvider.STATE_ACTIVA );
-              this.openProgreso(cita);
+              this.userData.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
+                (val)=>{
+                  this.userData.cargarCitas().subscribe(
+                    (val)=>{
+                      loader.dismiss();
+                      this.openProgreso(cita);
+                    }
+                  );
+               
+                });
             }
           }
         ]

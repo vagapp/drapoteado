@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
-import { UserDataProvider, servicios } from '../../providers/user-data/user-data';
+import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { reportes } from '../../providers/user-data/reportes';
 import { Debugger } from '../../providers/user-data/debugger';
+
 
 /**
  * Generated class for the ReporteModalPage page.
@@ -126,31 +127,32 @@ export class ReporteModalPage {
 
   loadReport( logoutonerrror = true ){
     console.log("cargando citas de reporte");
-    let dis = this;
+    let aux_citas_list = new Array();
     this.userData.getCitas(this.actualrepot.reportDateFrom,this.actualrepot.reportDateTo,this.actualrepot.doctoresFilter,this.actualrepot.cajaFilter,this.actualrepot.recepcionFilter).subscribe(
       (val)=>{
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
-        aux_results.forEach(function(element){
+        aux_results.forEach((element) => {
           let aux_cita = new Citas();
           aux_cita.setData(element);
           if(aux_cita.checkState(UserDataProvider.STATE_CANCELADA)){
-            dis.noCancel++;
-            dis.noCitas++;
+            this.noCancel++;
+            this.noCitas++;
           }
           if(aux_cita.checkState(UserDataProvider.STATE_FINALIZADA)){
-            dis.noShow++;
-            dis.noCitas++;
-            if(aux_cita.duracionMs) dis.duracionTotalMs += aux_cita.duracionMs;
-            if(aux_cita.costo) dis.costoTotal = aux_cita.costo;
-            if(aux_cita.cobro)dis.total+= aux_cita.cobro;
-            if(aux_cita.cobroEfectivo)dis.totalefectivo+=aux_cita.cobroEfectivo;
-	          if(aux_cita.cobroTarjeta)dis.totalTarjeta+=aux_cita.cobroTarjeta;
-            if(aux_cita.cobroCheque)dis.totalCheques+=aux_cita.cobroCheque;
-	          dis.totalcuentas+=100;
-            dis.totalAdeudo+=100;
-            dis.actualrepot.citas.push(aux_cita);
+            this.noShow++;
+            this.noCitas++;
+            if(aux_cita.duracionMs) this.duracionTotalMs += aux_cita.duracionMs;
+            if(aux_cita.costo) this.costoTotal = aux_cita.costo;
+            if(aux_cita.cobro) this.total+= aux_cita.cobro;
+            if(aux_cita.cobroEfectivo) this.totalefectivo+=aux_cita.cobroEfectivo;
+	          if(aux_cita.cobroTarjeta) this.totalTarjeta+=aux_cita.cobroTarjeta;
+            if(aux_cita.cobroCheque) this.totalCheques+=aux_cita.cobroCheque;
+	          this.totalcuentas+=100;
+            this.totalAdeudo+=100;
+            aux_citas_list.push(aux_cita);
           }
        });
+       this.actualrepot.citas = aux_citas_list;
        this.setduracionTotalStr();
        //this.cargarServicios();
         this.reportloaded = true;
@@ -165,7 +167,7 @@ export class ReporteModalPage {
   }
 
   cargarServicios(){
-    console.log("cargando servicios");
+    /*console.log("cargando servicios");
     this.actualrepot.servicios = new Array();
     let aux_arr = new Array();
     aux_arr[0]= this.userData.getDoctoresSimpleArray()
@@ -188,7 +190,7 @@ export class ReporteModalPage {
           console.log("citas w services added",this.actualrepot.citas);
           console.log("loadedServices",this.actualrepot.servicios);
       });
-       
+       */
       }
 
       setduracionTotalStr(){

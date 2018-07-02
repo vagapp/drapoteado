@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, DebugContext } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ViewController, AlertController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
@@ -43,7 +43,7 @@ export class ProgresocitaModalPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProgresocitaModalPage');
-    //this.cargarServicios();
+    this.cargarServicios();
   }
 
 

@@ -79,9 +79,9 @@ export class UsuariosPage {
 
   removeUsuario( userd ){
     let loader = this.loadingCtrl.create({
-      content: "Guardando . . ."
+      content: "removiendo usuario . . ."
     });
-    
+    loader.present();
     //remove this user from array of doctors
     console.log('doctors to remove',userd.field_doctores);
     let index = userd.field_doctores.und.indexOf(this.userData.userData.uid);
@@ -100,6 +100,7 @@ export class UsuariosPage {
         this.cargarUsuarios();
       },
       response => {
+        loader.dismiss();
         console.log("POST call in error", response);
         console.log("show error");
         for (var key in response.error.form_errors) {
@@ -112,6 +113,10 @@ export class UsuariosPage {
   
   cargarUsuarios(){
     console.log("cargando usuarios");
+    let loading = this.loadingCtrl.create({
+      content: 'Cargando Usuarios...'
+    });
+    loading.present();
     this.usersd = new Array();
     let doctors_array =  new Array();
     doctors_array.push(this.userData.userData.uid);
@@ -146,9 +151,11 @@ export class UsuariosPage {
           dis.usersd.push(aux_user);
        });
        console.log(dis.usersd);
+       loading.dismiss();
       },
        response => {
          console.log("POST call in error", response);
+         loading.dismiss();
        }
       );
   }

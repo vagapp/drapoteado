@@ -1,5 +1,6 @@
-import { citasData, UserDataProvider, servicios } from '../../providers/user-data/user-data';
+import { citasData, UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from './debugger';
+import { servicios } from './servicios';
 
 
 export class Citas{

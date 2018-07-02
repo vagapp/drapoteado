@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController, ViewController, AlertController } from 'ionic-angular';
 import { userd, UserDataProvider } from '../../providers/user-data/user-data';
+import { Debugger } from '../../providers/user-data/debugger';
 
 /**
  * Generated class for the NuevousuarioModalPage page.
@@ -59,7 +60,13 @@ export class NuevousuarioModalPage {
     let loader = this.loadingCtrl.create({
       content: "Generando Usuario"
     }); 
-    console.log("creating an user ",this.newUser);
+    loader.present();
+    if( !this.userData.checkUserPlanHolder() || this.userData.checkSusSubaccountsFull()){
+      loader.dismiss();
+      this.presentAlert('Error','Se llego al limite de subcuentas');
+      this.close();
+    }
+    Debugger.log(["creating an user ",this.newUser]);
     //revisar contraseñas
     if(!(this.newUser.pass === this.checkpass)){
       this.presentAlert("Error", "las contraseñas no coinciden");
@@ -79,16 +86,16 @@ export class NuevousuarioModalPage {
     this.newUser.field_nombre.und[0].value = "Subusuario";
     this.newUser.field_apellidos.und[0].value = "Subusuario";
     this.newUser.status = ""+1;
+    delete this.newUser.field_sub_id;
     this.userData.generateNewUserd( this.newUser ).subscribe(
     (val)=>{
-      console.log("the new user has been generated");
+      Debugger.log(['generated user returned',val]);
+      this.userData.subscription.field_subusuarios.push(val['uid']);
       this.presentToast("Completado");
       loader.dismiss();
       this.close();
     },
     response => {
-        console.log("POST call in error", response);
-        console.log("show error");
         for (var key in response.error.form_errors) {
           this.presentAlert(key, response.error.form_errors[key]);
           //this.presentToast(response.error.form_errors[key]);
@@ -172,6 +179,7 @@ updateUserd(){
   let loader = this.loadingCtrl.create({
     content: "Guardando . . ."
   });
+  loader.present();
   if(this.newUser.pass || this.checkpass){
   if(!(this.newUser.pass === this.checkpass)){
     this.presentAlert("Error", "las contraseñas no coinciden");
@@ -181,6 +189,7 @@ updateUserd(){
 }
   this.newUser.mail = this.newUser.field_useremail.und[0].email;
   this.newUser.status = ""+1;
+  delete this.newUser.field_sub_id;
   console.log("updating",this.newUser);
   this.userData.updateUserd( this.newUser ).subscribe(
     (val)=>{

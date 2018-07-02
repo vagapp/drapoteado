@@ -114,7 +114,8 @@ export class MyApp {
           if(!this.connectcomp){
             Debugger.log(['CONECT TIMEOUT']);
             this.userData.logout();
-            window.location.reload();
+            loading.dismiss();
+            //window.location.reload();
           }
         },25000);
     }, response => {

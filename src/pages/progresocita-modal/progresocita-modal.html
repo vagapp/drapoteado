@@ -36,8 +36,14 @@
         <div class="CitaDetailSections">
           <div class="CitaDetailSection borderRight">
             <b class="midFont">Servicios</b>
+            <div class="CitaDetail_services" *ngIf="this.activeCita.checkState(userData.STATE_ACTIVA)">
+                <div class="progreso_service" *ngFor="let added of activeCita.addedServices">
+                <b>{{added.Nid}}</b>
+                {{added.title}} - <span class="fontSecondary">${{added.costo}}</span>
+              </div>
+              </div>
             
-              <div class="CitaDetail_services" >
+              <div class="CitaDetail_services" *ngIf="!this.activeCita.checkState(userData.STATE_ACTIVA)">
                     <div class="progreso_service" *ngFor="let added of activeCita.reporteServicios">
                     <b>{{added.Nid}}</b>
                     {{added.title}} - <span class="fontSecondary">${{added.costo}}</span>

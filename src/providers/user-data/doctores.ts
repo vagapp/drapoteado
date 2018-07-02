@@ -12,7 +12,7 @@ export class Doctores{
     citasCobrar:Citas[]; // citas por cobrar
     citaActiva:Citas = null //cita activa
     citasParaHoy:number = 0; //numero de citas pendientes para hoy.
-    servicios:servicios[];
+    servicios:servicios[] = new Array();;
 
     public constructor(public userData: UserDataProvider){
         this.citas = new Array();
@@ -29,9 +29,11 @@ export class Doctores{
 
 
     setServicios( input_servicios:any[] ):boolean{
+      Debugger.log([`setting servicios on doctor ${this.Uid}`]);
       let ret = true;
       //let aux_serv_arr = new Array();
       input_servicios.forEach(serv => {
+        Debugger.log([`iterating service`,serv]);
        if(this.servicios.indexOf(serv) === -1 && Number(serv.Uid) === Number(this.Uid)){
          this.servicios.push(serv);
          Debugger.log([`servicio nuevo agregado a doc ${this.Uid}`,serv]);
