@@ -170,9 +170,6 @@ export class CitasPage {
     }
     }
 
-
-
-    
     presentToast(msg) {
       let toast = this.toastCtrl.create({
         message: msg,

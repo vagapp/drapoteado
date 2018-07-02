@@ -61,10 +61,12 @@ export class NuevousuarioModalPage {
       content: "Generando Usuario"
     }); 
     loader.present();
+    //validating if posible
     if( !this.userData.checkUserPlanHolder() || this.userData.checkSusSubaccountsFull()){
       loader.dismiss();
       this.presentAlert('Error','Se llego al limite de subcuentas');
       this.close();
+      return 0;
     }
     Debugger.log(["creating an user ",this.newUser]);
     //revisar contraseñas
@@ -91,6 +93,14 @@ export class NuevousuarioModalPage {
     (val)=>{
       Debugger.log(['generated user returned',val]);
       this.userData.subscription.field_subusuarios.push(val['uid']);
+      this.userData.updateSus(this.userData.subscription).subscribe(
+        (val) => {
+          Debugger.log(['updated subscription returned',val]);
+        },
+        response => { 
+          Debugger.log(['error on saving subscription for new user',response]);
+        }
+      );
       this.presentToast("Completado");
       loader.dismiss();
       this.close();

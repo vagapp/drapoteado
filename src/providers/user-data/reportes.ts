@@ -18,6 +18,7 @@ export class reportes{
     dialy:boolean = true; //si es un reporte diario autogenerado
     citas:Citas[] = new Array();
     servicios: servicios[] = new Array();
+    
     constructor(){
     }
 
