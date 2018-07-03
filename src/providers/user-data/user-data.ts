@@ -13,6 +13,7 @@ import { planes } from './planes';
 import { subscriptions } from './subscriptions';
 import { Debugger } from './debugger';
 import { reportes } from './reportes';
+import { Observable } from 'rxjs/Observable';
 
 
 /*
@@ -677,7 +678,7 @@ s
     return this.updateCita( cita.data );
   }
   
-  cargarCitas( logoutonerror = true ){
+  cargarCitas( logoutonerror = true ):Observable<any>{
     let ret = null;
     console.log("cargando citas");
     let date = new Date();
@@ -686,8 +687,10 @@ s
     let timestring = datestrings.timestring;
     console.log("simple array got",this.getDoctoresSimpleArray());
     let dis = this;
-    ret = this.getCitas(datestring,datestring,this.getDoctoresSimpleArray(),new Array(),new Array()).subscribe(
+    ret = this.getCitas(datestring,datestring,this.getDoctoresSimpleArray(),new Array(),new Array());
+    ret.subscribe(
       (val)=>{
+        Debugger.log(['cargarcitas responce got']);
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
         aux_results.forEach(function(element){
           let citaIndex = dis.getCitaIndexByNid(element.Nid);
@@ -722,6 +725,7 @@ s
          this.logout();
        }
       );
+      Debugger.log(['returning ret observable',ret]);
       return ret;
   }
 //este metodo ya no se usa fue reemplazado cuando se incluyo una clase para manejar docotores para simplificar manejar varios doctores
@@ -893,7 +897,7 @@ s
       'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
     });
     let observer = this.http.get(url,{headers});
-    observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
+    //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
 

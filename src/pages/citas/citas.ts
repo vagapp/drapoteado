@@ -6,6 +6,8 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { EmailValidator } from '@angular/forms';
 import { ProgresocitaModalPage } from '../progresocita-modal/progresocita-modal';
+import { Debugger } from '../../providers/user-data/debugger';
+import { Observer } from 'rxjs/Observer';
 
 /**
  * Generated class for the CitasPage page.
@@ -45,15 +47,21 @@ export class CitasPage {
   }
 
   openNuevaCita(){
+  
       let Modal = this.modalCtrl.create(NuevacitaModalPage, undefined, { cssClass: "nuevaCitaModal smallModal" });
       Modal.onDidDismiss(data => {
-        this.cargarCitas();
+        let loader = this.loadingCtrl.create({
+          content: "cargando..."
+        });
+        loader.present();
+        this.cargarCitas().subscribe((val)=>{loader.dismiss();}
+        );
       });
       Modal.present({});
     }
 
     cargarCitas(){
-      this.userData.cargarCitas();
+      return this.userData.cargarCitas();
     }
 
     updateStatePop( cita ,state ){
@@ -90,7 +98,7 @@ export class CitasPage {
 
     updateStateRequest ( cita, state ) {
       let loader = this.loadingCtrl.create({
-        content: "actualizando"
+        content: "actualizando..."
       });
       loader.present();
       this.userData.updateCitaState(cita,state).subscribe(
@@ -108,7 +116,12 @@ export class CitasPage {
     editCita( cita ){
       let Modal = this.modalCtrl.create(NuevacitaModalPage, { cita: cita }, { cssClass: "nuevaCitaModal smallModal" });
       Modal.onDidDismiss(data => {
-        this.cargarCitas();
+        let loader = this.loadingCtrl.create({
+          content: "cargando..."
+        });
+        loader.present();
+        this.cargarCitas().subscribe((val)=>{loader.dismiss();}
+        );
       });
       Modal.present({});
     }
@@ -118,7 +131,12 @@ export class CitasPage {
       console.log("sending progreso", cita);
       let Modal = this.modalCtrl.create(ProgresocitaModalPage, {cita : cita}, { cssClass: "smallModal progressModal" });
       Modal.onDidDismiss(data => {
-        this.userData.cargarCitas();
+        let loader = this.loadingCtrl.create({
+          content: "cargando..."
+        });
+        loader.present();
+        this.cargarCitas().subscribe((val)=>{loader.dismiss();}
+        );
       });
       Modal.present({});
     }
@@ -128,7 +146,7 @@ export class CitasPage {
       let loader = this.loadingCtrl.create({
         content: "actualizando"
       });
-      loader.present();
+      
       let aux_doc = this.userData.getDoctorOFCita(cita);
       console.log("tryin to open cita progreso",cita);
       if(cita.checkState(UserDataProvider.STATE_ACTIVA)){
@@ -152,6 +170,7 @@ export class CitasPage {
           {
             text: 'Si',
             handler: () => { 
+              loader.present();
               this.userData.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
                 (val)=>{
                   this.userData.cargarCitas().subscribe(
