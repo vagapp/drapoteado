@@ -57,7 +57,7 @@ export class UsuariosPage {
   deleteUsuario( userd ){
     let alert = this.alertCtrl.create({
       title: 'Eliminar',
-      message: '¿está seguro de que desea remover? el usuario no se borrara, solo dejara de administrar sus citas',
+      message: '¿Está seguro de que desea remover? El usuario no se borrará, solo dejará de administrar sus citas',
       buttons: [
         {
           text: 'Cancelar',

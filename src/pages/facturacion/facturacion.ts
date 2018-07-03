@@ -133,7 +133,7 @@ export class FacturacionPage {
         loading.dismiss();
         let alert = this.alertCtrl.create({
           title: 'Nada',
-          subTitle: 'Codigo no encontrado',
+          subTitle: 'Código no encontrado',
           buttons: ['Ok']
         });
         alert.present();
@@ -152,7 +152,7 @@ export class FacturacionPage {
   popRemoveDoctorSus( uid ){
     let alert = this.alertCtrl.create({
       title: 'Remover Doctor',
-      message: '¿esta seguro que desea remover este doctor de la subscripción?',
+      message: '¿Está seguro que desea remover este doctor de la subscripción?',
       buttons: [
         {
           text: 'No',

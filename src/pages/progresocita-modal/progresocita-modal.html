@@ -84,10 +84,10 @@
                     <input [(ngModel)]="this.cobroCheque" type="text"/>
                 </div>
                 <span *ngIf="this.CantidadRestante > 0" class="spanBlock midAlign fontPrimary">
-                    faltan ${{this.CantidadRestante}}
+                    Faltan ${{this.CantidadRestante}}
                 </span>
                 <span *ngIf="this.CantidadRestante < 0" class="spanBlock midAlign fontHigh">
-                        Restan ${{(this.CantidadRestante * -1)}}
+                        Sobrar ${{(this.CantidadRestante * -1)}}
                     </span>
                 </div>
             </div>

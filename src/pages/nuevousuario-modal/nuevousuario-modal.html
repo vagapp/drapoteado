@@ -20,7 +20,7 @@
       </div>
     <div class="nuevoservicio_content modalContent" *ngIf="codeuser">
         <div class="ModalInput_input">
-            <b>Introducir Codigo</b>
+            <b>Introducir Código</b>
             <input  [(ngModel)]="this.newUserCode" type="text"/>
         </div>
         <div class="midAlign">
@@ -38,17 +38,17 @@
             <b>Tipo de Usuario:</b>
           <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und" class="input_select input">
               <option selected disabled value="0">SELECT</option>
-              <option value="2">recepcion</option>
+              <option value="2">recepción</option>
               <option value="3">caja</option>
-              <option value="4">recepcion&caja</option>
+              <option value="4">recepción&caja</option>
             </select>
           </div>
           <div class="ModalInput_input">
-            <b>Correo Electronico</b>
+            <b>Correo Electrónico</b>
             <input [(ngModel)]="this.newUser.field_useremail.und[0].email" type="text"/>
         </div>
         <div *ngIf="this.isnew" class="ModalInput_input">
-            <b>Confirmar Correo Electronico</b>
+            <b>Confirmar Correo Electrónico</b>
             <input [(ngModel)]="this.newUser.mail" type="text"/>
         </div>
         <div class="ModalInput_input">

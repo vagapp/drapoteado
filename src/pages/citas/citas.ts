@@ -75,7 +75,7 @@ export class CitasPage {
       }
         let alert = this.alertCtrl.create({
           title: aux_title,
-          message: '¿esta seguro que desea colocar esta cita como '+aux_title+'?',
+          message: '¿Está seguro que desea colocar esta cita como '+aux_title+'?',
           buttons: [
             {
               text: 'No',
@@ -98,7 +98,7 @@ export class CitasPage {
 
     updateStateRequest ( cita, state ) {
       let loader = this.loadingCtrl.create({
-        content: "actualizando..."
+        content: "Actualizando..."
       });
       loader.present();
       this.userData.updateCitaState(cita,state).subscribe(
@@ -144,7 +144,7 @@ export class CitasPage {
 
     iniciarCita( cita:Citas ){
       let loader = this.loadingCtrl.create({
-        content: "actualizando"
+        content: "Actualizando"
       });
       
       let aux_doc = this.userData.getDoctorOFCita(cita);
@@ -159,7 +159,7 @@ export class CitasPage {
         }
       let alert = this.alertCtrl.create({
         title: "Iniciar Consulta",
-        message: '¿esta seguro que desea colocar esta cita como Activa?',
+        message: '¿Está seguro que desea colocar esta cita como Activa?',
         buttons: [
           {
             text: 'No',

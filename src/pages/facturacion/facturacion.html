@@ -14,9 +14,9 @@
     </div>
   </div>
   <div class="fact_page_wrapper">
-    <div *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])" class="access_code_opt"><span (click)="showInvitation();" class="access_code_opt_link">Tengo un codigo de invitación</span></div>
+    <div *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])" class="access_code_opt"><span (click)="showInvitation();" class="access_code_opt_link">Tengo un código de invitación</span></div>
     <div *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY]) && invitationshow" class="acesss_code_show"><ion-item class="acesss_code_show_input">
-        <ion-input placeholder="Codigo de invitacion" [(ngModel)]="invitationCode"></ion-input>
+        <ion-input placeholder="Código de invitación" [(ngModel)]="invitationCode"></ion-input>
       </ion-item>
       <button class="generalButton largeButton bgColorPrimary" (click)="invitationSub()" >Enviar</button>  
     </div>
@@ -24,14 +24,14 @@
     <div class="fact_myplan" *ngIf="userData.checkUserSuscription([userData.PLAN_ANY])">
       <span class="myplan_block">Plan activo: {{userData.subscription.plan.title}}</span>
       <span *ngIf="this.userData.checkUserPlanHolder()">
-      <span class="myplan_block">Codigo de invitacion: {{userData.subscription.field_invitation_code}}</span>
-      <span class="myplan_explain">Entregale este codigo a los doctores con los que quieras compartir esta suscripcion a <span class="colorPrimary">DRAP</span></span>
+      <span class="myplan_block">Código de invitación: {{userData.subscription.field_invitation_code}}</span>
+      <span class="myplan_explain">Entrégale este código a los doctores con los que quieras compartir esta suscripción a <span class="colorPrimary">DRAP</span></span>
       <span class="myplan_block">Doctores Afiliados:</span>
       <span *ngFor="let dctr of userData.subscription.field_doctores_info" class="myplan_doctor">{{dctr.name}} <span class="delete_doctor" *ngIf="this.userData.userData.uid !== dctr.uid" (click)="popRemoveDoctorSus(dctr.uid);">remover</span></span>
       <span class="myplan_block">Subcuentas activas:{{userData.subscription.noSubcuentas}}</span>
       </span>
       <span *ngIf="!this.userData.checkUserPlanHolder()">
-          <span class="myplan_block">Usted esta afiliado a una subscripcion administrada por otro usuario</span>
+          <span class="myplan_block">Usted esta afiliado a una subscripción administrada por otro usuario</span>
       </span>
     </div>
     <div class="fact_myplan noplan" *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])">
@@ -43,11 +43,11 @@
   </div>
 <div class="fact_page_content fact_section">
   <div class="fact_payment_methods" *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])">
-    <span class="fact_label">seleccione un metodo de pago:</span>
+    <span class="fact_label">seleccione un método de pago:</span>
     <div *ngFor="let src of this.sources" (click)="selectCard(src)"   [class.selectedsrc]="src.selected" class="fact_src_unit">
       {{src.brand}} **** **** **** {{src.last4}}
     </div>
-  <span class="fact_label">agregar un metodo de pago:</span>
+  <span class="fact_label">agregar un método de pago:</span>
   <div class="forwrapper">
   <form action="/" method="post" id="payment-form">
     

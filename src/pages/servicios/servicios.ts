@@ -80,7 +80,7 @@ export class ServiciosPage {
   deleteServicio( delete_servicio ){
     let alert = this.alertCtrl.create({
       title: 'Eliminar',
-      message: '¿está seguro de que desea eliminar?',
+      message: '¿Está seguro de que desea eliminar?',
       buttons: [
         {
           text: 'Cancelar',

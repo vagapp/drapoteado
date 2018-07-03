@@ -49,7 +49,7 @@ export class ReportesPage {
   elimiarReporte( report:reportes ){
     let alert = this.alertCtrl.create({
       title: 'eliminar reporte',
-      message: `¿esta seguro que desea eliminar este reporte?`,
+      message: `¿Está seguro que desea eliminar este reporte?`,
       buttons: [
         {
           text: 'No',
