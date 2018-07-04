@@ -44,7 +44,7 @@ export class HomePage {
 
   iniciarCita( cita:Citas ){
     let loader = this.loadingCtrl.create({
-      content: "actualizando..."
+      content: "Actualizando..."
     });
     let aux_doc = this.userData.getDoctorOFCita(cita);
     console.log("tryin to open cita progreso",cita);
@@ -59,7 +59,7 @@ export class HomePage {
       }
     let alert = this.alertCtrl.create({
       title: "Iniciar Consulta",
-      message: '¿esta seguro que desea colocar esta cita como Activa?',
+      message: '¿Está seguro que desea colocar esta cita como Activa?',
       buttons: [
         {
           text: 'No',

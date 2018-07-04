@@ -138,7 +138,7 @@ getUserByCode(){
      
       let aux_results = Object.keys(val).map(function (key) { return val[key]; });
       if(aux_results.length == 0){
-        dis.presentAlert("Nada", "No se encontro ningun usuario usando este codigo");
+        dis.presentAlert("Nada", "No se encontró ningún usuario usando este código");
         loader.dismiss();
         return false;
       } 

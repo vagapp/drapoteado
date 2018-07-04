@@ -85,7 +85,7 @@ export class ProgresocitaModalPage {
       finalizar(){
         let alert = this.alertCtrl.create({
           title: 'Finalizar',
-          message: '¿está seguro de que desea Finalizar la consulta?',
+          message: '¿Está seguro de que desea Finalizar la consulta?',
           buttons: [
             {
               text: 'Cancelar',
@@ -131,7 +131,7 @@ export class ProgresocitaModalPage {
         if(this.CantidadRestante > 0){
           let alert = this.alertCtrl.create({
             title: 'Cuidado',
-            message: '¿está seguro de que desea marcar esta cita como con la cantidad insuficiente?',
+            message: '¿Está seguro de que desea marcar esta cita como pagada con la cantidad insuficiente?',
             buttons: [
               {
                 text: 'Cancelar',
@@ -154,7 +154,7 @@ export class ProgresocitaModalPage {
       setToPaidPop(){
         let alert = this.alertCtrl.create({
           title: 'Pagada',
-          message: '¿está seguro de que desea marcar esta cita como pagada?',
+          message: '¿Está seguro de que desea marcar esta cita como pagada?',
           buttons: [
             {
               text: 'Cancelar',

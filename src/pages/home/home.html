@@ -4,7 +4,7 @@
   <div class="section_grid">
         <div class="section">
                 <span class="spanBlock bigFont"><span class="fontPrimary"><b>Bienvenido</b></span> <span class="">{{this.userData.userData.name}} </span><span class="rol_title" *ngIf="this.userData.checkUserFeature([this.userData.TIPO_CAJA,this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);" >({{this.userData.rol}})</span></span>
-                <span class="spanBlock bigSubFont">En que podemos ayudarte hoy:</span>
+                <span class="spanBlock bigSubFont">¿En qué podemos ayudarte hoy?</span>
         </div>
         <div class="section" >
                         <div class="section_content">
@@ -30,7 +30,7 @@
                 <div class="section" *ngFor="let nextCita of this.userData.nextCitas">
                           <span class="spanBlock bigSubFont">Proxima Cita</span>
                           <span *ngIf="nextCita" class="spanBlock bigSubFont"><b>{{nextCita.data.field_paciente.und[0].value}}</b></span>
-                          <span *ngIf="!nextCita" class="spanBlock bigSubFont"><b>No hay citas proximas</b></span>
+                          <span *ngIf="!nextCita" class="spanBlock bigSubFont"><b>No hay citas próximas</b></span>
                           <span *ngIf="nextCita && ( nextCita.checkState(userData.STATE_PENDIENTE) || nextCita.checkState(userData.STATE_CONFIRMADA)) && !nextCita.retrasada "  class="spanBlock bigSubFont">Inicia en <span class="fontPrimary">{{nextCita.untilText}}</span></span>
                           <span *ngIf="nextCita && ( nextCita.checkState(userData.STATE_PENDIENTE) || nextCita.checkState(userData.STATE_CONFIRMADA)) && nextCita.retrasada "  class="spanBlock bigSubFont">Debió iniciar <span class="fontPrimary">{{nextCita.untilText}}</span></span>
                           <span *ngIf="nextCita && nextCita.checkState(userData.STATE_ACTIVA)"  class="spanBlock bigSubFont">Cita Activa</span>
@@ -71,7 +71,7 @@
                                 <div class="section_dates">
                                       <span class="spanBlock midFont">Nombre del Doctor</span>
                                       <span class="spanBlock midFont"><b>Nombre del Paciente</b></span>
-                                      <span class="spanBlock midFont description">Description</span>
+                                      <span class="spanBlock midFont description">Descripción</span>
                                 </div>
                                 <div class="section_button">
                                 <button class="generalButton bgColorSecondary" (click)="openReportModal()">Notificar</button>
@@ -83,7 +83,7 @@
                         <div class="section_dates">
                                 <span class="spanBlock midFont">Nombre del Doctor</span>
                                 <span class="spanBlock midFont"><b>Nombre del Paciente</b></span>
-                                <span class="spanBlock midFont description">Description</span>
+                                <span class="spanBlock midFont description">Descripción</span>
                         </div>
                         <div class="section_button">
                                 <button class="generalButton bgColorHigh" (click)="openProgreso()">Cobrar</button>
@@ -133,7 +133,7 @@
                   <img src="assets/imgs/citas.svg"/>
           </div>
           <div class="section_text midFont">
-            <span class="spanBlock midMainFont">Citas Programada</span>
+            <span class="spanBlock midMainFont">Citas Programadas</span>
             <span class="spanBlock midSubFont">Revisa y administra tus citas programadas. </span>
             
           </div>
