@@ -33,8 +33,6 @@ export class HomePage {
   }
 
   ionViewDidLoad(){
-      //console.log("tutorial",this.userData.userData.tutorial_state);
-      //console.log(this.userData.userData.tutorial_state.und[0].value);
       if( this.userData.userData.tutorial_state.und && parseInt(this.userData.userData.tutorial_state.und[0].value) == 0){
         let Modal = this.modalCtrl.create(WelcomeModalPage);
         Modal.present({});
@@ -48,7 +46,6 @@ export class HomePage {
     let loader = this.loadingCtrl.create({
       content: "actualizando..."
     });
-    loader.present();
     let aux_doc = this.userData.getDoctorOFCita(cita);
     console.log("tryin to open cita progreso",cita);
     if(cita.checkState(UserDataProvider.STATE_ACTIVA)){
@@ -72,17 +69,16 @@ export class HomePage {
         },
         {
           text: 'Si',
-          handler: () => { 
+          handler: () => {
+            //loader.present();
             this.userData.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
               (val)=>{
                 this.userData.cargarCitas().subscribe(
                   (val)=>{
-                    loader.dismiss();
                     this.openProgreso(cita);
                   }
                 );
               });
-           
           }
         }
       ]
@@ -96,7 +92,6 @@ export class HomePage {
     this.userData.updateCitaState( cita , UserDataProvider.STATE_CONFIRMADA ).subscribe((val)=>{
       this.userData.cargarCitas()
     });
-    //this.userData.cargarCitas();
   }
 
   /*iniciarCita( cita:Citas ){

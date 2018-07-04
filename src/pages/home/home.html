@@ -16,13 +16,15 @@
         </div>
 
                 <!-- Citas activas -->
-              <div class="section" *ngFor="let citaActiva of this.userData.citasActivas">
+                <span  *ngFor="let citaActiva of this.userData.citasActivas">
+              <div class="section"  *ngIf="citaActiva && citaActiva.checkState(userData.STATE_ACTIVA)">
                         <span class="spanBlock bigSubFont fontHigh">Cita Activa</span>
                         <span *ngIf="citaActiva" class="spanBlock bigSubFont"><b>{{citaActiva.data.field_paciente.und[0].value}}</b></span>
               <div class="section_button">
               <button *ngIf="citaActiva && citaActiva.checkState(userData.STATE_ACTIVA)"  class="generalButton bgColorHigh" (click)="iniciarCita(citaActiva)">Ver Progreso</button>
               </div>
               </div>
+              </span>
 
               
                 <div class="section" *ngFor="let nextCita of this.userData.nextCitas">

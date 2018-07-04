@@ -54,37 +54,10 @@ export class ProgresocitaModalPage {
   cargarServicios(){
     this.activeCita.setAddedServices(this.activeCitaDoc.servicios);
     this.available_services = this.activeCita.getServiciosAvailable(this.activeCitaDoc.servicios);
-    /*
-    console.log("cargando servicios");
-    this.servicios = new Array();
-    let aux_arr = new Array();
-    aux_arr[0]= this.userData.userData.uid;
-    this.userData.getServicios(aux_arr).subscribe(
-      (val)=>{
-         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
-         let dis  = this;
-         aux_results.forEach(function(element) {
-          dis.servicios.push(element);          
-        });
-         this.activeCita.setAddedServices(this.servicios);
-         this.available_services = this.activeCita.getServiciosAvailable(this.servicios);
-         this.calcularCosto();
-      },
-        response => {
-          console.log("POST call in error", response);
-        },
-        () => {
-          console.log(this.servicios);
-          console.log(this.available_services);
-      });
-       */
-      }
+    }
   
-      addService(){
-        let loader = this.loadingCtrl.create({
-          content: "Guardando Cita"
-        }); 
-        loader.present();
+    
+    addService(){
         let aux_servicio = null;
         if(Number(this.selectedService) === Number(0)){
           console.log("nothing selected");
@@ -151,8 +124,6 @@ export class ProgresocitaModalPage {
           ]
         });
         alert.present();
-
-        
       }
 
 

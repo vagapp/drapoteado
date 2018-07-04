@@ -57,7 +57,7 @@ export class UserDataProvider {
  
 
   //loop and options:
-  loopMs:number = 600000; //Milisegundos que tarde en actualizar las citas.
+  loopMs:number = 10000; //Milisegundos que tarde en actualizar las citas.
   loopSusMs:number = 60000; //millisegundos que tarda en actualizar la suscripcion.
   ShowCitaUntilMs:Number = (60*60*1000); //Milisegundos para que deben quedarle a una cita para que se muestre en la pantalla de inicio, (si va a empezar en tantos ms o menos aparece)
 
@@ -176,6 +176,52 @@ export class UserDataProvider {
     });
     return observer;
   
+  }
+
+  initreset(){
+    this.userData= {
+      uid:0,
+      name:"",
+      pass:"",
+      mail:"",
+      status:"",
+      roles:[],
+      field_tipo_de_usuario:{und:[]},
+      field_useremail:{und:[{email:""}]},
+      field_nombre:{und:[{value:""}]},
+      field_apellidos:{und: [{value:""}]},
+      field_especialidad:{und: [{value:""}]},
+      field_alias:{und:[{value: ""}]},
+      field_calle:{und:[{value: ""}]},
+      field_no_ext:{und: [{value: ""}]},
+      field_no_int: {und: [{value: ""}]},
+      field_codigo_postal: {und: [{value: ""}]},
+      field_ciudad: {und: [{value:""}]},
+      field_colonia: {und:[{value: ""}]},
+      field_pais:{und: [{value:""}]},
+      field_municipio:{und:[{value:""}]},
+      field_estado_ubicacion:{und:[{value: ""}]},
+      field_plan_date: {und: [{value: {date:""}}]},
+      field_forma_pago: {und: [{value: ""}]},
+      tutorial_state: {und: [{value: "0"}]},
+      field_doctores:{und:[]},
+      field_sub_id:{und:[]},
+      field_planholder:{und:[{value: true}]},
+      field_stripe_customer_id: {und:[{value: ""}]},
+      field_src_json_info: {und:[{value: ""}]}
+  }
+    this.citas = new Array();
+    this.nextCitas = new Array();
+    this.citasPendientes= new Array();
+    this.citasCloser= new Array();
+    this.citasCobrar= new Array();
+    this.citasActivas= new Array();
+    this.citasParaHoy= 0;
+    this.subscription = null;
+    //this.planes:planes[]; //planes que ofrece drap.
+    this.doctores = new Array();
+    this.servicios = new Array();
+    
   }
 
   checkConnect(){
@@ -358,46 +404,16 @@ s
     let login_observer = this.http.post(url,body,{headers});
     login_observer.subscribe(
       (val) => {
-        console.log("logout complete", val);
-        this.userData= {
-          uid:0,
-          name:"",
-          pass:"",
-          mail:"",
-          status:"",
-          roles:[],
-          field_tipo_de_usuario:{und:[]},
-          field_useremail:{und:[{email:""}]},
-          field_nombre:{und:[{value:""}]},
-          field_apellidos:{und: [{value:""}]},
-          field_especialidad:{und: [{value:""}]},
-          field_alias:{und:[{value: ""}]},
-          field_calle:{und:[{value: ""}]},
-          field_no_ext:{und: [{value: ""}]},
-          field_no_int: {und: [{value: ""}]},
-          field_codigo_postal: {und: [{value: ""}]},
-          field_ciudad: {und: [{value:""}]},
-          field_colonia: {und:[{value: ""}]},
-          field_pais:{und: [{value:""}]},
-          field_municipio:{und:[{value:""}]},
-          field_estado_ubicacion:{und:[{value: ""}]},
-          field_plan_date: {und: [{value: {date:""}}]},
-          field_forma_pago: {und: [{value: ""}]},
-          tutorial_state: {und: [{value: "0"}]},
-          field_doctores:{und:[]},
-          field_sub_id:{und:[]},
-          field_planholder:{und:[{value: true}]},
-          field_stripe_customer_id: {und:[{value: ""}]},
-          field_src_json_info: {und:[{value: ""}]}
-      }
-        console.log(this.userData);
+        Debugger.log(["logout complete", val]);
+        this.initreset();
+        Debugger.log([this.userData]);
         this.AuthSubject.next(this.userData.uid);
       },
       response => {
-          console.log("POST call in error", response);
+        Debugger.log(["POST call in error", response]);
       },
       () => {
-          console.log("The POST observable is now completed.");
+        Debugger.log(["The POST observable is now completed."]);
       });
       return login_observer;
   }
@@ -1100,7 +1116,9 @@ s
     let ret = false;
     Debugger.log(['checking plan holder',this.subscription.field_plan_holder],false);
     if(this.subscription && this.subscription.field_plan_holder){
+      Debugger.log([`Comparing ${this.userData.uid} to ${this.subscription.field_plan_holder} = ${this.userData.uid === this.subscription.field_plan_holder}`],false);
     ret = this.userData.uid === this.subscription.field_plan_holder;
+    //ret = Number(this.userData.uid) === Number(this.subscription.field_plan_holder);
   }
     return ret;
   }

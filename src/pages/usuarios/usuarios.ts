@@ -54,7 +54,7 @@ export class UsuariosPage {
   }
 
   
-  deleteUsuario( userd ){
+  deleteUsuario( userd , fromSub:boolean = false){
     let alert = this.alertCtrl.create({
       title: 'Eliminar',
       message: '¿está seguro de que desea remover? el usuario no se borrara, solo dejara de administrar sus citas',
@@ -69,13 +69,18 @@ export class UsuariosPage {
         {
           text: 'Eliminar',
           handler: () => { 
-            this,this.removeUsuario( userd );
+            if(!fromSub) {this.removeUsuario( userd );}
+            else{ this.removeSubUserFromSubs(userd); }
           }
         }
       ]
     });
     alert.present();
   }
+
+  
+
+
 
   removeUsuario( userd ){
     let loader = this.loadingCtrl.create({
@@ -85,13 +90,15 @@ export class UsuariosPage {
     //remove this user from array of doctors
     console.log('doctors to remove',userd.field_doctores);
     let index = userd.field_doctores.und.indexOf(this.userData.userData.uid);
-    userd.field_doctores.und.splice(index,1);
+    if(index >= 0) userd.field_doctores.und.splice(index,1);
+
     console.log(userd.field_doctores.und);
     if(userd.field_doctores.und.length === 0){
       //userd.field_doctores.und.push("_none");
       console.log("este usuario ya no tiene doctores hay que bloquearlo?");
     }
     console.log("updating", userd);
+    delete userd.field_sub_id;
     this.userData.updateUserd( userd ).subscribe(
       (val)=>{
         console.log("usuarioUpdated");
@@ -108,6 +115,23 @@ export class UsuariosPage {
         }
       }
     );
+  }
+
+
+  removeSubUserFromSubs( userd ){
+    let loader = this.loadingCtrl.create({
+      content: "removiendo usuario . . ."
+    });
+    loader.present();
+    if(this.userData.checkUserPlanHolder()){
+      this.userData.subscription.removeSubUserFromSubs(userd);
+      this.userData.updateSus(this.userData.subscription).subscribe(
+        (val)=>{
+          loader.dismiss();
+          this.cargarUsuarios();
+        }
+      );
+    }
   }
 
   

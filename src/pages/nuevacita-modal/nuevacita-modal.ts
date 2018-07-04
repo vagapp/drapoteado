@@ -36,8 +36,9 @@ export class NuevacitaModalPage {
     let aux_node = navParams.get('cita');
     if(aux_node){
       this.cita = aux_node;
+      Debugger.log(['cita en modal es',this.cita]);
       this.selectedDate = this.cita.date.toISOString();
-      //this.isnew = false;
+      this.isnew = false;
       //this.newCita = UserDataProvider.getEmptyCita();
       //this.newCita = aux_node;
       //this.selectedDate = this.newCita.field_date.und.values.date;
@@ -102,6 +103,7 @@ updateCita(){
   this.setCitaDateFromiNPUT();
   this.userData.updateCita( this.cita.data ).subscribe(
     (val)=>{
+      Debugger.log(['updatecita returns',val]);
       console.log("citaupdated");
       this.presentToast("Completado");
       loader.dismiss();

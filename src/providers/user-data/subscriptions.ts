@@ -63,6 +63,7 @@ export class subscriptions{
                 this.field_subusuarios.push(element['uid']);
             });
         }
+        Debugger.log(['field_subusuarios at set data subscription',this.field_subusuarios]);
         this.field_doctores_info = JSON.parse(this.field_doctores_json);
         if(this.field_subusuarios)
         this.noSubcuentas = this.field_subusuarios.length;
@@ -164,5 +165,17 @@ export class subscriptions{
         aux_sus.is_plan_set = false;
         aux_sus.plan = null;
         return aux_sus;
+    }
+
+
+    removeSubUserFromSubs( userd ){
+        Debugger.log(['trata de remover este usuario de esta subscripcion',userd]);
+        if(this.field_subusuarios){
+            Debugger.log(['inde of this subuser', this.field_subusuarios.indexOf(userd['uid'])]);
+            let aux_index = this.field_subusuarios.indexOf(userd['uid']);
+            if(aux_index !== -1)this.field_subusuarios.splice(aux_index,1);
+            Debugger.log(['subusuarios after removing user from this index ,redy to save', this.field_subusuarios]);
+        }
+
     }
 }

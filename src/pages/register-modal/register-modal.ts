@@ -39,8 +39,11 @@ export class RegisterModalPage {
     let loading = this.loadingCtrl.create({
       content: 'Registrando...'
     });
+    
+    if(!this.basicValidation()){
+      return 0;
+    }
     loading.present();
-
   let cloneData = JSON.parse(JSON.stringify(this.userData.userData));
   delete cloneData.field_sub_id;
   cloneData.field_useremail.und[0].email = this.userData.userData.mail;
@@ -57,6 +60,7 @@ export class RegisterModalPage {
   //this.userData.userData.field_sub_id[0] = '_none';
   
   /*registrando un doctor*/
+  
     Debugger.log(['register',this.userData.userData]);
     let register_observer = this.userData.register(cloneData);
     register_observer.subscribe(
@@ -81,11 +85,15 @@ export class RegisterModalPage {
       () => {
         Debugger.log(["The POST observable is now completed."]);
       });
+    
   }
 
   basicValidation():boolean{
     let ret = true;
-    this.passconfirm
+    if(this.passconfirm.localeCompare(this.userData.userData.pass) !== 0){
+      ret = false;
+      this.presentAlert('Error','Las contraseñas no coinciden.');
+    }
     return ret;
   }
 

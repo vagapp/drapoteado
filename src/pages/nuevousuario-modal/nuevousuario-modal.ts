@@ -62,7 +62,13 @@ export class NuevousuarioModalPage {
     }); 
     loader.present();
     //validating if posible
-    if( !this.userData.checkUserPlanHolder() || this.userData.checkSusSubaccountsFull()){
+    if( !this.userData.checkUserPlanHolder() ){
+      loader.dismiss();
+      this.presentAlert('Error','Solo el administrador de plan puede crear subcuentas');
+      this.close();
+      return 0;
+    }
+    if( this.userData.checkSusSubaccountsFull() ){
       loader.dismiss();
       this.presentAlert('Error','Se llego al limite de subcuentas');
       this.close();
@@ -70,12 +76,12 @@ export class NuevousuarioModalPage {
     }
     Debugger.log(["creating an user ",this.newUser]);
     //revisar contraseñas
-    if(!(this.newUser.pass === this.checkpass)){
+    if(!(this.newUser.pass.localeCompare(this.checkpass) === 0)){
       this.presentAlert("Error", "las contraseñas no coinciden");
       loader.dismiss();
       return 0;
     }
-    if(!(this.newUser.mail == this.newUser.field_useremail.und[0].email)){
+    if(!(this.newUser.mail.localeCompare(this.newUser.field_useremail.und[0].email) === 0)){
       this.presentAlert("Error", "Los correos no coinciden");
       loader.dismiss();
       return 0;
@@ -92,6 +98,7 @@ export class NuevousuarioModalPage {
     this.userData.generateNewUserd( this.newUser ).subscribe(
     (val)=>{
       Debugger.log(['generated user returned',val]);
+      if(!this.userData.subscription.field_subusuarios) this.userData.subscription.field_subusuarios = new Array();
       this.userData.subscription.field_subusuarios.push(val['uid']);
       this.userData.updateSus(this.userData.subscription).subscribe(
         (val) => {
