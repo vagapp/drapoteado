@@ -521,6 +521,38 @@ s
     }); 
   }
 
+
+  
+  removeCitaFromLists(cita:Citas){
+    //todas las listas
+    const ArrOfArrs = [
+    this.citas,
+    this.citasActivas,
+    this.nextCitas,
+    this.citasPendientes,
+    this.citasCloser,
+    this.citasCobrar
+    ];
+    ArrOfArrs.forEach(arr => {
+      UserDataProvider.removeElementFromArray(cita,arr);
+    });
+    this.doctores.forEach(doc => {
+      doc.removeCitaFromLists(cita);
+    });
+    Debugger.log(['checking citas list after removing',this.citas]);
+  }
+
+  static removeElementFromArray(element:any ,array:Array<any>):number{
+    let ret = -2;
+    if(array){
+    ret = array.indexOf(element);
+    if(ret >= 0) array.splice(ret, 1);
+    }
+    return ret;
+  }
+
+  static remove
+
   //SUBSCRIPTION METHODS
   
   generateNewSus( suscription ){return this.generateNewNode(suscription.getData());}
@@ -700,7 +732,7 @@ s
   deleteCita( cita ){return this.deleteNode(cita);}
   updateCitaState( cita:Citas , state){
     cita.data.field_estado.und[0].value = state;
-    if(Number(state) === Number(UserDataProvider.STATE_ACTIVA)){cita.setHoraInicio();}
+    if(Number(state) === Number(UserDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(UserDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
     console.log("tryna update cita:",cita.data);
     return this.updateCita( cita.data );
@@ -966,7 +998,7 @@ s
       'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
     });
     let observer = this.http.delete(url,{headers});
-    observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
+    //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
 

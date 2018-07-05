@@ -166,7 +166,6 @@ setCitaDateFromiNPUT(){
   Debugger.log(['cita for setDate on local',`${aux_date} ${aux_time}`]);*/
   //this.cita.setDate( `${aux_date} ${aux_time}`);
   Debugger.log(['magi date setter got ',this.cita.date]);
-  
 }
 
 }

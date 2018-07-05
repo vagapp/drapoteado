@@ -182,10 +182,38 @@ export class CitasPage {
     }
     }
 
+    delecitaCitaPop(cita:Citas){
+      let alert = this.alertCtrl.create({
+        title: "Eliminar Citas",
+        message: '¿Está seguro que desea eliminar esta cita?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
+            handler: () => {
+            }
+          },
+          {
+            text: 'Si',
+            handler: () => { 
+              this.deleteCita(cita);
+            }
+          }
+        ]
+      });
+    }
+
     deleteCita( cita:Citas ){
       Debugger.log(['delete citas']);
+      let loader = this.loadingCtrl.create({
+        content: "eliminando..."
+      });
+      loader.present();
       this.userData.deleteCita( cita.data ).subscribe(
         (val)=>{
+          loader.dismiss();
+          Debugger.log(['val returned from deletecita',val]);
+          this.userData.removeCitaFromLists(cita);
           this.cargarCitas();
         }
       );

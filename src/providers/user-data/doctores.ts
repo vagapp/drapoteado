@@ -48,6 +48,35 @@ export class Doctores{
       Debugger.log([`removing servicio ${servicio.Nid} from list`,this.servicios]);
     }
 
+    removeCitaFromLists(cita:Citas){
+      const ArrOfArrs = [
+      this.citas,
+      this.citasPendientes,
+      this.citasCobrar
+      ];
+      ArrOfArrs.forEach(arr => {
+        UserDataProvider.removeElementFromArray(cita,arr);
+      });
+      if(this.citaActiva && Number(this.citaActiva.Nid) === Number(cita.Nid)){ 
+        this.citaActiva = null;
+      }
+      if(this.citaActiva && Number(this.citaActiva.Nid) === Number(cita.Nid) ){
+        this.nextCita = null;
+      }
+      this.calculateCitasParaHoy();
+    }
+
+    calculateCitasParaHoy(){
+      /*let aux_citasparahoy = 0;
+      this.citas.forEach(cita => {
+        if(cita.checkState(UserDataProvider.STATE_PENDIENTE) || cita.checkState(UserDataProvider.STATE_CONFIRMADA)){
+          aux_citasparahoy++;
+        }
+      });
+      this.citasParaHoy = aux_citasparahoy;*/
+      this.citasParaHoy = this.citasPendientes.length;
+    }
+
 
  //Actualizar citas desde afuera introduciendo los resultados de la busqueda de todas las citas.
  /**
