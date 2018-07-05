@@ -171,21 +171,27 @@ export class Citas{
 
     setDuracionMs(){
         //let now = new Date('2018/5/14 01:35:00Z');
+        Debugger.log(['dates setduration'])
+        Debugger.log([this.endDate]);
+        Debugger.log([this.startDate]);
         let now = new Date();
         if(this.startDate && this.endDate){
             this.duracionMs = (this.endDate.getTime() - this.startDate.getTime());
-        }else if( this.startDate){
+           
+        }else if( this.startDate ){
             this.duracionMs = (now.getTime() - this.startDate.getTime());
         }
+        Debugger.log(['this.duracionMs',this.duracionMs]);
         this.duracionText = "00:00";
-        let dms_seconds = this.duracionMs / 1000;
-        let dms_minutes = dms_seconds / 60;
-        dms_seconds =  (dms_seconds - ( dms_minutes * 60) );
+        let dms_seconds = Math.floor(this.duracionMs / 1000);
+        let dms_minutes = Math.floor(dms_seconds / 60);
+        dms_seconds =  Math.floor((dms_seconds - ( dms_minutes * 60) ));
         let dms_minutes_str = ""+dms_minutes;
         let dms_seconds_str = ""+dms_seconds;
         while(dms_minutes_str.length < 2) dms_minutes_str = "0"+dms_minutes_str;
         while(dms_seconds_str.length < 2) dms_seconds_str = "0"+dms_seconds_str;
         this.duracionText = dms_minutes_str+":"+dms_seconds_str;
+        Debugger.log(['this.duracionText', this.duracionText]);
     }
 
 
@@ -198,7 +204,11 @@ export class Citas{
     getUntilMs():number{
         //let now = new Date('2018/5/14 01:35:00Z');
         let now = new Date();
+        //Debugger.log(['comparing dates to get MS']);
+        //Debugger.log([this.date]);
+        //Debugger.log([now]);
         this.untilMs = ( this.date.getTime() - now.getTime() );
+        //Debugger.log(['calculated untilMs',this.untilMs]);
         return this.untilMs;
     }
 
@@ -206,13 +216,13 @@ export class Citas{
         let ret = null;
         let negative = false;
         let aux_untilMs = this.untilMs;
-        Debugger.log(['entering get until time string with ',aux_untilMs]);
+        //Debugger.log(['entering get until time string with ',aux_untilMs]);
         if(this.untilMs < 0){
-            Debugger.log(['untilMs es negativo']);
+            //Debugger.log(['untilMs es negativo']);
             negative = true;
             aux_untilMs = aux_untilMs*-1;
         }
-        Debugger.log(['untilMs af neg check',aux_untilMs]);
+        //Debugger.log(['untilMs af neg check',aux_untilMs]);
         let minutes = aux_untilMs/(60*1000);
         let hours = Math.floor(minutes/(60));
         minutes = Math.floor(( minutes - (hours * 60)));
@@ -332,6 +342,32 @@ export class Citas{
         let timestring =  `${this.date.getHours()}:${this.date.getMinutes()}`;
         ret = `${datestring}T${timestring}`;
         return ret;
+      }
+
+
+      getDisplayableDates():{"date":string,"time":string}{
+        let ret = {"date":'',"time":''};
+        let datestring = `${this.date.getDate()}/${(this.date.getMonth()+1)}/${this.date.getFullYear()}`;
+        let timestring =  `${this.date.getHours()}:${this.date.getMinutes()}`;
+        ret = { "date":datestring ,"time":timestring};
+        return ret;
+      }
+
+      static getLocalDateIso( date:Date ){
+        var tzo = date.getTimezoneOffset(),
+        dif = tzo >= 0 ? '+' : '-',
+        pad = function(num) {
+            var norm = Math.floor(Math.abs(num));
+            return (norm < 10 ? '0' : '') + norm;
+        };
+    return date.getFullYear() +
+        '-' + pad(date.getMonth() + 1) +
+        '-' + pad(date.getDate()) +
+        'T' + pad(date.getHours()) +
+        ':' + pad(date.getMinutes()) +
+        ':' + pad(date.getSeconds()) +
+        dif + pad(tzo / 60) +
+        ':' + pad(tzo % 60);
       }
     
 

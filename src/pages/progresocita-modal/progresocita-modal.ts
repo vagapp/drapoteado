@@ -26,6 +26,7 @@ export class ProgresocitaModalPage {
   cobroTarjeta:number=0;
   cobroCheque:number=0;
   activeCitaDoc:Doctores;
+  showinterval = null;
   added_services_list:{
     servicio:servicios
     costooverride:number
@@ -42,12 +43,18 @@ export class ProgresocitaModalPage {
   ) {
     this.activeCita = navParams.get('cita');
     this.activeCitaDoc = this.userData.getDoctorOFCita(this.activeCita);
+    this.showinterval = setInterval(() => { this.activeCita.setDuracionMs(); }, 1000);
     console.log("opening progreso of", this.activeCita);
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProgresocitaModalPage');
     this.cargarServicios();
+  }
+
+  ionViewWillLeave(){
+    if(this.showinterval)
+      clearInterval(this.showinterval);
   }
 
 

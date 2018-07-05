@@ -37,7 +37,7 @@ export class NuevacitaModalPage {
     if(aux_node){
       this.cita = aux_node;
       Debugger.log(['cita en modal es',this.cita]);
-      this.selectedDate = this.cita.date.toISOString();
+      this.selectedDate = Citas.getLocalDateIso(this.cita.date); //this.cita.date.toISOString();
       this.isnew = false;
       //this.newCita = UserDataProvider.getEmptyCita();
       //this.newCita = aux_node;
@@ -46,7 +46,7 @@ export class NuevacitaModalPage {
     }else{
       this.isnew = true;
       this.resetNewCita();
-      this.selectedDate = new Date().toISOString();
+      this.selectedDate = Citas.getLocalDateIso(new Date());//new Date().toISOString();
     }
   }
 
@@ -142,14 +142,52 @@ presentAlert(key,Msg) {
 }
 
 setCitaDateFromiNPUT(){
+  //get the timezoned input and put it on utc on this format 2018-07-04 14:30:00-07:00 to set data using citas code
+  Debugger.log(['string that not works now is',this.selectedDate],false);
+  this.selectedDate = this.selectedDate.slice(0,19);
+  let aux_date_obj = new Date(this.selectedDate+'Z');
+  let aux_date_str_utc = `${aux_date_obj.getFullYear()}-${aux_date_obj.getDate()}-${(aux_date_obj.getMonth()+1)}T${aux_date_obj.getHours()}:${aux_date_obj.getMinutes()}:00`;
+  let aux_testdate = new Date(aux_date_str_utc+'Z');
+  this.cita.setDate(this.selectedDate,true); //this is not on utc but it contains the actual timezone so its okai
+ /* let aux_date_obj = new Date(this.selectedDate);
+  Debugger.log(['aux_date_obj is',aux_date_obj]);
+  Debugger.log(['utc aux_date_obj is',aux_date_obj.toUTCString()]);
   let aux_datetimeparts = this.selectedDate.split('T');
   const aux_date = aux_datetimeparts[0];
   aux_datetimeparts = aux_datetimeparts[1].split('.');
   const aux_time = aux_datetimeparts[0];
   //this.cita.date = new Date(`${aux_date} ${aux_time}`);
-  this.cita.setDate(`${aux_date} ${aux_time}`);
+  Debugger.log([` Setting Cita from input: ${aux_date} ${aux_time}`]);*/
+  //let aux_date_str_utc = `${aux_date_obj.getUTCFullYear()}-${aux_date_obj.getUTCDate()}-${(aux_date_obj.getMonth()+1)}T${aux_date_obj.getUTCHours()}:${aux_date_obj.getUTCMinutes()}:00`;
+  //let aux_testdate = new Date(aux_date_str_utc+'Z');
+  //Debugger.log([]);
+  /*Debugger.log(['auxdate testo on utc saving',this.cita.date]);
+  Debugger.log(['cita for setDate on utc',aux_date_str_utc]);
+  Debugger.log(['cita for setDate on local',`${aux_date} ${aux_time}`]);*/
+  //this.cita.setDate( `${aux_date} ${aux_time}`);
   Debugger.log(['magi date setter got ',this.cita.date]);
+  
 }
 
-
 }
+
+/**
+ * Esto de aqui es para que el date me de el toisostring en la hora de aqui
+ *  **/
+/*
+Date.prototype.toISOString = function() {
+  var tzo = -this.getTimezoneOffset(),
+      dif = tzo >= 0 ? '+' : '-',
+      pad = function(num) {
+          var norm = Math.floor(Math.abs(num));
+          return (norm < 10 ? '0' : '') + norm;
+      };
+  return this.getFullYear() +
+      '-' + pad(this.getMonth() + 1) +
+      '-' + pad(this.getDate()) +
+      'T' + pad(this.getHours()) +
+      ':' + pad(this.getMinutes()) +
+      ':' + pad(this.getSeconds()) +
+      dif + pad(tzo / 60) +
+      ':' + pad(tzo % 60);
+}*/

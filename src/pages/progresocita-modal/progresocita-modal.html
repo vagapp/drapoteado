@@ -11,7 +11,7 @@
           <span class="spanBlock midFont"><b>Progreso de la Cita</b></span>
         </div>
         <div class="dateright floatRight">
-           <span class="spanBlock"><span class=" fontSecondary midFont">{{activeCita.data.field_date.und[0].value.date}}</span><span class="fontHigh midFont">{{activeCita.data.field_date.und[0].value.time}}</span></span>
+           <span class="spanBlock"><span class=" fontSecondary midFont">{{activeCita.getDisplayableDates().date}}</span><span class="fontHigh midFont">{{activeCita.getDisplayableDates().time}}</span></span>
           </div>
       </div>
       <div class="CitaDetail_Content">
@@ -22,6 +22,7 @@
                         <th>no</th>
                         <th>Paciente</th>
                         <th *ngIf="!(userData.checkUserPermission([userData.TIPO_DOCTOR]))">Doctor</th>
+                        <th> Tiempo Transcurrido:  <span class="fontHigh midFont">{{activeCita.duracionText }} </span></th>
                      </tr>
                 </thead>
                 <tbody>
@@ -29,7 +30,8 @@
                         <td>01</td>
                         <td>{{this.activeCita.data.field_paciente.und[0].value}}</td>
                         <td *ngIf="!(userData.checkUserPermission([userData.TIPO_DOCTOR]))">{{this.activeCita.data.doctor_name}}/ {{this.activeCita.data.doctor_alias}}</td>
-                     </tr>
+                        <td> </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

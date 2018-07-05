@@ -33,7 +33,7 @@
                 <td>{{cita.data.field_paciente.und[0].value}}</td>
                 <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}} / cita.doctor_alias</td>
                 <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">General</td>
-                <td><span class="fontSecondary">{{cita.data.field_date.und[0].value.date}}</span> - <span class="fontHigh">{{cita.data.field_date.und[0].value.time}}</span></td>
+                <td><span class="fontSecondary">{{cita.getDisplayableDates().date}}</span> - <span class="fontHigh">{{cita.getDisplayableDates().time}}</span></td>
                 <td>{{cita.getStateString()}}</td>
                 <td class="toolCol">
                   <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="editCita(cita)" *ngIf="this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION]);"/>
@@ -41,7 +41,8 @@
                   <button  *ngIf="cita.checkState(userData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Activar</button>
                   <button  *ngIf="cita.checkState(userData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Ver Progreso</button>
                   <button  *ngIf="cita.checkState(userData.STATE_COBRO) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR, this.userData.TIPO_CAJA, this.userData.TIPO_CAJAYRECEPCION])" (click)="openProgreso(cita);" class="bgColorSecondary generalButton tableButton">Cobrar</button>
-                  <button class="bgColorPrimary generalButton tableButton">Eliminar</button>
+                  <button  (click)="updateStatePop(cita, this.userData.STATE_CANCELADA)" class="bgColorPrimary generalButton tableButton">Cancelar</button>
+                  <button  (click)="deleteCita(cita)" class="bgColorPrimary generalButton tableButton">Eliminar</button>
                 </td>
              </tr>
         </tbody>

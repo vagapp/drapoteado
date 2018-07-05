@@ -8,7 +8,7 @@ import { Http } from '@angular/http';
 import { Citas } from './citas';
 import { Doctores } from './doctores';
 import { servicios } from './servicios';
-import {Subject} from 'rxjs/Subject';
+import { Subject } from 'rxjs/Subject';
 import { planes } from './planes';
 import { subscriptions } from './subscriptions';
 import { Debugger } from './debugger';
@@ -59,6 +59,7 @@ export class UserDataProvider {
   //loop and options:
   loopMs:number = 10000; //Milisegundos que tarde en actualizar las citas.
   loopSusMs:number = 60000; //millisegundos que tarda en actualizar la suscripcion.
+  loopUntiCitas:number = 1000; //milisegundos para actualizar el ultiMS de las citas.
   ShowCitaUntilMs:Number = (60*60*1000); //Milisegundos para que deben quedarle a una cita para que se muestre en la pantalla de inicio, (si va a empezar en tantos ms o menos aparece)
 
   //VARIABLES STATICAS, y osea se necesitan getters porque los html no pueden acceder a las variables static que pedo
@@ -82,6 +83,7 @@ export class UserDataProvider {
   public static STATE_COBRO = 3;
   public static STATE_FINALIZADA = 4;
   public static STATE_CANCELADA = 5;
+  public static STATE_ELIMINADA = 6;
 
   get STATE_PENDIENTE(){return UserDataProvider.STATE_PENDIENTE;}
   get STATE_CONFIRMADA(){return UserDataProvider.STATE_CONFIRMADA;}
@@ -89,6 +91,7 @@ export class UserDataProvider {
   get STATE_COBRO(){return UserDataProvider.STATE_COBRO;}
   get STATE_FINALIZADA(){return UserDataProvider.STATE_FINALIZADA;}
   get STATE_CANCELADA(){return UserDataProvider.STATE_CANCELADA;}
+  get STATE_ELIMINADA(){return UserDataProvider.STATE_CANCELADA;}
 
   //suscripciones planes cons
   public static PLAN_ANY = -1;
@@ -346,7 +349,17 @@ s
     this.cargarSubscription();
   }
  }, this.loopSusMs);
+ /*setInterval(() => {
+  if(this.citas && this.citas.length > 0){
+    this.nextCitas.forEach(aux_cita => {
+      aux_cita.getUntilMs();
+    });
   }
+}, this.loopUntiCitas);*/
+  }
+
+
+
   login(username:string, password:string){
     let body = JSON.stringify({"username":username,"password":password});
     console.log(body);
@@ -685,11 +698,10 @@ s
   generateNewCita( newCita ){return this.generateNewNode(newCita);}
   updateCita( cita ){return this.updateNode(cita);}
   deleteCita( cita ){return this.deleteNode(cita);}
-  updateCitaState( cita , state){
+  updateCitaState( cita:Citas , state){
     cita.data.field_estado.und[0].value = state;
-    if(state == UserDataProvider.STATE_ACTIVA){cita.setHoraInicio();}
-    if(state == UserDataProvider.STATE_COBRO){cita.setHoraFin();}
-    //if( cita instanceof Citas ){ cita = cita.data; }
+    if(Number(state) === Number(UserDataProvider.STATE_ACTIVA)){cita.setHoraInicio();}
+    if(Number(state) === Number(UserDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
     console.log("tryna update cita:",cita.data);
     return this.updateCita( cita.data );
   }

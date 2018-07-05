@@ -47,21 +47,23 @@ export class CitasPage {
   }
 
   openNuevaCita(){
-  
       let Modal = this.modalCtrl.create(NuevacitaModalPage, undefined, { cssClass: "nuevaCitaModal smallModal" });
       Modal.onDidDismiss(data => {
-        let loader = this.loadingCtrl.create({
-          content: "cargando..."
-        });
-        loader.present();
-        this.cargarCitas().subscribe((val)=>{loader.dismiss();}
-        );
+        this.cargarCitas();
       });
       Modal.present({});
     }
 
     cargarCitas(){
-      return this.userData.cargarCitas();
+      let loader = this.loadingCtrl.create({
+        content: "cargando..."
+      });
+      loader.present();
+      this.userData.cargarCitas().subscribe(
+      (val) => {},
+      response => {},
+      () => {loader.dismiss();}
+      );
     }
 
     updateStatePop( cita ,state ){
@@ -116,12 +118,8 @@ export class CitasPage {
     editCita( cita ){
       let Modal = this.modalCtrl.create(NuevacitaModalPage, { cita: cita }, { cssClass: "nuevaCitaModal smallModal" });
       Modal.onDidDismiss(data => {
-        let loader = this.loadingCtrl.create({
-          content: "cargando..."
-        });
-        loader.present();
-        this.cargarCitas().subscribe((val)=>{loader.dismiss();}
-        );
+        this.cargarCitas();/*.subscribe((val)=>{loader.dismiss();}
+        );*/
       });
       Modal.present({});
     }
@@ -131,12 +129,8 @@ export class CitasPage {
       console.log("sending progreso", cita);
       let Modal = this.modalCtrl.create(ProgresocitaModalPage, {cita : cita}, { cssClass: "smallModal progressModal" });
       Modal.onDidDismiss(data => {
-        let loader = this.loadingCtrl.create({
-          content: "cargando..."
-        });
-        loader.present();
-        this.cargarCitas().subscribe((val)=>{loader.dismiss();}
-        );
+       this.cargarCitas();/*.subscribe((val)=>{loader.dismiss();}
+        );*/
       });
       Modal.present({});
     }
@@ -179,7 +173,6 @@ export class CitasPage {
                       this.openProgreso(cita);
                     }
                   );
-               
                 });
             }
           }
@@ -187,6 +180,15 @@ export class CitasPage {
       });
       alert.present();
     }
+    }
+
+    deleteCita( cita:Citas ){
+      Debugger.log(['delete citas']);
+      this.userData.deleteCita( cita.data ).subscribe(
+        (val)=>{
+          this.cargarCitas();
+        }
+      );
     }
 
     presentToast(msg) {

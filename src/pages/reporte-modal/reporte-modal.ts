@@ -132,8 +132,12 @@ export class ReporteModalPage {
       (val)=>{
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
         aux_results.forEach((element) => {
+          Debugger.log([`loadReport check element ${element['Nid']}`,element]);
           let aux_cita = new Citas();
           aux_cita.setData(element);
+          Debugger.log(['loadReport check aux cita',aux_cita]);
+          aux_cita.setDuracionMs();
+          Debugger.log(['loadReport check aux cita',aux_cita]);
           if(aux_cita.checkState(UserDataProvider.STATE_CANCELADA)){
             this.noCancel++;
             this.noCitas++;
@@ -147,9 +151,11 @@ export class ReporteModalPage {
             if(aux_cita.cobroEfectivo) this.totalefectivo+=aux_cita.cobroEfectivo;
 	          if(aux_cita.cobroTarjeta) this.totalTarjeta+=aux_cita.cobroTarjeta;
             if(aux_cita.cobroCheque) this.totalCheques+=aux_cita.cobroCheque;
+           
 	          this.totalcuentas+=100;
             this.totalAdeudo+=100;
             aux_citas_list.push(aux_cita);
+           
           }
        });
        this.actualrepot.citas = aux_citas_list;
