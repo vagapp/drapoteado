@@ -18,6 +18,8 @@ export class reportes{
     dialy:boolean = true; //si es un reporte diario autogenerado
     citas:Citas[] = new Array();
     servicios: servicios[] = new Array();
+    dateStartUTMS:number = 0;
+    dateEndUTMS:number = 0;
     
     constructor(){
     }
@@ -56,6 +58,7 @@ export class reportes{
         
         this.author_uid = input_data['uid'];
         this.dialy =  input_data['field_dialy']['value'];
+        this.getNowDatesUT();
        //cargarCitas
        Debugger.log(["gathered dataModel",this]);
     }
@@ -124,6 +127,12 @@ export class reportes{
 
     cargarCitas(){
         Debugger.log(["cargar Citas not implemented"]);    
+    }
+
+    getNowDatesUT(){
+        this.dateStartUTMS =  new Date().setHours(0,0,0,0);
+        this.dateEndUTMS =  new Date().setHours(23,59,59,999); 
+        Debugger.log([`dates are ${this.dateStartUTMS} to ${this.dateEndUTMS} and are ${new Date(this.dateStartUTMS)} to ${new Date(this.dateEndUTMS)}`]);
     }
 
 

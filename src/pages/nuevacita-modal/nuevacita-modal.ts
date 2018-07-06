@@ -23,6 +23,14 @@ export class NuevacitaModalPage {
   //citaobject:Citas = null;
   selectedDate:string = null;
 
+  /*get selectedDateUT():number{
+    return new Date(this.selectedDate).getTime();
+  }*/
+
+  /*get nowDateUT():number{
+    //return new Date().getTime();
+  }*/
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -37,7 +45,7 @@ export class NuevacitaModalPage {
     if(aux_node){
       this.cita = aux_node;
       Debugger.log(['cita en modal es',this.cita]);
-      this.selectedDate = Citas.getLocalDateIso(this.cita.date); //this.cita.date.toISOString();
+      //this.selectedDate = Citas.getLocalDateIso(this.cita.date); //this.cita.date.toISOString();
       this.isnew = false;
       //this.newCita = UserDataProvider.getEmptyCita();
       //this.newCita = aux_node;
@@ -143,8 +151,20 @@ presentAlert(key,Msg) {
 
 setCitaDateFromiNPUT(){
   //get the timezoned input and put it on utc on this format 2018-07-04 14:30:00-07:00 to set data using citas code
-  Debugger.log(['string that not works now is',this.selectedDate],false);
-  this.selectedDate = this.selectedDate.slice(0,19);
+  //Debugger.log(['string that not works now is',this.selectedDate],false);
+  //this.cita.setDate(this.selectedDate,true);
+  let now = new Date();
+  Debugger.log([this.selectedDate]);
+  let auxdate = new Date(this.selectedDate);
+  Debugger.log([`times dif are now ${now.getTime()} vs sel ${auxdate.getTime()}`]);
+  Debugger.log([`offset is`,new Date().getTimezoneOffset()]);
+  let dateUT = auxdate.getTime();
+  const offset = (new Date().getTimezoneOffset() * 60 * 1000 * 2); // offset is in minutes so 60 * 1000 to get  milliseconds
+  dateUT = dateUT + offset;
+  this.cita.setDateUT(dateUT);
+  this.cita.data.field_datemsb['und'][0]['value'] = dateUT;
+  Debugger.log([`saving ${dateUT} for ${new Date(dateUT)}`]);
+  /*this.selectedDate = this.selectedDate.slice(0,19);
   let aux_date_obj = new Date(this.selectedDate+'Z');
   let aux_date_str_utc = `${aux_date_obj.getFullYear()}-${aux_date_obj.getDate()}-${(aux_date_obj.getMonth()+1)}T${aux_date_obj.getHours()}:${aux_date_obj.getMinutes()}:00`;
   let aux_testdate = new Date(aux_date_str_utc+'Z');
@@ -165,7 +185,7 @@ setCitaDateFromiNPUT(){
   Debugger.log(['cita for setDate on utc',aux_date_str_utc]);
   Debugger.log(['cita for setDate on local',`${aux_date} ${aux_time}`]);*/
   //this.cita.setDate( `${aux_date} ${aux_time}`);
-  Debugger.log(['magi date setter got ',this.cita.date]);
+  //Debugger.log(['magi date setter got ',this.cita.date]);
 }
 
 }

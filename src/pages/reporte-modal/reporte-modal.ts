@@ -128,8 +128,9 @@ export class ReporteModalPage {
   loadReport( logoutonerrror = true ){
     console.log("cargando citas de reporte");
     let aux_citas_list = new Array();
-    this.userData.getCitas(this.actualrepot.reportDateFrom,this.actualrepot.reportDateTo,this.actualrepot.doctoresFilter,this.actualrepot.cajaFilter,this.actualrepot.recepcionFilter).subscribe(
-      (val)=>{
+    //this.userData.getCitas(this.actualrepot.reportDateFrom,this.actualrepot.reportDateTo,this.actualrepot.doctoresFilter,this.actualrepot.cajaFilter,this.actualrepot.recepcionFilter).subscribe(
+      this.userData.getCitasUTms(`${this.actualrepot.dateStartUTMS}--${this.actualrepot.dateEndUTMS}`,this.actualrepot.doctoresFilter,this.actualrepot.cajaFilter,this.actualrepot.recepcionFilter).subscribe(
+        (val)=>{
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
         aux_results.forEach((element) => {
           Debugger.log([`loadReport check element ${element['Nid']}`,element]);

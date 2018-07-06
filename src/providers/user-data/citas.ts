@@ -5,6 +5,7 @@ import { servicios } from './servicios';
 
 export class Citas{
     Nid:number;
+    dateMs: number;
     date: Date;
     startDate:Date = null;
     endDate:Date = null;
@@ -72,8 +73,10 @@ export class Citas{
           this.data.field_cobro_efectivo.und[0].value = data_input.field_cobro_efectivo;
           this.data.field_cobro_tarjeta.und[0].value = data_input.field_cobro_tarjeta;
           this.data.field_costo_sobrescribir.und[0].value = data_input.field_costo_sobrescribir;
+          this.data.field_datemsb.und[0].value = Number(data_input.field_datemsb.value);
           if(data_input['field_servicios_json'])this.setServiciosReport(data_input['field_servicios_json']['value']);
-          this.setDate(data_input.field_date.value);
+          //this.setDate(data_input.field_date.value);
+          this.setDateUT(this.data.field_datemsb.und[0].value);
           this.setDurationDates(data_input.field_hora_inicio,data_input.field_hora_final);
           console.log("savedData",this.data);
         }
@@ -134,6 +137,26 @@ export class Citas{
                 Debugger.log(['esta cita esta retrasada']);
             }
     }
+
+    setDateUT( dateUTms ){
+        Debugger.log([dateUTms]);
+        //Got date on utc so adding a Z to set it on utc and use getUTCDate to bypass any timezone
+        this.date = new Date(dateUTms);
+        Debugger.log(["cita UTms date is: "+this.date]);
+        //set data date fields on the format requiered by inputs:
+        this.data.field_date.und[0].value.date = `${UserDataProvider.formatDateBinaryNumber(this.date.getUTCDate())}/${UserDataProvider.formatDateBinaryNumber((this.date.getUTCMonth()+1))}/${UserDataProvider.formatDateBinaryNumber(this.date.getUTCFullYear())}`
+        this.data.field_date.und[0].value.time = `${UserDataProvider.formatDateBinaryNumber(this.date.getUTCHours())}:${UserDataProvider.formatDateBinaryNumber(this.date.getUTCMinutes())}`;
+        Debugger.log(['set date is',this.data.field_date]);
+        //set time until this date:
+        this.getUntilMs();
+        this.getUntilTimeString();
+        Debugger.log(['set date is after',this.data.field_date]);
+        Debugger.log(["Ms until this date: ", this.untilMs]);
+        if(this.untilMs < 0){
+            this.retrasada=true;
+            Debugger.log(['esta cita esta retrasada']);
+        }
+}
 
 
     setDurationDates( inicio_input, final_input ){

@@ -737,37 +737,51 @@ s
     console.log("tryna update cita:",cita.data);
     return this.updateCita( cita.data );
   }
+
+  static getNowUTdates(){
+    let start =  new Date().setHours(0,0,0,0);
+    let end =  new Date().setHours(23,59,59,999); 
+    Debugger.log([`getting now ut dates ${start} to ${end} and are for ${new Date(start)} to ${new Date(end)}`]);
+    return {"start":start,"end":end};
+  }
+
+  static formatDateBinaryNumber( num ){
+    return (num < 10 ? '0' : '') + num;
+  }
   
   cargarCitas( logoutonerror = true ):Observable<any>{
     let ret = null;
     console.log("cargando citas");
-    let date = new Date();
+    /*let date = new Date();
     let datestrings = UserDataProvider.getTodayDateTimeStringsSearchFormat();
     let datestring = datestrings.datestring;
     let timestring = datestrings.timestring;
     console.log("simple array got",this.getDoctoresSimpleArray());
-    let dis = this;
-    ret = this.getCitas(datestring,datestring,this.getDoctoresSimpleArray(),new Array(),new Array());
+    let dis = this;*/
+    //ret = this.getCitas(datestring,datestring,this.getDoctoresSimpleArray(),new Array(),new Array());
+    let UTdates = UserDataProvider.getNowUTdates();
+    Debugger.log([` dates searching en cargar citas es ${UTdates.start}--${UTdates.end}`]);
+    ret = this.getCitasUTms(`${UTdates.start}--${UTdates.end}`,this.getDoctoresSimpleArray(),new Array(),new Array());
     ret.subscribe(
       (val)=>{
         Debugger.log(['cargarcitas responce got']);
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
-        aux_results.forEach(function(element){
-          let citaIndex = dis.getCitaIndexByNid(element.Nid);
+        aux_results.forEach(element => {
+          let citaIndex = this.getCitaIndexByNid(element.Nid);
           if(citaIndex > -1){
-            dis.citas[citaIndex].setData(element);
+            this.citas[citaIndex].setData(element);
           }else{
           let aux_cita = new Citas();
           aux_cita.setData(element);
-          dis.citas.push(aux_cita);
+          this.citas.push(aux_cita);
         }
         //aux_citasparahoy++;
        });
        //this.citasParaHoy = aux_citasparahoy;
-       console.log(dis.citas);
+       console.log(this.citas);
        //this.nextCitas = new Array();
        this.doctores.forEach(doctor => {
-         doctor.setCitas(dis.citas);
+         doctor.setCitas(this.citas);
          Debugger.log(['citas seteadas para este doctor',doctor.citas]);
        });
        this.getCitasActivas();
@@ -950,6 +964,28 @@ s
     if(recepciones.length == 0){recepcionfilter = "&args[2]=all";}
     let datefilter = "?date[min][date]="+fechaFrom+"&date[max][date]="+fechaTo;
     let url = this.urlbase+'appoint/rest_citas.json'+datefilter+doctorfilter+cajafilter+recepcionfilter;
+    console.log("url",url);
+    let headers = new HttpHeaders(
+      {'Content-Type':'application/json; charset=utf-8',
+      'X-CSRF-Token': ""+this.sessionData.token,
+      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
+    });
+    let observer = this.http.get(url,{headers});
+    //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
+    return observer;
+  }
+
+
+  getCitasUTms(rangeUTms, doctores:number[] ,  cajas:number[] ,  recepciones:number[]){
+    let doctorfilter = "args[0]="+doctores.join();
+    let cajafilter = "&args[1]="+cajas.join();
+    let recepcionfilter = "&args[2]="+recepciones.join();
+    let rangeFilter = "&args[3]="+rangeUTms;
+    if(doctores.length == 0){doctorfilter = "args[0]=all";}
+    if(cajas.length == 0){cajafilter = "&args[1]=all";}
+    if(recepciones.length == 0){recepcionfilter = "&args[2]=all";}
+    //let datefilter = "?date[min][date]="+fechaFrom+"&date[max][date]="+fechaTo;
+    let url = this.urlbase+'appoint/rest_citas.json?'+doctorfilter+cajafilter+recepcionfilter+rangeFilter;
     console.log("url",url);
     let headers = new HttpHeaders(
       {'Content-Type':'application/json; charset=utf-8',
@@ -1413,7 +1449,8 @@ s
       field_cobro:{und:[{value:0}]},
       field_cobro_efectivo:{und:[{value:0}]},
       field_cobro_tarjeta:{und:[{value:0}]},
-      field_cobro_cheque:{und:[{value:0}]}
+      field_cobro_cheque:{und:[{value:0}]},
+      field_datemsb:{und:[{value:0}]}
     }
   }
 
@@ -1499,7 +1536,8 @@ export interface citasData{
     field_cobro:{und:[{value:number}]},
     field_cobro_efectivo:{und:[{value:number}]},
     field_cobro_tarjeta:{und:[{value:number}]},
-    field_cobro_cheque:{und:[{value:number}]}
+    field_cobro_cheque:{und:[{value:number}]},
+    field_datemsb:{und:[{value:number}]}
 }
 
 
