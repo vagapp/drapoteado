@@ -74,10 +74,12 @@ export class Citas{
           this.data.field_cobro_tarjeta.und[0].value = data_input.field_cobro_tarjeta;
           this.data.field_costo_sobrescribir.und[0].value = data_input.field_costo_sobrescribir;
           this.data.field_datemsb.und[0].value = Number(data_input.field_datemsb.value);
+          if(data_input.field_hora_iniciomsb) this.data.field_hora_iniciomsb.und[0].value = Number(data_input.field_hora_iniciomsb.value);
+          if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);
           if(data_input['field_servicios_json'])this.setServiciosReport(data_input['field_servicios_json']['value']);
           //this.setDate(data_input.field_date.value);
           this.setDateUT(this.data.field_datemsb.und[0].value);
-          this.setDurationDates(data_input.field_hora_inicio,data_input.field_hora_final);
+          this.setDurationDates(this.data.field_hora_iniciomsb.und[0].value,this.data.field_hora_finalmsb.und[0].value);
           console.log("savedData",this.data);
         }
 
@@ -86,14 +88,17 @@ export class Citas{
             */
     setHoraInicio(){
         let now = new Date();
+        this.data.field_hora_iniciomsb.und[0].value = now.getTime();
         this.data.field_hora_inicio.und[0].value.date = now.getUTCDate()+'/'+(now.getUTCMonth()+1)+'/'+now.getUTCFullYear();
         this.data.field_hora_inicio.und[0].value.time = now.getUTCHours()+":"+now.getUTCMinutes();
-        console.log("hora inicio on data",this.data.field_hora_inicio);
+        Debugger.log(['data af hinicio',this.data]);
+        //console.log("hora inicio on data",this.data.field_hora_inicio);
         //and this is saved later
     }
 
     setHoraFin(){
         let now = new Date();
+        this.data.field_hora_finalmsb.und[0].value = now.getTime();
         this.data.field_hora_final.und[0].value.date = now.getUTCDate()+'/'+(now.getUTCMonth()+1)+'/'+now.getUTCFullYear();
         this.data.field_hora_final.und[0].value.time = now.getUTCHours()+":"+now.getUTCMinutes();
         console.log("hora final on data",this.data.field_hora_final);
@@ -170,15 +175,17 @@ export class Citas{
         this.data.field_hora_final.und[0].value.date = null
         this.data.field_hora_final.und[0].value.time = null
         //Got date on utc so adding a Z to set it on utc and use getUTCDate to bypass any timezone
-        if(inicio_input.value){
-            this.startDate = new Date(inicio_input.value+'Z');
+        //if(inicio_input.value){
+        if(inicio_input){
+            this.startDate = new Date(inicio_input);
             if(this.isValidDate(this.startDate)){
             this.data.field_hora_inicio.und[0].value.date = this.startDate.getUTCDate()+'/'+(this.startDate.getUTCMonth()+1)+'/'+this.startDate.getUTCFullYear();
             this.data.field_hora_inicio.und[0].value.time = this.startDate.getUTCHours()+":"+this.startDate.getUTCMinutes();
             }
         }
-       if(final_input.value){
-            this.endDate = new Date(final_input.value+'Z');
+       //if(final_input.value){
+        if(final_input){
+            this.endDate = new Date(final_input);
             if(this.isValidDate(this.endDate)){
             this.data.field_hora_final.und[0].value.date = this.endDate.getUTCDate()+'/'+(this.endDate.getUTCMonth()+1)+'/'+this.endDate.getUTCFullYear();
             this.data.field_hora_final.und[0].value.time = this.endDate.getUTCHours()+":"+this.endDate.getUTCMinutes();
@@ -195,26 +202,40 @@ export class Citas{
     setDuracionMs(){
         //let now = new Date('2018/5/14 01:35:00Z');
         Debugger.log(['dates setduration'])
-        Debugger.log([this.endDate]);
-        Debugger.log([this.startDate]);
-        let now = new Date();
-        if(this.startDate && this.endDate){
-            this.duracionMs = (this.endDate.getTime() - this.startDate.getTime());
-           
-        }else if( this.startDate ){
-            this.duracionMs = (now.getTime() - this.startDate.getTime());
+        Debugger.log([this.data.field_hora_iniciomsb.und[0].value]);
+        Debugger.log([this.data.field_hora_finalmsb['und'][0]['value']]);
+        if(this.data.field_hora_iniciomsb['und'][0]['value'] && this.data.field_hora_finalmsb['und'][0]['value']){
+            this.duracionMs = ( new Date(this.data.field_hora_finalmsb['und'][0]['value']).getTime() - new Date(this.data.field_hora_iniciomsb['und'][0]['value']).getTime());
+        }else if( this.data.field_hora_iniciomsb['und'][0]['value'] ){
+            this.duracionMs = (new Date().getTime() - new Date(this.data.field_hora_iniciomsb['und'][0]['value']).getTime());
+        }else{
+            this.duracionMs = 0;
         }
         Debugger.log(['this.duracionMs',this.duracionMs]);
-        this.duracionText = "00:00";
-        let dms_seconds = Math.floor(this.duracionMs / 1000);
-        let dms_minutes = Math.floor(dms_seconds / 60);
-        dms_seconds =  Math.floor((dms_seconds - ( dms_minutes * 60) ));
-        let dms_minutes_str = ""+dms_minutes;
-        let dms_seconds_str = ""+dms_seconds;
-        while(dms_minutes_str.length < 2) dms_minutes_str = "0"+dms_minutes_str;
-        while(dms_seconds_str.length < 2) dms_seconds_str = "0"+dms_seconds_str;
-        this.duracionText = dms_minutes_str+":"+dms_seconds_str;
+        this.duracionText = Citas.getDateDifText(this.duracionMs);
         Debugger.log(['this.duracionText', this.duracionText]);
+    }
+
+    static getDateDifText( numberdatedif ):string{ //regresa la diferencia en texto ej. "hace 05 minutos"
+        let ret = "00";
+        let aux_ms = Math.abs(numberdatedif);
+        if(aux_ms < (60 * 1000)){ //menos de un minuto
+            ret =  `${UserDataProvider.formatDateBinaryNumber( Math.floor(aux_ms / 1000))} segundos`
+        }else if(aux_ms < ( 60 * 60 * 1000)){ //menos de una hora
+            ret =  `${UserDataProvider.formatDateBinaryNumber( Math.floor(aux_ms / (1000 * 60) ))} Minutos`
+        }else{
+            Debugger.log(['calculating diftext',aux_ms]);
+            let aux_hours = Math.floor(aux_ms / (1000 * 60 * 60));
+            aux_ms -= aux_hours * ( 1000 * 60 * 60 );
+            Debugger.log(['calculating diftext ah',aux_ms]);
+            let aux_minutes = Math.floor(aux_ms / (1000 * 60));
+            aux_ms -= aux_minutes * ( 1000 * 60 );
+            Debugger.log(['calculating diftext am',aux_ms]);
+            let aux_seconds = Math.floor(aux_ms / (1000) );
+            ret =  `${UserDataProvider.formatDateBinaryNumber(aux_hours)}:${UserDataProvider.formatDateBinaryNumber(aux_minutes)}:${UserDataProvider.formatDateBinaryNumber(aux_seconds)} Hrs`
+        }
+        if(numberdatedif < 0) ret = `hace ${ret}`;
+        return ret;
     }
 
 
@@ -236,7 +257,11 @@ export class Citas{
     }
 
     getUntilTimeString():string{
-        let ret = null;
+        let ret = "00";
+        ret = Citas.getDateDifText(this.untilMs);
+        this.untilText = ret;
+        return ret;
+        /*let ret = null;
         let negative = false;
         let aux_untilMs = this.untilMs;
         //Debugger.log(['entering get until time string with ',aux_untilMs]);
@@ -258,7 +283,7 @@ export class Citas{
             ret = `hace ${ret}`;
         }
         this.untilText = ret;
-        return ret;
+        return ret;*/
     }
 
     CloserThanMs( compareMS:Number ):boolean{

@@ -1450,7 +1450,9 @@ s
       field_cobro_efectivo:{und:[{value:0}]},
       field_cobro_tarjeta:{und:[{value:0}]},
       field_cobro_cheque:{und:[{value:0}]},
-      field_datemsb:{und:[{value:0}]}
+      field_datemsb:{und:[{value:0}]},
+      field_hora_iniciomsb:{und:[{value:null}]},
+      field_hora_finalmsb:{und:[{value:null}]}
     }
   }
 
@@ -1537,7 +1539,9 @@ export interface citasData{
     field_cobro_efectivo:{und:[{value:number}]},
     field_cobro_tarjeta:{und:[{value:number}]},
     field_cobro_cheque:{und:[{value:number}]},
-    field_datemsb:{und:[{value:number}]}
+    field_datemsb:{und:[{value:number}]},
+    field_hora_iniciomsb:{und:[{value:number}]},
+    field_hora_finalmsb:{und:[{value:number}]},
 }
 
 
