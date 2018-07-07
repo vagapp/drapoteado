@@ -329,7 +329,7 @@ export class RegisterModalPage {
   }
 
   checkStripeSetup(){
-    return (!this.isnew && ( this.userData.subscription === null || this.userData.subscription.plan === null) );
+    return (!this.isnew && this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) && ( this.userData.subscription === null || this.userData.subscription.plan === null) );
   }
 
   setupStripe(){

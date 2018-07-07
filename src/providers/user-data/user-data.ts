@@ -1073,14 +1073,14 @@ export class UserDataProvider {
 
   cargarSubscription( code:string = null){
     let nidFilter = "?args[0]=all";
-    Debugger.log(["userdata sub id",this.userData.field_sub_id]);
-    if(Number(this.userData.field_sub_id.und[0]) !== Number(0)){
+    //Debugger.log(["userdata sub id",this.userData.field_sub_id]);
+    //if(Number(this.userData.field_sub_id.und[0]) !== Number(0)){
     //nidFilter="?args[0]="+this.userData.field_sub_id.und[0];
     let filter = "";
     if(code){
-    filter=`?args[0]=all&args[1]=all&args[2]=all&args[3]=${code}`;
+      filter=`?args[0]=all&args[1]=all&args[2]=all&args[3]=${code}`;
     }else{
-    filter=`?args[0]=all&${this.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false)?`args[1]=${this.userData.uid}`:'args[1]=all'}&${(!this.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false))?`args[2]=${this.userData.uid}`:'args[2]=all'}&args[3]=all`;
+      filter=`?args[0]=all&${this.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false)?`args[1]=${this.userData.uid}`:'args[1]=all'}&${(!this.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false))?`args[2]=${this.userData.uid}`:'args[2]=all'}&args[3]=all`;
     }
     let url = this.urlbase+'appoint/rest_suscripciones.json'+filter;
     Debugger.log(["suscription filtered url",url]);
@@ -1121,13 +1121,13 @@ export class UserDataProvider {
       }
       });
     return observer;
-  }else{
+  /*}else{
     console.log("no subscription loaded");
     this.subscription = subscriptions.getEmptySuscription();
     this.subscription.is_plan_set = true;
     this.susSubject.next(0);
     return null;
-  }
+  }*/
   }
 
 
