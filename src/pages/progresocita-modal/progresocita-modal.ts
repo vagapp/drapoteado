@@ -113,6 +113,7 @@ export class ProgresocitaModalPage {
                 console.log("guardando",this.activeCita);
                 this.userData.updateCitaState( this.activeCita ,UserDataProvider.STATE_COBRO ).subscribe(
                   (val) => {
+                    this.activeCitaDoc.citaActiva = null;
                     loader.dismiss();
                     this.presentAlert("Completado","La cita se encuentra ahora en espera de cobro");
                   },

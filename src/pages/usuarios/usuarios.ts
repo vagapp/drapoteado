@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController, ToastController, 
 import { NuevousuarioModalPage } from '../nuevousuario-modal/nuevousuario-modal';
 import { ModalController } from 'ionic-angular';
 import { userd, UserDataProvider } from '../../providers/user-data/user-data';
+import { Debugger } from '../../providers/user-data/debugger';
 
 /**
  * Generated class for the UsuariosPage page.
@@ -57,7 +58,7 @@ export class UsuariosPage {
   deleteUsuario( userd , fromSub:boolean = false){
     let alert = this.alertCtrl.create({
       title: 'Eliminar',
-      message: '¿Está seguro de que desea remover? El usuario no se borrará, solo dejará de administrar sus citas',
+      message: '¿Está seguro de que desea eliminar este usuario de la subscripción?',
       buttons: [
         {
           text: 'Cancelar',
@@ -69,8 +70,8 @@ export class UsuariosPage {
         {
           text: 'Eliminar',
           handler: () => { 
-            if(!fromSub) {this.removeUsuario( userd );}
-            else{ this.removeSubUserFromSubs(userd); }
+            //if(!fromSub) {this.removeUsuario( userd );}
+            this.removeSubUserFromSubs(userd); 
           }
         }
       ]
@@ -78,10 +79,61 @@ export class UsuariosPage {
     alert.present();
   }
 
+  removeUsuariopop( userd , fromSub:boolean = false){
+    let alert = this.alertCtrl.create({
+      title: 'Remover',
+      message: '¿Está seguro de que desea remover? El usuario no se borrará, solo dejará de administrar sus citas',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+           
+          }
+        },
+        {
+          text: 'Remover',
+          handler: () => { 
+            this.removeUsuario( userd );
+            //if(!fromSub) {this.removeUsuario( userd );}
+            //this.removeSubUserFromSubs(userd); 
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  agregarusuariopop( userd ){
+    let alert = this.alertCtrl.create({
+      title: 'Agregar',
+      message: '¿Está seguro de que desea agregar? El usuario administrara sus citas',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+           
+          }
+        },
+        {
+          text: 'Agregar',
+          handler: () => { 
+            this.addUsuario( userd );
+            //if(!fromSub) {this.removeUsuario( userd );}
+            //this.removeSubUserFromSubs(userd); 
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+
   
 
 
-
+  
   removeUsuario( userd ){
     let loader = this.loadingCtrl.create({
       content: "removiendo usuario . . ."
@@ -98,6 +150,32 @@ export class UsuariosPage {
       console.log("este usuario ya no tiene doctores hay que bloquearlo?");
     }
     console.log("updating", userd);
+    delete userd.field_sub_id;
+    this.userData.updateUserd( userd ).subscribe(
+      (val)=>{
+        console.log("usuarioUpdated");
+        this.presentToast("Completado");
+        loader.dismiss();
+        this.cargarUsuarios();
+      },
+      response => {
+        loader.dismiss();
+        console.log("POST call in error", response);
+        console.log("show error");
+        for (var key in response.error.form_errors) {
+          this.presentAlert(key, response.error.form_errors[key]);
+        }
+      }
+    );
+  }
+
+  addUsuario( userd ){
+    let loader = this.loadingCtrl.create({
+      content: "removiendo usuario . . ."
+    });
+    loader.present();
+    if( !userd.field_doctores.und ){  userd.field_doctores.und = new Array();}
+    userd.field_doctores.und.push(this.userData.userData.uid);
     delete userd.field_sub_id;
     this.userData.updateUserd( userd ).subscribe(
       (val)=>{
@@ -134,7 +212,9 @@ export class UsuariosPage {
     }
   }
 
-  
+  /*
+    cargar usuarios carga los usuarios de la subscripcion y los usuarios que tienes agregados.
+  **/
   cargarUsuarios(){
     console.log("cargando usuarios");
     let loading = this.loadingCtrl.create({
@@ -144,13 +224,18 @@ export class UsuariosPage {
     this.usersd = new Array();
     let doctors_array =  new Array();
     doctors_array.push(this.userData.userData.uid);
-    let dis = this;
-    this.userData.getUsers(doctors_array,"").subscribe(
+    let ids = null;
+    if(this.userData.checkUserPlanHolder() && this.userData.subscription.field_subusuarios){
+      //si es planholder no busca sus usuarios si no todos los usuarios de esta subscripcion
+      ids = this.userData.subscription.field_subusuarios;
+      doctors_array = null;
+    }
+    this.userData.getUsers(doctors_array, null, ids).subscribe(
       (val)=>{ 
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
-        aux_results.forEach(function(element) {
-          console.log(element);
-          let aux_user = dis.userData.getEmptyUserd();
+        aux_results.forEach((element) => {
+          Debugger.log(['received userd',element]);
+          let aux_user = this.userData.getEmptyUserd();
           aux_user.uid = element.uid;
           aux_user.name = element.name;
           aux_user.field_alias.und[0].value = element.field_alias;
@@ -172,9 +257,9 @@ export class UsuariosPage {
             aux_user.field_tipo_de_usuario.und.push(element);
           });
           console.log( aux_user.field_tipo_de_usuario);
-          dis.usersd.push(aux_user);
+          this.usersd.push(aux_user);
        });
-       console.log(dis.usersd);
+       console.log(this.usersd);
        loading.dismiss();
       },
        response => {

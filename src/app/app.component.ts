@@ -11,9 +11,9 @@ import { ServiciosPage } from '../pages/servicios/servicios';
 import { UsuariosPage } from '../pages/usuarios/usuarios';
 import { ReportesPage } from '../pages/reportes/reportes';
 import { UserDataProvider } from '../providers/user-data/user-data';
-//import { Storage } from '@ionic/storage';
 import { FacturacionPage } from '../pages/facturacion/facturacion';
 import { Debugger } from '../providers/user-data/debugger';
+import { RegisterModalPage } from '../pages/register-modal/register-modal';
 
 @Component({
   templateUrl: 'app.html'
@@ -32,7 +32,6 @@ export class MyApp {
     public statusBar: StatusBar, 
     public splashScreen: SplashScreen,
     public userData: UserDataProvider,
-    //private storage: Storage,
     public loadingCtrl: LoadingController,
   ) {
     this.initializeApp();
@@ -50,7 +49,7 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.splashScreen.hide();
+      //this.splashScreen.hide();
       Debugger.log(['platform redy']);
       let loading = this.loadingCtrl.create({
         content: 'Bienvenido'
@@ -62,6 +61,8 @@ export class MyApp {
       this.statusBar.styleDefault();
       
       this.userData.requestToken().subscribe((val) => {
+        this.userData.sessionData.token = val['token'];
+        console.log("token updated",this.userData.sessionData.token);
         //request token for this session, then check if conected to system connect.
         //sometimes this runs faster so it should be assigned here.
         this.userData.cargarPlanes();
@@ -91,7 +92,7 @@ export class MyApp {
                 ){
                   Debugger.log(["check of suscription",this.userData.subscription]);
                   if(Number(this.userData.subscription.field_active) === 0){
-                  this.rootPage=FacturacionPage;
+                  this.rootPage=RegisterModalPage;
                   loading.dismiss();
                   clearInterval(moveinterval);
                   }else{
@@ -110,7 +111,7 @@ export class MyApp {
             loading.dismiss();
           }
         });
-        setTimeout( ()=>{
+        /*let outInterval = setInterval( ()=>{
           Debugger.log(['connectTimeout is',this.connectcomp]);
           if(!this.connectcomp){
             Debugger.log(['CONECT TIMEOUT']);
@@ -118,7 +119,7 @@ export class MyApp {
             loading.dismiss();
             //window.location.reload();
           }
-        },25000);
+        },120000);*/
     }, response => {
       console.log("POST call in error", JSON.stringify(response));
   },() => {

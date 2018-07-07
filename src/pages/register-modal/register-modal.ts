@@ -4,6 +4,8 @@ import { UserDataProvider  } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
 import { sources } from '../../providers/user-data/sources';
 import { planes } from '../../providers/user-data/planes';
+import { HomePage } from '../home/home';
+import { subscriptions } from '../../providers/user-data/subscriptions';
 
 declare var Stripe;
 
@@ -34,6 +36,7 @@ export class RegisterModalPage {
   card: any;
   invitationCode:string = null;
   invitationshow:boolean = false;
+  isnew = true;
   
   constructor(
     public navCtrl: NavController, 
@@ -46,9 +49,42 @@ export class RegisterModalPage {
   }
 
   ionViewDidLoad() {
+    Debugger.log(['userdata',this.userData.userData]);
     Debugger.log(['ionViewDidLoad RegisterModalPage']);
+    Debugger.log(['uid on register',this.userData.userData.uid]);
+    this.isnew = !this.userData.checkIsLoggedin();
     this.setupStripe();
     this.loadSources();
+  }
+
+
+  actionUpdate(){
+    let loading = this.loadingCtrl.create({
+      content: 'actualizando...'
+    });
+
+    Debugger.log(['update not supported yet']);
+    //revisar contraseñas
+    Debugger.log([this.userData.userData.pass]);
+    if(!this.basicValidation()){
+      return 0;
+    }
+    loading.present();
+    let aux_userData = JSON.parse(JSON.stringify(this.userData.userData));
+    delete aux_userData.field_sub_id;
+    delete aux_userData.field_tipo_de_usuario;
+    this.userData.updateUserd(aux_userData).subscribe(
+      (val)=>{
+        loading.dismiss();
+      }
+    );
+    /*this.userData.updateUser().subscribe(
+      (val)=>{
+        loading.dismiss();
+      }
+    );*/
+    
+
   }
 
   actionRegister(){
@@ -101,14 +137,16 @@ export class RegisterModalPage {
       () => {
         Debugger.log(["The POST observable is now completed."]);
       });
-    
   }
 
   basicValidation():boolean{
     let ret = true;
-    if(this.passconfirm.localeCompare(this.userData.userData.pass) !== 0){
+    if(this.userData.userData.pass && !this.passconfirm || !this.userData.userData.pass && this.passconfirm){
+      this.presentAlert('Confirmar contraseña.','Error');
+    }
+    if(this.userData.userData.pass && this.passconfirm && this.passconfirm.localeCompare(this.userData.userData.pass) !== 0){
       ret = false;
-      this.presentAlert('Error','Las contraseñas no coinciden.');
+      this.presentAlert('Las contraseñas no coinciden.','Error');
     }
     return ret;
   }
@@ -126,26 +164,176 @@ export class RegisterModalPage {
       alert.present();
   }
 
-
-
-
   
+  selectCard( input_src:sources ){
+    Debugger.log(['selecting source',input_src]);
+    this.selected_source = input_src;
+    this.selected_source.set_selected()
+  }
+
+  selectPlan( input_plan:planes ){
+    this.selected_plan = input_plan;
+    this.userData.setcssplanselected(input_plan);
+  }
+  
+  suscribirse(){
+    Debugger.log(['suscribirse']);
+    Debugger.log(["card seleccionado",this.selected_source]);
+    if(this.selected_source === null){
+      Debugger.log(['NO HAZ ELEGIDO METODO DE PAGO']);
+      return false;
+    }
+    Debugger.log(["plan seleccionado",this.selected_plan]);
+    if(this.selected_plan === null){
+      Debugger.log(['NO HAZ ELEGIDO PLAN']);
+      return false;
+    }
+    Debugger.log(['validation passed como hacer una suscripcion por stripe = 0']);
+    if(this.userData.subscription.nid === null){
+      Debugger.log(['new subscription']);
+      let aux_sus = subscriptions.getEmptySuscription();
+      aux_sus.plan = this.selected_plan;
+      aux_sus.field_plan_sus = this.selected_plan.nid;
+      aux_sus.field_plan_holder = this.userData.userData.uid;
+      aux_sus.field_doctores = new Array();
+      aux_sus.field_doctores.push(this.userData.userData.uid);
+      aux_sus.field_stripe_src_sus_id = this.selected_source.src_id;
+      aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
+      this.userData.generateNewSus(aux_sus).subscribe((val)=>{
+        Debugger.log(['we got this',val]);
+        this.userData.subscription.nid = val['nid'];
+        this.userData.userData.field_sub_id["und"][0]['value'] =  val['nid'];
+        this.userData.updateUser().subscribe(
+          (val)=>{
+            Debugger.log(['se guardo el stripe sub_id en usuario']);
+          }
+        );
+        Debugger.log(['subs updated to this, update user please',this.userData.subscription.nid]); 
+      });
+    }else{
+      Debugger.log(['UPDATE SUSCRIPTION NOT IMPLEMENTED YET']);
+    }
+  }
+
+
+  invitationSub(){
+    if(this.invitationCode.localeCompare('all') === 0){
+      Debugger.log(['all not permited']);
+      return false;
+    }
+    let loading = this.loadingCtrl.create({
+      content: 'Buscando codigo...'
+    });
+    loading.present();
+    Debugger.log(['joining with',this.invitationCode]);
+    
+    this.userData.cargarSubscription(this.invitationCode).subscribe(
+      (val)=>{
+        if(this.userData.error_sub_is_full){
+          this.userData.error_sub_is_full = false;
+          loading.dismiss();
+          let alert = this.alertCtrl.create({
+          title: 'Error',
+          subTitle: 'No es posible unirse a esta subscripción, se ha alcanzado el limite de doctores',
+          buttons: ['Ok']
+          });
+          alert.present();
+          
+          }else{
+        if(this.userData.subscription.nid !== null){
+          this.userData.subscription.field_doctores.push(this.userData.userData.uid);
+          Debugger.log(['loeaded subscription',this.userData.subscription]);
+          this.userData.updateSus(this.userData.subscription).subscribe((val=>{
+            Debugger.log(['updated subscription received',val]);
+            loading.dismiss();
+            this.navCtrl.setRoot(HomePage);
+          }));
+        
+      }else{
+        loading.dismiss();
+        let alert = this.alertCtrl.create({
+          title: 'Nada',
+          subTitle: 'Código no encontrado',
+          buttons: ['Ok']
+        });
+        alert.present();
+      }
+    }
+    }
+    );
+  }
+
+  showInvitation(){
+    this.invitationshow = !this.invitationshow;
+  }
+
+  popRemoveDoctorSus( uid ){
+    let alert = this.alertCtrl.create({
+      title: 'Remover Doctor',
+      message: '¿Está seguro que desea remover este doctor de la subscripción?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+           
+          }
+        },
+        {
+          text: 'Si',
+          handler: () => { 
+            this.removeDoctorSus(uid);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  removeDoctorSus( uid ){
+    if(this.userData.userData.uid === uid){
+      return false;
+    }
+    let loading = this.loadingCtrl.create({
+      content: 'Eliminando usuario'
+    });
+    loading.present();
+    Debugger.log(['removing ',uid]);
+    Debugger.log(['index of uid',this.userData.subscription.field_doctores.indexOf(uid)]);
+    if(this.userData.subscription.field_doctores.indexOf(uid) >= 0){
+    this.userData.subscription.field_doctores.splice(this.userData.subscription.field_doctores.indexOf(uid), 1);
+    }
+    Debugger.log(['userData after removing doctor',this.userData.subscription.field_doctores]);
+    this.userData.updateSus(this.userData.subscription).subscribe(
+      (val) =>{
+        Debugger.log(['response from deleting doctor on subs',val]);
+        this.userData.cargarSubscription().subscribe((val)=>{
+        loading.dismiss();
+        });
+      }
+    );
+  }
 
   loadSources(){
+    if(!this.isnew){
     Debugger.log(['loading srcs']);
     let old_selected = this.selected_source;
     this.sources = new Array();
     for(let i = 0; i < this.userData.userData.field_src_json_info.und.length; i++){
-      
       let new_source = new sources();
       new_source.setData(this.userData.userData.field_src_json_info.und[i]);
       this.sources.push(new_source);
       if(old_selected !== null && new_source.src_id === old_selected.src_id) this.selected_source = new_source;
     }
   }
+  }
+
+  checkStripeSetup(){
+    return (!this.isnew && ( this.userData.subscription === null || this.userData.subscription.plan === null) );
+  }
 
   setupStripe(){
-    if(this.userData.subscription === null || this.userData.subscription.plan === null){
+    if(this.checkStripeSetup()){
     let elements = this.stripe.elements();
     var style = {
       base: {
@@ -206,6 +394,9 @@ export class RegisterModalPage {
     });
   }
 }
+
+
+
 
 
 

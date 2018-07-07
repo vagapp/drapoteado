@@ -15,6 +15,7 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
 import { LoginPage } from '../login/login';
 import { Citas } from '../../providers/user-data/citas';
 import { FacturacionPage } from '../facturacion/facturacion';
+import { RegisterModalPage } from '../register-modal/register-modal';
 
 
 @Component({
@@ -115,6 +116,11 @@ export class HomePage {
   }
   openFacturacion(){
     this.navCtrl.setRoot(FacturacionPage);
+  }
+  openRegister(){
+    let Modal = this.modalCtrl.create(RegisterModalPage, undefined, { cssClass: "bigModal" });
+    Modal.onDidDismiss(data => {});
+    Modal.present({});
   }
   openCitas(){
     this.navCtrl.setRoot(CitasPage);

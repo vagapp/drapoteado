@@ -201,6 +201,7 @@ export class CitasPage {
           }
         ]
       });
+      alert.present();
     }
 
     deleteCita( cita:Citas ){

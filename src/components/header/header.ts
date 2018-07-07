@@ -5,6 +5,7 @@ import { LoginPage } from '../../pages/login/login';
 import { Debugger } from '../../providers/user-data/debugger';
 import { FacturacionPage } from '../../pages/facturacion/facturacion';
 import { HomePage } from '../../pages/home/home';
+import { RegisterModalPage } from '../../pages/register-modal/register-modal';
 
 /**
  * Generated class for the HeaderComponent component.
@@ -37,9 +38,9 @@ export class HeaderComponent {
         this.pagename = this.navCtrl.getActive().name;
         if(Number(val) === 0){
         Debugger.log(['page is ax',this.pagename]);
-        if(this.pagename.localeCompare('FacturacionPage') !== 0){
+        if(this.pagename.localeCompare('RegisterModalPage') !== 0){
           Debugger.log(['implying this is not facturation page']);
-          this.navCtrl.setRoot(FacturacionPage);
+          this.navCtrl.setRoot(RegisterModalPage);
         }
         }
       }

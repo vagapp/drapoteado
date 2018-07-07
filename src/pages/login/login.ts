@@ -53,7 +53,78 @@ export class LoginPage {
   
     login_observer.subscribe(
       (val) => {
-          console.log("sucess login on login view");
+
+        Debugger.log(['checkConnect val',val]);
+          if(val['user']['uid'] != 0){
+            console.log("logged in as", val['user']['name']);
+            this.userData.setSessionData(val);
+            //this doesnt give the complete info of the user. need to request the user info.
+            this.userData.requestUserData(val['user']['uid']).subscribe((val)=>{
+              //val['user'] = user_aux;
+              console.log(val);
+              this.userData.setUserData(val);
+              this.userData.cargarSubscription();
+              let moveinterval = setInterval(() =>{
+                Debugger.log(['checking initiation']);
+                Debugger.log(['planes set',this.userData.are_planes_set]);
+                Debugger.log(['planes set',this.userData.planes]);
+                Debugger.log(['subscription',this.userData.subscription]);
+                if(
+                  this.userData.are_planes_set && 
+                  this.userData.subscription !== null && 
+                  this.userData.subscription.is_plan_set
+                ){
+                  Debugger.log(["check of suscription",this.userData.subscription]);
+                  if(Number(this.userData.subscription.field_active) === 0){
+                  //this.rootPage=RegisterModalPage;
+                  this.navCtrl.setRoot(RegisterModalPage, {});
+                  loading.dismiss();
+                  clearInterval(moveinterval);
+                  }else{
+                  this.navCtrl.setRoot(HomePage, {});
+                  this.userData.cargarListaReportes();
+                  loading.dismiss();
+                  clearInterval(moveinterval);
+                  }
+              }
+              },500);
+            },  () => {
+          });
+          }else{
+            console.log("not logged in.");
+            this.navCtrl.setRoot(LoginPage, {});
+            //this.rootPage = LoginPage;
+            loading.dismiss();
+          }
+        //val['user'] = user_aux;
+        /*console.log(val);
+        this.userData.setUserData(val);
+        this.userData.cargarSubscription();
+        let moveinterval = setInterval(() =>{
+          Debugger.log(['checking initiation']);
+          Debugger.log(['planes set',this.userData.are_planes_set]);
+          Debugger.log(['planes set',this.userData.planes]);
+          Debugger.log(['subscription',this.userData.subscription]);
+          if(
+            this.userData.are_planes_set && 
+            this.userData.subscription !== null && 
+            this.userData.subscription.is_plan_set
+          ){
+            Debugger.log(["check of suscription",this.userData.subscription]);
+            if(Number(this.userData.subscription.field_active) === 0){
+              this.navCtrl.setRoot(RegisterModalPage, {});
+            loading.dismiss();
+            clearInterval(moveinterval);
+            }else{
+            this.navCtrl.setRoot(HomePage, {});
+            this.userData.cargarListaReportes();
+            loading.dismiss();
+            clearInterval(moveinterval);
+            }
+        }
+        },500);*/
+      
+          /*console.log("sucess login on login view");
           console.log("logged in as", val['user']['name']);
             this.userData.setSessionData(val);
             //this doesnt give the complete info of the user. need to request the user info.
@@ -79,7 +150,7 @@ export class LoginPage {
               },500);
             },  () => {
           });
-          
+          */
       },
       response => {
           Debugger.log(["POST call in error", JSON.stringify(response)]);

@@ -26,6 +26,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HeaderComponent } from '../components/header/header';
 import { FooterComponent } from '../components/footer/footer';
+import { ComponentsModule } from '../components/components.module';
 import { UserDataProvider } from '../providers/user-data/user-data';
 import {HttpClientModule} from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
@@ -39,6 +40,7 @@ import { HttpModule } from '@angular/http';
 import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
 import { Platform } from 'ionic-angular';
+
 
 @NgModule({
   declarations: [
@@ -59,8 +61,6 @@ import { Platform } from 'ionic-angular';
     FacturacionPage,
     LoginPage,
     CitasPage,
-    HeaderComponent,
-    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +68,8 @@ import { Platform } from 'ionic-angular';
     NativeHttpModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

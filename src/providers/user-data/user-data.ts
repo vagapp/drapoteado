@@ -166,17 +166,15 @@ export class UserDataProvider {
 
   requestToken(){
     let url = this.urlbase+'appoint/user/token.json';
-  
-    
-  let headers = new HttpHeaders(
+    let headers = new HttpHeaders(
     {
       'Content-Type':'application/json; charset=utf-8'
     });
-    let observer = this.http.post(url,"",{headers})
-    observer.subscribe((val)=>{
+    let observer = this.http.post(url,"",{headers});
+    /*observer.subscribe((val)=>{
      this.sessionData.token = val['token'];
      console.log("token updated",this.sessionData.token);
-    });
+    });*/
     return observer;
   
   }
@@ -234,18 +232,21 @@ export class UserDataProvider {
       {'Content-Type':'application/json; charset=utf-8',
       'X-CSRF-Token': ""+this.sessionData.token,
     });
-    let observer = this.http.post(url,"",{headers})
-    observer.subscribe((val)=>{
+    let observer = this.http.post(url,"",{headers});
+    /*observer.subscribe((val)=>{
      console.log('connect ret',val);
     },(error)=>{
       Debugger.log(['ERROR WHILE CONNECT',false]);
       this.logout();
-    });
+    });*/
     return observer;
   }
 
+    checkIsLoggedin():boolean{
+      return Number(this.userData.uid) !== 0;
+    }
 
-s
+
   requestUserData(uid){
     //console.log("tryna fetch userdata",uid );
     //recovers user data from the user uid
@@ -261,7 +262,7 @@ s
 
 
   setSessionData(val){
-    //console.log('setting sessionData',val);
+    console.log('setting sessionData',val);
     this.sessionData.sessid = val['sessid'];
     this.sessionData.session_name = val['session_name'];
     if(val['token']){
@@ -271,7 +272,7 @@ s
   }
 
   setUserData(val){
-    //console.log('setting user data',val);
+    console.log('setting user data',val);
     this.userData.uid = val['uid'];
     this.userData.name = val['name'];
     this.userData.pass = val['pass'];
@@ -280,19 +281,19 @@ s
     this.userData.roles = val['roles'];
     this.userData.field_tipo_de_usuario = val['field_tipo_de_usuario'];
     this.userData.field_useremail = val['field_useremail'];
-    this.userData.field_nombre = val['field_nombre'];
-    this.userData.field_apellidos = val['field_apellidos'];
-    this.userData.field_especialidad = val['field_especialidad'];
-    this.userData.field_alias = val['field_alias'];
-    this.userData.field_calle = val['field_calle'];
-    this.userData.field_no_ext = val['field_no_ext'];
-    this.userData.field_no_int = val['field_no_int'];
-    this.userData.field_codigo_postal = val['field_codigo_postal'];
-    this.userData.field_ciudad = val['field_ciudad'];
-    this.userData.field_colonia = val['field_colonia'];
-    this.userData.field_pais = val['field_pais'];
-    this.userData.field_municipio = val['field_municipio'];
-    this.userData.field_estado_ubicacion = val['field_estado_ubicacion'];
+    if(val['field_nombre'].length !== 0)this.userData.field_nombre = val['field_nombre'];
+    if(val['field_apellidos'].length !== 0)this.userData.field_apellidos = val['field_apellidos'];
+    if(val['field_especialidad'].length !== 0){this.userData.field_especialidad = val['field_especialidad']; Debugger.log(['setting especialidad']);}
+    if(val['field_alias'].length !== 0)this.userData.field_alias = val['field_alias'];
+    if(val['field_calle'].length !== 0)this.userData.field_calle = val['field_calle'];
+    if(val['field_no_ext'].length !== 0)this.userData.field_no_ext = val['field_no_ext'];
+    if(val['field_no_int'].length !== 0)this.userData.field_no_int = val['field_no_int'];
+    if(val['field_codigo_postal'].length !== 0)this.userData.field_codigo_postal = val['field_codigo_postal'];
+    if(val['field_ciudad'].length !== 0)this.userData.field_ciudad = val['field_ciudad'];
+    if(val['field_colonia'].length !== 0)this.userData.field_colonia = val['field_colonia'];
+    if(val['field_pais'].length !== 0)this.userData.field_pais = val['field_pais'];
+    if(val['field_municipio'].length !== 0)this.userData.field_municipio = val['field_municipio'];
+    if(val['field_estado_ubicacion'].length !== 0)this.userData.field_estado_ubicacion = val['field_estado_ubicacion'];
     this.userData.field_plan_date = val['field_plan_date'];
     this.userData.field_forma_pago = val['field_forma_pago'];
     this.userData.tutorial_state = val['field_tutorial_state'];
@@ -328,7 +329,7 @@ s
     Debugger.log(["doctores encontrados",this.doctores]);
     Debugger.log(["cargar servicios y recargar servicios en un loop"]);
     this.cargarServicios();
-    //console.log('filled userData',this.userData);
+    console.log('filled userData',this.userData);
   }
 
   setup(){
@@ -369,7 +370,7 @@ s
       'Content-Type':'application/json;charset=utf-8',
       'X-CSRF-Token': ""+this.sessionData.token,});
     let login_observer = this.http.post(url,body,{headers});
-    login_observer.subscribe(
+    /*login_observer.subscribe(
       (val) => {
         Debugger.log(['data obtained on login',val]);
         //will implement custom data for login since it is very sensible that it is done in less connections and fastest as posible. login gives much more information than a simple user/uid request.
@@ -402,7 +403,7 @@ s
         this.userData.tutorial_state = val['user']['field_tutorial_state'];
         this.userData.field_doctores = val['user']['field_doctores'];
         this.AuthSubject.next(this.userData.uid);
-      });
+      });*/
       return login_observer;
   }
 
@@ -1022,7 +1023,7 @@ s
       'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
     });
     let observer = this.http.put(url,body,{headers});
-    observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
+    //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   } 
 
@@ -1319,18 +1320,20 @@ s
    * codigo:string en el que se busca el codigo, dejar cadena vacia para no filtrar por codigo, o poner all no se yo que hagas tu
    * 
    * **/
-  getUsers( doctores, codigo:string ){
-    console.log("buscando usuarios");
-    console.log(doctores);
-    console.log(codigo);
+  getUsers( doctores, codigo:string = null , ids:Array<number> = null){
+    Debugger.log(["buscando usuarios"]);
+    Debugger.log([doctores]);
+    Debugger.log([codigo]);
+    Debugger.log([ids]);
     //filter doctor: args[0]=all
-    let doctorfilter = "?args[0]="+doctores.join();
+    let doctorfilter = "?args[0]=all";
     let codigofilter = "&args[1]=all";
-    if(doctores.length == 0){doctorfilter = "?args[0]=all";}
-    if( codigo ){
-      codigofilter = "&args[1]="+codigo;
-    }
-    let url = this.urlbase+'appoint/rest_users'+doctorfilter+codigofilter;
+    let ids_filter = `&args[2]=all`;
+    if(doctores && doctores.length > 0){doctorfilter = "?args[0]="+doctores.join();}
+    if( codigo ){ codigofilter = "&args[1]="+codigo; }
+    if(ids && ids.length > 0){ ids_filter = `&args[2]=${ids.join(',')}`; }
+    let url = this.urlbase+'appoint/rest_users'+doctorfilter+codigofilter+ids_filter;
+    Debugger.log([url]);
     let headers = new HttpHeaders(
       {'Content-Type':'application/json; charset=utf-8',
       'X-CSRF-Token': ""+this.sessionData.token,
