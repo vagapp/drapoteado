@@ -322,14 +322,23 @@ export class UserDataProvider {
       aux_doc.Uid = this.userData.uid;
       this.doctores.push(aux_doc);
       }else{ //si no es un doctor cargar todos los doctores que esta manejando
+        let doctoruids = new Array();
         for(let i = 0; i<this.userData.field_doctores.und.length; i++){
           let aux_doc = new Doctores(this);
-          aux_doc.Uid = this.userData.field_doctores.und[i];
+          aux_doc.Uid = this.userData.field_doctores.und[i].uid;
+          doctoruids.push(aux_doc.Uid);
           this.doctores.push(aux_doc);
         }
-        this.getUsers(null,null,this.userData.field_doctores.und).subscribe(
+        Debugger.log(['SetData SubuserDoctors Array',doctoruids]);
+        this.getUsers(null,null,doctoruids).subscribe(
           (val)=>{
             Debugger.log(['SetData SubuserDoctors Array',val]);
+            this.doctores.forEach(doc => {
+              if( Number(doc.Uid) === Number(val['uid']) ){
+                doc.name = val['name'];
+                doc.field_alias = val['field_alias'];
+              }
+            });
           }
         );
       }
