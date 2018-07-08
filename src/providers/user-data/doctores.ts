@@ -12,7 +12,9 @@ export class Doctores{
     citasCobrar:Citas[]; // citas por cobrar
     citaActiva:Citas = null //cita activa
     citasParaHoy:number = 0; //numero de citas pendientes para hoy.
-    servicios:servicios[] = new Array();;
+    servicios:servicios[] = new Array();
+    name:string = '';
+    field_alias:string = '';
 
     public constructor(public userData: UserDataProvider){
         this.citas = new Array();

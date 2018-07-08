@@ -49,7 +49,7 @@ export class HomePage {
     });
     let aux_doc = this.userData.getDoctorOFCita(cita);
     console.log("tryin to open cita progreso",cita);
-    if(cita.checkState(UserDataProvider.STATE_ACTIVA)){
+    if(cita.checkState(UserDataProvider.STATE_ACTIVA) || cita.checkState(UserDataProvider.STATE_COBRO)){
       loader.dismiss();
       this.openProgreso(cita);
     }else{

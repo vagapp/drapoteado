@@ -70,18 +70,22 @@ export class NuevacitaModalPage {
 
 
   createCita(){
+    if(!this.basicNewCitaValidation()){ return false; }
     let loader = this.loadingCtrl.create({
       content: "Generando Cita"
     }); 
     Debugger.log(["creando una cita ",this.cita.data]);
     Debugger.log(["fecha string datetimepicker",this.selectedDate]);
     this.cita.data.field_estado.und["0"].value = 0;
-    if(this.userData.userData.field_tipo_de_usuario.und[0].value == 1){
+    /*if(this.userData.userData.field_tipo_de_usuario.und[0].value == 1){*/
+    if(this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])){
+      //si es doctor se agrega a si mismo a la cita, si no pues se agrega con un select
       this.cita.data.field_cita_doctor.und[0]=this.userData.userData.uid;
-      this.cita.data.field_cita_recepcion.und[0]=this.userData.userData.uid;
-      this.cita.data.field_cita_caja.und[0]="_none";
-      this.cita.data.field_servicios_cita.und = [];
     }
+      this.cita.data.field_cita_recepcion.und[0]=this.userData.userData.uid; //esto es quien creo la cita
+      this.cita.data.field_cita_caja.und[0]="_none"; //quien cobro la cita
+      this.cita.data.field_servicios_cita.und = []; //limpiamos los servicios porque nos deja basura
+    
     //this.cita.setDate(this.selectedDate);
     this.setCitaDateFromiNPUT();
     this.userData.generateNewCita( this.cita.data ).subscribe(
@@ -102,6 +106,19 @@ export class NuevacitaModalPage {
         loader.dismiss();
       }
   );
+}
+
+basicNewCitaValidation(){
+  let ret = true;
+  if(this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])){
+  }
+  else{
+    if( Number(this.cita.data.field_cita_doctor.und[0]) === 0 ){
+      this.presentAlert('Error','Debe elegir un doctor para esta cita');
+      ret = false;
+    }
+  }
+  return ret;
 }
 
 updateCita(){

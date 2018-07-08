@@ -51,6 +51,7 @@ export class UserDataProvider {
   subscription:subscriptions = null;
   planes:planes[]; //planes que ofrece drap.
   are_planes_set:boolean = false;
+  docs_loaded:boolean = false;
 
   doctores:Doctores[] = new Array();
   servicios:servicios[] = new Array();
@@ -329,17 +330,24 @@ export class UserDataProvider {
           doctoruids.push(aux_doc.Uid);
           this.doctores.push(aux_doc);
         }
-        Debugger.log(['SetData SubuserDoctors Array',doctoruids]);
+        Debugger.log(['doctores to search',doctoruids]);
         this.getUsers(null,null,doctoruids).subscribe(
-          (val)=>{
-            Debugger.log(['SetData SubuserDoctors Array',val]);
-            this.doctores.forEach(doc => {
-              if( Number(doc.Uid) === Number(val['uid']) ){
-                doc.name = val['name'];
-                doc.field_alias = val['field_alias'];
-              }
+          (val)=>{ 
+            Debugger.log(['getData result Array',val]);
+            let aux_results = Object.keys(val).map(function (key) { return val[key]; });
+            aux_results.forEach(element => {
+              Debugger.log(['setting  this element doc',element]);
+              this.doctores.forEach(doc => {
+                if( Number(doc.Uid) === Number(element['uid']) ){
+                  doc.name = element['name'];
+                  doc.field_alias = element['field_alias'];
+                }
+              });
             });
-          }
+            Debugger.log(['doctores at the end of getting users',this.doctores]);
+            this.docs_loaded = true;
+          },
+          (response)=>{this.docs_loaded = true;},
         );
       }
     Debugger.log(["doctores encontrados",this.doctores]);
@@ -805,6 +813,7 @@ export class UserDataProvider {
        this.getNextcitas();
        this.getCitasPendientes();
        this.getCitasParaHoy();
+       if(this.checkUserPermission([UserDataProvider.TIPO_CAJA,UserDataProvider.TIPO_CAJAYRECEPCION,UserDataProvider.TIPO_DOCTOR])){this.getCitasCobrar();}
        //this.setCitas();
        //this.getNextCita();
        //console.log("doctores resultado",this.doctores);
@@ -898,6 +907,16 @@ export class UserDataProvider {
       });
     });
     console.log("citas pendientes obtenidas de cada doctor",this.citasPendientes);
+  }
+
+  getCitasCobrar(){
+    this.citasCobrar = new Array();
+    this.doctores.forEach(doctor => {
+      doctor.citasCobrar.forEach(cita => {
+        this.citasCobrar.push(cita);
+      });
+    });
+    console.log("citas por cobrar obtenidas de cada doctor",this.citasCobrar);
   }
 
   getDoctorOFCita( Cita:Citas ):Doctores{
