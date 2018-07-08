@@ -12,7 +12,7 @@
       <span class="spanBlock midFont"><b>Citas Programadas</b></span>
       <span class="spanBlock midSubFont">Revisa y administra tus citas</span>
     </div>
-      <button class="bgColorSecondary generalButton floatRight" (click)="openNuevaCita()">Agregar Nueva</button>
+      <button *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY]);"  class="bgColorSecondary generalButton floatRight" (click)="openNuevaCita()">Agregar Nueva</button>
   </div>
   <div class="Citas_grid result_wrapper">
     <table class="results_table">

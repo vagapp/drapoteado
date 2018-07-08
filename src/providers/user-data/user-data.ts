@@ -75,7 +75,7 @@ export class UserDataProvider {
   get TIPO_CAJA(){return UserDataProvider.TIPO_CAJA;}
   get TIPO_CAJAYRECEPCION(){return UserDataProvider.TIPO_CAJAYRECEPCION;}
   get TIPO_ANY(){return UserDataProvider.TIPO_ANY;}
-
+  
   //estados de cita:
   public static STATE_PENDIENTE = 0;
   public static STATE_CONFIRMADA = 1;
@@ -297,7 +297,9 @@ export class UserDataProvider {
     this.userData.field_plan_date = val['field_plan_date'];
     this.userData.field_forma_pago = val['field_forma_pago'];
     this.userData.tutorial_state = val['field_tutorial_state'];
+    if(val['field_doctores'].length !== 0){
     this.userData.field_doctores = val['field_doctores'];
+    }else{ this.userData.field_doctores.und = new Array();}
     Debugger.log(["checking this out subs id",val['field_sub_id']]);
     if(val['field_sub_id'].length != 0){
     this.userData.field_sub_id.und[0] = val['field_sub_id']['und'][0]['nid'];
@@ -325,6 +327,11 @@ export class UserDataProvider {
           aux_doc.Uid = this.userData.field_doctores.und[i];
           this.doctores.push(aux_doc);
         }
+        this.getUsers(null,null,this.userData.field_doctores.und).subscribe(
+          (val)=>{
+            Debugger.log(['SetData SubuserDoctors Array',val]);
+          }
+        );
       }
     Debugger.log(["doctores encontrados",this.doctores]);
     Debugger.log(["cargar servicios y recargar servicios en un loop"]);
@@ -1160,7 +1167,8 @@ export class UserDataProvider {
   //user aux methods
 
   getTipoUsuarioString( tipo ){
-    tipo = parseInt(tipo);
+    //Debugger.log(['obtener tipo de usuario para ',tipo]);
+    tipo = Number(tipo);
     let ret = "subusuario";
     switch( tipo ){
       case UserDataProvider.TIPO_DOCTOR: ret = "doctor"; break;
@@ -1195,6 +1203,7 @@ export class UserDataProvider {
 
   checkUserPlanHolder():boolean{
     let ret = false;
+    if(!this.subscription) return false;
     Debugger.log(['checking plan holder',this.subscription.field_plan_holder],false);
     if(this.subscription && this.subscription.field_plan_holder){
       Debugger.log([`Comparing ${this.userData.uid} to ${this.subscription.field_plan_holder} = ${this.userData.uid === this.subscription.field_plan_holder}`],false);
@@ -1234,7 +1243,8 @@ export class UserDataProvider {
     let ret = false;
     Debugger.log([`checking suscriptions ${suscriptions} vs ${this.subscription}`],debug);
     //si la subscripcion no esta activa (expiro, no ha sido pagada etc) retorna false
-    if(Number(this.userData.field_sub_id.und[0]) === Number(0) || this.subscription === null){return false;}
+    //if(Number(this.userData.field_sub_id.und[0]) === Number(0) || this.subscription === null){return false;}
+    if(this.subscription === null){return false;}
     if(Number(this.subscription.field_active) === Number(0)){return false;}
     // checking for ANY, automatically returns true since we checked for not 0 or null up here
     if(suscriptions.indexOf(UserDataProvider.PLAN_ANY) > -1){ return true;}
@@ -1329,9 +1339,11 @@ export class UserDataProvider {
     let doctorfilter = "?args[0]=all";
     let codigofilter = "&args[1]=all";
     let ids_filter = `&args[2]=all`;
-    if(doctores && doctores.length > 0){doctorfilter = "?args[0]="+doctores.join();}
-    if( codigo ){ codigofilter = "&args[1]="+codigo; }
-    if(ids && ids.length > 0){ ids_filter = `&args[2]=${ids.join(',')}`; }
+    let oneprotection = false;
+    if(doctores && doctores.length > 0){doctorfilter = "?args[0]="+doctores.join(); oneprotection=true;}
+    if( codigo ){ codigofilter = "&args[1]="+codigo; oneprotection=true;}
+    if(ids && ids.length > 0){ ids_filter = `&args[2]=${ids.join(',')}`; oneprotection=true;}
+    if(!oneprotection) doctorfilter = "?args[0]=-1" //esto evita que alguna tonteria te mande todos los usuarios del sistema, devolviendo nada
     let url = this.urlbase+'appoint/rest_users'+doctorfilter+codigofilter+ids_filter;
     Debugger.log([url]);
     let headers = new HttpHeaders(
