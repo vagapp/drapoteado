@@ -6,7 +6,7 @@
                 <span class="spanBlock bigFont"><span class="fontPrimary"><b>Bienvenido</b></span> <span class="">{{this.userData.userData.name}} </span><span class="rol_title" *ngIf="this.userData.checkUserFeature([this.userData.TIPO_CAJA,this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);" >( {{this.userData.getTipoUsuarioString(this.userData.userData.field_tipo_de_usuario['und'][0]['value'])}} )</span></span>
                 <span class="spanBlock bigSubFont">¿En qué podemos ayudarte hoy?</span>
         </div>
-        <div class="section" >
+        <div class="section"  *ngIf="this.userData.checkUserFeature([this.userData.TIPO_ANY],[this.userData.PLAN_ANY],false);">
                         <div class="section_content">
                               <span class="spanBlock bigSubFont">Citas Programadas para Hoy: <span class="fontPrimary">{{userData.citasParaHoy}}</span></span>
                         </div>
@@ -134,7 +134,7 @@
 
     
 
-    <div class="section">
+    <div class="section" *ngIf="userData.checkUserFeature([userData.TIPO_ANY],[userData.PLAN_ANY])">
             <div class="section_content">
           <div class="section_icon">
                   <img src="assets/imgs/citas.svg"/>
@@ -153,7 +153,7 @@
         
 
 
-        <div class="section">
+        <div class="section" *ngIf="userData.checkUserFeature([userData.TIPO_ANY],[userData.PLAN_ANY])">
                 <div class="section_content">
               <div class="section_icon">
                       <img src="assets/imgs/reportes.svg"/>
@@ -170,7 +170,7 @@
 
             
 
-            <div class="section"  *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR],null,false);">
+            <div class="section"  *ngIf="userData.checkUserFeature([userData.TIPO_DOCTOR],null)" >
                     <div class="section_content">
                   <div class="section_icon">
                           <img src="assets/imgs/datos.svg"/>
@@ -187,7 +187,7 @@
                   </div>
                 </div>
 
-                <div class="section"  *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR],null,false);">
+                <div class="section" *ngIf="userData.checkUserPlanHolder() && userData.checkUserFeature([userData.TIPO_ANY],[userData.PLAN_ANY])" >
                         <div class="section_content">
                       <div class="section_icon">
                               <img src="assets/imgs/datos.svg"/>

@@ -69,8 +69,9 @@
     </div>
 
   <div class="register_contet_head">
-    <div class="bigFont"> <span class="fontPrimary"><b>Registro</b></span> <span class="lightFont">de Nuevo Usuario</span></div>
-    <div class="midSubFont"> Por favor proporciona los siguientes datos: </div>
+    <div class="bigFont" *ngIf="this.isnew"> <span class="fontPrimary"><b>Registro</b></span> <span class="lightFont">de Nuevo Usuario</span></div>
+    <div class="midSubFont" *ngIf="this.isnew"> Por favor proporciona los siguientes datos: </div>
+    <div class="bigFont" *ngIf="!this.isnew"> <span class="fontPrimary"><b>Datos</b></span> <span class="lightFont">de Usuario</span></div>
   </div>
   <div class="register_contet_form">
     <div class="register_base register_form_section rfsFlex">

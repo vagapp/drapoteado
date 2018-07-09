@@ -92,7 +92,8 @@ export class MyApp {
                 ){
                   Debugger.log(["check of suscription",this.userData.subscription]);
                   if(Number(this.userData.subscription.field_active) === 0){
-                  this.rootPage=RegisterModalPage;
+                  //this.rootPage=RegisterModalPage;
+                  this.rootPage = HomePage;
                   loading.dismiss();
                   clearInterval(moveinterval);
                   }else{

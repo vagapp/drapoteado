@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UserDataProvider } from '../../providers/user-data/user-data';
-import { NavController } from 'ionic-angular';
+import { NavController, Loading, LoadingController } from 'ionic-angular';
 import { LoginPage } from '../../pages/login/login';
 import { Debugger } from '../../providers/user-data/debugger';
 import { FacturacionPage } from '../../pages/facturacion/facturacion';
@@ -26,7 +26,8 @@ export class HeaderComponent {
 
   constructor(
     public userData: UserDataProvider,
-    public navCtrl:NavController
+    public navCtrl:NavController,
+    public loadingCtrl:LoadingController
   ) {
    
     console.log('Loading Header Component check session');
@@ -37,12 +38,28 @@ export class HeaderComponent {
     this.susObservable.subscribe(
       (val)=>{
         this.pagename = this.navCtrl.getActive().name;
+        Debugger.log(['sus val is',val]);
         if(Number(val) === 0){
         Debugger.log(['page is ax',this.pagename]);
-        if(this.pagename.localeCompare('RegisterModalPage') !== 0){
+        if(this.pagename.localeCompare('HomePage') !== 0){
           Debugger.log(['implying this is not facturation page']);
-          this.navCtrl.setRoot(RegisterModalPage);
+          this.navCtrl.setRoot(HomePage);
         }
+        this.userData.resetLists();
+        }else{
+          if(this.userData.sus_to_reports){
+            let loader = this.loadingCtrl.create({
+              content: "Cargando..."
+            });
+            loader.present();
+            this.userData.loading_reports = true;
+            let loadrepointerval = setInterval(
+              ()=>{
+                if(!this.userData.loading_reports){ loader.dismiss();clearInterval(loadrepointerval);}
+              },500
+            );
+            this.userData.cargarListaReportes();
+          }
         }
       }
     );

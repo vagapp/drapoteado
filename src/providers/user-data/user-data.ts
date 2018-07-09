@@ -54,7 +54,8 @@ export class UserDataProvider {
   planes:planes[]; //planes que ofrece drap.
   are_planes_set:boolean = false;
   docs_loaded:boolean = false;
-  loading_reports = false;
+  loading_reports = false; //esta bandera indica que se estan cargando los reportes en la pagina de reportes, despues de borrar uno, porque luego aparece denuevo si se quieren cargar
+  sus_to_reports = false; //esta bandera undica que se esta esperando cargar una suscripcion activa para poder cargar reportes. en header
 
   doctores:Doctores[] = new Array();
   servicios:servicios[] = new Array();
@@ -215,6 +216,11 @@ export class UserDataProvider {
       field_stripe_customer_id: {und:[{value: ""}]},
       field_src_json_info: {und:[{value: ""}]}
   }
+    this.resetLists();
+    
+  }
+  
+   resetLists(){
     this.citas = new Array();
     this.nextCitas = new Array();
     this.citasPendientes= new Array();
@@ -226,7 +232,6 @@ export class UserDataProvider {
     //this.planes:planes[]; //planes que ofrece drap.
     this.doctores = new Array();
     this.servicios = new Array();
-    
   }
 
   checkConnect(){
@@ -1153,7 +1158,7 @@ export class UserDataProvider {
             let toadd = true;
             Debugger.log(['checking is sub is full before adding to this user',aux_subs.isDocfull]);
             if(code && aux_subs.isDocfull){ toadd = false; this.error_sub_is_full = true; this.susSubject.next(0);}
-            if(toadd)this.subscription = aux_subs;
+            if(toadd){this.subscription = aux_subs;  this.susSubject.next(this.subscription.field_active);}
             clearInterval(setPlan_interval);
           }
         },500);

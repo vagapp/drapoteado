@@ -77,7 +77,7 @@ export class LoginPage {
                   Debugger.log(["check of suscription",this.userData.subscription]);
                   if(Number(this.userData.subscription.field_active) === 0){
                   //this.rootPage=RegisterModalPage;
-                  this.navCtrl.setRoot(RegisterModalPage, {});
+                  this.navCtrl.setRoot(HomePage, {});
                   loading.dismiss();
                   clearInterval(moveinterval);
                   }else{
