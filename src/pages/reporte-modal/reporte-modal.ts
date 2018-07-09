@@ -202,14 +202,15 @@ export class ReporteModalPage {
 
       setduracionTotalStr(){
         console.log("totalmscount",this.duracionTotalMs);
-        let dsm_seconds = this.duracionTotalMs / 1000;
+        this.duracionTotalStr = Citas.getDateDifText(this.duracionTotalMs);
+       /* let dsm_seconds = this.duracionTotalMs / 1000;
         let dsm_minutes = dsm_seconds / 60;
         dsm_seconds = dsm_seconds - (dsm_minutes * 60);
         let dsm_seconds_str = ""+dsm_seconds;
         let dsm_minutes_str = ""+dsm_minutes;
         while(dsm_minutes_str.length < 2) dsm_minutes_str = "0"+dsm_minutes_str;
         while(dsm_seconds_str.length < 2) dsm_seconds_str = "0"+dsm_seconds_str;
-        this.duracionTotalStr = dsm_minutes_str+":"+dsm_seconds_str;
+        this.duracionTotalStr = dsm_minutes_str+":"+dsm_seconds_str;*/
         console.log(this.duracionTotalStr);
       }
 

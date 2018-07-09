@@ -26,7 +26,7 @@
               <span class="spanBlock midFont"><b>Fecha</b></span>
               <span class="spanBlock fontSecondary midFont">{{this.actualrepot.reportDateFrom}}</span>
             </div>
-    <button class="bgColorSecondary generalButton">Exportar</button>
+    <!--<button class="bgColorSecondary generalButton">Exportar</button>-->
     <button class="bgColorPrimary generalButton" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])">Eliminar</button>
   </div>
   </div>
@@ -38,10 +38,10 @@
     <span class="rbh_span midFont"><b>Paciente:</b>{{cita.paciente}}</span>
     <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"><b>Doctor:</b> {{cita.doctor_name}}/{{cita.doctor_alias}}</span>
     <span class="rbh_span midFont"><b>Duración</b> <span class="fontHigh">{{cita.duracionText}}</span></span>
-    <span class="rbh_span_toolbar">
+    <!--<span class="rbh_span_toolbar">
         <img src="assets/imgs/editar.svg" class="drap_edit_icon" />
         <button class="bgColorPrimary generalButton">Eliminar</button>
-    </span>
+    </span>-->
   </div>
   <div class="ReporteRow_Services">
     <b class="rpr_service midFont"> Servicios </b>

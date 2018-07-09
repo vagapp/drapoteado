@@ -30,6 +30,8 @@ export class UserDataProvider {
   showCaja:boolean;
   showReception:boolean;
 
+  showhour:string = '00:00';
+
   //datos de citas. los necesito globales para usarlos en la pagina de home. ademas las voy a ligar con algun servicio servidor cosa para comunicacion bilineal
   citas:Citas[]; //listado de todas las citas
   nextCitas:Citas[]; //proxima cita pendiente
@@ -52,6 +54,7 @@ export class UserDataProvider {
   planes:planes[]; //planes que ofrece drap.
   are_planes_set:boolean = false;
   docs_loaded:boolean = false;
+  loading_reports = false;
 
   doctores:Doctores[] = new Array();
   servicios:servicios[] = new Array();
@@ -360,12 +363,14 @@ export class UserDataProvider {
     this.rol = "doctor";
   }
 
+
   threadloop(){
     console.log("loopMs",this.loopMs);
     setInterval(() => {
       if(this.userData.uid && this.userData.uid != 0){
       this.cargarCitas();
-      
+      let now = new Date();
+      this.showhour = `${UserDataProvider.formatDateBinaryNumber( now.getHours() )}:${UserDataProvider.formatDateBinaryNumber( now.getMinutes() )}`;
     }
    }, this.loopMs);
    setInterval(() => {
@@ -576,7 +581,7 @@ export class UserDataProvider {
     return ret;
   }
 
-  static remove
+
 
   //SUBSCRIPTION METHODS
   
@@ -628,6 +633,7 @@ export class UserDataProvider {
               this.reportes.push(aux_rep);
             }
             });
+            this.loading_reports = false;
           }
         );
         clearInterval(moveinterval);
@@ -664,7 +670,7 @@ export class UserDataProvider {
     return observer;
   }
 
-  getReportes( dialy:number = -1, date:string = UserDataProvider.getTodayDateTimeStringsSearchFormat('reportes').datestring , uid:number = this.userData.uid){
+  getReportes( dialy:number = -1, date:string = `${reportes.getTodayReportRangeNumbers().start-30*1000}--${reportes.getTodayReportRangeNumbers().end-30*1000}` , uid:number = this.userData.uid){
     this.userData.uid;
     let filter = `?args[0]=${uid}`;
     let extrafilters = `&args[1]=${date}${dialy === -1?'':`&args[2]=${dialy}`}`;
@@ -688,11 +694,12 @@ export class UserDataProvider {
     const uax_treport = new reportes();
     uax_treport.author_uid = this.userData.uid;
     uax_treport.doctores = this.getDoctoresSimpleArray();
-    const todaydatestrings = UserDataProvider.getTodayDateTimeStringsSaveFormat();
+    uax_treport.setNowDatesUT();
+    /*const todaydatestrings = UserDataProvider.getTodayDateTimeStringsSaveFormat();
     uax_treport.datefrom_date = todaydatestrings.datestring;
     uax_treport.datefrom_time = todaydatestrings.timestring;
     uax_treport.dateTo_date = todaydatestrings.datestring;
-    uax_treport.dateTo_time = todaydatestrings.timestring;
+    uax_treport.dateTo_time = todaydatestrings.timestring;*/
     uax_treport.dialy = true;
     this.generateNewNode(uax_treport.getData()).subscribe(
       (val)=>{
@@ -711,15 +718,10 @@ export class UserDataProvider {
       this.todayReport = null;
     }
     var index = this.reportes.indexOf(report);
-    if(index !== -1)this.reportes.splice(index, 1);    
+    if(index >= -1) this.reportes.splice(index, 1);    
     Debugger.log(['reportes filtered',this.reportes]);
     Debugger.log(['NOW DELETE REPORT FROM DATABASE MF']);
     let observable = this.deleteNode(report.getData());
-    observable.subscribe(
-      (val) => {
-        this.cargarListaReportes();
-      }
-    );
     return observable
   }
 
@@ -749,6 +751,8 @@ export class UserDataProvider {
     Debugger.log(['getting today date for search format: ', {"datestring":datestring,"timestring":timestring}]);
     return {"datestring":datestring,"timestring":timestring};
   }
+
+ 
 
 
   //CITAS METHODS
@@ -1064,6 +1068,7 @@ export class UserDataProvider {
 
   deleteNode( node ){
     let url = this.urlbase+'appoint/node/'+node.Nid;
+    Debugger.log(['deleting node url',url]);
     let headers = new HttpHeaders(
       {'Content-Type':'application/json; charset=utf-8',
       'X-CSRF-Token': ""+this.sessionData.token,

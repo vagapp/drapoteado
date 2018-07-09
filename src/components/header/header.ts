@@ -28,6 +28,7 @@ export class HeaderComponent {
     public userData: UserDataProvider,
     public navCtrl:NavController
   ) {
+   
     console.log('Loading Header Component check session');
     //this.text = 'Hello World';
     console.log("okai there is");
@@ -58,6 +59,8 @@ export class HeaderComponent {
     this.navCtrl.setRoot(HomePage);
     }*/
   }
+
+  
 
   
 

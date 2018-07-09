@@ -26,7 +26,7 @@
         <tbody>
             <tr *ngIf="this.userData.todayReport">
                 <td>{{this.userData.todayReport.nid}}</td>
-                <td class="fontSecondary">{{this.userData.todayReport.datefrom_date}} <span *ngIf="this.userData.todayReport.dialy">Diario de hoy</span></td>
+                <td class="fontSecondary">{{this.userData.todayReport.dateString}} <span *ngIf="this.userData.todayReport.dialy">Diario de hoy</span></td>
                 <td class="toolCol">
                   <img (click)="openReportModal(this.userData.todayReport);" src="assets/imgs/ver.svg"  class="icon_drapo">
                   <!--<button class="bgColorSecondary generalButton tableButton">Exportar</button>-->
@@ -34,11 +34,11 @@
              </tr>
             <tr *ngFor="let report of this.userData.reportes">
                 <td>{{report.nid}}</td>
-                <td class="fontSecondary">{{report.datefrom_date}} <span *ngIf="this.userData.todayReport.dialy">Diario</span></td>
+                <td class="fontSecondary">{{report.dateString}} <span *ngIf="this.userData.todayReport.dialy">Diario</span></td>
                 <td class="toolCol">
                   <img (click)="openReportModal(report);" src="assets/imgs/ver.svg"  class="icon_drapo">
                   <!--<button class="bgColorSecondary generalButton tableButton">Exportar</button>-->
-                  <button class="bgColorPrimary generalButton tableButton" (click)="this.elimiarReporte(report);">Eliminar</button>
+                  <button class="bgColorPrimary generalButton tableButton" (click)="elimiarReporte(report);">Eliminar</button>
                 </td>
              </tr>
         </tbody>

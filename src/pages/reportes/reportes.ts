@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { NuevoreporteModalPage } from '../nuevoreporte-modal/nuevoreporte-modal';
 import { ModalController } from 'ionic-angular';
 import { reportes } from '../../providers/user-data/reportes';
@@ -26,7 +26,8 @@ export class ReportesPage {
     public navParams: NavParams,
      public modalCtrl: ModalController,
     public userData: UserDataProvider,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController
     ) {
   }
 
@@ -61,7 +62,28 @@ export class ReportesPage {
         {
           text: 'Si',
           handler: () => { 
-            this.userData.deleteReport(report);
+            let loader = this.loadingCtrl.create({
+              content: "Eliminando..."
+            });
+            loader.present();
+            this.userData.loading_reports = true;
+            let loadrepointerval = setInterval(
+              ()=>{
+                if(!this.userData.loading_reports){ loader.dismiss();clearInterval(loadrepointerval);}
+              },500
+            );
+            this.userData.deleteReport(report).subscribe(
+              (val) => {
+               
+                Debugger.log([val]);
+                this.userData.cargarListaReportes();
+              },
+              (response)=>{
+                
+                this.userData.loading_reports = false;
+                Debugger.log(['deleting node error',response]);
+              }
+            );
           }
         }
       ]
