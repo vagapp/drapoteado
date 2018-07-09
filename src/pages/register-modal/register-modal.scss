@@ -308,6 +308,67 @@ page-register-modal {
     margin-right: 50px;
   }
 
+
+
+  @media screen and (max-width: 600px) {
+
+    .rfsFlex .registerInput, .rfsFlex .ubication_det{
+        width: 100%;
+        text-align: left;
+    }
+
+    .rfsFlex .ubication_det{
+        flex-flow: column;
+    }
+
+    .rfsFlex .registerInput input{
+        width: 90%;
+        font-size: 17px;
+    }
+
+    .rfsFlex .registerInput .input_select{
+        width: 90% !important;
+    }
+
+    
+
+   .registerInput b{
+        width: 100%;
+        display: block;
+        font-size: 18px;
+    }
+
+    .registerInput input {
+        width: 90%;
+    }
+
+    
+
+    .ubdet_input{
+        margin-top: 10px;
+       
+    }
+
+    .bluelink_wrapper .blueLink {
+        float: right;
+        cursor: pointer;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        background: #C1272D;
+        /* padding: 10px; */
+        /* margin-left: 35px; */
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+}
+
+  
+
     
 
 }
+
+

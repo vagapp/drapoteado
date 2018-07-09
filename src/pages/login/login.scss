@@ -48,10 +48,22 @@ page-login {
     .modal-wrapper{
         width: 20000px !important;
     }
+
+    
    
         @media screen and (min-width: 1000px) {
             .modal-wrapper{
                 min-width: 1000px;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .login_form{
+                widows: 100%;
+            }
+
+            .largeButton{
+                width: 80%;
             }
         }
     
