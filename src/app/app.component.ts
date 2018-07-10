@@ -25,6 +25,8 @@ export class MyApp {
   token: string;
   connectcomp:boolean=false;
 
+  
+
   pages: Array<{title: string, component: any}>;
 
   constructor(
@@ -66,7 +68,6 @@ export class MyApp {
         //request token for this session, then check if conected to system connect.
         //sometimes this runs faster so it should be assigned here.
         this.userData.cargarPlanes();
-        this.userData.sessionData.token = val['token'];
         this.connectcomp = false;
         this.userData.checkConnect().subscribe((val)=>{
           Debugger.log(['checkConnect val',val]);

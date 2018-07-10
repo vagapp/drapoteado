@@ -69,6 +69,7 @@ export class RegisterModalPage {
     if(!this.basicValidation()){
       return 0;
     }
+    
     loading.present();
     let aux_userData = JSON.parse(JSON.stringify(this.userData.userData));
     delete aux_userData.field_sub_id;
@@ -107,20 +108,16 @@ export class RegisterModalPage {
   delete cloneData.field_doctores;
   delete cloneData.field_forma_pago;
   delete cloneData.field_plan_date;
-  //this.userData.userData.field_useremail.und[0].email=this.userData.userData.mail;
-  //this.userData.userData.field_tipo_de_usuario.und[0]="1";
-  //this.userData.userData.field_sub_id[0] = '_none';
   
-  /*registrando un doctor*/
-  
-    Debugger.log(['register',this.userData.userData]);
+  Debugger.log(['register',this.userData.userData]);
     let register_observer = this.userData.register(cloneData);
     register_observer.subscribe(
       (val) => {
-        Debugger.log(["sucess register on modal"]);
-        loading.dismiss();
-        this.presentAlert('Se ha completado su registro, favor de iniciar sesión',"Registro Completo");
-        this.dismiss();
+        Debugger.log(["sucess register on modal",val]);
+        window.location.reload();
+        /*loading.dismiss();
+        this.presentAlert('Se ha completado su registro, favor de iniciar sesión',"Registro Completo");*/
+        //this.dismiss();
       },
       response => {
         Debugger.log(["POST call in error", response]);

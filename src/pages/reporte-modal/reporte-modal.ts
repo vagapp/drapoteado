@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ViewController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { reportes } from '../../providers/user-data/reportes';
@@ -55,7 +55,8 @@ export class ReporteModalPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public userData: UserDataProvider,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public viewCtrl:ViewController
   ) {
     let loading = this.loadingCtrl.create({
       content: 'Cargando Reporte...'
@@ -77,6 +78,8 @@ export class ReporteModalPage {
   ionViewDidLoad() {
     
   }
+  
+  
 
   reset(){
     this.actualrepot = new reportes();
@@ -212,6 +215,11 @@ export class ReporteModalPage {
         while(dsm_seconds_str.length < 2) dsm_seconds_str = "0"+dsm_seconds_str;
         this.duracionTotalStr = dsm_minutes_str+":"+dsm_seconds_str;*/
         console.log(this.duracionTotalStr);
+      }
+
+
+      dismiss() {
+        this.viewCtrl.dismiss();
       }
 
 

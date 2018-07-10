@@ -46,6 +46,10 @@ export class LoginPage {
       content: 'Entrando...'
     });
     loading.present();
+    this.userData.requestToken().subscribe((val) => {
+      this.userData.sessionData.token = val['token'];
+      console.log("token updated",this.userData.sessionData.token);
+      
     let login_observer = this.userData.login(this.username,this.password);
     let loader = this.loadingCtrl.create({
       content: ""
@@ -154,13 +158,15 @@ export class LoginPage {
       },
       response => {
           Debugger.log(["POST call in error", JSON.stringify(response)]);
-          this.presentAlert('Usuario o contraseña incorrectos','Error');
+          this.presentAlert(response.error,'Error');
           loading.dismiss();
       },
       () => {
           loader.dismiss();
           console.log("The POST observable is now completed.");
       });
+    }
+  );
   }
 
   actionOpenRegister(){

@@ -65,7 +65,17 @@ page-login {
             .largeButton{
                 width: 80%;
             }
-        }
+
+            .login_form ion-list {
+                width: auto;
+            }
+
+            
+            .login_form .spanLink {
+                text-align: right;
+                width: auto;
+            }
     
+        }
 
 }

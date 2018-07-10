@@ -2,7 +2,7 @@ page-welcome-modal {
 
     .modal_header{
        text-align: center;
-       width:100%;
+       width: auto;
        margin: 30px;
        padding: 10px;
        border-bottom: 1px solid gray;
@@ -11,7 +11,7 @@ page-welcome-modal {
         font-size: 8rem;
     }
     .header_subtitle{
-        font-size: 4.5rem;
+        font-size: 3.5rem;
         font-weight: bold;
     }
     .modal_title_logo{
@@ -26,5 +26,9 @@ page-welcome-modal {
         font-size: 2rem;
         padding-left: 20px;
         padding-right: 20px;
+    }
+
+    @media screen and (max-width: 600px) {
+        
     }
 }
