@@ -46,6 +46,11 @@ export class NuevousuarioModalPage {
     }
   }
 
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
+
   resetNewUser(){
     this.newUser = this.userData.getEmptyUserd();
   }

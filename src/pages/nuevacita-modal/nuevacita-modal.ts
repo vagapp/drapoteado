@@ -58,6 +58,10 @@ export class NuevacitaModalPage {
     }
   }
 
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
   resetNewCita(){
     this.cita = new Citas();
     /*this.newCita=UserDataProvider.getEmptyCita();

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
 /**
  * Generated class for the NuevoreporteModalPage page.
@@ -15,11 +15,15 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class NuevoreporteModalPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl:ViewController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NuevoreporteModalPage');
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
   }
 
 }

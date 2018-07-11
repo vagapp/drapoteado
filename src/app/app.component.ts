@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, LoadingController } from 'ionic-angular';
+import { Nav, Platform, LoadingController, ModalController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -35,6 +35,7 @@ export class MyApp {
     public splashScreen: SplashScreen,
     public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
+    public modalCtrl: ModalController
   ) {
     this.initializeApp();
 
@@ -182,6 +183,11 @@ export class MyApp {
   openUsuariosPage(){this.nav.setRoot(UsuariosPage);}
   openReportesPage(){this.nav.setRoot(ReportesPage);}
   openFacturacionPage(){this.nav.setRoot(FacturacionPage);}
+  openRegister(){
+    console.log("open Register");
+    let Modal = this.modalCtrl.create(RegisterModalPage, undefined, { cssClass: "bigModal" });
+    Modal.present({});
+  }
   
   
   

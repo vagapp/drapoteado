@@ -57,6 +57,11 @@ export class ProgresocitaModalPage {
       clearInterval(this.showinterval);
   }
 
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
+
 
   cargarServicios(){
     this.activeCita.setAddedServices(this.activeCitaDoc.servicios);

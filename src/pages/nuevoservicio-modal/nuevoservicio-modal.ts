@@ -49,6 +49,10 @@ export class NuevoservicioModalPage {
     }
   }
 
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
   resetNewService(){
     this.newService={
       Nid:null,

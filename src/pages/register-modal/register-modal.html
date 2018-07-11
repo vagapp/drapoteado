@@ -7,7 +7,6 @@
 <ion-header class="register_modal">
 </ion-header>
 <ion-content class="register_content">
-
       <div *ngIf="!isnew"  class="fact_page_wrapper">
         <div *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])" class="access_code_opt"><span (click)="showInvitation();" class="access_code_opt_link">Tengo un código de invitación</span></div>
         <div *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY]) && invitationshow" class="acesss_code_show"><ion-item class="acesss_code_show_input">
@@ -238,7 +237,8 @@
     <button *ngIf="!isnew"   class="bgColorPrimary generalButton" (click)="actionUpdate()" >Actualizar Datos</button>
     </div>
     <div class="bluelink_wrapper">
-    <a class="blueLink midFont" (click)="this.dismiss();">¡Ya Tengo una Cuenta!</a>
+    <a  *ngIf="this.isnew"   class="blueLink midFont" (click)="this.dismiss();">¡Ya Tengo una Cuenta!</a>
+    <a  *ngIf="!this.isnew"   class="blueLink midFont" (click)="this.dismiss();">Cerrar</a>
   </div>
   </div>
   </div>

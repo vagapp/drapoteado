@@ -16,7 +16,7 @@
         </div>
 
                 <!-- Agregar nueva cita para recepciones -->
-        <div class="section" *ngIf="this.userData.docs_loaded && this.userData.checkUserFeature([this.userData.TIPO_RECEPCION,TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);" >
+        <div class="section" *ngIf="this.userData.docs_loaded && this.userData.checkUserFeature([this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);" >
                         <button class="bgColorSecondary generalButton floatRight" (click)="openNuevaCita()">Agregar Nueva Cita</button>
                         </div>
 
