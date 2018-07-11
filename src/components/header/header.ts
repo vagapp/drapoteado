@@ -29,7 +29,6 @@ export class HeaderComponent {
     public navCtrl:NavController,
     public loadingCtrl:LoadingController
   ) {
-   
     console.log('Loading Header Component check session');
     //this.text = 'Hello World';
     console.log("okai there is");
