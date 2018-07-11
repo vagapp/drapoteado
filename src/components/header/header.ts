@@ -72,9 +72,11 @@ export class HeaderComponent {
   }
 
   goHome(){
-    /*if(this.userData.checkUserFeature([])){
-    this.navCtrl.setRoot(HomePage);
-    }*/
+    this.pagename = this.navCtrl.getActive().name;
+    if(this.pagename.localeCompare('HomePage') !== 0){
+      Debugger.log(['implying this is not Home page']);
+      this.navCtrl.setRoot(HomePage);
+    }
   }
 
   

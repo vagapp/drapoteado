@@ -2,7 +2,7 @@
 <div >
   <ion-header >
     <ion-navbar color="primary">
-      <ion-title><img src="assets/imgs/logo-blanco.svg" class="header_logo_drap"/></ion-title>
+      <ion-title (click)="goHome()" ><img src="assets/imgs/logo-blanco.svg" class="header_logo_drap"/></ion-title>
       <ion-buttons right class="menu_buttons" *ngIf="this.userData.checkUserFeature([this.userData.TIPO_ANY],[this.userData.PLAN_ANY],false);">
       <!--<button ion-button>Alertas <span>10</span></button>-->
       <button ion-button>{{this.userData.userData.name}} <img src="assets/imgs/flecha-blanca.svg" class="header_flecha_blanca" /></button>
