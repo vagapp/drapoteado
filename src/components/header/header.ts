@@ -23,7 +23,6 @@ export class HeaderComponent {
   authObservable = null;
   susObservable = null;
   pagename = this.navCtrl.getActive().name;
-
   constructor(
     public userData: UserDataProvider,
     public navCtrl:NavController,

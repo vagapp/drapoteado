@@ -46,6 +46,7 @@ export class NuevoservicioModalPage {
     }else{
       this.isnew = true;
       this.resetNewService();
+      this.newService.costo = null;
     }
   }
 

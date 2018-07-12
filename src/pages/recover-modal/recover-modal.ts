@@ -1,0 +1,75 @@
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
+import { UserDataProvider } from '../../providers/user-data/user-data';
+import { Debugger } from '../../providers/user-data/debugger';
+
+/**
+ * Generated class for the RecoverModalPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+
+@IonicPage()
+@Component({
+  selector: 'page-recover-modal',
+  templateUrl: 'recover-modal.html',
+})
+export class RecoverModalPage {
+  recovername:string = '';
+
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public userData: UserDataProvider,
+    public viewCtrl: ViewController,
+    public alertCtrl: AlertController
+  ) {
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad RecoverModalPage');
+  }
+
+  basicvalidation():boolean{
+    let ret = true;
+    if( this.recovername.localeCompare('') === 0){
+      ret = false;
+    }
+    return ret;
+  }
+
+  actionRequestRecover(){
+    if(this.basicvalidation()){
+      this.userData.requestRecover(this.recovername).subscribe(
+        (val) => {
+          this.presentAlert('Encontrado','Revivirás tu eMail dentro de la brevedad');
+          Debugger.log(['return of recoverrequesto',val]);
+          this.dismiss();
+        },(response)=>{
+          this.presentAlert('Error','No encontramos nada con estos datos');
+        },()=>{
+
+        }
+      );
+    }
+  }
+
+
+  presentAlert(key,Msg) {
+    let alert = this.alertCtrl.create({
+      title: key,
+      subTitle: Msg,
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
+
+
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
+
+
+}

@@ -40,6 +40,7 @@ import { HttpModule } from '@angular/http';
 import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
 import { Platform } from 'ionic-angular';
+import { RecoverModalPage } from '../pages/recover-modal/recover-modal';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { Platform } from 'ionic-angular';
     ListPage,
     WelcomeModalPage,
     RegisterModalPage,
+    RecoverModalPage,
     ReporteModalPage,
     NuevacitaModalPage,
     ProgresocitaModalPage,
@@ -78,6 +80,7 @@ import { Platform } from 'ionic-angular';
     ListPage,
     WelcomeModalPage,
     RegisterModalPage,
+    RecoverModalPage,
     ReporteModalPage,
     NuevacitaModalPage,
     ProgresocitaModalPage,

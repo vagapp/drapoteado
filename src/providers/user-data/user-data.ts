@@ -1360,6 +1360,7 @@ export class UserDataProvider {
   }
 
 
+ 
 
 
   /**
@@ -1464,6 +1465,18 @@ export class UserDataProvider {
     }else{
       return false;
     }*/
+  }
+
+  requestRecover( name:string ){
+    let body = `{"name":"${name}"}`;
+    console.log("requesting password reset body ",body);
+    let url = this.urlbase+'appoint/user/request_new_password.json';
+    let headers = new HttpHeaders(
+      {'Content-Type':'application/json; charset=utf-8',
+      'X-CSRF-Token': ""+this.sessionData.token
+    });
+    let observer = this.http.post(url,body,{headers});
+    return observer;
   }
 
 

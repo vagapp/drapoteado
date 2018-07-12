@@ -22,9 +22,9 @@ export class ProgresocitaModalPage {
   available_services: servicios[];
   selectedService:number;
   costoCita:number;
-  cobroEfectivo:number=0;
-  cobroTarjeta:number=0;
-  cobroCheque:number=0;
+  cobroEfectivo:number=null;
+  cobroTarjeta:number=null;
+  cobroCheque:number=null;
   activeCitaDoc:Doctores;
   showinterval = null;
   added_services_list:{

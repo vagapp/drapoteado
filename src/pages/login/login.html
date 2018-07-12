@@ -20,7 +20,7 @@
             <ion-input type="password" placeholder="Contraseña" [(ngModel)]="password"></ion-input>
           </ion-item>
     </ion-list>    
-    <span class="spanBlock spanLink midFont lightFont">¿Olvidaste tú contraseña?</span>
+    <span class="spanBlock spanLink midFont lightFont"  (click)="actionOpenRecover()" >¿Olvidaste tú contraseña?</span>
     <button class="generalButton largeButton bgColorPrimary" (click)="actionLogin()" >Log In</button>  
 </div>
 </div>

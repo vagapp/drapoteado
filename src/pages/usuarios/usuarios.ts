@@ -286,7 +286,7 @@ close(){
   this.viewCtrl.dismiss();
 }
 
-presentAlert(key,Msg) {
+presentAlert(key,Msg){
   let alert = this.alertCtrl.create({
     title: key,
     subTitle: Msg,
@@ -294,6 +294,8 @@ presentAlert(key,Msg) {
   });
   alert.present();
 }
+
+
 
   
 

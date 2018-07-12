@@ -16,6 +16,7 @@ import { LoginPage } from '../login/login';
 import { Citas } from '../../providers/user-data/citas';
 import { FacturacionPage } from '../facturacion/facturacion';
 import { RegisterModalPage } from '../register-modal/register-modal';
+import { Debugger } from '../../providers/user-data/debugger';
 
 
 @Component({
@@ -34,10 +35,24 @@ export class HomePage {
   }
 
   ionViewDidLoad(){
-      if( this.userData.userData.tutorial_state.und && parseInt(this.userData.userData.tutorial_state.und[0].value) == 0){
+    Debugger.log(['this.userData.userData.tutorial_state',this.userData.userData.tutorial_state.und[0]]);
+    Debugger.log(['this.userData.userData.tutorial_state',this.userData.userData.tutorial_state.und[0].value]);
+      if( this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){
         let Modal = this.modalCtrl.create(WelcomeModalPage);
         Modal.present({});
         this.userData.userData.tutorial_state.und[0].value = "1";
+        let cloneData = {
+          uid:this.userData.userData.uid,
+          field_tutorial_state: {und: [{value: "1"}]},
+        }
+        this.userData.updateUserd(cloneData).subscribe(
+          (val)=>{
+            Debugger.log(['update user tutorial state',val]);
+          }, (response) => {
+            Debugger.log(['error on update user tutorial state',response]);
+          }
+        );
+        
     }
     this.userData.cargarCitas();
   }

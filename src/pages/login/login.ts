@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalOptions, ModalController, LoadingController, AlertController } from 'ionic-angular';
 import { RegisterModalPage } from '../register-modal/register-modal';
 import { UserDataProvider  } from '../../providers/user-data/user-data';
+import {RecoverModalPage} from '../recover-modal/recover-modal';
 import { HomePage } from '../home/home';
 import { ToastController } from 'ionic-angular';
 import { Debugger } from '../../providers/user-data/debugger';
@@ -173,6 +174,13 @@ export class LoginPage {
     console.log("open Register");
     let Modal = this.modalCtrl.create(RegisterModalPage, undefined, { cssClass: "bigModal" });
     Modal.present({});
+  }
+
+  actionOpenRecover(){
+    let Modal = this.modalCtrl.create(RecoverModalPage, undefined, { cssClass: "smallModal recoverModal" });
+    //let Modal = this.modalCtrl.create(RecoverModalPage);
+    Modal.present({});
+    console.log("open Recover");
   }
 
   presentAlert(msg:string,title:string){

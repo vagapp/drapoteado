@@ -1,4 +1,4 @@
-<ion-menu [content]="content">
+<ion-menu side="right" [content]="content">
   <ion-header>
     <ion-toolbar>
       <ion-title>Menu</ion-title>
@@ -30,6 +30,9 @@
       <button *ngIf="userData.checkUserFeature([userData.TIPO_DOCTOR],[userData.PLAN_ANY])" menuClose ion-item  (click)="openRegister()">
           Mis Datos
       </button>
+      <button menuClose ion-item>
+          Tutorial
+        </button>
       <button menuClose ion-item  (click)="userData.logout()">
         Logout
       </button>
