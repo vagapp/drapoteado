@@ -397,7 +397,7 @@ border: 0px solid #000000;
 .smallModal .modal-wrapper{
     /*max-width: 60%;*/
     /*max-height: 80%;*/
-    max-width: 1200px;
+    min-width: 1000px;
     /*left: 20%;*/
     /*top: 10%;*/
 }
@@ -507,6 +507,16 @@ border: 0px solid #000000;
 @media screen and (max-width: 1350px){
     .section_grid{
         grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+
+@media screen and (max-width: 1024px){
+   
+    .smallModal .modal-wrapper{
+        height: 100% !important;
+        min-width: auto;
     }
 
 }
@@ -641,7 +651,11 @@ border: 0px solid #000000;
 
     .smallModal .modal-wrapper{
         height: 100% !important;
+        min-width: auto;
     }
+
+    
+
 
    
 }

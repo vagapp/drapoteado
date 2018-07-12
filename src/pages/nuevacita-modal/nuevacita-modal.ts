@@ -16,6 +16,10 @@ import { Debugger } from '../../providers/user-data/debugger';
   selector: 'page-nuevacita-modal',
   templateUrl: 'nuevacita-modal.html',
 })
+
+
+
+
 export class NuevacitaModalPage {
   //newCita: citasData;
   cita:Citas = null;
