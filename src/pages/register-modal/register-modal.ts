@@ -219,7 +219,6 @@ export class RegisterModalPage {
           (val)=>{
             Debugger.log(['se guardo el stripe sub_id en usuario']);
             window.location.reload();
-            loading.dismiss();
           }
         );
         Debugger.log(['subs updated to this, update user please',this.userData.subscription.nid]); 
