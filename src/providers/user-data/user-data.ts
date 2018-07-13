@@ -1418,7 +1418,7 @@ export class UserDataProvider {
       'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
     });
     let observer = this.http.put(url,body,{headers});
-    observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
+    //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
 
@@ -1435,7 +1435,18 @@ export class UserDataProvider {
       aux_userData.field_tipo_de_usuario.und.push(this.userData.field_tipo_de_usuario.und[i].value);
     }*/
     aux_userData.field_tipo_de_usuario = UserDataProvider.cleanUserDataReferenceField(this.userData.field_tipo_de_usuario);
-    aux_userData.field_sub_id = UserDataProvider.cleanUserDataReferenceField(this.userData.field_sub_id);
+    Debugger.log(['this.userData.field_sub_id',this.userData.field_sub_id])
+    if(this.userData.field_sub_id['und']['0']){
+      Debugger.log(['subid setted']);
+    }else{
+      if(this.userData.field_sub_id['und']['0']['value']){
+        aux_userData.field_sub_id = UserDataProvider.cleanUserDataReferenceField(this.userData.field_sub_id);
+      }else{
+      Debugger.log(['subid not setted,remove']);
+      delete aux_userData.field_sub_id;
+      }
+    }
+    //aux_userData.field_sub_id = UserDataProvider.cleanUserDataReferenceField(this.userData.field_sub_id);
     if( Number(this.userData.field_sub_id.und[0]) === Number(0) ){
       delete aux_userData.field_sub_id;
     }

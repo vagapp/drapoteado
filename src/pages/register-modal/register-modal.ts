@@ -194,6 +194,10 @@ export class RegisterModalPage {
       Debugger.log(['NO HAZ ELEGIDO PLAN']);
       return false;
     }
+    let loading = this.loadingCtrl.create({
+      content: 'Subscribiendo...'
+    });
+    loading.present();
     Debugger.log(['validation passed como hacer una suscripcion por stripe = 0']);
     if(this.userData.subscription.nid === null){
       Debugger.log(['new subscription']);
@@ -208,16 +212,21 @@ export class RegisterModalPage {
       this.userData.generateNewSus(aux_sus).subscribe((val)=>{
         Debugger.log(['we got this',val]);
         this.userData.subscription.nid = val['nid'];
-        this.userData.userData.field_sub_id["und"][0]['value'] =  val['nid'];
+        this.userData.userData.field_sub_id={und:new Array()};
+        this.userData.userData.field_sub_id.und.push(val['nid']);
+        //this.userData.userData.field_sub_id["und"]["0"] =  val['nid'];
         this.userData.updateUser().subscribe(
           (val)=>{
             Debugger.log(['se guardo el stripe sub_id en usuario']);
+            window.location.reload();
+            loading.dismiss();
           }
         );
         Debugger.log(['subs updated to this, update user please',this.userData.subscription.nid]); 
       });
     }else{
       Debugger.log(['UPDATE SUSCRIPTION NOT IMPLEMENTED YET']);
+      loading.dismiss();
     }
   }
 
@@ -391,6 +400,7 @@ export class RegisterModalPage {
                             brand:result.source.card.brand
                             };
           this.userData.userData.field_src_json_info['und'].push({value: JSON.stringify(cu_src_data)});
+          Debugger.log(['userdatajson',this.userData.userData.field_src_json_info]);
           /*console.log( this.userData.userData.field_src_json_info);*/
         }
         this.userData.updateUser().subscribe(
