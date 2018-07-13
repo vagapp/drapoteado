@@ -36,7 +36,7 @@
         </div>
       </div>
     <div class="fact_page_content fact_section">
-      <div class="fact_payment_methods" *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])">
+      <div class="fact_payment_methods" *ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])"> <!--*ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])"-->
         <span class="fact_label">seleccione un método de pago:</span>
         <div *ngFor="let src of this.sources" (click)="selectCard(src)"   [class.selectedsrc]="src.selected" class="fact_src_unit">
           {{src.brand}} **** **** **** {{src.last4}}

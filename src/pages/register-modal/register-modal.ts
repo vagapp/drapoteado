@@ -53,6 +53,15 @@ export class RegisterModalPage {
     Debugger.log(['ionViewDidLoad RegisterModalPage']);
     Debugger.log(['uid on register',this.userData.userData.uid]);
     this.isnew = !this.userData.checkIsLoggedin();
+    /*
+    setTimeout(()=>{
+      
+    },3000);
+   */
+    
+  }
+
+  ionViewDidEnter(){
     this.setupStripe();
     this.loadSources();
   }
@@ -350,6 +359,8 @@ export class RegisterModalPage {
     };
 
     this.card = elements.create('card', { style: style });
+    let crd = document.getElementById("card-element");
+    Debugger.log([crd]);
     this.card.mount('#card-element');
     this.card.addEventListener('change', event => {
       var displayError = document.getElementById('card-errors');
@@ -365,6 +376,7 @@ export class RegisterModalPage {
       event.preventDefault();
 
       // this.stripe.createToken(this.card)
+    
       this.stripe.createSource(this.card).then(result => {
         if (result.error) {
           var errorElement = document.getElementById('card-errors');
@@ -398,3 +410,15 @@ export class RegisterModalPage {
 
 
 }
+/*function stripeTokenHandler(token) {
+  // Insert the token ID into the form so it gets submitted to the server
+  var form = document.getElementById('payment-form');
+  var hiddenInput = document.createElement('input');
+  hiddenInput.setAttribute('type', 'hidden');
+  hiddenInput.setAttribute('name', 'stripeToken');
+  hiddenInput.setAttribute('value', token.id);
+  form.appendChild(hiddenInput);
+
+  // Submit the form
+  form.submit();
+}*/
