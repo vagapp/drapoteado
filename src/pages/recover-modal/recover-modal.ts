@@ -43,7 +43,7 @@ export class RecoverModalPage {
     if(this.basicvalidation()){
       this.userData.requestRecover(this.recovername).subscribe(
         (val) => {
-          this.presentAlert('Encontrado','Revivirás tu eMail dentro de la brevedad');
+          this.presentAlert('Encontrado','recibirás tu eMail dentro de la brevedad');
           Debugger.log(['return of recoverrequesto',val]);
           this.dismiss();
         },(response)=>{

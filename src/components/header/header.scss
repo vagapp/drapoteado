@@ -22,4 +22,11 @@ header {
     .header_showdate{
         color:white;
     }
+
+    @media screen and (max-width: 450px){
+        .header_logo_drap{
+            max-width: 50px;
+            margin-left: 20px;
+        }
+    }
 }
