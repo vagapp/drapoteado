@@ -40,6 +40,10 @@ ion-header{
 }
 
 
+ion-app.ios [padding] .scroll-content{
+    padding:0;
+}
+
 .main_logo{
     max-width: 200px;
     max-height: 200px;
@@ -47,7 +51,7 @@ ion-header{
     width: auto;
 }
 .contentdown .scroll-content{
-    margin-top: 80px;
+    margin-top: 65px;
 }
 
 .lightFont{

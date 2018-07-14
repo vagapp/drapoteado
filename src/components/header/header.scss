@@ -1,13 +1,12 @@
 header {
     .header_logo_drap{
         max-width: 150px;
+        height: 30px;
         margin-left: 20px;
     }
 
     .header_menu_drap{
-        max-width: 30px;
-        max-height: 30px;
-        margin-right: 20px;
+       height: 30px;
     }
 
     .header_flecha_blanca{
@@ -17,10 +16,27 @@ header {
 
     .menu_buttons{
         padding-right: 30px;
+        display: inline-flex;
+        width: -webkit-fill-available;
+        justify-content: flex-end;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .menu_buttons div{
+        display: inline-block;
+        padding: 10px;
     }
 
     .header_showdate{
         color:white;
+    }
+
+    .drap_global_header{
+        display: flex;
+        flex-flow: row;
+        justify-content: center;
+        align-items: center;
     }
 
     @media screen and (max-width: 450px){
@@ -28,5 +44,20 @@ header {
             max-width: 50px;
             margin-left: 20px;
         }
+
+        .header_menu_drap{
+            height: 18px;
+         }
+
+         .menu_buttons{
+             font-size: 1.5rem;
+         }
+
+         .header_span_name{
+            max-width: 140px;
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis; 
+         }
     }
 }
