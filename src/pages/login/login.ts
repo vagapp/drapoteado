@@ -183,6 +183,12 @@ export class LoginPage {
     console.log("open Recover");
   }
 
+  openRegister(){
+    let Modal = this.modalCtrl.create(RegisterModalPage, undefined, { cssClass: "bigModal" });
+    Modal.onDidDismiss(data => {});
+    Modal.present({});
+  }
+
   presentAlert(msg:string,title:string){
     let alert = this.alertCtrl.create({
       title: title,

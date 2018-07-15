@@ -23,6 +23,7 @@ import { FacturacionPage } from '../pages/facturacion/facturacion';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Clipboard } from '@ionic-native/clipboard';
 
 import { HeaderComponent } from '../components/header/header';
 import { FooterComponent } from '../components/footer/footer';
@@ -101,6 +102,7 @@ import { RecoverModalPage } from '../pages/recover-modal/recover-modal';
   ],
   providers: [
     StatusBar,
+    Clipboard,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserDataProvider,

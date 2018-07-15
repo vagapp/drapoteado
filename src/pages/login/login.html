@@ -19,9 +19,10 @@
         <ion-item class="loginInput">
             <ion-input type="password" placeholder="Contraseña" [(ngModel)]="password"></ion-input>
           </ion-item>
-    </ion-list>    
-    <span class="spanBlock spanLink midFont lightFont"  (click)="actionOpenRecover()" >¿Olvidaste tú contraseña?</span>
+    </ion-list>   
     <button class="generalButton largeButton bgColorPrimary" (click)="actionLogin()" >Log In</button>  
+    <span class="spanBlock spanLink midFont lightFont"  (click)="actionOpenRecover()" >¿Olvidaste tú contraseña?</span>
+    <span class="spanBlock spanLink midFont lightFont"  (click)="openRegister()" >¿No tienes una cuenta?</span>
 </div>
 </div>
 </ion-content>

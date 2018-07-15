@@ -52,7 +52,7 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      //this.splashScreen.hide();
+      this.splashScreen.hide();
       Debugger.log(['platform redy']);
       let loading = this.loadingCtrl.create({
         content: 'Bienvenido'

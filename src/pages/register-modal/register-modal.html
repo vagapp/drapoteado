@@ -17,7 +17,8 @@
         <div class="fact_myplan" *ngIf="userData.checkUserSuscription([userData.PLAN_ANY])">
           <span class="myplan_block">Plan activo: {{userData.subscription.plan.title}}</span>
           <span *ngIf="this.userData.checkUserPlanHolder()">
-          <span class="myplan_block">Código de invitación: {{userData.subscription.field_invitation_code}}</span>
+          <!--<span class="myplan_block">Código de invitación: {{userData.subscription.field_invitation_code}}</span>-->
+          <button class="generalButton copyCodeBtn"  (click)="copyCode()">Copiar Código de invitación</button>
           <span class="myplan_explain">Entrégale este código a los doctores con los que quieras compartir esta suscripción a <span class="colorPrimary">DRAP</span></span>
           <span class="myplan_block">Doctores Afiliados:</span>
           <span *ngFor="let dctr of userData.subscription.field_doctores_info" class="myplan_doctor">{{dctr.name}} <span class="delete_doctor" *ngIf="this.userData.userData.uid !== dctr.uid" (click)="popRemoveDoctorSus(dctr.uid);">remover</span></span>

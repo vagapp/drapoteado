@@ -17,7 +17,7 @@
   <ion-header>
     <div class="drap_global_header">
         <img  (click)="goHome()"  src="assets/imgs/logo-blanco.svg" class="header_logo_drap"/>
-        <div class="menu_buttons" *ngIf="this.userData.checkUserFeature([this.userData.TIPO_ANY],[this.userData.PLAN_ANY],false);">
+        <div class="menu_buttons">
           <div class="header_span header_span_name">{{this.userData.userData.name}}</div>
           <div class="header_span header_showdate">{{this.userData.showhour}}</div>
           <div menuToggle><img src="assets/imgs/menu.svg" class="header_menu_drap" /></div>

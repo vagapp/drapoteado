@@ -6,6 +6,7 @@ import { sources } from '../../providers/user-data/sources';
 import { planes } from '../../providers/user-data/planes';
 import { HomePage } from '../home/home';
 import { subscriptions } from '../../providers/user-data/subscriptions';
+import { Clipboard } from '@ionic-native/clipboard';
 
 declare var Stripe;
 
@@ -44,7 +45,8 @@ export class RegisterModalPage {
     public navParams: NavParams, 
     public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public clipboard: Clipboard
   ) {
   }
 
@@ -418,6 +420,9 @@ export class RegisterModalPage {
 }
 
 
+copyCode(){
+  this.clipboard.copy(this.userData.subscription.field_invitation_code);
+}
 
 
 
