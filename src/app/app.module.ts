@@ -70,7 +70,7 @@ import { RecoverModalPage } from '../pages/recover-modal/recover-modal';
       monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre' ],
       monthShortNames: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Cct', 'Nov', 'Dec' ],
       dayNames:['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'],
-      dayShortNames: ['Fom', 'Lun', 'Mar', 'Mie','Jue','Vie','Sab' ],
+      dayShortNames: ['Dom', 'Lun', 'Mar', 'Mie','Jue','Vie','Sab' ],
      }),
     BrowserModule,
     HttpClientModule,

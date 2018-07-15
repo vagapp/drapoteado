@@ -60,16 +60,14 @@ export class HomePage {
 
   iniciarCita( cita:Citas ){
     let loader = this.loadingCtrl.create({
-      content: "Actualizando..."
+      content: "Iniciando Cita..."
     });
     let aux_doc = this.userData.getDoctorOFCita(cita);
     console.log("tryin to open cita progreso",cita);
     if(cita.checkState(UserDataProvider.STATE_ACTIVA) || cita.checkState(UserDataProvider.STATE_COBRO)){
-      loader.dismiss();
       this.openProgreso(cita);
     }else{
       if(aux_doc.citaActiva){
-        loader.dismiss();
         this.presentAlert("Ocupado","Este doctor esta ocupado con una cita Activa");
         return 0;
       }
@@ -86,15 +84,16 @@ export class HomePage {
         {
           text: 'Si',
           handler: () => {
-            //loader.present();
+            loader.present();
             this.userData.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
               (val)=>{
                 this.userData.cargarCitas().subscribe(
                   (val)=>{
+                    loader.dismiss();
                     this.openProgreso(cita);
-                  }
+                  },(response)=>{ loader.dismiss();}
                 );
-              });
+              },(response)=>{ loader.dismiss();});
           }
         }
       ]

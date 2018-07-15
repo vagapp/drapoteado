@@ -95,9 +95,11 @@ export class ProgresocitaModalPage {
 
 
       finalizar(){
+        let exmsg = "";
+        if(Number(this.activeCita.addedServices.length) === 0){ exmsg = 'Aun no se ha agregado ningún servicio a esta cita';}
         let alert = this.alertCtrl.create({
           title: 'Finalizar',
-          message: '¿Está seguro de que desea Finalizar la consulta?',
+          message: `Está seguro de que desea Finalizar la consulta? ${exmsg}`,
           buttons: [
             {
               text: 'Cancelar',
