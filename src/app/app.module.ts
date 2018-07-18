@@ -24,6 +24,8 @@ import { FacturacionPage } from '../pages/facturacion/facturacion';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Clipboard } from '@ionic-native/clipboard';
+import { OneSignal } from '@ionic-native/onesignal';
+
 
 import { HeaderComponent } from '../components/header/header';
 import { FooterComponent } from '../components/footer/footer';
@@ -107,6 +109,7 @@ import { RecoverModalPage } from '../pages/recover-modal/recover-modal';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserDataProvider,
     HttpClient,
+    OneSignal,
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

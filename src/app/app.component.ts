@@ -2,6 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, LoadingController, ModalController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { OneSignal, OSNotificationPayload } from '@ionic-native/onesignal';
+import { isCordovaAvailable } from '../common/is-cordova-available';
+
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
@@ -14,6 +17,7 @@ import { UserDataProvider } from '../providers/user-data/user-data';
 import { FacturacionPage } from '../pages/facturacion/facturacion';
 import { Debugger } from '../providers/user-data/debugger';
 import { RegisterModalPage } from '../pages/register-modal/register-modal';
+
 
 @Component({
   templateUrl: 'app.html'
@@ -35,7 +39,8 @@ export class MyApp {
     public splashScreen: SplashScreen,
     public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    private oneSignal: OneSignal
   ) {
     this.initializeApp();
 
@@ -50,8 +55,26 @@ export class MyApp {
     ];
   }
 
+  /**
+   * ONESIGNAL WEB NOTIFICATION
+   * <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+<script>
+  var OneSignal = window.OneSignal || [];
+  OneSignal.push(function() {
+    OneSignal.init({
+      appId: "7902c2ba-310b-4eab-90c3-8cae53de891f",
+      autoRegister: false,
+      notifyButton: {
+        enable: true,
+      },
+    });
+  });
+</script>
+   * **/
+
   initializeApp() {
     this.platform.ready().then(() => {
+      this.initOnesignal();
       this.splashScreen.hide();
       Debugger.log(['platform redy']);
       let loading = this.loadingCtrl.create({
@@ -130,6 +153,26 @@ export class MyApp {
 });
 
     });
+  }
+
+
+  initOnesignal(){
+    if (isCordovaAvailable()){
+      this.oneSignal.startInit('7902c2ba-310b-4eab-90c3-8cae53de891f', '470345987173');
+      this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
+      this.oneSignal.handleNotificationReceived().subscribe(data => this.onPushReceived(data.payload));
+      this.oneSignal.handleNotificationOpened().subscribe(data => this.onPushOpened(data.notification.payload));
+      this.oneSignal.endInit();
+      //postNotification(Parameters)
+    } 
+  }
+
+  private onPushReceived(payload: OSNotificationPayload) {
+    alert('Push recevied:' + payload.body);
+  }
+  
+  private onPushOpened(payload: OSNotificationPayload) {
+    alert('Push opened: ' + payload.body);
   }
 
   /*initCheckSession(){
