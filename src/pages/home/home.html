@@ -35,7 +35,7 @@
               <!--</span>-->
 
                 <div class="section" *ngFor="let nextCita of this.userData.nextCitas">
-                          <span class="spanBlock bigSubFont">Proxima Cita</span>
+                          <span class="spanBlock bigSubFont">Próxima Cita</span>
                           <span *ngIf="nextCita && (!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]))" class="spanBlock">{{nextCita.doctor_name}} / {{nextCita.doctor_alias}}</span>
                           <span *ngIf="nextCita" class="spanBlock bigSubFont"><b>{{nextCita.data.field_paciente.und[0].value}}</b></span>
                           <span *ngIf="!nextCita" class="spanBlock bigSubFont"><b>No hay citas próximas</b></span>
