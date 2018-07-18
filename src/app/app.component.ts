@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { OneSignal, OSNotificationPayload } from '@ionic-native/onesignal';
 import { isCordovaAvailable } from '../common/is-cordova-available';
+import { storage } from 
 
 
 import { HomePage } from '../pages/home/home';
@@ -158,7 +159,17 @@ export class MyApp {
 
   initOnesignal(){
     if (isCordovaAvailable()){
-      this.oneSignal.startInit('7902c2ba-310b-4eab-90c3-8cae53de891f', '470345987173');
+      var iosSettings = {};
+      iosSettings["kOSSettingsKeyAutoPrompt"] = true;
+      iosSettings["kOSSettingsKeyInAppLaunchURL"] = false;
+      // Initialise plugin with OneSignal service
+      this.oneSignal.startInit('7902c2ba-310b-4eab-90c3-8cae53de891f', '470345987173').iOSSettings(iosSettings);
+      this.oneSignal.getIds()
+      .then((ids) =>
+      {
+         console.log('getIds: ' + JSON.stringify(ids));
+         this.userData.onseignalDid = ids;
+      });
       this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
       this.oneSignal.handleNotificationReceived().subscribe(data => this.onPushReceived(data.payload));
       this.oneSignal.handleNotificationOpened().subscribe(data => this.onPushOpened(data.notification.payload));
