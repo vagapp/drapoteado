@@ -117,5 +117,8 @@
     <engine name="android" spec="7.0.0" />
     <engine name="browser" spec="5.0.3" />
     <engine name="ios" spec="^4.4.0" />
+<<<<<<< HEAD
+>>>>>>> a50342513b2084db2e0fedbc96e4c8a8031c78d6
+=======
 >>>>>>> a50342513b2084db2e0fedbc96e4c8a8031c78d6
 </widget>
