@@ -6,6 +6,7 @@ import { Http } from '@angular/http';
 
 //import { Storage } from '@ionic/storage';
 import { Citas } from './citas';
+import { Notification } from './Notification';
 import { Doctores } from './doctores';
 import { servicios } from './servicios';
 import { Subject } from 'rxjs/Subject';
@@ -42,6 +43,8 @@ export class UserDataProvider {
   citasCobrar:Citas[]; // citas por cobrar
   citasActivas:Citas[];  //cita activa
   citasParaHoy:number = 0; //numero de citas pendientes para hoy.
+
+  notificaciones: Notification[] = new Array();
 
   error_sub_is_full:boolean = false;
 
@@ -169,6 +172,7 @@ export class UserDataProvider {
     //this.nextCitas = new Array();;
     this.doctores = new Array();
     this.threadloop();
+    this.cargarNotificaciones();
   }
 
   requestToken(){
@@ -376,6 +380,7 @@ export class UserDataProvider {
     setInterval(() => {
       if(this.userData.uid && this.userData.uid != 0){
       this.cargarCitas();
+      this.cargarNotificaciones();
       let now = new Date();
       this.showhour = `${UserDataProvider.formatDateBinaryNumber( now.getHours() )}:${UserDataProvider.formatDateBinaryNumber( now.getMinutes() )}`;
     }
@@ -1362,6 +1367,51 @@ export class UserDataProvider {
   }
 
 
+  /** 
+   * NOTIFICACIONES
+   * **/
+  cargarNotificaciones(){
+    this.getDummynotes();
+  }
+
+  getDummynotes(){
+    this.notificaciones = new Array();
+    let aux_notification = new Notification();
+    let aux_input_data = {
+      field_title:{und:[{value:"titulo"}]},
+      field_subtitle:{und:[{value:"subtitle"}]},
+      field_text:{und:[{value:"texto lelelalsas"}]},
+      field_read:{und:[{value:true}]},
+      field_user:{und:[76]},
+    };
+    aux_notification.setData(aux_input_data);
+    this.notificaciones.push(aux_notification);
+    aux_notification = new Notification();
+    aux_input_data = {
+      field_title:{und:[{value:"titulo2"}]},
+      field_subtitle:{und:[{value:"subtitle2"}]},
+      field_text:{und:[{value:"texto lelelalsas2"}]},
+      field_read:{und:[{value:true}]},
+      field_user:{und:[76]},
+    };
+    aux_notification.setData(aux_input_data);
+    this.notificaciones.push(aux_notification);
+  }
+
+  generateNotification( forUid:number[] , title:string , subtitle:string, text:string ){
+    forUid.forEach(uid => {
+      let newNotification = new Notification();
+      newNotification.user = uid;
+      newNotification.read = false;
+      newNotification.title = title;
+      newNotification.subtitle = subtitle;
+      newNotification.text = text;
+      const auxdata = newNotification.getData();
+      Debugger.log(['send data to endpoiint',auxdata]);
+    });
+   
+
+  }
  
 
 
@@ -1491,6 +1541,8 @@ export class UserDataProvider {
     let observer = this.http.post(url,body,{headers});
     return observer;
   }
+
+  
 
 
 /**

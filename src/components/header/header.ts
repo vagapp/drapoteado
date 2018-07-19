@@ -6,6 +6,8 @@ import { Debugger } from '../../providers/user-data/debugger';
 import { FacturacionPage } from '../../pages/facturacion/facturacion';
 import { HomePage } from '../../pages/home/home';
 import { RegisterModalPage } from '../../pages/register-modal/register-modal';
+import { PopoverController } from 'ionic-angular';
+import { NotificationPopPage }from '../../pages/notification-pop/notification-pop';
 
 /**
  * Generated class for the HeaderComponent component.
@@ -22,11 +24,14 @@ export class HeaderComponent {
   fntColor:"FFFFFF";
   authObservable = null;
   susObservable = null;
+  showNotifications:boolean = false;
+
   pagename = this.navCtrl.getActive().name;
   constructor(
     public userData: UserDataProvider,
     public navCtrl:NavController,
-    public loadingCtrl:LoadingController
+    public loadingCtrl:LoadingController,
+    public popoverCtrl: PopoverController
   ) {
     console.log('Loading Header Component check session');
     //this.text = 'Hello World';
@@ -76,6 +81,17 @@ export class HeaderComponent {
       this.navCtrl.setRoot(HomePage);
     }
   }
+
+  toggleNotifications() {
+    this.showNotifications = !this.showNotifications;
+    Debugger.log(['abrirpopoveer', this.showNotifications]);
+  }
+
+  notificationClick( notification ){
+    Debugger.log(['notification',notification]);
+  }
+
+
 
   
 

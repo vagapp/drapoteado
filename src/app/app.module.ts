@@ -19,6 +19,7 @@ import { ServiciosPage } from '../pages/servicios/servicios';
 import { UsuariosPage } from '../pages/usuarios/usuarios';
 import { ReportesPage } from '../pages/reportes/reportes';
 import { FacturacionPage } from '../pages/facturacion/facturacion';
+import { NotificationPopPage } from '../pages/notification-pop/notification-pop';
 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -66,6 +67,7 @@ import { RecoverModalPage } from '../pages/recover-modal/recover-modal';
     FacturacionPage,
     LoginPage,
     CitasPage,
+    NotificationPopPage
   ],
   imports: [
     IonicModule.forRoot(MyApp, {
@@ -100,7 +102,8 @@ import { RecoverModalPage } from '../pages/recover-modal/recover-modal';
     ReportesPage,
     FacturacionPage,
     CitasPage,
-    LoginPage
+    LoginPage,
+    NotificationPopPage
   ],
   providers: [
     StatusBar,

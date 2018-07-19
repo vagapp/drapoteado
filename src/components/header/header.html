@@ -18,11 +18,16 @@
     <div class="drap_global_header">
         <img  (click)="goHome()"  src="assets/imgs/logo-blanco.svg" class="header_logo_drap"/>
         <div class="menu_buttons">
-          <div class="header_span header_span_name">{{this.userData.userData.name}}</div>
+          <div class="header_span header_span_name" (click)="toggleNotifications($event)">{{this.userData.userData.name}}
+            <div class="pop_body" *ngIf="this.showNotifications">
+              <div *ngFor="let notification of this.userData.notificaciones" class="notification_item" (click)="notificationClick(notification)">
+                  <span class="notification_title">{{notification.title}}</span>{{notification.subtitle}}
+              </div>
+        </div>
+          </div>
           <div class="header_span header_showdate">{{this.userData.showhour}}</div>
           <div menuToggle><img src="assets/imgs/menu.svg" class="header_menu_drap" /></div>
         </div>
-        
         </div>
     </ion-header>
   
