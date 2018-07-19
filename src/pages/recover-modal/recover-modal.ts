@@ -54,8 +54,7 @@ export class RecoverModalPage {
       );
     }
   }
-
-
+  
   presentAlert(key,Msg) {
     let alert = this.alertCtrl.create({
       title: key,

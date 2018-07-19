@@ -7,6 +7,7 @@ import { planes } from '../../providers/user-data/planes';
 import { HomePage } from '../home/home';
 import { subscriptions } from '../../providers/user-data/subscriptions';
 import { Clipboard } from '@ionic-native/clipboard';
+import { isCordovaAvailable } from '../../common/is-cordova-available';
 
 declare var Stripe;
 
@@ -28,7 +29,10 @@ export class RegisterModalPage {
   grupoOtro:string = null;
   hospitalOotro:string = null; 
   onHospital:boolean = null;
-
+  
+  get onCordova(){
+    return isCordovaAvailable;
+  }
 
   stripe = Stripe('pk_test_4CJTbKZki9tC21cGTx4rLPLO');
   sources:sources[] = new Array();

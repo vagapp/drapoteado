@@ -171,7 +171,7 @@ export class UsuariosPage {
 
   addUsuario( userd ){
     let loader = this.loadingCtrl.create({
-      content: "removiendo usuario . . ."
+      content: "agregando usuario . . ."
     });
     loader.present();
     if( !userd.field_doctores.und ){  userd.field_doctores.und = new Array();}
@@ -225,11 +225,12 @@ export class UsuariosPage {
     let doctors_array =  new Array();
     doctors_array.push(this.userData.userData.uid);
     let ids = null;
-    if(this.userData.checkUserPlanHolder() && this.userData.subscription.field_subusuarios){
+    //if(this.userData.checkUserPlanHolder() && this.userData.subscription.field_subusuarios){
       //si es planholder no busca sus usuarios si no todos los usuarios de esta subscripcion
       ids = this.userData.subscription.field_subusuarios;
+      Debugger.log(['subusers ids to load',ids]);
       doctors_array = null;
-    }
+    //}
     this.userData.getUsers(doctors_array, null, ids).subscribe(
       (val)=>{ 
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });

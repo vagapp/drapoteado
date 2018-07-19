@@ -28,7 +28,7 @@
                 <td><b>{{user.uid}}</b>{{user.name}}</td>
                 <td class="fontHight">{{this.userData.getTipoUsuarioString(user.field_tipo_de_usuario.und[0])}}</td>
                 <td class="toolCol">
-                  <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="editUsuario(user)">
+                  <img     *ngIf="this.userData.checkUserPlanHolder()"  src="assets/imgs/editar.svg" class="icon_drapo" (click)="editUsuario(user)">
                   <button  *ngIf="user.field_doctores.und.indexOf(this.userData.userData.uid) >= 0"  (click)="removeUsuariopop(user)" class="bgColorPrimary generalButton tableButton">Remover</button>
                   <button  *ngIf="user.field_doctores.und.indexOf(this.userData.userData.uid) === -1"  (click)="agregarusuariopop(user)" class="bgColorPrimary generalButton tableButton">Agregar</button>
                   <button  *ngIf="this.userData.checkUserPlanHolder()"  (click)="deleteUsuario(user,true)" class="bgColorPrimary generalButton tableButton">Eliminar</button>

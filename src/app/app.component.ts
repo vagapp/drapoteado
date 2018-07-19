@@ -4,8 +4,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { OneSignal, OSNotificationPayload } from '@ionic-native/onesignal';
 import { isCordovaAvailable } from '../common/is-cordova-available';
-import { storage } from 
-
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
@@ -76,7 +74,7 @@ export class MyApp {
   initializeApp() {
     this.platform.ready().then(() => {
       this.initOnesignal();
-      this.splashScreen.hide();
+      if(isCordovaAvailable)this.splashScreen.hide();
       Debugger.log(['platform redy']);
       let loading = this.loadingCtrl.create({
         content: 'Bienvenido'
