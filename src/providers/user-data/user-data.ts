@@ -32,6 +32,8 @@ export class UserDataProvider {
 
   showhour:string = '00:00';
 
+  onseignalDid = null;
+
   //datos de citas. los necesito globales para usarlos en la pagina de home. ademas las voy a ligar con algun servicio servidor cosa para comunicacion bilineal
   citas:Citas[]; //listado de todas las citas
   nextCitas:Citas[]; //proxima cita pendiente
