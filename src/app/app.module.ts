@@ -31,10 +31,13 @@ import { OneSignal } from '@ionic-native/onesignal';
 import { HeaderComponent } from '../components/header/header';
 import { FooterComponent } from '../components/footer/footer';
 import { ComponentsModule } from '../components/components.module';
+import { DirectivesModule } from '../directives/directives.module';
 import { UserDataProvider } from '../providers/user-data/user-data';
 import {HttpClientModule} from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { HTTP } from '@ionic-native/http';
+import { ClickOutsideModule } from 'ng-click-outside';
+ 
 
 import { IonicStorageModule } from '@ionic/storage';
 
@@ -45,6 +48,7 @@ import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
 import { Platform } from 'ionic-angular';
 import { RecoverModalPage } from '../pages/recover-modal/recover-modal';
+
 
 
 @NgModule({
@@ -67,7 +71,7 @@ import { RecoverModalPage } from '../pages/recover-modal/recover-modal';
     FacturacionPage,
     LoginPage,
     CitasPage,
-    NotificationPopPage
+    NotificationPopPage,
   ],
   imports: [
     IonicModule.forRoot(MyApp, {
@@ -81,7 +85,9 @@ import { RecoverModalPage } from '../pages/recover-modal/recover-modal';
     NativeHttpModule,
     HttpModule,
     IonicStorageModule.forRoot(),
-    ComponentsModule
+    ComponentsModule,
+    DirectivesModule,
+    ClickOutsideModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

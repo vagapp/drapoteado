@@ -42,7 +42,7 @@ export class MyApp {
     private oneSignal: OneSignal
   ) {
     this.initializeApp();
-
+    
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },

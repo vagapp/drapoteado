@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ElementRef } from '@angular/core';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { NavController, Loading, LoadingController } from 'ionic-angular';
 import { LoginPage } from '../../pages/login/login';
@@ -8,6 +8,7 @@ import { HomePage } from '../../pages/home/home';
 import { RegisterModalPage } from '../../pages/register-modal/register-modal';
 import { PopoverController } from 'ionic-angular';
 import { NotificationPopPage }from '../../pages/notification-pop/notification-pop';
+
 
 /**
  * Generated class for the HeaderComponent component.
@@ -31,7 +32,8 @@ export class HeaderComponent {
     public userData: UserDataProvider,
     public navCtrl:NavController,
     public loadingCtrl:LoadingController,
-    public popoverCtrl: PopoverController
+    public popoverCtrl: PopoverController,
+    private eRef: ElementRef
   ) {
     console.log('Loading Header Component check session');
     //this.text = 'Hello World';
@@ -73,7 +75,14 @@ export class HeaderComponent {
         this.navCtrl.setRoot(LoginPage);
     });
   }
-
+  @HostListener('document:click', ['$event'])
+  clickout(event) {
+    if(this.eRef.nativeElement.contains(event.target)) {
+      console.log("in");
+    } else {
+      console.log("out");
+    }
+  }
   goHome(){
     this.pagename = this.navCtrl.getActive().name;
     if(this.pagename.localeCompare('HomePage') !== 0){
@@ -82,9 +91,14 @@ export class HeaderComponent {
     }
   }
 
-  toggleNotifications() {
-    this.showNotifications = !this.showNotifications;
+  openNotifications() {
+    this.showNotifications = true;
     Debugger.log(['abrirpopoveer', this.showNotifications]);
+  }
+
+  closeNotifications(){
+    this.showNotifications = false;
+    Debugger.log(['clickoutside works', this.showNotifications]);
   }
 
   notificationClick( notification ){
