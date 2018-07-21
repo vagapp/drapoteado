@@ -17,6 +17,7 @@ import { Citas } from '../../providers/user-data/citas';
 import { FacturacionPage } from '../facturacion/facturacion';
 import { RegisterModalPage } from '../register-modal/register-modal';
 import { Debugger } from '../../providers/user-data/debugger';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 
 @Component({
@@ -24,6 +25,7 @@ import { Debugger } from '../../providers/user-data/debugger';
   templateUrl: 'home.html'
 })
 export class HomePage {
+  rifa:string = 'nadien';
 
   constructor(
     public navCtrl: NavController,
@@ -161,6 +163,17 @@ export class HomePage {
       buttons: ['Dismiss']
     });
     alert.present();
+  }
+
+  calcularRifa(){
+    let random = Math.floor(Math.random() * 6) + 1;
+    switch(random){
+      case 1: this.rifa="ernesto"; break;
+      case 2: this.rifa="andrea"; break;
+      case 3: this.rifa="panchito"; break;
+      case 4: this.rifa="lucia"; break;
+      case 5: this.rifa="alberto"; break;
+    }
   }
   
 }

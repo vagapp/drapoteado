@@ -34,6 +34,9 @@ export class UserDataProvider {
   showhour:string = '00:00';
 
   onseignalDid = null;
+  onesignalAPPid:string = '7902c2ba-310b-4eab-90c3-8cae53de891f';
+  onesignalSenderid:string = '470345987173';
+  cargandoNotif:boolean = false;
 
   //datos de citas. los necesito globales para usarlos en la pagina de home. ademas las voy a ligar con algun servicio servidor cosa para comunicacion bilineal
   citas:Citas[]; //listado de todas las citas
@@ -1371,7 +1374,48 @@ export class UserDataProvider {
    * NOTIFICACIONES
    * **/
   cargarNotificaciones(){
-    this.getDummynotes();
+    this.cargandoNotif = true;
+    let uidFilter = `?args[0]=${this.userData.uid}` ;
+    let url = this.urlbase+'appoint/rest_notifications.json'+uidFilter;
+    Debugger.log(["cargarNotificaciones url",url]);
+    let headers = new HttpHeaders(
+      {'Content-Type':'application/json; charset=utf-8',
+      'X-CSRF-Token': ""+this.sessionData.token,
+      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
+    });
+    let observer = this.http.get(url,{headers});
+    observer.subscribe(
+      (val)=>{
+        Debugger.log(['cargarNotificaciones raw val',val]);
+        let aux_results = Object.keys(val).map(function (key) { return val[key]; });
+        aux_results.forEach(noti => {
+           let found = false;
+           this.notificaciones.forEach(snoti => {
+             if(Number(snoti.Nid) === Number(noti.nid)){
+               found = true;
+               snoti.setData(noti);
+             }
+           });
+           if(!found){
+             let aux_notification = new Notification();
+             aux_notification.setData(noti);
+             this.notificaciones.push(aux_notification);
+           }
+        });
+        this.cargandoNotif = false;
+      },(response)=>{this.cargandoNotif = false;});
+    return observer;
+  }
+
+  savePlayerID(){
+    let aux_user_data = {
+      uid: this.userData.uid,
+      field_playerid:{und:[{value:this.onseignalDid}]},
+    }
+    this.updateUserd(aux_user_data).subscribe(
+      (val)=>{Debugger.log(['PlayerIDsaved']);},
+      (response)=>{Debugger.log(['PlayerIDsave error',response]);}
+    );
   }
 
   getDummynotes(){
@@ -1398,7 +1442,7 @@ export class UserDataProvider {
     this.notificaciones.push(aux_notification);
   }
 
-  generateNotification( forUid:number[] , title:string , subtitle:string, text:string ){
+  generateNotification( forUid:number[] ,playerIDs:string[], title:string , subtitle:string, text:string ){
     forUid.forEach(uid => {
       let newNotification = new Notification();
       newNotification.user = uid;
@@ -1408,7 +1452,19 @@ export class UserDataProvider {
       newNotification.text = text;
       const auxdata = newNotification.getData();
       Debugger.log(['send data to endpoiint',auxdata]);
+
     });
+    if(playerIDs && playerIDs.length !== 0){
+    let notificationObj  = {app_id: '7902c2ba-310b-4eab-90c3-8cae53de891f',
+      include_player_ids: playerIDs,
+      contents: {
+          en: title
+      },
+      headings: {
+          en: text
+      }
+            }
+      }
    
 
   }

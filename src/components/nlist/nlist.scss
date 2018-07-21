@@ -1,0 +1,43 @@
+nlist {
+    .pop_body{
+        /*display:none !important;*/
+        padding: 0 !important;
+        position: absolute;
+        min-height: 20px;
+        width: 400px;
+        background: white;
+        top: 60px;
+        left: -200px;
+        color: #4D4D4D;
+        font-size:1.5rem;
+        -webkit-box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.45);
+        -moz-box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.45);
+        box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.45);
+        border-radius: 10px 10px 10px 10px;
+        -moz-border-radius: 10px 10px 10px 10px;
+        -webkit-border-radius: 10px 10px 10px 10px;
+        border: 0px solid #4D4D4D;
+    }
+
+    .pop_body .notification_item{
+        display: flex;
+        justify-content:flex-start;
+        align-items: baseline;
+        border-bottom: 1px solid lightgray;
+        padding: 20px;
+        cursor: pointer;
+    }
+
+    .pop_body .notification_item:hover{
+       background-color: lightgray;
+    }
+
+    .pop_body .notification_item:last-child{
+        border-bottom:none !important;
+    }
+
+    .notification_title{
+        font-size:1.8rem;
+        margin-right: 10px;
+    }
+}

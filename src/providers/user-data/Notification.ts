@@ -1,3 +1,5 @@
+import { Debugger } from "./debugger";
+
 export class Notification{
     Nid:number = null;
     title: string; //titulo de la notificacion
@@ -10,13 +12,50 @@ export class Notification{
     }
 
     setData( input_data ){
-        this.Nid = input_data['Nid'];
-        this.title = input_data['field_title']['und']['0']['value'];
-        this.subtitle = input_data['field_subtitle']['und']['0']['value'];
-        this.text = input_data['field_text']['und']['0']['value'];
-        this.user = input_data['field_user']['und']['0'];
+        Debugger.log(['trynna set noti data from',input_data]);
+        this.Nid = input_data['nid'];
+        this.title = input_data['field_title']['value'];
+        this.subtitle = input_data['field_subtitle']['value'];
+        this.text = input_data['field_text']['value'];
+        this.user = input_data['field_user']['uid'];
+        Debugger.log(['item generated is this',this]);
         }
-
+        /*
+            array (
+  0 => 
+  stdClass::__set_state(array(
+     'nid' => '183',
+     'title' => 'Notitest1',
+     'field_read' => 
+    array (
+      'value' => '0',
+    ),
+     'field_subtitle' => 
+    array (
+      'value' => 'subtitle',
+      'format' => NULL,
+      'safe_value' => 'subtitle',
+    ),
+     'field_text' => 
+    array (
+      'value' => 'text testes texte ',
+      'format' => NULL,
+      'safe_value' => 'text testes texte ',
+    ),
+     'field_title' => 
+    array (
+      'value' => 'Notitest1',
+      'format' => NULL,
+      'safe_value' => 'Notitest1',
+    ),
+     'field_user' => 
+    array (
+      'uid' => '76',
+      'access' => true,
+    ),
+  )),
+)
+        */
     getData(){
         let aux_data = {
             Nid: this.Nid,

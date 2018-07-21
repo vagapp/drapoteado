@@ -167,6 +167,7 @@ export class MyApp {
       {
          console.log('getIds: ' + JSON.stringify(ids));
          this.userData.onseignalDid = ids;
+         this.userData.savePlayerID();
       });
       this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
       this.oneSignal.handleNotificationReceived().subscribe(data => this.onPushReceived(data.payload));

@@ -14,16 +14,12 @@
     </ion-navbar>
   </ion-header>-->
 
-  <ion-header >
+  <ion-header>
     <div class="drap_global_header">
         <img  (click)="goHome()"  src="assets/imgs/logo-blanco.svg" class="header_logo_drap"/>
         <div class="menu_buttons">
-          <div class="header_span header_span_name" (click)="openNotifications()">{{this.userData.userData.name}}
-            <div class="pop_body" *ngIf="this.showNotifications" outside-click="closeNotifications()">
-              <div *ngFor="let notification of this.userData.notificaciones" class="notification_item"  (click)="notificationClick(notification)">
-                  <span class="notification_title">{{notification.title}}</span>{{notification.subtitle}}
-              </div>
-        </div>
+          <div class="header_span header_span_name open_nlist1">{{this.userData.userData.name}}
+            <nlist [nlistn]="1" [openClass]="'open_nlist1'"></nlist>
           </div>
           <div class="header_span header_showdate">{{this.userData.showhour}}</div>
           <div menuToggle><img src="assets/imgs/menu.svg" class="header_menu_drap" /></div>

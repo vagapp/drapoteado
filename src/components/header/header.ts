@@ -75,34 +75,13 @@ export class HeaderComponent {
         this.navCtrl.setRoot(LoginPage);
     });
   }
-  @HostListener('document:click', ['$event'])
-  clickout(event) {
-    if(this.eRef.nativeElement.contains(event.target)) {
-      console.log("in");
-    } else {
-      console.log("out");
-    }
-  }
+ 
   goHome(){
     this.pagename = this.navCtrl.getActive().name;
     if(this.pagename.localeCompare('HomePage') !== 0){
       Debugger.log(['implying this is not Home page']);
       this.navCtrl.setRoot(HomePage);
     }
-  }
-
-  openNotifications() {
-    this.showNotifications = true;
-    Debugger.log(['abrirpopoveer', this.showNotifications]);
-  }
-
-  closeNotifications(){
-    this.showNotifications = false;
-    Debugger.log(['clickoutside works', this.showNotifications]);
-  }
-
-  notificationClick( notification ){
-    Debugger.log(['notification',notification]);
   }
 
 
