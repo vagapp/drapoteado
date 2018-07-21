@@ -74,6 +74,7 @@ export class MyApp {
   initializeApp() {
     this.platform.ready().then(() => {
       this.initOnesignal();
+      
       if(isCordovaAvailable)this.splashScreen.hide();
       Debugger.log(['platform redy']);
       let loading = this.loadingCtrl.create({
@@ -104,6 +105,8 @@ export class MyApp {
               console.log(val);
               this.userData.setUserData(val);
               this.userData.cargarSubscription();
+              this.userData.cargarNotificaciones();
+              this.userData.generateNotification([76],null,'inaptestnoti','subtitleinap','estaesunanotificacion de prueba');
               let moveinterval = setInterval(() =>{
                 Debugger.log(['checking initiation']);
                 Debugger.log(['planes set',this.userData.are_planes_set]);
@@ -115,8 +118,10 @@ export class MyApp {
                   this.userData.subscription.is_plan_set
                 ){
                   Debugger.log(["check of suscription",this.userData.subscription]);
+                 
                   if(Number(this.userData.subscription.field_active) === 0){
                   //this.rootPage=RegisterModalPage;
+                 
                   this.rootPage = HomePage;
                   loading.dismiss();
                   clearInterval(moveinterval);
@@ -161,7 +166,7 @@ export class MyApp {
       iosSettings["kOSSettingsKeyAutoPrompt"] = true;
       iosSettings["kOSSettingsKeyInAppLaunchURL"] = false;
       // Initialise plugin with OneSignal service
-      this.oneSignal.startInit('7902c2ba-310b-4eab-90c3-8cae53de891f', '470345987173').iOSSettings(iosSettings);
+      this.oneSignal.startInit(this.userData.onesignalAPPid, this.userData.onesignalSenderid).iOSSettings(iosSettings);
       this.oneSignal.getIds()
       .then((ids) =>
       {

@@ -15,6 +15,7 @@ import { subscriptions } from './subscriptions';
 import { Debugger } from './debugger';
 import { reportes } from './reportes';
 import { Observable } from 'rxjs/Observable';
+import { isCordovaAvailable } from '../../common/is-cordova-available';
 
 
 /*
@@ -175,7 +176,7 @@ export class UserDataProvider {
     //this.nextCitas = new Array();;
     this.doctores = new Array();
     this.threadloop();
-    this.cargarNotificaciones();
+
   }
 
   requestToken(){
@@ -1443,6 +1444,7 @@ export class UserDataProvider {
   }
 
   generateNotification( forUid:number[] ,playerIDs:string[], title:string , subtitle:string, text:string ){
+    let notificationDatas =  new Array();
     forUid.forEach(uid => {
       let newNotification = new Notification();
       newNotification.user = uid;
@@ -1452,9 +1454,16 @@ export class UserDataProvider {
       newNotification.text = text;
       const auxdata = newNotification.getData();
       Debugger.log(['send data to endpoiint',auxdata]);
-
+      this.generateNewNode(auxdata).subscribe(
+        (val)=>{
+          Debugger.log(['notification creation val raw',val]);
+        },(response)=>{
+          Debugger.log(['notification responses error',response]);
+        });
     });
-    if(playerIDs && playerIDs.length !== 0){
+    
+      if(isCordovaAvailable){ //si cordova esta activo intentara crear notificaciones 
+    if(playerIDs && playerIDs.length !== 0){ //si tenemos playerids a los que mandar la notificacion (que aun no puedo obtener porque no he guardado)
     let notificationObj  = {app_id: '7902c2ba-310b-4eab-90c3-8cae53de891f',
       include_player_ids: playerIDs,
       contents: {
@@ -1465,7 +1474,8 @@ export class UserDataProvider {
       }
             }
       }
-   
+      //  crear notificacion aqui pushearla ahi con el metodo ese
+    }
 
   }
  
