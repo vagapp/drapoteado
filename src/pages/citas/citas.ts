@@ -105,6 +105,12 @@ export class CitasPage {
       loader.present();
       this.userData.updateCitaState(cita,state).subscribe(
         (val)=>{
+          if(Number(state) === 1){
+            this.userData.generateNotification([cita.data.field_cita_doctor.und[0]],null,'Cita Confirmada',`con ${cita.paciente}`,`${new Date(cita.data.field_datemsb['und'][0]['value'])}`);
+          }
+          if(Number(state) === 3){
+            this.userData.generateNotification([cita.data.field_cita_caja.und[0]],null,'Cita a cobrar',`de ${cita.paciente}`,`Una cita esta en espera de cobro`);
+          }
           loader.dismiss();
           this.cargarCitas();
         },

@@ -40,13 +40,15 @@ export class UserDataProvider {
   cargandoNotif:boolean = false;
 
   //datos de citas. los necesito globales para usarlos en la pagina de home. ademas las voy a ligar con algun servicio servidor cosa para comunicacion bilineal
-  citas:Citas[]; //listado de todas las citas
-  nextCitas:Citas[]; //proxima cita pendiente
-  citasPendientes:Citas[]; //citas pendientes
-  citasCloser:Citas[];
-  citasCobrar:Citas[]; // citas por cobrar
-  citasActivas:Citas[];  //cita activa
-  citasParaHoy:number = 0; //numero de citas pendientes para hoy.
+  citas: Citas[]; //listado de todas las citas
+  nextCitas: Citas[]; //proxima cita pendiente
+  citasPendientes: Citas[]; //citas pendientes
+  citasCloser: Citas[];
+  citasCobrar: Citas[]; // citas por cobrar
+  citasActivas: Citas[];  //cita activa
+  citasParaHoy: number = 0; //numero de citas pendientes para hoy.
+  citasRetrasadas: Citas[]; //citasRetrasadas
+  
 
   notificaciones: Notification[] = new Array();
 
@@ -73,7 +75,7 @@ export class UserDataProvider {
   //loop and options:
   loopMs:number = 10000; //Milisegundos que tarde en actualizar las citas.
   loopSusMs:number = 60000; //millisegundos que tarda en actualizar la suscripcion.
-  loopUntiCitas:number = 1000; //milisegundos para actualizar el ultiMS de las citas.
+  loopUntiCitas:number = 1000; //milisegundos para actualizar el ultiMS de las citas y las listas de citas.
   ShowCitaUntilMs:Number = (60*60*1000); //Milisegundos para que deben quedarle a una cita para que se muestre en la pantalla de inicio, (si va a empezar en tantos ms o menos aparece)
 
   //VARIABLES STATICAS, y osea se necesitan getters porque los html no pueden acceder a las variables static que pedo
@@ -173,7 +175,6 @@ export class UserDataProvider {
     this.showCaja = false;
     this.showReception = false;
     this.citas = new Array();
-    //this.nextCitas = new Array();;
     this.doctores = new Array();
     this.threadloop();
 
@@ -186,10 +187,6 @@ export class UserDataProvider {
       'Content-Type':'application/json; charset=utf-8'
     });
     let observer = this.http.post(url,"",{headers});
-    /*observer.subscribe((val)=>{
-     this.sessionData.token = val['token'];
-     console.log("token updated",this.sessionData.token);
-    });*/
     return observer;
   
   }
@@ -252,12 +249,6 @@ export class UserDataProvider {
       'X-CSRF-Token': ""+this.sessionData.token,
     });
     let observer = this.http.post(url,"",{headers});
-    /*observer.subscribe((val)=>{
-     console.log('connect ret',val);
-    },(error)=>{
-      Debugger.log(['ERROR WHILE CONNECT',false]);
-      this.logout();
-    });*/
     return observer;
   }
 
@@ -267,8 +258,6 @@ export class UserDataProvider {
 
 
   requestUserData(uid){
-    //console.log("tryna fetch userdata",uid );
-    //recovers user data from the user uid
       let url = this.urlbase+'appoint/user/'+uid;
       let headers = new HttpHeaders(
         {'Content-Type':'application/json; charset=utf-8',
@@ -395,13 +384,14 @@ export class UserDataProvider {
     this.cargarSubscription();
   }
  }, this.loopSusMs);
- /*setInterval(() => {
+ setInterval(() => {
   if(this.citas && this.citas.length > 0){
-    this.nextCitas.forEach(aux_cita => {
+    this.organizarCitas();
+    /*this.nextCitas.forEach(aux_cita => {
       aux_cita.getUntilMs();
-    });
+    });*/
   }
-}, this.loopUntiCitas);*/
+}, this.loopUntiCitas);
   }
 
 
@@ -797,49 +787,28 @@ export class UserDataProvider {
   cargarCitas( logoutonerror = true ):Observable<any>{
     let ret = null;
     console.log("cargando citas");
-    /*let date = new Date();
-    let datestrings = UserDataProvider.getTodayDateTimeStringsSearchFormat();
-    let datestring = datestrings.datestring;
-    let timestring = datestrings.timestring;
-    console.log("simple array got",this.getDoctoresSimpleArray());
-    let dis = this;*/
-    //ret = this.getCitas(datestring,datestring,this.getDoctoresSimpleArray(),new Array(),new Array());
     let UTdates = UserDataProvider.getNowUTdates();
     Debugger.log([` dates searching en cargar citas es ${UTdates.start}--${UTdates.end}`]);
     ret = this.getCitasUTms(`${UTdates.start}--${UTdates.end}`,this.getDoctoresSimpleArray(),new Array(),new Array());
     ret.subscribe(
       (val)=>{
-        Debugger.log(['cargarcitas responce got']);
-        let aux_results = Object.keys(val).map(function (key) { return val[key]; });
-        aux_results.forEach(element => {
-          let citaIndex = this.getCitaIndexByNid(element.Nid);
+        //aqui creamos el pool de citas, este pool sirve para que los doctores tomen y administren las citas que tienen.
+        Debugger.log(['citas Cargadas',val]);
+        for( let cita of val ){
+          let citaIndex = this.getCitaIndexByNid(cita.Nid);
           if(citaIndex > -1){
-            this.citas[citaIndex].setData(element);
+            this.citas[citaIndex].setData(cita);
           }else{
           let aux_cita = new Citas();
-          aux_cita.setData(element);
+          aux_cita.setData(cita);
           this.citas.push(aux_cita);
-        }
-        //aux_citasparahoy++;
-       });
-       //this.citasParaHoy = aux_citasparahoy;
-       console.log(this.citas);
-       //this.nextCitas = new Array();
-       this.doctores.forEach(doctor => {
-         doctor.setCitas(this.citas);
-         Debugger.log(['citas seteadas para este doctor',doctor.citas]);
-       });
-       this.getCitasActivas();
-       this.getNextcitas();
-       this.getCitasPendientes();
-       this.getCitasParaHoy();
-       if(this.checkUserPermission([UserDataProvider.TIPO_CAJA,UserDataProvider.TIPO_CAJAYRECEPCION,UserDataProvider.TIPO_DOCTOR])){this.getCitasCobrar();}
-       //this.setCitas();
-       //this.getNextCita();
-       //console.log("doctores resultado",this.doctores);
+          }
+      }
+      //si tiene algun permiso o plan se llenan las listas para mostrar las citas.
+        this.organizarCitas();
       },
        response => {
-         //console.log(response.error.text);
+       
          Debugger.log(["POST call in error", response]);
          if(logoutonerror)
          this.logout();
@@ -848,60 +817,56 @@ export class UserDataProvider {
       Debugger.log(['returning ret observable',ret]);
       return ret;
   }
-//este metodo ya no se usa fue reemplazado cuando se incluyo una clase para manejar docotores para simplificar manejar varios doctores
-//se usa el metodo setCitas de la clase doctores por cada doctor en la lista de doctores y se le manda como parametro la lista de citas.
-  /*setCitas(  ){
-    this.citasPendientes = new Array();
-    this.citasCobrar = new Array();
-    let aux_citasparahoy = 0;
-    let aux_nextCita = null;
-    let smallestUntilMs = null;
-    this.citas.forEach(cita => {
-      cita.getUntilMs();
-      if(cita.checkState(UserDataProvider.STATE_PENDIENTE) || cita.checkState(UserDataProvider.STATE_CONFIRMADA)){
-        aux_citasparahoy++;
-        this.citasPendientes.push(cita);
-      if(cita.untilMs > 0){ cita.retrasada = true; } //si se paso la fecha ponerla como retrasada.
-        if(smallestUntilMs === null || cita.untilMs < smallestUntilMs){
-          //si no hay mas pequeño    O  si la cita es mas pequeño
-          aux_nextCita = cita; //esta cita es la mas cercana
-          smallestUntilMs = cita.untilMs;
-        }
-      }
-      if(cita.checkState(UserDataProvider.STATE_COBRO)){
-        this.citasCobrar.push(cita);
-      }
-      if(cita.checkState(UserDataProvider.STATE_ACTIVA)){
-        console.log("cita activa.",this.citaActiva);
-        if(!this.citaActiva){
-          console.log("agregando cita");
-          this.citaActiva = cita;
-        }else{
-          this.updateCitaState(cita.data,UserDataProvider.STATE_PENDIENTE).subscribe();
-          cita.data.field_estado.und[0].value = this.STATE_PENDIENTE;
-          
-        }
-      }
-     // }
-    });
-    this.citasParaHoy = aux_citasparahoy;
-    //this.nextCita = aux_nextCita;
-    console.log("citas seteadas:");
-    console.log("nextCitas", this.nextCitas);
-    console.log("citasParaHoy", this.citasParaHoy);
-    console.log("citasPendientes", this.citasPendientes);
-    console.log("citasCobrar", this.citasCobrar);
-    console.log("cita activa", this.citasActivas);
-  }*/
 
-  getCitasActivas(){
+
+  organizarCitas(){
+     //tenemos un pool de citas actualizadas en this.citas, los doctores deben tomar esas citas y organizarlas.
+    
+    if(this.checkUserFeature([UserDataProvider.TIPO_ANY],[UserDataProvider.PLAN_ANY])){ //revisar que el usuario tenga plan y permisos validos
+       this.clearCitaLists();
+       for( let doc of this.doctores){
+          doc.setCitas(this.citas);
+          if(doc.citaActiva) { this.citasActivas.push(doc.citaActiva); }
+          if(doc.nextCita){ this.nextCitas.push(doc.nextCita); }
+          this.citasPendientes =  this.citasPendientes.concat(doc.citasPendientes);
+          this.citasRetrasadas =  this.citasRetrasadas.concat(doc.citasRetrasadas);
+          if(this.checkUserPermission([UserDataProvider.TIPO_CAJA,UserDataProvider.TIPO_CAJAYRECEPCION,UserDataProvider.TIPO_DOCTOR])){ //si puede cobrar carga las citas por cobrar
+            this.citasCobrar = this.citasCobrar.concat(doc.citasCobrar);
+          }
+        }
+      for( let cita of this.citas ){
+        if(cita.CloserThanMs(this.ShowCitaUntilMs)){
+          if(this.nextCitas.indexOf(cita) === -1 && this.citasActivas.indexOf(cita) === -1 && this.citasRetrasadas.indexOf(cita) === -1){
+            this.citasCloser.push(cita);
+          }
+        }
+      }
+      for( let cita of this.citasRetrasadas){
+        if((!cita.data.field_retrasdas) || Number(cita.data.field_retrasdas.und.value) === 0){
+          Debugger.log(['cita retrasadas desactualizada']);
+        }
+      }
+      }
+  }
+
+  clearCitaLists(){
+    this.citasActivas =  new Array();
+    this.nextCitas = new Array();
+    this.citasPendientes =  new Array();
+    this.citasCloser = new Array();
+    this.citasCobrar = new Array();
+    this.citasRetrasadas = new Array();
+  }
+
+
+  /*getCitasActivas(){
     this.citasActivas =  new Array();
     this.doctores.forEach(element => {
       if(element.citaActiva){
        this.citasActivas.push(element.citaActiva);
       }
     });
-    console.log("citas activas obtenidas de cada doctor",this.citasActivas);
+    //console.log("citas activas obtenidas de cada doctor",this.citasActivas);
   }
 
   getNextcitas(){
@@ -926,7 +891,7 @@ export class UserDataProvider {
           }
       });
     });
-    console.log("citas pendientes obtenidas de cada doctor",this.citasPendientes);
+    //console.log("citas pendientes obtenidas de cada doctor",this.citasPendientes);
   }
 
   getCitasCobrar(){
@@ -936,8 +901,13 @@ export class UserDataProvider {
         this.citasCobrar.push(cita);
       });
     });
-    console.log("citas por cobrar obtenidas de cada doctor",this.citasCobrar);
+    //console.log("citas por cobrar obtenidas de cada doctor",this.citasCobrar);
   }
+
+  getCitasRetrasadas(){
+    this.citasRetrasadas = new Array();
+    this.doctores.forEach(
+  }*/
 
   getDoctorOFCita( Cita:Citas ):Doctores{
     let ret = null;
@@ -1649,7 +1619,8 @@ export class UserDataProvider {
       field_cobro_cheque:{und:[{value:0}]},
       field_datemsb:{und:[{value:0}]},
       field_hora_iniciomsb:{und:[{value:null}]},
-      field_hora_finalmsb:{und:[{value:null}]}
+      field_hora_finalmsb:{und:[{value:null}]},
+      field_retrasda:{und:[{value:0}]},
     }
   }
 
@@ -1739,6 +1710,7 @@ export interface citasData{
     field_datemsb:{und:[{value:number}]},
     field_hora_iniciomsb:{und:[{value:number}]},
     field_hora_finalmsb:{und:[{value:number}]},
+    field_retrasda:{und:[{value:number}]},
 }
 
 
@@ -1773,5 +1745,10 @@ export interface userd{
     field_planholder:{und:[{ value:boolean}]},
     field_stripe_customer_id:{und:[{ value:string}]},
     field_src_json_info:{und:[{ value:string}]},
+}
+
+{
+ 
+
 }
 

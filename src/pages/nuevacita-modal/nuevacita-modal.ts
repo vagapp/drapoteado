@@ -21,20 +21,10 @@ import { Debugger } from '../../providers/user-data/debugger';
 
 
 export class NuevacitaModalPage {
-  //newCita: citasData;
   cita:Citas = null;
   isnew:boolean = true;
-  //citaobject:Citas = null;
   selectedDate:string = null;
-
-  /*get selectedDateUT():number{
-    return new Date(this.selectedDate).getTime();
-  }*/
-
-  /*get nowDateUT():number{
-    //return new Date().getTime();
-  }*/
-
+  
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -49,12 +39,7 @@ export class NuevacitaModalPage {
     if(aux_node){
       this.cita = aux_node;
       Debugger.log(['cita en modal es',this.cita]);
-      //this.selectedDate = Citas.getLocalDateIso(this.cita.date); //this.cita.date.toISOString();
       this.isnew = false;
-      //this.newCita = UserDataProvider.getEmptyCita();
-      //this.newCita = aux_node;
-      //this.selectedDate = this.newCita.field_date.und.values.date;
-     
     }else{
       this.isnew = true;
       this.resetNewCita();
@@ -98,6 +83,7 @@ export class NuevacitaModalPage {
     this.setCitaDateFromiNPUT();
     this.userData.generateNewCita( this.cita.data ).subscribe(
     (val)=>{
+      this.userData.generateNotification([this.cita.data.field_cita_doctor.und[0]],null,'Nueva Cita',`con ${this.cita.paciente}`,`${new Date(this.cita.data.field_datemsb['und'][0]['value'])}`);
       console.log("the new cita has been generated");
       this.presentToast("Completado");
       loader.dismiss();

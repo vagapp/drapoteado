@@ -106,7 +106,7 @@ export class MyApp {
               this.userData.setUserData(val);
               this.userData.cargarSubscription();
               this.userData.cargarNotificaciones();
-              this.userData.generateNotification([76],null,'inaptestnoti','subtitleinap','estaesunanotificacion de prueba');
+              //this.userData.generateNotification([76],null,'inaptestnoti','subtitleinap','estaesunanotificacion de prueba');
               let moveinterval = setInterval(() =>{
                 Debugger.log(['checking initiation']);
                 Debugger.log(['planes set',this.userData.are_planes_set]);

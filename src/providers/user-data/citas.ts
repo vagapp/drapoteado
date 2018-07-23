@@ -27,7 +27,6 @@ export class Citas{
     }
 
     init(){
-
         this.addedServices = new Array();
         this.data = UserDataProvider.getEmptyCita();
     }
@@ -74,6 +73,7 @@ export class Citas{
           this.data.field_cobro_tarjeta.und[0].value = data_input.field_cobro_tarjeta;
           this.data.field_costo_sobrescribir.und[0].value = data_input.field_costo_sobrescribir;
           this.data.field_datemsb.und[0].value = Number(data_input.field_datemsb.value);
+          this.data.field_retrasda.und[0].value = data_input.field_retrasda;
           if(data_input.field_hora_iniciomsb) this.data.field_hora_iniciomsb.und[0].value = Number(data_input.field_hora_iniciomsb.value);
           if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);
           if(data_input['field_servicios_json'])this.setServiciosReport(data_input['field_servicios_json']['value']);
@@ -138,7 +138,7 @@ export class Citas{
             Debugger.log(['set date is after',this.data.field_date]);
             Debugger.log(["Ms until this date: ", this.untilMs]);
             if(this.untilMs < 0){
-                this.retrasada=true;
+                this.retrasada = true;
                 Debugger.log(['esta cita esta retrasada']);
             }
     }

@@ -11,6 +11,7 @@ export class Doctores{
     citasPendientes:Citas[]; //citas pendientes
     citasCobrar:Citas[]; // citas por cobrar
     citaActiva:Citas = null //cita activa
+    citasRetrasadas:Citas[];
     citasParaHoy:number = 0; //numero de citas pendientes para hoy.
     servicios:servicios[] = new Array();
     name:string = '';
@@ -69,13 +70,6 @@ export class Doctores{
     }
 
     calculateCitasParaHoy(){
-      /*let aux_citasparahoy = 0;
-      this.citas.forEach(cita => {
-        if(cita.checkState(UserDataProvider.STATE_PENDIENTE) || cita.checkState(UserDataProvider.STATE_CONFIRMADA)){
-          aux_citasparahoy++;
-        }
-      });
-      this.citasParaHoy = aux_citasparahoy;*/
       this.citasParaHoy = this.citasPendientes.length;
     }
 
@@ -98,20 +92,21 @@ export class Doctores{
         console.log("----------------------------------empezar cita "+citas_input);
     this.citasPendientes = new Array();
     this.citasCobrar = new Array();
+    this.citasRetrasadas = new Array();
     this.citas = new Array();
     let aux_citasparahoy = 0;
     let aux_nextCita = null;
     let smallestUntilMs = null;
     citas_input.forEach(cita => {
         if(Number(cita.data.field_cita_doctor.und[0]) === Number(this.Uid)){
-            console.log("encontro cita propia");
+            //console.log("encontro cita propia");
       this.citas.push(cita);
       cita.getUntilMs();
       if(cita.checkState(UserDataProvider.STATE_PENDIENTE) || cita.checkState(UserDataProvider.STATE_CONFIRMADA)){
         aux_citasparahoy++;
         this.citasPendientes.push(cita);
-      if(cita.untilMs < 0){ cita.retrasada = true; } //si se paso la fecha ponerla como retrasada. es decir si el numero es negativo, menor a 0
-        if(smallestUntilMs === null || cita.untilMs < smallestUntilMs){
+      if(cita.untilMs < 0){ cita.retrasada = true; this.citasRetrasadas.push(cita); } //si se paso la fecha ponerla como retrasada. es decir si el numero es negativo, menor a 0
+      else if(smallestUntilMs === null || cita.untilMs < smallestUntilMs){
           //si no hay mas pequeño    O  si la cita es mas pequeño
           aux_nextCita = cita; //esta cita es la mas cercana
           smallestUntilMs = cita.untilMs;
@@ -126,7 +121,6 @@ export class Doctores{
           console.log("agregando cita");
           this.citaActiva = cita;
           console.log("cita activa agregada",this.citaActiva);
-    
         }else{
            /* if(! ( Number(this.citaActiva.Nid) === Number(cita.Nid) ) ){
             cita.data.field_estado.und[0].value = UserDataProvider.STATE_PENDIENTE;
