@@ -172,12 +172,12 @@ export class MyApp {
       {
          console.log('getIds: ' + JSON.stringify(ids));
          this.userData.onseignalDid = ids;
-         this.userData.savePlayerID();
       });
       this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
       this.oneSignal.handleNotificationReceived().subscribe(data => this.onPushReceived(data.payload));
       this.oneSignal.handleNotificationOpened().subscribe(data => this.onPushOpened(data.notification.payload));
       this.oneSignal.endInit();
+      
       //postNotification(Parameters)
     } 
   }

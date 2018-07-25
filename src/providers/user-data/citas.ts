@@ -21,6 +21,10 @@ export class Citas{
     serviceDataSet:boolean = false; //describe si los servicios de la cita han sido seteados cuando esta activa, evitando que se actualicen externamente.
     cobroDataSet:boolean = false; //describe si los cobros de la cita han sido seteados cuando esta en cobro, evitando que se actualicen externamente.
     reporteServicios:any[] = new Array();
+    doctor_playerid:string = null;
+    caja_playerid:string = null;
+    recepcion_playerid:string = null;
+
     
     constructor(){
         this.init();
@@ -77,6 +81,9 @@ export class Citas{
           if(data_input.field_hora_iniciomsb) this.data.field_hora_iniciomsb.und[0].value = Number(data_input.field_hora_iniciomsb.value);
           if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);
           if(data_input['field_servicios_json'])this.setServiciosReport(data_input['field_servicios_json']['value']);
+          if(data_input.doctor_playerid) this.doctor_playerid = data_input.doctor_playerid;
+          if(data_input.recepcion_playerid)  this.recepcion_playerid = data_input.recepcion_playerid;
+          if(data_input.caja_playerid)  this.caja_playerid = data_input.caja_playerid;
           //this.setDate(data_input.field_date.value);
           this.setDateUT(this.data.field_datemsb.und[0].value);
           this.setDurationDates(this.data.field_hora_iniciomsb.und[0].value,this.data.field_hora_finalmsb.und[0].value);

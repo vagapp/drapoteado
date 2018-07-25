@@ -76,14 +76,17 @@ export class NuevacitaModalPage {
       this.cita.data.field_cita_doctor.und[0]=this.userData.userData.uid;
     }
       this.cita.data.field_cita_recepcion.und[0]=this.userData.userData.uid; //esto es quien creo la cita
+      this.cita.recepcion_playerid = this.userData.onseignalDid.userid;
       this.cita.data.field_cita_caja.und[0]="_none"; //quien cobro la cita
+      this.cita.caja_playerid = null;
       this.cita.data.field_servicios_cita.und = []; //limpiamos los servicios porque nos deja basura
     
     //this.cita.setDate(this.selectedDate);
     this.setCitaDateFromiNPUT();
     this.userData.generateNewCita( this.cita.data ).subscribe(
     (val)=>{
-      this.userData.generateNotification([this.cita.data.field_cita_doctor.und[0]],null,'Nueva Cita',`con ${this.cita.paciente}`,`${new Date(this.cita.data.field_datemsb['und'][0]['value'])}`);
+      let doc = this.userData.getDoctorOFCita(this.cita);
+      this.userData.generateNotification([this.cita.data.field_cita_doctor.und[0]],[doc.playerID],'Nueva Cita',`con ${this.cita.paciente}`,`${new Date(this.cita.data.field_datemsb['und'][0]['value'])}`);
       console.log("the new cita has been generated");
       this.presentToast("Completado");
       loader.dismiss();

@@ -175,7 +175,7 @@ export class UserDataProvider {
     this.showCaja = false;
     this.showReception = false;
     this.citas = new Array();
-    this.doctores = new Array();
+    //this.doctores = new Array();
     this.threadloop();
 
   }
@@ -357,6 +357,7 @@ export class UserDataProvider {
           (response)=>{this.docs_loaded = true;},
         );
       }
+    this.savePlayerID();
     Debugger.log(["doctores encontrados",this.doctores]);
     Debugger.log(["cargar servicios y recargar servicios en un loop"]);
     this.cargarServicios();
@@ -366,6 +367,8 @@ export class UserDataProvider {
   setup(){
     this.rol = "doctor";
   }
+
+
 
 
   threadloop(){
@@ -842,7 +845,7 @@ export class UserDataProvider {
         }
       }
       for( let cita of this.citasRetrasadas){
-        if((!cita.data.field_retrasdas) || Number(cita.data.field_retrasdas.und.value) === 0){
+        if((!cita.data.field_retrasda) || Number(cita.data.field_retrasda['und']['0']['value']) === 0){
           Debugger.log(['cita retrasadas desactualizada']);
         }
       }
@@ -1379,14 +1382,17 @@ export class UserDataProvider {
   }
 
   savePlayerID(){
-    let aux_user_data = {
-      uid: this.userData.uid,
-      field_playerid:{und:[{value:this.onseignalDid}]},
+    if(isCordovaAvailable){
+      Debugger.log(['enter savePlayerID saving',this.onseignalDid]);
+      let aux_user_data = {
+        uid: this.userData.uid,
+        field_playerid:{und:[{value:this.onseignalDid.userId}]},
+      }
+      this.updateUserd(aux_user_data).subscribe(
+        (val)=>{Debugger.log(['PlayerIDsaved']);},
+        (response)=>{Debugger.log(['PlayerIDsave error',response]);}
+      );
     }
-    this.updateUserd(aux_user_data).subscribe(
-      (val)=>{Debugger.log(['PlayerIDsaved']);},
-      (response)=>{Debugger.log(['PlayerIDsave error',response]);}
-    );
   }
 
   getDummynotes(){

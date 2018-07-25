@@ -7,7 +7,6 @@ import { Citas } from '../../providers/user-data/citas';
 import { EmailValidator } from '@angular/forms';
 import { ProgresocitaModalPage } from '../progresocita-modal/progresocita-modal';
 import { Debugger } from '../../providers/user-data/debugger';
-import { Observer } from 'rxjs/Observer';
 
 /**
  * Generated class for the CitasPage page.
@@ -105,11 +104,17 @@ export class CitasPage {
       loader.present();
       this.userData.updateCitaState(cita,state).subscribe(
         (val)=>{
-          if(Number(state) === 1){
-            this.userData.generateNotification([cita.data.field_cita_doctor.und[0]],null,'Cita Confirmada',`con ${cita.paciente}`,`${new Date(cita.data.field_datemsb['und'][0]['value'])}`);
+          Debugger.log(['updating cita',cita]);
+          if(Number(state) === 1){ //cambiando a cita confirmada
+            //crear notificacion para doctor a quien le confirmaron la cita
+            if(cita.doctor_playerid)
+            this.userData.generateNotification([cita.data.field_cita_doctor.und[0]],[cita.doctor_playerid],'Cita Confirmada',`con ${cita.paciente}`,`${new Date(cita.data.field_datemsb['und'][0]['value'])}`);
           }
-          if(Number(state) === 3){
-            this.userData.generateNotification([cita.data.field_cita_caja.und[0]],null,'Cita a cobrar',`de ${cita.paciente}`,`Una cita esta en espera de cobro`);
+          if(Number(state) === 3){ //cambiando a cita por cobrar
+            //crear notificacion para cajas que esten ligadas al doctor.
+            if(cita.caja_playerid){
+            this.userData.generateNotification([cita.data.field_cita_caja.und[0]],[cita.caja_playerid],'Cita a cobrar',`de ${cita.paciente}`,`Una cita esta en espera de cobro`);
+          }
           }
           loader.dismiss();
           this.cargarCitas();

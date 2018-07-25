@@ -16,6 +16,7 @@ export class Doctores{
     servicios:servicios[] = new Array();
     name:string = '';
     field_alias:string = '';
+    playerID:string = '';
 
     public constructor(public userData: UserDataProvider){
         this.citas = new Array();
