@@ -1419,14 +1419,10 @@ export class UserDataProvider {
     this.notificaciones.push(aux_notification);
   }
 
-  generateNotification( forUid:number[] ,playerIDs:string[], title:string , subtitle:string, text:string ){
+  generateNotification( forUid:number[], text:string ){
     let notificationDatas =  new Array();
-    forUid.forEach(uid => {
       let newNotification = new Notification();
-      newNotification.user = uid;
-      newNotification.read = false;
-      newNotification.title = title;
-      newNotification.subtitle = subtitle;
+      newNotification.user = forUid;
       newNotification.text = text;
       const auxdata = newNotification.getData();
       Debugger.log(['send data to endpoiint',auxdata]);
@@ -1436,23 +1432,6 @@ export class UserDataProvider {
         },(response)=>{
           Debugger.log(['notification responses error',response]);
         });
-    });
-    
-      if(isCordovaAvailable){ //si cordova esta activo intentara crear notificaciones 
-    if(playerIDs && playerIDs.length !== 0){ //si tenemos playerids a los que mandar la notificacion (que aun no puedo obtener porque no he guardado)
-    let notificationObj  = {app_id: '7902c2ba-310b-4eab-90c3-8cae53de891f',
-      include_player_ids: playerIDs,
-      contents: {
-          en: title
-      },
-      headings: {
-          en: text
-      }
-            }
-      }
-      //  crear notificacion aqui pushearla ahi con el metodo ese
-    }
-
   }
  
 

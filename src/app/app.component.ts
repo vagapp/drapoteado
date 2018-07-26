@@ -177,7 +177,7 @@ export class MyApp {
       this.oneSignal.handleNotificationReceived().subscribe(data => this.onPushReceived(data.payload));
       this.oneSignal.handleNotificationOpened().subscribe(data => this.onPushOpened(data.notification.payload));
       this.oneSignal.endInit();
-      
+      this.userData.generateNotification( [this.userData.onseignalDid],'Hello Worl Notification');
       //postNotification(Parameters)
     } 
   }

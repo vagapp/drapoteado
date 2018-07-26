@@ -6,7 +6,7 @@ export class Notification{
     subtitle: string; //subtitulo de la notificacion
     text: string;   //texto de la notificacion.
     read: boolean;   //si ya se ha leido esta notificacion.
-    user: number; //nid del usuario que tiene la notificacion.
+    user: number[]; //nid del usuario que tiene la notificacion.
 
     constructor(){
     }
@@ -60,11 +60,8 @@ export class Notification{
         let aux_data = {
             Nid: this.Nid,
             type: 'notification',
-            field_title:{und:[{value: this.title}]},
-            field_subtitle:{und:[{value:this.subtitle}]},
             field_text:{und:[{value:this.text}]},
-            field_read:{und:[{value:this.read}]},
-            field_user:{und:[this.user]},
+            field_user:{und:this.user},
           };
           if(!this.Nid){
               delete aux_data.Nid;
