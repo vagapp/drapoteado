@@ -1,8 +1,7 @@
 <span>
 <div class="pop_body" *ngIf="this.show" >
     <div *ngFor="let notification of this.userData.notificaciones" class="notification_item"  (click)="notificationClick(notification)">
-        <span class="notification_title">{{notification.title}}</span>{{notification.subtitle}}
-   
+        {{notification.text}}
 </div>
 </div>
 </span>

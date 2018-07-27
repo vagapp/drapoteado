@@ -108,12 +108,12 @@ export class CitasPage {
           if(Number(state) === 1){ //cambiando a cita confirmada
             //crear notificacion para doctor a quien le confirmaron la cita
             if(cita.doctor_playerid)
-            this.userData.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`);
+            this.userData.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
           }
           if(Number(state) === 3){ //cambiando a cita por cobrar
             //crear notificacion para cajas que esten ligadas al doctor.
             if(cita.caja_playerid){
-            this.userData.generateNotification([cita.data.field_cita_caja.und[0]],`La cita de de ${cita.paciente} esta en espera de cobro`);
+            this.userData.generateNotification([cita.data.field_cita_caja.und[0]],`La cita de de ${cita.paciente} esta en espera de cobro`,`cita-${cita.Nid}`);
           }
           }
           loader.dismiss();

@@ -86,7 +86,7 @@ export class NuevacitaModalPage {
     this.userData.generateNewCita( this.cita.data ).subscribe(
     (val)=>{
       let doc = this.userData.getDoctorOFCita(this.cita);
-      this.userData.generateNotification([this.cita.data.field_cita_doctor.und[0]],`Nueva Cita con ${this.cita.paciente} fecha: ${new Date(this.cita.data.field_datemsb['und'][0]['value'])}`);
+      this.userData.generateNotification([this.cita.data.field_cita_doctor.und[0]],`Nueva Cita con ${this.cita.paciente} fecha: ${new Date(this.cita.data.field_datemsb['und'][0]['value'])}`,`cita-${this.cita.Nid}`);
       console.log("the new cita has been generated");
       this.presentToast("Completado");
       loader.dismiss();

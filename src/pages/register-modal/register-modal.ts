@@ -31,7 +31,7 @@ export class RegisterModalPage {
   onHospital:boolean = null;
   
   get onCordova(){
-    return isCordovaAvailable;
+    return isCordovaAvailable();
   }
 
   stripe = Stripe('pk_test_4CJTbKZki9tC21cGTx4rLPLO');

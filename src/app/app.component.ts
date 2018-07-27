@@ -75,7 +75,7 @@ export class MyApp {
     this.platform.ready().then(() => {
       this.initOnesignal();
       
-      if(isCordovaAvailable)this.splashScreen.hide();
+      if(isCordovaAvailable())this.splashScreen.hide();
       Debugger.log(['platform redy']);
       let loading = this.loadingCtrl.create({
         content: 'Bienvenido'
@@ -105,8 +105,8 @@ export class MyApp {
               console.log(val);
               this.userData.setUserData(val);
               this.userData.cargarSubscription();
+              //this.userData.generateNotification( [76],'Hello World Notification');
               this.userData.cargarNotificaciones();
-              //this.userData.generateNotification([76],null,'inaptestnoti','subtitleinap','estaesunanotificacion de prueba');
               let moveinterval = setInterval(() =>{
                 Debugger.log(['checking initiation']);
                 Debugger.log(['planes set',this.userData.are_planes_set]);
@@ -177,13 +177,14 @@ export class MyApp {
       this.oneSignal.handleNotificationReceived().subscribe(data => this.onPushReceived(data.payload));
       this.oneSignal.handleNotificationOpened().subscribe(data => this.onPushOpened(data.notification.payload));
       this.oneSignal.endInit();
-      this.userData.generateNotification( [this.userData.onseignalDid],'Hello Worl Notification');
+      
       //postNotification(Parameters)
     } 
   }
 
   private onPushReceived(payload: OSNotificationPayload) {
-    alert('Push recevied:' + payload.body);
+    //alert('Push recevied:' + payload.body);
+    this.userData.cargarNotificaciones();
   }
   
   private onPushOpened(payload: OSNotificationPayload) {

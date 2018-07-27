@@ -1382,7 +1382,7 @@ export class UserDataProvider {
   }
 
   savePlayerID(){
-    if(isCordovaAvailable){
+    if(isCordovaAvailable()){
       Debugger.log(['enter savePlayerID saving',this.onseignalDid]);
       let aux_user_data = {
         uid: this.userData.uid,
@@ -1419,8 +1419,8 @@ export class UserDataProvider {
     this.notificaciones.push(aux_notification);
   }
 
-  generateNotification( forUid:number[], text:string ){
-    let notificationDatas =  new Array();
+  generateNotification( forUid:number[], text:string, action:string ){
+      let notificationDatas =  new Array();
       let newNotification = new Notification();
       newNotification.user = forUid;
       newNotification.text = text;
@@ -1433,6 +1433,8 @@ export class UserDataProvider {
           Debugger.log(['notification responses error',response]);
         });
   }
+
+  
  
 
 

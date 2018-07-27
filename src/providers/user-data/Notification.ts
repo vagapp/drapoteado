@@ -7,6 +7,7 @@ export class Notification{
     text: string;   //texto de la notificacion.
     read: boolean;   //si ya se ha leido esta notificacion.
     user: number[]; //nid del usuario que tiene la notificacion.
+    action: string; //accion de la notificacion, determina que se hace cuando se da click.
 
     constructor(){
     }
@@ -18,6 +19,7 @@ export class Notification{
         this.subtitle = input_data['field_subtitle']['value'];
         this.text = input_data['field_text']['value'];
         this.user = input_data['field_user']['uid'];
+        this.action = input_data['field_subtitle']['value'];
         Debugger.log(['item generated is this',this]);
         }
         /*
