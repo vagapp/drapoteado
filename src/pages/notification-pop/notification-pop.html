@@ -1,0 +1,6 @@
+<div class="pop_page">
+        <div class="notification_item notification_load" *ngIf="this.userData.activeCargandoNotif"> <ion-spinner ></ion-spinner>  Cargando notificaciones... </div>
+<div *ngFor="let notification of this.userData.notificaciones" class="notification_item"  (click)="notificationClick(notification)">
+        {{notification.text}}
+</div>
+</div>

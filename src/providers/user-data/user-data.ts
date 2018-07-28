@@ -38,6 +38,11 @@ export class UserDataProvider {
   onesignalAPPid:string = '7902c2ba-310b-4eab-90c3-8cae53de891f';
   onesignalSenderid:string = '470345987173';
   cargandoNotif:boolean = false;
+  activeCargandoNotif:boolean = false;
+
+  autoCitasLoad = null;
+  autoNotificationsLoad = null;
+  autoSubscriptionLoad = null;
 
   //datos de citas. los necesito globales para usarlos en la pagina de home. ademas las voy a ligar con algun servicio servidor cosa para comunicacion bilineal
   citas: Citas[]; //listado de todas las citas
@@ -117,6 +122,7 @@ export class UserDataProvider {
   //AuthObservable
   AuthSubject:Subject<any> = new Subject();
   susSubject:Subject<any> = new Subject();
+  notiSubject:Subject<any> = new Subject();
   
   sessionData = {
     sessid:false,
@@ -370,24 +376,70 @@ export class UserDataProvider {
 
 
 
-
   threadloop(){
     console.log("loopMs",this.loopMs);
     setInterval(() => {
       if(this.userData.uid && this.userData.uid != 0){
-      this.cargarCitas();
-      this.cargarNotificaciones();
-      let now = new Date();
-      this.showhour = `${UserDataProvider.formatDateBinaryNumber( now.getHours() )}:${UserDataProvider.formatDateBinaryNumber( now.getMinutes() )}`;
+       //Debugger.log(['checking automatic notification load subscription',this.autoNotificationsLoad]);
+        if(!this.autoNotificationsLoad){
+          //Debugger.log(['automatic notification load start']);
+          let observer = this.getNotificationObservable();
+          this.autoNotificationsLoad = observer.subscribe(
+            (val)=>{
+              this.setNotifications(val);
+              //Debugger.log(['Completing automatic notification load',val]);
+              this.cargandoNotif = false;
+              this.autoNotificationsLoad.unsubscribe();
+              this.autoNotificationsLoad = null;
+            },(response)=>{ 
+              //Debugger.log(['error on nautomatic notification load',response]);
+              this.cargandoNotif = false;
+              this.autoNotificationsLoad.unsubscribe();
+              this.autoNotificationsLoad = null;
+            });
+           //this.cargarNotificaciones();
+          }
+    
+
+      
+        if(!this.autoCitasLoad){
+          const autocita_obs = this.getCargarCitasObservable();
+          this.autoCitasLoad = autocita_obs.subscribe(
+      (val)=>{
+        this.setCitasFO(val);
+        this.autoCitasLoad.unsubscribe();
+        this.autoCitasLoad = null;
+      },
+       response => {
+         Debugger.log(["POST call in error", response]);
+         this.autoCitasLoad.unsubscribe();
+         this.autoCitasLoad = null;
+       }
+      );
+        //this.cargarCitas();
     }
+  }
    }, this.loopMs);
    setInterval(() => {
     if(this.userData.uid && this.userData.uid != 0){
       Debugger.log(['Auto updatingSuscription']);
-    this.cargarSubscription();
+      if(!this.autoSubscriptionLoad){
+      const observer = this.getCargarSubscriptionObservable();
+      this.autoSubscriptionLoad = observer.subscribe(
+        (val)=>{
+            this.setSubscriptionFO(val);
+            this.autoSubscriptionLoad.unsubscribe();
+            this.autoSubscriptionLoad = null;
+        },(response)=>{
+          this.autoSubscriptionLoad.unsubscribe();
+          this.autoSubscriptionLoad = null;
+        });
+      }
   }
  }, this.loopSusMs);
  setInterval(() => {
+  let now = new Date();
+  this.showhour = `${UserDataProvider.formatDateBinaryNumber( now.getHours() )}:${UserDataProvider.formatDateBinaryNumber( now.getMinutes() )}`;
   if(this.citas && this.citas.length > 0){
     this.organizarCitas();
     /*this.nextCitas.forEach(aux_cita => {
@@ -788,30 +840,13 @@ export class UserDataProvider {
   }
   
   cargarCitas( logoutonerror = true ):Observable<any>{
-    let ret = null;
     console.log("cargando citas");
-    let UTdates = UserDataProvider.getNowUTdates();
-    Debugger.log([` dates searching en cargar citas es ${UTdates.start}--${UTdates.end}`]);
-    ret = this.getCitasUTms(`${UTdates.start}--${UTdates.end}`,this.getDoctoresSimpleArray(),new Array(),new Array());
+    const ret = this.getCargarCitasObservable();
     ret.subscribe(
       (val)=>{
-        //aqui creamos el pool de citas, este pool sirve para que los doctores tomen y administren las citas que tienen.
-        Debugger.log(['citas Cargadas',val]);
-        for( let cita of val ){
-          let citaIndex = this.getCitaIndexByNid(cita.Nid);
-          if(citaIndex > -1){
-            this.citas[citaIndex].setData(cita);
-          }else{
-          let aux_cita = new Citas();
-          aux_cita.setData(cita);
-          this.citas.push(aux_cita);
-          }
-      }
-      //si tiene algun permiso o plan se llenan las listas para mostrar las citas.
-        this.organizarCitas();
+        this.setCitasFO(val);
       },
        response => {
-       
          Debugger.log(["POST call in error", response]);
          if(logoutonerror)
          this.logout();
@@ -820,6 +855,29 @@ export class UserDataProvider {
       Debugger.log(['returning ret observable',ret]);
       return ret;
   }
+
+  getCargarCitasObservable(){
+    let UTdates = UserDataProvider.getNowUTdates();
+    Debugger.log([` dates searching en cargar citas es ${UTdates.start}--${UTdates.end}`]);
+    return this.getCitasUTms(`${UTdates.start}--${UTdates.end}`,this.getDoctoresSimpleArray(),new Array(),new Array());
+  }
+
+  setCitasFO( val ){
+  //aqui creamos el pool de citas, este pool sirve para que los doctores tomen y administren las citas que tienen.
+  Debugger.log(['citas Cargadas',val]);
+  for( let cita of val ){
+    let citaIndex = this.getCitaIndexByNid(cita.Nid);
+    if(citaIndex > -1){
+      this.citas[citaIndex].setData(cita);
+    }else{
+    let aux_cita = new Citas();
+    aux_cita.setData(cita);
+    this.citas.push(aux_cita);
+    }
+}
+//si tiene algun permiso o plan se llenan las listas para mostrar las citas.
+  this.organizarCitas();
+}
 
 
   organizarCitas(){
@@ -1026,6 +1084,19 @@ export class UserDataProvider {
     return observer;
   }
 
+  getCitasNidObservable(Nid){
+    let url = this.urlbase+'appoint/rest_citas.json?'+`args[0]=all&args[1]=all&args[2]=all&args[3]=all&args[4]=${Nid}`;
+    Debugger.log(['loadinc single cita w nid',url]);
+    let headers = new HttpHeaders(
+      {'Content-Type':'application/json; charset=utf-8',
+      'X-CSRF-Token': ""+this.sessionData.token,
+      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
+    });
+    let observer = this.http.get(url,{headers});
+    //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
+    return observer;
+  }
+
     //General Node Management
   generateNewNode( newNode ){
     Debugger.log(['saving node ',newNode]);
@@ -1068,6 +1139,18 @@ export class UserDataProvider {
     return observer;
   }
 
+  getNode( node ){
+    let url = this.urlbase+'appoint/node/'+node.Nid;
+    Debugger.log(['getting node url',url]);
+    let headers = new HttpHeaders(
+      {'Content-Type':'application/json; charset=utf-8',
+      'X-CSRF-Token': ""+this.sessionData.token,
+      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
+    });
+    let observer = this.http.get(url,{headers});
+    return observer;
+  }
+
 
 
   /**
@@ -1101,10 +1184,16 @@ export class UserDataProvider {
   }
 
   cargarSubscription( code:string = null){
+    const observer = this.getCargarSubscriptionObservable(code);
+    observer.subscribe(
+      (val)=>{
+          this.setSubscriptionFO(val, code);
+      });
+    return observer;
+  }
+
+  getCargarSubscriptionObservable( code:string = null ){
     let nidFilter = "?args[0]=all";
-    //Debugger.log(["userdata sub id",this.userData.field_sub_id]);
-    //if(Number(this.userData.field_sub_id.und[0]) !== Number(0)){
-    //nidFilter="?args[0]="+this.userData.field_sub_id.und[0];
     let filter = "";
     if(code){
       filter=`?args[0]=all&args[1]=all&args[2]=all&args[3]=${code}`;
@@ -1119,9 +1208,11 @@ export class UserDataProvider {
       'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
     });
     let observer = this.http.get(url,{headers});
-    observer.subscribe(
-      (val)=>{
-        Debugger.log(['subscription raw cal',val]);
+    return observer
+  }
+
+  setSubscriptionFO(val, code:string = null){
+    Debugger.log(['subscription raw cal',val]);
         let aux_results = Object.keys(val).map(function(key) { return val[key]; });
         let aux_subs = new subscriptions();
         if(!aux_subs.setData(aux_results[0])){
@@ -1148,15 +1239,6 @@ export class UserDataProvider {
         },500);
       }
       }
-      });
-    return observer;
-  /*}else{
-    console.log("no subscription loaded");
-    this.subscription = subscriptions.getEmptySuscription();
-    this.subscription.is_plan_set = true;
-    this.susSubject.next(0);
-    return null;
-  }*/
   }
 
 
@@ -1349,6 +1431,16 @@ export class UserDataProvider {
    * **/
   cargarNotificaciones(){
     this.cargandoNotif = true;
+    let observer = this.getNotificationObservable();
+    observer.subscribe(
+      (val)=>{
+        this.setNotifications(val);
+        this.cargandoNotif = false;
+      },(response)=>{this.cargandoNotif = false;});
+    return observer;
+  }
+
+  getNotificationObservable(){
     let uidFilter = `?args[0]=${this.userData.uid}` ;
     let url = this.urlbase+'appoint/rest_notifications.json'+uidFilter;
     Debugger.log(["cargarNotificaciones url",url]);
@@ -1358,27 +1450,34 @@ export class UserDataProvider {
       'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
     });
     let observer = this.http.get(url,{headers});
-    observer.subscribe(
-      (val)=>{
-        Debugger.log(['cargarNotificaciones raw val',val]);
-        let aux_results = Object.keys(val).map(function (key) { return val[key]; });
-        aux_results.forEach(noti => {
-           let found = false;
-           this.notificaciones.forEach(snoti => {
-             if(Number(snoti.Nid) === Number(noti.nid)){
-               found = true;
-               snoti.setData(noti);
-             }
-           });
-           if(!found){
-             let aux_notification = new Notification();
-             aux_notification.setData(noti);
-             this.notificaciones.push(aux_notification);
-           }
-        });
-        this.cargandoNotif = false;
-      },(response)=>{this.cargandoNotif = false;});
     return observer;
+  }
+
+  setNotifications( input_val ){
+   
+    for( let noti of input_val){
+      let found = false;
+      this.notificaciones.forEach(snoti => {
+        if(Number(snoti.Nid) === Number(noti.nid)){
+          found = true;
+          snoti.setData(noti);
+        }
+      });
+      if(!found){
+        let aux_notification = new Notification();
+        aux_notification.setData(noti);
+        this.notificaciones.push(aux_notification);
+      }
+    }
+  }
+
+
+  operateNotification(noti:Notification){
+    this.notiSubject.next(noti.action);
+  }
+
+  operatePushNotification(action){
+    this.notiSubject.next(action);
   }
 
   savePlayerID(){
@@ -1424,6 +1523,7 @@ export class UserDataProvider {
       let newNotification = new Notification();
       newNotification.user = forUid;
       newNotification.text = text;
+      newNotification.action = action;
       const auxdata = newNotification.getData();
       Debugger.log(['send data to endpoiint',auxdata]);
       this.generateNewNode(auxdata).subscribe(

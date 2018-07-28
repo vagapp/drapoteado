@@ -19,7 +19,7 @@ export class Notification{
         this.subtitle = input_data['field_subtitle']['value'];
         this.text = input_data['field_text']['value'];
         this.user = input_data['field_user']['uid'];
-        this.action = input_data['field_subtitle']['value'];
+        this.action = input_data['field_action'];
         Debugger.log(['item generated is this',this]);
         }
         /*
@@ -64,10 +64,12 @@ export class Notification{
             type: 'notification',
             field_text:{und:[{value:this.text}]},
             field_user:{und:this.user},
+            field_action:{und:[{value:this.action}]}
           };
           if(!this.Nid){
               delete aux_data.Nid;
           }
+          Debugger.log(['Noti getData gets',aux_data]);
           return aux_data;
     }
 

@@ -1,6 +1,6 @@
-import { Component, HostListener, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserDataProvider } from '../../providers/user-data/user-data';
-import { NavController, Loading, LoadingController } from 'ionic-angular';
+import { NavController, Loading, LoadingController, ModalController } from 'ionic-angular';
 import { LoginPage } from '../../pages/login/login';
 import { Debugger } from '../../providers/user-data/debugger';
 import { FacturacionPage } from '../../pages/facturacion/facturacion';
@@ -8,7 +8,8 @@ import { HomePage } from '../../pages/home/home';
 import { RegisterModalPage } from '../../pages/register-modal/register-modal';
 import { PopoverController } from 'ionic-angular';
 import { NotificationPopPage }from '../../pages/notification-pop/notification-pop';
-
+import { Citas } from '../../providers/user-data/citas';
+import {ProgresocitaModalPage} from '../../pages/progresocita-modal/progresocita-modal';
 
 /**
  * Generated class for the HeaderComponent component.
@@ -20,11 +21,13 @@ import { NotificationPopPage }from '../../pages/notification-pop/notification-po
   selector: 'header',
   templateUrl: 'header.html'
 })
+
 export class HeaderComponent {
   bgColor:"C1272D";
   fntColor:"FFFFFF";
   authObservable = null;
   susObservable = null;
+  notiSubject = null;
   showNotifications:boolean = false;
 
   pagename = this.navCtrl.getActive().name;
@@ -33,13 +36,15 @@ export class HeaderComponent {
     public navCtrl:NavController,
     public loadingCtrl:LoadingController,
     public popoverCtrl: PopoverController,
-    private eRef: ElementRef
+    public modalCtrl: ModalController
+    
   ) {
     console.log('Loading Header Component check session');
     //this.text = 'Hello World';
     console.log("okai there is");
     this.authObservable = userData.AuthSubject;
     this.susObservable = userData.susSubject;
+    this.notiSubject = userData.notiSubject;
     this.susObservable.subscribe(
       (val)=>{
         this.pagename = this.navCtrl.getActive().name;
@@ -74,6 +79,64 @@ export class HeaderComponent {
       if(Number(val) === Number(0) ) 
         this.navCtrl.setRoot(LoginPage);
     });
+
+    this.notiSubject.subscribe((action:string)=>{
+       this.handleNotificationAction(action);
+      });
+    } //fin constructor
+
+
+  handleNotificationAction( action:string){
+    if(this.userData.checkUserFeature([UserDataProvider.TIPO_ANY],[UserDataProvider.PLAN_ANY])){
+      Debugger.log(["operating notification on header",action]);
+      const aux = action.split('-');
+      switch(aux[0]){
+        case 'cita':  //abrir cita
+          this.openCitaModal(aux[1]);
+        break;
+        default: 
+          Debugger.log(['operating unknown action on notification']);
+      }
+    }
+  }
+
+  openCitaModal( citaNid ){
+    //buscar que la cita exista.
+    const index = this.userData.getCitaIndexByNid(Number(citaNid));
+    if(index !== -1){ //si la cita existe abrirla
+      const cita = this.userData.citas[index];
+      this.openProgreso(cita);
+    }else{//si la cita no existe cargarla.
+      Debugger.log(['node not on memory, loading it from database']);
+      //cargar una cita por el nodo
+      const observable = this.userData.getCitasNidObservable(citaNid);
+      let loader = this.loadingCtrl.create({
+        content: "Cargando..."
+      });
+      loader.present();
+      observable.subscribe((val)=>{
+        loader.dismiss()
+        if(val[0]){
+        Debugger.log(['wegotfrom nodeload',val]);
+        let aux_cita = new Citas();
+        aux_cita.setData(val[0]);
+        Debugger.log(['loaded cita',aux_cita]);
+        this.openProgreso(aux_cita);
+      }
+      },(response)=>{
+        loader.dismiss();
+      }
+    )
+    }
+  }
+
+  openProgreso( cita: Citas){
+    console.log("sending progreso", cita);
+    let Modal = this.modalCtrl.create(ProgresocitaModalPage, {cita : cita}, { cssClass: "smallModal progressModal" });
+    Modal.onDidDismiss(data => {
+      this.userData.cargarCitas();
+    });
+    Modal.present({});
   }
  
   goHome(){
@@ -82,6 +145,29 @@ export class HeaderComponent {
       Debugger.log(['implying this is not Home page']);
       this.navCtrl.setRoot(HomePage);
     }
+  }
+
+
+  presentNotifications(myEvent) {
+    if(this.userData.notificaciones.length === 0){
+      this.userData.activeCargandoNotif = true;
+      let notinterval = setInterval(()=>{
+        if(!this.userData.activeCargandoNotif || this.userData.notificaciones.length !== 0){
+          this.userData.activeCargandoNotif = false;
+          clearInterval(notinterval);
+        }
+      },500);
+      this.userData.getNotificationObservable().subscribe(
+          (val)=>{
+            this.userData.setNotifications(val);
+            this.userData.cargandoNotif =  this.userData.activeCargandoNotif = false;
+          },(response)=>{this.userData.cargandoNotif = this.userData.activeCargandoNotif = false;}
+      );
+    }
+    let popover = this.popoverCtrl.create(NotificationPopPage, undefined, { cssClass: "notiPopover" });
+    popover.present({
+      ev: myEvent
+    });
   }
 
 

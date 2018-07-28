@@ -80,7 +80,7 @@ export class Citas{
           this.data.field_retrasda.und[0].value = data_input.field_retrasda;
           if(data_input.field_hora_iniciomsb) this.data.field_hora_iniciomsb.und[0].value = Number(data_input.field_hora_iniciomsb.value);
           if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);
-          if(data_input['field_servicios_json'])this.setServiciosReport(data_input['field_servicios_json']['value']);
+          if(data_input['field_servicios_json'] && data_input['field_servicios_json']['value'])this.setServiciosReport(data_input['field_servicios_json']['value']);
           if(data_input.doctor_playerid) this.doctor_playerid = data_input.doctor_playerid;
           if(data_input.recepcion_playerid)  this.recepcion_playerid = data_input.recepcion_playerid;
           if(data_input.caja_playerid)  this.caja_playerid = data_input.caja_playerid;

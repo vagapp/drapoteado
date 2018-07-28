@@ -208,6 +208,16 @@ ion-app.ios [padding] .scroll-content{
     bottom: 0;
 }
 
+.notiPopover .popover-content{
+    top: 80px !important;
+    width: 300px;
+}
+
+.notiPopover .popover-content .notification_item{
+    border-bottom: 1px solid lightgray;
+    padding: 20px;  
+}
+
 .ModalInput_input{
     font-size: 2rem !important;
 }

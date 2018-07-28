@@ -196,6 +196,8 @@ export class UsuariosPage {
   }
 
 
+
+
   removeSubUserFromSubs( userd ){
     let loader = this.loadingCtrl.create({
       content: "removiendo usuario . . ."

@@ -130,6 +130,7 @@ export class HomePage {
     });
     Modal.present({});
   }
+  
   openFacturacion(){
     this.navCtrl.setRoot(FacturacionPage);
   }
@@ -175,5 +176,6 @@ export class HomePage {
       case 5: this.rifa="alberto"; break;
     }
   }
+  
   
 }

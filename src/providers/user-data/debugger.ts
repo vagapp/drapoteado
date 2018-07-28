@@ -17,6 +17,4 @@ export class Debugger{
                 console.log.apply(console,show);
             }
         }
-
-        
     }   

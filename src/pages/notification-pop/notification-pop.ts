@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
 
@@ -15,11 +15,11 @@ import { Debugger } from '../../providers/user-data/debugger';
   templateUrl: 'notification-pop.html',
 })
 export class NotificationPopPage {
-
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    public userData: UserDataProvider
+    public userData: UserDataProvider,
+    public viewCtrl: ViewController
   ) {
   }
 
@@ -29,6 +29,11 @@ export class NotificationPopPage {
 
   notificationClick( notification ){
     Debugger.log(['notification',notification]);
+    this.userData.operateNotification(notification);
+  }
+
+  close() {
+    this.viewCtrl.dismiss();
   }
 
   

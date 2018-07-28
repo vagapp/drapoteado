@@ -105,7 +105,7 @@ export class MyApp {
               console.log(val);
               this.userData.setUserData(val);
               this.userData.cargarSubscription();
-              //this.userData.generateNotification( [76],'Hello World Notification');
+              //this.userData.generateNotification( [76],'Hello World Notification cita', 'cita-196');
               this.userData.cargarNotificaciones();
               let moveinterval = setInterval(() =>{
                 Debugger.log(['checking initiation']);
@@ -141,15 +141,6 @@ export class MyApp {
             loading.dismiss();
           }
         });
-        /*let outInterval = setInterval( ()=>{
-          Debugger.log(['connectTimeout is',this.connectcomp]);
-          if(!this.connectcomp){
-            Debugger.log(['CONECT TIMEOUT']);
-            this.userData.logout();
-            loading.dismiss();
-            //window.location.reload();
-          }
-        },120000);*/
     }, response => {
       console.log("POST call in error", JSON.stringify(response));
   },() => {
@@ -188,7 +179,8 @@ export class MyApp {
   }
   
   private onPushOpened(payload: OSNotificationPayload) {
-    alert('Push opened: ' + payload.body);
+    Debugger.log(['onPushOpened',payload]);
+    this.userData.operatePushNotification(payload.additionalData.action);
   }
 
   /*initCheckSession(){
