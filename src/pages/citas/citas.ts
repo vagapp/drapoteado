@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ToastController, LoadingController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
-import { NuevacitaModalPage } from '../nuevacita-modal/nuevacita-modal';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
-import { EmailValidator } from '@angular/forms';
-import { ProgresocitaModalPage } from '../progresocita-modal/progresocita-modal';
-import { Debugger } from '../../providers/user-data/debugger';
-
 /**
  * Generated class for the CitasPage page.
  *
@@ -41,12 +36,12 @@ export class CitasPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CitasPage');
+    //console.log('ionViewDidLoad CitasPage');
     this.cargarCitas();
   }
 
   openNuevaCita(){
-      let Modal = this.modalCtrl.create(NuevacitaModalPage, undefined, { cssClass: "nuevaCitaModal smallModal" });
+      let Modal = this.modalCtrl.create("NuevacitaModalPage", undefined, { cssClass: "nuevaCitaModal smallModal" });
       Modal.onDidDismiss(data => {
         this.cargarCitas();
       });
@@ -104,7 +99,7 @@ export class CitasPage {
       loader.present();
       this.userData.updateCitaState(cita,state).subscribe(
         (val)=>{
-          Debugger.log(['updating cita',cita]);
+          //Debugger.log(['updating cita',cita]);
           if(Number(state) === 1){ //cambiando a cita confirmada
             //crear notificacion para doctor a quien le confirmaron la cita
             if(cita.doctor_playerid)
@@ -120,14 +115,14 @@ export class CitasPage {
           this.cargarCitas();
         },
         response => {
-          console.log("POST call in error", response);
+          //console.log("POST call in error", response);
           this.presentAlert("Error","Ubo un problema al presentar ");
         }
       );
     } 
 
     editCita( cita ){
-      let Modal = this.modalCtrl.create(NuevacitaModalPage, { cita: cita }, { cssClass: "nuevaCitaModal smallModal" });
+      let Modal = this.modalCtrl.create("NuevacitaModalPage", { cita: cita }, { cssClass: "nuevaCitaModal smallModal" });
       Modal.onDidDismiss(data => {
         this.cargarCitas();/*.subscribe((val)=>{loader.dismiss();}
         );*/
@@ -137,8 +132,8 @@ export class CitasPage {
 
 
     openProgreso( cita: Citas){
-      console.log("sending progreso", cita);
-      let Modal = this.modalCtrl.create(ProgresocitaModalPage, {cita : cita}, { cssClass: "smallModal progressModal" });
+      //console.log("sending progreso", cita);
+      let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
       Modal.onDidDismiss(data => {
        this.cargarCitas();/*.subscribe((val)=>{loader.dismiss();}
         );*/
@@ -153,7 +148,7 @@ export class CitasPage {
       });
       
       let aux_doc = this.userData.getDoctorOFCita(cita);
-      console.log("tryin to open cita progreso",cita);
+      //console.log("tryin to open cita progreso",cita);
       if(cita.checkState(UserDataProvider.STATE_ACTIVA)){
         this.openProgreso(cita);
       }else{
@@ -216,7 +211,7 @@ export class CitasPage {
     }
 
     deleteCita( cita:Citas ){
-      Debugger.log(['delete citas']);
+      //Debugger.log(['delete citas']);
       let loader = this.loadingCtrl.create({
         content: "eliminando..."
       });
@@ -224,7 +219,7 @@ export class CitasPage {
       this.userData.deleteCita( cita.data ).subscribe(
         (val)=>{
           loader.dismiss();
-          Debugger.log(['val returned from deletecita',val]);
+          //Debugger.log(['val returned from deletecita',val]);
           this.userData.removeCitaFromLists(cita);
           this.cargarCitas();
         }

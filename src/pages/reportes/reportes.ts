@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
-import { NuevoreporteModalPage } from '../nuevoreporte-modal/nuevoreporte-modal';
 import { ModalController } from 'ionic-angular';
 import { reportes } from '../../providers/user-data/reportes';
 import { UserDataProvider } from '../../providers/user-data/user-data';
-import { Debugger } from '../../providers/user-data/debugger';
-import { ReporteModalPage } from '../reporte-modal/reporte-modal';
+//import { Debugger } from '../../providers/user-data/debugger';
+
 
 /**
  * Generated class for the ReportesPage page.
@@ -32,18 +31,18 @@ export class ReportesPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ReportesPage');
+    //console.log('ionViewDidLoad ReportesPage');
     this.userData.cargarListaReportes();
-    Debugger.log(["reportes carfados",this.userData.reportes]);
+    //Debugger.log(["reportes carfados",this.userData.reportes]);
   }
 
   openNuevoreporte(){
-    let Modal = this.modalCtrl.create(NuevoreporteModalPage, undefined, { cssClass: "smallModal nuevoreporteModal" });
+    let Modal = this.modalCtrl.create("NuevoreporteModalPage", undefined, { cssClass: "smallModal nuevoreporteModal" });
     Modal.present({});
   }
   
   openReportModal( report:reportes ){
-    let Modal = this.modalCtrl.create(ReporteModalPage, {reporte:report}, { cssClass: "bigModal reportModal" });
+    let Modal = this.modalCtrl.create("ReporteModalPage", {reporte:report}, { cssClass: "bigModal reportModal" });
     Modal.present({});
   }
 
@@ -74,14 +73,12 @@ export class ReportesPage {
             );
             this.userData.deleteReport(report).subscribe(
               (val) => {
-               
-                Debugger.log([val]);
+                //Debugger.log([val]);
                 this.userData.cargarListaReportes();
               },
               (response)=>{
-                
                 this.userData.loading_reports = false;
-                Debugger.log(['deleting node error',response]);
+                //Debugger.log(['deleting node error',response]);
               }
             );
           }

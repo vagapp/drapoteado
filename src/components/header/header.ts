@@ -1,15 +1,9 @@
 import { Component } from '@angular/core';
 import { UserDataProvider } from '../../providers/user-data/user-data';
-import { NavController, Loading, LoadingController, ModalController } from 'ionic-angular';
-import { LoginPage } from '../../pages/login/login';
-import { Debugger } from '../../providers/user-data/debugger';
-import { FacturacionPage } from '../../pages/facturacion/facturacion';
-import { HomePage } from '../../pages/home/home';
-import { RegisterModalPage } from '../../pages/register-modal/register-modal';
-import { PopoverController } from 'ionic-angular';
-import { NotificationPopPage }from '../../pages/notification-pop/notification-pop';
+import { NavController, LoadingController, ModalController, PopoverController } from 'ionic-angular';
+//import { Debugger } from '../../providers/user-data/debugger';
 import { Citas } from '../../providers/user-data/citas';
-import {ProgresocitaModalPage} from '../../pages/progresocita-modal/progresocita-modal';
+
 
 /**
  * Generated class for the HeaderComponent component.
@@ -39,21 +33,18 @@ export class HeaderComponent {
     public modalCtrl: ModalController
     
   ) {
-    console.log('Loading Header Component check session');
-    //this.text = 'Hello World';
-    console.log("okai there is");
     this.authObservable = userData.AuthSubject;
     this.susObservable = userData.susSubject;
     this.notiSubject = userData.notiSubject;
     this.susObservable.subscribe(
       (val)=>{
         this.pagename = this.navCtrl.getActive().name;
-        Debugger.log(['sus val is',val]);
+        //Debugger.log(['sus val is',val]);
         if(Number(val) === 0){
-        Debugger.log(['page is ax',this.pagename]);
+        //Debugger.log(['page is ax',this.pagename]);
         if(this.pagename.localeCompare('HomePage') !== 0){
-          Debugger.log(['implying this is not facturation page']);
-          this.navCtrl.setRoot(HomePage);
+          //Debugger.log(['implying this is not facturation page']);
+          this.navCtrl.setRoot("HomePage");
         }
         this.userData.resetLists();
         }else{
@@ -75,9 +66,8 @@ export class HeaderComponent {
     );
     this.authObservable.subscribe( 
       (val)=>{
-      console.log("user uid changed to",val);
       if(Number(val) === Number(0) ) 
-        this.navCtrl.setRoot(LoginPage);
+        this.navCtrl.setRoot("LoginPage");
     });
 
     this.notiSubject.subscribe((action:string)=>{
@@ -88,14 +78,14 @@ export class HeaderComponent {
 
   handleNotificationAction( action:string){
     if(this.userData.checkUserFeature([UserDataProvider.TIPO_ANY],[UserDataProvider.PLAN_ANY])){
-      Debugger.log(["operating notification on header",action]);
+      //Debugger.log(["operating notification on header",action]);
       const aux = action.split('-');
       switch(aux[0]){
         case 'cita':  //abrir cita
           this.openCitaModal(aux[1]);
         break;
         default: 
-          Debugger.log(['operating unknown action on notification']);
+          //Debugger.log(['operating unknown action on notification']);
       }
     }
   }
@@ -107,7 +97,7 @@ export class HeaderComponent {
       const cita = this.userData.citas[index];
       this.openProgreso(cita);
     }else{//si la cita no existe cargarla.
-      Debugger.log(['node not on memory, loading it from database']);
+      //Debugger.log(['node not on memory, loading it from database']);
       //cargar una cita por el nodo
       const observable = this.userData.getCitasNidObservable(citaNid);
       let loader = this.loadingCtrl.create({
@@ -117,10 +107,10 @@ export class HeaderComponent {
       observable.subscribe((val)=>{
         loader.dismiss()
         if(val[0]){
-        Debugger.log(['wegotfrom nodeload',val]);
+        //Debugger.log(['wegotfrom nodeload',val]);
         let aux_cita = new Citas();
         aux_cita.setData(val[0]);
-        Debugger.log(['loaded cita',aux_cita]);
+        //Debugger.log(['loaded cita',aux_cita]);
         this.openProgreso(aux_cita);
       }
       },(response)=>{
@@ -131,8 +121,7 @@ export class HeaderComponent {
   }
 
   openProgreso( cita: Citas){
-    console.log("sending progreso", cita);
-    let Modal = this.modalCtrl.create(ProgresocitaModalPage, {cita : cita}, { cssClass: "smallModal progressModal" });
+    let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
     Modal.onDidDismiss(data => {
       this.userData.cargarCitas();
     });
@@ -142,8 +131,8 @@ export class HeaderComponent {
   goHome(){
     this.pagename = this.navCtrl.getActive().name;
     if(this.pagename.localeCompare('HomePage') !== 0){
-      Debugger.log(['implying this is not Home page']);
-      this.navCtrl.setRoot(HomePage);
+      //Debugger.log(['implying this is not Home page']);
+      this.navCtrl.setRoot("HomePage");
     }
   }
 
@@ -164,7 +153,7 @@ export class HeaderComponent {
           },(response)=>{this.userData.cargandoNotif = this.userData.activeCargandoNotif = false;}
       );
     }
-    let popover = this.popoverCtrl.create(NotificationPopPage, undefined, { cssClass: "notiPopover" });
+    let popover = this.popoverCtrl.create("NotificationPopPage", undefined, { cssClass: "notiPopover" });
     popover.present({
       ev: myEvent
     });

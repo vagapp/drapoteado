@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, LoadingController, AlertController } from 'ionic-angular';
 import { UserDataProvider  } from '../../providers/user-data/user-data';
-import { Debugger } from '../../providers/user-data/debugger';
+//import { Debugger } from '../../providers/user-data/debugger';
 import { sources } from '../../providers/user-data/sources';
 import { planes } from '../../providers/user-data/planes';
-import { HomePage } from '../home/home';
 import { subscriptions } from '../../providers/user-data/subscriptions';
 import { Clipboard } from '@ionic-native/clipboard';
 import { isCordovaAvailable } from '../../common/is-cordova-available';
@@ -55,9 +54,9 @@ export class RegisterModalPage {
   }
 
   ionViewDidLoad() {
-    Debugger.log(['userdata',this.userData.userData]);
-    Debugger.log(['ionViewDidLoad RegisterModalPage']);
-    Debugger.log(['uid on register',this.userData.userData.uid]);
+    //Debugger.log(['userdata',this.userData.userData]);
+    //Debugger.log(['ionViewDidLoad RegisterModalPage']);
+    //Debugger.log(['uid on register',this.userData.userData.uid]);
     this.isnew = !this.userData.checkIsLoggedin();
     /*
     setTimeout(()=>{
@@ -78,9 +77,9 @@ export class RegisterModalPage {
       content: 'actualizando...'
     });
 
-    Debugger.log(['update not supported yet']);
+    //Debugger.log(['update not supported yet']);
     //revisar contraseñas
-    Debugger.log([this.userData.userData.pass]);
+    //Debugger.log([this.userData.userData.pass]);
     if(!this.basicValidation()){
       return 0;
     }
@@ -124,18 +123,18 @@ export class RegisterModalPage {
   delete cloneData.field_forma_pago;
   delete cloneData.field_plan_date;
   
-  Debugger.log(['register',this.userData.userData]);
+  //Debugger.log(['register',this.userData.userData]);
     let register_observer = this.userData.register(cloneData);
     register_observer.subscribe(
       (val) => {
-        Debugger.log(["sucess register on modal",val]);
+        //Debugger.log(["sucess register on modal",val]);
         window.location.reload();
         /*loading.dismiss();
         this.presentAlert('Se ha completado su registro, favor de iniciar sesión',"Registro Completo");*/
         //this.dismiss();
       },
       response => {
-        Debugger.log(["POST call in error", response]);
+        //Debugger.log(["POST call in error", response]);
         if(response && response.error && response.error.form_errors){
           let error_msg = `Se encontraron los siguientes errores:`;
           for (var key in response.error.form_errors) {
@@ -147,7 +146,7 @@ export class RegisterModalPage {
         loading.dismiss();
       },
       () => {
-        Debugger.log(["The POST observable is now completed."]);
+        //Debugger.log(["The POST observable is now completed."]);
       });
   }
 
@@ -178,7 +177,7 @@ export class RegisterModalPage {
 
   
   selectCard( input_src:sources ){
-    Debugger.log(['selecting source',input_src]);
+    //Debugger.log(['selecting source',input_src]);
     this.selected_source = input_src;
     this.selected_source.set_selected()
   }
@@ -189,24 +188,24 @@ export class RegisterModalPage {
   }
   
   suscribirse(){
-    Debugger.log(['suscribirse']);
-    Debugger.log(["card seleccionado",this.selected_source]);
+    //Debugger.log(['suscribirse']);
+    //Debugger.log(["card seleccionado",this.selected_source]);
     if(this.selected_source === null){
-      Debugger.log(['NO HAZ ELEGIDO METODO DE PAGO']);
+      //Debugger.log(['NO HAZ ELEGIDO METODO DE PAGO']);
       return false;
     }
-    Debugger.log(["plan seleccionado",this.selected_plan]);
+   // Debugger.log(["plan seleccionado",this.selected_plan]);
     if(this.selected_plan === null){
-      Debugger.log(['NO HAZ ELEGIDO PLAN']);
+      //Debugger.log(['NO HAZ ELEGIDO PLAN']);
       return false;
     }
     let loading = this.loadingCtrl.create({
       content: 'Subscribiendo...'
     });
     loading.present();
-    Debugger.log(['validation passed como hacer una suscripcion por stripe = 0']);
+   // Debugger.log(['validation passed como hacer una suscripcion por stripe = 0']);
     if(this.userData.subscription.nid === null){
-      Debugger.log(['new subscription']);
+      //Debugger.log(['new subscription']);
       let aux_sus = subscriptions.getEmptySuscription();
       aux_sus.plan = this.selected_plan;
       aux_sus.field_plan_sus = this.selected_plan.nid;
@@ -216,21 +215,21 @@ export class RegisterModalPage {
       aux_sus.field_stripe_src_sus_id = this.selected_source.src_id;
       aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
       this.userData.generateNewSus(aux_sus).subscribe((val)=>{
-        Debugger.log(['we got this',val]);
+       // Debugger.log(['we got this',val]);
         this.userData.subscription.nid = val['nid'];
         this.userData.userData.field_sub_id={und:new Array()};
         this.userData.userData.field_sub_id.und.push(val['nid']);
         //this.userData.userData.field_sub_id["und"]["0"] =  val['nid'];
         this.userData.updateUser().subscribe(
           (val)=>{
-            Debugger.log(['se guardo el stripe sub_id en usuario']);
+            //Debugger.log(['se guardo el stripe sub_id en usuario']);
             window.location.reload();
           }
         );
-        Debugger.log(['subs updated to this, update user please',this.userData.subscription.nid]); 
+        //Debugger.log(['subs updated to this, update user please',this.userData.subscription.nid]); 
       });
     }else{
-      Debugger.log(['UPDATE SUSCRIPTION NOT IMPLEMENTED YET']);
+      //Debugger.log(['UPDATE SUSCRIPTION NOT IMPLEMENTED YET']);
       loading.dismiss();
     }
   }
@@ -238,14 +237,14 @@ export class RegisterModalPage {
 
   invitationSub(){
     if(this.invitationCode.localeCompare('all') === 0){
-      Debugger.log(['all not permited']);
+      //Debugger.log(['all not permited']);
       return false;
     }
     let loading = this.loadingCtrl.create({
       content: 'Buscando codigo...'
     });
     loading.present();
-    Debugger.log(['joining with',this.invitationCode]);
+    //Debugger.log(['joining with',this.invitationCode]);
     
     this.userData.cargarSubscription(this.invitationCode).subscribe(
       (val)=>{
@@ -262,11 +261,11 @@ export class RegisterModalPage {
           }else{
         if(this.userData.subscription.nid !== null){
           this.userData.subscription.field_doctores.push(this.userData.userData.uid);
-          Debugger.log(['loeaded subscription',this.userData.subscription]);
+          //Debugger.log(['loeaded subscription',this.userData.subscription]);
           this.userData.updateSus(this.userData.subscription).subscribe((val=>{
-            Debugger.log(['updated subscription received',val]);
+            //Debugger.log(['updated subscription received',val]);
             loading.dismiss();
-            this.navCtrl.setRoot(HomePage);
+            this.navCtrl.setRoot("HomePage");
           }));
         
       }else{
@@ -318,15 +317,15 @@ export class RegisterModalPage {
       content: 'Eliminando usuario'
     });
     loading.present();
-    Debugger.log(['removing ',uid]);
-    Debugger.log(['index of uid',this.userData.subscription.field_doctores.indexOf(uid)]);
+    //Debugger.log(['removing ',uid]);
+    //Debugger.log(['index of uid',this.userData.subscription.field_doctores.indexOf(uid)]);
     if(this.userData.subscription.field_doctores.indexOf(uid) >= 0){
     this.userData.subscription.field_doctores.splice(this.userData.subscription.field_doctores.indexOf(uid), 1);
     }
-    Debugger.log(['userData after removing doctor',this.userData.subscription.field_doctores]);
+    //Debugger.log(['userData after removing doctor',this.userData.subscription.field_doctores]);
     this.userData.updateSus(this.userData.subscription).subscribe(
       (val) =>{
-        Debugger.log(['response from deleting doctor on subs',val]);
+        //Debugger.log(['response from deleting doctor on subs',val]);
         this.userData.cargarSubscription().subscribe((val)=>{
         loading.dismiss();
         });
@@ -336,7 +335,7 @@ export class RegisterModalPage {
 
   loadSources(){
     if(!this.isnew){
-    Debugger.log(['loading srcs']);
+    //Debugger.log(['loading srcs']);
     let old_selected = this.selected_source;
     this.sources = new Array();
     for(let i = 0; i < this.userData.userData.field_src_json_info.und.length; i++){
@@ -373,8 +372,8 @@ export class RegisterModalPage {
     };
 
     this.card = elements.create('card', { style: style });
-    let crd = document.getElementById("card-element");
-    Debugger.log([crd]);
+    //let crd = document.getElementById("card-element");
+    //Debugger.log([crd]);
     this.card.mount('#card-element');
     this.card.addEventListener('change', event => {
       var displayError = document.getElementById('card-errors');
@@ -397,7 +396,7 @@ export class RegisterModalPage {
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
-          Debugger.log(["result source added"]);
+          //Debugger.log(["result source added"]);
           //console.log(JSON.stringify(result));
           let cu_src_data = {
                             id:result.source.id,
@@ -406,12 +405,12 @@ export class RegisterModalPage {
                             brand:result.source.card.brand
                             };
           this.userData.userData.field_src_json_info['und'].push({value: JSON.stringify(cu_src_data)});
-          Debugger.log(['userdatajson',this.userData.userData.field_src_json_info]);
+          //Debugger.log(['userdatajson',this.userData.userData.field_src_json_info]);
           /*console.log( this.userData.userData.field_src_json_info);*/
         }
         this.userData.updateUser().subscribe(
           (val)=>{
-            Debugger.log(['se guardo el stripe source']);
+            //Debugger.log(['se guardo el stripe source']);
             this.loadSources();
             loading.dismiss();
           },(response)=>{

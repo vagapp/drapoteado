@@ -1,23 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, LoadingController } from 'ionic-angular';
-import { ComponentsModule } from "../../components/components.module";
-import { PopoverController } from 'ionic-angular';
-import { WelcomeModalPage } from '../welcome-modal/welcome-modal';
-import { ReporteModalPage} from '../reporte-modal/reporte-modal';
-import { ProgresocitaModalPage } from '../progresocita-modal/progresocita-modal';
-import { CitasPage } from '../citas/citas';
-import { ServiciosPage } from '../servicios/servicios';
-import { UsuariosPage } from '../usuarios/usuarios';
-import { ReportesPage } from '../reportes/reportes';
-import { ModalController } from 'ionic-angular';
-import { NuevacitaModalPage } from '../nuevacita-modal/nuevacita-modal';
+import { NavController, AlertController, LoadingController, ModalController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
-import { LoginPage } from '../login/login';
 import { Citas } from '../../providers/user-data/citas';
-import { FacturacionPage } from '../facturacion/facturacion';
-import { RegisterModalPage } from '../register-modal/register-modal';
-import { Debugger } from '../../providers/user-data/debugger';
-import { ClickOutsideModule } from 'ng-click-outside';
+//import { Debugger } from '../../providers/user-data/debugger';
 
 
 @Component({
@@ -37,10 +22,8 @@ export class HomePage {
   }
 
   ionViewDidLoad(){
-    Debugger.log(['this.userData.userData.tutorial_state',this.userData.userData.tutorial_state.und[0]]);
-    Debugger.log(['this.userData.userData.tutorial_state',this.userData.userData.tutorial_state.und[0].value]);
       if( this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){
-        let Modal = this.modalCtrl.create(WelcomeModalPage);
+        let Modal = this.modalCtrl.create("WelcomeModalPage");
         Modal.present({});
         this.userData.userData.tutorial_state.und[0].value = "1";
         let cloneData = {
@@ -49,9 +32,9 @@ export class HomePage {
         }
         this.userData.updateUserd(cloneData).subscribe(
           (val)=>{
-            Debugger.log(['update user tutorial state',val]);
+           
           }, (response) => {
-            Debugger.log(['error on update user tutorial state',response]);
+          
           }
         );
         
@@ -65,7 +48,7 @@ export class HomePage {
       content: "Iniciando Cita..."
     });
     let aux_doc = this.userData.getDoctorOFCita(cita);
-    console.log("tryin to open cita progreso",cita);
+    
     if(cita.checkState(UserDataProvider.STATE_ACTIVA) || cita.checkState(UserDataProvider.STATE_COBRO)){
       this.openProgreso(cita);
     }else{
@@ -107,52 +90,47 @@ export class HomePage {
 
   confirmarCita(cita:Citas){
     this.userData.updateCitaState( cita , UserDataProvider.STATE_CONFIRMADA ).subscribe((val)=>{
+        this.userData.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
       this.userData.cargarCitas()
     });
   }
 
-  /*iniciarCita( cita:Citas ){
-      console.log("mostrar modal de desea iniciar esta cita");
-    console.log("si acepta usar openProgreso para iniciar cita");
-    console.log("cargar la cita en el modal");
-  }*/
 
   openReportModal(){
-    let Modal = this.modalCtrl.create(ReporteModalPage, undefined, { cssClass: "bigModal reportModal" });
+    let Modal = this.modalCtrl.create("ReporteModalPage", undefined, { cssClass: "bigModal reportModal" });
     Modal.present({});
   }
 
   openProgreso( cita: Citas){
-    console.log("sending progreso", cita);
-    let Modal = this.modalCtrl.create(ProgresocitaModalPage, {cita : cita}, { cssClass: "smallModal progressModal" });
+    let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
     Modal.onDidDismiss(data => {
       this.userData.cargarCitas();
     });
     Modal.present({});
   }
-  
+
   openFacturacion(){
-    this.navCtrl.setRoot(FacturacionPage);
+    this.navCtrl.setRoot("FacturacionPage");
   }
   openRegister(){
-    let Modal = this.modalCtrl.create(RegisterModalPage, undefined, { cssClass: "bigModal" });
+    let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
     Modal.onDidDismiss(data => {});
     Modal.present({});
   }
   openCitas(){
-    this.navCtrl.setRoot(CitasPage);
+    this.navCtrl.setRoot("CitasPage");
   }
   openServicios(){
-    this.navCtrl.setRoot(ServiciosPage);
+    this.navCtrl.setRoot("ServiciosPage");
   }
   openUsuarios(){
-    this.navCtrl.setRoot(UsuariosPage);
+    this.navCtrl.setRoot("UsuariosPage");
   }
   openReportes(){
-    this.navCtrl.setRoot(ReportesPage);
+    this.navCtrl.setRoot("ReportesPage");
   }
   openNuevaCita(){
-    let Modal = this.modalCtrl.create(NuevacitaModalPage, undefined, { cssClass: "nuevaCitaModal smallModal" });
+    let Modal = this.modalCtrl.create("NuevacitaModalPage", undefined, { cssClass: "nuevaCitaModal smallModal" });
     Modal.present({});
   }
 

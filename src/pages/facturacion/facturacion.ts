@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { sources } from '../../providers/user-data/sources';
-import { Debugger } from '../../providers/user-data/debugger';
+//import { Debugger } from '../../providers/user-data/debugger';
 import { planes } from '../../providers/user-data/planes';
 import { subscriptions } from '../../providers/user-data/subscriptions';
-import { HomePage } from '../home/home';
+
 
 declare var Stripe;
 
@@ -40,13 +40,13 @@ export class FacturacionPage {
   }
 
   ionViewDidLoad() {
-    Debugger.log(['facturation checks',this.userData.subscription]);
+    //Debugger.log(['facturation checks',this.userData.subscription]);
     this.setupStripe();
     this.loadSources();
   }
 
   selectCard( input_src:sources ){
-    Debugger.log(['selecting source',input_src]);
+    //Debugger.log(['selecting source',input_src]);
     this.selected_source = input_src;
     this.selected_source.set_selected()
   }
@@ -57,20 +57,20 @@ export class FacturacionPage {
   }
   
   suscribirse(){
-    Debugger.log(['suscribirse']);
-    Debugger.log(["card seleccionado",this.selected_source]);
+    //Debugger.log(['suscribirse']);
+    //Debugger.log(["card seleccionado",this.selected_source]);
     if(this.selected_source === null){
-      Debugger.log(['NO HAZ ELEGIDO METODO DE PAGO']);
+      //Debugger.log(['NO HAZ ELEGIDO METODO DE PAGO']);
       return false;
     }
-    Debugger.log(["plan seleccionado",this.selected_plan]);
+    //Debugger.log(["plan seleccionado",this.selected_plan]);
     if(this.selected_plan === null){
-      Debugger.log(['NO HAZ ELEGIDO PLAN']);
+      //Debugger.log(['NO HAZ ELEGIDO PLAN']);
       return false;
     }
-    Debugger.log(['validation passed como hacer una suscripcion por stripe = 0']);
+    //Debugger.log(['validation passed como hacer una suscripcion por stripe = 0']);
     if(this.userData.subscription.nid === null){
-      Debugger.log(['new subscription']);
+      //Debugger.log(['new subscription']);
       let aux_sus = subscriptions.getEmptySuscription();
       aux_sus.plan = this.selected_plan;
       aux_sus.field_plan_sus = this.selected_plan.nid;
@@ -80,32 +80,32 @@ export class FacturacionPage {
       aux_sus.field_stripe_src_sus_id = this.selected_source.src_id;
       aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
       this.userData.generateNewSus(aux_sus).subscribe((val)=>{
-        Debugger.log(['we got this',val]);
+        //Debugger.log(['we got this',val]);
         this.userData.subscription.nid = val['nid'];
         this.userData.userData.field_sub_id["und"][0]['value'] =  val['nid'];
         this.userData.updateUser().subscribe(
           (val)=>{
-            Debugger.log(['se guardo el stripe sub_id en usuario']);
+            //Debugger.log(['se guardo el stripe sub_id en usuario']);
           }
         );
-        Debugger.log(['subs updated to this, update user please',this.userData.subscription.nid]); 
+        //Debugger.log(['subs updated to this, update user please',this.userData.subscription.nid]); 
       });
     }else{
-      Debugger.log(['UPDATE SUSCRIPTION NOT IMPLEMENTED YET']);
+      //Debugger.log(['UPDATE SUSCRIPTION NOT IMPLEMENTED YET']);
     }
   }
 
 
   invitationSub(){
     if(this.invitationCode.localeCompare('all') === 0){
-      Debugger.log(['all not permited']);
+      //Debugger.log(['all not permited']);
       return false;
     }
     let loading = this.loadingCtrl.create({
       content: 'Buscando codigo...'
     });
     loading.present();
-    Debugger.log(['joining with',this.invitationCode]);
+    //Debugger.log(['joining with',this.invitationCode]);
     
     this.userData.cargarSubscription(this.invitationCode).subscribe(
       (val)=>{
@@ -122,11 +122,11 @@ export class FacturacionPage {
           }else{
         if(this.userData.subscription.nid !== null){
           this.userData.subscription.field_doctores.push(this.userData.userData.uid);
-          Debugger.log(['loeaded subscription',this.userData.subscription]);
+          //Debugger.log(['loeaded subscription',this.userData.subscription]);
           this.userData.updateSus(this.userData.subscription).subscribe((val=>{
-            Debugger.log(['updated subscription received',val]);
+            //Debugger.log(['updated subscription received',val]);
             loading.dismiss();
-            this.navCtrl.setRoot(HomePage);
+            this.navCtrl.setRoot("HomePage");
           }));
         
       }else{
@@ -180,15 +180,15 @@ export class FacturacionPage {
       content: 'Eliminando usuario'
     });
     loading.present();
-    Debugger.log(['removing ',uid]);
-    Debugger.log(['index of uid',this.userData.subscription.field_doctores.indexOf(uid)]);
+    //Debugger.log(['removing ',uid]);
+    //Debugger.log(['index of uid',this.userData.subscription.field_doctores.indexOf(uid)]);
     if(this.userData.subscription.field_doctores.indexOf(uid) >= 0){
     this.userData.subscription.field_doctores.splice(this.userData.subscription.field_doctores.indexOf(uid), 1);
     }
-    Debugger.log(['userData after removing doctor',this.userData.subscription.field_doctores]);
+    //Debugger.log(['userData after removing doctor',this.userData.subscription.field_doctores]);
     this.userData.updateSus(this.userData.subscription).subscribe(
       (val) =>{
-        Debugger.log(['response from deleting doctor on subs',val]);
+        //Debugger.log(['response from deleting doctor on subs',val]);
         this.userData.cargarSubscription().subscribe((val)=>{
         loading.dismiss();
         });
@@ -197,7 +197,7 @@ export class FacturacionPage {
   }
 
   loadSources(){
-    Debugger.log(['loading srcs']);
+    //Debugger.log(['loading srcs']);
     let old_selected = this.selected_source;
     this.sources = new Array();
     for(let i = 0; i < this.userData.userData.field_src_json_info.und.length; i++){
@@ -250,7 +250,7 @@ export class FacturacionPage {
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
-          Debugger.log(["result source added"]);
+          //Debugger.log(["result source added"]);
           //console.log(JSON.stringify(result));
           let cu_src_data = {
                             id:result.source.id,
@@ -263,7 +263,7 @@ export class FacturacionPage {
         }
         this.userData.updateUser().subscribe(
           (val)=>{
-            Debugger.log(['se guardo el stripe source']);
+            //Debugger.log(['se guardo el stripe source']);
             this.loadSources();
           }
         );

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController, ViewController, AlertController } from 'ionic-angular';
-import { UserDataProvider, citasData } from '../../providers/user-data/user-data';
+import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { Debugger } from '../../providers/user-data/debugger';
 
@@ -85,7 +85,7 @@ export class NuevacitaModalPage {
     this.setCitaDateFromiNPUT();
     this.userData.generateNewCita( this.cita.data ).subscribe(
     (val)=>{
-      let doc = this.userData.getDoctorOFCita(this.cita);
+      //let doc = this.userData.getDoctorOFCita(this.cita);
       this.userData.generateNotification([this.cita.data.field_cita_doctor.und[0]],`Nueva Cita con ${this.cita.paciente} fecha: ${new Date(this.cita.data.field_datemsb['und'][0]['value'])}`,`cita-${this.cita.Nid}`);
       console.log("the new cita has been generated");
       this.presentToast("Completado");

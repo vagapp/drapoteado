@@ -120,15 +120,16 @@ export class ProgresocitaModalPage {
                 console.log("guardando",this.activeCita);
                 this.userData.updateCitaState( this.activeCita ,UserDataProvider.STATE_COBRO ).subscribe(
                   (val) => {
-                    this.activeCitaDoc.citaActiva = null;
                     loader.dismiss();
+                    this.userData.generateNotification([this.activeCita.data.field_cita_caja.und[0]],`La cita de de ${this.activeCita.paciente} esta en espera de cobro`,`cita-${this.activeCita.Nid}`);
+                    this.activeCitaDoc.citaActiva = null;
                     this.presentAlert("Completado","La cita se encuentra ahora en espera de cobro");
                   },
                   response => {
                       console.log("POST call in error", response);
-                      this.close();
                       loader.dismiss();
                       this.presentAlert("error","error inesperado, intentelo denuevo");
+                      this.close();
                   },
                   () => {
                       console.log("The POST observable is now completed.");

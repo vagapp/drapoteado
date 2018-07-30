@@ -1,5 +1,4 @@
 import { Citas } from "./citas";
-import { citasData, UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from "./debugger";
 import { servicios } from "./servicios";
 

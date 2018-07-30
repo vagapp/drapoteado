@@ -1,6 +1,5 @@
-import {UserDataProvider } from '../../providers/user-data/user-data';
 import { planes } from './planes';
-import { Debugger } from './debugger';
+//import { Debugger } from './debugger';
 
 
 /**
@@ -63,7 +62,7 @@ export class subscriptions{
                 this.field_subusuarios.push(element['uid']);
             });
         }
-        Debugger.log(['field_subusuarios at set data subscription',this.field_subusuarios]);
+        //Debugger.log(['field_subusuarios at set data subscription',this.field_subusuarios]);
         this.field_doctores_info = JSON.parse(this.field_doctores_json);
         if(this.field_subusuarios)
         this.noSubcuentas = this.field_subusuarios.length;
@@ -71,7 +70,7 @@ export class subscriptions{
     }
 
     getData():any{
-        Debugger.log(['tryna get data from',this]);
+        //Debugger.log(['tryna get data from',this]);
         let ret = null;
         if(this.nid !== null){
         ret =  {
@@ -100,7 +99,7 @@ export class subscriptions{
         });
         }
     }else{
-        Debugger.log(['is a new shit to save']);
+        //Debugger.log(['is a new shit to save']);
         ret =  {
             Nid:this.nid,
             type:"suscripcion",
@@ -126,7 +125,7 @@ export class subscriptions{
         });
         }
     }
-        Debugger.log(['source getData',ret]);
+        //Debugger.log(['source getData',ret]);
         return ret;
     }
 
@@ -140,12 +139,12 @@ export class subscriptions{
                this.checkfullness();
            }
        });
-       Debugger.log(['returning plan found and set', this.is_plan_set]);
+       //Debugger.log(['returning plan found and set', this.is_plan_set]);
        return ret; 
     }
     
     checkfullness(){
-        Debugger.log(['checking fullness from plan',this.plan]);
+        //Debugger.log(['checking fullness from plan',this.plan]);
         if(this.plan && this.plan.nid){
             if(this.field_doctores){
                 if(this.field_doctores.length >= this.plan.field_no_doctores){ this.isDocfull = true;}else{this.isDocfull=false;}
@@ -169,12 +168,12 @@ export class subscriptions{
 
 
     removeSubUserFromSubs( userd ){
-        Debugger.log(['trata de remover este usuario de esta subscripcion',userd]);
+        //Debugger.log(['trata de remover este usuario de esta subscripcion',userd]);
         if(this.field_subusuarios){
-            Debugger.log(['inde of this subuser', this.field_subusuarios.indexOf(userd['uid'])]);
+            //Debugger.log(['inde of this subuser', this.field_subusuarios.indexOf(userd['uid'])]);
             let aux_index = this.field_subusuarios.indexOf(userd['uid']);
             if(aux_index !== -1)this.field_subusuarios.splice(aux_index,1);
-            Debugger.log(['subusuarios after removing user from this index ,redy to save', this.field_subusuarios]);
+            //Debugger.log(['subusuarios after removing user from this index ,redy to save', this.field_subusuarios]);
         }
 
     }

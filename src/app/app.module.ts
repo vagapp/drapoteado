@@ -3,75 +3,31 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
-import { WelcomeModalPage } from '../pages/welcome-modal/welcome-modal';
-import { RegisterModalPage } from '../pages/register-modal/register-modal';
-import { ReporteModalPage } from '../pages/reporte-modal/reporte-modal';
-import { NuevacitaModalPage} from '../pages/nuevacita-modal/nuevacita-modal';
-import { ProgresocitaModalPage } from '../pages/progresocita-modal/progresocita-modal';
-import { NuevoservicioModalPage } from '../pages/nuevoservicio-modal/nuevoservicio-modal';
-import { NuevousuarioModalPage } from '../pages/nuevousuario-modal/nuevousuario-modal';
-import { NuevoreporteModalPage } from '../pages/nuevoreporte-modal/nuevoreporte-modal';
-import { LoginPage } from '../pages/login/login';
-import { CitasPage } from '../pages/citas/citas';
-import { ServiciosPage } from '../pages/servicios/servicios';
-import { UsuariosPage } from '../pages/usuarios/usuarios';
-import { ReportesPage } from '../pages/reportes/reportes';
-import { FacturacionPage } from '../pages/facturacion/facturacion';
-import { NotificationPopPage } from '../pages/notification-pop/notification-pop';
-
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Clipboard } from '@ionic-native/clipboard';
 import { OneSignal } from '@ionic-native/onesignal';
 
-
-import { HeaderComponent } from '../components/header/header';
-import { FooterComponent } from '../components/footer/footer';
 import { ComponentsModule } from '../components/components.module';
 import { DirectivesModule } from '../directives/directives.module';
 import { UserDataProvider } from '../providers/user-data/user-data';
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
-import { HTTP } from '@ionic-native/http';
-import { ClickOutsideModule } from 'ng-click-outside';
+//import { HTTP } from '@ionic-native/http';
  
-
-import { IonicStorageModule } from '@ionic/storage';
-
-
 import { HttpModule } from '@angular/http';
 
-import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
-import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
-import { Platform } from 'ionic-angular';
-import { RecoverModalPage } from '../pages/recover-modal/recover-modal';
+//import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
+//import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
+//import { Platform } from 'ionic-angular';
+
 
 
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
-    ListPage,
-    WelcomeModalPage,
-    RegisterModalPage,
-    RecoverModalPage,
-    ReporteModalPage,
-    NuevacitaModalPage,
-    ProgresocitaModalPage,
-    NuevoservicioModalPage,
-    NuevousuarioModalPage,
-    NuevoreporteModalPage,
-    ServiciosPage,
-    UsuariosPage,
-    ReportesPage,
-    FacturacionPage,
-    LoginPage,
-    CitasPage,
-    NotificationPopPage,
   ],
   imports: [
     IonicModule.forRoot(MyApp, {
@@ -82,34 +38,15 @@ import { RecoverModalPage } from '../pages/recover-modal/recover-modal';
      }),
     BrowserModule,
     HttpClientModule,
-    NativeHttpModule,
+    //NativeHttpModule,
     HttpModule,
-    IonicStorageModule.forRoot(),
+    //IonicStorageModule.forRoot(),
     ComponentsModule,
     DirectivesModule,
-    ClickOutsideModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
-    ListPage,
-    WelcomeModalPage,
-    RegisterModalPage,
-    RecoverModalPage,
-    ReporteModalPage,
-    NuevacitaModalPage,
-    ProgresocitaModalPage,
-    NuevoservicioModalPage,
-    NuevousuarioModalPage,
-    NuevoreporteModalPage,
-    ServiciosPage,
-    UsuariosPage,
-    ReportesPage,
-    FacturacionPage,
-    CitasPage,
-    LoginPage,
-    NotificationPopPage
   ],
   providers: [
     StatusBar,

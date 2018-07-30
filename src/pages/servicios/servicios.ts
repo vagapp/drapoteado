@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
-import { NuevoservicioModalPage } from '../nuevoservicio-modal/nuevoservicio-modal';
 import { ModalController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
-import { servicios } from '../../providers/user-data/servicios';
+//import { servicios } from '../../providers/user-data/servicios';
 
 
 
@@ -39,7 +38,7 @@ export class ServiciosPage {
     this.cargarServicios();
   }
   openNuevoservicio(){
-    let Modal = this.modalCtrl.create(NuevoservicioModalPage, undefined, { cssClass: "smallModal nuevoservicioModal" });
+    let Modal = this.modalCtrl.create("NuevoservicioModalPage", undefined, { cssClass: "smallModal nuevoservicioModal" });
     Modal.onDidDismiss(data => {
       this.cargarServicios();
     });
@@ -70,7 +69,7 @@ export class ServiciosPage {
   }
 
   editServicio( edit_servicio ){
-    let Modal = this.modalCtrl.create(NuevoservicioModalPage,{ servicio: edit_servicio.getData() } , { cssClass: "smallModal nuevoservicioModal" });
+    let Modal = this.modalCtrl.create("NuevoservicioModalPage",{ servicio: edit_servicio.getData() } , { cssClass: "smallModal nuevoservicioModal" });
     Modal.onDidDismiss(data => {
       this.cargarServicios();
     });

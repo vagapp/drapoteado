@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
-
-import { HTTP } from '@ionic-native/http';
-import { Http } from '@angular/http';
-
 //import { Storage } from '@ionic/storage';
 import { Citas } from './citas';
 import { Notification } from './Notification';
@@ -169,9 +165,6 @@ export class UserDataProvider {
 
   constructor(
     private http: HttpClient,
-    //private storage: Storage,
-    private httpn: HTTP,
-    private Http: Http,
   ) {
     Debugger.log(['Hello UserDataProvider Provider',false]);
     this.doctores = new Array();
@@ -1193,7 +1186,7 @@ export class UserDataProvider {
   }
 
   getCargarSubscriptionObservable( code:string = null ){
-    let nidFilter = "?args[0]=all";
+    //let nidFilter = "?args[0]=all";
     let filter = "";
     if(code){
       filter=`?args[0]=all&args[1]=all&args[2]=all&args[3]=${code}`;
@@ -1519,7 +1512,6 @@ export class UserDataProvider {
   }
 
   generateNotification( forUid:number[], text:string, action:string ){
-      let notificationDatas =  new Array();
       let newNotification = new Notification();
       newNotification.user = forUid;
       newNotification.text = text;
