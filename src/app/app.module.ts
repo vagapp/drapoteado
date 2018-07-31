@@ -15,9 +15,9 @@ import { UserDataProvider } from '../providers/user-data/user-data';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 //import { HTTP } from '@ionic-native/http';
- 
 import { HttpModule } from '@angular/http';
-
+import { AuthInterceptor } from '../providers/auth-interceptor/auth-interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 //import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 //import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
 //import { Platform } from 'ionic-angular';
@@ -30,13 +30,14 @@ import { HttpModule } from '@angular/http';
     MyApp,
   ],
   imports: [
+    BrowserModule,
     IonicModule.forRoot(MyApp, {
+      preloadModules: true,
       monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre' ],
       monthShortNames: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Cct', 'Nov', 'Dec' ],
       dayNames:['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'],
       dayShortNames: ['Dom', 'Lun', 'Mar', 'Mie','Jue','Vie','Sab' ],
      }),
-    BrowserModule,
     HttpClientModule,
     //NativeHttpModule,
     HttpModule,
@@ -49,6 +50,11 @@ import { HttpModule } from '@angular/http';
     MyApp,
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
     StatusBar,
     Clipboard,
     SplashScreen,

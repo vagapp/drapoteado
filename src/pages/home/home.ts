@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, LoadingController, ModalController } from 'ionic-angular';
+import { NavController, AlertController, LoadingController, ModalController, IonicPage } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 //import { Debugger } from '../../providers/user-data/debugger';
 
-
+@IonicPage({
+  name: 'HomePage',
+  priority: 'high'
+})
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
   rifa:string = 'nadien';
-
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController, 
@@ -32,12 +34,9 @@ export class HomePage {
         }
         this.userData.updateUserd(cloneData).subscribe(
           (val)=>{
-           
           }, (response) => {
-          
           }
         );
-        
     }
     this.userData.cargarCitas();
   }

@@ -3,7 +3,6 @@ import { HeaderComponent } from './header/header';
 import { IonicModule } from 'ionic-angular';
 import { FooterComponent } from './footer/footer';
 import { DirectivesModule } from '../directives/directives.module';
-import { ClickOutsideModule } from 'ng-click-outside';
 import { NlistComponent } from './nlist/nlist';
 
 
@@ -11,7 +10,7 @@ import { NlistComponent } from './nlist/nlist';
 	declarations: [HeaderComponent,
     FooterComponent,
     NlistComponent],
-	imports: [IonicModule, DirectivesModule, ClickOutsideModule],
+	imports: [IonicModule, DirectivesModule],
 	exports: [HeaderComponent,
     FooterComponent,
     NlistComponent]

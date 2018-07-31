@@ -7,6 +7,7 @@ import { isCordovaAvailable } from '../common/is-cordova-available';
 import { UserDataProvider } from '../providers/user-data/user-data';
 
 
+
 //import { Debugger } from '../providers/user-data/debugger';
 
 
@@ -16,8 +17,10 @@ import { UserDataProvider } from '../providers/user-data/user-data';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
   rootPage: any = "LoginPage";
+  Home: any = 'HomePage';
   token: string;
   connectcomp:boolean=false;
+
 
   
 
@@ -114,11 +117,11 @@ export class MyApp {
                   if(Number(this.userData.subscription.field_active) === 0){
                   //this.rootPage=RegisterModalPage;
                  
-                  this.rootPage = "HomePage";
+                  this.rootPage = 'HomePage';
                   loading.dismiss();
                   clearInterval(moveinterval);
                   }else{
-                  this.rootPage = "HomePage";
+                  this.rootPage = 'HomePage';
                   this.userData.cargarListaReportes();
                   loading.dismiss();
                   clearInterval(moveinterval);
@@ -181,7 +184,7 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
   
-  openHomePage(){this.nav.setRoot("HomePage");}
+  openHomePage(){this.nav.setRoot(this.Home);}
   openCitasPage(){this.nav.setRoot("CitasPage");}
   openServiciosPage(){this.nav.setRoot("ServiciosPage");}
   openUsuariosPage(){this.nav.setRoot("UsuariosPage");}

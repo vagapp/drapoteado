@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController, IonicPage } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { sources } from '../../providers/user-data/sources';
 //import { Debugger } from '../../providers/user-data/debugger';
@@ -16,6 +16,7 @@ declare var Stripe;
  * Ionic pages and navigation.
  */
 
+@IonicPage()
 @Component({
   selector: 'page-facturacion',
   templateUrl: 'facturacion.html',

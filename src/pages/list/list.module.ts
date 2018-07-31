@@ -10,4 +10,4 @@ import { ListPage } from './list';
     IonicPageModule.forChild(ListPage),
   ],
 })
-export class LoginPageModule {}
+export class ListPageModule {}
