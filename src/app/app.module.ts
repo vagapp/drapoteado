@@ -17,7 +17,15 @@ import { HttpClient } from '@angular/common/http';
 //import { HTTP } from '@ionic-native/http';
 import { HttpModule } from '@angular/http';
 import { AuthInterceptor } from '../providers/auth-interceptor/auth-interceptor';
+import { TimeoutInterceptor } from '../providers/timeout-interceptor/timeout-interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CitasDataProvider } from '../providers/citas-data/citas-data';
+import { DateProvider } from '../providers/date/date';
+import { BaseUrlProvider } from '../providers/base-url/base-url';
+import { CitasManagerProvider } from '../providers/citas-manager/citas-manager';
+import { CordovaAvailableProvider } from '../providers/cordova-available/cordova-available';
+import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
+
 //import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 //import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
 //import { Platform } from 'ionic-angular';
@@ -55,6 +63,11 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
       useClass: AuthInterceptor,
       multi: true
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TimeoutInterceptor,
+      multi: true
+    },
     StatusBar,
     Clipboard,
     SplashScreen,
@@ -62,6 +75,12 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     UserDataProvider,
     HttpClient,
     OneSignal,
+    CitasDataProvider,
+    DateProvider,
+    BaseUrlProvider,
+    CitasManagerProvider,
+    CordovaAvailableProvider,
+    WebsocketServiceProvider,
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

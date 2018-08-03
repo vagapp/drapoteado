@@ -4,6 +4,7 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { reportes } from '../../providers/user-data/reportes';
 import { Debugger } from '../../providers/user-data/debugger';
+import { StateCita } from '../../constants/StateCita';
 import * as jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
@@ -107,11 +108,15 @@ export class ReporteModalPage {
   }
 
   setReport(){
-    console.log('loadingservice', this.navParams.get('reporte'));
+    //console.log('loadingservice', this.navParams.get('reporte'));
     let aux_repo = this.navParams.get('reporte');
     if(aux_repo){
       this.actualrepot = aux_repo;
     }else{
+      console.log('today report is set to',this.userData.todayReport);
+      if(!this.userData.todayReport){
+       this.dismiss();
+      }
       this.actualrepot = this.userData.todayReport;
     }
     if (this.actualrepot === null){
@@ -144,11 +149,11 @@ export class ReporteModalPage {
           Debugger.log(['loadReport check aux cita',aux_cita]);
           aux_cita.setDuracionMs();
           Debugger.log(['loadReport check aux cita',aux_cita]);
-          if(aux_cita.checkState(UserDataProvider.STATE_CANCELADA)){
+          if(aux_cita.checkState(StateCita.STATE_CANCELADA)){
             this.noCancel++;
             this.noCitas++;
           }
-          if(aux_cita.checkState(UserDataProvider.STATE_FINALIZADA)){
+          if(aux_cita.checkState(StateCita.STATE_FINALIZADA)){
             this.noShow++;
             this.noCitas++;
             if(aux_cita.duracionMs) this.duracionTotalMs += aux_cita.duracionMs;

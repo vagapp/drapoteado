@@ -10,22 +10,19 @@ export class AuthInterceptor implements HttpInterceptor  {
   constructor(private userData:UserDataProvider){
 
   }
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    req = req.clone({headers: this.setAuthHeaders(req.headers)});
-    console.log('AuthInterceptor intercepting request',req);
+  intercept(req: HttpRequest<any>,next: HttpHandler): Observable<HttpEvent<any>> {
+    req = req.clone({setHeaders: this.getAuthHeaders()});
     return next.handle(req).do(evt => {
       console.log('AuthInterceptor handling event',evt);
     });
 }
 
-setAuthHeaders( headers:HttpHeaders):HttpHeaders{
- let ret = headers;
- ret.append('Content-Type','application/json; charset=utf-8');
- if(this.userData.sessionData.token) ret.append('X-CSRF-Token',`${this.userData.sessionData.token}`);
- if(this.userData.sessionData.sessid && this.userData.sessionData.session_name) ret.append('Authentication',`${this.userData.sessionData.session_name}=${this.userData.sessionData.sessid}`);
- return ret;
+getAuthHeaders(){
+ let ret = {'Content-Type':'application/json; charset=utf-8'};
+ if(this.userData.sessionData.token) ret['X-CSRF-Token']=`${this.userData.sessionData.token}`;
+ if(this.userData.sessionData.sessid && this.userData.sessionData.session_name) ret['Authentication']=`${this.userData.sessionData.session_name}=${this.userData.sessionData.sessid}`;
+ return  ret
 }
 }
+
+

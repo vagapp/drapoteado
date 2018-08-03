@@ -3,8 +3,9 @@ import { Nav, Platform, LoadingController, ModalController } from 'ionic-angular
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { OneSignal, OSNotificationPayload } from '@ionic-native/onesignal';
-import { isCordovaAvailable } from '../common/is-cordova-available';
 import { UserDataProvider } from '../providers/user-data/user-data';
+import { CordovaAvailableProvider } from '../providers/cordova-available/cordova-available';
+import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
 
 
 
@@ -33,7 +34,9 @@ export class MyApp {
     public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
-    private oneSignal: OneSignal
+    private oneSignal: OneSignal,
+    public ica: CordovaAvailableProvider,
+    public wsp: WebsocketServiceProvider
   ) {
     this.initializeApp();
     
@@ -70,7 +73,7 @@ export class MyApp {
     this.platform.ready().then(() => {
       this.initOnesignal();
       
-      if(isCordovaAvailable())this.splashScreen.hide();
+      if(this.ica.isCordovaAvailable)this.splashScreen.hide();
       //Debugger.log(['platform redy']);
       let loading = this.loadingCtrl.create({
         content: 'Bienvenido'
@@ -147,7 +150,7 @@ export class MyApp {
 
 
   initOnesignal(){
-    if (isCordovaAvailable()){
+    if (this.ica.isCordovaAvailable){
       var iosSettings = {};
       iosSettings["kOSSettingsKeyAutoPrompt"] = true;
       iosSettings["kOSSettingsKeyInAppLaunchURL"] = false;

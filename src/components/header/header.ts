@@ -23,8 +23,8 @@ export class HeaderComponent {
   susObservable = null;
   notiSubject = null;
   showNotifications:boolean = false;
-
-  pagename = this.navCtrl.getActive().name;
+  pagename = null;
+ 
   constructor(
     public userData: UserDataProvider,
     public navCtrl:NavController,
@@ -33,6 +33,7 @@ export class HeaderComponent {
     public modalCtrl: ModalController
     
   ) {
+    //this.pagename = this.navCtrl.getActive().name;
     this.authObservable = userData.AuthSubject;
     this.susObservable = userData.susSubject;
     this.notiSubject = userData.notiSubject;

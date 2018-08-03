@@ -76,7 +76,7 @@ export class NuevacitaModalPage {
       this.cita.data.field_cita_doctor.und[0]=this.userData.userData.uid;
     }
       this.cita.data.field_cita_recepcion.und[0]=this.userData.userData.uid; //esto es quien creo la cita
-      this.cita.recepcion_playerid = this.userData.onseignalDid.userid;
+      //this.cita.recepcion_playerid = this.userData.onseignalDid.userid;
       this.cita.data.field_cita_caja.und[0]="_none"; //quien cobro la cita
       this.cita.caja_playerid = null;
       this.cita.data.field_servicios_cita.und = []; //limpiamos los servicios porque nos deja basura

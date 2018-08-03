@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 //import { Storage } from '@ionic/storage';
 import { Citas } from './citas';
 import { Notification } from './Notification';
@@ -11,7 +11,7 @@ import { subscriptions } from './subscriptions';
 import { Debugger } from './debugger';
 import { reportes } from './reportes';
 import { Observable } from 'rxjs/Observable';
-import { isCordovaAvailable } from '../../common/is-cordova-available';
+import { CordovaAvailableProvider } from '../cordova-available/cordova-available';
 
 
 /*
@@ -165,6 +165,7 @@ export class UserDataProvider {
 
   constructor(
     private http: HttpClient,
+    private ica: CordovaAvailableProvider
   ) {
     Debugger.log(['Hello UserDataProvider Provider',false]);
     this.doctores = new Array();
@@ -183,11 +184,10 @@ export class UserDataProvider {
     let url = this.urlbase+'appoint/user/token.json';
     let headers = new HttpHeaders(
     {
-      'Content-Type':'application/json; charset=utf-8'
+      'Custom':'application/json; charset=utf-8'
     });
     let observer = this.http.post(url,"",{headers});
     return observer;
-  
   }
 
   initreset(){
@@ -243,11 +243,7 @@ export class UserDataProvider {
   checkConnect(){
     Debugger.log(['checkConnect',false]);
     let url = this.urlbase+'appoint/system/connect.json';
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-    });
-    let observer = this.http.post(url,"",{headers});
+    let observer = this.http.post(url,"");
     return observer;
   }
 
@@ -258,12 +254,7 @@ export class UserDataProvider {
 
   requestUserData(uid){
       let url = this.urlbase+'appoint/user/'+uid;
-      let headers = new HttpHeaders(
-        {'Content-Type':'application/json; charset=utf-8',
-        'X-CSRF-Token': ""+this.sessionData.token,
-        'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-      });
-      let userData_observer = this.http.get(url,{headers});
+      let userData_observer = this.http.get(url);
       return userData_observer;
   }
 
@@ -449,10 +440,7 @@ export class UserDataProvider {
     console.log(body);
     //let url = this.urlbase+'appoint/user/login';
     let url = this.urlbase+'appoint/user/login';
-    let headers = new HttpHeaders({
-      'Content-Type':'application/json;charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,});
-    let login_observer = this.http.post(url,body,{headers});
+    let login_observer = this.http.post(url,body);
     /*login_observer.subscribe(
       (val) => {
         Debugger.log(['data obtained on login',val]);
@@ -493,12 +481,7 @@ export class UserDataProvider {
   logout(){
     let body="";
     let url = this.urlbase+'appoint/user/logout';
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let login_observer = this.http.post(url,body,{headers});
+    let login_observer = this.http.post(url,body);
     login_observer.subscribe(
       (val) => {
         Debugger.log(["logout complete", val]);
@@ -526,8 +509,7 @@ export class UserDataProvider {
     let body = JSON.stringify(aux_registerdata);
     Debugger.log(['register data sending',body]);
     let url = this.urlbase+'appoint/user/register';
-    let headers = new HttpHeaders({'Content-Type':'application/json; charset=utf-8'});
-    let register_observer = this.http.post(url,body,{headers});
+    let register_observer = this.http.post(url,body);
     /*register_observer.subscribe(
       (val) => {
           console.log("POST call successful value returned in body", val);
@@ -557,12 +539,7 @@ export class UserDataProvider {
     let doctorfilter = "?args[0]="+uids.join();
     if(uids.length == 0){doctorfilter = "?args[0]=all";}
     let url = this.urlbase+'appoint/rest_servicios'+doctorfilter;
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.get(url,{headers});
+    let observer = this.http.get(url);
     observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
@@ -733,12 +710,7 @@ export class UserDataProvider {
       Debugger.log(['get reportes dialy is set to',dialy]);
     }
     Debugger.log(["get reportes url url",url]);
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.get(url,{headers});
+    let observer = this.http.get(url);
     observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
@@ -1045,12 +1017,7 @@ export class UserDataProvider {
     let datefilter = "?date[min][date]="+fechaFrom+"&date[max][date]="+fechaTo;
     let url = this.urlbase+'appoint/rest_citas.json'+datefilter+doctorfilter+cajafilter+recepcionfilter;
     console.log("url",url);
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.get(url,{headers});
+    let observer = this.http.get(url);
     //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
@@ -1067,12 +1034,7 @@ export class UserDataProvider {
     //let datefilter = "?date[min][date]="+fechaFrom+"&date[max][date]="+fechaTo;
     let url = this.urlbase+'appoint/rest_citas.json?'+doctorfilter+cajafilter+recepcionfilter+rangeFilter;
     console.log("url",url);
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.get(url,{headers});
+    let observer = this.http.get(url);
     //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
@@ -1080,12 +1042,7 @@ export class UserDataProvider {
   getCitasNidObservable(Nid){
     let url = this.urlbase+'appoint/rest_citas.json?'+`args[0]=all&args[1]=all&args[2]=all&args[3]=all&args[4]=${Nid}`;
     Debugger.log(['loadinc single cita w nid',url]);
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.get(url,{headers});
+    let observer = this.http.get(url);
     //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
@@ -1096,12 +1053,7 @@ export class UserDataProvider {
     let body = JSON.stringify(newNode);
     Debugger.log(['saving node json',body]);
     let url = this.urlbase+'appoint/node/';
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.post(url,body,{headers});
+    let observer = this.http.post(url,body);
     //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
@@ -1109,12 +1061,7 @@ export class UserDataProvider {
   updateNode( node ){
     let body = JSON.stringify(node);
     let url = this.urlbase+'appoint/node/'+node.Nid;
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.put(url,body,{headers});
+    let observer = this.http.put(url,body);
     //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   } 
@@ -1122,12 +1069,7 @@ export class UserDataProvider {
   deleteNode( node ){
     let url = this.urlbase+'appoint/node/'+node.Nid;
     Debugger.log(['deleting node url',url]);
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.delete(url,{headers});
+    let observer = this.http.delete(url);
     //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
@@ -1135,12 +1077,7 @@ export class UserDataProvider {
   getNode( node ){
     let url = this.urlbase+'appoint/node/'+node.Nid;
     Debugger.log(['getting node url',url]);
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.get(url,{headers});
+    let observer = this.http.get(url);
     return observer;
   }
 
@@ -1153,12 +1090,7 @@ export class UserDataProvider {
     this.planes = new Array();
     let url = this.urlbase+'appoint/rest_planes.json';
     console.log("url",url);
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.get(url,{headers});
+    let observer = this.http.get(url);
     observer.subscribe(
       (val)=>{
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
@@ -1195,12 +1127,7 @@ export class UserDataProvider {
     }
     let url = this.urlbase+'appoint/rest_suscripciones.json'+filter;
     Debugger.log(["suscription filtered url",url]);
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.get(url,{headers});
+    let observer = this.http.get(url);
     return observer
   }
 
@@ -1437,12 +1364,7 @@ export class UserDataProvider {
     let uidFilter = `?args[0]=${this.userData.uid}` ;
     let url = this.urlbase+'appoint/rest_notifications.json'+uidFilter;
     Debugger.log(["cargarNotificaciones url",url]);
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.get(url,{headers});
+    let observer = this.http.get(url);
     return observer;
   }
 
@@ -1474,7 +1396,7 @@ export class UserDataProvider {
   }
 
   savePlayerID(){
-    if(isCordovaAvailable()){
+    if(this.ica.isCordovaAvailable){
       Debugger.log(['enter savePlayerID saving',this.onseignalDid]);
       let aux_user_data = {
         uid: this.userData.uid,
@@ -1552,12 +1474,7 @@ export class UserDataProvider {
     if(!oneprotection) doctorfilter = "?args[0]=-1" //esto evita que alguna tonteria te mande todos los usuarios del sistema, devolviendo nada
     let url = this.urlbase+'appoint/rest_users'+doctorfilter+codigofilter+ids_filter;
     Debugger.log([url]);
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.get(url,{headers});
+    let observer = this.http.get(url);
     observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
@@ -1566,12 +1483,7 @@ export class UserDataProvider {
     let body = JSON.stringify(userd);
     console.log("body",body);
     let url = this.urlbase+'appoint/user/';
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.post(url,body,{headers});
+    let observer = this.http.post(url,body);
     return observer;
   }
 
@@ -1579,12 +1491,7 @@ export class UserDataProvider {
     let body = JSON.stringify(userd);
     console.log("updating userd body ",body);
     let url = this.urlbase+'appoint/user/'+userd.uid;
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token,
-      'Authentication':this.sessionData.session_name+'='+this.sessionData.sessid
-    });
-    let observer = this.http.put(url,body,{headers});
+    let observer = this.http.put(url,body);
     //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
     return observer;
   }
@@ -1649,11 +1556,7 @@ export class UserDataProvider {
     let body = `{"name":"${name}"}`;
     console.log("requesting password reset body ",body);
     let url = this.urlbase+'appoint/user/request_new_password.json';
-    let headers = new HttpHeaders(
-      {'Content-Type':'application/json; charset=utf-8',
-      'X-CSRF-Token': ""+this.sessionData.token
-    });
-    let observer = this.http.post(url,body,{headers});
+    let observer = this.http.post(url,body);
     return observer;
   }
 
