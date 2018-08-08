@@ -12,6 +12,8 @@ import { Debugger } from './debugger';
 import { reportes } from './reportes';
 import { Observable } from 'rxjs/Observable';
 import { CordovaAvailableProvider } from '../cordova-available/cordova-available';
+import { CitasDataProvider } from '../citas-data/citas-data';
+import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 
 
 /*
@@ -41,14 +43,14 @@ export class UserDataProvider {
   autoSubscriptionLoad = null;
 
   //datos de citas. los necesito globales para usarlos en la pagina de home. ademas las voy a ligar con algun servicio servidor cosa para comunicacion bilineal
-  citas: Citas[]; //listado de todas las citas
-  nextCitas: Citas[]; //proxima cita pendiente
+  //citas: Citas[]; //listado de todas las citas
+  /*nextCitas: Citas[]; //proxima cita pendiente
   citasPendientes: Citas[]; //citas pendientes
   citasCloser: Citas[];
   citasCobrar: Citas[]; // citas por cobrar
   citasActivas: Citas[];  //cita activa
   citasParaHoy: number = 0; //numero de citas pendientes para hoy.
-  citasRetrasadas: Citas[]; //citasRetrasadas
+  citasRetrasadas: Citas[]; //citasRetrasadas*/
   
 
   notificaciones: Notification[] = new Array();
@@ -69,7 +71,7 @@ export class UserDataProvider {
   loading_reports = false; //esta bandera indica que se estan cargando los reportes en la pagina de reportes, despues de borrar uno, porque luego aparece denuevo si se quieren cargar
   sus_to_reports = false; //esta bandera undica que se esta esperando cargar una suscripcion activa para poder cargar reportes. en header
 
-  doctores:Doctores[] = new Array();
+  //doctores:Doctores[] = new Array();
   servicios:servicios[] = new Array();
  
 
@@ -165,16 +167,18 @@ export class UserDataProvider {
 
   constructor(
     private http: HttpClient,
-    private ica: CordovaAvailableProvider
+    private ica: CordovaAvailableProvider,
+    private citas: CitasDataProvider,
+    private doctores: DoctoresDataProvider
   ) {
     Debugger.log(['Hello UserDataProvider Provider',false]);
-    this.doctores = new Array();
+    //this.doctores = new Array();
     this.setup();
     this.subAccount = false;
     this.showMain = true;
     this.showCaja = false;
     this.showReception = false;
-    this.citas = new Array();
+    //this.citas = new Array();
     //this.doctores = new Array();
     this.threadloop();
 
@@ -222,12 +226,12 @@ export class UserDataProvider {
       field_stripe_customer_id: {und:[{value: ""}]},
       field_src_json_info: {und:[{value: ""}]}
   }
-    this.resetLists();
+    //this.resetLists();
     
   }
   
-   resetLists(){
-    this.citas = new Array();
+   /*resetLists(){
+    //this.citas = new Array();
     this.nextCitas = new Array();
     this.citasPendientes= new Array();
     this.citasCloser= new Array();
@@ -238,7 +242,7 @@ export class UserDataProvider {
     //this.planes:planes[]; //planes que ofrece drap.
     this.doctores = new Array();
     this.servicios = new Array();
-  }
+  }*/
 
   checkConnect(){
     Debugger.log(['checkConnect',false]);
@@ -318,14 +322,14 @@ export class UserDataProvider {
       //si es un doctor agregarse a si mismo a la lista de doctores.
       let aux_doc = new Doctores(this);
       aux_doc.Uid = this.userData.uid;
-      this.doctores.push(aux_doc);
+      this.doctores.addDoctor(aux_doc);
       }else{ //si no es un doctor cargar todos los doctores que esta manejando
         let doctoruids = new Array();
         for(let i = 0; i<this.userData.field_doctores.und.length; i++){
           let aux_doc = new Doctores(this);
           aux_doc.Uid = this.userData.field_doctores.und[i].uid;
           doctoruids.push(aux_doc.Uid);
-          this.doctores.push(aux_doc);
+          this.doctores.addDoctor(aux_doc);
         }
         Debugger.log(['doctores to search',doctoruids]);
         this.getUsers(null,null,doctoruids).subscribe(
@@ -334,21 +338,21 @@ export class UserDataProvider {
             let aux_results = Object.keys(val).map(function (key) { return val[key]; });
             aux_results.forEach(element => {
               Debugger.log(['setting  this element doc',element]);
-              this.doctores.forEach(doc => {
+              this.doctores.doctores.forEach(doc => {
                 if( Number(doc.Uid) === Number(element['uid']) ){
                   doc.name = element['name'];
                   doc.field_alias = element['field_alias'];
                 }
               });
             });
-            Debugger.log(['doctores at the end of getting users',this.doctores]);
+            Debugger.log(['doctores at the end of getting users',this.doctores.doctores]);
             this.docs_loaded = true;
           },
           (response)=>{this.docs_loaded = true;},
         );
       }
     this.savePlayerID();
-    Debugger.log(["doctores encontrados",this.doctores]);
+    Debugger.log(["doctores encontrados",this.doctores.doctores]);
     Debugger.log(["cargar servicios y recargar servicios en un loop"]);
     this.cargarServicios();
     console.log('filled userData',this.userData);
@@ -365,7 +369,8 @@ export class UserDataProvider {
     setInterval(() => {
       if(this.userData.uid && this.userData.uid != 0){
        //Debugger.log(['checking automatic notification load subscription',this.autoNotificationsLoad]);
-        if(!this.autoNotificationsLoad){
+       /* 
+       if(!this.autoNotificationsLoad){
           //Debugger.log(['automatic notification load start']);
           let observer = this.getNotificationObservable();
           this.autoNotificationsLoad = observer.subscribe(
@@ -382,10 +387,10 @@ export class UserDataProvider {
               this.autoNotificationsLoad = null;
             });
            //this.cargarNotificaciones();
-          }
+          }*/
     
 
-      
+      /*
         if(!this.autoCitasLoad){
           const autocita_obs = this.getCargarCitasObservable();
           this.autoCitasLoad = autocita_obs.subscribe(
@@ -401,9 +406,10 @@ export class UserDataProvider {
        }
       );
         //this.cargarCitas();
-    }
+    }*/
   }
    }, this.loopMs);
+   
    setInterval(() => {
     if(this.userData.uid && this.userData.uid != 0){
       Debugger.log(['Auto updatingSuscription']);
@@ -424,12 +430,6 @@ export class UserDataProvider {
  setInterval(() => {
   let now = new Date();
   this.showhour = `${UserDataProvider.formatDateBinaryNumber( now.getHours() )}:${UserDataProvider.formatDateBinaryNumber( now.getMinutes() )}`;
-  if(this.citas && this.citas.length > 0){
-    this.organizarCitas();
-    /*this.nextCitas.forEach(aux_cita => {
-      aux_cita.getUntilMs();
-    });*/
-  }
 }, this.loopUntiCitas);
   }
 
@@ -566,10 +566,10 @@ export class UserDataProvider {
         }
       );
       Debugger.log(['user data servicios',this.servicios]);
-      this.doctores.forEach(doc => {
+      this.doctores.doctores.forEach(doc => {
         doc.setServicios(this.servicios);
       });
-      Debugger.log(['doctores at end of cargarservicios',this.doctores]);
+      Debugger.log(['doctores at end of cargarservicios',this.doctores.doctores]);
         console.log(this.servicios);
       });
   }
@@ -577,14 +577,14 @@ export class UserDataProvider {
   removeServicioFromLists(servicio:servicios){
     var index = this.servicios.indexOf(servicio);
     if(index !== -1)this.servicios.splice(index, 1);
-    this.doctores.forEach(doc => {
+    this.doctores.doctores.forEach(doc => {
       doc.removeServicioFromLists(servicio);
     }); 
   }
 
 
   
-  removeCitaFromLists(cita:Citas){
+  /*removeCitaFromLists(cita:Citas){
     //todas las listas
     const ArrOfArrs = [
     this.citas,
@@ -601,7 +601,7 @@ export class UserDataProvider {
       doc.removeCitaFromLists(cita);
     });
     Debugger.log(['checking citas list after removing',this.citas]);
-  }
+  }*/
 
   static removeElementFromArray(element:any ,array:Array<any>):number{
     let ret = -2;
@@ -804,6 +804,7 @@ export class UserDataProvider {
     return (num < 10 ? '0' : '') + num;
   }
   
+  /*
   cargarCitas( logoutonerror = true ):Observable<any>{
     console.log("cargando citas");
     const ret = this.getCargarCitasObservable();
@@ -883,7 +884,7 @@ export class UserDataProvider {
     this.citasCobrar = new Array();
     this.citasRetrasadas = new Array();
   }
-
+*/
 
   /*getCitasActivas(){
     this.citasActivas =  new Array();
@@ -944,7 +945,7 @@ export class UserDataProvider {
 
   getDoctorByUid( uid ):Doctores{
     let ret = null;
-    this.doctores.forEach(element => {
+    this.doctores.doctores.forEach(element => {
       console.log("comparing uid", Number(element.Uid)+"==="+Number(uid));
       if(Number(element.Uid) === Number(uid) ) {
         ret = element;
@@ -965,26 +966,26 @@ export class UserDataProvider {
 
   getDoctoresSimpleArray():number[]{
     let ret = new Array();
-    this.doctores.forEach(element => {
+    this.doctores.doctores.forEach(element => {
        ret.push(Number(element.Uid));
     });
     return ret;
   }
 
-  getCitasParaHoy(){
+  /*getCitasParaHoy(){
     let ret = 0;
     this.doctores.forEach(element => {
       ret += element.citasParaHoy;
    });
    this.citasParaHoy = ret;
    return ret;
-  }
+  }*/
 
  
 
 
 
-  getCitaIndexByNid( input_nid ){
+  /*getCitaIndexByNid( input_nid ){
     let ret = -1;
     let index = 0;
     this.citas.forEach(cita => {
@@ -994,7 +995,7 @@ export class UserDataProvider {
       index++;
     });
     return ret;
-  }
+  }*/
 
 
    /**

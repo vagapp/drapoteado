@@ -47,7 +47,7 @@ export class HeaderComponent {
           //Debugger.log(['implying this is not facturation page']);
           this.navCtrl.setRoot("HomePage");
         }
-        this.userData.resetLists();
+        //this.userData.resetLists();
         }else{
           if(this.userData.sus_to_reports){
             let loader = this.loadingCtrl.create({
@@ -93,11 +93,11 @@ export class HeaderComponent {
 
   openCitaModal( citaNid ){
     //buscar que la cita exista.
-    const index = this.userData.getCitaIndexByNid(Number(citaNid));
-    if(index !== -1){ //si la cita existe abrirla
-      const cita = this.userData.citas[index];
-      this.openProgreso(cita);
-    }else{//si la cita no existe cargarla.
+    //const index = this.userData.getCitaIndexByNid(Number(citaNid));
+    //if(index !== -1){ //si la cita existe abrirla
+      //const cita = this.userData.citas[index];
+      //this.openProgreso(cita);
+    //}else{//si la cita no existe cargarla.
       //Debugger.log(['node not on memory, loading it from database']);
       //cargar una cita por el nodo
       const observable = this.userData.getCitasNidObservable(citaNid);
@@ -112,19 +112,19 @@ export class HeaderComponent {
         let aux_cita = new Citas();
         aux_cita.setData(val[0]);
         //Debugger.log(['loaded cita',aux_cita]);
-        this.openProgreso(aux_cita);
+        //this.openProgreso(aux_cita);
       }
       },(response)=>{
         loader.dismiss();
       }
     )
-    }
+   // }
   }
 
   openProgreso( cita: Citas){
     let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
     Modal.onDidDismiss(data => {
-      this.userData.cargarCitas();
+      //this.userData.cargarCitas();
     });
     Modal.present({});
   }

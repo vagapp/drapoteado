@@ -6,17 +6,23 @@ import { DateProvider } from '../date/date';
 import { BaseUrlProvider } from '../base-url/base-url';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { Citas } from '../user-data/citas';
+import { UserDataProvider } from '../user-data/user-data';
+import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 
 @Injectable()
 export class CitasManagerProvider {
+ 
 
   constructor(
     public http: HttpClient, 
     public datep: DateProvider,
     public baseurl: BaseUrlProvider,
-    public citasData: CitasDataProvider
+    public citasData: CitasDataProvider,
+    public doctores: DoctoresDataProvider
   ) {
     console.log('Hello CitasManagerProvider Provider');
+    
+    
   }
 
   requestCitas():Observable<any>{
@@ -31,12 +37,12 @@ export class CitasManagerProvider {
   getCitasObservable(
     from:number = this.datep.nowStart,
     to:number = this.datep.nowEnd,
-    doctores:number[] = null,  
+    doctores:number[] = this.doctores.doctoresIDs,  
     cajas:number[] = null,  
     recepciones:number[] = null
   ):Observable<any>{
-    let filterString = `args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}&args[3]=${from}--${to}`;
-    let url = `${this.baseurl.endpointUrl}rest_citas.json?${filterString}`;
+    let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}&args[3]=${from}--${to}`;
+    let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
     return this.http.get(url);
   }
 
@@ -48,12 +54,15 @@ export class CitasManagerProvider {
   setCitas( val ){
     console.log('citas response raw value',val);
     for(let cita of val){
-      let aux_cita = new Citas();
-      aux_cita.setData(cita);
-      this.citasData.addCita(aux_cita,false);
+      this.generateCita(cita);
     }
     this.citasData.triggerSubject();
   }
 
-
+  generateCita( data ){
+    let aux_cita = new Citas();
+    aux_cita.setData(data);
+    this.citasData.addCita(aux_cita,false);
+  }
+  
 }

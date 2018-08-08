@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController, ToastController, 
 import { ModalController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
+import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 /**
  * Generated class for the CitasPage page.
  *
@@ -30,7 +31,8 @@ export class CitasPage {
     public userData:UserDataProvider,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    public citasData: CitasDataProvider
   ) {
     //this.citas = new Array();
   }
@@ -52,12 +54,12 @@ export class CitasPage {
       let loader = this.loadingCtrl.create({
         content: "cargando..."
       });
-      loader.present();
-      this.userData.cargarCitas().subscribe(
+      //loader.present();
+      /*this.userData.cargarCitas().subscribe(
       (val) => {},
       response => {},
       () => {loader.dismiss();}
-      );
+      );*/
     }
 
     updateStatePop( cita ,state ){
@@ -170,15 +172,15 @@ export class CitasPage {
           {
             text: 'Si',
             handler: () => { 
-              loader.present();
+              //loader.present();
               this.userData.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
                 (val)=>{
-                  this.userData.cargarCitas().subscribe(
+                  /*this.userData.cargarCitas().subscribe(
                     (val)=>{
                       loader.dismiss();
                       this.openProgreso(cita);
                     }
-                  );
+                  );*/
                 });
             }
           }
@@ -220,7 +222,7 @@ export class CitasPage {
         (val)=>{
           loader.dismiss();
           //Debugger.log(['val returned from deletecita',val]);
-          this.userData.removeCitaFromLists(cita);
+          //this.userData.removeCitaFromLists(cita);
           this.cargarCitas();
         }
       );

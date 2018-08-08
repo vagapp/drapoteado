@@ -6,6 +6,7 @@ import { OneSignal, OSNotificationPayload } from '@ionic-native/onesignal';
 import { UserDataProvider } from '../providers/user-data/user-data';
 import { CordovaAvailableProvider } from '../providers/cordova-available/cordova-available';
 import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
+import { CitasManagerProvider } from '../providers/citas-manager/citas-manager';
 
 
 
@@ -36,7 +37,8 @@ export class MyApp {
     public modalCtrl: ModalController,
     private oneSignal: OneSignal,
     public ica: CordovaAvailableProvider,
-    public wsp: WebsocketServiceProvider
+    public wsp: WebsocketServiceProvider,
+    public citasManager: CitasManagerProvider
   ) {
     this.initializeApp();
     
@@ -89,7 +91,7 @@ export class MyApp {
         //console.log("token updated",this.userData.sessionData.token);
         //request token for this session, then check if conected to system connect.
         //sometimes this runs faster so it should be assigned here.
-        this.userData.cargarPlanes();
+        //this.userData.cargarPlanes();
         this.connectcomp = false;
         this.userData.checkConnect().subscribe((val)=>{
           //Debugger.log(['checkConnect val',val]);
@@ -103,8 +105,10 @@ export class MyApp {
               //console.log(val);
               this.userData.setUserData(val);
               this.userData.cargarSubscription();
+              this.citasManager.requestCitas();
               //this.userData.generateNotification( [76],'Hello World Notification cita', 'cita-196');
               this.userData.cargarNotificaciones();
+              
               let moveinterval = setInterval(() =>{
                 //Debugger.log(['checking initiation']);
                 //Debugger.log(['planes set',this.userData.are_planes_set]);

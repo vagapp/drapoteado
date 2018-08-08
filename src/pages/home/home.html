@@ -8,7 +8,7 @@
         </div>
         <div class="section"  *ngIf="this.userData.checkUserFeature([this.userData.TIPO_ANY],[this.userData.PLAN_ANY],false);">
                         <div class="section_content">
-                              <span class="spanBlock bigSubFont">Citas Programadas para Hoy: <span class="fontPrimary">{{userData.citasParaHoy}}</span></span>
+                              <span class="spanBlock bigSubFont">Citas Programadas para Hoy: <span class="fontPrimary">{{0}}</span></span>
                         </div>
                        <div class="section_button">
                         <button class="generalButton bgColorSecondary" (click)="openReportModal(this.userData.todayReport)">Resumen</button>
@@ -19,75 +19,6 @@
         <div class="section" *ngIf="this.userData.docs_loaded && this.userData.checkUserFeature([this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);" >
                         <button class="bgColorSecondary generalButton floatRight" (click)="openNuevaCita()">Agregar Nueva Cita</button>
                         </div>
-
-                <!-- Citas activas -->
-               <!-- <span  *ngFor="let citaActiva of this.userData.citasActivas"> -->
-              <div class="section"  *ngFor="let citaActiva of this.userData.citasActivas">
-                        <span *ngIf="citaActiva" class="spanBlock bigSubFont fontHigh">Cita Activa</span>
-                        <span *ngIf="!citaActiva" class="spanBlock bigSubFont fontHigh">No hay citas activas</span>
-                        <span *ngIf="citaActiva && (!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]))" class="spanBlock">{{citaActiva.doctor_name}} / {{citaActiva.doctor_alias}}</span>
-                        <span *ngIf="citaActiva" class="spanBlock bigSubFont"><b>{{citaActiva.data.field_paciente.und[0].value}}</b></span>
-              <div class="section_button">
-              <button *ngIf="citaActiva && citaActiva.checkState(userData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])"  class="generalButton bgColorHigh" (click)="iniciarCita(citaActiva)">Ver Progreso</button>
-              </div>
-              </div>
-              <!--</span>-->
-
-                <div class="section" *ngFor="let nextCita of this.userData.nextCitas">
-                          <span class="spanBlock bigSubFont">Próxima Cita</span>
-                          <span *ngIf="nextCita && (!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]))" class="spanBlock">{{nextCita.doctor_name}} / {{nextCita.doctor_alias}}</span>
-                          <span *ngIf="nextCita" class="spanBlock bigSubFont"><b>{{nextCita.data.field_paciente.und[0].value}}</b></span>
-                          <span *ngIf="!nextCita" class="spanBlock bigSubFont"><b>No hay citas próximas</b></span>
-                          <span *ngIf="nextCita && ( nextCita.checkState(userData.STATE_PENDIENTE) || nextCita.checkState(userData.STATE_CONFIRMADA)) && !nextCita.retrasada "  class="spanBlock bigSubFont">Inicia en <span class="fontPrimary">{{nextCita.untilText}}</span></span>
-                          <span *ngIf="nextCita && ( nextCita.checkState(userData.STATE_PENDIENTE) || nextCita.checkState(userData.STATE_CONFIRMADA)) && nextCita.retrasada "  class="spanBlock bigSubFont">Debió iniciar <span class="fontPrimary">{{nextCita.untilText}}</span></span>
-                          <span *ngIf="nextCita && nextCita.checkState(userData.STATE_CONFIRMADA) && (!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]))"  class="spanBlock bigSubFont">Confirmada</span>
-                          <span *ngIf="nextCita && nextCita.checkState(userData.STATE_ACTIVA)"  class="spanBlock bigSubFont">Cita Activa</span>
-                         
-                <div class="section_button">
-                <button *ngIf="nextCita && nextCita.checkState(userData.STATE_PENDIENTE)"  class="generalButton bgColorSecondary" (click)="confirmarCita(nextCita)">Confirmar</button>
-                <button *ngIf="nextCita && nextCita.checkState(userData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])"  class="generalButton bgColorSecondary" (click)="iniciarCita(nextCita)">Iniciar Consulta</button>
-                <button *ngIf="nextCita && nextCita.checkState(userData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])"  class="generalButton bgColorSecondary" (click)="iniciarCita(nextCita)">Ver Progreso</button>
-                </div>
-                </div>
-
-                <div class="section" *ngFor="let cita of userData.citasRetrasadas">
-                                <span class="spanBlock bigSubFont">Cita Retrasada</span>
-                                <span *ngIf="cita && (!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]))" class="spanBlock">{{cita.doctor_name}} / {{cita.doctor_alias}}</span>
-                                <span *ngIf="cita" class="spanBlock bigSubFont"><b>{{cita.data.field_paciente.und[0].value}}</b></span>
-                                <span *ngIf="cita && cita.checkState(userData.STATE_PENDIENTE) && !cita.retrasada"  class="spanBlock bigSubFont">Inicia en <span class="fontPrimary">{{cita.untilText}}</span></span>
-                                <span *ngIf="cita && cita.checkState(userData.STATE_PENDIENTE) && cita.retrasada"  class="spanBlock bigSubFont">Debió iniciar <span class="fontPrimary">{{cita.untilText}}</span></span>
-                                <span *ngIf="cita && cita.checkState(userData.STATE_CONFIRMADA)"  class="spanBlock bigSubFont">Confirmada</span>
-                                <span *ngIf="cita && cita.checkState(userData.STATE_ACTIVA)"  class="spanBlock bigSubFont">Cita Activa</span>
-                      <div class="section_button">
-                                <button *ngIf="cita && cita.checkState(userData.STATE_PENDIENTE)"  class="generalButton bgColorSecondary" (click)="confirmarCita(cita)">Confirmar</button>
-                                <button *ngIf="cita && cita.checkState(userData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])"  class="generalButton bgColorSecondary" (click)="iniciarCita(cita)">Iniciar Consulta</button>
-                      <button *ngIf="cita && cita.checkState(userData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])"  class="generalButton bgColorSecondary" (click)="iniciarCita(cita)">Ver Progreso</button>
-                      </div>
-                </div>
-
-                <div class="section" *ngFor="let cita of userData.citasCloser">
-                        <span class="spanBlock bigSubFont">Cita Cercana</span>
-                        <span *ngIf="cita && (!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]))" class="spanBlock">{{cita.doctor_name}} / {{cita.doctor_alias}}</span>
-                        <span *ngIf="cita" class="spanBlock bigSubFont"><b>{{cita.data.field_paciente.und[0].value}}</b></span>
-                        <span *ngIf="cita && cita.checkState(userData.STATE_PENDIENTE) && !cita.retrasada"  class="spanBlock bigSubFont">Inicia en <span class="fontPrimary">{{cita.untilText}}</span></span>
-                        <span *ngIf="cita && cita.checkState(userData.STATE_PENDIENTE) && cita.retrasada"  class="spanBlock bigSubFont">Debió iniciar <span class="fontPrimary">{{cita.untilText}}</span></span>
-                        <span *ngIf="cita && cita.checkState(userData.STATE_CONFIRMADA)"  class="spanBlock bigSubFont">Confirmada</span>
-                        <span *ngIf="cita && cita.checkState(userData.STATE_ACTIVA)"  class="spanBlock bigSubFont">Cita Activa</span>
-              <div class="section_button">
-                        <button *ngIf="cita && cita.checkState(userData.STATE_PENDIENTE)"  class="generalButton bgColorSecondary" (click)="confirmarCita(cita)">Confirmar</button>
-                        <button *ngIf="cita && cita.checkState(userData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])"  class="generalButton bgColorSecondary" (click)="iniciarCita(cita)">Iniciar Consulta</button>
-              <button *ngIf="cita && cita.checkState(userData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])"  class="generalButton bgColorSecondary" (click)="iniciarCita(cita)">Ver Progreso</button>
-              </div>
-        </div>
-
-                <div class="section" *ngFor="let citaCobro of userData.citasCobrar" >
-                                <span class="spanBlock bigSubFont">Por Cobrar</span>
-                                <span *ngIf="citaCobro && (!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]))" class="spanBlock">{{citaCobro.doctor_name}} / {{citaCobro.doctor_alias}}</span>
-                                <span *ngIf="citaCobro" class="spanBlock bigSubFont"><b>{{citaCobro.data.field_paciente.und[0].value}}</b></span>
-                      <div class="section_button">
-                      <button *ngIf="citaCobro && citaCobro.checkState(userData.STATE_COBRO) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_CAJA,this.userData.TIPO_CAJAYRECEPCION])"  class="generalButton bgColorSecondary" (click)="iniciarCita(citaCobro)">Cobrar</button>
-                      </div>
-                </div>
 
                 <!--
                 <div class="section" *ngIf="userData.showReception">

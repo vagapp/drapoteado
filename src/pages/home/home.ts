@@ -38,7 +38,7 @@ export class HomePage {
           }
         );
     }
-    this.userData.cargarCitas();
+    //this.userData.cargarCitas();
   }
 
 
@@ -68,15 +68,15 @@ export class HomePage {
         {
           text: 'Si',
           handler: () => {
-            loader.present();
+            //loader.present();
             this.userData.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
               (val)=>{
-                this.userData.cargarCitas().subscribe(
+                /*this.userData.cargarCitas().subscribe(
                   (val)=>{
                     loader.dismiss();
                     this.openProgreso(cita);
                   },(response)=>{ loader.dismiss();}
-                );
+                );*/
               },(response)=>{ loader.dismiss();});
           }
         }
@@ -90,7 +90,7 @@ export class HomePage {
   confirmarCita(cita:Citas){
     this.userData.updateCitaState( cita , UserDataProvider.STATE_CONFIRMADA ).subscribe((val)=>{
         this.userData.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
-      this.userData.cargarCitas()
+      //this.userData.cargarCitas()
     });
   }
 
@@ -103,7 +103,7 @@ export class HomePage {
   openProgreso( cita: Citas){
     let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
     Modal.onDidDismiss(data => {
-      this.userData.cargarCitas();
+      //this.userData.cargarCitas();
     });
     Modal.present({});
   }

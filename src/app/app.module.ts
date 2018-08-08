@@ -25,6 +25,7 @@ import { BaseUrlProvider } from '../providers/base-url/base-url';
 import { CitasManagerProvider } from '../providers/citas-manager/citas-manager';
 import { CordovaAvailableProvider } from '../providers/cordova-available/cordova-available';
 import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
+import { DoctoresDataProvider } from '../providers/doctores-data/doctores-data';
 
 //import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 //import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
@@ -81,6 +82,7 @@ import { WebsocketServiceProvider } from '../providers/websocket-service/websock
     CitasManagerProvider,
     CordovaAvailableProvider,
     WebsocketServiceProvider,
+    DoctoresDataProvider,
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

@@ -28,7 +28,7 @@
              </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let cita of this.userData.citas">
+            <tr *ngFor="let cita of this.citasData.citas">
                 <td>01</td>
                 <td>{{cita.data.field_paciente.und[0].value}}</td>
                 <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}} / cita.doctor_alias</td>
