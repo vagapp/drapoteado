@@ -26,6 +26,18 @@ import { CitasManagerProvider } from '../providers/citas-manager/citas-manager';
 import { CordovaAvailableProvider } from '../providers/cordova-available/cordova-available';
 import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
 import { DoctoresDataProvider } from '../providers/doctores-data/doctores-data';
+import { PlanesDataProvider } from '../providers/planes-data/planes-data';
+import { SubscriptionDataProvider } from '../providers/subscription-data/subscription-data';
+import { SubscriptionManagerProvider } from '../providers/subscription-manager/subscription-manager';
+import { OnesignalManagerProvider } from '../providers/onesignal-manager/onesignal-manager';
+import { NotificationsDataProvider } from '../providers/notifications-data/notifications-data';
+import { NotificationsManagerProvider } from '../providers/notifications-manager/notifications-manager';
+import { DrupalNodeManagerProvider } from '../providers/drupal-node-manager/drupal-node-manager';
+import { DoctoresManagerProvider } from '../providers/doctores-manager/doctores-manager';
+import { ServiciosManagerProvider } from '../providers/servicios-manager/servicios-manager';
+import { DrupalUserManagerProvider } from '../providers/drupal-user-manager/drupal-user-manager';
+import { ReportesDataProvider } from '../providers/reportes-data/reportes-data';
+import { ReportesManagerProvider } from '../providers/reportes-manager/reportes-manager';
 
 //import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 //import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
@@ -83,6 +95,18 @@ import { DoctoresDataProvider } from '../providers/doctores-data/doctores-data';
     CordovaAvailableProvider,
     WebsocketServiceProvider,
     DoctoresDataProvider,
+    PlanesDataProvider,
+    SubscriptionDataProvider,
+    SubscriptionManagerProvider,
+    OnesignalManagerProvider,
+    NotificationsDataProvider,
+    NotificationsManagerProvider,
+    DrupalNodeManagerProvider,
+    DoctoresManagerProvider,
+    ServiciosManagerProvider,
+    DrupalUserManagerProvider,
+    ReportesDataProvider,
+    ReportesManagerProvider,
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

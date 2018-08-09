@@ -8,6 +8,7 @@ import { CitasDataProvider } from '../citas-data/citas-data';
 import { Citas } from '../user-data/citas';
 import { UserDataProvider } from '../user-data/user-data';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
+import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-manager';
 
 @Injectable()
 export class CitasManagerProvider {
@@ -18,7 +19,8 @@ export class CitasManagerProvider {
     public datep: DateProvider,
     public baseurl: BaseUrlProvider,
     public citasData: CitasDataProvider,
-    public doctores: DoctoresDataProvider
+    public doctores: DoctoresDataProvider,
+    public nodeMan: DrupalNodeManagerProvider
   ) {
     console.log('Hello CitasManagerProvider Provider');
     
@@ -63,6 +65,19 @@ export class CitasManagerProvider {
     let aux_cita = new Citas();
     aux_cita.setData(data);
     this.citasData.addCita(aux_cita,false);
+  }
+
+
+  //CITAS METHODS
+  generateNewCita( newCita ){return this.nodeMan.generateNewNode(newCita);}
+  updateCita( cita ){return this.nodeMan.updateNode(cita);}
+  deleteCita( cita ){return this.nodeMan.deleteNode(cita);}
+  updateCitaState( cita:Citas , state){
+    cita.data.field_estado.und[0].value = state;
+    if(Number(state) === Number(UserDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
+    if(Number(state) === Number(UserDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
+    console.log("tryna update cita:",cita.data);
+    return this.updateCita( cita.data );
   }
   
 }

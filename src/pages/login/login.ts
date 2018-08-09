@@ -72,7 +72,7 @@ export class LoginPage {
                 //Debugger.log(['planes set',this.userData.planes]);
                 //Debugger.log(['subscription',this.userData.subscription]);
                 if(
-                  this.userData.are_planes_set && 
+                  //this.userData.are_planes_set && 
                   this.userData.subscription !== null && 
                   this.userData.subscription.is_plan_set
                 ){

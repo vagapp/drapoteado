@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, AlertController, LoadingController, ModalController, IonicPage } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
+import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 @IonicPage({
@@ -19,11 +20,12 @@ export class HomePage {
     public modalCtrl: ModalController, 
     public userData: UserDataProvider,
     public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public userMan: DrupalUserManagerProvider
   ) {
   }
 
-  ionViewDidLoad(){
+  async ionViewDidLoad(){
       if( this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){
         let Modal = this.modalCtrl.create("WelcomeModalPage");
         Modal.present({});
@@ -32,13 +34,8 @@ export class HomePage {
           uid:this.userData.userData.uid,
           field_tutorial_state: {und: [{value: "1"}]},
         }
-        this.userData.updateUserd(cloneData).subscribe(
-          (val)=>{
-          }, (response) => {
-          }
-        );
+        await this.userMan.updateUserd(cloneData).toPromise();
     }
-    //this.userData.cargarCitas();
   }
 
 

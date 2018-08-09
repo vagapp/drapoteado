@@ -146,7 +146,7 @@ export class reportes{
         Debugger.log(["cargar Citas not implemented"]);    
     }
 
-    setNowDatesUT(){ // this is used to instantly create today report = ) 
+    /*setNowDatesUT(){ // this is used to instantly create today report = ) 
         let ranges = reportes.getTodayReportRangeNumbers();
         this.dateStartUTMS =  ranges.start;//new Date().setHours(0,0,0,0);
         this.dateEndUTMS = ranges.end; //new Date().setHours(23,59,59,999); 
@@ -156,7 +156,7 @@ export class reportes{
 
     static getTodayReportRangeNumbers(){
         return { start: new Date().setHours(0,0,0,0) , end: new Date().setHours(23,59,59,999) };
-    }
+    }*/
 
 
     

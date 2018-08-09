@@ -29,7 +29,7 @@ export class DoctoresDataProvider {
   
 
   addDoctor( doc:Doctores, call:boolean = true){
-    this.doctores.push(doc);
+    if(!this.exists(doc))this.doctores.push(doc);
     if( call )this.subject.next(this.doctores);
     console.log('added cita',doc,this.doctores);
   }
@@ -40,5 +40,9 @@ export class DoctoresDataProvider {
     if( call ) this.subject.next(this.doctores);
     console.log('removed cita',doc,this.doctores);
   }
+
+  exists( doc:Doctores ):boolean{
+    return this.doctores.filter((docs)=>{ return docs.Uid === doc.Uid }).length > 0;
+   }
 
 }

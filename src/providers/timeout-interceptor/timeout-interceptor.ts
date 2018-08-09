@@ -8,7 +8,7 @@ export class TimeoutInterceptor implements HttpInterceptor {
   defaultTimeout = 120000;
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('TimeoutInterceptor intercepts');
+    //console.log('TimeoutInterceptor intercepts');
     const timeout = Number(req.headers.get('timeout')) || this.defaultTimeout;
     return next.handle(req).timeout(timeout);
   }

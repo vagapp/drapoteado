@@ -2,11 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, LoadingController, ModalController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { OneSignal, OSNotificationPayload } from '@ionic-native/onesignal';
 import { UserDataProvider } from '../providers/user-data/user-data';
 import { CordovaAvailableProvider } from '../providers/cordova-available/cordova-available';
 import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
 import { CitasManagerProvider } from '../providers/citas-manager/citas-manager';
+import { PlanesDataProvider } from '../providers/planes-data/planes-data';
+import { OnesignalManagerProvider } from '../providers/onesignal-manager/onesignal-manager';
 
 
 
@@ -21,7 +22,6 @@ export class MyApp {
   rootPage: any = "LoginPage";
   Home: any = 'HomePage';
   token: string;
-  connectcomp:boolean=false;
 
 
   
@@ -35,14 +35,13 @@ export class MyApp {
     public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
-    private oneSignal: OneSignal,
     public ica: CordovaAvailableProvider,
     public wsp: WebsocketServiceProvider,
-    public citasManager: CitasManagerProvider
+    public citasManager: CitasManagerProvider,
+    public planes: PlanesDataProvider,
+    public OneMan: OnesignalManagerProvider
   ) {
     this.initializeApp();
-    
-    // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: "HomePage" },
       { title: 'Citas', component: "CitasPage" },
@@ -53,49 +52,27 @@ export class MyApp {
     ];
   }
 
-  /**
-   * ONESIGNAL WEB NOTIFICATION
-   * <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-<script>
-  var OneSignal = window.OneSignal || [];
-  OneSignal.push(function() {
-    OneSignal.init({
-      appId: "7902c2ba-310b-4eab-90c3-8cae53de891f",
-      autoRegister: false,
-      notifyButton: {
-        enable: true,
-      },
-    });
-  });
-</script>
-   * **/
+
 
   initializeApp() {
-    
     this.platform.ready().then(() => {
-      this.initOnesignal();
-      
-      if(this.ica.isCordovaAvailable)this.splashScreen.hide();
-      //Debugger.log(['platform redy']);
-      let loading = this.loadingCtrl.create({
-        content: 'Bienvenido'
-      });
-      loading.present();
-     
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
-      
-      this.userData.requestToken().subscribe((val) => {
+      this.OneMan.init();
+      if(this.ica.isCordovaAvailable)this.splashScreen.hide();
+      let loading = this.loadingCtrl.create({content: 'Bienvenido'});
+      loading.present();
+      this.initLoad().then(()=>{
+        if(this.userData.userData.uid !== 0) this.rootPage = 'HomePage';
+        loading.dismiss();
+      });
+    
+      /*this.userData.requestToken().subscribe((val) => {
         this.userData.sessionData.token = val['token'];
         //console.log("token updated",this.userData.sessionData.token);
         //request token for this session, then check if conected to system connect.
-        //sometimes this runs faster so it should be assigned here.
         //this.userData.cargarPlanes();
-        this.connectcomp = false;
         this.userData.checkConnect().subscribe((val)=>{
-          //Debugger.log(['checkConnect val',val]);
-          this.connectcomp = true;
+          console.log('checkConnect',val);
           if(val['user']['uid'] != 0){
             //console.log("logged in as", val['user']['name']);
             this.userData.setSessionData(val);
@@ -148,46 +125,31 @@ export class MyApp {
   },() => {
     //console.log("The POST observable is now completed.");
 });
+*/
 
     });
   }
 
+  //loads token and planes syncronous
+  async initLoad(){
+    let token_data = await this.userData.requestToken().toPromise();
+    if( token_data ) this.userData.sessionData.token = token_data['token'];
+    let planes_data = await this.planes.requestPlanes().toPromise();
+    if( planes_data ) this.planes.setPlanes(planes_data);
+    let connec_Data = await this.userData.checkConnect().toPromise();
+    if(connec_Data && connec_Data['user']['uid'] != 0){
+      //if logged in set session and userdata
+      this.userData.setSessionData(connec_Data);
+      await this.userData.loginSetData(connec_Data['user']['uid']); 
+   }
+}
 
-  initOnesignal(){
-    if (this.ica.isCordovaAvailable){
-      var iosSettings = {};
-      iosSettings["kOSSettingsKeyAutoPrompt"] = true;
-      iosSettings["kOSSettingsKeyInAppLaunchURL"] = false;
-      // Initialise plugin with OneSignal service
-      this.oneSignal.startInit(this.userData.onesignalAPPid, this.userData.onesignalSenderid).iOSSettings(iosSettings);
-      this.oneSignal.getIds()
-      .then((ids) =>
-      {
-         //console.log('getIds: ' + JSON.stringify(ids));
-         this.userData.onseignalDid = ids;
-      });
-      this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
-      this.oneSignal.handleNotificationReceived().subscribe(data => this.onPushReceived(data.payload));
-      this.oneSignal.handleNotificationOpened().subscribe(data => this.onPushOpened(data.notification.payload));
-      this.oneSignal.endInit();
-      
-      //postNotification(Parameters)
-    } 
-  }
 
-  private onPushReceived(payload: OSNotificationPayload) {
-    //alert('Push recevied:' + payload.body);
-    this.userData.cargarNotificaciones();
-  }
-  
-  private onPushOpened(payload: OSNotificationPayload) {
-    //Debugger.log(['onPushOpened',payload]);
-    this.userData.operatePushNotification(payload.additionalData.action);
-  }
+
+
+
 
   openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
   

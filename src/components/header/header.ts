@@ -3,6 +3,8 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
 import { NavController, LoadingController, ModalController, PopoverController } from 'ionic-angular';
 //import { Debugger } from '../../providers/user-data/debugger';
 import { Citas } from '../../providers/user-data/citas';
+import { NotificationsDataProvider } from '../../providers/notifications-data/notifications-data';
+import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 
 
 /**
@@ -16,12 +18,11 @@ import { Citas } from '../../providers/user-data/citas';
   templateUrl: 'header.html'
 })
 
-export class HeaderComponent {
+export class HeaderComponent{
   bgColor:"C1272D";
   fntColor:"FFFFFF";
   authObservable = null;
   susObservable = null;
-  notiSubject = null;
   showNotifications:boolean = false;
   pagename = null;
  
@@ -30,13 +31,14 @@ export class HeaderComponent {
     public navCtrl:NavController,
     public loadingCtrl:LoadingController,
     public popoverCtrl: PopoverController,
-    public modalCtrl: ModalController
-    
+    public modalCtrl: ModalController,
+    public notificationData: NotificationsDataProvider,
+    public notiMan: NotificationsManagerProvider
   ) {
     //this.pagename = this.navCtrl.getActive().name;
     this.authObservable = userData.AuthSubject;
     this.susObservable = userData.susSubject;
-    this.notiSubject = userData.notiSubject;
+   
     this.susObservable.subscribe(
       (val)=>{
         this.pagename = this.navCtrl.getActive().name;
@@ -48,22 +50,8 @@ export class HeaderComponent {
           this.navCtrl.setRoot("HomePage");
         }
         //this.userData.resetLists();
-        }else{
-          if(this.userData.sus_to_reports){
-            let loader = this.loadingCtrl.create({
-              content: "Cargando..."
-            });
-            loader.present();
-            this.userData.loading_reports = true;
-            let loadrepointerval = setInterval(
-              ()=>{
-                if(!this.userData.loading_reports){ loader.dismiss();clearInterval(loadrepointerval);}
-              },500
-            );
-            this.userData.cargarListaReportes();
-          }
         }
-      }
+        }
     );
     this.authObservable.subscribe( 
       (val)=>{
@@ -71,9 +59,6 @@ export class HeaderComponent {
         this.navCtrl.setRoot("LoginPage");
     });
 
-    this.notiSubject.subscribe((action:string)=>{
-       this.handleNotificationAction(action);
-      });
     } //fin constructor
 
 
@@ -138,16 +123,13 @@ export class HeaderComponent {
   }
 
 
-  presentNotifications(myEvent) {
-    if(this.userData.notificaciones.length === 0){
-      this.userData.activeCargandoNotif = true;
-      let notinterval = setInterval(()=>{
-        if(!this.userData.activeCargandoNotif || this.userData.notificaciones.length !== 0){
-          this.userData.activeCargandoNotif = false;
-          clearInterval(notinterval);
-        }
-      },500);
-      this.userData.getNotificationObservable().subscribe(
+  async presentNotifications(myEvent) {
+      await this.notiMan.cargarNotificaciones().toPromise();
+      let popover = this.popoverCtrl.create("NotificationPopPage", undefined, { cssClass: "notiPopover" });
+      popover.present({
+        ev: myEvent
+      });
+      /*this.notiMan.getNotificationObservable().subscribe(
           (val)=>{
             this.userData.setNotifications(val);
             this.userData.cargandoNotif =  this.userData.activeCargandoNotif = false;
@@ -157,7 +139,7 @@ export class HeaderComponent {
     let popover = this.popoverCtrl.create("NotificationPopPage", undefined, { cssClass: "notiPopover" });
     popover.present({
       ev: myEvent
-    });
+    });*/
   }
 
 
