@@ -11,6 +11,24 @@ export class CitasDataProvider{
   citas:Citas[] = new Array();
   citasSubject:Subject<any> = new Subject();
 
+
+  //estados de cita:
+  public static STATE_PENDIENTE = 0;
+  public static STATE_CONFIRMADA = 1;
+  public static STATE_ACTIVA = 2;
+  public static STATE_COBRO = 3;
+  public static STATE_FINALIZADA = 4;
+  public static STATE_CANCELADA = 5;
+  public static STATE_ELIMINADA = 6;
+
+  get STATE_PENDIENTE(){return CitasDataProvider.STATE_PENDIENTE;}
+  get STATE_CONFIRMADA(){return CitasDataProvider.STATE_CONFIRMADA;}
+  get STATE_ACTIVA(){return CitasDataProvider.STATE_ACTIVA;}
+  get STATE_COBRO(){return CitasDataProvider.STATE_COBRO;}
+  get STATE_FINALIZADA(){return CitasDataProvider.STATE_FINALIZADA;}
+  get STATE_CANCELADA(){return CitasDataProvider.STATE_CANCELADA;}
+  get STATE_ELIMINADA(){return CitasDataProvider.STATE_CANCELADA;}
+
   constructor() {}
   get subject():Subject<any>{return this.citasSubject;}
 
@@ -49,4 +67,20 @@ export class CitasDataProvider{
   triggerSubject(){
     this.subject.next(this.citas);
   }
+
+  static getStateLabel( state:number ):string{
+    let ret = '';
+    switch(state){
+      case CitasDataProvider.STATE_PENDIENTE: ret = 'Pendiente'; break;
+      case CitasDataProvider.STATE_CONFIRMADA: ret = 'Confirmada'; break;
+      case CitasDataProvider.STATE_ACTIVA: ret = 'Activa'; break;
+      case CitasDataProvider.STATE_COBRO: ret = 'Cobro'; break;
+      case CitasDataProvider.STATE_FINALIZADA: ret = 'Finalizada'; break;
+      case CitasDataProvider.STATE_CANCELADA: ret = 'Cancelada'; break;
+      case CitasDataProvider.STATE_ELIMINADA: ret = 'Eliminada'; break;
+      default: ret = 'Error';
+    }
+    return ret;
+  }
+
 }

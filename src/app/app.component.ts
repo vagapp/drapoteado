@@ -8,6 +8,7 @@ import { WebsocketServiceProvider } from '../providers/websocket-service/websock
 import { CitasManagerProvider } from '../providers/citas-manager/citas-manager';
 import { PlanesDataProvider } from '../providers/planes-data/planes-data';
 import { OnesignalManagerProvider } from '../providers/onesignal-manager/onesignal-manager';
+import { DoctoresManagerProvider } from '../providers/doctores-manager/doctores-manager';
 
 
 
@@ -39,7 +40,8 @@ export class MyApp {
     public wsp: WebsocketServiceProvider,
     public citasManager: CitasManagerProvider,
     public planes: PlanesDataProvider,
-    public OneMan: OnesignalManagerProvider
+    public OneMan: OnesignalManagerProvider,
+    public docMan: DoctoresManagerProvider
   ) {
     this.initializeApp();
     this.pages = [
@@ -140,7 +142,10 @@ export class MyApp {
     if(connec_Data && connec_Data['user']['uid'] != 0){
       //if logged in set session and userdata
       this.userData.setSessionData(connec_Data);
-      await this.userData.loginSetData(connec_Data['user']['uid']); 
+      await this.userData.loginSetData(connec_Data['user']['uid']);
+      this.docMan.initDoctoresUids();
+      await this.citasManager.requestCitas().toPromise();
+      console.log(this.citasManager.citasData.citas);
    }
 }
 

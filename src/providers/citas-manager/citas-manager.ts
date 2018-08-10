@@ -43,7 +43,8 @@ export class CitasManagerProvider {
     cajas:number[] = null,  
     recepciones:number[] = null
   ):Observable<any>{
-    let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}&args[3]=${from}--${to}`;
+    //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}&args[3]=${from}--${to}`;
+    let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
     let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
     return this.http.get(url);
   }
@@ -74,8 +75,8 @@ export class CitasManagerProvider {
   deleteCita( cita ){return this.nodeMan.deleteNode(cita);}
   updateCitaState( cita:Citas , state){
     cita.data.field_estado.und[0].value = state;
-    if(Number(state) === Number(UserDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
-    if(Number(state) === Number(UserDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
+    if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
+    if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
     console.log("tryna update cita:",cita.data);
     return this.updateCita( cita.data );
   }

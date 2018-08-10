@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { Doctores } from '../user-data/doctores';
+import { UserDataProvider } from '../user-data/user-data';
+import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
 
 
 /*
@@ -16,8 +18,26 @@ export class DoctoresManagerProvider {
   constructor(
     public http: HttpClient,
     public docData:DoctoresDataProvider,
+    public userData: UserDataProvider,
+    public userMan: DrupalUserManagerProvider
   ) {
   }
+
+
+  /**
+   * Este metodo carga los uids de los doctores del usuario:
+   * si es un doctor carga su propio uid
+   * si es una subcuenta carga los uids de todos los doctores que esta manejando.
+  */
+  initDoctoresUids(){
+    if(this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
+      this.setDoctores([this.userData.userData.uid]);
+    }else{
+      if(this.userData.userData.field_doctores && this.userData.userData.field_doctores.und.length > 0)
+      this.setDoctores(this.userData.userData.field_doctores.und);
+    }
+  }
+
 
 
   setDoctores(Uids:number[]){
@@ -30,7 +50,7 @@ export class DoctoresManagerProvider {
 
 
   requestDoctores(){
-    
+
   }
   /*
   cargarDoctores(){

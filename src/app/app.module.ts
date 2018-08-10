@@ -38,6 +38,7 @@ import { ServiciosManagerProvider } from '../providers/servicios-manager/servici
 import { DrupalUserManagerProvider } from '../providers/drupal-user-manager/drupal-user-manager';
 import { ReportesDataProvider } from '../providers/reportes-data/reportes-data';
 import { ReportesManagerProvider } from '../providers/reportes-manager/reportes-manager';
+import { LoaderProvider } from '../providers/loader/loader';
 
 //import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 //import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
@@ -107,6 +108,7 @@ import { ReportesManagerProvider } from '../providers/reportes-manager/reportes-
     DrupalUserManagerProvider,
     ReportesDataProvider,
     ReportesManagerProvider,
+    LoaderProvider,
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

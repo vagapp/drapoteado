@@ -2,6 +2,7 @@ import { citasData, UserDataProvider } from '../../providers/user-data/user-data
 import { Debugger } from './debugger';
 import { servicios } from './servicios';
 import { DateProvider } from '../date/date';
+import { CitasDataProvider } from '../citas-data/citas-data';
 
 
 export class Citas{
@@ -45,12 +46,10 @@ export class Citas{
     get cobroEfectivo(){return Number(this.data.field_cobro_efectivo.und[0].value);}
     get cobroTarjeta(){return Number(this.data.field_cobro_tarjeta.und[0].value);}
     get CantidadRestante(){ return (Number(this.costo) - Number(this.cobro) ); }
-    
-    
+    get stateLabel(){ return CitasDataProvider.getStateLabel(Number(this.data.field_estado.und[0].value)); }
     set cobroCheque(val){ this.data.field_cobro_cheque.und[0].value = Number(val); this.calcularCobroTotal();} 
     set cobroEfectivo(val){ this.data.field_cobro_efectivo.und[0].value = Number(val); this.calcularCobroTotal();}
     set cobroTarjeta(val){ this.data.field_cobro_tarjeta.und[0].value = Number(val); this.calcularCobroTotal();}
-
     calcularCobroTotal(){ this.data.field_cobro.und[0].value = this.cobroTarjeta + this.cobroCheque + this.cobroEfectivo }
 
     
@@ -372,8 +371,10 @@ export class Citas{
         return ret;
    }
    
-
+   /* Esta mamada que xD**/
     getStateString(){
+        return this.stateLabel;
+        /*
         let state = parseInt(""+this.data.field_estado.und[0].value);
         let ret = "";
         switch(state){
@@ -384,7 +385,7 @@ export class Citas{
           case UserDataProvider.STATE_FINALIZADA: ret="Finalizada"; break;
           case UserDataProvider.STATE_CANCELADA: ret="Cancelada"; break;
         }
-        return ret;
+        return ret;*/
       }
 
       save(){

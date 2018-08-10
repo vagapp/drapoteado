@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ToastController, LoadingController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
+import { LoaderProvider } from '../../providers/loader/loader';
 //import { servicios } from '../../providers/user-data/servicios';
 
 
@@ -30,34 +31,34 @@ export class ServiciosPage {
     public userData: UserDataProvider,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    public servicioMan: ServiciosManagerProvider
+    public servicioMan: ServiciosManagerProvider,
+    public loader: LoaderProvider
   ) {
     //this.servicios = new Array();
   }
 
   ionViewDidLoad() {
-    //console.log('ionViewDidLoad ServiciosPage');
+    console.log(this.servicioMan.docData.doctoresIDs);
     this.cargarServicios();
   }
+
   openNuevoservicio(){
     let Modal = this.modalCtrl.create("NuevoservicioModalPage", undefined, { cssClass: "smallModal nuevoservicioModal" });
-    Modal.onDidDismiss(data => {
-      this.cargarServicios();
-    });
     Modal.present({});
-  }
-
-  cargarServicios(){
-    this.servicioMan.cargarServicios();
   }
 
   editServicio( edit_servicio ){
     let Modal = this.modalCtrl.create("NuevoservicioModalPage",{ servicio: edit_servicio.getData() } , { cssClass: "smallModal nuevoservicioModal" });
-    Modal.onDidDismiss(data => {
-      this.cargarServicios();
-    });
     Modal.present({});
   }
+
+  async cargarServicios(){
+    this.loader.presentLoader('cargando...');
+    await this.servicioMan.loadServicios();
+    this.loader.dismissLoader();
+  }
+
+ 
 
   deleteServicio( delete_servicio ){
     let alert = this.alertCtrl.create({

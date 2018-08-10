@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 import { UserDataProvider, serviciosd } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
 import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
+import { LoaderProvider } from '../../providers/loader/loader';
 
 /**
  * Generated class for the NuevoservicioModalPage page.
@@ -27,7 +28,8 @@ export class NuevoservicioModalPage {
     public loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     public viewCtrl: ViewController,
-    public servMan: ServiciosManagerProvider
+    public servMan: ServiciosManagerProvider,
+    public loader: LoaderProvider
   ) {
     console.log('loadingservice', navParams.get('servicio'));
     let aux_service = navParams.get('servicio');
@@ -52,9 +54,7 @@ export class NuevoservicioModalPage {
     }
   }
 
-  dismiss() {
-    this.viewCtrl.dismiss();
-  }
+ 
 
   resetNewService(){
     this.newService={
@@ -74,19 +74,21 @@ export class NuevoservicioModalPage {
     //this.resetNewService()
   }
 
-  createService(){
-    let loader = this.loadingCtrl.create({
-      content: "Generando Servicio"
-    }); 
-    loader.present();
+  async createService(){
+    this.loader.presentLoader('Creando Servicio ...');
     this.newService.body.und[0].value="automatic description";
     this.newService.field_doctor_uid.und[0].value= this.userData.userData.uid;
     console.log("creating a service ",this.newService);
-    this.servMan.generateNewService( this.newService ).subscribe(
+    let serv_res = await this.servMan.generateNewService( this.newService ).toPromise();
+    let update_res = await this.servMan.loadServicios();
+    this.loader.dismissLoader();
+    this.dismiss();
+    
+    /*.subscribe(
     (val)=>{
       console.log("the new service has been generated");
       this.presentToast("Completado");
-      loader.dismiss();
+     
       this.close();
     },
     response => {
@@ -95,17 +97,17 @@ export class NuevoservicioModalPage {
         response.error.forEach(element => {
           this.presentToast(element);
         });
-        loader.dismiss();
       }
-  );
+  );*/
 }
 
-updateService(){
-  let loader = this.loadingCtrl.create({
-    content: "Guardando . . ."
-  }); 
-  loader.present();
-  this.servMan.updateService( this.newService ).subscribe(
+async updateService(){
+  this.loader.presentLoader('Guardando Servicio ...');
+  let serv_res = await this.servMan.updateService( this.newService ).toPromise();
+  let update_res = await this.servMan.loadServicios();
+  this.loader.dismissLoader();
+  this.dismiss();
+  /*.subscribe(
     (val)=>{
       console.log("serviceupdated");
       this.presentToast("Completado");
@@ -117,7 +119,7 @@ updateService(){
         console.log("show error");
         loader.dismiss();
       }
-  );
+  );*/
 }
 
 presentToast(msg) {
@@ -130,9 +132,7 @@ presentToast(msg) {
 }
 
 
-close(){
+dismiss() {
   this.viewCtrl.dismiss();
 }
-
-
 }

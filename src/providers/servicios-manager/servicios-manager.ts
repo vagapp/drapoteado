@@ -4,6 +4,7 @@ import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-ma
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { servicios } from '../user-data/servicios';
 import { BaseUrlProvider } from '../base-url/base-url';
+import { Observable } from 'rxjs/Observable';
 
 /*
   Generated class for the ServiciosManagerProvider provider.
@@ -25,46 +26,48 @@ export class ServiciosManagerProvider {
   }
 
 
-  cargarServicios(){
-    this.getServicios(this.docData.doctoresIDs).subscribe(
-      (val)=>{
-        let aux_results = Object.keys(val).map(function (key) { return val[key]; });
-         aux_results.forEach((result_servicio) => {
-           
-          let found = false;
-          this.servicios.forEach(servicio => {
-            if(Number(servicio.Nid) === Number(result_servicio['Nid'])){
-              servicio.setData(result_servicio);
-              found = true;
-            }
-          });
-          if( !found ){
-            let aux_serv = new servicios();
-            aux_serv.setData(result_servicio);
-            this.servicios.push(aux_serv);
-          }
-        }
-      );
-      this.docData.doctores.forEach(doc => {
-        doc.setServicios(this.servicios);
-      });
-     
-        console.log(this.servicios);
-      });
+  async loadServicios(){
+    console.log(this.docData.doctoresIDs);
+    let servicios_data = await this.requestServiciosDoctors(this.docData.doctoresIDs).toPromise();
+    for(let servicio_data of servicios_data){this.addServicio(servicio_data);}
+    this.docData.doctores.forEach(doc => {doc.setServicios(this.servicios);});
   }
 
-    /**
+  /**
    * uids:number[] son los uids de los usuarios autores de los servicios que se desea filtrar
   **/
- getServicios( uids:number[] ){
-  //filter by author (doctor): args[0]=70,76,1,all
-  let doctorfilter = "?args[0]="+uids.join();
-  if(uids.length == 0){doctorfilter = "?args[0]=all";}
-  let url = this.bu.endpointUrl+'rest_servicios'+doctorfilter;
-  let observer = this.http.get(url);
-  observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
+ requestServiciosDoctors( uids:number[] ):Observable<any>{
+  let url = `${this.bu.endpointUrl}rest_servicios?args[0]=${uids.length > 0 ? uids.join() : "all"}`;
+  let observer = this.http.get(url).share();
   return observer;
 }
+
+
+  checkForUpdate( servicio_data ):boolean{
+    let ret = false;
+    let exists = this.servicios.filter((servicios)=>{ return (Number(servicios.Nid) === Number(servicio_data['Nid'])) });
+    console.log('servicio to update',servicio_data)
+    if(exists.length > 0){
+      exists[0].setData(servicio_data);
+      ret = true;
+    }
+    console.log( 'servicios after',this.servicios );
+    return ret;
+  }
+
+
+  addServicio(servicio_data:any){
+    if(!this.checkForUpdate(servicio_data)){
+      const aux_serv = new servicios();
+      aux_serv.setData(servicio_data);
+      this.servicios.push(aux_serv);
+    }
+  }
+
+  removeServicio( Nid:number ){
+    
+  }
+
 
   removeServicioFromLists(servicio:servicios){
     var index = this.servicios.indexOf(servicio);
@@ -73,6 +76,7 @@ export class ServiciosManagerProvider {
       doc.removeServicioFromLists(servicio);
     }); 
   }
+  
 
 
   //Service Methods

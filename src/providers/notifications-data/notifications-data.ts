@@ -14,5 +14,4 @@ export class NotificationsDataProvider {
   Subject:Subject<any> = new Subject();
   constructor() {
   }
-
 }
