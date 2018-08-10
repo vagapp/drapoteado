@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController, LoadingController
 import { ModalController } from 'ionic-angular';
 import { reportes } from '../../providers/user-data/reportes';
 import { UserDataProvider } from '../../providers/user-data/user-data';
+import { ReportesManagerProvider } from '../../providers/reportes-manager/reportes-manager';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 
@@ -26,13 +27,14 @@ export class ReportesPage {
      public modalCtrl: ModalController,
     public userData: UserDataProvider,
     private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    public reportesMan: ReportesManagerProvider
     ) {
   }
 
   ionViewDidLoad() {
     //console.log('ionViewDidLoad ReportesPage');
-    this.userData.cargarListaReportes();
+    this.reportesMan.cargarListaReportes();
     //Debugger.log(["reportes carfados",this.userData.reportes]);
   }
 
@@ -55,7 +57,6 @@ export class ReportesPage {
           text: 'No',
           role: 'cancel',
           handler: () => {
-           
           }
         },
         {
@@ -65,20 +66,11 @@ export class ReportesPage {
               content: "Eliminando..."
             });
             loader.present();
-            this.userData.loading_reports = true;
-            let loadrepointerval = setInterval(
-              ()=>{
-                if(!this.userData.loading_reports){ loader.dismiss();clearInterval(loadrepointerval);}
-              },500
-            );
-            this.userData.deleteReport(report).subscribe(
+            this.reportesMan.deleteReport(report).subscribe(
               (val) => {
-                //Debugger.log([val]);
-                this.userData.cargarListaReportes();
+                this.reportesMan.cargarListaReportes();
               },
               (response)=>{
-                this.userData.loading_reports = false;
-                //Debugger.log(['deleting node error',response]);
               }
             );
           }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
+import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
 //import { servicios } from '../../providers/user-data/servicios';
 
 
@@ -29,6 +30,7 @@ export class ServiciosPage {
     public userData: UserDataProvider,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
+    public servicioMan: ServiciosManagerProvider
   ) {
     //this.servicios = new Array();
   }
@@ -46,26 +48,7 @@ export class ServiciosPage {
   }
 
   cargarServicios(){
-    this.userData.cargarServicios();
-    /*console.log("cargando servicios");
-    this.servicios = new Array();
-    let aux_arr = new Array();
-    aux_arr[0]= this.userData.userData.uid;
-    this.userData.getServicios(aux_arr).subscribe(
-      (val)=>{
-         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
-         let dis  = this;
-         aux_results.forEach((element) => {
-          this.servicios.push(element);
-        },
-        
-      );
-        console.log(dis.servicios);
-      },
-      response => {
-        console.log("POST call in error", response);
-      }
-    );*/
+    this.servicioMan.cargarServicios();
   }
 
   editServicio( edit_servicio ){
@@ -92,9 +75,9 @@ export class ServiciosPage {
           text: 'Eliminar',
           handler: () => {
             //console.log('Buy clicked');
-            this.userData.deleteService(delete_servicio).subscribe(
+            this.servicioMan.deleteService(delete_servicio).subscribe(
               (val)=>{
-                 this.userData.removeServicioFromLists(delete_servicio);
+                 this.servicioMan.removeServicioFromLists(delete_servicio);
                 }
             );
           }

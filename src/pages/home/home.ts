@@ -3,6 +3,8 @@ import { NavController, AlertController, LoadingController, ModalController, Ion
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
+import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
+import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 @IonicPage({
@@ -21,7 +23,9 @@ export class HomePage {
     public userData: UserDataProvider,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
-    public userMan: DrupalUserManagerProvider
+    public userMan: DrupalUserManagerProvider,
+    public citasMan: CitasManagerProvider,
+    public notiMan: NotificationsManagerProvider
   ) {
   }
 
@@ -66,7 +70,7 @@ export class HomePage {
           text: 'Si',
           handler: () => {
             //loader.present();
-            this.userData.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
+            this.citasMan.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
               (val)=>{
                 /*this.userData.cargarCitas().subscribe(
                   (val)=>{
@@ -85,8 +89,8 @@ export class HomePage {
 
 
   confirmarCita(cita:Citas){
-    this.userData.updateCitaState( cita , UserDataProvider.STATE_CONFIRMADA ).subscribe((val)=>{
-        this.userData.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
+    this.citasMan.updateCitaState( cita , UserDataProvider.STATE_CONFIRMADA ).subscribe((val)=>{
+        this.notiMan.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
       //this.userData.cargarCitas()
     });
   }

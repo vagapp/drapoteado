@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController, ViewController } from 'ionic-angular';
 import { UserDataProvider, serviciosd } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
+import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
 
 /**
  * Generated class for the NuevoservicioModalPage page.
@@ -25,7 +26,8 @@ export class NuevoservicioModalPage {
     public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
-    public viewCtrl: ViewController
+    public viewCtrl: ViewController,
+    public servMan: ServiciosManagerProvider
   ) {
     console.log('loadingservice', navParams.get('servicio'));
     let aux_service = navParams.get('servicio');
@@ -80,7 +82,7 @@ export class NuevoservicioModalPage {
     this.newService.body.und[0].value="automatic description";
     this.newService.field_doctor_uid.und[0].value= this.userData.userData.uid;
     console.log("creating a service ",this.newService);
-    this.userData.generateNewService( this.newService ).subscribe(
+    this.servMan.generateNewService( this.newService ).subscribe(
     (val)=>{
       console.log("the new service has been generated");
       this.presentToast("Completado");
@@ -103,7 +105,7 @@ updateService(){
     content: "Guardando . . ."
   }); 
   loader.present();
-  this.userData.updateService( this.newService ).subscribe(
+  this.servMan.updateService( this.newService ).subscribe(
     (val)=>{
       console.log("serviceupdated");
       this.presentToast("Completado");

@@ -1,6 +1,7 @@
 import { citasData, UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from './debugger';
 import { servicios } from './servicios';
+import { DateProvider } from '../date/date';
 
 
 export class Citas{
@@ -156,8 +157,8 @@ export class Citas{
         this.date = new Date(dateUTms);
         Debugger.log(["cita UTms date is: "+this.date]);
         //set data date fields on the format requiered by inputs:
-        this.data.field_date.und[0].value.date = `${UserDataProvider.formatDateBinaryNumber(this.date.getUTCDate())}/${UserDataProvider.formatDateBinaryNumber((this.date.getUTCMonth()+1))}/${UserDataProvider.formatDateBinaryNumber(this.date.getUTCFullYear())}`
-        this.data.field_date.und[0].value.time = `${UserDataProvider.formatDateBinaryNumber(this.date.getUTCHours())}:${UserDataProvider.formatDateBinaryNumber(this.date.getUTCMinutes())}`;
+        this.data.field_date.und[0].value.date = `${DateProvider.formatDateBinaryNumber(this.date.getUTCDate())}/${DateProvider.formatDateBinaryNumber((this.date.getUTCMonth()+1))}/${DateProvider.formatDateBinaryNumber(this.date.getUTCFullYear())}`
+        this.data.field_date.und[0].value.time = `${DateProvider.formatDateBinaryNumber(this.date.getUTCHours())}:${DateProvider.formatDateBinaryNumber(this.date.getUTCMinutes())}`;
         Debugger.log(['set date is',this.data.field_date]);
         //set time until this date:
         this.getUntilMs();
@@ -227,9 +228,9 @@ export class Citas{
         let ret = "00";
         let aux_ms = Math.abs(numberdatedif);
         if(aux_ms < (60 * 1000)){ //menos de un minuto
-            ret =  `${UserDataProvider.formatDateBinaryNumber( Math.floor(aux_ms / 1000))} segundos`
+            ret =  `${DateProvider.formatDateBinaryNumber( Math.floor(aux_ms / 1000))} segundos`
         }else if(aux_ms < ( 60 * 60 * 1000)){ //menos de una hora
-            ret =  `${UserDataProvider.formatDateBinaryNumber( Math.floor(aux_ms / (1000 * 60) ))} Minutos`
+            ret =  `${DateProvider.formatDateBinaryNumber( Math.floor(aux_ms / (1000 * 60) ))} Minutos`
         }else{
             Debugger.log(['calculating diftext',aux_ms]);
             let aux_hours = Math.floor(aux_ms / (1000 * 60 * 60));
@@ -239,7 +240,7 @@ export class Citas{
             aux_ms -= aux_minutes * ( 1000 * 60 );
             Debugger.log(['calculating diftext am',aux_ms]);
             let aux_seconds = Math.floor(aux_ms / (1000) );
-            ret =  `${UserDataProvider.formatDateBinaryNumber(aux_hours)}:${UserDataProvider.formatDateBinaryNumber(aux_minutes)}:${UserDataProvider.formatDateBinaryNumber(aux_seconds)} Hrs`
+            ret =  `${DateProvider.formatDateBinaryNumber(aux_hours)}:${DateProvider.formatDateBinaryNumber(aux_minutes)}:${DateProvider.formatDateBinaryNumber(aux_seconds)} Hrs`
         }
         if(numberdatedif < 0) ret = `hace ${ret}`;
         return ret;

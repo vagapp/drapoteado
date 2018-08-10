@@ -20,8 +20,8 @@
             <tr>
                 <th>no</th>
                 <th>Paciente</th>
-                <th *ngIf="userData.subAccount">Doctor</th>
-                <th *ngIf="userData.subAccount">Tipo de Servicio</th>
+                <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Doctor</th>
+                <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Tipo de Servicio</th>
                 <th>Fecha</th>
                 <th>Estado</th>
                 <th></th>

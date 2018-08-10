@@ -55,7 +55,7 @@ export class LoginPage {
   
     login_observer.subscribe(
       (val) => {
-
+        /*
         //Debugger.log(['checkConnect val',val]);
           if(val['user']['uid'] != 0){
             //console.log("logged in as", val['user']['name']);
@@ -65,7 +65,7 @@ export class LoginPage {
               //val['user'] = user_aux;
               //console.log(val);
               this.userData.setUserData(val);
-              this.userData.cargarSubscription();
+              //this.userData.cargarSubscription();
               let moveinterval = setInterval(() =>{
                 //Debugger.log(['checking initiation']);
                 //Debugger.log(['planes set',this.userData.are_planes_set]);
@@ -97,6 +97,7 @@ export class LoginPage {
             this.navCtrl.setRoot(LoginPage, {});
             loading.dismiss();
           }
+          */
       },
       response => {
           //Debugger.log(["POST call in error", JSON.stringify(response)]);

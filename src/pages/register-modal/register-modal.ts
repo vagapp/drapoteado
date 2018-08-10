@@ -7,6 +7,7 @@ import { planes } from '../../providers/user-data/planes';
 import { subscriptions } from '../../providers/user-data/subscriptions';
 import { Clipboard } from '@ionic-native/clipboard';
 import { CordovaAvailableProvider } from '../../providers/cordova-available/cordova-available';
+import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
 
 
 declare var Stripe;
@@ -51,7 +52,8 @@ export class RegisterModalPage {
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
     public clipboard: Clipboard,
-    public ica: CordovaAvailableProvider
+    public ica: CordovaAvailableProvider,
+    public userMan: DrupalUserManagerProvider
   ) {
   }
 
@@ -90,7 +92,7 @@ export class RegisterModalPage {
     let aux_userData = JSON.parse(JSON.stringify(this.userData.userData));
     delete aux_userData.field_sub_id;
     delete aux_userData.field_tipo_de_usuario;
-    this.userData.updateUserd(aux_userData).subscribe(
+    this.userMan.updateUserd(aux_userData).subscribe(
       (val)=>{
         loading.dismiss();
       }
@@ -216,7 +218,7 @@ export class RegisterModalPage {
       aux_sus.field_doctores.push(this.userData.userData.uid);
       aux_sus.field_stripe_src_sus_id = this.selected_source.src_id;
       aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
-      this.userData.generateNewSus(aux_sus).subscribe((val)=>{
+      /*this.userData.generateNewSus(aux_sus).subscribe((val)=>{
        // Debugger.log(['we got this',val]);
         this.userData.subscription.nid = val['nid'];
         this.userData.userData.field_sub_id={und:new Array()};
@@ -229,7 +231,7 @@ export class RegisterModalPage {
           }
         );
         //Debugger.log(['subs updated to this, update user please',this.userData.subscription.nid]); 
-      });
+      });*/
     }else{
       //Debugger.log(['UPDATE SUSCRIPTION NOT IMPLEMENTED YET']);
       loading.dismiss();
@@ -248,7 +250,7 @@ export class RegisterModalPage {
     loading.present();
     //Debugger.log(['joining with',this.invitationCode]);
     
-    this.userData.cargarSubscription(this.invitationCode).subscribe(
+    /*this.userData.cargarSubscription(this.invitationCode).subscribe(
       (val)=>{
         if(this.userData.error_sub_is_full){
           this.userData.error_sub_is_full = false;
@@ -281,7 +283,7 @@ export class RegisterModalPage {
       }
     }
     }
-    );
+    );*/
   }
 
   showInvitation(){
@@ -315,7 +317,7 @@ export class RegisterModalPage {
     if(this.userData.userData.uid === uid){
       return false;
     }
-    let loading = this.loadingCtrl.create({
+    /*let loading = this.loadingCtrl.create({
       content: 'Eliminando usuario'
     });
     loading.present();
@@ -332,7 +334,7 @@ export class RegisterModalPage {
         loading.dismiss();
         });
       }
-    );
+    );*/
   }
 
   loadSources(){
@@ -426,7 +428,7 @@ export class RegisterModalPage {
 
 
 copyCode(){
-  this.clipboard.copy(this.userData.subscription.field_invitation_code);
+  /*this.clipboard.copy(this.userData.subscription.field_invitation_code);*/
 }
 
 

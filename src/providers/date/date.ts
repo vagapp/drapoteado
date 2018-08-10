@@ -13,5 +13,9 @@ export class DateProvider {
   static  getUntil( Since:Date ):number{
     return Since.getTime() - (new Date().getTime());
   }
+
+  static formatDateBinaryNumber( num ){
+    return (num < 10 ? '0' : '') + num;
+  }
   
 }

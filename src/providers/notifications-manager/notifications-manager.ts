@@ -5,6 +5,7 @@ import { NotificationsDataProvider } from '../notifications-data/notifications-d
 import { UserDataProvider } from '../user-data/user-data';
 import { BaseUrlProvider } from '../base-url/base-url';
 import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-manager';
+import { Observable } from 'rxjs/Observable';
 
 /*
   Generated class for the NotificationsManagerProvider provider.
@@ -27,10 +28,9 @@ export class NotificationsManagerProvider {
    /** 
    * NOTIFICACIONES
    * **/
-  cargarNotificaciones(){
-    let observer = this.getNotificationObservable();
-    observer.subscribe(
-      (val)=>{this.setNotifications(val);});
+  cargarNotificaciones():Observable<any>{
+    let observer = this.getNotificationObservable().share();
+    observer.subscribe((val)=>{this.setNotifications(val);});
     return observer;
   }
 

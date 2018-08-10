@@ -4,6 +4,8 @@ import { ModalController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { CitasDataProvider } from '../../providers/citas-data/citas-data';
+import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
+import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 /**
  * Generated class for the CitasPage page.
  *
@@ -32,7 +34,9 @@ export class CitasPage {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    public citasData: CitasDataProvider
+    public citasData: CitasDataProvider,
+    public citasMan: CitasManagerProvider,
+    public notiMan: NotificationsManagerProvider
   ) {
     //this.citas = new Array();
   }
@@ -99,18 +103,18 @@ export class CitasPage {
         content: "Actualizando..."
       });
       loader.present();
-      this.userData.updateCitaState(cita,state).subscribe(
+      this.citasMan.updateCitaState(cita,state).subscribe(
         (val)=>{
           //Debugger.log(['updating cita',cita]);
           if(Number(state) === 1){ //cambiando a cita confirmada
             //crear notificacion para doctor a quien le confirmaron la cita
             if(cita.doctor_playerid)
-            this.userData.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
+            this.notiMan.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
           }
           if(Number(state) === 3){ //cambiando a cita por cobrar
             //crear notificacion para cajas que esten ligadas al doctor.
             if(cita.caja_playerid){
-            this.userData.generateNotification([cita.data.field_cita_caja.und[0]],`La cita de de ${cita.paciente} esta en espera de cobro`,`cita-${cita.Nid}`);
+            this.notiMan.generateNotification([cita.data.field_cita_caja.und[0]],`La cita de de ${cita.paciente} esta en espera de cobro`,`cita-${cita.Nid}`);
           }
           }
           loader.dismiss();
@@ -173,7 +177,7 @@ export class CitasPage {
             text: 'Si',
             handler: () => { 
               //loader.present();
-              this.userData.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
+              this.citasMan.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
                 (val)=>{
                   /*this.userData.cargarCitas().subscribe(
                     (val)=>{
@@ -218,7 +222,7 @@ export class CitasPage {
         content: "eliminando..."
       });
       loader.present();
-      this.userData.deleteCita( cita.data ).subscribe(
+      this.citasMan.deleteCita( cita.data ).subscribe(
         (val)=>{
           loader.dismiss();
           //Debugger.log(['val returned from deletecita',val]);

@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { Debugger } from '../../providers/user-data/debugger';
+import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
+import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 
 /**
  * Generated class for the NuevacitaModalPage page.
@@ -32,7 +34,9 @@ export class NuevacitaModalPage {
     public loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     public viewCtrl: ViewController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    public citasMan: CitasManagerProvider,
+    public notiMan: NotificationsManagerProvider
   ) {
     console.log('GETTING CITA', navParams.get('cita'));
     let aux_node = navParams.get('cita');
@@ -83,10 +87,10 @@ export class NuevacitaModalPage {
     
     //this.cita.setDate(this.selectedDate);
     this.setCitaDateFromiNPUT();
-    this.userData.generateNewCita( this.cita.data ).subscribe(
+    this.citasMan.generateNewCita( this.cita.data ).subscribe(
     (val)=>{
       //let doc = this.userData.getDoctorOFCita(this.cita);
-      this.userData.generateNotification([this.cita.data.field_cita_doctor.und[0]],`Nueva Cita con ${this.cita.paciente} fecha: ${new Date(this.cita.data.field_datemsb['und'][0]['value'])}`,`cita-${this.cita.Nid}`);
+      this.notiMan.generateNotification([this.cita.data.field_cita_doctor.und[0]],`Nueva Cita con ${this.cita.paciente} fecha: ${new Date(this.cita.data.field_datemsb['und'][0]['value'])}`,`cita-${this.cita.Nid}`);
       console.log("the new cita has been generated");
       this.presentToast("Completado");
       loader.dismiss();
@@ -123,7 +127,7 @@ updateCita(){
     content: "Guardando . . ."
   });
   this.setCitaDateFromiNPUT();
-  this.userData.updateCita( this.cita.data ).subscribe(
+  this.citasMan.updateCita( this.cita.data ).subscribe(
     (val)=>{
       Debugger.log(['updatecita returns',val]);
       console.log("citaupdated");

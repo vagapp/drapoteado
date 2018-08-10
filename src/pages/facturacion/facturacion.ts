@@ -80,7 +80,7 @@ export class FacturacionPage {
       aux_sus.field_doctores.push(this.userData.userData.uid);
       aux_sus.field_stripe_src_sus_id = this.selected_source.src_id;
       aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
-      this.userData.generateNewSus(aux_sus).subscribe((val)=>{
+      /*this.userData.generateNewSus(aux_sus).subscribe((val)=>{
         //Debugger.log(['we got this',val]);
         this.userData.subscription.nid = val['nid'];
         this.userData.userData.field_sub_id["und"][0]['value'] =  val['nid'];
@@ -90,7 +90,7 @@ export class FacturacionPage {
           }
         );
         //Debugger.log(['subs updated to this, update user please',this.userData.subscription.nid]); 
-      });
+      });*/
     }else{
       //Debugger.log(['UPDATE SUSCRIPTION NOT IMPLEMENTED YET']);
     }
@@ -108,7 +108,7 @@ export class FacturacionPage {
     loading.present();
     //Debugger.log(['joining with',this.invitationCode]);
     
-    this.userData.cargarSubscription(this.invitationCode).subscribe(
+    /*this.userData.cargarSubscription(this.invitationCode).subscribe(
       (val)=>{
         if(this.userData.error_sub_is_full){
           this.userData.error_sub_is_full = false;
@@ -140,8 +140,9 @@ export class FacturacionPage {
         alert.present();
       }
     }
+    
     }
-    );
+    );*/
   
   }
 
@@ -177,7 +178,7 @@ export class FacturacionPage {
     if(this.userData.userData.uid === uid){
       return false;
     }
-    let loading = this.loadingCtrl.create({
+    /*let loading = this.loadingCtrl.create({
       content: 'Eliminando usuario'
     });
     loading.present();
@@ -194,7 +195,7 @@ export class FacturacionPage {
         loading.dismiss();
         });
       }
-    );
+    );*/
   }
 
   loadSources(){

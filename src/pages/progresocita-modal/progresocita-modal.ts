@@ -4,6 +4,8 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { servicios } from '../../providers/user-data/servicios';
 import { Doctores } from '../../providers/user-data/doctores';
+import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
+import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 
 /**
  * Generated class for the ProgresocitaModalPage page.
@@ -39,7 +41,9 @@ export class ProgresocitaModalPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
     public viewCtrl: ViewController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public citasMan: CitasManagerProvider,
+    public notiMan: NotificationsManagerProvider
   ) {
     this.activeCita = navParams.get('cita');
     this.activeCitaDoc = this.userData.getDoctorOFCita(this.activeCita);
@@ -118,10 +122,10 @@ export class ProgresocitaModalPage {
                 this.activeCita.data.field_costo_sobrescribir.und[0].value = this.costoCita;
                 this.activeCita.setServicesData();
                 console.log("guardando",this.activeCita);
-                this.userData.updateCitaState( this.activeCita ,UserDataProvider.STATE_COBRO ).subscribe(
+                this.citasMan.updateCitaState( this.activeCita ,UserDataProvider.STATE_COBRO ).subscribe(
                   (val) => {
                     loader.dismiss();
-                    this.userData.generateNotification([this.activeCita.data.field_cita_caja.und[0]],`La cita de de ${this.activeCita.paciente} esta en espera de cobro`,`cita-${this.activeCita.Nid}`);
+                    this.notiMan.generateNotification([this.activeCita.data.field_cita_caja.und[0]],`La cita de de ${this.activeCita.paciente} esta en espera de cobro`,`cita-${this.activeCita.Nid}`);
                     this.activeCitaDoc.citaActiva = null;
                     this.presentAlert("Completado","La cita se encuentra ahora en espera de cobro");
                   },
@@ -188,7 +192,7 @@ export class ProgresocitaModalPage {
         this.activeCita.cobroEfectivo = this.cobroEfectivo;
         this.activeCita.cobroCheque = this.cobroCheque;
         this.activeCita.cobroTarjeta = this.cobroTarjeta;
-        this.userData.updateCitaState( this.activeCita ,UserDataProvider.STATE_FINALIZADA ).subscribe(
+        this.citasMan.updateCitaState( this.activeCita ,UserDataProvider.STATE_FINALIZADA ).subscribe(
           (val) => {
             loader.dismiss();
             this.presentAlert("Completeado","La cita ha finalizado");

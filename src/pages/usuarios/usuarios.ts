@@ -4,6 +4,7 @@ import { NuevousuarioModalPage } from '../nuevousuario-modal/nuevousuario-modal'
 import { ModalController } from 'ionic-angular';
 import { userd, UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
+import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
 
 /**
  * Generated class for the UsuariosPage page.
@@ -29,6 +30,7 @@ export class UsuariosPage {
     private toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
     public viewCtrl: ViewController,
+    public userMan: DrupalUserManagerProvider
   ) {
     this.usersd = new Array();
   }
@@ -151,7 +153,7 @@ export class UsuariosPage {
     }
     console.log("updating", userd);
     delete userd.field_sub_id;
-    this.userData.updateUserd( userd ).subscribe(
+    this.userMan.updateUserd( userd ).subscribe(
       (val)=>{
         console.log("usuarioUpdated");
         this.presentToast("Completado");
@@ -177,7 +179,7 @@ export class UsuariosPage {
     if( !userd.field_doctores.und ){  userd.field_doctores.und = new Array();}
     userd.field_doctores.und.push(this.userData.userData.uid);
     delete userd.field_sub_id;
-    this.userData.updateUserd( userd ).subscribe(
+    this.userMan.updateUserd( userd ).subscribe(
       (val)=>{
         console.log("usuarioUpdated");
         this.presentToast("Completado");
@@ -199,7 +201,7 @@ export class UsuariosPage {
 
 
   removeSubUserFromSubs( userd ){
-    let loader = this.loadingCtrl.create({
+    /*let loader = this.loadingCtrl.create({
       content: "removiendo usuario . . ."
     });
     loader.present();
@@ -211,7 +213,7 @@ export class UsuariosPage {
           this.cargarUsuarios();
         }
       );
-    }
+    }*/
   }
 
   /*
@@ -233,7 +235,7 @@ export class UsuariosPage {
       Debugger.log(['subusers ids to load',ids]);
       doctors_array = null;
     //}
-    this.userData.getUsers(doctors_array, null, ids).subscribe(
+    this.userMan.requestUsers(doctors_array, null, ids).subscribe(
       (val)=>{ 
         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
         aux_results.forEach((element) => {

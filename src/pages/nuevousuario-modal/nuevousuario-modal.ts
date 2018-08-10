@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController, ViewController, AlertController } from 'ionic-angular';
 import { userd, UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
+import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
 
 /**
  * Generated class for the NuevousuarioModalPage page.
@@ -30,7 +31,9 @@ export class NuevousuarioModalPage {
     public loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     public viewCtrl: ViewController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public userMan: DrupalUserManagerProvider,
+
   ) {
     console.log('GETTING userd', navParams.get('userd'));
     let aux_node = navParams.get('userd');
@@ -100,19 +103,19 @@ export class NuevousuarioModalPage {
     this.newUser.field_apellidos.und[0].value = "Subusuario";
     this.newUser.status = ""+1;
     delete this.newUser.field_sub_id;
-    this.userData.generateNewUserd( this.newUser ).subscribe(
+    this.userMan.generateNewUserd( this.newUser ).subscribe(
     (val)=>{
       Debugger.log(['generated user returned',val]);
       if(!this.userData.subscription.field_subusuarios) this.userData.subscription.field_subusuarios = new Array();
       this.userData.subscription.field_subusuarios.push(val['uid']);
-      this.userData.updateSus(this.userData.subscription).subscribe(
+      /*this.userData.updateSus(this.userData.subscription).subscribe(
         (val) => {
           Debugger.log(['updated subscription returned',val]);
         },
         response => { 
           Debugger.log(['error on saving subscription for new user',response]);
         }
-      );
+      );*/
       this.presentToast("Completado");
       loader.dismiss();
       this.close();
@@ -137,7 +140,7 @@ getUserByCode(){
     content: "Guardando . . ."
   });
   let dis = this;
-  this.userData.getUsers(new Array(),this.newUserCode).subscribe(
+  this.userMan.requestUsers(new Array(),this.newUserCode).subscribe(
     (val)=>{ 
       console.log(val);
      
@@ -172,7 +175,7 @@ getUserByCode(){
        //guardar usuario
        console.log("guardando usuario",aux_user);
        //agregando doctor al usuario
-          dis.userData.updateUserd( aux_user).subscribe(
+          dis.userMan.updateUserd( aux_user).subscribe(
             (val)=>{
               console.log("usuarioUpdated");
               dis.presentToast("Usuario Agregado");
@@ -213,7 +216,7 @@ updateUserd(){
   this.newUser.status = ""+1;
   delete this.newUser.field_sub_id;
   console.log("updating",this.newUser);
-  this.userData.updateUserd( this.newUser ).subscribe(
+  this.userMan.updateUserd( this.newUser ).subscribe(
     (val)=>{
       console.log("usuarioUpdated");
       this.presentToast("Completado");

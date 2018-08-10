@@ -7,6 +7,7 @@ import { Debugger } from '../../providers/user-data/debugger';
 import { StateCita } from '../../constants/StateCita';
 import * as jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { ReportesDataProvider } from '../../providers/reportes-data/reportes-data';
 
 
 /**
@@ -59,7 +60,8 @@ export class ReporteModalPage {
     public navParams: NavParams,
     public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
-    public viewCtrl:ViewController
+    public viewCtrl:ViewController,
+    public reportesData: ReportesDataProvider
   ) {
     let loading = this.loadingCtrl.create({
       content: 'Cargando Reporte...'
@@ -113,11 +115,11 @@ export class ReporteModalPage {
     if(aux_repo){
       this.actualrepot = aux_repo;
     }else{
-      console.log('today report is set to',this.userData.todayReport);
-      if(!this.userData.todayReport){
+      console.log('today report is set to',this.reportesData.todayReport);
+      if(!this.reportesData.todayReport){
        this.dismiss();
       }
-      this.actualrepot = this.userData.todayReport;
+      this.actualrepot = this.reportesData.todayReport;
     }
     if (this.actualrepot === null){
      Debugger.log(['cagamos']);
