@@ -24,7 +24,7 @@
              </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let user of this.usersd">
+            <tr *ngFor="let user of this.subuserData.subUsers">
                 <td><b>{{user.uid}}</b>{{user.name}}</td>
                 <td class="fontHight">{{this.userData.getTipoUsuarioString(user.field_tipo_de_usuario.und[0])}}</td>
                 <td class="toolCol">

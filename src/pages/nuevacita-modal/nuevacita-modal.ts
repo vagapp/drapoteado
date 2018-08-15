@@ -9,6 +9,7 @@ import { LoaderProvider } from '../../providers/loader/loader';
 import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { AlertProvider } from '../../providers/alert/alert';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
+import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
 
 /**
  * Generated class for the NuevacitaModalPage page.
@@ -40,7 +41,8 @@ export class NuevacitaModalPage {
     public notiMan: NotificationsManagerProvider,
     public loader: LoaderProvider,
     public alert: AlertProvider,
-    public wsMessenger: WsMessengerProvider
+    public wsMessenger: WsMessengerProvider,
+    public docData: DoctoresDataProvider
   ) {
     console.log('GETTING CITA', navParams.get('cita'));
     let aux_node = navParams.get('cita');
@@ -132,15 +134,7 @@ async updateCita(){
   this.loader.dismissLoader();
   this.close();
 }
-/*
-presentToast(msg) {
-  let toast = this.toastCtrl.create({
-    message: msg,
-    duration: 6000,
-    position: 'top'
-  });
-  toast.present();
-}*/
+
 
 close(){
   this.viewCtrl.dismiss();
@@ -163,28 +157,6 @@ setCitaDateFromiNPUT(){
   this.cita.setDateUT(dateUT);
   this.cita.data.field_datemsb['und'][0]['value'] = dateUT;
   Debugger.log([`saving ${dateUT} for ${new Date(dateUT)}`]);
-  /*this.selectedDate = this.selectedDate.slice(0,19);
-  let aux_date_obj = new Date(this.selectedDate+'Z');
-  let aux_date_str_utc = `${aux_date_obj.getFullYear()}-${aux_date_obj.getDate()}-${(aux_date_obj.getMonth()+1)}T${aux_date_obj.getHours()}:${aux_date_obj.getMinutes()}:00`;
-  let aux_testdate = new Date(aux_date_str_utc+'Z');
-  this.cita.setDate(this.selectedDate,true); //this is not on utc but it contains the actual timezone so its okai
- /* let aux_date_obj = new Date(this.selectedDate);
-  Debugger.log(['aux_date_obj is',aux_date_obj]);
-  Debugger.log(['utc aux_date_obj is',aux_date_obj.toUTCString()]);
-  let aux_datetimeparts = this.selectedDate.split('T');
-  const aux_date = aux_datetimeparts[0];
-  aux_datetimeparts = aux_datetimeparts[1].split('.');
-  const aux_time = aux_datetimeparts[0];
-  //this.cita.date = new Date(`${aux_date} ${aux_time}`);
-  Debugger.log([` Setting Cita from input: ${aux_date} ${aux_time}`]);*/
-  //let aux_date_str_utc = `${aux_date_obj.getUTCFullYear()}-${aux_date_obj.getUTCDate()}-${(aux_date_obj.getMonth()+1)}T${aux_date_obj.getUTCHours()}:${aux_date_obj.getUTCMinutes()}:00`;
-  //let aux_testdate = new Date(aux_date_str_utc+'Z');
-  //Debugger.log([]);
-  /*Debugger.log(['auxdate testo on utc saving',this.cita.date]);
-  Debugger.log(['cita for setDate on utc',aux_date_str_utc]);
-  Debugger.log(['cita for setDate on local',`${aux_date} ${aux_time}`]);*/
-  //this.cita.setDate( `${aux_date} ${aux_time}`);
-  //Debugger.log(['magi date setter got ',this.cita.date]);
 }
 
 }

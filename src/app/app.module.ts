@@ -42,6 +42,8 @@ import { LoaderProvider } from '../providers/loader/loader';
 import { AlertProvider } from '../providers/alert/alert';
 import { CitasPresentatorProvider } from '../providers/citas-presentator/citas-presentator';
 import { WsMessengerProvider } from '../providers/ws-messenger/ws-messenger';
+import { SubusersDataProvider } from '../providers/subusers-data/subusers-data';
+import { SubusersManagerProvider } from '../providers/subusers-manager/subusers-manager';
 
 //import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 //import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
@@ -115,7 +117,9 @@ import { WsMessengerProvider } from '../providers/ws-messenger/ws-messenger';
     AlertProvider,
     CitasPresentatorProvider,
     WebsocketServiceProvider,
-    WsMessengerProvider
+    WsMessengerProvider,
+    SubusersDataProvider,
+    SubusersManagerProvider
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

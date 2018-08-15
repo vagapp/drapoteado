@@ -24,7 +24,7 @@
                 <b>Doctor:</b>
               <select [(ngModel)]="this.cita.data.field_cita_doctor.und[0]"  name="field_cita_doctor" class="input_select input">
                   <option *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="0" >SELECT</option>
-                  <option *ngFor="let doc of this.userData.doctores"  value="{{doc.Uid}}" >{{doc.name}} / {{doc.field_alias}} </option>
+                  <option *ngFor="let doc of this.docData.doctores"  value="{{doc.Uid}}" >{{doc.name}} / {{doc.field_alias}} </option>
                   <option *ngIf="this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="{{this.userData.userData.uid}}">{{this.userData.userData.name}}</option>
                 </select>
               </div>
