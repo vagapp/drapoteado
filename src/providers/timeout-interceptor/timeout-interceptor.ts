@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class TimeoutInterceptor implements HttpInterceptor {
-  defaultTimeout = 120000;
+  defaultTimeout = 500000;
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     //console.log('TimeoutInterceptor intercepts');

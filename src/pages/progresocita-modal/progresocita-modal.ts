@@ -6,6 +6,10 @@ import { servicios } from '../../providers/user-data/servicios';
 import { Doctores } from '../../providers/user-data/doctores';
 import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
 import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { AlertProvider } from '../../providers/alert/alert';
+import { CitasDataProvider } from '../../providers/citas-data/citas-data';
+import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
 
 /**
  * Generated class for the ProgresocitaModalPage page.
@@ -38,12 +42,17 @@ export class ProgresocitaModalPage {
 
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public userData: UserDataProvider,
-    public loadingCtrl: LoadingController,
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    public userData: UserDataProvider,
+    public loader: LoaderProvider,
     public viewCtrl: ViewController,
-    public alertCtrl: AlertController,
+    public alert: AlertProvider,
+    public citasData: CitasDataProvider,
     public citasMan: CitasManagerProvider,
-    public notiMan: NotificationsManagerProvider
+    public notiMan: NotificationsManagerProvider,
+    public citasPresentator: CitasPresentatorProvider
   ) {
     this.activeCita = navParams.get('cita');
     this.activeCitaDoc = this.userData.getDoctorOFCita(this.activeCita);
@@ -60,11 +69,6 @@ export class ProgresocitaModalPage {
     if(this.showinterval)
       clearInterval(this.showinterval);
   }
-
-  dismiss() {
-    this.viewCtrl.dismiss();
-  }
-
 
 
   cargarServicios(){
@@ -98,137 +102,54 @@ export class ProgresocitaModalPage {
       }
 
 
-      finalizar(){
+      finalizarPop(){
         let exmsg = "";
         if(Number(this.activeCita.addedServices.length) === 0){ exmsg = 'Aun no se ha agregado ningún servicio a esta cita';}
-        let alert = this.alertCtrl.create({
-          title: 'Finalizar',
-          message: `Está seguro de que desea Finalizar la consulta? ${exmsg}`,
-          buttons: [
-            {
-              text: 'Cancelar',
-              role: 'cancel',
-              handler: () => {
-              }
-            },
-            {
-              text: 'Finalizar',
-              handler: () => {
-                let loader = this.loadingCtrl.create({
-                  content: "Guardando Cita"
-                }); 
-                loader.present();
-                this.calcularCosto();
-                this.activeCita.data.field_costo_sobrescribir.und[0].value = this.costoCita;
-                this.activeCita.setServicesData();
-                console.log("guardando",this.activeCita);
-                this.citasMan.updateCitaState( this.activeCita ,UserDataProvider.STATE_COBRO ).subscribe(
-                  (val) => {
-                    loader.dismiss();
-                    this.notiMan.generateNotification([this.activeCita.data.field_cita_caja.und[0]],`La cita de de ${this.activeCita.paciente} esta en espera de cobro`,`cita-${this.activeCita.Nid}`);
-                    this.activeCitaDoc.citaActiva = null;
-                    this.presentAlert("Completado","La cita se encuentra ahora en espera de cobro");
-                  },
-                  response => {
-                      console.log("POST call in error", response);
-                      loader.dismiss();
-                      this.presentAlert("error","error inesperado, intentelo denuevo");
-                      this.close();
-                  },
-                  () => {
-                      console.log("The POST observable is now completed.");
-                  }
-                );
-              }
-            }
-          ]
-        });
-        alert.present();
+        this.alert.chooseAlert(
+          'Finalizar',
+          `Está seguro de que desea Finalizar la consulta? ${exmsg}`,
+          ()=>{ this.finalizarActualCita(); },
+          ()=>{}
+        );
       }
 
+      async finalizarActualCita(){
+        this.calcularCosto();
+        this.activeCita.data.field_costo_sobrescribir.und[0].value = this.costoCita;
+        this.activeCita.setServicesData();
+        await this.citasPresentator.updateStateRequest( this.activeCita ,CitasDataProvider.STATE_COBRO );
+        this.activeCitaDoc.citaActiva = null;
+      }
 
-      pagada(){
+     
+
+      pagadaPop(){
+        let title = 'Pagada';
+        let msg = '¿Está seguro de que desea marcar esta cita como pagada?';
+        
         if(this.CantidadRestante > 0){
-          let alert = this.alertCtrl.create({
-            title: 'Cuidado',
-            message: '¿Está seguro de que desea marcar esta cita como pagada con la cantidad insuficiente?',
-            buttons: [
-              {
-                text: 'Cancelar',
-                role: 'cancel',
-                handler: () => {
-                }
-              },
-              {
-                text: 'Aceptar',
-                handler: () => {this.setToPaidPop();}
-              }
-            ]
-          });
-          alert.present();
-        }else{
-          this.setToPaidPop();
-      }
+          title = 'Cuidado';
+          msg = '¿Está seguro de que desea marcar esta cita como pagada con la cantidad insuficiente?';
+        }
+          this.alert.chooseAlert(
+            title,
+            msg,
+            ()=>{ this.pagarActualCita() },
+            ()=>{}
+          );
       }
 
-      setToPaidPop(){
-        let alert = this.alertCtrl.create({
-          title: 'Pagada',
-          message: '¿Está seguro de que desea marcar esta cita como pagada?',
-          buttons: [
-            {
-              text: 'Cancelar',
-              role: 'cancel',
-              handler: () => {
-              }
-            },
-            {
-              text: 'Aceptar',
-              handler: () => {
-                console.log("guardando", this.activeCita);
-        let loader = this.loadingCtrl.create({
-          content: "Guardando Cita"
-        }); 
+      async pagarActualCita(){
         this.activeCita.cobroEfectivo = this.cobroEfectivo;
         this.activeCita.cobroCheque = this.cobroCheque;
         this.activeCita.cobroTarjeta = this.cobroTarjeta;
-        this.citasMan.updateCitaState( this.activeCita ,UserDataProvider.STATE_FINALIZADA ).subscribe(
-          (val) => {
-            loader.dismiss();
-            this.presentAlert("Completeado","La cita ha finalizado");
-            this.viewCtrl.dismiss();
-          },
-          response => {
-              console.log("POST call in error", response);
-              this.close();
-               loader.dismiss();
-              this.presentAlert("error","error inesperado, intentelo denuevo");
-          },
-          () => {
-              console.log("The POST observable is now completed.");
-          }
-        );
-              }
-            }
-          ]
-        });
-        alert.present();
+        await this.citasPresentator.updateStateRequest(this.activeCita ,CitasDataProvider.STATE_FINALIZADA );
+        this.close();
       }
-  
 
+  
       close(){
         this.viewCtrl.dismiss();
       }
-
-
-      presentAlert(key,Msg) {
-        let alert = this.alertCtrl.create({
-          title: key,
-          subTitle: Msg,
-          buttons: ['Dismiss']
-        });
-        alert.present();
-      }
-      
 
 }

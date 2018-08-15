@@ -5,6 +5,7 @@ import { Citas } from '../../providers/user-data/citas';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
 import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
 import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
+import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 @IonicPage({
@@ -21,11 +22,8 @@ export class HomePage {
     public navCtrl: NavController,
     public modalCtrl: ModalController, 
     public userData: UserDataProvider,
-    public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController,
     public userMan: DrupalUserManagerProvider,
-    public citasMan: CitasManagerProvider,
-    public notiMan: NotificationsManagerProvider
+    public citasPresentator: CitasPresentatorProvider
   ) {
   }
 
@@ -39,60 +37,18 @@ export class HomePage {
           field_tutorial_state: {und: [{value: "1"}]},
         }
         await this.userMan.updateUserd(cloneData).toPromise();
+        console.log('update tutorial at dismiss');
     }
   }
 
 
   iniciarCita( cita:Citas ){
-    let loader = this.loadingCtrl.create({
-      content: "Iniciando Cita..."
-    });
-    let aux_doc = this.userData.getDoctorOFCita(cita);
-    
-    if(cita.checkState(UserDataProvider.STATE_ACTIVA) || cita.checkState(UserDataProvider.STATE_COBRO)){
-      this.openProgreso(cita);
-    }else{
-      if(aux_doc.citaActiva){
-        this.presentAlert("Ocupado","Este doctor esta ocupado con una cita Activa");
-        return 0;
-      }
-    let alert = this.alertCtrl.create({
-      title: "Iniciar Consulta",
-      message: '¿Está seguro que desea colocar esta cita como Activa?',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-          handler: () => {
-          }
-        },
-        {
-          text: 'Si',
-          handler: () => {
-            //loader.present();
-            this.citasMan.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
-              (val)=>{
-                /*this.userData.cargarCitas().subscribe(
-                  (val)=>{
-                    loader.dismiss();
-                    this.openProgreso(cita);
-                  },(response)=>{ loader.dismiss();}
-                );*/
-              },(response)=>{ loader.dismiss();});
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
+   this.citasPresentator.iniciarCita(cita);
   }
 
 
   confirmarCita(cita:Citas){
-    this.citasMan.updateCitaState( cita , UserDataProvider.STATE_CONFIRMADA ).subscribe((val)=>{
-        this.notiMan.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
-      //this.userData.cargarCitas()
-    });
+    this.citasPresentator.confirmarCita(cita);
   }
 
 
@@ -135,14 +91,7 @@ export class HomePage {
   }
 
 
-  presentAlert(key,Msg) {
-    let alert = this.alertCtrl.create({
-      title: key,
-      subTitle: Msg,
-      buttons: ['Dismiss']
-    });
-    alert.present();
-  }
+ 
 
   calcularRifa(){
     let random = Math.floor(Math.random() * 6) + 1;

@@ -38,7 +38,6 @@ export class ServiciosPage {
   }
 
   ionViewDidLoad() {
-    console.log(this.servicioMan.docData.doctoresIDs);
     this.cargarServicios();
   }
 

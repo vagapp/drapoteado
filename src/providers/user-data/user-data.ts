@@ -39,23 +39,6 @@ export class UserDataProvider {
   get TIPO_CAJAYRECEPCION(){return UserDataProvider.TIPO_CAJAYRECEPCION;}
   get TIPO_ANY(){return UserDataProvider.TIPO_ANY;}
   
-  //estados de cita:
-  public static STATE_PENDIENTE = 0;
-  public static STATE_CONFIRMADA = 1;
-  public static STATE_ACTIVA = 2;
-  public static STATE_COBRO = 3;
-  public static STATE_FINALIZADA = 4;
-  public static STATE_CANCELADA = 5;
-  public static STATE_ELIMINADA = 6;
-
-  get STATE_PENDIENTE(){return UserDataProvider.STATE_PENDIENTE;}
-  get STATE_CONFIRMADA(){return UserDataProvider.STATE_CONFIRMADA;}
-  get STATE_ACTIVA(){return UserDataProvider.STATE_ACTIVA;}
-  get STATE_COBRO(){return UserDataProvider.STATE_COBRO;}
-  get STATE_FINALIZADA(){return UserDataProvider.STATE_FINALIZADA;}
-  get STATE_CANCELADA(){return UserDataProvider.STATE_CANCELADA;}
-  get STATE_ELIMINADA(){return UserDataProvider.STATE_CANCELADA;}
-
   //suscripciones planes cons
   public static PLAN_ANY = -1;
 
@@ -818,6 +801,7 @@ export class UserDataProvider {
       field_hora_iniciomsb:{und:[{value:null}]},
       field_hora_finalmsb:{und:[{value:null}]},
       field_retrasda:{und:[{value:0}]},
+      aux_servicios_json:null
     }
   }
 
@@ -908,6 +892,7 @@ export interface citasData{
     field_hora_iniciomsb:{und:[{value:number}]},
     field_hora_finalmsb:{und:[{value:number}]},
     field_retrasda:{und:[{value:number}]},
+    aux_servicios_json:string
 }
 
 

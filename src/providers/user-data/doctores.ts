@@ -2,6 +2,7 @@ import { Citas } from "./citas";
 import { UserDataProvider } from "./user-data";
 import { servicios } from "./servicios";
 import { Debugger } from "./debugger";
+import { CitasDataProvider } from "../citas-data/citas-data";
 
 export class Doctores{
     Uid:number = null;
@@ -86,7 +87,7 @@ export class Doctores{
             //console.log("encontro cita propia");
       this.citas.push(cita);
       cita.getUntilMs();
-      if(cita.checkState(UserDataProvider.STATE_PENDIENTE) || cita.checkState(UserDataProvider.STATE_CONFIRMADA)){
+      if(cita.checkState(CitasDataProvider.STATE_PENDIENTE) || cita.checkState(CitasDataProvider.STATE_CONFIRMADA)){
         aux_citasparahoy++;
       if(cita.untilMs < 0){ cita.retrasada = true; } //si se paso la fecha ponerla como retrasada. es decir si el numero es negativo, menor a 0
       else if(smallestUntilMs === null || cita.untilMs < smallestUntilMs){
@@ -95,7 +96,7 @@ export class Doctores{
           smallestUntilMs = cita.untilMs;
         }
       }
-      if(cita.checkState(UserDataProvider.STATE_ACTIVA)){
+      if(cita.checkState(CitasDataProvider.STATE_ACTIVA)){
         console.log("cita activa.",this.citaActiva);
         if(!this.citaActiva){
           console.log("agregando cita");

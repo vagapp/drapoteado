@@ -9,6 +9,9 @@ import { Citas } from '../user-data/citas';
 import { UserDataProvider } from '../user-data/user-data';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-manager';
+import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
+import { Message } from '../websocket-service/websocket-service';
+
 
 @Injectable()
 export class CitasManagerProvider {
@@ -20,11 +23,10 @@ export class CitasManagerProvider {
     public baseurl: BaseUrlProvider,
     public citasData: CitasDataProvider,
     public doctores: DoctoresDataProvider,
-    public nodeMan: DrupalNodeManagerProvider
+    public nodeMan: DrupalNodeManagerProvider,
+    public userMan: DrupalUserManagerProvider
   ) {
     console.log('Hello CitasManagerProvider Provider');
-    
-    
   }
 
   requestCitas():Observable<any>{
@@ -43,8 +45,8 @@ export class CitasManagerProvider {
     cajas:number[] = null,  
     recepciones:number[] = null
   ):Observable<any>{
-    //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}&args[3]=${from}--${to}`;
-    let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
+    let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}&args[3]=${from}--${to}`;
+    //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
     let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
     return this.http.get(url);
   }
@@ -68,6 +70,19 @@ export class CitasManagerProvider {
     this.citasData.addCita(aux_cita,false);
   }
 
+  generateCitaFullData( data ){
+    let aux_cita = new Citas();
+    aux_cita.data = data;
+    aux_cita.processData();
+    console.log('fulldata generated ',aux_cita);
+    this.citasData.addCita(aux_cita,false);
+  }
+
+  updateCitaNid( Nid ):Observable<any>{
+    let obs = this.getCitaObservable(Nid).share();
+    obs.subscribe((val)=>{this.setCitas(val);});
+    return obs;
+  }
 
   //CITAS METHODS
   generateNewCita( newCita ){return this.nodeMan.generateNewNode(newCita);}
@@ -77,8 +92,8 @@ export class CitasManagerProvider {
     cita.data.field_estado.und[0].value = state;
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
-    console.log("tryna update cita:",cita.data);
-    return this.updateCita( cita.data );
+    //console.log("tryna update cita:",cita.data);
+    return this.updateCita( cita.data ).share();
   }
   
 }

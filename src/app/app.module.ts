@@ -39,6 +39,9 @@ import { DrupalUserManagerProvider } from '../providers/drupal-user-manager/drup
 import { ReportesDataProvider } from '../providers/reportes-data/reportes-data';
 import { ReportesManagerProvider } from '../providers/reportes-manager/reportes-manager';
 import { LoaderProvider } from '../providers/loader/loader';
+import { AlertProvider } from '../providers/alert/alert';
+import { CitasPresentatorProvider } from '../providers/citas-presentator/citas-presentator';
+import { WsMessengerProvider } from '../providers/ws-messenger/ws-messenger';
 
 //import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 //import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
@@ -94,7 +97,7 @@ import { LoaderProvider } from '../providers/loader/loader';
     BaseUrlProvider,
     CitasManagerProvider,
     CordovaAvailableProvider,
-    WebsocketServiceProvider,
+    ,
     DoctoresDataProvider,
     PlanesDataProvider,
     SubscriptionDataProvider,
@@ -109,6 +112,10 @@ import { LoaderProvider } from '../providers/loader/loader';
     ReportesDataProvider,
     ReportesManagerProvider,
     LoaderProvider,
+    AlertProvider,
+    CitasPresentatorProvider,
+    WebsocketServiceProvider,
+    WsMessengerProvider
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

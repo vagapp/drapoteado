@@ -11,7 +11,6 @@ export class CitasDataProvider{
   citas:Citas[] = new Array();
   citasSubject:Subject<any> = new Subject();
 
-
   //estados de cita:
   public static STATE_PENDIENTE = 0;
   public static STATE_CONFIRMADA = 1;
@@ -33,6 +32,8 @@ export class CitasDataProvider{
   get subject():Subject<any>{return this.citasSubject;}
 
   addCita( cita:Citas, call:boolean = true){
+    console.log('adding a cita', cita);
+    console.log('already existing citas',this.citas);
     if(!this.exists(cita)) this.citas.push(cita);
     else this.updateCita(cita.data);
     if( call )this.subject.next(this.citas);
@@ -50,18 +51,20 @@ export class CitasDataProvider{
   updateCita( data:citasData ){
     for( let cita of this.citas ){
       if(cita.Nid === data.Nid){
-        cita.setData(data);
+        cita.data = data;
+        /*cita.setData(data);*/
         console.log('updated cita',cita);
       }
     }
   }
+
 
   getCitasByStatus( status:string ){
     return this.citas.filter( (citas) => {citas.checkState(status)});
   }
 
   exists( cita:Citas ):boolean{
-   return this.citas.filter((citas)=>{ return citas.Nid === cita.Nid }).length > 0;
+   return this.citas.filter((citas)=>{ console.log(citas.Nid,'vs',cita.Nid); return Number(citas.Nid) === Number(cita.Nid) }).length > 0;
   }
 
   triggerSubject(){
@@ -81,6 +84,10 @@ export class CitasDataProvider{
       default: ret = 'Error';
     }
     return ret;
+  }
+
+  static getReceivers(cita:Citas):number[]{
+    return [cita.data.field_cita_doctor.und[0]];
   }
 
 }

@@ -9,6 +9,7 @@ import { CitasManagerProvider } from '../providers/citas-manager/citas-manager';
 import { PlanesDataProvider } from '../providers/planes-data/planes-data';
 import { OnesignalManagerProvider } from '../providers/onesignal-manager/onesignal-manager';
 import { DoctoresManagerProvider } from '../providers/doctores-manager/doctores-manager';
+import { WsMessengerProvider } from '../providers/ws-messenger/ws-messenger';
 
 
 
@@ -41,7 +42,8 @@ export class MyApp {
     public citasManager: CitasManagerProvider,
     public planes: PlanesDataProvider,
     public OneMan: OnesignalManagerProvider,
-    public docMan: DoctoresManagerProvider
+    public docMan: DoctoresManagerProvider,
+    public wsMessenger: WsMessengerProvider
   ) {
     this.initializeApp();
     this.pages = [
@@ -146,6 +148,7 @@ export class MyApp {
       this.docMan.initDoctoresUids();
       await this.citasManager.requestCitas().toPromise();
       console.log(this.citasManager.citasData.citas);
+      //this.wsMessenger.testCitaSend();
    }
 }
 

@@ -18,7 +18,9 @@ export class AuthInterceptor implements HttpInterceptor  {
 }
 
 getAuthHeaders(){
- let ret = {'Content-Type':'application/json; charset=utf-8'};
+ let ret = {'Content-Type':'application/json; charset=utf-8',
+            'Cache-Control': 'no-cache, no-store'
+            };
  if(this.userData.sessionData.token) ret['X-CSRF-Token']=`${this.userData.sessionData.token}`;
  if(this.userData.sessionData.sessid && this.userData.sessionData.session_name) ret['Authentication']=`${this.userData.sessionData.session_name}=${this.userData.sessionData.sessid}`;
  return  ret

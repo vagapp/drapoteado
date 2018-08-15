@@ -5,6 +5,10 @@ import { Citas } from '../../providers/user-data/citas';
 import { Debugger } from '../../providers/user-data/debugger';
 import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
 import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
+import { AlertProvider } from '../../providers/alert/alert';
+import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 
 /**
  * Generated class for the NuevacitaModalPage page.
@@ -31,12 +35,12 @@ export class NuevacitaModalPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public userData: UserDataProvider,
-    public loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
     public viewCtrl: ViewController,
-    private alertCtrl: AlertController,
     public citasMan: CitasManagerProvider,
-    public notiMan: NotificationsManagerProvider
+    public notiMan: NotificationsManagerProvider,
+    public loader: LoaderProvider,
+    public alert: AlertProvider,
+    public wsMessenger: WsMessengerProvider
   ) {
     console.log('GETTING CITA', navParams.get('cita'));
     let aux_node = navParams.get('cita');
@@ -57,8 +61,6 @@ export class NuevacitaModalPage {
 
   resetNewCita(){
     this.cita = new Citas();
-    /*this.newCita=UserDataProvider.getEmptyCita();
-    this.selectedDate = new Date().toISOString();*/
   }
 
   ionViewDidLoad() {
@@ -66,47 +68,37 @@ export class NuevacitaModalPage {
   }
 
 
-  createCita(){
+  async createCita(){
     if(!this.basicNewCitaValidation()){ return false; }
-    let loader = this.loadingCtrl.create({
-      content: "Generando Cita"
-    }); 
-    Debugger.log(["creando una cita ",this.cita.data]);
-    Debugger.log(["fecha string datetimepicker",this.selectedDate]);
+    this.loader.presentLoader('creando cita...');
     this.cita.data.field_estado.und["0"].value = 0;
-    /*if(this.userData.userData.field_tipo_de_usuario.und[0].value == 1){*/
     if(this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])){
-      //si es doctor se agrega a si mismo a la cita, si no pues se agrega con un select
       this.cita.data.field_cita_doctor.und[0]=this.userData.userData.uid;
     }
       this.cita.data.field_cita_recepcion.und[0]=this.userData.userData.uid; //esto es quien creo la cita
-      //this.cita.recepcion_playerid = this.userData.onseignalDid.userid;
       this.cita.data.field_cita_caja.und[0]="_none"; //quien cobro la cita
       this.cita.caja_playerid = null;
       this.cita.data.field_servicios_cita.und = []; //limpiamos los servicios porque nos deja basura
-    
-    //this.cita.setDate(this.selectedDate);
-    this.setCitaDateFromiNPUT();
-    this.citasMan.generateNewCita( this.cita.data ).subscribe(
+      this.setCitaDateFromiNPUT();
+    await this.citasMan.generateNewCita( this.cita.data ).subscribe(
     (val)=>{
-      //let doc = this.userData.getDoctorOFCita(this.cita);
+      console.log(val.nid);
       this.notiMan.generateNotification([this.cita.data.field_cita_doctor.und[0]],`Nueva Cita con ${this.cita.paciente} fecha: ${new Date(this.cita.data.field_datemsb['und'][0]['value'])}`,`cita-${this.cita.Nid}`);
-      console.log("the new cita has been generated");
-      this.presentToast("Completado");
-      loader.dismiss();
-      this.close();
+      this.cita.data.Nid = val.nid;
+      this.cita.Nid = val.nid;
+      this.wsMessenger.generateWSupdateMessage(this.cita);
     },
     response => {
         console.log("POST call in error", response);
         console.log("show error");
         for (var key in response.error.form_errors) {
-          this.presentAlert(key, response.error.form_errors[key]);
-          //this.presentToast(response.error.form_errors[key]);
-          //console.log(key, response.error.form_errors[key]);
+          this.alert.presentAlert(key, response.error.form_errors[key]);
         }
-        loader.dismiss();
       }
   );
+  //await this.citasMan.requestCitas().toPromise();
+  this.loader.dismissLoader();
+  this.close();
 }
 
 basicNewCitaValidation(){
@@ -115,36 +107,32 @@ basicNewCitaValidation(){
   }
   else{
     if( Number(this.cita.data.field_cita_doctor.und[0]) === 0 ){
-      this.presentAlert('Error','Debe elegir un doctor para esta cita');
+      this.alert.presentAlert('Error','Debe elegir un doctor para esta cita');
       ret = false;
     }
   }
   return ret;
 }
 
-updateCita(){
-  let loader = this.loadingCtrl.create({
-    content: "Guardando . . ."
-  });
+async updateCita(){
+  this.loader.presentLoader('actualizando ...');
   this.setCitaDateFromiNPUT();
-  this.citasMan.updateCita( this.cita.data ).subscribe(
+  await this.citasMan.updateCita( this.cita.data ).subscribe(
     (val)=>{
-      Debugger.log(['updatecita returns',val]);
-      console.log("citaupdated");
-      this.presentToast("Completado");
-      loader.dismiss();
-      this.close();
+      this.wsMessenger.generateWSupdateMessage(this.cita);    
     },
     response => {
       console.log("POST call in error", response);
       console.log("show error");
       for (var key in response.error.form_errors) {
-        this.presentAlert(key, response.error.form_errors[key]);
+        this.alert.presentAlert(key, response.error.form_errors[key]);
       }
     }
   );
+  this.loader.dismissLoader();
+  this.close();
 }
-
+/*
 presentToast(msg) {
   let toast = this.toastCtrl.create({
     message: msg,
@@ -152,20 +140,13 @@ presentToast(msg) {
     position: 'top'
   });
   toast.present();
-}
+}*/
 
 close(){
   this.viewCtrl.dismiss();
 }
 
-presentAlert(key,Msg) {
-  let alert = this.alertCtrl.create({
-    title: key,
-    subTitle: Msg,
-    buttons: ['Dismiss']
-  });
-  alert.present();
-}
+
 
 setCitaDateFromiNPUT(){
   //get the timezoned input and put it on utc on this format 2018-07-04 14:30:00-07:00 to set data using citas code
