@@ -204,7 +204,7 @@ export class Citas{
             }
         }
         this.setDuracionMs();
-        console.log("obtained duracionMs",this.duracionMs);
+        //console.log("obtained duracionMs",this.duracionMs);
     }
 
     isValidDate(d){
@@ -219,9 +219,9 @@ export class Citas{
         }else{
             this.duracionMs = 0;
         }
-        Debugger.log(['this.duracionMs',this.duracionMs]);
+        //Debugger.log(['this.duracionMs',this.duracionMs]);
         this.duracionText = DateProvider.getDateDifText(this.duracionMs);
-        Debugger.log(['this.duracionText', this.duracionText]);
+        //Debugger.log(['this.duracionText', this.duracionText]);
     }
 
     

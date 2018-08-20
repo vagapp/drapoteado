@@ -117,15 +117,41 @@ actualReport:reportes = null;
     this.resetVars();
     this.noCitas = this.actualReport.citas.length;
     this.noCancel = this.actualReport.citas.filter((citas)=>{return citas.checkState(CitasDataProvider.STATE_CANCELADA)} ).length;
-    for(let cita of this.actualReport.citas){
+    this.calcularCitasPorCobrar();
+    let filteredCitas = CitasDataProvider.sortByDate(this.getFilteredCitasShow());
+    for(let cita of filteredCitas){
       if(cita.duracionMs) this.duracionTotalMs += cita.duracionMs;
       if(cita.costo) this.costoTotal = cita.costo;
       if(cita.cobro) this.total+= cita.cobro;
+      if(cita.costo && cita.cobro && cita.costo > cita.cobro){ this.cajaAdeudo += cita.costo - cita.cobro; }
       if(cita.cobroEfectivo) this.totalefectivo+=cita.cobroEfectivo;
 	    if(cita.cobroTarjeta) this.totalTarjeta+=cita.cobroTarjeta;
       if(cita.cobroCheque) this.totalCheques+=cita.cobroCheque;
     }
     this.duracionTotalStr = DateProvider.getDateDifText(this.duracionTotalMs);
+  }
+
+  calcularCitasPorCobrar(){
+    let citasPorCobrar = this.actualReport.citas.filter((citas)=>{
+      return citas.checkState(CitasDataProvider.STATE_COBRO);
+    }); 
+    this.cajacuentas = 0;
+    for(let cita of citasPorCobrar){
+      if(cita.costo)
+      this.cajacuentas += cita.costo;
+    }
+  }
+
+  /**
+   * this methos filter the report citas to get only the citas states that we want on the report.
+  */
+  getFilteredCitasShow(){
+    return this.actualReport.citas.filter(
+      (citas)=>{
+        return (
+          !citas.checkState(CitasDataProvider.STATE_CANCELADA) 
+        )
+      });
   }
 
   resetVars(){

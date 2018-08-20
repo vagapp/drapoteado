@@ -4,6 +4,7 @@ import { ModalController } from 'ionic-angular';
 import { reportes } from '../../providers/user-data/reportes';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { ReportesManagerProvider } from '../../providers/reportes-manager/reportes-manager';
+import { ReportesDataProvider } from '../../providers/reportes-data/reportes-data';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 
@@ -28,7 +29,8 @@ export class ReportesPage {
     public userData: UserDataProvider,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    public reportesMan: ReportesManagerProvider
+    public reportesMan: ReportesManagerProvider,
+    public reportesData: ReportesDataProvider
     ) {
   }
 

@@ -7,6 +7,7 @@ import { CitasManagerProvider } from '../../providers/citas-manager/citas-manage
 import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
+import { ReportesDataProvider } from '../../providers/reportes-data/reportes-data';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 @IonicPage({
@@ -25,7 +26,8 @@ export class HomePage {
     public userData: UserDataProvider,
     public userMan: DrupalUserManagerProvider,
     public citasPresentator: CitasPresentatorProvider,
-    public reportPresentator: ReportPresentatorProvider
+    public reportPresentator: ReportPresentatorProvider,
+    public reportesData: ReportesDataProvider
   ) {
   }
 

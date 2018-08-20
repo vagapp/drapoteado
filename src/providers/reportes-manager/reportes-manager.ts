@@ -86,11 +86,18 @@ export class ReportesManagerProvider {
     console.log('obtained stringified', JSON.stringify(uax_treport));
     console.log('obtained data stringified', JSON.stringify(uax_treport.getData()));
     let data = uax_treport.getData();
-    this.nodeEditor.getCleanField(data,'field_doctores');
-    this.nodeEditor.getCleanField(data,'field_cajas') ;
-    this.nodeEditor.getCleanField(data,'field_recepciones');
-    this.nodeEditor.getCleanField(data,'field_datestartutmb');
-    this.nodeEditor.getCleanField(data,'field_dateendutmb');
+    this.nodeEditor.getCleanField(DrupalNodeEditorProvider.FIELD_RELATION,data,'field_doctores');
+    this.nodeEditor.getCleanField(DrupalNodeEditorProvider.FIELD_RELATION,data,'field_cajas') ;
+    this.nodeEditor.getCleanField(DrupalNodeEditorProvider.FIELD_RELATION,data,'field_recepciones');
+    this.nodeEditor.getCleanField(DrupalNodeEditorProvider.FIELD_NUMBER,data,'field_datestartutmb');
+    this.nodeEditor.getCleanField(DrupalNodeEditorProvider.FIELD_NUMBER,data,'field_dateendutmb');
+    console.log('docs',data['field_doctores']);
+    data['field_doctores'] = data['field_doctores'].map((val)=>{ return {uid:val}});
+    data['field_cajas'] = data['field_cajas'].map((val)=>{ return {uid:val}});
+    data['field_recepciones'] = data['field_recepciones'].map((val)=>{ return {uid:val}});
+    data['field_datestartutmb'] = {'value': data['field_datestartutmb']}
+    data['field_dateendutmb'] = {'value': data['field_dateendutmb']}
+    console.log('data ends as',data);
     this.reportesData.addReporte(data,true);
     
   }

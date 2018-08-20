@@ -38,7 +38,7 @@ export class DoctoresManagerProvider {
       if(this.userData.userData.field_doctores && this.userData.userData.field_doctores.und.length > 0){
       //this.setDoctores(this.userData.userData.field_doctores.und);
       console.log('docs ids',this.userData.userData.field_doctores.und);
-      const docfilter = this.nodeEditor.getCleanField(this.userData.userData,'field_doctores',false);
+      const docfilter = this.nodeEditor.getCleanField(DrupalNodeEditorProvider.FIELD_RELATION,this.userData.userData,'field_doctores',false);
       console.log('cleaned docfilter',docfilter);
       let docs_data = await this.userMan.requestUsers(null,null,docfilter).toPromise();
       this.setDoctoresData(docs_data);

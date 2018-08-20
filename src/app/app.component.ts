@@ -10,6 +10,7 @@ import { PlanesDataProvider } from '../providers/planes-data/planes-data';
 import { OnesignalManagerProvider } from '../providers/onesignal-manager/onesignal-manager';
 import { DoctoresManagerProvider } from '../providers/doctores-manager/doctores-manager';
 import { WsMessengerProvider } from '../providers/ws-messenger/ws-messenger';
+import { ServiciosManagerProvider } from '../providers/servicios-manager/servicios-manager';
 
 
 
@@ -43,7 +44,8 @@ export class MyApp {
     public planes: PlanesDataProvider,
     public OneMan: OnesignalManagerProvider,
     public docMan: DoctoresManagerProvider,
-    public wsMessenger: WsMessengerProvider
+    public wsMessenger: WsMessengerProvider,
+    public serviciosManager: ServiciosManagerProvider
   ) {
     this.initializeApp();
     this.pages = [
@@ -148,6 +150,7 @@ export class MyApp {
       await this.userData.loginSetData(connec_Data['user']['uid']);
       await this.docMan.initDoctoresUids();
       await this.citasManager.requestCitas().toPromise();
+      this.serviciosManager.loadServicios();
       console.log(this.citasManager.citasData.citas);
       //this.wsMessenger.testCitaSend();
    }

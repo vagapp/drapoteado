@@ -50,7 +50,9 @@
   </div>
   <div class="ReporteRow_Totals">
     <div class="rrt_left midFont"> <b>Costo</b> <span class="fontPrimary">${{cita.costo}}</span> </div>
-    <div class="rrt_right midFont"> <b>Caja</b> Total <span class="fontSecondary">${{cita.cobro}}</span> </div>
+    
+    <div class="rrt_right midFont" ng-if="cita.costo > cita.cobro"> <b>Caja</b> Total <span class="fontPrimary">${{cita.cobro}}</span> </div>
+    <div class="rrt_right midFont"  ng-if="cita.costo <= cita.cobro"> <b>Caja</b> Total <span class="fontSecondary">${{cita.cobro}}</span> </div>
     <div class="rrt_right midFont">  Efectivo <span class="fontSecondary">${{cita.cobroEfectivo}}</span> </div>
     <div class="rrt_right midFont">  Tarjeta <span class="fontSecondary">${{cita.cobroTarjeta}}</span> </div>
     <div class="rrt_right midFont">  Cheque <span class="fontSecondary">${{cita.cobroCheque}}</span> </div>
@@ -59,30 +61,22 @@
 </div>
 <div class="ReportesTotales">
   <div class="resumen_totales">
-    <span class="totalespan midFont"><b>Citas Totales:</b> <span class="fontSecondary">{{noCitas}}</span></span>
-    <span class="totalespan midFont"><b>Citas Canceladas:</b> <span class="fontPrimary">{{noCancel}}</span></span>
-    <span class="totalespan midFont"><b>No Show:</b> <span class="fontPrimary">{{noShow}}</span></span>
-    <span class="totalespan midFont"><b>Duración Total:</b> <span class="fontHigh">{{this.duracionTotalStr}}</span></span>
+    <span class="totalespan midFont"><b>Citas Totales:</b> <span class="fontSecondary">{{reportPresentator.noCitas}}</span></span>
+    <span class="totalespan midFont"><b>Citas Canceladas:</b> <span class="fontPrimary">{{reportPresentator.noCancel}}</span></span>
+    <!--<span class="totalespan midFont"><b>No Show:</b> <span class="fontPrimary">{{reportPresentator.noShow}}</span></span>-->
+    <span class="totalespan midFont"><b>Duración Total:</b> <span class="fontHigh">{{reportPresentator.duracionTotalStr}}</span></span>
   </div>
   <div class="Totales_Ingreso">
-      <span class="toin_span midFont"><b>Ingreso Total<span class="fontPrimary">${{costoTotal}}</span></b></span>
+      <span class="toin_span midFont"><b>Debe Total<span class="fontPrimary">${{reportPresentator.costoTotal}}</span></b></span>
   </div>
-  <!---
-  <div class="Totales_Ingreso">
-    <span class="toin_span midFont"><b>Ingreso Total<span class="fontPrimary">${{total}}</span></b></span>
-    <span class="toin_span midSubFont">Efectivo:<span class="fontPrimary">${{totalefectivo}}</span></span>
-    <span class="toin_span midSubFont">Tarjeta:<span class="fontPrimary">${{totalTarjeta}}</span></span>
-    <span class="toin_span midSubFont">Cheques:<span class="fontSecondary">${{totalCheques}}</span></span>
-    <span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontSecondary">${{totalcuentas}}</span></span>
-    <span class="toin_span midSubFont">Adeudo:<span class="fontSecondary">${{totalAdeudo}}</span></span>
-  </div>-->
+  
   <div class="Totales_Caja">
-      <span class="toin_span midFont"><b>Ingreso Caja<span class="fontPrimary">${{total}}</span></b></span>
-      <span class="toin_span midSubFont">Efectivo:<span class="fontPrimary">${{totalefectivo}}</span></span>
-      <span class="toin_span midSubFont">Tarjeta:<span class="fontPrimary">${{totalTarjeta}}</span></span>
-      <span class="toin_span midSubFont">Cheques:<span class="fontSecondary">${{totalCheques}}</span></span>
-      <span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontSecondary">$000,000.000</span></span>
-      <span class="toin_span midSubFont">Adeudo:<span class="fontSecondary">$000,000.000</span></span>  
+      <span class="toin_span midFont"><b>Haber Total<span class="fontPrimary">${{reportPresentator.total}}</span></b></span>
+      <span class="toin_span midSubFont">Efectivo:<span class="fontPrimary">${{reportPresentator.totalefectivo}}</span></span>
+      <span class="toin_span midSubFont">Tarjeta:<span class="fontPrimary">${{reportPresentator.totalTarjeta}}</span></span>
+      <span class="toin_span midSubFont">Cheques:<span class="fontSecondary">${{reportPresentator.totalCheques}}</span></span>
+      <span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontSecondary">${{this.reportPresentator.cajacuentas}}</span></span>
+      <span class="toin_span midSubFont">Adeudo:<span class="fontSecondary">${{this.reportPresentator.cajaAdeudo}}</span></span>  
   </div>
 </div>
 </ion-content>

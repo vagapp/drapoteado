@@ -25,17 +25,17 @@
              </tr>
         </thead>
         <tbody>
-            <tr *ngIf="this.userData.todayReport">
-                <td>{{this.userData.todayReport.nid}}</td>
-                <td class="fontSecondary">{{this.userData.todayReport.dateString}} <span *ngIf="this.userData.todayReport.dialy">Diario de hoy</span></td>
+            <tr *ngIf="this.reportesData.todayReport">
+                <td>{{this.reportesData.todayReport.nid}}</td>
+                <td class="fontSecondary">{{this.reportesData.todayReport.dateString}} <span *ngIf="this.reportesData.todayReport.dialy">Diario de hoy</span></td>
                 <td class="toolCol">
-                  <img (click)="openReportModal(this.userData.todayReport);" src="assets/imgs/ver.svg"  class="icon_drapo">
+                  <img (click)="openReportModal(this.reportesData.todayReport);" src="assets/imgs/ver.svg"  class="icon_drapo">
                   <!--<button class="bgColorSecondary generalButton tableButton">Exportar</button>-->
                 </td>
              </tr>
-            <tr *ngFor="let report of this.userData.reportes">
+            <tr *ngFor="let report of this.reportesData.reportes">
                 <td>{{report.nid}}</td>
-                <td class="fontSecondary">{{report.dateString}} <span *ngIf="this.userData.todayReport.dialy">Diario</span></td>
+                <td class="fontSecondary">{{report.dateString}} <span *ngIf="this.reportesData.todayReport.dialy">Diario</span></td>
                 <td class="toolCol">
                   <img (click)="openReportModal(report);" src="assets/imgs/ver.svg"  class="icon_drapo">
                   <!--<button class="bgColorSecondary generalButton tableButton">Exportar</button>-->

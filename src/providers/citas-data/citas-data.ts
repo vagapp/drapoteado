@@ -90,4 +90,14 @@ export class CitasDataProvider{
     return [cita.data.field_cita_doctor.und[0]];
   }
 
+  static sortByDate(citas:Citas[]){
+    return citas.sort((a,b)=>{ 
+      if (a.dateMs < b.dateMs)
+      return -1;
+    if (a.dateMs > b.dateMs)
+      return 1;
+   return 0;
+    });
+  }
+
 }

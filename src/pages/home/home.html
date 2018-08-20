@@ -8,15 +8,15 @@
         </div>
         <div class="section"  *ngIf="this.userData.checkUserFeature([this.userData.TIPO_ANY],[this.userData.PLAN_ANY],false);">
                         <div class="section_content">
-                              <span class="spanBlock bigSubFont">Citas Programadas para Hoy: <span class="fontPrimary">{{0}}</span></span>
+                             <!--<span class="spanBlock bigSubFont">Citas Programadas para Hoy: <span class="fontPrimary">{{0}}</span></span>-->
                         </div>
                        <div class="section_button">
-                        <button class="generalButton bgColorSecondary" (click)="openReportModal(this.userData.todayReport)">Resumen</button>
+                        <button class="generalButton bgColorSecondary" (click)="openReportModal(this.reportesData.todayReport)">Resumen</button>
                         </div>
         </div>
 
                 <!-- Agregar nueva cita para recepciones -->
-        <div class="section" *ngIf="this.userData.docs_loaded && this.userData.checkUserFeature([this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);" >
+        <div class="section" *ngIf="false && this.userData.checkUserFeature([this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);" >
                         <button class="bgColorSecondary generalButton floatRight" (click)="openNuevaCita()">Agregar Nueva Cita</button>
                         </div>
 
@@ -31,7 +31,7 @@
                                 <button class="generalButton bgColorSecondary" (click)="openReportModal()">Notificar</button>
                                 <button class="generalButton bgColorPrimary" (click)="openReportModal()">Cancelar</button>
                                 </div>
-                </div>-->
+                </div>
 
                 <div class="section" *ngIf="userData.showReception">
                         <div class="section_dates">
@@ -43,6 +43,7 @@
                                 <button class="generalButton bgColorHigh" (click)="openProgreso()">Cobrar</button>
                         </div>
                 </div>
+                -->
 
   <div class="section" *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR],[this.userData.PLAN_ANY],false);">
       <div class="section_content">

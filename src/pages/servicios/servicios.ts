@@ -52,9 +52,9 @@ export class ServiciosPage {
   }
 
   async cargarServicios(){
-    this.loader.presentLoader('cargando...');
+    /*this.loader.presentLoader('cargando...');
     await this.servicioMan.loadServicios();
-    this.loader.dismissLoader();
+    this.loader.dismissLoader();*/
   }
 
  
