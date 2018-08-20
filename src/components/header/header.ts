@@ -58,7 +58,7 @@ export class HeaderComponent{
       if(Number(val) === Number(0) ) 
         this.navCtrl.setRoot("LoginPage");
     });
-
+    
     } //fin constructor
 
 

@@ -22,18 +22,17 @@ ion-content{
     position: unset;
 }
 
-@media only screen and (min-height: 768px) and (min-width: 768px){
-
-    ion-modal{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .modal-wrapper {
-        position: unset;
-    }
+ion-modal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.modal-wrapper {
+    position: unset;
+}
+
+
 
 ion-header{
     background: #C1272D;

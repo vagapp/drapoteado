@@ -60,6 +60,7 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.rootPage = 'LoginPage';
       this.statusBar.styleDefault();
       this.OneMan.init();
       if(this.ica.isCordovaAvailable)this.splashScreen.hide();
@@ -145,7 +146,7 @@ export class MyApp {
       //if logged in set session and userdata
       this.userData.setSessionData(connec_Data);
       await this.userData.loginSetData(connec_Data['user']['uid']);
-      this.docMan.initDoctoresUids();
+      await this.docMan.initDoctoresUids();
       await this.citasManager.requestCitas().toPromise();
       console.log(this.citasManager.citasData.citas);
       //this.wsMessenger.testCitaSend();

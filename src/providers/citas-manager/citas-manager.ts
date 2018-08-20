@@ -45,9 +45,19 @@ export class CitasManagerProvider {
     cajas:number[] = null,  
     recepciones:number[] = null
   ):Observable<any>{
-    let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}&args[3]=${from}--${to}`;
+    console.log('from',new Date(from));
+    console.log('to',new Date(to));
+    console.log('is',new Date(1534605765000));
+    console.log('1534605765000');
+    console.log('from',from);
+    console.log('to',to)
+    console.log('doctores',doctores);
+    console.log('cajas',cajas);
+    console.log('recepciones',recepciones);
+    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : 'all'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=${from}--${to}`;
     //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
     let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
+    console.log('url getting citas',url);
     return this.http.get(url);
   }
 
@@ -76,6 +86,15 @@ export class CitasManagerProvider {
     aux_cita.processData();
     console.log('fulldata generated ',aux_cita);
     this.citasData.addCita(aux_cita,false);
+    return aux_cita;
+  }
+
+  deleteCitaFullData(data){
+    console.log('deleting data',data);
+    let aux_cita = new Citas();
+    aux_cita.Nid = data.Nid;
+    this.citasData.removeCita(aux_cita);
+    return aux_cita;
   }
 
   updateCitaNid( Nid ):Observable<any>{

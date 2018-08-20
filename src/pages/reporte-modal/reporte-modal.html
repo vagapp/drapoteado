@@ -25,7 +25,7 @@
           </div>
           <div class="info_tool">
               <span class="spanBlock midFont"><b>Fecha</b></span>
-              <span class="spanBlock fontSecondary midFont">{{this.actualrepot.dateString}}</span>
+              <span class="spanBlock fontSecondary midFont">{{this.reportPresentator.actualReport.dateString}}</span>
             </div>
     <!--<button class="bgColorSecondary generalButton" (click)="generatePDF()" >Exportar</button>-->
     <button class="bgColorPrimary generalButton" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])">Eliminar</button>
@@ -33,7 +33,7 @@
   </div>
 
 <div class="ReportGrid">
-<div class="ReporteRow" *ngFor="let cita of this.actualrepot.citas">
+<div class="ReporteRow" *ngFor="let cita of this.reportPresentator.actualReport.citas">
   <div class="ReporteRow_head">
     <span class="rbh_span midFont"> <b>No {{cita.Nid}}</b> </span>
     <span class="rbh_span midFont"><b>Paciente:</b>{{cita.paciente}}</span>

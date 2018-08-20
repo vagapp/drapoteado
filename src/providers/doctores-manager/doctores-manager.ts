@@ -4,6 +4,7 @@ import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { Doctores } from '../user-data/doctores';
 import { UserDataProvider } from '../user-data/user-data';
 import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
+import { DrupalNodeEditorProvider } from '../drupal-node-editor/drupal-node-editor';
 
 
 /*
@@ -19,7 +20,8 @@ export class DoctoresManagerProvider {
     public http: HttpClient,
     public docData:DoctoresDataProvider,
     public userData: UserDataProvider,
-    public userMan: DrupalUserManagerProvider
+    public userMan: DrupalUserManagerProvider,
+    public nodeEditor: DrupalNodeEditorProvider
   ) {
   }
 
@@ -29,12 +31,19 @@ export class DoctoresManagerProvider {
    * si es un doctor carga su propio uid
    * si es una subcuenta carga los uids de todos los doctores que esta manejando.
   */
-  initDoctoresUids(){
+  async initDoctoresUids(){
     if(this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
       this.setDoctores([this.userData.userData.uid]);
     }else{
-      if(this.userData.userData.field_doctores && this.userData.userData.field_doctores.und.length > 0)
-      this.setDoctores(this.userData.userData.field_doctores.und);
+      if(this.userData.userData.field_doctores && this.userData.userData.field_doctores.und.length > 0){
+      //this.setDoctores(this.userData.userData.field_doctores.und);
+      console.log('docs ids',this.userData.userData.field_doctores.und);
+      const docfilter = this.nodeEditor.getCleanField(this.userData.userData,'field_doctores',false);
+      console.log('cleaned docfilter',docfilter);
+      let docs_data = await this.userMan.requestUsers(null,null,docfilter).toPromise();
+      this.setDoctoresData(docs_data);
+      //for(let doc of doc_data){
+      }
     }
   }
 
@@ -44,6 +53,17 @@ export class DoctoresManagerProvider {
     for(let uid of Uids){
       const auxDoc = new Doctores();
       auxDoc.Uid = uid;
+      this.docData.addDoctor(auxDoc);
+    }
+  }
+
+  setDoctoresData(docs_data){
+    console.log('setting docs based on data', docs_data);
+    for(let doc of docs_data){
+      const auxDoc = new Doctores();
+      auxDoc.Uid = doc.uid;
+      auxDoc.name = doc.name;
+      auxDoc.field_alias = doc.field_alias;
       this.docData.addDoctor(auxDoc);
     }
   }

@@ -44,6 +44,11 @@ import { CitasPresentatorProvider } from '../providers/citas-presentator/citas-p
 import { WsMessengerProvider } from '../providers/ws-messenger/ws-messenger';
 import { SubusersDataProvider } from '../providers/subusers-data/subusers-data';
 import { SubusersManagerProvider } from '../providers/subusers-manager/subusers-manager';
+import { ReporteCitasProvider } from '../providers/reporte-citas/reporte-citas';
+import { ReportPresentatorProvider } from '../providers/report-presentator/report-presentator';
+import { ReporteServiciosProvider } from '../providers/reporte-servicios/reporte-servicios';
+import { DrupalNodeEditorProvider } from '../providers/drupal-node-editor/drupal-node-editor';
+
 
 //import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 //import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
@@ -119,7 +124,11 @@ import { SubusersManagerProvider } from '../providers/subusers-manager/subusers-
     WebsocketServiceProvider,
     WsMessengerProvider,
     SubusersDataProvider,
-    SubusersManagerProvider
+    SubusersManagerProvider,
+    ReporteCitasProvider,
+    ReportPresentatorProvider,
+    ReporteServiciosProvider,
+    DrupalNodeEditorProvider
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

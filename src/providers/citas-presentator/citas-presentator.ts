@@ -118,7 +118,7 @@ export class CitasPresentatorProvider {
   async deleteCita( cita:Citas ){
    this.loader.presentLoader('Eliminando...');
    await this.citasManager.deleteCita( cita.data ).toPromise();
-   this.wsMessenger.generateWSupdateMessage(cita);
+   this.wsMessenger.generateWSremoveCitaMessage(cita);
    this.loader.dismissLoader();
   }
 

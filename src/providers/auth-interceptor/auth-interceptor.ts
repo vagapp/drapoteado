@@ -23,7 +23,7 @@ getAuthHeaders(){
             };
  if(this.userData.sessionData.token) ret['X-CSRF-Token']=`${this.userData.sessionData.token}`;
  if(this.userData.sessionData.sessid && this.userData.sessionData.session_name) ret['Authentication']=`${this.userData.sessionData.session_name}=${this.userData.sessionData.sessid}`;
- return  ret
+ return  ret;
 }
 }
 

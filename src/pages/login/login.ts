@@ -40,7 +40,6 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    //console.log('ionViewDidLoad LoginPage');
   }
 
   async actionLogin(){
@@ -52,7 +51,7 @@ export class LoginPage {
       async (val) => {
         this.userData.setSessionData(val);
         await this.userData.loginSetData(val['user']['uid']);
-        this.docMan.initDoctoresUids();
+        await this.docMan.initDoctoresUids();
         await this.citasManager.requestCitas().toPromise();
         console.log(this.citasManager.citasData.citas);
         this.loader.dismissLoader();

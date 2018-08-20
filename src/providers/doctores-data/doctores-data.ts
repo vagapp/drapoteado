@@ -16,6 +16,7 @@ export class DoctoresDataProvider {
   
   get doctoresIDs():number[]{
     let ret = null;
+    console.log(this.doctores);
     if(this.doctores && this.doctores.length !== 0){
       ret = new Array();
       for(let doc of this.doctores){

@@ -6,6 +6,7 @@ import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/d
 import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
 import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
+import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 @IonicPage({
@@ -23,11 +24,13 @@ export class HomePage {
     public modalCtrl: ModalController, 
     public userData: UserDataProvider,
     public userMan: DrupalUserManagerProvider,
-    public citasPresentator: CitasPresentatorProvider
+    public citasPresentator: CitasPresentatorProvider,
+    public reportPresentator: ReportPresentatorProvider
   ) {
   }
 
   async ionViewDidLoad(){
+    if(this.userData.userData.uid !== 0){
       if( this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){
         let Modal = this.modalCtrl.create("WelcomeModalPage");
         Modal.present({});
@@ -39,6 +42,7 @@ export class HomePage {
         await this.userMan.updateUserd(cloneData).toPromise();
         console.log('update tutorial at dismiss');
     }
+  }
   }
 
 
@@ -53,8 +57,7 @@ export class HomePage {
 
 
   openReportModal(){
-    let Modal = this.modalCtrl.create("ReporteModalPage", undefined, { cssClass: "bigModal reportModal" });
-    Modal.present({});
+    this.reportPresentator.openReportModal();
   }
 
   openProgreso( cita: Citas){

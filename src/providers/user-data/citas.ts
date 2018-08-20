@@ -212,10 +212,6 @@ export class Citas{
     }
 
     setDuracionMs(){
-        //let now = new Date('2018/5/14 01:35:00Z');
-        Debugger.log(['dates setduration'])
-        Debugger.log([this.data.field_hora_iniciomsb.und[0].value]);
-        Debugger.log([this.data.field_hora_finalmsb['und'][0]['value']]);
         if(this.data.field_hora_iniciomsb['und'][0]['value'] && this.data.field_hora_finalmsb['und'][0]['value']){
             this.duracionMs = ( new Date(this.data.field_hora_finalmsb['und'][0]['value']).getTime() - new Date(this.data.field_hora_iniciomsb['und'][0]['value']).getTime());
         }else if( this.data.field_hora_iniciomsb['und'][0]['value'] ){
@@ -224,31 +220,11 @@ export class Citas{
             this.duracionMs = 0;
         }
         Debugger.log(['this.duracionMs',this.duracionMs]);
-        this.duracionText = Citas.getDateDifText(this.duracionMs);
+        this.duracionText = DateProvider.getDateDifText(this.duracionMs);
         Debugger.log(['this.duracionText', this.duracionText]);
     }
 
-    static getDateDifText( numberdatedif ):string{ //regresa la diferencia en texto ej. "hace 05 minutos"
-        let ret = "00";
-        let aux_ms = Math.abs(numberdatedif);
-        if(aux_ms < (60 * 1000)){ //menos de un minuto
-            ret =  `${DateProvider.formatDateBinaryNumber( Math.floor(aux_ms / 1000))} segundos`
-        }else if(aux_ms < ( 60 * 60 * 1000)){ //menos de una hora
-            ret =  `${DateProvider.formatDateBinaryNumber( Math.floor(aux_ms / (1000 * 60) ))} Minutos`
-        }else{
-            Debugger.log(['calculating diftext',aux_ms]);
-            let aux_hours = Math.floor(aux_ms / (1000 * 60 * 60));
-            aux_ms -= aux_hours * ( 1000 * 60 * 60 );
-            Debugger.log(['calculating diftext ah',aux_ms]);
-            let aux_minutes = Math.floor(aux_ms / (1000 * 60));
-            aux_ms -= aux_minutes * ( 1000 * 60 );
-            Debugger.log(['calculating diftext am',aux_ms]);
-            let aux_seconds = Math.floor(aux_ms / (1000) );
-            ret =  `${DateProvider.formatDateBinaryNumber(aux_hours)}:${DateProvider.formatDateBinaryNumber(aux_minutes)}:${DateProvider.formatDateBinaryNumber(aux_seconds)} Hrs`
-        }
-        if(numberdatedif < 0) ret = `hace ${ret}`;
-        return ret;
-    }
+    
 
 
     
@@ -270,7 +246,7 @@ export class Citas{
 
     getUntilTimeString():string{
         let ret = "00";
-        ret = Citas.getDateDifText(this.untilMs);
+        ret = DateProvider.getDateDifText(this.untilMs);
         this.untilText = ret;
         return ret;
         /*let ret = null;

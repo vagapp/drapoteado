@@ -7,6 +7,7 @@ import { UserDataProvider } from '../user-data/user-data';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { Citas } from '../user-data/citas';
+import { ReportPresentatorProvider } from '../report-presentator/report-presentator';
 
 
 @Injectable()
@@ -17,6 +18,7 @@ export class WebsocketServiceProvider {
     public cmanager: CitasManagerProvider,
     public userData: UserDataProvider,
     public docData: DoctoresDataProvider,
+    public reportPresentator: ReportPresentatorProvider
   ) {
     this.init();
   }
@@ -35,6 +37,7 @@ export class WebsocketServiceProvider {
     console.log('message received', message);
     switch(message.action){
       case 'addCita': this.addCita(message); break;
+      case 'removeCita': this.removeCita(message); break;
     }
   }
 
@@ -45,7 +48,15 @@ export class WebsocketServiceProvider {
    */
   addCita(message:Message){
     if(this.FilterMessageCita(message)){
-      this.cmanager.generateCitaFullData(message.content);
+      let aux_cita = this.cmanager.generateCitaFullData(message.content);
+      this.reportPresentator.updateCita(aux_cita);
+    }
+  }
+
+  removeCita(message:Message){
+    if(this.FilterMessageCita(message)){
+      let aux_cita = this.cmanager.deleteCitaFullData(message.content);
+      this.reportPresentator.deleteCita(aux_cita);
     }
   }
 
