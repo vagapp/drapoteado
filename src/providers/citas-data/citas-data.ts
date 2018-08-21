@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Citas } from '../user-data/citas';
 import { Subject } from 'rxjs/Subject';
 import { citasData } from '../user-data/user-data';
+import { Doctores } from '../user-data/doctores';
+import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 
 
 
@@ -100,5 +102,10 @@ export class CitasDataProvider{
    return 0;
     });
   }
+
+ 
+
+ 
+
 
 }

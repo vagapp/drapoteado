@@ -38,6 +38,7 @@ export class WebsocketServiceProvider {
     switch(message.action){
       case 'addCita': this.addCita(message); break;
       case 'removeCita': this.removeCita(message); break;
+      case 'loadedReport': this.loadedReport(message); break;
     }
   }
 
@@ -67,6 +68,12 @@ export class WebsocketServiceProvider {
       if(this.docData.existsByUid(uid)){ ret = true; break;}
     }
     return ret;
+  }
+
+
+  loadedReport( message:Message){
+    console.log('REPORTING APP LOADED ------------------------------------------------');
+    console.log(message);
   }
 
   send(message:Message) {

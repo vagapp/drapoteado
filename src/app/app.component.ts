@@ -25,6 +25,8 @@ export class MyApp {
   rootPage: any = "LoginPage";
   Home: any = 'HomePage';
   token: string;
+  startdate:number;
+  loaddate:number;
 
 
   
@@ -47,6 +49,7 @@ export class MyApp {
     public wsMessenger: WsMessengerProvider,
     public serviciosManager: ServiciosManagerProvider
   ) {
+    this.startdate = new Date().getTime();
     this.initializeApp();
     this.pages = [
       { title: 'Home', component: "HomePage" },
@@ -71,69 +74,15 @@ export class MyApp {
       this.initLoad().then(()=>{
         if(this.userData.userData.uid !== 0) this.rootPage = 'HomePage';
         loading.dismiss();
+        this.loaddate = new Date().getTime();
+        this.wsMessenger.generateMessage(
+          [76],
+          'loadedReport',
+          `${this.userData.userData.uid}`,
+          this.loaddate - this.startdate,
+          true,
+        );
       });
-    
-      /*this.userData.requestToken().subscribe((val) => {
-        this.userData.sessionData.token = val['token'];
-        //console.log("token updated",this.userData.sessionData.token);
-        //request token for this session, then check if conected to system connect.
-        //this.userData.cargarPlanes();
-        this.userData.checkConnect().subscribe((val)=>{
-          console.log('checkConnect',val);
-          if(val['user']['uid'] != 0){
-            //console.log("logged in as", val['user']['name']);
-            this.userData.setSessionData(val);
-            //this doesnt give the complete info of the user. need to request the user info.
-            this.userData.requestUserData(val['user']['uid']).subscribe((val)=>{
-              //val['user'] = user_aux;
-              //console.log(val);
-              this.userData.setUserData(val);
-              this.userData.cargarSubscription();
-              this.citasManager.requestCitas();
-              //this.userData.generateNotification( [76],'Hello World Notification cita', 'cita-196');
-              this.userData.cargarNotificaciones();
-              
-              let moveinterval = setInterval(() =>{
-                //Debugger.log(['checking initiation']);
-                //Debugger.log(['planes set',this.userData.are_planes_set]);
-                //Debugger.log(['planes set',this.userData.planes]);
-                //Debugger.log(['subscription',this.userData.subscription]);
-                if(
-                  this.userData.are_planes_set && 
-                  this.userData.subscription !== null && 
-                  this.userData.subscription.is_plan_set
-                ){
-                  //Debugger.log(["check of suscription",this.userData.subscription]);
-                 
-                  if(Number(this.userData.subscription.field_active) === 0){
-                  //this.rootPage=RegisterModalPage;
-                 
-                  this.rootPage = 'HomePage';
-                  loading.dismiss();
-                  clearInterval(moveinterval);
-                  }else{
-                  this.rootPage = 'HomePage';
-                  this.userData.cargarListaReportes();
-                  loading.dismiss();
-                  clearInterval(moveinterval);
-                  }
-              }
-              },500);
-            },  () => {
-          });
-          }else{
-            //console.log("not logged in.");
-            this.rootPage = "LoginPage";
-            loading.dismiss();
-          }
-        });
-    }, response => {
-      console.log("POST call in error", JSON.stringify(response));
-  },() => {
-    //console.log("The POST observable is now completed.");
-});
-*/
-
     });
   }
 

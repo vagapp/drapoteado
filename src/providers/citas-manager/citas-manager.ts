@@ -11,6 +11,7 @@ import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-manager';
 import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
 import { Message } from '../websocket-service/websocket-service';
+import { Doctores } from '../user-data/doctores';
 
 
 @Injectable()
@@ -113,6 +114,23 @@ export class CitasManagerProvider {
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
     //console.log("tryna update cita:",cita.data);
     return this.updateCita( cita.data ).share();
+  }
+
+
+  getDoctorOFCita( Cita:Citas ):Doctores{
+    let ret = null;
+    let uid = Cita.data.field_cita_doctor.und[0];
+    ret = this.doctores.getDoctorByUid(uid);
+    return ret;
+  }
+
+  isNextCita(cita:Citas):boolean{
+    let ret = false;
+    let aux_doctor = this.getDoctorOFCita(cita);
+    if(aux_doctor.nextCita && ( Number(aux_doctor.nextCita.Nid) === Number(cita.Nid)) ){
+      ret = true;
+    }
+    return ret;
   }
   
 }

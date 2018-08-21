@@ -491,33 +491,10 @@ export class UserDataProvider {
     this.doctores.forEach(
   }*/
 
-  getDoctorOFCita( Cita:Citas ):Doctores{
-    let ret = null;
-    let uid = Cita.data.field_cita_doctor.und[0];
-    ret = this.getDoctorByUid(uid);
-    return ret;
-  }
+ 
+  
 
-  getDoctorByUid( uid ):Doctores{
-    let ret = null;
-    this.doctores.doctores.forEach(element => {
-      console.log("comparing uid", Number(element.Uid)+"==="+Number(uid));
-      if(Number(element.Uid) === Number(uid) ) {
-        ret = element;
-      }
-    });
-    console.log(ret);
-    return ret;
-  }
-
-  isNextCita(cita:Citas):boolean{
-    let ret = false;
-    let aux_doctor = this.getDoctorOFCita(cita);
-    if(aux_doctor.nextCita && ( Number(aux_doctor.nextCita.Nid) === Number(cita.Nid)) ){
-      ret = true;
-    }
-    return ret;
-  }
+  
 
   getDoctoresSimpleArray():number[]{
     let ret = new Array();

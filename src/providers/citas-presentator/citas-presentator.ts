@@ -73,7 +73,7 @@ export class CitasPresentatorProvider {
 
 
   iniciarCita( cita:Citas ){
-    let aux_doc = this.userData.getDoctorOFCita(cita);
+    let aux_doc = this.citasManager.getDoctorOFCita(cita);
     if(cita.checkState(CitasDataProvider.STATE_ACTIVA) || cita.checkState(CitasDataProvider.STATE_COBRO)){
       this.openProgreso(cita);
     }else{

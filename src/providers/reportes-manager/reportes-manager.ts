@@ -51,7 +51,7 @@ export class ReportesManagerProvider {
     }
   }
 
-  requestReportes( 
+  requestReportes(
     dialy:number = -1, 
     date:string = `${(this.dp.nowStart-30*1000)}--${(this.dp.nowEnd-30*1000)}` , 
     uid:number = this.userData.userData.uid

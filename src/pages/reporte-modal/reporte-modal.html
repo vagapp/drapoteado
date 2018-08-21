@@ -49,10 +49,11 @@
     <span *ngFor="let servicio of cita.reporteServicios" class="rpr_service midFont"> {{servicio.title}} <span class="fontSecondary">${{servicio.costo}}</span></span>
   </div>
   <div class="ReporteRow_Totals">
-    <div class="rrt_left midFont"> <b>Debe</b> <span class="fontPrimary">${{cita.costo}}</span> </div>
+    <div class="rrt_left midFont"> <b>Costo</b> <span class="fontPrimary">${{cita.costo}}</span> </div>
     
-    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Haber</b> Total <span class="fontPrimary">${{cita.cobro}}</span> </div>
-    <div class="rrt_right midFont"  *ngIf="cita.costo <= cita.cobro"> <b>Haber</b> Total <span class="fontSecondary">${{cita.cobro}}</span> </div>
+    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Pago</b> Total <span class="fontPrimary">${{cita.cobro}}</span> </div>
+    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Pendiente</b> <span class="fontPrimary">${{cita.costo - cita.cobro}}</span> </div>
+    <div class="rrt_right midFont"  *ngIf="cita.costo <= cita.cobro"> <b>Pago</b> Total <span class="fontSecondary">${{cita.cobro}}</span> </div>
     <div class="rrt_right midFont">  Efectivo <span class="fontSecondary">${{cita.cobroEfectivo}}</span> </div>
     <div class="rrt_right midFont">  Tarjeta <span class="fontSecondary">${{cita.cobroTarjeta}}</span> </div>
     <div class="rrt_right midFont">  Cheque <span class="fontSecondary">${{cita.cobroCheque}}</span> </div>
@@ -67,16 +68,16 @@
     <span class="totalespan midFont"><b>Duración Total:</b> <span class="fontHigh">{{reportPresentator.duracionTotalStr}}</span></span>
   </div>
   <div class="Totales_Ingreso">
-      <span class="toin_span midFont"><b>Debe Total<span class="fontPrimary">${{reportPresentator.costoTotal}}</span></b></span>
+      <span class="toin_span midFont"><b>Costo Total<span class="fontPrimary">${{reportPresentator.costoTotal}}</span></b></span>
   </div>
   
   <div class="Totales_Caja">
-      <span class="toin_span midFont"><b>Haber Total<span class="fontPrimary">${{reportPresentator.total}}</span></b></span>
-      <span class="toin_span midSubFont">Efectivo:<span class="fontPrimary">${{reportPresentator.totalefectivo}}</span></span>
-      <span class="toin_span midSubFont">Tarjeta:<span class="fontPrimary">${{reportPresentator.totalTarjeta}}</span></span>
+      <span class="toin_span midFont"><b>Caja Total<span class="fontPrimary">${{reportPresentator.total}}</span></b></span>
+      <span class="toin_span midSubFont">Efectivo:<span class="fontSecondary">${{reportPresentator.totalefectivo}}</span></span>
+      <span class="toin_span midSubFont">Tarjeta:<span class="fontSecondary">${{reportPresentator.totalTarjeta}}</span></span>
       <span class="toin_span midSubFont">Cheques:<span class="fontSecondary">${{reportPresentator.totalCheques}}</span></span>
-      <span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontSecondary">${{this.reportPresentator.cajacuentas}}</span></span>
-      <span class="toin_span midSubFont">Adeudo:<span class="fontSecondary">${{this.reportPresentator.cajaAdeudo}}</span></span>  
+      <span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontPrimary">${{this.reportPresentator.cajacuentas}}</span></span>
+      <span class="toin_span midSubFont">Pendiente total:<span class="fontPrimary">${{this.reportPresentator.cajacuentas + this.reportPresentator.cajaAdeudo}}</span></span>  
   </div>
 </div>
 </ion-content>

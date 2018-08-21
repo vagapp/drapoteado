@@ -54,4 +54,19 @@ export class DoctoresDataProvider {
     return doc.citaActiva !== null;
    }
 
+   getDoctorByUid( uid ):Doctores{
+    let ret = null;
+    const exists = this.doctores.filter((docs)=>{ return Number(docs.Uid) === Number(uid) })
+    if(exists.length > 0) ret = exists[0];
+    return ret;
+    /*this.doctores.forEach(element => {
+      console.log("comparing uid", Number(element.Uid)+"==="+Number(uid));
+      if(Number(element.Uid) === Number(uid) ) {
+        ret = element;
+      }
+    });
+    console.log(ret);
+    return ret;*/
+  }
+
 }
