@@ -623,7 +623,7 @@ export class UserDataProvider {
     let ret = "subusuario";
     switch( tipo ){
       case UserDataProvider.TIPO_DOCTOR: ret = "doctor"; break;
-      case UserDataProvider.TIPO_RECEPCION: ret = "recepcion"; break;
+      case UserDataProvider.TIPO_RECEPCION: ret = "recepción"; break;
       case UserDataProvider.TIPO_CAJA: ret = "caja"; break;
       case UserDataProvider.TIPO_CAJAYRECEPCION: ret = "recepcion&caja"; break;
     }

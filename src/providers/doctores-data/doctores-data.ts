@@ -37,7 +37,7 @@ export class DoctoresDataProvider {
 
   removeDoctor( doc:Doctores, call:boolean = true){
     //delete this.citas[cita.Nid];
-    this.doctores = this.doctores.filter((doctores)=>{ doctores.Uid !== doc.Uid});
+    this.doctores = this.doctores.filter((doctores)=>{ return doctores.Uid !== doc.Uid});
     if( call ) this.subject.next(this.doctores);
     console.log('removed doctor',doc,this.doctores);
   }

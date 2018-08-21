@@ -42,7 +42,8 @@ export class CitasDataProvider{
 
   removeCita( cita:Citas, call:boolean = true){
     //delete this.citas[cita.Nid];
-    this.citas = this.citas.filter((citas)=>{ citas.Nid !== cita.Nid});
+    this.citas = this.citas.filter((citas)=>{ return citas.Nid !== cita.Nid});
+    console.log('citas list after removed',this.citas);
     if( call ) this.subject.next(this.citas);
     console.log('removed cita',cita,this.citas);
   }

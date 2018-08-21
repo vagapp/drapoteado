@@ -74,9 +74,9 @@ export class HomePage {
     this.navCtrl.setRoot("FacturacionPage");
   }
   openRegister(){
-    let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
+    /*let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
     Modal.onDidDismiss(data => {});
-    Modal.present({});
+    Modal.present({});*/
   }
   openCitas(){
     this.navCtrl.setRoot("CitasPage");

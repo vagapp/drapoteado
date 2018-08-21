@@ -121,7 +121,7 @@ actualReport:reportes = null;
     let filteredCitas = CitasDataProvider.sortByDate(this.getFilteredCitasShow());
     for(let cita of filteredCitas){
       if(cita.duracionMs) this.duracionTotalMs += cita.duracionMs;
-      if(cita.costo) this.costoTotal = cita.costo;
+      if(cita.costo) this.costoTotal += cita.costo;
       if(cita.cobro) this.total+= cita.cobro;
       if(cita.costo && cita.cobro && cita.costo > cita.cobro){ this.cajaAdeudo += cita.costo - cita.cobro; }
       if(cita.cobroEfectivo) this.totalefectivo+=cita.cobroEfectivo;

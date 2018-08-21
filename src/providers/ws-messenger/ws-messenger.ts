@@ -65,7 +65,7 @@ export class WsMessengerProvider {
   generateWSremoveCitaMessage( cita:Citas ){
     this.generateMessage(
       this.docData.doctoresIDs,
-      'remove',
+      'removeCita',
       `${this.userData.userData.uid}`,
       cita.data,
       true

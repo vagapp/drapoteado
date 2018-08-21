@@ -33,7 +33,7 @@ export class ReportesDataProvider {
   }
 
   removeReporte( reporte:reportes, call:boolean = true){
-    this.reportes = this.reportes.filter((reportes)=>{ reportes.nid !== reporte.nid});
+    this.reportes = this.reportes.filter((reportes)=>{ return reportes.nid !== reporte.nid});
     if( call ) this.subject.next(this.reportes);
     console.log('removed cita',reporte,this.reportes);
   }

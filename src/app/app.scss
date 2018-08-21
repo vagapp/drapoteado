@@ -547,6 +547,10 @@ border: 0px solid #000000;
 }
 
 @media screen and (max-width: 450px){
+
+    ion-modal{
+        display: block;
+    }
     .section_grid{
         grid-template-columns: 1fr;
     }

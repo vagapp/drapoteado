@@ -5,6 +5,9 @@ import { reportes } from '../../providers/user-data/reportes';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { ReportesManagerProvider } from '../../providers/reportes-manager/reportes-manager';
 import { ReportesDataProvider } from '../../providers/reportes-data/reportes-data';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { AlertProvider } from '../../providers/alert/alert';
+import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 
@@ -27,16 +30,19 @@ export class ReportesPage {
     public navParams: NavParams,
      public modalCtrl: ModalController,
     public userData: UserDataProvider,
-    private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController,
     public reportesMan: ReportesManagerProvider,
-    public reportesData: ReportesDataProvider
+    public reportesData: ReportesDataProvider,
+    public loader: LoaderProvider,
+    public alert: AlertProvider,
+    public reportPresentator: ReportPresentatorProvider
     ) {
   }
 
-  ionViewDidLoad() {
+  async ionViewDidLoad() {
     //console.log('ionViewDidLoad ReportesPage');
-    this.reportesMan.cargarListaReportes();
+    this.loader.presentLoader('cargando reportes ...');
+    await this.reportesMan.cargarListaReportes();
+    this.loader.dismissLoader();
     //Debugger.log(["reportes carfados",this.userData.reportes]);
   }
 
@@ -46,11 +52,23 @@ export class ReportesPage {
   }
   
   openReportModal( report:reportes ){
-    let Modal = this.modalCtrl.create("ReporteModalPage", {reporte:report}, { cssClass: "bigModal reportModal" });
-    Modal.present({});
+    this.reportPresentator.openReportModal(report);
+    /*let Modal = this.modalCtrl.create("ReporteModalPage", {reporte:report}, { cssClass: "bigModal reportModal" });
+    Modal.present({});*/
   }
 
   elimiarReporte( report:reportes ){
+    this.alert.chooseAlert(
+      'eliminar reporte',
+      `¿Está seguro que desea eliminar este reporte?`,
+      async ()=>{
+        this.loader.presentLoader('eliminando ...');
+        let val = await this.reportesMan.deleteReport(report).toPromise();
+        this.loader.dismissLoader();
+      },
+      ()=>{}
+    );
+    /*
     let alert = this.alertCtrl.create({
       title: 'eliminar reporte',
       message: `¿Está seguro que desea eliminar este reporte?`,
@@ -80,7 +98,7 @@ export class ReportesPage {
       ]
     });
     alert.present();
-   
+   */
   }
 
 }

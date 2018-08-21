@@ -49,10 +49,10 @@
     <span *ngFor="let servicio of cita.reporteServicios" class="rpr_service midFont"> {{servicio.title}} <span class="fontSecondary">${{servicio.costo}}</span></span>
   </div>
   <div class="ReporteRow_Totals">
-    <div class="rrt_left midFont"> <b>Costo</b> <span class="fontPrimary">${{cita.costo}}</span> </div>
+    <div class="rrt_left midFont"> <b>Debe</b> <span class="fontPrimary">${{cita.costo}}</span> </div>
     
-    <div class="rrt_right midFont" ng-if="cita.costo > cita.cobro"> <b>Caja</b> Total <span class="fontPrimary">${{cita.cobro}}</span> </div>
-    <div class="rrt_right midFont"  ng-if="cita.costo <= cita.cobro"> <b>Caja</b> Total <span class="fontSecondary">${{cita.cobro}}</span> </div>
+    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Haber</b> Total <span class="fontPrimary">${{cita.cobro}}</span> </div>
+    <div class="rrt_right midFont"  *ngIf="cita.costo <= cita.cobro"> <b>Haber</b> Total <span class="fontSecondary">${{cita.cobro}}</span> </div>
     <div class="rrt_right midFont">  Efectivo <span class="fontSecondary">${{cita.cobroEfectivo}}</span> </div>
     <div class="rrt_right midFont">  Tarjeta <span class="fontSecondary">${{cita.cobroTarjeta}}</span> </div>
     <div class="rrt_right midFont">  Cheque <span class="fontSecondary">${{cita.cobroCheque}}</span> </div>

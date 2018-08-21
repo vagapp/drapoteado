@@ -61,8 +61,8 @@ export class MyApp {
 
 
   initializeApp() {
+    this.rootPage = 'LoginPage';
     this.platform.ready().then(() => {
-      this.rootPage = 'LoginPage';
       this.statusBar.styleDefault();
       this.OneMan.init();
       if(this.ica.isCordovaAvailable)this.splashScreen.hide();

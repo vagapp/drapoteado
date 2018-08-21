@@ -67,8 +67,8 @@ export class LoginPage {
 
   actionOpenRegister(){
     //console.log("open Register");
-    let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
-    Modal.present({});
+    /*let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
+    Modal.present({});*/
   }
 
   actionOpenRecover(){
@@ -79,9 +79,9 @@ export class LoginPage {
   }
 
   openRegister(){
-    let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
+    /*let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
     Modal.onDidDismiss(data => {});
-    Modal.present({});
+    Modal.present({});*/
   }
 
 
