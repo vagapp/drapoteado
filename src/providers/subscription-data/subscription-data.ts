@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { planes } from '../user-data/planes';
 import { Observable } from 'rxjs/Observable';
+import { subscriptions } from '../user-data/subscriptions';
 
 /*
   Generated class for the SubscriptionDataProvider provider.
@@ -11,13 +11,16 @@ import { Observable } from 'rxjs/Observable';
 */
 @Injectable()
 export class SubscriptionDataProvider {
+  subscription: subscriptions = null;
+
   nid:number = null; //nid de la subscripcion
   uid:number = null; //uid del doctor
   plan:planes = null;//objeto de plan completo
   field_plan_sus:number=null //nid del plan
   field_subusuarios:number[]=null; //array of sub acound uids
+  field_active:boolean = false;
 
-  constructor(public http: HttpClient) {
+  constructor() {
   }
 
 

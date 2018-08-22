@@ -31,9 +31,10 @@ export class CitasManagerProvider {
   }
 
   requestCitas():Observable<any>{
+    console.log('requesting citas from docs',this.doctores.doctoresIDs);
     let observable = this.getCitasObservable().share();
     observable.subscribe(
-      (val)=>{this.setCitas(val);},
+      (val)=>{ console.log('obtained citas',val);this.setCitas(val);},
       response => { console.log('error requestCitas',response);}
     );
     return observable;

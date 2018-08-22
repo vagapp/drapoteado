@@ -322,6 +322,12 @@ export class Citas{
         return ret;
    }
 
+   removeServicio( servicio:servicios ):boolean {
+       let ret = false;
+       this.addedServices = this.addedServices.filter( (servicios)=>{ return Number(servicios.Nid) !== Number(servicio.Nid)});
+       return ret = true;
+   }
+
    /**
     * returns a list of services that havent been added to this cita from a list of available services
     **/
@@ -343,12 +349,14 @@ export class Citas{
    checkServicio( servicio:servicios ):boolean{
        let ret = false;
         console.log("checking if cita contains servicio ",servicio);
-        this.addedServices.forEach(element => {
+        /*this.addedServices.forEach(element => {
             if(Number(element.Nid) === Number(servicio.Nid)  ){
                 ret = true;
                 console.log("added service");
             }
-        });
+        });*/
+        if(this.addedServices.find((servicios)=>{ return Number(servicios.Nid) === Number(servicio.Nid)})) ret = true;
+        console.log('found ? ',ret);
         return ret;
    }
    

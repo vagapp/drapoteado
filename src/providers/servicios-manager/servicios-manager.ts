@@ -37,6 +37,7 @@ export class ServiciosManagerProvider {
    * uids:number[] son los uids de los usuarios autores de los servicios que se desea filtrar
   **/
  requestServiciosDoctors( uids:number[] ):Observable<any>{
+   console.log('requesting servicios',uids);
   let url = `${this.bu.endpointUrl}rest_servicios?args[0]=${uids.length > 0 ? uids.join() : "all"}`;
   let observer = this.http.get(url).share();
   return observer;

@@ -15,7 +15,7 @@ export class DoctoresDataProvider {
   doctoresSubject:Subject<any> = new Subject();
   
   get doctoresIDs():number[]{
-    let ret = null;
+    let ret = new Array();
     console.log(this.doctores);
     if(this.doctores && this.doctores.length !== 0){
       ret = new Array();

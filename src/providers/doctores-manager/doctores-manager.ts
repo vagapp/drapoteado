@@ -5,6 +5,7 @@ import { Doctores } from '../user-data/doctores';
 import { UserDataProvider } from '../user-data/user-data';
 import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
 import { DrupalNodeEditorProvider } from '../drupal-node-editor/drupal-node-editor';
+import { SubscriptionManagerProvider } from '../subscription-manager/subscription-manager';
 
 
 /*
@@ -21,6 +22,7 @@ export class DoctoresManagerProvider {
     public docData:DoctoresDataProvider,
     public userData: UserDataProvider,
     public userMan: DrupalUserManagerProvider,
+    public subsMan: SubscriptionManagerProvider,
     public nodeEditor: DrupalNodeEditorProvider
   ) {
   }
@@ -68,6 +70,16 @@ export class DoctoresManagerProvider {
     }
   }
 
+
+  filterActiveDoctors(){
+    if(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
+    this.docData.doctores = this.docData.doctores.filter(
+      (docs) =>{
+        return this.subsMan.checkSusOfDoctor(docs.Uid);
+      }
+    );
+    }
+  }
 
   requestDoctores(){
 

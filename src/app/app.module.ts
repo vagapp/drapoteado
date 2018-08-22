@@ -48,7 +48,6 @@ import { ReporteCitasProvider } from '../providers/reporte-citas/reporte-citas';
 import { ReportPresentatorProvider } from '../providers/report-presentator/report-presentator';
 import { ReporteServiciosProvider } from '../providers/reporte-servicios/reporte-servicios';
 import { DrupalNodeEditorProvider } from '../providers/drupal-node-editor/drupal-node-editor';
-import { CitaServiciosProvider } from '../providers/cita-servicios/cita-servicios';
 import { CitaProgressControllerProvider } from '../providers/cita-progress-controller/cita-progress-controller';
 
 
@@ -131,7 +130,6 @@ import { CitaProgressControllerProvider } from '../providers/cita-progress-contr
     ReportPresentatorProvider,
     ReporteServiciosProvider,
     DrupalNodeEditorProvider,
-    CitaServiciosProvider,
     CitaProgressControllerProvider
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]

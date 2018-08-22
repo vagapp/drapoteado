@@ -12,7 +12,7 @@
           <span class="spanBlock midFont"><b>Progreso de la Cita</b></span>
         </div>
         <div class="dateright floatRight">
-           <span class="spanBlock"><span class=" fontSecondary midFont">{{activeCita.getDisplayableDates().date}}</span><span class="fontHigh midFont">{{activeCita.getDisplayableDates().time}}</span></span>
+           <span class="spanBlock"><span class=" fontSecondary midFont">{{progressController.activeCita.getDisplayableDates().date}}</span><span class="fontHigh midFont">{{progressController.activeCita.getDisplayableDates().time}}</span></span>
           </div>
       </div>
       <div class="CitaDetail_Content">
@@ -23,14 +23,14 @@
                         <th>no</th>
                         <th>Paciente</th>
                         <th *ngIf="!(userData.checkUserPermission([userData.TIPO_DOCTOR]))">Doctor</th>
-                        <th> Tiempo Transcurrido:  <span class="fontHigh midFont">{{activeCita.duracionText }} </span></th>
+                        <th> Tiempo Transcurrido:  <span class="fontHigh midFont">{{progressController.activeCita.duracionText }} </span></th>
                      </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>01</td>
-                        <td>{{this.activeCita.data.field_paciente.und[0].value}}</td>
-                        <td *ngIf="!(userData.checkUserPermission([userData.TIPO_DOCTOR]))">{{this.activeCita.data.doctor_name}}/ {{this.activeCita.data.doctor_alias}}</td>
+                        <td>{{progressController.activeCita.data.field_paciente.und[0].value}}</td>
+                        <td *ngIf="!(userData.checkUserPermission([userData.TIPO_DOCTOR]))">{{progressController.activeCita.data.doctor_name}}/ {{progressController.activeCita.data.doctor_alias}}</td>
                         <td> </td>
                     </tr>
                 </tbody>
@@ -39,29 +39,29 @@
         <div class="CitaDetailSections">
           <div class="CitaDetailSection borderRight">
             <b class="midFont">Servicios</b>
-            <div class="CitaDetail_services" *ngIf="this.activeCita.checkState(citasData.STATE_ACTIVA)">
-                <div class="progreso_service" *ngFor="let added of activeCita.addedServices">
+            <div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA)">
+                <div class="progreso_service" *ngFor="let added of progressController.activeCita.addedServices">
                 <b>{{added.Nid}}</b>
-                {{added.title}} - <span class="fontSecondary">${{added.costo}}</span>
+                {{added.title}} - <span class="fontSecondary">${{added.costo}}</span> <span (click)="progressController.removeService(added);" class="removeServicebtn" >x</span>
               </div>
               </div>
             
-              <div class="CitaDetail_services" *ngIf="!this.activeCita.checkState(userData.STATE_ACTIVA)">
-                    <div class="progreso_service" *ngFor="let added of activeCita.reporteServicios">
+              <div class="CitaDetail_services" *ngIf="!progressController.activeCita.checkState(userData.STATE_ACTIVA)">
+                    <div class="progreso_service" *ngFor="let added of progressController.activeCita.reporteServicios">
                     <b>{{added.Nid}}</b>
-                    {{added.title}} - <span class="fontSecondary">${{added.costo}}</span>
+                    {{added.title}} - <span class="fontSecondary">${{added.costo}}</span> 
                   </div>
                   </div>
-                  <div class="CitaDetail_services" *ngIf="this.activeCita.checkState(citasData.STATE_ACTIVA) && userData.checkUserPermission([userData.TIPO_DOCTOR])">
+                  <div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA) && userData.checkUserPermission([userData.TIPO_DOCTOR])">
                     <div class="registerInput">
-                      <select [(ngModel)]="selectedService"  name="selectedService" class="input_select input" >
+                      <select [(ngModel)]="progressController.selectedService"  name="selectedService" class="input_select input" >
                           <option selected disabled value="0">Select</option>
-                          <option *ngFor="let service of this.available_services" value="{{service.Nid}}">{{service.title}}</option>
+                          <option *ngFor="let service of progressController.available_services" value="{{service.Nid}}">{{service.title}}</option>
                         </select>
                       </div>
                       <div class="midAlign">
                             <div class="register_button_section">
-                            <button (click)="addService()"  class="bgColorSecondary generalButton">Agregar</button>
+                            <button (click)="progressController.addService()"  class="bgColorSecondary generalButton">Agregar</button>
                             </div>
                           </div>
                   </div>
@@ -69,36 +69,36 @@
             </div>
             <div class="CitaDetailSection midFont">
               <b>Costo de la Cita</b>
-              <span *ngIf="this.activeCita.checkState(this.citasData.STATE_ACTIVA)" class="floatRight"><span class="fontSecondary">${{this.costoCita}}</span> <ion-icon name="menu"></ion-icon> </span>
-              <span *ngIf="this.activeCita.checkState(this.citasData.STATE_COBRO)" class="floatRight"><span class="fontSecondary">${{this.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
+              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_ACTIVA)" class="floatRight"><span class="fontSecondary">${{progressController.costoCita}}</span> <ion-icon name="menu"></ion-icon> </span>
+              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO)" class="floatRight"><span class="fontSecondary">${{progressController.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
               costo
-              <div *ngIf="this.activeCita.checkState(citasData.STATE_COBRO) && userData.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA])">
+              <div *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO) && userData.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA])">
               <b>Formas de Pago</b>
               <div class="ModalInput_input">
                     Efectivo
-                    <input [(ngModel)]="this.cobroEfectivo" type="text"/>
+                    <input [(ngModel)]="progressController.cobroEfectivo" type="text"/>
                 </div>
                 <div class="ModalInput_input">
                     Tarjeta
-                    <input [(ngModel)]="this.cobroTarjeta" type="text"/>
+                    <input [(ngModel)]="progressController.cobroTarjeta" type="text"/>
                 </div>
                 <div class="ModalInput_input"> 
                     Cheque
-                    <input [(ngModel)]="this.cobroCheque" type="text"/>
+                    <input [(ngModel)]="progressController.cobroCheque" type="text"/>
                 </div>
-                <span *ngIf="this.CantidadRestante > 0" class="spanBlock midAlign fontPrimary">
-                    Faltan ${{this.CantidadRestante}}
+                <span *ngIf="progressController.CantidadRestante > 0" class="spanBlock midAlign fontPrimary">
+                    Faltan ${{progressController.CantidadRestante}}
                 </span>
-                <span *ngIf="this.CantidadRestante < 0" class="spanBlock midAlign fontHigh">
-                        Sobrar ${{(this.CantidadRestante * -1)}}
+                <span *ngIf="progressController.CantidadRestante < 0" class="spanBlock midAlign fontHigh">
+                        Sobrar ${{(progressController.CantidadRestante * -1)}}
                     </span>
                 </div>
             </div>
         </div>
         <div class="midAlign">
             <div class="register_button_section">
-            <button  *ngIf="this.activeCita.checkState(citasData.STATE_ACTIVA)"  (click)="finalizarPop()" class="bgColorPrimary generalButton">Finalizar Cita</button>
-            <button  *ngIf="this.activeCita.checkState(citasData.STATE_COBRO)" (click)="pagadaPop()" class="bgColorPrimary generalButton">Marcar como pagada</button>
+            <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA)"  (click)="finalizarPop()" class="bgColorPrimary generalButton">Finalizar Cita</button>
+            <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO)" (click)="pagadaPop()" class="bgColorPrimary generalButton">Marcar como pagada</button>
             </div>
           </div>
       </div>

@@ -10,6 +10,7 @@ import { Citas } from '../user-data/citas';
 import { UserDataProvider } from '../user-data/user-data';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { WsMessengerProvider } from '../ws-messenger/ws-messenger';
+import { CitaProgressControllerProvider } from '../cita-progress-controller/cita-progress-controller';
 
 
 /*
@@ -27,7 +28,8 @@ export class CitasPresentatorProvider {
     public alert: AlertProvider,
     public loader: LoaderProvider,
     public modalCtrl: ModalController,
-    public wsMessenger: WsMessengerProvider
+    public wsMessenger: WsMessengerProvider,
+    public progresSController: CitaProgressControllerProvider
   ) {
 
   }
@@ -67,8 +69,9 @@ export class CitasPresentatorProvider {
   }
 
   openProgreso( cita: Citas){
-    let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
-    Modal.present({});
+    /*let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
+    Modal.present({});*/
+    this.progresSController.openProgress(cita);
   }
 
 

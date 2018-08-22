@@ -11,6 +11,7 @@ import { OnesignalManagerProvider } from '../providers/onesignal-manager/onesign
 import { DoctoresManagerProvider } from '../providers/doctores-manager/doctores-manager';
 import { WsMessengerProvider } from '../providers/ws-messenger/ws-messenger';
 import { ServiciosManagerProvider } from '../providers/servicios-manager/servicios-manager';
+import { SubscriptionManagerProvider } from '../providers/subscription-manager/subscription-manager';
 
 
 
@@ -47,7 +48,8 @@ export class MyApp {
     public OneMan: OnesignalManagerProvider,
     public docMan: DoctoresManagerProvider,
     public wsMessenger: WsMessengerProvider,
-    public serviciosManager: ServiciosManagerProvider
+    public serviciosManager: ServiciosManagerProvider,
+    public subscriptionManager: SubscriptionManagerProvider
   ) {
     this.startdate = new Date().getTime();
     this.initializeApp();
@@ -97,7 +99,12 @@ export class MyApp {
       //if logged in set session and userdata
       this.userData.setSessionData(connec_Data);
       await this.userData.loginSetData(connec_Data['user']['uid']);
+      await this.subscriptionManager.loadSubscription();
       await this.docMan.initDoctoresUids();
+      await this.subscriptionManager.loadDoctorsSubscriptions();
+      console.log('docs before filter active',this.docMan.docData.doctoresIDs);
+      this.docMan.filterActiveDoctors();
+      console.log('docs after filter active',this.docMan.docData.doctoresIDs);
       await this.citasManager.requestCitas().toPromise();
       this.serviciosManager.loadServicios();
       console.log(this.citasManager.citasData.citas);
