@@ -9,6 +9,7 @@ import { LoaderProvider } from '../../providers/loader/loader';
 import { AlertProvider } from '../../providers/alert/alert';
 import { SubusersDataProvider } from '../../providers/subusers-data/subusers-data';
 import { SubusersManagerProvider } from '../../providers/subusers-manager/subusers-manager';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
 
 /**
  * Generated class for the UsuariosPage page.
@@ -35,7 +36,8 @@ export class UsuariosPage {
     public loader: LoaderProvider,
     public alert: AlertProvider,
     public subuserData: SubusersDataProvider,
-    public subusersManager: SubusersManagerProvider
+    public subusersManager: SubusersManagerProvider,
+    public permissions: PermissionsProvider
   ) {
     //this.usersd = new Array();
   }
@@ -196,7 +198,11 @@ export class UsuariosPage {
 
 
 
-  removeSubUserFromSubs( userd ){
+  async removeSubUserFromSubs( userd ){
+    this.loader.presentLoader('removiendo usuario');
+    await this.subusersManager.removeSubuser(userd);
+    console.log('is removed yet?');
+    this.loader.dismissLoader();
     /*let loader = this.loadingCtrl.create({
       content: "removiendo usuario . . ."
     });

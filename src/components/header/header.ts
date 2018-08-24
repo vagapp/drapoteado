@@ -5,6 +5,7 @@ import { NavController, LoadingController, ModalController, PopoverController } 
 import { Citas } from '../../providers/user-data/citas';
 import { NotificationsDataProvider } from '../../providers/notifications-data/notifications-data';
 import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
 
 
 /**
@@ -33,7 +34,8 @@ export class HeaderComponent{
     public popoverCtrl: PopoverController,
     public modalCtrl: ModalController,
     public notificationData: NotificationsDataProvider,
-    public notiMan: NotificationsManagerProvider
+    public notiMan: NotificationsManagerProvider,
+    public perm:PermissionsProvider
   ) {
     //this.pagename = this.navCtrl.getActive().name;
     this.authObservable = userData.AuthSubject;

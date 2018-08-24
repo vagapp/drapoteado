@@ -8,6 +8,7 @@ import { NotificationsManagerProvider } from '../../providers/notifications-mana
 import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 import { ReportesDataProvider } from '../../providers/reportes-data/reportes-data';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 @IonicPage({
@@ -27,8 +28,10 @@ export class HomePage {
     public userMan: DrupalUserManagerProvider,
     public citasPresentator: CitasPresentatorProvider,
     public reportPresentator: ReportPresentatorProvider,
-    public reportesData: ReportesDataProvider
+    public reportesData: ReportesDataProvider,
+    public permissions: PermissionsProvider
   ) {
+    //console.log('hello',permissions.subsData.subscription);
   }
 
   async ionViewDidLoad(){
@@ -74,10 +77,11 @@ export class HomePage {
     this.navCtrl.setRoot("FacturacionPage");
   }
   openRegister(){
-    /*let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
+    let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
     Modal.onDidDismiss(data => {});
-    Modal.present({});*/
+    Modal.present({});
   }
+  
   openCitas(){
     this.navCtrl.setRoot("CitasPage");
   }

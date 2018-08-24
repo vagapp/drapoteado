@@ -3,6 +3,7 @@ import { NavController, NavParams, ViewController, IonicPage } from 'ionic-angul
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
 import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
+import { NotificationsDataProvider } from '../../providers/notifications-data/notifications-data';
 
 /**
  * Generated class for the NotificationPopPage page.
@@ -21,7 +22,8 @@ export class NotificationPopPage {
     public navParams: NavParams,
     public userData: UserDataProvider,
     public viewCtrl: ViewController,
-    public notiMan: NotificationsManagerProvider
+    public notiMan: NotificationsManagerProvider,
+    public notiData: NotificationsDataProvider
   ) {
   }
 

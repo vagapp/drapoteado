@@ -10,6 +10,7 @@ import { WebsocketServiceProvider } from '../../providers/websocket-service/webs
 import { AlertProvider } from '../../providers/alert/alert';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
 
 /**
  * Generated class for the NuevacitaModalPage page.
@@ -42,7 +43,8 @@ export class NuevacitaModalPage {
     public loader: LoaderProvider,
     public alert: AlertProvider,
     public wsMessenger: WsMessengerProvider,
-    public docData: DoctoresDataProvider
+    public docData: DoctoresDataProvider,
+    public permissions: PermissionsProvider
   ) {
     console.log('GETTING CITA', navParams.get('cita'));
     let aux_node = navParams.get('cita');

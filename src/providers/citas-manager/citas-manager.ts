@@ -31,7 +31,6 @@ export class CitasManagerProvider {
   }
 
   requestCitas():Observable<any>{
-    console.log('requesting citas from docs',this.doctores.doctoresIDs);
     let observable = this.getCitasObservable().share();
     observable.subscribe(
       (val)=>{ console.log('obtained citas',val);this.setCitas(val);},
@@ -56,7 +55,7 @@ export class CitasManagerProvider {
     console.log('doctores',doctores);
     console.log('cajas',cajas);
     console.log('recepciones',recepciones);
-    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : 'all'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=${from}--${to}`;
+    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=${from}--${to}`;
     //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
     let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
     console.log('url getting citas',url);

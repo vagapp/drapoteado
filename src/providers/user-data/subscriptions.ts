@@ -168,13 +168,13 @@ export class subscriptions{
 
 
     removeSubUserFromSubs( userd ){
-        //Debugger.log(['trata de remover este usuario de esta subscripcion',userd]);
-        if(this.field_subusuarios){
-            //Debugger.log(['inde of this subuser', this.field_subusuarios.indexOf(userd['uid'])]);
+        this.field_subusuarios = this.field_subusuarios.filter((s_uid)=>{ return Number(s_uid) !== Number(userd['uid']) });
+        /*if(this.field_subusuarios){
+           
             let aux_index = this.field_subusuarios.indexOf(userd['uid']);
             if(aux_index !== -1)this.field_subusuarios.splice(aux_index,1);
-            //Debugger.log(['subusuarios after removing user from this index ,redy to save', this.field_subusuarios]);
-        }
+           
+        }*/
 
     }
 }

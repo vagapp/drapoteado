@@ -12,6 +12,7 @@ import { DoctoresManagerProvider } from '../providers/doctores-manager/doctores-
 import { WsMessengerProvider } from '../providers/ws-messenger/ws-messenger';
 import { ServiciosManagerProvider } from '../providers/servicios-manager/servicios-manager';
 import { SubscriptionManagerProvider } from '../providers/subscription-manager/subscription-manager';
+import { PermissionsProvider } from '../providers/permissions/permissions';
 
 
 
@@ -49,7 +50,8 @@ export class MyApp {
     public docMan: DoctoresManagerProvider,
     public wsMessenger: WsMessengerProvider,
     public serviciosManager: ServiciosManagerProvider,
-    public subscriptionManager: SubscriptionManagerProvider
+    public subscriptionManager: SubscriptionManagerProvider,
+    public perm: PermissionsProvider
   ) {
     this.startdate = new Date().getTime();
     this.initializeApp();
@@ -77,6 +79,7 @@ export class MyApp {
         if(this.userData.userData.uid !== 0) this.rootPage = 'HomePage';
         loading.dismiss();
         this.loaddate = new Date().getTime();
+       
         this.wsMessenger.generateMessage(
           [76],
           'loadedReport',
@@ -102,12 +105,14 @@ export class MyApp {
       await this.subscriptionManager.loadSubscription();
       await this.docMan.initDoctoresUids();
       await this.subscriptionManager.loadDoctorsSubscriptions();
-      console.log('docs before filter active',this.docMan.docData.doctoresIDs);
+      console.log('subscription initload is', this.subscriptionManager.subsData.subscription);
+      console.log('docs before filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
       this.docMan.filterActiveDoctors();
-      console.log('docs after filter active',this.docMan.docData.doctoresIDs);
+      console.log('docs after filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
       await this.citasManager.requestCitas().toPromise();
       this.serviciosManager.loadServicios();
       console.log(this.citasManager.citasData.citas);
+      console.log('docs end initload',JSON.stringify(this.docMan.docData.doctoresIDs));
       //this.wsMessenger.testCitaSend();
    }
 }

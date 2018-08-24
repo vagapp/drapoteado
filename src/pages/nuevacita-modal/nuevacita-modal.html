@@ -20,12 +20,12 @@
               <input [(ngModel)]="this.cita.data.field_paciente.und[0].value" name="field_paciente" type="text"/>
           </div>
           <!--<div class="ModalInput_input" *ngIf="!(this.userData.userData.field_tipo_de_usuario.und[0].value == 1)">-->
-            <div class="ModalInput_input" *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]);" >
+            <div class="ModalInput_input" *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" >
                 <b>Doctor:</b>
               <select [(ngModel)]="this.cita.data.field_cita_doctor.und[0]"  name="field_cita_doctor" class="input_select input">
-                  <option *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="0" >SELECT</option>
+                  <option *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="0" >SELECT</option>
                   <option *ngFor="let doc of this.docData.doctores"  value="{{doc.Uid}}" >{{doc.name}} / {{doc.field_alias}} </option>
-                  <option *ngIf="this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="{{this.userData.userData.uid}}">{{this.userData.userData.name}}</option>
+                  <option *ngIf="this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="{{this.userData.userData.uid}}">{{this.userData.userData.name}}</option>
                 </select>
               </div>
           <div class="ModalInput_input">

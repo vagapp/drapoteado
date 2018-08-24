@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserDataProvider } from '../user-data/user-data';
+import { UserDataProvider, userd } from '../user-data/user-data';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 import { Observable } from 'rxjs/Observable';
 import { BaseUrlProvider } from '../base-url/base-url';
 import { subscriptions } from '../user-data/subscriptions';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
+import { PlanesDataProvider } from '../planes-data/planes-data';
+import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-manager';
 
 /*
   Generated class for the SubscriptionManagerProvider provider.
@@ -22,7 +24,9 @@ export class SubscriptionManagerProvider {
     public userData: UserDataProvider,
     public subsData: SubscriptionDataProvider,
     public docData: DoctoresDataProvider,
-    public bu: BaseUrlProvider
+    public planesData: PlanesDataProvider,
+    public bu: BaseUrlProvider,
+    public nodeManager: DrupalNodeManagerProvider
   ) {
     
   }
@@ -34,7 +38,8 @@ export class SubscriptionManagerProvider {
     console.log('sus_data', sus_data);
     this.subsData.subscription = new subscriptions();
     this.subsData.subscription.setData(sus_data[0]);
-    console.log(this.subsData.subscription);
+    this.subsData.subscription.setPlanFromList(this.planesData.planes);
+    console.log('subscription is ',this.subsData.subscription);
    }
   }
 
@@ -73,6 +78,13 @@ export class SubscriptionManagerProvider {
     });
     if(subs) ret = true;
     return ret;
+  }
+
+  async removeSubuser( user: userd){
+    this.subsData.subscription.removeSubUserFromSubs(user);
+    let obs = this.nodeManager.updateNode(this.subsData.subscription.getData());
+    await obs.toPromise();
+    console.log('sub removed and saved');
   }
 
 

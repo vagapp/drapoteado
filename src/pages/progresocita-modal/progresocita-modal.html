@@ -22,7 +22,7 @@
                     <tr>
                         <th>no</th>
                         <th>Paciente</th>
-                        <th *ngIf="!(userData.checkUserPermission([userData.TIPO_DOCTOR]))">Doctor</th>
+                        <th *ngIf="!(permissions.checkUserPermission([userData.TIPO_DOCTOR]))">Doctor</th>
                         <th> Tiempo Transcurrido:  <span class="fontHigh midFont">{{progressController.activeCita.duracionText }} </span></th>
                      </tr>
                 </thead>
@@ -30,7 +30,7 @@
                     <tr>
                         <td>01</td>
                         <td>{{progressController.activeCita.data.field_paciente.und[0].value}}</td>
-                        <td *ngIf="!(userData.checkUserPermission([userData.TIPO_DOCTOR]))">{{progressController.activeCita.data.doctor_name}}/ {{progressController.activeCita.data.doctor_alias}}</td>
+                        <td *ngIf="!(permissions.checkUserPermission([userData.TIPO_DOCTOR]))">{{progressController.activeCita.data.doctor_name}}/ {{progressController.activeCita.data.doctor_alias}}</td>
                         <td> </td>
                     </tr>
                 </tbody>
@@ -52,7 +52,7 @@
                     {{added.title}} - <span class="fontSecondary">${{added.costo}}</span> 
                   </div>
                   </div>
-                  <div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA) && userData.checkUserPermission([userData.TIPO_DOCTOR])">
+                  <div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA) && permissions.checkUserPermission([userData.TIPO_DOCTOR])">
                     <div class="registerInput">
                       <select [(ngModel)]="progressController.selectedService"  name="selectedService" class="input_select input" >
                           <option selected disabled value="0">Select</option>
@@ -72,7 +72,7 @@
               <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_ACTIVA)" class="floatRight"><span class="fontSecondary">${{progressController.costoCita}}</span> <ion-icon name="menu"></ion-icon> </span>
               <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO)" class="floatRight"><span class="fontSecondary">${{progressController.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
               costo
-              <div *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO) && userData.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA])">
+              <div *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA])">
               <b>Formas de Pago</b>
               <div class="ModalInput_input">
                     Efectivo

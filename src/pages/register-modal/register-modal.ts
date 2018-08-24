@@ -8,6 +8,8 @@ import { subscriptions } from '../../providers/user-data/subscriptions';
 import { Clipboard } from '@ionic-native/clipboard';
 import { CordovaAvailableProvider } from '../../providers/cordova-available/cordova-available';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
 
 
 declare var Stripe;
@@ -53,11 +55,14 @@ export class RegisterModalPage {
     public alertCtrl: AlertController,
     public clipboard: Clipboard,
     public ica: CordovaAvailableProvider,
-    public userMan: DrupalUserManagerProvider
+    public userMan: DrupalUserManagerProvider,
+    public permissions: PermissionsProvider,
+    public subsData: SubscriptionDataProvider
   ) {
   }
 
   ionViewDidLoad() {
+    console.log(this.subsData.subscription);
     //Debugger.log(['userdata',this.userData.userData]);
     //Debugger.log(['ionViewDidLoad RegisterModalPage']);
     //Debugger.log(['uid on register',this.userData.userData.uid]);
@@ -208,7 +213,7 @@ export class RegisterModalPage {
     });
     loading.present();
    // Debugger.log(['validation passed como hacer una suscripcion por stripe = 0']);
-    if(this.userData.subscription.nid === null){
+    if(this.subsData.subscription.nid === null){
       //Debugger.log(['new subscription']);
       let aux_sus = subscriptions.getEmptySuscription();
       aux_sus.plan = this.selected_plan;
@@ -352,7 +357,12 @@ export class RegisterModalPage {
   }
 
   checkStripeSetup(){
-    return (!this.isnew && this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) && ( this.userData.subscription === null || this.userData.subscription.plan === null) );
+    let ret = (
+      !this.isnew && 
+      this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) 
+      && ( this.subsData.subscription === null || this.subsData.subscription.plan === null) );
+      console.log('check stripe setup',ret);
+      return ret;
   }
 
   setupStripe(){

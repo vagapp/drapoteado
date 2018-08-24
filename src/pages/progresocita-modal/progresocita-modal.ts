@@ -11,13 +11,8 @@ import { AlertProvider } from '../../providers/alert/alert';
 import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
 import { CitaProgressControllerProvider } from '../../providers/cita-progress-controller/cita-progress-controller';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
 
-/**
- * Generated class for the ProgresocitaModalPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -38,7 +33,8 @@ export class ProgresocitaModalPage {
     public citasMan: CitasManagerProvider,
     public notiMan: NotificationsManagerProvider,
     public citasPresentator: CitasPresentatorProvider,
-    public progressController: CitaProgressControllerProvider
+    public progressController: CitaProgressControllerProvider,
+    public permissions: PermissionsProvider
   ) {
   }
 

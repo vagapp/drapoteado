@@ -7,6 +7,7 @@ import { LoaderProvider } from '../../providers/loader/loader';
 import { ReportesManagerProvider } from '../../providers/reportes-manager/reportes-manager';
 import { ReporteCitasProvider } from '../../providers/reporte-citas/reporte-citas';
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
 
 
 /**
@@ -32,7 +33,8 @@ export class ReporteModalPage {
     public viewCtrl:ViewController,
     public reportesManager: ReportesManagerProvider,
     public loader: LoaderProvider,
-    public reportPresentator: ReportPresentatorProvider
+    public reportPresentator: ReportPresentatorProvider,
+    public permissions:PermissionsProvider
   ) {
    
   }
