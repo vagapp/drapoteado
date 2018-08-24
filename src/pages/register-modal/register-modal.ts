@@ -10,6 +10,9 @@ import { CordovaAvailableProvider } from '../../providers/cordova-available/cord
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
+import { AlertProvider } from '../../providers/alert/alert';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 
 
 declare var Stripe;
@@ -57,7 +60,10 @@ export class RegisterModalPage {
     public ica: CordovaAvailableProvider,
     public userMan: DrupalUserManagerProvider,
     public permissions: PermissionsProvider,
-    public subsData: SubscriptionDataProvider
+    public subsData: SubscriptionDataProvider,
+    public subsManager: SubscriptionManagerProvider,
+    public alert: AlertProvider,
+    public loader: LoaderProvider
   ) {
   }
 
@@ -81,27 +87,22 @@ export class RegisterModalPage {
   }
 
 
-  actionUpdate(){
-    let loading = this.loadingCtrl.create({
+  async actionUpdate(){
+    /*let loading = this.loadingCtrl.create({
       content: 'actualizando...'
     });
-
+*/
     //Debugger.log(['update not supported yet']);
     //revisar contraseñas
     //Debugger.log([this.userData.userData.pass]);
-    if(!this.basicValidation()){
-      return 0;
-    }
-    
-    loading.present();
+    if(!this.basicValidation()){return 0;}
+    this.loader.presentLoader('Actualizando...');
     let aux_userData = JSON.parse(JSON.stringify(this.userData.userData));
     delete aux_userData.field_sub_id;
     delete aux_userData.field_tipo_de_usuario;
-    this.userMan.updateUserd(aux_userData).subscribe(
-      (val)=>{
-        loading.dismiss();
-      }
-    );
+    let res = await this.userMan.updateUserd(aux_userData).toPromise();
+    this.loader.dismissLoader();
+    /*
     /*this.userData.updateUser().subscribe(
       (val)=>{
         loading.dismiss();
@@ -112,14 +113,8 @@ export class RegisterModalPage {
   }
 
   actionRegister(){
-    let loading = this.loadingCtrl.create({
-      content: 'Registrando...'
-    });
-    
-    if(!this.basicValidation()){
-      return 0;
-    }
-    loading.present();
+    if(!this.basicValidation()){return 0;}
+    this.loader.presentLoader('Registrando ...');
   let cloneData = JSON.parse(JSON.stringify(this.userData.userData));
   delete cloneData.field_sub_id;
   cloneData.field_useremail.und[0].email = this.userData.userData.mail;
@@ -136,11 +131,7 @@ export class RegisterModalPage {
     let register_observer = this.userData.register(cloneData);
     register_observer.subscribe(
       (val) => {
-        //Debugger.log(["sucess register on modal",val]);
         window.location.reload();
-        /*loading.dismiss();
-        this.presentAlert('Se ha completado su registro, favor de iniciar sesión',"Registro Completo");*/
-        //this.dismiss();
       },
       response => {
         //Debugger.log(["POST call in error", response]);
@@ -150,38 +141,29 @@ export class RegisterModalPage {
             error_msg += `
             ${response.error.form_errors[key]}`;
           }
-          this.presentAlert(error_msg,'Error');
+          this.alert.presentAlert('Error', error_msg);
         }
-        loading.dismiss();
+       this.loader.dismissLoader();
       },
       () => {
-        //Debugger.log(["The POST observable is now completed."]);
+       
       });
   }
 
   basicValidation():boolean{
     let ret = true;
     if(this.userData.userData.pass && !this.passconfirm || !this.userData.userData.pass && this.passconfirm){
-      this.presentAlert('Confirmar contraseña.','Error');
+      this.alert.presentAlert('Error','Confirmar contraseña.');
     }
     if(this.userData.userData.pass && this.passconfirm && this.passconfirm.localeCompare(this.userData.userData.pass) !== 0){
       ret = false;
-      this.presentAlert('Las contraseñas no coinciden.','Error');
+      this.alert.presentAlert('Error','Las contraseñas no coinciden.');
     }
     return ret;
   }
 
   dismiss() {
     this.viewCtrl.dismiss();
-  }
-
-  presentAlert(msg:string,title:string){
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: msg,
-      buttons: ['Ok']
-      });
-      alert.present();
   }
 
   
@@ -197,24 +179,10 @@ export class RegisterModalPage {
   }
   
   suscribirse(){
-    //Debugger.log(['suscribirse']);
-    //Debugger.log(["card seleccionado",this.selected_source]);
-    if(this.selected_source === null){
-      //Debugger.log(['NO HAZ ELEGIDO METODO DE PAGO']);
-      return false;
-    }
-   // Debugger.log(["plan seleccionado",this.selected_plan]);
-    if(this.selected_plan === null){
-      //Debugger.log(['NO HAZ ELEGIDO PLAN']);
-      return false;
-    }
-    let loading = this.loadingCtrl.create({
-      content: 'Subscribiendo...'
-    });
-    loading.present();
-   // Debugger.log(['validation passed como hacer una suscripcion por stripe = 0']);
+    if(this.selected_source === null){return false;}
+    if(this.selected_plan === null){return false;}
+    this.loader.presentLoader('Subscribiendo ...');
     if(this.subsData.subscription.nid === null){
-      //Debugger.log(['new subscription']);
       let aux_sus = subscriptions.getEmptySuscription();
       aux_sus.plan = this.selected_plan;
       aux_sus.field_plan_sus = this.selected_plan.nid;
@@ -223,36 +191,18 @@ export class RegisterModalPage {
       aux_sus.field_doctores.push(this.userData.userData.uid);
       aux_sus.field_stripe_src_sus_id = this.selected_source.src_id;
       aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
-      /*this.userData.generateNewSus(aux_sus).subscribe((val)=>{
-       // Debugger.log(['we got this',val]);
-        this.userData.subscription.nid = val['nid'];
-        this.userData.userData.field_sub_id={und:new Array()};
-        this.userData.userData.field_sub_id.und.push(val['nid']);
-        //this.userData.userData.field_sub_id["und"]["0"] =  val['nid'];
-        this.userData.updateUser().subscribe(
-          (val)=>{
-            //Debugger.log(['se guardo el stripe sub_id en usuario']);
-            window.location.reload();
-          }
-        );
-        //Debugger.log(['subs updated to this, update user please',this.userData.subscription.nid]); 
-      });*/
-    }else{
-      //Debugger.log(['UPDATE SUSCRIPTION NOT IMPLEMENTED YET']);
-      loading.dismiss();
+      let res = this.subsManager.generateNewSus(aux_sus).toPromise();
+      if(res) window.location.reload(); else  this.loader.dismissLoader();
     }
   }
 
 
   invitationSub(){
-    if(this.invitationCode.localeCompare('all') === 0){
-      //Debugger.log(['all not permited']);
+    console.log('not implemented');
+    return false;
+    /*if(this.invitationCode.localeCompare('all') === 0){
       return false;
-    }
-    let loading = this.loadingCtrl.create({
-      content: 'Buscando codigo...'
-    });
-    loading.present();
+    }*/
     //Debugger.log(['joining with',this.invitationCode]);
     
     /*this.userData.cargarSubscription(this.invitationCode).subscribe(
@@ -296,6 +246,15 @@ export class RegisterModalPage {
   }
 
   popRemoveDoctorSus( uid ){
+    console.log('not implemented');
+    return false;
+    /*this.alert.chooseAlert(
+      'Remover Doctor',
+      '¿Está seguro que desea remover este doctor de la subscripción?',
+      ()=>{},
+      ()=>{this.removeDoctorSus(uid);}
+    );*/
+    /*
     let alert = this.alertCtrl.create({
       title: 'Remover Doctor',
       message: '¿Está seguro que desea remover este doctor de la subscripción?',
@@ -315,13 +274,15 @@ export class RegisterModalPage {
         }
       ]
     });
-    alert.present();
+    alert.present();*/
   }
 
   removeDoctorSus( uid ){
-    if(this.userData.userData.uid === uid){
+    console.log('not implemented');
+    return false;
+    /*if(this.userData.userData.uid === uid){
       return false;
-    }
+    }*/
     /*let loading = this.loadingCtrl.create({
       content: 'Eliminando usuario'
     });

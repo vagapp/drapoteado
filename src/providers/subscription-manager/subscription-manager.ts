@@ -87,6 +87,16 @@ export class SubscriptionManagerProvider {
     console.log('sub removed and saved');
   }
 
+  generateNewSus( suscription ){return this.nodeManager.generateNewNode(suscription.getData());}
+  updateSus( suscription ){return this.nodeManager.updateNode(suscription.getData());}
+  deletesSus( suscription ){return this.nodeManager.deleteNode(suscription.getData());}
+  generateUserSuscription(){
+    this.generateNewSus(this.subsData.subscription);
+  }
+  updateUserSuscription(){
+    this.updateSus(this.subsData.subscription);
+  }
+
 
   /*
   cargarSubscription( code:string = null){

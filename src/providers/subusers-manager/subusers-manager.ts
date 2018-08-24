@@ -5,6 +5,8 @@ import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-ma
 import { Observable } from 'rxjs/Observable';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { SubusersDataProvider } from '../subusers-data/subusers-data';
+import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
+import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-manager';
 
 /*
   Generated class for the SubusersManagerProvider provider.
@@ -19,7 +21,9 @@ export class SubusersManagerProvider {
     public subusersData: SubusersDataProvider,
     public userData: UserDataProvider,
     public userMan: DrupalUserManagerProvider,
-    public docData: DoctoresDataProvider
+    public docData: DoctoresDataProvider,
+    public subsData: SubscriptionDataProvider,
+    public nodeManager: DrupalNodeManagerProvider
   ) {
     console.log('Hello SubusersManagerProvider Provider');
   }
@@ -56,6 +60,28 @@ export class SubusersManagerProvider {
       this.subusersData.addUser(aux_user);
     }
 
+      /**
+       * 
+       * @param user user to check if it has been created by this user
+       * checks if this user is registered on this subscription. meaning it has been created by this user.
+       */
+    checkIsOwnSubuser(user:userd){
+      return this.subsData.subscription.field_subusuarios.find((uid)=>{ return Number(uid) === Number(user.uid)}) ? true : false;
+    }
+
+    /**
+     * this removes the user from subscription rendering the user useless.
+    */
+    async removeUserFromSubscription( user: userd){
+      if(this.checkIsOwnSubuser(user)){
+        this.subsData.subscription.removeSubUserFromSubs(user);
+        let obs = this.nodeManager.updateNode(this.subsData.subscription.getData());
+        await obs.toPromise();
+        //await this.removeSubuser(user);
+        console.log('sub removed and saved');
+      }
+    }
+
 
     /*
     * remove subuser takes this doctor out of the list of the subuser, 
@@ -88,4 +114,5 @@ export class SubusersManagerProvider {
       if(!user.field_doctores.und){ user.field_doctores.und = new Array();}
       user.field_doctores.und.push(uid);
     }
+
   }

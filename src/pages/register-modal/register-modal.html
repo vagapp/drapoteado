@@ -8,11 +8,11 @@
     <div class="modal_closer" *ngIf="!this.isnew" (click)="this.dismiss();">Volver</div>
       <div *ngIf="!isnew"  class="fact_page_wrapper">
         <div *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY])" class="access_code_opt"><span (click)="showInvitation();" class="access_code_opt_link">Tengo un código de invitación</span></div>
-        <div *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY]) && invitationshow" class="acesss_code_show"><ion-item class="acesss_code_show_input">
+        <!--<div *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY]) && invitationshow" class="acesss_code_show"><ion-item class="acesss_code_show_input">
             <ion-input placeholder="Código de invitación" [(ngModel)]="invitationCode"></ion-input>
           </ion-item>
           <button class="generalButton largeButton bgColorPrimary" (click)="invitationSub()" >Enviar</button>  
-        </div>
+        </div>-->
       <div class="fact_subs_info fac_tsection">
         <div class="fact_myplan" *ngIf="permissions.checkUserSuscription([userData.PLAN_ANY])">
           <span class="myplan_block">Plan activo: {{subsData.subscription.plan.title}}</span>

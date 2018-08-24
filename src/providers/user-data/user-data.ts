@@ -250,15 +250,15 @@ export class UserDataProvider {
   }
 
 
-  register( data = null){
-    let aux_registerdata = null;
+  register( data = this.userData){
+    /*let aux_registerdata = null;
     if(data){
       aux_registerdata = data;
     }else{
       aux_registerdata = this.userData;
-    } 
-    let body = JSON.stringify(aux_registerdata);
-    Debugger.log(['register data sending',body]);
+    } */
+    let body = JSON.stringify(data);
+    //Debugger.log(['register data sending',body]);
     let url = this.bu.endpointUrl+'user/register';
     let register_observer = this.http.post(url,body);
     return register_observer.share();

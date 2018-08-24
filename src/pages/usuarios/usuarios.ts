@@ -145,6 +145,7 @@ export class UsuariosPage {
   async removeUsuario( userd ){
     this.loader.presentLoader("removiendo usuario . . .");
     await this.subusersManager.removeSubuser(userd);
+    console.log('is removed yet?');
     this.loader.dismissLoader();
     //remove this user from array of doctors
     /*SubusersManagerProvider.removeDoctorFromSubUser(userd, this.userData.userData.uid);
@@ -199,8 +200,9 @@ export class UsuariosPage {
 
 
   async removeSubUserFromSubs( userd ){
-    this.loader.presentLoader('removiendo usuario');
-    await this.subusersManager.removeSubuser(userd);
+    this.loader.presentLoader('Eliminando usuario ...');
+    //await this.subusersManager.removeSubuser(userd);
+    await this.subusersManager.removeUserFromSubscription(userd);
     console.log('is removed yet?');
     this.loader.dismissLoader();
     /*let loader = this.loadingCtrl.create({
