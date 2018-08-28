@@ -8,6 +8,9 @@ import { subscriptions } from '../user-data/subscriptions';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { PlanesDataProvider } from '../planes-data/planes-data';
 import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-manager';
+import { planes } from '../user-data/planes';
+import { sources } from '../user-data/sources';
+import { PermissionsProvider } from '../permissions/permissions';
 
 /*
   Generated class for the SubscriptionManagerProvider provider.
@@ -26,7 +29,8 @@ export class SubscriptionManagerProvider {
     public docData: DoctoresDataProvider,
     public planesData: PlanesDataProvider,
     public bu: BaseUrlProvider,
-    public nodeManager: DrupalNodeManagerProvider
+    public nodeManager: DrupalNodeManagerProvider,
+    public permissions: PermissionsProvider
   ) {
     
   }
@@ -78,6 +82,47 @@ export class SubscriptionManagerProvider {
     });
     if(subs) ret = true;
     return ret;
+  }
+  
+
+  async subscribe(plan:planes, source:sources){
+    console.log('subscribing');
+    let ns_res = await this.getSubscribeObs(plan,source).toPromise();
+    console.log('this');
+    if(ns_res && this.checkForSubscription()) 
+    await this.deletesSus(this.subsData.subscription).toPromise();
+  }
+
+  getSubscribeObs(plan:planes, source:sources):Observable<any>{
+    console.log('getSubscribeObs');
+    console.log(plan);
+    console.log(source);
+    let ret = null;
+    if(!this.permissions.checkUserPlanHolder()) return ret;
+    let aux_sus = subscriptions.getEmptySuscription();
+    if(this.checkForSubscription()){
+      aux_sus.field_doctores = this.subsData.subscription.field_doctores;
+      aux_sus.field_subusuarios = this.subsData.subscription.field_subusuarios;
+      aux_sus.plan = plan;
+      aux_sus.field_plan_sus = plan.nid;
+      aux_sus.field_plan_holder = this.userData.userData.uid;
+      aux_sus.field_stripe_src_sus_id = source.src_id;
+      aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
+    }else{
+      aux_sus.plan = plan;
+      aux_sus.field_plan_sus = plan.nid;
+      aux_sus.field_plan_holder = this.userData.userData.uid;
+      aux_sus.field_doctores = new Array();
+      aux_sus.field_doctores.push(this.userData.userData.uid);
+      aux_sus.field_stripe_src_sus_id = source.src_id;
+      aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
+    }
+    ret = this.generateNewSus(aux_sus);
+    return ret;
+  }
+
+  checkForSubscription(){
+    return this.subsData.subscription !== null ? true: false;
   }
 
   async removeSubuser( user: userd){

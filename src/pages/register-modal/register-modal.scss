@@ -164,8 +164,27 @@ page-register-modal {
 
 
 
+.fact_page_wrapper{
+    padding-top: 40px;
+    width:100%;
+    text-align: center;
+}
 
+.subscribe_wrap{
+    width: 100%;
+    display: flex;
+    flex: 2 1
+}
 
+.fact_label_main{
+    font-size: 1.5em;
+}
+
+.left_label{
+    width: 100%;
+    text-align: left;
+    display: block;
+}
 
 
 
@@ -207,12 +226,6 @@ page-register-modal {
         font-weight: bold;
       }
 
-      .fact_page_wrapper{
-        display: flex;
-        width: 100%;
-        flex-flow: row;
-        flex-wrap: wrap;
-      }
 
       .fact_section{
         display: flex;
@@ -226,8 +239,18 @@ page-register-modal {
         padding: 40px;
     }
 
+    .nopayment_label{
+        font-size: 1.2em;
+        padding: 20px;
+    }
+
+    .sources_wrapper{
+        min-height: 100px;
+    }
+
     .fact_src_unit, .fact_pna_item{
       width: 100%;
+      max-width: 500px;
       height: 50px;
       display: flex;
       align-items: center;
@@ -236,10 +259,20 @@ page-register-modal {
       background-color: lightgray;
       padding-left: 30px;
       cursor: pointer;
+      margin-bottom: 5px;
+    border-radius: 4px 4px 4px 4px;
+    -moz-border-radius: 4px 4px 4px 4px;
+    -webkit-border-radius: 4px 4px 4px 4px;
+    border: 0px solid #000000;
   }
   
   .selectedsrc, .selectedplan{
-      background-color:  #94BA3A;
+    background-color: #50A3C7;
+    color: white;
+  }
+
+  .disabledsubbtn{
+      background-color: gray;
   }
 
   .forwrapper{
@@ -254,15 +287,17 @@ page-register-modal {
   }
 
   .checkout{
+    width: 100%;
     display: flex;
-    flex-flow: row;
-    flex-wrap: wrap; 
+    flex-flow: column;
+    align-items: flex-end;
+    padding: 20px;
+    padding-right: 95px;
   }
 
   .checkout div{
     display: inline-block;
     min-width: 300px;
-    width: 75%;
   }
 
   .checkout .button_section{

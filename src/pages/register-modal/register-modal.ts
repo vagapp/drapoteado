@@ -13,6 +13,7 @@ import { SubscriptionDataProvider } from '../../providers/subscription-data/subs
 import { AlertProvider } from '../../providers/alert/alert';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
+import { PlanesDataProvider } from '../../providers/planes-data/planes-data';
 
 
 declare var Stripe;
@@ -35,6 +36,10 @@ export class RegisterModalPage {
   grupoOtro:string = null;
   hospitalOotro:string = null; 
   onHospital:boolean = null;
+
+  get enabledButton():boolean{
+    return this.selected_source !== null && this.selected_plan !== null;
+  }
   
   get onCordova(){
     return this.ica.isCordovaAvailable;
@@ -63,22 +68,15 @@ export class RegisterModalPage {
     public subsData: SubscriptionDataProvider,
     public subsManager: SubscriptionManagerProvider,
     public alert: AlertProvider,
-    public loader: LoaderProvider
+    public loader: LoaderProvider,
+    public planesData: PlanesDataProvider
   ) {
   }
 
   ionViewDidLoad() {
     console.log(this.subsData.subscription);
-    //Debugger.log(['userdata',this.userData.userData]);
-    //Debugger.log(['ionViewDidLoad RegisterModalPage']);
-    //Debugger.log(['uid on register',this.userData.userData.uid]);
     this.isnew = !this.userData.checkIsLoggedin();
-    /*
-    setTimeout(()=>{
-      
-    },3000);
-   */
-    
+    console.log('openingregister modal isnew? ',this.isnew);
   }
 
   ionViewDidEnter(){
@@ -88,13 +86,6 @@ export class RegisterModalPage {
 
 
   async actionUpdate(){
-    /*let loading = this.loadingCtrl.create({
-      content: 'actualizando...'
-    });
-*/
-    //Debugger.log(['update not supported yet']);
-    //revisar contraseñas
-    //Debugger.log([this.userData.userData.pass]);
     if(!this.basicValidation()){return 0;}
     this.loader.presentLoader('Actualizando...');
     let aux_userData = JSON.parse(JSON.stringify(this.userData.userData));
@@ -102,14 +93,6 @@ export class RegisterModalPage {
     delete aux_userData.field_tipo_de_usuario;
     let res = await this.userMan.updateUserd(aux_userData).toPromise();
     this.loader.dismissLoader();
-    /*
-    /*this.userData.updateUser().subscribe(
-      (val)=>{
-        loading.dismiss();
-      }
-    );*/
-    
-
   }
 
   actionRegister(){
@@ -178,11 +161,19 @@ export class RegisterModalPage {
     this.userData.setcssplanselected(input_plan);
   }
   
-  suscribirse(){
-    if(this.selected_source === null){return false;}
-    if(this.selected_plan === null){return false;}
+  async suscribirse(){
+    if(!this.enabledButton) return false;
     this.loader.presentLoader('Subscribiendo ...');
-    if(this.subsData.subscription.nid === null){
+    console.log(this.selected_source);
+    console.log(this.selected_plan);
+    await this.subsManager.subscribe( this.selected_plan,this.selected_source);
+    /*console.log('subscribing');
+    let ns_res = await this.subsManager.getSubscribeObs( this.selected_plan,this.selected_source).toPromise();
+    if(ns_res && this.subsManager.checkForSubscription()) 
+    await this.subsManager.deletesSus(this.subsData.subscription).toPromise();*/
+    console.log('before this');
+    window.location.reload();
+    /*if(this.subsData.subscription.nid === null){
       let aux_sus = subscriptions.getEmptySuscription();
       aux_sus.plan = this.selected_plan;
       aux_sus.field_plan_sus = this.selected_plan.nid;
@@ -193,7 +184,7 @@ export class RegisterModalPage {
       aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
       let res = this.subsManager.generateNewSus(aux_sus).toPromise();
       if(res) window.location.reload(); else  this.loader.dismissLoader();
-    }
+    }*/
   }
 
 
@@ -322,12 +313,13 @@ export class RegisterModalPage {
       !this.isnew && 
       this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) 
       && ( this.subsData.subscription === null || this.subsData.subscription.plan === null) );
-      console.log('check stripe setup',ret);
       return ret;
   }
 
   setupStripe(){
+    console.log('setting stripe');
     if(this.checkStripeSetup()){
+      console.log(' stripe checked and needed');
     let elements = this.stripe.elements();
     var style = {
       base: {
@@ -345,7 +337,7 @@ export class RegisterModalPage {
         iconColor: '#fa755a'
       }
     };
-
+    console.log('LF card elements');
     this.card = elements.create('card', { style: style });
     //let crd = document.getElementById("card-element");
     //Debugger.log([crd]);
@@ -362,17 +354,13 @@ export class RegisterModalPage {
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', event => {
       event.preventDefault();
-      let loading = this.loadingCtrl.create({
-        content: 'agregando tarjeta...'
-      });
-      loading.present();
-      this.stripe.createSource(this.card).then(result => {
+      this.loader.presentLoader('Agregando tarjeta...');
+      this.stripe.createSource(this.card).then( async result => {
         if (result.error) {
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
+          this.loader.dismissLoader();
         } else {
-          //Debugger.log(["result source added"]);
-          //console.log(JSON.stringify(result));
           let cu_src_data = {
                             id:result.source.id,
                             last4:result.source.card.last4,
@@ -380,18 +368,10 @@ export class RegisterModalPage {
                             brand:result.source.card.brand
                             };
           this.userData.userData.field_src_json_info['und'].push({value: JSON.stringify(cu_src_data)});
-          //Debugger.log(['userdatajson',this.userData.userData.field_src_json_info]);
-          /*console.log( this.userData.userData.field_src_json_info);*/
         }
-        this.userData.updateUser().subscribe(
-          (val)=>{
-            //Debugger.log(['se guardo el stripe source']);
-            this.loadSources();
-            loading.dismiss();
-          },(response)=>{
-            loading.dismiss();
-          }
-        );
+        let updateUser_res = await this.userData.updateUser().toPromise();
+        this.loadSources();
+        this.loader.dismissLoader();
       });
     });
   }

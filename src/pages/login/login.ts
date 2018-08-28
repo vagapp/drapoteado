@@ -6,6 +6,8 @@ import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-dat
 import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
 import { DoctoresManagerProvider } from '../../providers/doctores-manager/doctores-manager';
 import { AlertProvider } from '../../providers/alert/alert';
+import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
+import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
 //import { ToastController } from 'ionic-angular';
 //import { Debugger } from '../../providers/user-data/debugger';
 
@@ -35,7 +37,9 @@ export class LoginPage {
     public alert: AlertProvider,
     public docData: DoctoresDataProvider,
     public citasManager:CitasManagerProvider,
-    public docMan: DoctoresManagerProvider
+    public docMan: DoctoresManagerProvider,
+    public subscriptionManager: SubscriptionManagerProvider,
+    public serviciosManager: ServiciosManagerProvider
   ) {
   }
 
@@ -49,13 +53,24 @@ export class LoginPage {
     let login_observer = this.userData.login(this.username,this.password);
     await login_observer.subscribe(
       async (val) => {
-        this.userData.setSessionData(val);
-        await this.userData.loginSetData(val['user']['uid']);
-        await this.docMan.initDoctoresUids();
-        await this.citasManager.requestCitas().toPromise();
-        console.log(this.citasManager.citasData.citas);
-        this.loader.dismissLoader();
-        this.navCtrl.setRoot("HomePage");
+          //if logged in set session and userdata
+      this.userData.setSessionData(val);
+      await this.userData.loginSetData(val['user']['uid']);
+      /*await this.subscriptionManager.loadSubscription();
+      await this.docMan.initDoctoresUids();
+      await this.subscriptionManager.loadDoctorsSubscriptions();
+      console.log('subscription initload is', this.subscriptionManager.subsData.subscription);
+      console.log('docs before filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
+      this.docMan.filterActiveDoctors();
+      console.log('docs after filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
+      await this.citasManager.requestCitas().toPromise();
+      this.serviciosManager.loadServicios();
+      console.log(this.citasManager.citasData.citas);
+      console.log('docs end initload',JSON.stringify(this.docMan.docData.doctoresIDs));
+      /*this.rootPage = 'HomePage';
+      loading.dismiss();
+      this.loaddate = new Date().getTime();*/
+      location.reload();
       },
       response => {
           this.alert.presentAlert('Error',response.error);
@@ -63,13 +78,6 @@ export class LoginPage {
       });
     }
 
-  
-
-  actionOpenRegister(){
-    //console.log("open Register");
-    /*let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
-    Modal.present({});*/
-  }
 
   actionOpenRecover(){
     let Modal = this.modalCtrl.create("RecoverModalPage", undefined, { cssClass: "smallModal recoverModal" });
@@ -79,9 +87,8 @@ export class LoginPage {
   }
 
   openRegister(){
-    /*let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
-    Modal.onDidDismiss(data => {});
-    Modal.present({});*/
+    let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
+    Modal.present({});
   }
 
 

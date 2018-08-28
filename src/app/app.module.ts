@@ -52,6 +52,7 @@ import { CitaProgressControllerProvider } from '../providers/cita-progress-contr
 import { PermissionsProvider } from '../providers/permissions/permissions';
 
 
+
 //import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 //import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
 //import { Platform } from 'ionic-angular';
@@ -132,7 +133,7 @@ import { PermissionsProvider } from '../providers/permissions/permissions';
     ReporteServiciosProvider,
     DrupalNodeEditorProvider,
     CitaProgressControllerProvider,
-    PermissionsProvider
+    PermissionsProvider,
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

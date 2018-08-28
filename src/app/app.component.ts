@@ -68,6 +68,7 @@ export class MyApp {
 
 
   initializeApp() {
+    this.splashScreen.hide();
     this.rootPage = 'LoginPage';
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
@@ -79,7 +80,6 @@ export class MyApp {
         if(this.userData.userData.uid !== 0) this.rootPage = 'HomePage';
         loading.dismiss();
         this.loaddate = new Date().getTime();
-       
         this.wsMessenger.generateMessage(
           [76],
           'loadedReport',
@@ -116,11 +116,6 @@ export class MyApp {
       //this.wsMessenger.testCitaSend();
    }
 }
-
-
-
-
-
 
   openPage(page) {
     this.nav.setRoot(page.component);

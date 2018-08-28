@@ -78,7 +78,6 @@ export class HomePage {
   }
   openRegister(){
     let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
-    Modal.onDidDismiss(data => {});
     Modal.present({});
   }
   
