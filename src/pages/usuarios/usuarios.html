@@ -12,9 +12,12 @@
       <span class="spanBlock midFont"><b>Alta de Usuarios</b></span>
       <span class="spanBlock midSubFont">Da de alta a los usuarios que utilizarán esta aplicación en recepción, caja y Recepción & Caja (si es la misma persona)</span>
     </div>
-      <button class="bgColorSecondary generalButton floatRight" (click)="openNuevousuario()">Agregar Nuevo</button>
+    <div class="modalPage_btn_wrapper">
+      <button class="bgColorSecondary generalButton" (click)="openNuevousuario()">Agregar Nuevo</button>
+    </div>
   </div>
   <div class="Citas_grid result_wrapper">
+      <div class="subusers_subscription_div midFont">Sub-usuarios administrando citas de este doctor</div>
     <table class="results_table">
         <thead>
             <tr>
@@ -31,11 +34,31 @@
                   <img     *ngIf="this.permissions.checkUserPlanHolder()"  src="assets/imgs/editar.svg" class="icon_drapo" (click)="editUsuario(user)">
                   <button  *ngIf="user.field_doctores.und.indexOf(this.userData.userData.uid) >= 0"  (click)="removeUsuariopop(user)" class="bgColorPrimary generalButton tableButton">Remover</button>
                   <button  *ngIf="user.field_doctores.und.indexOf(this.userData.userData.uid) === -1"  (click)="agregarusuariopop(user)" class="bgColorPrimary generalButton tableButton">Agregar</button>
-                  <button  *ngIf="this.permissions.checkUserPlanHolder()"  (click)="deleteUsuario(user,true)" class="bgColorPrimary generalButton tableButton">Eliminar</button>
                 </td>
              </tr>
         </tbody>
     </table>
+    <div class="subusers_subscription_div midFont">Sub-usuarios afiliados a la suscripción <span class="subusers_subscription_number"> num: {{this.subuserData.subscriptionSubUsers.length}} / {{subusersLimit}} </span></div>
+    <table class="results_table">
+      <thead>
+          <tr>
+              <th>Usuario</th>
+              <th>Tipo de Usuario</th>
+              <th></th>
+           </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let user of this.subuserData.subscriptionSubUsers">
+              <td><b>{{user.uid}}</b>{{user.name}}</td>
+              <td class="fontHight">{{this.userData.getTipoUsuarioString(user.field_tipo_de_usuario.und[0])}}</td>
+              <td class="toolCol">
+                <img     *ngIf="this.permissions.checkUserPlanHolder()"  src="assets/imgs/editar.svg" class="icon_drapo" (click)="editUsuario(user)">
+                <button  *ngIf="user.field_doctores.und.indexOf(this.userData.userData.uid) === -1"  (click)="agregarusuariopop(user)" class="bgColorPrimary generalButton tableButton">Asignarme</button>
+                <button  *ngIf="this.permissions.checkUserPlanHolder()"  (click)="deleteUsuario(user,true)" class="bgColorPrimary generalButton tableButton">Eliminar</button>
+              </td>
+           </tr>
+      </tbody>
+  </table>
   </div>
 <footer></footer>
 </ion-content>

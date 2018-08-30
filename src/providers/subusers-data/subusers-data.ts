@@ -11,16 +11,44 @@ import { userd } from '../user-data/user-data';
 @Injectable()
 export class SubusersDataProvider {
   subUsers:userd[] = new Array();
+  subscriptionSubUsers: userd[] = new Array();
+  
+  static SUBUSER_CONSUMERS = 0;
+  static SUBUSERS_SUBSCRIPTION = 1;
   
   constructor() {
   }
 
-  addUser( user: userd ){
-    this.subUsers.push(user);
+  addUser( user: userd ){this.add(user);}
+  removeUser( user:userd  ){this.remove(user);}
+  checkUpdate(user: userd){return this.check(user);}
+
+  addUserSubs( user: userd ){console.log('add subusersSUBS'); this.add(user,this.subscriptionSubUsers);}
+  removeUserSubs( user:userd  ){this.remove(user,SubusersDataProvider.SUBUSERS_SUBSCRIPTION);}
+  checkUpdateSubs(user: userd){return this.check(user,this.subscriptionSubUsers);}
+
+
+  add( user: userd , list: Array<userd> = this.subUsers){
+    console.log('add subusersSUBS LIST IS',list); 
+    if(!this.check(user,list))
+    list.push(user);
   }
 
-  removeUser( user:userd  ){
-    this.subUsers = this.subUsers.filter((users)=>{ return Number(users.uid) !== Number(user.uid)});
+  remove( user:userd , list:number = SubusersDataProvider.SUBUSER_CONSUMERS){
+    switch( list ){
+      case SubusersDataProvider.SUBUSER_CONSUMERS: this.subUsers = this.subUsers.filter((users)=>{ return Number(users.uid) !== Number(user.uid)}); break;
+      case SubusersDataProvider.SUBUSERS_SUBSCRIPTION: this.subscriptionSubUsers = this.subscriptionSubUsers.filter((users)=>{ return Number(users.uid) !== Number(user.uid)}); break;
+    } 
+  }
+
+  check(user: userd , list: Array<userd> = this.subUsers){
+    let ret = false;
+    let found = list.find((users)=>{ return Number(users.uid) === Number(user.uid) });
+    if(found){
+      list[list.indexOf(found)] = user;
+      ret = true;
+    }
+    return ret;
   }
 
 

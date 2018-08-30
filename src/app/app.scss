@@ -34,6 +34,7 @@ ion-modal{
 
 
 
+
 ion-header{
     background: #C1272D;
     /*height: 80px;*/
@@ -359,6 +360,12 @@ border: 0px solid #000000;
     margin: 7px; 
 }
 
+.modalPage_btn_wrapper{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+}
+
 .modalCloser{
     display: none;
 }
@@ -517,8 +524,6 @@ border: 0px solid #000000;
         min-width: 1000px;
         width: 80%;
         height: 80%;
-        /*left: 10%;*/
-        /*top: 10%;*/
     }
 }
 
@@ -536,6 +541,9 @@ border: 0px solid #000000;
         height: 100% !important;
         min-width: auto;
     }
+    .subscribe_wrap{
+        flex-flow: column;
+    }
 
 }
 
@@ -544,7 +552,39 @@ border: 0px solid #000000;
         grid-template-columns: 1fr;
     }
 
+   
+
 }
+
+@media screen and (max-width: 768px){
+    ion-modal {
+        display: block;
+    }
+    .modal_closer {
+        width: 100%;
+        height: 80px;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: left;
+        -webkit-justify-content: left;
+        -ms-flex-pack: left;
+        justify-content: left;
+        -webkit-box-align: end;
+        -webkit-align-items: flex-end;
+        -ms-flex-align: end;
+        align-items: flex-end;
+        background: #C1272D;
+        padding-bottom: 10px;
+        padding-left: 20px;
+        font-size: 2rem;
+        color: white;
+    }
+
+  
+}
+
 
 @media screen and (max-width: 450px){
 

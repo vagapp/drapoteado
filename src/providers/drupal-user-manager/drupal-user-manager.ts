@@ -28,6 +28,7 @@ export class DrupalUserManagerProvider {
     if(ids && ids.length > 0){ ids_filter = `&args[2]=${ids.join(',')}`; oneprotection=true;}
     if(!oneprotection) doctorfilter = "?args[0]=-1" //esto evita que alguna tonteria te mande todos los usuarios del sistema, devolviendo nada
     let url = `${this.bu.endpointUrl}rest_users${doctorfilter}${codigofilter}${ids_filter}`;
+    console.log('user requesting url is',url);
     return this.http.get(url).share();
   }
 

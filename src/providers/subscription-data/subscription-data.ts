@@ -23,5 +23,13 @@ export class SubscriptionDataProvider {
   constructor() {
   }
 
+  getSubusersIDs():Array<number>{
+    let ret = new Array<number>();
+    if(this.subscription)
+    ret =  this.subscription.field_subusuarios;
+    console.log('getting subusers ids',ret);
+    return ret;
+  }
+
 
 }

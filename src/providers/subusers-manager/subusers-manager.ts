@@ -28,19 +28,57 @@ export class SubusersManagerProvider {
     console.log('Hello SubusersManagerProvider Provider');
   }
 
+  /*async fullUserLoad(){
+
+    await this.cargarSubusuarios();
+    await this.cargarSubusuariosSubs();
+  }*/
+
   async cargarSubusuarios(){
+    //this.subusersData.subscriptionSubUsers = new Array();
+    //this.subusersData.subUsers = new Array();
+    await this.loadSubusers();
+    await this.loadSubusersSubs();
+  }
+
+  async loadSubusers(){
     let res = await this.requestSubusuarios().toPromise();
+    console.log('loading subusers res',res);
     for(let us of res){
     this.setSubusuariosResult(us);
     }
+    console.log('loaded subusers', this.subusersData.subUsers);
+  }
+
+  async loadSubusersSubs(){
+    //need to use ids filter with the subscription users ids. get ids from subsData.
+    let res = await this.requestSubusuariosSubs().toPromise();
+    console.log('loading subusers for subscription res',res);
+    for(let us of res){
+    this.setSubusuariosResult(us,SubusersDataProvider.SUBUSERS_SUBSCRIPTION);
+    }
+    console.log('loaded subusers', this.subusersData.subUsers);
   }
 
   requestSubusuarios():Observable<any>{
     return this.userMan.requestUsers([this.userData.userData.uid], null, null).share();
   }
 
-  setSubusuariosResult( user_data ){
-      let aux_user = this.userData.getEmptyUserd();
+  requestSubusuariosSubs():Observable<any>{
+    return this.userMan.requestUsers(null, null,this.subsData.getSubusersIDs()).share();
+  }
+
+  setSubusuariosResult( user_data, subuser_type:number = SubusersDataProvider.SUBUSER_CONSUMERS ){
+    console.log('setSubusuariosResult data',user_data,subuser_type);
+    let aux_user = this.generateUserdFromData(user_data);
+    switch(subuser_type){
+      case SubusersDataProvider.SUBUSER_CONSUMERS: this.subusersData.addUser(aux_user); break;
+      case SubusersDataProvider.SUBUSERS_SUBSCRIPTION: this.subusersData.addUserSubs(aux_user); break;
+    }
+    }
+
+    generateUserdFromData( user_data):userd{
+      let aux_user = SubusersManagerProvider.getEmptyUserd();
       aux_user.uid = user_data.uid;
       aux_user.name = user_data.name;
       aux_user.field_alias.und[0].value = user_data.field_alias;
@@ -54,10 +92,8 @@ export class SubusersManagerProvider {
         aux_user.field_doctores.und.push(doc.uid);
       }
       aux_user.field_tipo_de_usuario.und = new Array();
-      for( let tipo of user_data.field_tipo_de_usuario){
-        aux_user.field_tipo_de_usuario.und.push(tipo);
-      }
-      this.subusersData.addUser(aux_user);
+      if(user_data.field_tipo_de_usuario.value) aux_user.field_tipo_de_usuario.und.push(user_data.field_tipo_de_usuario.value);
+      return aux_user;
     }
 
       /**
@@ -77,6 +113,7 @@ export class SubusersManagerProvider {
         this.subsData.subscription.removeSubUserFromSubs(user);
         let obs = this.nodeManager.updateNode(this.subsData.subscription.getData());
         await obs.toPromise();
+        this.subusersData.removeUserSubs(user);
         //await this.removeSubuser(user);
         console.log('sub removed and saved');
       }
@@ -114,5 +151,43 @@ export class SubusersManagerProvider {
       if(!user.field_doctores.und){ user.field_doctores.und = new Array();}
       user.field_doctores.und.push(uid);
     }
+
+
+
+    static getEmptyUserd(){
+      return <userd>{
+        uid:0,
+        name:"",
+        pass:"",
+        mail:"",
+        status:"",
+        roles:[0],
+        field_tipo_de_usuario:{und:[0]},
+        field_useremail:{und:[{email:""}]},
+          field_nombre:{und:[{value:""}]},
+          field_apellidos:{und: [{value:""}]},
+          field_especialidad:{und: [{value:""}]},
+          field_alias:{und:[{value: ""}]},
+          field_calle:{und:[{value: ""}]},
+          field_no_ext:{und: [{value: ""}]},
+          field_no_int: {und: [{value: ""}]},
+          field_codigo_postal: {und: [{value: ""}]},
+          field_ciudad: {und: [{value:""}]},
+          field_colonia: {und:[{value: ""}]},
+          field_pais:{und: [{value:""}]},
+          field_municipio:{und:[{value:""}]},
+          field_estado_ubicacion:{und:[{value: ""}]},
+          field_plan_date: {und: [{value: {date:""}}]},
+          field_forma_pago: {und: [{value: ""}]},
+          tutorial_state:{und:[{ value:0}]},
+          field_codigo:{und:[{ value:""}]},
+          field_doctores:{und:[0]},
+          field_sub_id:{und:[0]},
+          field_planholder:{und:[{value: true}]},
+          field_stripe_customer_id:{und:[{value: ""}]},
+          field_src_json_info:{und:[{value: ""}]}
+      }
+    }
+  
 
   }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ToastController, LoadingController, ViewController } from 'ionic-angular';
-import { NuevousuarioModalPage } from '../nuevousuario-modal/nuevousuario-modal';
+
 import { ModalController } from 'ionic-angular';
 import { userd, UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
@@ -10,6 +10,7 @@ import { AlertProvider } from '../../providers/alert/alert';
 import { SubusersDataProvider } from '../../providers/subusers-data/subusers-data';
 import { SubusersManagerProvider } from '../../providers/subusers-manager/subusers-manager';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
 
 /**
  * Generated class for the UsuariosPage page.
@@ -25,6 +26,13 @@ import { PermissionsProvider } from '../../providers/permissions/permissions';
 })
 export class UsuariosPage {
   //usersd:userd[];
+  get subusersLimit():number{
+    let ret = 0;
+    if(this.subsData.subscription && this.subsData.subscription.plan){
+      ret = this.subsData.subscription.plan.field_no_subcuentas;
+    }
+    return ret;
+  }
 
   constructor(
     public navCtrl: NavController, 
@@ -35,6 +43,7 @@ export class UsuariosPage {
     public userMan: DrupalUserManagerProvider,
     public loader: LoaderProvider,
     public alert: AlertProvider,
+    public subsData: SubscriptionDataProvider,
     public subuserData: SubusersDataProvider,
     public subusersManager: SubusersManagerProvider,
     public permissions: PermissionsProvider
@@ -53,6 +62,8 @@ export class UsuariosPage {
  async cargarUsuarios(){
  this.loader.presentLoader('Cargando Usuarios ...');
  await this.subusersManager.cargarSubusuarios();
+ //await this.subusersManager.cargarSubusuariosSubs();
+ console.log('subscription subusers loaded end',this.subuserData.subscriptionSubUsers);
  this.loader.dismissLoader();
   /*this.usersd = new Array();
   let doctors_array =  new Array();
@@ -104,12 +115,12 @@ export class UsuariosPage {
 }
 
   openNuevousuario(){
-    let Modal = this.modalCtrl.create(NuevousuarioModalPage, undefined, { cssClass: "smallModal nuevousuarioModal" });
+    let Modal = this.modalCtrl.create("NuevousuarioModalPage", undefined, { cssClass: "smallModal nuevousuarioModal" });
     Modal.present({});
   }
 
   editUsuario( userd ){
-    let Modal = this.modalCtrl.create(NuevousuarioModalPage, { 'userd': userd }, { cssClass: "smallModal nuevousuarioModal" });
+    let Modal = this.modalCtrl.create("NuevousuarioModalPage", { 'userd': userd }, { cssClass: "smallModal nuevousuarioModal" });
     Modal.present({});
   }
 
@@ -135,7 +146,7 @@ export class UsuariosPage {
   agregarusuariopop( userd ){
     this.alert.chooseAlert(
       'Agregar',
-      '¿Está seguro de que desea agregar? El usuario administrara sus citas',
+      '¿Está seguro de que desea asignarse a este usuario? El usuario administrara sus citas',
       ()=>{  this.addUsuario( userd ); },
       ()=>{}
     );
@@ -145,6 +156,7 @@ export class UsuariosPage {
   async removeUsuario( userd ){
     this.loader.presentLoader("removiendo usuario . . .");
     await this.subusersManager.removeSubuser(userd);
+    await this.subusersManager.cargarSubusuarios();
     console.log('is removed yet?');
     this.loader.dismissLoader();
     //remove this user from array of doctors
@@ -174,6 +186,7 @@ export class UsuariosPage {
   async addUsuario( userd ){
     this.loader.presentLoader('Agregando usuario ...');
     await this.subusersManager.addSubuser(userd);
+    await this.subusersManager.cargarSubusuarios();
     this.loader.dismissLoader();
     /*if( !userd.field_doctores.und ){  userd.field_doctores.und = new Array();}
     userd.field_doctores.und.push(this.userData.userData.uid);
@@ -203,6 +216,7 @@ export class UsuariosPage {
     this.loader.presentLoader('Eliminando usuario ...');
     //await this.subusersManager.removeSubuser(userd);
     await this.subusersManager.removeUserFromSubscription(userd);
+    await this.subusersManager.cargarSubusuarios();
     console.log('is removed yet?');
     this.loader.dismissLoader();
     /*let loader = this.loadingCtrl.create({

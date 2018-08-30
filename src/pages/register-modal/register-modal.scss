@@ -347,9 +347,12 @@ page-register-modal {
       
   }
 
-
-
-  @media screen and (max-width: 600px) {
+  
+@media screen and (max-width: 1000px) {
+    .checkout{
+        padding: 0;
+        align-items: center;
+    }
 
     .rfsFlex .registerInput, .rfsFlex .ubication_det{
         width: 100%;
@@ -407,8 +410,30 @@ page-register-modal {
     .scroll-content{
         padding-top: 20px;
     }
-
 }
+
+
+  @media screen and (max-width: 768px) {
+
+  .rfsFlex{
+    flex-flow: column ;
+    }
+
+    .registerInput{
+        width: 100% !important;
+        text-align: left;
+    }
+
+    .ubdet_input{
+        text-align: left;
+    }
+
+    .rfsFlex .registerInput, .rfsFlex .ubication_det{
+        width: 100%;
+    }
+}
+
+
 
   
 

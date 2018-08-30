@@ -138,8 +138,8 @@ export class SubscriptionManagerProvider {
   generateUserSuscription(){
     this.generateNewSus(this.subsData.subscription);
   }
-  updateUserSuscription(){
-    this.updateSus(this.subsData.subscription);
+  updateUserSuscription():Observable<any>{
+    return this.updateSus(this.subsData.subscription);
   }
 
 

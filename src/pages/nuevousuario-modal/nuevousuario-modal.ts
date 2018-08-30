@@ -3,6 +3,11 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 import { userd, UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
+import { SubusersManagerProvider } from '../../providers/subusers-manager/subusers-manager';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { AlertProvider } from '../../providers/alert/alert';
+import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
+import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 
 /**
  * Generated class for the NuevousuarioModalPage page.
@@ -28,18 +33,20 @@ export class NuevousuarioModalPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public userData: UserDataProvider,
-    public loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
+    public subsData: SubscriptionDataProvider,
+    public subsManager: SubscriptionManagerProvider,
     public viewCtrl: ViewController,
-    public alertCtrl: AlertController,
     public userMan: DrupalUserManagerProvider,
+    public subusersManager: SubusersManagerProvider,
+    public loader: LoaderProvider,
+    public alert: AlertProvider
 
   ) {
     console.log('GETTING userd', navParams.get('userd'));
     let aux_node = navParams.get('userd');
     if(aux_node){
       this.isnew = false;
-      this.newUser = this.userData.getEmptyUserd();
+      this.newUser = SubusersManagerProvider.getEmptyUserd();
       this.newUser = aux_node;
       this.initialpage = false;
       this.newuser = true;
@@ -53,9 +60,8 @@ export class NuevousuarioModalPage {
     this.viewCtrl.dismiss();
   }
 
-
   resetNewUser(){
-    this.newUser = this.userData.getEmptyUserd();
+    this.newUser = SubusersManagerProvider.getEmptyUserd();
   }
 
   ionViewDidLoad() {
@@ -65,35 +71,8 @@ export class NuevousuarioModalPage {
 
 
   createUserd(){
-    let loader = this.loadingCtrl.create({
-      content: "Generando Usuario"
-    }); 
-    loader.present();
-    //validating if posible
-    if( !this.userData.checkUserPlanHolder() ){
-      loader.dismiss();
-      this.presentAlert('Error','Solo el administrador de plan puede crear subcuentas');
-      this.close();
-      return 0;
-    }
-    if( this.userData.checkSusSubaccountsFull() ){
-      loader.dismiss();
-      this.presentAlert('Error','Se llego al limite de subcuentas');
-      this.close();
-      return 0;
-    }
-    Debugger.log(["creating an user ",this.newUser]);
-    //revisar contraseñas
-    if(!(this.newUser.pass.localeCompare(this.checkpass) === 0)){
-      this.presentAlert("Error", "las contraseñas no coinciden");
-      loader.dismiss();
-      return 0;
-    }
-    if(!(this.newUser.mail.localeCompare(this.newUser.field_useremail.und[0].email) === 0)){
-      this.presentAlert("Error", "Los correos no coinciden");
-      loader.dismiss();
-      return 0;
-    }
+   if(this.createUserValidation()){
+    this.loader.presentLoader('Generando Usuario ... ');
     //agregar este doctor.
     this.newUser.field_doctores.und = new Array(); 
     this.newUser.field_doctores.und[this.userData.userData.uid] = this.userData.userData.uid;
@@ -104,42 +83,61 @@ export class NuevousuarioModalPage {
     this.newUser.status = ""+1;
     delete this.newUser.field_sub_id;
     this.userMan.generateNewUserd( this.newUser ).subscribe(
-    (val)=>{
-      Debugger.log(['generated user returned',val]);
-      if(!this.userData.subscription.field_subusuarios) this.userData.subscription.field_subusuarios = new Array();
-      this.userData.subscription.field_subusuarios.push(val['uid']);
-      /*this.userData.updateSus(this.userData.subscription).subscribe(
-        (val) => {
-          Debugger.log(['updated subscription returned',val]);
-        },
-        response => { 
-          Debugger.log(['error on saving subscription for new user',response]);
-        }
-      );*/
-      this.presentToast("Completado");
-      loader.dismiss();
+    async (val)=>{
+      if(!this.subsData.subscription.field_subusuarios) this.subsData.subscription.field_subusuarios = new Array();
+      this.subsData.subscription.field_subusuarios.push(val['uid']);
+      let obs = this.subsManager.updateUserSuscription();
+      console.log(obs);
+      await obs.toPromise();
+      await this.subusersManager.cargarSubusuarios();
+      this.loader.dismissLoader();
       this.close();
     },
     response => {
         for (var key in response.error.form_errors) {
-          this.presentAlert(key, response.error.form_errors[key]);
-          //this.presentToast(response.error.form_errors[key]);
-          //console.log(key, response.error.form_errors[key]);
+          this.alert.presentAlert(key, response.error.form_errors[key]);
         }
-        loader.dismiss();
+        this.loader.dismissLoader();
       }
   );
 }
+}
 
-getUserByCode(){
-  if((!this.newUserCode) || (this.newUserCode === "all") ){
-    console.log("all or empty is not valid mf");
-    return false;
+createUserValidation():boolean{
+  let ret = true;
+  if( !this.userData.checkUserPlanHolder() ){
+    this.alert.presentAlert('Error','Solo el administrador de plan puede crear subcuentas');
+    ret = false;
   }
-  let loader = this.loadingCtrl.create({
-    content: "Guardando . . ."
-  });
-  let dis = this;
+  if( this.userData.checkSusSubaccountsFull() ){
+    this.alert.presentAlert('Error','Se llego al limite de subcuentas');
+    ret = false;
+  }
+  if(!(this.newUser.pass.localeCompare(this.checkpass) === 0)){
+    this.alert.presentAlert("Error", "las contraseñas no coinciden");
+    ret = false;
+  }
+  if(!(this.newUser.mail.localeCompare(this.newUser.field_useremail.und[0].email) === 0)){
+    this.alert.presentAlert("Error", "Los correos no coinciden");
+    ret = false;
+  }
+  return ret;
+}
+
+async getUserByCode(){
+  if(this.getUserCodeValidation()){
+  this.loader.presentLoader('Buscando usuario ...');
+  let res = await this.userMan.requestUsers(new Array(),this.newUserCode).toPromise();
+  if(res && res.length > 0){
+    console.log('user found',res[0]);
+    await this.addUserFromCode(res[0]);
+    await this.subusersManager.cargarSubusuarios();
+  }else{
+    this.alert.presentAlert("Nada", "No se encontró ningún usuario usando este código");
+  }
+  this.loader.dismissLoader();
+
+/*
   this.userMan.requestUsers(new Array(),this.newUserCode).subscribe(
     (val)=>{ 
       console.log(val);
@@ -197,64 +195,107 @@ getUserByCode(){
      response => {
        console.log("POST call in error", response);
      }
-    );
+    );*/
+  }
+}
+
+getUserCodeValidation():boolean{
+  let ret = true;
+  if((!this.newUserCode) || (this.newUserCode === "all") ){
+    ret = false;
+  }
+  return ret;
+}
+
+async addUserFromCode( user_data ){
+  let aux_user = SubusersManagerProvider.getEmptyUserd();
+        aux_user.uid = user_data.uid;
+        aux_user.name = user_data.name;
+        aux_user.field_alias.und[0].value = user_data.field_alias;
+        aux_user.field_nombre.und[0].value = user_data.field_nombre;
+        aux_user.field_apellidos.und[0].value = user_data.field_apellidos;
+        aux_user.field_useremail.und[0].email = user_data.field_useremail.email;
+        aux_user.mail = user_data.mail;
+        aux_user.status = "1";
+        aux_user.field_doctores.und = new Array();
+        aux_user.field_tipo_de_usuario.und = new Array();
+        for(let element of user_data.field_doctores){ aux_user.field_doctores.und.push(element.uid); }
+        for(let element of user_data.field_tipo_de_usuario){ aux_user.field_tipo_de_usuario.und.push(element.uid); }
+        aux_user.field_doctores.und.push(this.userData.userData.uid);
+        let res = await this.userMan.updateUserd(aux_user).toPromise(); 
+       
+          /*this.userMan.updateUserd( aux_user).subscribe(
+            (val)=>{
+              console.log("usuarioUpdated");
+              this.presentToast("Usuario Agregado");
+              loader.dismiss();
+              dis.close();
+            },
+            response => {
+              console.log("POST call in error", response);
+              console.log("show error");
+              for (var key in response.error.form_errors) {
+                dis.presentAlert(key, response.error.form_errors[key]);
+              }
+              loader.dismiss();
+            }
+          );*/
 }
 
 updateUserd(){
-  let loader = this.loadingCtrl.create({
-    content: "Guardando . . ."
-  });
-  loader.present();
-  if(this.newUser.pass || this.checkpass){
-  if(!(this.newUser.pass === this.checkpass)){
-    this.presentAlert("Error", "las contraseñas no coinciden");
-    loader.dismiss();
-    return 0;
-  }
-}
+  if(this.updateUserValidation()){
+  this.loader.presentLoader('Guardando usuario ...');
   this.newUser.mail = this.newUser.field_useremail.und[0].email;
   this.newUser.status = ""+1;
   delete this.newUser.field_sub_id;
-  console.log("updating",this.newUser);
   this.userMan.updateUserd( this.newUser ).subscribe(
-    (val)=>{
-      console.log("usuarioUpdated");
-      this.presentToast("Completado");
-      loader.dismiss();
+    async (val)=>{
+      await this.subusersManager.cargarSubusuarios();
+      this.loader.dismissLoader();
       this.close();
     },
     response => {
-      console.log("POST call in error", response);
-      console.log("show error");
       for (var key in response.error.form_errors) {
-        this.presentAlert(key, response.error.form_errors[key]);
+        this.alert.presentAlert(key, response.error.form_errors[key]);
       }
-      loader.dismiss();
+      this.loader.dismissLoader();
     }
   );
 }
+}
 
-presentToast(msg) {
+updateUserValidation():boolean{
+  let ret = true;
+  if(this.newUser.pass || this.checkpass){
+    if(!(this.newUser.pass === this.checkpass)){
+      this.alert.presentAlert("Error", "las contraseñas no coinciden");
+      ret = false;
+    }
+  }
+  return ret;
+}
+
+/*presentToast(msg) {
   let toast = this.toastCtrl.create({
     message: msg,
     duration: 6000,
     position: 'top'
   });
   toast.present();
-}
+}*/
 
 close(){
   this.viewCtrl.dismiss();
 }
 
-presentAlert(key,Msg) {
+/*presentAlert(key,Msg) {
   let alert = this.alertCtrl.create({
     title: key,
     subTitle: Msg,
     buttons: ['Dismiss']
   });
   alert.present();
-}
+}*/
 
 
 randomCode(){
