@@ -72,9 +72,12 @@ export class DoctoresManagerProvider {
 
 
   filterActiveDoctors(){
+    console.log('filterActiveDoctors');
     if(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
+      console.log('this is not a doc');
     this.docData.doctores = this.docData.doctores.filter(
       (docs) =>{
+        console.log('checking doc subs',docs);
         return this.subsMan.checkSusOfDoctor(docs.Uid);
       }
     );

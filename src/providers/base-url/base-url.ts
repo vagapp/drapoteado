@@ -11,9 +11,10 @@ export class BaseUrlProvider {
   protocol:string = 'http://';
   //hostname:string = 'vmi118470.contaboserver.net/~drapp/';
   //hostname:string = '18.191.210.253/';
-  hostname:string = 'ec2-18-191-210-253.us-east-2.compute.amazonaws.com/';
+  //hostname:string = 'ec2-18-191-210-253.us-east-2.compute.amazonaws.com/';
+  hostname:string = 'www.drap.com.mx/';
   //websocketUrl:string = 'ws://vagapp.mx:8081/';
-  websocketUrl:string = 'ws://18.191.210.253:8081/';
+  websocketUrl:string = 'ws://www.drap.com.mx:8081/';
 
   constructor() {
   }

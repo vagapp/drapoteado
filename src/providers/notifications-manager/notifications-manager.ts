@@ -36,7 +36,7 @@ export class NotificationsManagerProvider {
 
   getNotificationObservable(){
     let uidFilter = `?args[0]=${this.userData.userData.uid}` ;
-    let url = `${this.bu.endpointUrl}/rest_notifications.json${uidFilter}`;
+    let url = `${this.bu.endpointUrl}rest_notifications.json${uidFilter}`;
     let observer = this.http.get(url);
     return observer;
   }

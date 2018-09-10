@@ -49,13 +49,16 @@ export class SubscriptionManagerProvider {
 
   async loadDoctorsSubscriptions(){
     if(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
+      console.log('loadDoctorsSubscriptions not a doc');
       let docs_subs_data = await this.requestDocsSubscription().toPromise();
+      console.log('requestDocsSubscription res',docs_subs_data);
       if(docs_subs_data) 
        for(let doc_sus of docs_subs_data){
-         let aux_sus = new subscriptions();
-         aux_sus.setData(doc_sus);
+        let aux_sus = new subscriptions();
+        aux_sus.setData(doc_sus);
         this.doc_subscriptions.push(aux_sus);
        }
+       console.log('loaded doctor subs',this.doc_subscriptions);
     }
   }
 
@@ -70,16 +73,21 @@ export class SubscriptionManagerProvider {
     //const filter=`?args[0]=all&${this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false)?`args[1]=${this.userData.userData.uid}`:'args[1]=all'}&${(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false))?`args[2]=${this.userData.userData.uid}`:'args[2]=all'}&args[3]=all`;
     const filter = `?args[0]=all&args[1]=all&args[2]=all&args[3]=${this.docData.doctoresIDs}`;
     const url = `${this.bu.endpointUrl}rest_suscripciones.json${filter}`;
+    console.log('requesting docs subs url',url);
     const observer = this.http.get(url).share();
     return observer;
   }
 
   checkSusOfDoctor(nid:number){
     let ret = false;
+    console.log('in subs:',this.doc_subscriptions);
     let subs = this.doc_subscriptions.find((subs)=>{ 
-      return (Number(subs.field_plan_holder) === nid) 
-      && subs.field_active === 1
+      console.log(subs.field_plan_holder,nid);
+      console.log(subs.field_active);
+      return (Number(subs.field_plan_holder) === Number(nid)) 
+      && Number(subs.field_active) === 1
     });
+    console.log('subs result',subs);
     if(subs) ret = true;
     return ret;
   }

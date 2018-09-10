@@ -28,7 +28,7 @@ export class WebsocketServiceProvider {
     this.websocket.subscribe(
       (message) => this.serverMessages(message),
       (err) => console.error(err),
-      () => console.warn('Completed!')
+      () => {console.warn('Completed!'); console.log("over");}
       );
       console.log("cosas feas terminadas que pedo");
   }
@@ -49,6 +49,7 @@ export class WebsocketServiceProvider {
    */
   addCita(message:Message){
     if(this.FilterMessageCita(message)){
+      console.log("cita2addfiltered");
       let aux_cita = this.cmanager.generateCitaFullData(message.content);
       this.reportPresentator.updateCita(aux_cita);
     }
