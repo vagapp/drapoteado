@@ -6,6 +6,9 @@ import { UserDataProvider } from '../user-data/user-data';
 import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
 import { DrupalNodeEditorProvider } from '../drupal-node-editor/drupal-node-editor';
 import { SubscriptionManagerProvider } from '../subscription-manager/subscription-manager';
+import { CitasDataProvider } from '../citas-data/citas-data';
+import { Subject } from 'rxjs/Subject';
+import { Citas } from '../user-data/citas';
 
 
 /*
@@ -16,6 +19,7 @@ import { SubscriptionManagerProvider } from '../subscription-manager/subscriptio
 */
 @Injectable()
 export class DoctoresManagerProvider {
+  citasSubject:Subject<any>;
 
   constructor(
     public http: HttpClient,
@@ -23,10 +27,17 @@ export class DoctoresManagerProvider {
     public userData: UserDataProvider,
     public userMan: DrupalUserManagerProvider,
     public subsMan: SubscriptionManagerProvider,
-    public nodeEditor: DrupalNodeEditorProvider
+    public nodeEditor: DrupalNodeEditorProvider,
+    public citasData: CitasDataProvider
   ) {
+    this.citasSubject = this.citasData.citasSubject;
+    this.citasSubject.subscribe(
+      (val)=>{
+        //whem there is a change on citas, doctor manager evaluates citas to get nextCitas for these doctors.
+        console.log('citas change on doctor manager',val);
+      }
+    );
   }
-
 
   /**
    * Este metodo carga los uids de los doctores del usuario:
@@ -37,7 +48,10 @@ export class DoctoresManagerProvider {
     if(this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
       this.setDoctores([this.userData.userData.uid]);
     }else{
+      console.log('not a doctor setting docs uids');
+      console.log(this.userData.userData.field_doctores);
       if(this.userData.userData.field_doctores && this.userData.userData.field_doctores.und.length > 0){
+        console.log('it has docs');
       //this.setDoctores(this.userData.userData.field_doctores.und);
       console.log('docs ids',this.userData.userData.field_doctores.und);
       const docfilter = this.nodeEditor.getCleanField(DrupalNodeEditorProvider.FIELD_RELATION,this.userData.userData,'field_doctores',false);
@@ -83,6 +97,15 @@ export class DoctoresManagerProvider {
     );
     }
   }
+
+  evaluateCitas(){
+    for(let doctor of this.docData.doctores){
+      let doc_citas = this.citasData.citas.filter((citas)=>{ Number(citas.data.field_cita_doctor.und[0]) === Number(doctor.Uid) });
+      console.log('doccitas',doctor.Uid,doc_citas);
+    }
+  }
+
+  
 
   requestDoctores(){
 

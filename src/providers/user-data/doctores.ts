@@ -13,6 +13,7 @@ export class Doctores{
     name:string = '';
     field_alias:string = '';
     playerID:string = '';
+    showDate: Citas = null;
 
     public constructor(){
       this.citas = new Array();

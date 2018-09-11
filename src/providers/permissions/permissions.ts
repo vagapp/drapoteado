@@ -48,6 +48,7 @@ checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean
   let ret = false;
   //si la subscripcion no esta activa (expiro, no ha sido pagada etc) retorna false
   //if(Number(this.userData.field_sub_id.und[0]) === Number(0) || this.subscription === null){return false;}
+  if(!this.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){return true;} //now subusers dont get to check on subscription
   if(this.subsData.subscription === null){return false;}
   if(Number(this.subsData.subscription.field_active) === Number(0)){return false;} //if not active returns false also
   // checking for ANY, automatically returns true since we checked for not 0 or null up here

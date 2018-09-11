@@ -102,7 +102,9 @@ export class MyApp {
       //if logged in set session and userdata
       this.userData.setSessionData(connec_Data);
       await this.userData.loginSetData(connec_Data['user']['uid']);
+      if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
       await this.subscriptionManager.loadSubscription();
+      }
       await this.docMan.initDoctoresUids();
       await this.subscriptionManager.loadDoctorsSubscriptions();
       console.log('subscription initload is', this.subscriptionManager.subsData.subscription);

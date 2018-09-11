@@ -9,6 +9,7 @@ import { CitasPresentatorProvider } from '../../providers/citas-presentator/cita
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 import { ReportesDataProvider } from '../../providers/reportes-data/reportes-data';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 @IonicPage({
@@ -29,7 +30,8 @@ export class HomePage {
     public citasPresentator: CitasPresentatorProvider,
     public reportPresentator: ReportPresentatorProvider,
     public reportesData: ReportesDataProvider,
-    public permissions: PermissionsProvider
+    public permissions: PermissionsProvider,
+    public doctoresData: DoctoresDataProvider
   ) {
     //console.log('hello',permissions.subsData.subscription);
   }

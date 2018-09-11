@@ -52,6 +52,8 @@ export class NuevacitaModalPage {
       this.cita = aux_node;
       Debugger.log(['cita en modal es',this.cita]);
       this.isnew = false;
+      this.selectedDate = Citas.getLocalDateIso(new Date(this.cita.data.field_datemsb['und'][0]['value']));//new Date().toISOString();
+      console.log(this.selectedDate);
     }else{
       this.isnew = true;
       this.resetNewCita();

@@ -6,11 +6,13 @@ import { DirectivesModule } from '../directives/directives.module';
 import { NlistComponent } from './nlist/nlist';
 
 
+
 @NgModule({
 	declarations: [
     HeaderComponent,
     FooterComponent,
-    NlistComponent
+    NlistComponent,
+    
 ],
 	imports: [
         IonicModule, 
@@ -18,7 +20,8 @@ import { NlistComponent } from './nlist/nlist';
     ],
 	exports: [HeaderComponent,
     FooterComponent,
-    NlistComponent
+    NlistComponent,
+    
 ]
 })
 export class ComponentsModule {}

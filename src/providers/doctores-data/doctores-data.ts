@@ -16,6 +16,7 @@ export class DoctoresDataProvider {
   
   get doctoresIDs():number[]{
     let ret = new Array();
+    ret.push(0);
     console.log(this.doctores);
     if(this.doctores && this.doctores.length !== 0){
       ret = new Array();
@@ -26,7 +27,10 @@ export class DoctoresDataProvider {
     return ret;
   }
   get subject():Subject<any>{return this.doctoresSubject;}
-  constructor() {}
+  constructor() {
+    console.log('doctoresdata');
+    console.log(this.doctores);
+  }
   
 
   addDoctor( doc:Doctores, call:boolean = true){

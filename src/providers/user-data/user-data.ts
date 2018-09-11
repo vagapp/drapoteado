@@ -222,10 +222,6 @@ export class UserDataProvider {
     }else{
       this.userData.field_src_json_info.und = new Array();
     }
-    //this.savePlayerID();
-    //Debugger.log(["doctores encontrados",this.doctores.doctores]);
-   
-    //this.cargarServicios();
     console.log('filled userData',this.userData);
   }
 

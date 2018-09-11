@@ -51,11 +51,12 @@ export class CitasDataProvider{
   }
 
 
-  updateCita( data:citasData ){
+  updateCita( data:citasData, call:boolean = true ){
     for( let cita of this.citas ){
       if(cita.Nid === data.Nid){
         cita.data = data;
         /*cita.setData(data);*/
+         if( call ) this.subject.next(this.citas);
         console.log('updated cita',cita);
       }
     }

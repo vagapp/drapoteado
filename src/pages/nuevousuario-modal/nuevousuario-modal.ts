@@ -220,10 +220,22 @@ async addUserFromCode( user_data ){
         aux_user.field_doctores.und = new Array();
         aux_user.field_tipo_de_usuario.und = new Array();
         for(let element of user_data.field_doctores){ aux_user.field_doctores.und.push(element.uid); }
-        for(let element of user_data.field_tipo_de_usuario){ aux_user.field_tipo_de_usuario.und.push(element.uid); }
+        delete aux_user.field_tipo_de_usuario;
+        delete aux_user.field_sub_id;
+        //for(let element of user_data.field_tipo_de_usuario){ aux_user.field_tipo_de_usuario.und.push(element.uid); }for(let element of user_data.field_tipo_de_usuario){ aux_user.field_tipo_de_usuario.und.push(element.uid); }
         aux_user.field_doctores.und.push(this.userData.userData.uid);
+        console.log(aux_user);
         let res = await this.userMan.updateUserd(aux_user).toPromise(); 
-       
+        /*this.userMan.updateUserd( aux_user).subscribe(
+          (val)=>{
+            console.log("usuarioUpdated");
+          
+          },
+          response => {
+            console.log("POST call in error", response);
+           
+          }
+        );*/
           /*this.userMan.updateUserd( aux_user).subscribe(
             (val)=>{
               console.log("usuarioUpdated");
