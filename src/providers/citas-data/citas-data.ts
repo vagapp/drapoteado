@@ -104,6 +104,24 @@ export class CitasDataProvider{
     });
   }
 
+  static sortFilterByCloserNow(citas:Citas[]){
+    console.log('citas to sortfilter',citas);
+    citas = CitasDataProvider.filterPassedCitas(citas);
+    return citas.sort((a,b)=>{ 
+      if (a.dateMs < b.dateMs)
+      return -1;
+    if (a.dateMs > b.dateMs)
+      return 1;
+   return 0;
+    });
+  }
+
+  static filterPassedCitas( citas:Citas[] ){
+    const nowMs = new Date().getTime();
+    return citas.filter((aux_citas)=>{  console.log('filtering cita ',aux_citas.dateMs,nowMs); return aux_citas.dateMs > nowMs }); //filter citas that are coming, not the ones that have passed already
+  }
+
+
  
 
  

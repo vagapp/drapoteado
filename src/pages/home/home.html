@@ -37,10 +37,14 @@
                             </div>
 
       <div class="section doctor_section" *ngFor="let doctor of this.doctoresData.doctores" >
-              <span *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR])" >{{doctor.name}}</span>
-              <span *ngIf="doctor.nextCita" > Proxima cita es </span>
-              <span *ngIf="doctor.citaActiva" >Cota activa es</span>
-              
+              <span *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR])" class="spanBlock midMainFont">{{doctor.name}}</span>
+              <span *ngIf="doctor.citasPendientes.length > 0" class="spanBlock midSubFont">Citas pendientes {{doctor.citasPendientes.length}}</span>
+              <span *ngIf="doctor.citaActiva" class="spanBlock midSubFont">Se encuentra atendiendo a {{doctor.citaActiva.paciente}}</span>
+              <button  *ngIf="doctor.citaActiva && doctor.citaActiva.checkState(citasData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(doctor.citaActiva);" class="bgColorSecondary generalButton tableButton">Ver Progreso</button>
+              <span *ngIf="doctor.nextCita" class="spanBlock midSubFont"> Proxima cita con <span class="midMainFont">{{doctor.nextCita.paciente}}</span> dentro de {{doctor.nextCita.getUntilTimeString()}}</span>
+              <button  *ngIf="doctor.nextCita && doctor.nextCita.checkState(this.citasData.STATE_PENDIENTE) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION])" (click)="citasPresentator.confirmarCita(doctor.nextCita)"  class="bgColorSecondary generalButton tableButton">Confirmar</button>
+              <button  *ngIf="!doctor.citaActiva && doctor.nextCita && doctor.nextCita.checkState(citasData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(doctor.nextCita);" class="bgColorSecondary generalButton tableButton">Activar</button>
+              <span *ngIf="!doctor.nextCita && !doctor.citaActiva" class="spanBlock midSubFont">No tiene citas pendientes</span>
               <!-- getToShow -->
       </div>
                 <!--

@@ -76,6 +76,7 @@ export class Citas{
           this.data.field_cobro_tarjeta.und[0].value = data_input.field_cobro_tarjeta;
           this.data.field_costo_sobrescribir.und[0].value = data_input.field_costo_sobrescribir;
           this.data.field_datemsb.und[0].value = Number(data_input.field_datemsb.value);
+          this.dateMs =  this.data.field_datemsb.und[0].value;
           this.data.field_retrasda.und[0].value = data_input.field_retrasda;
           if(data_input.field_hora_iniciomsb) this.data.field_hora_iniciomsb.und[0].value = Number(data_input.field_hora_iniciomsb.value);
           if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);

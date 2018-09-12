@@ -7,6 +7,7 @@ import { CitasDataProvider } from "../citas-data/citas-data";
 export class Doctores{
     Uid:number = null;
     citas:Citas[]; //listado de todas las citas
+    citasPendientes:Citas[] = new Array();
     citaActiva:Citas = null //cita activa
     nextCita:Citas = null //cita activa
     servicios:servicios[] = new Array();
