@@ -29,7 +29,8 @@ export class SubusersDataProvider {
 
 
   add( user: userd , list: Array<userd> = this.subUsers){
-    console.log('add subusersSUBS LIST IS',list); 
+    console.log('add subusersSUBS LIST IS',list);
+    console.log('user',user);
     if(!this.check(user,list))
     list.push(user);
   }
