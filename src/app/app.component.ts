@@ -108,10 +108,12 @@ export class MyApp {
       await this.docMan.initDoctoresUids();
       await this.subscriptionManager.loadDoctorsSubscriptions();
       console.log('subscription initload is', this.subscriptionManager.subsData.subscription);
+      console.log('kewe');
       console.log('docs before filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
       this.docMan.filterActiveDoctors();
       console.log('docs after filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
       await this.citasManager.requestCitas().toPromise();
+      this.docMan.evaluateCitas();
       this.serviciosManager.loadServicios();
       console.log(this.citasManager.citasData.citas);
       console.log('docs end initload',JSON.stringify(this.docMan.docData.doctoresIDs));

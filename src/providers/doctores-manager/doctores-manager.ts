@@ -99,11 +99,13 @@ export class DoctoresManagerProvider {
   }
 
   evaluateCitas(){
+    console.log('total citas on eval doctores',this.citasData.citas);
     for(let doctor of this.docData.doctores){
-      let doc_citas = this.citasData.citas.filter((citas)=>{ Number(citas.data.field_cita_doctor.und[0]) === Number(doctor.Uid) });
+      let doc_citas = this.citasData.citas.filter((citas)=>{  return Number(citas.data.field_cita_doctor.und[0]) === Number(doctor.Uid) });
       console.log('doccitas',doctor.Uid,doc_citas);
     }
   }
+
 
   
 
