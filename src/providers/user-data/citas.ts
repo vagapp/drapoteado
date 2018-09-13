@@ -91,6 +91,7 @@ export class Citas{
 
     processData(){
         this.Nid = this.data.Nid
+        this.dateMs =  this.data.field_datemsb.und[0].value;
         if(this.data.aux_servicios_json) this.setServiciosReport(this.data.aux_servicios_json);
         this.setDateUT(this.data.field_datemsb.und[0].value);
         this.setDurationDates(this.data.field_hora_iniciomsb.und[0].value,this.data.field_hora_finalmsb.und[0].value);
@@ -316,6 +317,7 @@ export class Citas{
 
    addServicio( servicio:servicios ):boolean{
        let ret = false;
+       if(!servicio) return false;
         if(!this.checkServicio(servicio)){
             this.addedServices.push(servicio);
             ret = true;
@@ -336,11 +338,17 @@ export class Citas{
    getServiciosAvailable( servicios: servicios[]):servicios[]{
        let ret = new Array();
        console.log("trynna get servicios available from",servicios);
-        servicios.forEach(element => {
+       for(let servicio of servicios){
+           console.log('checking servicio',servicio);
+        if(servicio && !this.checkServicio(servicio)){
+            ret.push(servicio);
+        }
+       }
+        /*servicios.forEach(element => {
             if(!this.checkServicio(element)){
                 ret.push(element);
             }
-       });
+       });*/
        return ret;
    }
 

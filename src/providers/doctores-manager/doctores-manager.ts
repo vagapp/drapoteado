@@ -34,8 +34,9 @@ export class DoctoresManagerProvider {
     this.citasSubject.subscribe(
       (val)=>{
         //whem there is a change on citas, doctor manager evaluates citas to get nextCitas for these doctors.
-        //console.log('citas change on doctor manager',val);
-        this.evaluateCitas();
+       console.log('citas change on doctor manager',val);
+       this.evaluateCitas();
+      
       }
     );
     const intervalUntil = setInterval(()=>{ 
@@ -111,17 +112,16 @@ export class DoctoresManagerProvider {
     console.log('total citas on eval doctores',this.citasData.citas);
     for(let doctor of this.docData.doctores){
       doctor.nextCita = null;
+      doctor.citaActiva = null;
+      let aux_activa = this.citasData.citas.find((citas)=>{
+        return (Number(citas.data.field_cita_doctor.und[0]) === Number(doctor.Uid))
+        && citas.checkState( CitasDataProvider.STATE_ACTIVA)
+      });
+      if(aux_activa) doctor.citaActiva = aux_activa;
       let doc_citas = this.citasData.citas.filter((citas)=>{  return Number(citas.data.field_cita_doctor.und[0]) === Number(doctor.Uid) });
       doctor.citasPendientes = this.getCitasPendientesOfDoc( doctor );
-      console.log('citas pendientes de doctor',doctor.citasPendientes);
-      console.log('doccitas',doctor.Uid,doc_citas);
-      let curated_citas = CitasDataProvider.sortFilterByCloserNow(doc_citas);
-      console.log('curated citas ', curated_citas);
-      if(curated_citas.length > 0 && (!doctor.citaActiva || Number(doctor.citaActiva.Nid) !== Number(curated_citas[0].Nid) )){
-        console.log('adding cita next cita to doctor');
-        doctor.nextCita = curated_citas[0];
-        console.log('doctor.nextCita',doctor.nextCita);
-      }
+      const curated_citas = CitasDataProvider.sortFilterByCloserNow( doctor.citasPendientes);
+      if(curated_citas.length > 0){doctor.nextCita = curated_citas[0];}
       //cuando tenemos las citas podemos evaluarlas ordenando por datems lo que nos dara la cita mas proxima.
       //u obtener las cita activa.
     }
@@ -173,7 +173,13 @@ export class DoctoresManagerProvider {
 
 
   getCitasPendientesOfDoc( doctor ):Citas[]{
-    const ret =  this.citasData.citas.filter( (citas)=>{ return ( (Number(citas.data.field_cita_doctor.und[0]) === Number(doctor.uid)) &&  citas.untilMs > 0 && ( citas.checkState( CitasDataProvider.STATE_CONFIRMADA ) ||citas.checkState( CitasDataProvider.STATE_PENDIENTE ) ) ) }  );
+    const ret =  this.citasData.citas.filter( (citas)=>{ 
+      console.log(citas.Nid,citas.data.field_cita_doctor.und[0],doctor.Uid,citas.untilMs, citas.data.field_estado.und[0]['value']);
+      return ( 
+        (Number(citas.data.field_cita_doctor.und[0]) === Number(doctor.Uid)) 
+        &&  citas.untilMs > 0 
+        && ( citas.checkState( CitasDataProvider.STATE_CONFIRMADA ) || citas.checkState( CitasDataProvider.STATE_PENDIENTE ) ) 
+      )});
     console.log('filtering citas pendientes',ret);
     return ret;
   }

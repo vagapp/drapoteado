@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Doctores } from '../user-data/doctores';
 import { Subject } from 'rxjs/Subject';
+import { Citas } from '../user-data/citas';
 
 /*
   Generated class for the DoctoresDataProvider provider.
@@ -56,6 +57,10 @@ export class DoctoresDataProvider {
 
    static isDoctorBusy( doc:Doctores ){
     return doc.citaActiva !== null;
+   }
+
+   static setDoctorBusy( doc:Doctores , cita:Citas ){
+    doc.citaActiva = cita;
    }
 
    getDoctorByUid( uid ):Doctores{

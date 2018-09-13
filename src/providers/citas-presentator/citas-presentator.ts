@@ -77,6 +77,7 @@ export class CitasPresentatorProvider {
 
   iniciarCita( cita:Citas ){
     let aux_doc = this.citasManager.getDoctorOFCita(cita);
+    console.log('doctor of cita is',aux_doc);
     if(cita.checkState(CitasDataProvider.STATE_ACTIVA) || cita.checkState(CitasDataProvider.STATE_COBRO)){
       this.openProgreso(cita);
     }else{
@@ -87,7 +88,8 @@ export class CitasPresentatorProvider {
         "Iniciar Consulta",
         '¿Está seguro que desea colocar esta cita como Activa?',
         async ()=>{ 
-          this.loader.presentLoader('actualziando...'); 
+          this.loader.presentLoader('actualziando...');
+          DoctoresDataProvider.setDoctorBusy(aux_doc,cita);
           await this.citasManager.updateCitaState( cita , CitasDataProvider.STATE_ACTIVA ).toPromise(); 
           this.wsMessenger.generateWSupdateMessage(cita);
           this.loader.dismissLoader(); },

@@ -86,7 +86,7 @@ export class CitasManagerProvider {
     aux_cita.data = data;
     aux_cita.processData();
     console.log('fulldata generated ',aux_cita);
-    this.citasData.addCita(aux_cita,false);
+    this.citasData.addCita(aux_cita);
     return aux_cita;
   }
 
