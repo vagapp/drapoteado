@@ -25,7 +25,8 @@ export class CitasManagerProvider {
     public citasData: CitasDataProvider,
     public doctores: DoctoresDataProvider,
     public nodeMan: DrupalNodeManagerProvider,
-    public userMan: DrupalUserManagerProvider
+    public userMan: DrupalUserManagerProvider,
+    public userData:UserDataProvider
   ) {
     console.log('Hello CitasManagerProvider Provider');
   }
@@ -70,9 +71,21 @@ export class CitasManagerProvider {
   setCitas( val ){
     console.log('citas response raw value',val);
     for(let cita of val){
-      this.generateCita(cita);
+      if(this.checkUserCitaDataFilter(cita)){
+        this.generateCita(cita);
+      }
     }
     this.citasData.triggerSubject();
+  }
+
+  checkUserCitaDataFilter(citaData):boolean{
+    let ret = true;
+    //console.log('data to check()',citaData);
+    if(this.userData.checkUserPermission([UserDataProvider.TIPO_CAJA]) && ! (Number(citaData.field_estado) === Number(CitasDataProvider.STATE_COBRO)) ){
+      ret = false;
+      console.log('cita blocked from caja couase doesnt need cobro', citaData);
+    }
+    return ret;
   }
 
   generateCita( data ){

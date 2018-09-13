@@ -75,7 +75,7 @@ export class CitasPresentatorProvider {
   }
 
 
-  iniciarCita( cita:Citas ){
+  async iniciarCita( cita:Citas ){
     let aux_doc = this.citasManager.getDoctorOFCita(cita);
     console.log('doctor of cita is',aux_doc);
     if(cita.checkState(CitasDataProvider.STATE_ACTIVA) || cita.checkState(CitasDataProvider.STATE_COBRO)){
@@ -84,6 +84,12 @@ export class CitasPresentatorProvider {
       if(DoctoresDataProvider.isDoctorBusy(aux_doc)){
         this.alert.presentAlert("Ocupado","Este doctor esta ocupado con una cita Activa");
       }else{
+        this.loader.presentLoader('actualziando...');
+          DoctoresDataProvider.setDoctorBusy(aux_doc,cita);
+          await this.citasManager.updateCitaState( cita , CitasDataProvider.STATE_ACTIVA ).toPromise(); 
+          this.wsMessenger.generateWSupdateMessage(cita);
+          this.loader.dismissLoader(); 
+        /*
       this.alert.chooseAlert(
         "Iniciar Consulta",
         '¿Está seguro que desea colocar esta cita como Activa?',
@@ -95,6 +101,7 @@ export class CitasPresentatorProvider {
           this.loader.dismissLoader(); },
         ()=>{}
       );
+      */
     }
   }
   }
