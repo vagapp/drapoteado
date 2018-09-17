@@ -8,6 +8,7 @@ import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { Citas } from '../user-data/citas';
 import { ReportPresentatorProvider } from '../report-presentator/report-presentator';
+import { DoctoresManagerProvider } from '../doctores-manager/doctores-manager';
 
 
 @Injectable()
@@ -18,7 +19,8 @@ export class WebsocketServiceProvider {
     public cmanager: CitasManagerProvider,
     public userData: UserDataProvider,
     public docData: DoctoresDataProvider,
-    public reportPresentator: ReportPresentatorProvider
+    public reportPresentator: ReportPresentatorProvider,
+    public doctoresManager: DoctoresManagerProvider
   ) {
     this.init();
   }

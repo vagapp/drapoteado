@@ -27,9 +27,10 @@
         <tbody>
             <tr *ngIf="this.reportesData.todayReport">
                 <td>{{this.reportesData.todayReport.nid}}</td>
-                <td class="fontSecondary">{{this.reportesData.todayReport.dateString}} <span *ngIf="this.reportesData.todayReport.dialy">Diario de hoy</span></td>
+                <td class="fontSecondary">{{this.reportesData.todayReport.dateString}} Diario de hoy</td>
                 <td class="toolCol">
-                  <img (click)="openReportModal(this.reportesData.todayReport);" src="assets/imgs/ver.svg"  class="icon_drapo">
+                    <img (click)="openNuevoreporte(this.reportesData.todayReport);" src="assets/imgs/reporte.svg"  class="icon_drapo_big">
+                    <img (click)="openTicket(this.reportesData.todayReport);" src="assets/imgs/ticket.svg"  class="icon_drapo_big">
                   <!--<button class="bgColorSecondary generalButton tableButton">Exportar</button>-->
                 </td>
              </tr>
@@ -37,7 +38,8 @@
                 <td>{{report.nid}}</td>
                 <td class="fontSecondary">{{report.dateString}} <span *ngIf="this.reportesData.todayReport.dialy">Diario</span></td>
                 <td class="toolCol">
-                  <img (click)="openReportModal(report);" src="assets/imgs/ver.svg"  class="icon_drapo">
+                  <img (click)="openNuevoreporte(report);" src="assets/imgs/reporte.svg"  class="icon_drapo_big">
+                  <img (click)="openTicket(report);" src="assets/imgs/ticket.svg"  class="icon_drapo_big">
                   <!--<button class="bgColorSecondary generalButton tableButton">Exportar</button>-->
                   <button class="bgColorPrimary generalButton tableButton" (click)="elimiarReporte(report);">Eliminar</button>
                 </td>

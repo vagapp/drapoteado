@@ -46,15 +46,20 @@ export class ReportesPage {
     //Debugger.log(["reportes carfados",this.userData.reportes]);
   }
 
-  openNuevoreporte(){
-    let Modal = this.modalCtrl.create("NuevoreporteModalPage", undefined, { cssClass: "smallModal nuevoreporteModal" });
-    Modal.present({});
+  openNuevoreporte(report:reportes){
+   /* let Modal = this.modalCtrl.create("NuevoreporteModalPage", undefined, { cssClass: "smallModal nuevoreporteModal" });
+    Modal.present({});*/
+    this.reportPresentator.openReportGenerate(report);
   }
   
   openReportModal( report:reportes ){
     this.reportPresentator.openReportModal(report);
     /*let Modal = this.modalCtrl.create("ReporteModalPage", {reporte:report}, { cssClass: "bigModal reportModal" });
     Modal.present({});*/
+  }
+
+  openTicket(report:reportes){
+    this.reportPresentator.openTicket(report);
   }
 
   elimiarReporte( report:reportes ){

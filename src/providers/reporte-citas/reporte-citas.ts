@@ -18,15 +18,24 @@ export class ReporteCitasProvider {
    
   }
 
-  async reporteLoadCitas( report:reportes){
+  async reporteLoadCitas( report:reportes , doctorUid:number = null){
     let aux_citas = new Array<Citas>();
-    const obs = this.reporteGetCitasObservable(report);
+    const obs = this.reporteGetCitasObservable(report, doctorUid);
     let citas_data = await obs.toPromise();
     report.citas = this.generateCitasFromdata(citas_data);
     //now we gotta sort everything.
   }
 
-  reporteGetCitasObservable(report:reportes){
+  reporteGetCitasObservable(report:reportes,  doctorUid:number = null){
+    if(doctorUid)
+    return this.citasManager.getCitasObservable(
+      report.dateStartUTMS,
+      report.dateEndUTMS,
+      [doctorUid],
+      report.cajaFilter,
+      report.recepcionFilter
+     );
+    else
     return this.citasManager.getCitasObservable(
       report.dateStartUTMS,
       report.dateEndUTMS,

@@ -22,7 +22,13 @@ import { ModalController } from 'ionic-angular';
 */
 @Injectable()
 export class ReportPresentatorProvider {
+  static REPORT_TICKET = 2;
+  static REPORT_COMPLETE = 1;
+  get REPORT_TICKET(){ return ReportPresentatorProvider.REPORT_TICKET;}
+  get REPORT_COMPLETE(){ return ReportPresentatorProvider.REPORT_COMPLETE;}
 actualReport:reportes = null;
+type:number = 1;
+docuid:number = null;
 
   noCitas:number;
   noShow:number;
@@ -45,6 +51,8 @@ actualReport:reportes = null;
 	cajacuentas:number;
   cajaAdeudo:number;
 
+
+
   constructor(
     public reporteCitas: ReporteCitasProvider,
     public reporteServicios: ReporteServiciosProvider,
@@ -66,6 +74,37 @@ actualReport:reportes = null;
     Modal.present({});
   }
 
+ async openTicket(report:reportes = null){
+  this.loader.presentLoader('Cargando Reporte ...');
+  await this.setReport(report);
+  await this.loadReporte();
+  let Modal = this.modalCtrl.create("ReporteModalPage", undefined, { cssClass: "bigModal reportModal" });
+  this.loader.dismissLoader();
+  Modal.present({});
+}
+
+async openReporte( report:reportes = null){
+  console.log('opening reporte', this.type);
+  this.loader.presentLoader('Cargando Reporte ...');
+  await this.setReport(report);
+  await this.loadReporte();
+  let  load = "ReporteModalPage";
+  if(Number(this.type) === ReportPresentatorProvider.REPORT_TICKET) load = "ReporteTicketPage";
+  let Modal = this.modalCtrl.create(load, undefined, { cssClass: "bigModal reportModal" });
+  this.loader.dismissLoader();
+  Modal.present({});
+
+}
+
+async openReportGenerate( report:reportes = null ){
+  this.loader.presentLoader('Cargando Reporte ...');
+  await this.setReport(report);
+  let Modal = this.modalCtrl.create("ReporteGeneratePage", undefined, { cssClass: "smallModal nuevoreporteModal" });
+  this.loader.dismissLoader();
+  Modal.present({});
+}
+  
+
   async setReport(report:reportes = null){
     if(report){this.actualReport = report;
     }else{
@@ -83,7 +122,7 @@ actualReport:reportes = null;
   }
 
   async loadReportCitas(){
-    await this.reporteCitas.reporteLoadCitas(this.actualReport);
+    await this.reporteCitas.reporteLoadCitas(this.actualReport, this.docuid);
   }
 
   async loadReportServicios(){
