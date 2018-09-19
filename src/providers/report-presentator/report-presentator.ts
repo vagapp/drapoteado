@@ -78,7 +78,7 @@ docuid:number = null;
   this.loader.presentLoader('Cargando Reporte ...');
   await this.setReport(report);
   await this.loadReporte();
-  let Modal = this.modalCtrl.create("ReporteModalPage", undefined, { cssClass: "bigModal reportModal" });
+  let Modal = this.modalCtrl.create("ReporteModalPage", undefined, { cssClass: "smallModal reportModal" });
   this.loader.dismissLoader();
   Modal.present({});
 }
@@ -89,8 +89,9 @@ async openReporte( report:reportes = null){
   await this.setReport(report);
   await this.loadReporte();
   let  load = "ReporteModalPage";
-  if(Number(this.type) === ReportPresentatorProvider.REPORT_TICKET) load = "ReporteTicketPage";
-  let Modal = this.modalCtrl.create(load, undefined, { cssClass: "bigModal reportModal" });
+  let modalClass = 'bigModal'
+  if(Number(this.type) === ReportPresentatorProvider.REPORT_TICKET){ load = "ReporteTicketPage"; modalClass = 'verysmallModal'; }
+  let Modal = this.modalCtrl.create(load, undefined, { cssClass: `${modalClass} reportModal` });
   this.loader.dismissLoader();
   Modal.present({});
 

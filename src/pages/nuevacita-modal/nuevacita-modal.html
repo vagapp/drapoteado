@@ -37,10 +37,24 @@
               <input [(ngModel)]="this.cita.data.field_telefono.und[0].value" name="field_telefono" type="text"/>
           </div>
           <div class="nuevacita_dates">
-                <ion-item>
+                <div moment-picker="ctrl.myInput"
+                locale="es"
+                format="LL LTS"
+                min-view="month"
+                max-view="day"
+                today="true"
+                inline="true"
+                set-on-select="true">
+           </div>
+               <!-- <ion-calendar  name="date" [(ngModel)]="date"
+                (onChange)="onChange($event)"
+                [type]="type"
+                [format]="'YYYY-MM-DD'">
+          </ion-calendar>-->    
+                <!--<ion-item>
                         <ion-label>Fecha</ion-label>
                         <ion-datetime displayFormat="DDD DD/MMM/YYYY HH:mm" [(ngModel)]="selectedDate" name="selectedDate"></ion-datetime>
-                      </ion-item>
+                      </ion-item>-->
                 
               <!--<div class="ModalInput_input">
                   <b>Fecha</b>

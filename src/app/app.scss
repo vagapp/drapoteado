@@ -340,10 +340,33 @@ border: 0px solid #000000;
     right: 50px;
 }
 
-.modalPage_logo{
+.modalPage_logo {
     height: 100px;
     width: 100px;
-    display: inline-block;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ticket_row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.ticket_row_block{
+    margin: 30px
+}
+
+.ticket_content{
+display: flex;
+justify-content: center;
+align-items: center;
+flex-flow: column;
+}
+
+.drapo_icon_logo img {
+    max-height: 50px;
 }
 
 .drap_edit_icon{
@@ -433,6 +456,14 @@ border: 0px solid #000000;
     /*max-width: 60%;*/
     /*max-height: 80%;*/
     min-width: 1000px;
+    /*left: 20%;*/
+    /*top: 10%;*/
+}
+
+.verysmallModal .modal-wrapper{
+    /*max-width: 60%;*/
+    /*max-height: 80%;*/
+    min-width: 600px;
     /*left: 20%;*/
     /*top: 10%;*/
 }

@@ -32,6 +32,9 @@ export class NuevacitaModalPage {
   cita:Citas = null;
   isnew:boolean = true;
   selectedDate:string = null;
+
+  date: string;
+  type: 'string';
   
   constructor(
     public navCtrl: NavController, 
@@ -59,6 +62,9 @@ export class NuevacitaModalPage {
       this.resetNewCita();
       this.selectedDate = Citas.getLocalDateIso(new Date());//new Date().toISOString();
     }
+  }
+  onChange($event) {
+    console.log($event);
   }
 
   dismiss() {

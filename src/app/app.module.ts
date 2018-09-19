@@ -50,6 +50,7 @@ import { ReporteServiciosProvider } from '../providers/reporte-servicios/reporte
 import { DrupalNodeEditorProvider } from '../providers/drupal-node-editor/drupal-node-editor';
 import { CitaProgressControllerProvider } from '../providers/cita-progress-controller/cita-progress-controller';
 import { PermissionsProvider } from '../providers/permissions/permissions';
+import { CalendarModule } from "ion2-calendar";
 
 
 
@@ -79,6 +80,7 @@ import { PermissionsProvider } from '../providers/permissions/permissions';
     //IonicStorageModule.forRoot(),
     ComponentsModule,
     DirectivesModule,
+    CalendarModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
