@@ -11,6 +11,8 @@ import { AlertProvider } from '../../providers/alert/alert';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
+import * as moment from 'moment';
+import { DateProvider } from '../../providers/date/date';
 
 /**
  * Generated class for the NuevacitaModalPage page.
@@ -34,6 +36,7 @@ export class NuevacitaModalPage {
   selectedDate:string = null;
 
   date: string;
+  dateobj:Date;
   type: 'string';
   
   constructor(
@@ -47,24 +50,30 @@ export class NuevacitaModalPage {
     public alert: AlertProvider,
     public wsMessenger: WsMessengerProvider,
     public docData: DoctoresDataProvider,
-    public permissions: PermissionsProvider
+    public permissions: PermissionsProvider,
+    public dateP: DateProvider
   ) {
     console.log('GETTING CITA', navParams.get('cita'));
+    moment.locale('es');
     let aux_node = navParams.get('cita');
     if(aux_node){
       this.cita = aux_node;
       Debugger.log(['cita en modal es',this.cita]);
       this.isnew = false;
-      this.selectedDate = Citas.getLocalDateIso(new Date(this.cita.data.field_datemsb['und'][0]['value']));//new Date().toISOString();
+      //this.selectedDate = Citas.getLocalDateIso(new Date(this.cita.data.field_datemsb['und'][0]['value']));//new Date().toISOString();
+      this.dateobj = new Date(this.cita.data.field_datemsb['und'][0]['value']);
       console.log(this.selectedDate);
     }else{
       this.isnew = true;
       this.resetNewCita();
-      this.selectedDate = Citas.getLocalDateIso(new Date());//new Date().toISOString();
+      this.cita.date = new Date();
+      this.dateobj = new Date();
+      //this.selectedDate = Citas.getLocalDateIso(new Date());//new Date().toISOString();
     }
   }
-  onChange($event) {
-    console.log($event);
+  datechange($event) {
+    this.cita.date = $event;
+    //console.log($event);
   }
 
   dismiss() {
@@ -78,6 +87,11 @@ export class NuevacitaModalPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad NuevacitaModalPage');
   }
+
+  getDisplayableDates(){
+    return DateProvider.getDisplayableDates( this.cita.date);
+  }
+
 
 
   async createCita(){
@@ -156,7 +170,8 @@ setCitaDateFromiNPUT(){
   //get the timezoned input and put it on utc on this format 2018-07-04 14:30:00-07:00 to set data using citas code
   //Debugger.log(['string that not works now is',this.selectedDate],false);
   //this.cita.setDate(this.selectedDate,true);
-  let now = new Date();
+  //OLD CODE FROM IONIC DATEPICKER
+  /*let now = new Date();
   Debugger.log([this.selectedDate]);
   let auxdate = new Date(this.selectedDate);
   Debugger.log([`times dif are now ${now.getTime()} vs sel ${auxdate.getTime()}`]);
@@ -166,7 +181,12 @@ setCitaDateFromiNPUT(){
   dateUT = dateUT + offset;
   this.cita.setDateUT(dateUT);
   this.cita.data.field_datemsb['und'][0]['value'] = dateUT;
-  Debugger.log([`saving ${dateUT} for ${new Date(dateUT)}`]);
+  Debugger.log([`saving ${dateUT} for ${new Date(dateUT)}`]);*/
+
+  //CODE FOR CALENDAR PICKER
+  let dateUT = this.dateobj.getTime();
+  this.cita.setDateUT(dateUT);
+  this.cita.data.field_datemsb['und'][0]['value'] = dateUT;
 }
 
 }

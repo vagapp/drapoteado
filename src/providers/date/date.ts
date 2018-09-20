@@ -39,5 +39,13 @@ export class DateProvider {
         if(numberdatedif < 0) ret = `hace ${ret}`;
         return ret;
     }
+
+    static getDisplayableDates(date:Date){
+        let ret = {"date":'',"time":''};
+        let datestring = `${DateProvider.formatDateBinaryNumber(date.getDate())}/${(DateProvider.formatDateBinaryNumber(date.getMonth()+1))}/${date.getFullYear()}`;
+        let timestring =  `${DateProvider.formatDateBinaryNumber(date.getHours())}:${DateProvider.formatDateBinaryNumber(date.getMinutes())}`;
+        ret = { "date":datestring ,"time":timestring};
+        return ret;
+    }
   
 }

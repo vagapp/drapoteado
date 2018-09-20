@@ -37,7 +37,9 @@
               <input [(ngModel)]="this.cita.data.field_telefono.und[0].value" name="field_telefono" type="text"/>
           </div>
           <div class="nuevacita_dates">
-                <dl-date-time-picker></dl-date-time-picker>
+              <span class="midMainFont"> {{getDisplayableDates().date}} {{getDisplayableDates().time}}</span>
+                <dl-date-time-picker name="date" [(ngModel)]="dateobj" (ngModelChange)="datechange($event)" minView="hour"></dl-date-time-picker>
+               
                <!-- <div moment-picker="ctrl.myInput"
                 locale="es"
                 format="LL LTS"
