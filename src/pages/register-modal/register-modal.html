@@ -19,7 +19,11 @@
         </div>
       </div>
     <div class="fact_page_content" *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY])" >
-        <span class="fact_label_main">Usted no cuenta con un plan activo o su subscripción ha expirado</span>
+        <div class="modal_header">
+            <span class="spanBlock header_title"><img class="modal_title_logo" src="assets/imgs/logo-rojo-gris.svg"/></span>
+            <span class="spanBlock header_subtitle">¡ Bienvenido !</span>
+            <p>Gracias por usar nuestra aplicación, para comenzar a utilizarla es necesario que elijas uno de nuestros planes</p>
+          </div>
         <div class="subscribe_wrap">
         <div class="fact_myplan noplan " >
             <span class="fact_label left_label">Seleccione un plan</span>
@@ -62,12 +66,12 @@
       </div>
     </div>
 
-  <div class="register_contet_head">
+  <div class="register_contet_head"  *ngIf="permissions.checkUserSuscription([userData.PLAN_ANY])">
     <div class="bigFont" *ngIf="this.isnew"> <span class="fontPrimary"><b>Registro</b></span> <span class="lightFont">de Nuevo Usuario</span></div>
     <div class="midSubFont" *ngIf="this.isnew"> Por favor proporciona los siguientes datos: </div>
     <div class="bigFont" *ngIf="!this.isnew"> <span class="fontPrimary"><b>Datos</b></span> <span class="lightFont">de Usuario</span></div>
   </div>
-  <div class="register_contet_form">
+  <div class="register_contet_form"  *ngIf="permissions.checkUserSuscription([userData.PLAN_ANY])">
     <div class="register_base register_form_section rfsFlex">
         <div class="registerInput">
             <b>Email:</b><input [(ngModel)]="this.userData.userData.mail" type="text"/>

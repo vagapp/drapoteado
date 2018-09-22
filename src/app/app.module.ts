@@ -75,7 +75,7 @@ import { CalendarModule } from "ion2-calendar";
       dayShortNames: ['Dom', 'Lun', 'Mar', 'Mie','Jue','Vie','Sab' ],
      }),
     HttpClientModule,
-    //NativeHttpModule,
+    //NativeHttpModule, 
     HttpModule,
     //IonicStorageModule.forRoot(),
     ComponentsModule,

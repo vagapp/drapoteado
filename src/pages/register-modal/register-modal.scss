@@ -412,6 +412,35 @@ page-register-modal {
     }
 }
 
+.modal_header{
+    text-align: center;
+    width: auto;
+    margin: 30px;
+    padding: 10px;
+    border-bottom: 1px solid gray;
+ }
+ .header_title{
+     font-size: 8rem;
+ }
+ .header_subtitle{
+     font-size: 3.5rem;
+     font-weight: bold;
+ }
+ .modal_title_logo{
+     display: inline-block;
+     max-width: 250px;
+     max-height: 70px;
+     height: auto;
+     width: auto;
+ }
+ .modal_body{
+     text-align: center;
+     font-size: 2rem;
+     padding-left: 20px;
+     padding-right: 20px;
+ }
+
+
 
   @media screen and (max-width: 768px) {
 

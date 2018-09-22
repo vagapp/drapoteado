@@ -40,7 +40,8 @@ export class HomePage {
 
   async ionViewDidLoad(){
     if(this.userData.userData.uid !== 0){
-      if( this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){
+      
+      if(this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY]) && this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){
         let Modal = this.modalCtrl.create("WelcomeModalPage");
         Modal.present({});
         this.userData.userData.tutorial_state.und[0].value = "1";

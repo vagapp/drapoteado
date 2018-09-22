@@ -33,6 +33,7 @@ export class WebsocketServiceProvider {
       () => {console.warn('Completed!'); console.log("over");}
       );
       console.log("cosas feas terminadas que pedo");
+      
   }
 
   serverMessages(message:Message){

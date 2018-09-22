@@ -77,7 +77,13 @@ export class MyApp {
       let loading = this.loadingCtrl.create({content: 'Bienvenido'});
       loading.present();
       this.initLoad().then(()=>{
-        if(this.userData.userData.uid !== 0) this.rootPage = 'HomePage';
+        if(this.userData.userData.uid !== 0){
+          this.rootPage = 'HomePage';
+          if(!this.perm.checkUserSuscription([UserDataProvider.PLAN_ANY])){
+            let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
+            Modal.present({});
+          }
+        }
         loading.dismiss();
         this.loaddate = new Date().getTime();
         this.wsMessenger.generateMessage(
