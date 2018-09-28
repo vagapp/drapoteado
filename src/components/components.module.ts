@@ -7,11 +7,13 @@ import { NlistComponent } from './nlist/nlist';
 
 
 
+
 @NgModule({
 	declarations: [
     HeaderComponent,
     FooterComponent,
     NlistComponent,
+
     
 ],
 	imports: [
@@ -21,6 +23,7 @@ import { NlistComponent } from './nlist/nlist';
 	exports: [HeaderComponent,
     FooterComponent,
     NlistComponent,
+
     
 ]
 })

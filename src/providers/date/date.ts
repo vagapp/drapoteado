@@ -47,5 +47,12 @@ export class DateProvider {
         ret = { "date":datestring ,"time":timestring};
         return ret;
     }
+
+    static getDisplayableHourfMS(MS:number){
+        let date = new Date();
+        date.setHours(0,0,0,0);
+        date = new Date(date.getTime() + MS);
+        return `${DateProvider.formatDateBinaryNumber(date.getHours())}:${DateProvider.formatDateBinaryNumber(date.getMinutes())}`;
+    }
   
 }

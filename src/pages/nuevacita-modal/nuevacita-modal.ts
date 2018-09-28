@@ -11,8 +11,11 @@ import { AlertProvider } from '../../providers/alert/alert';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
-import * as moment from 'moment';
+//import * as moment from 'moment';
 import { DateProvider } from '../../providers/date/date';
+//import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
+import { Calendar } from '@ionic-native/calendar';
+import { DoctoresManagerProvider } from '../../providers/doctores-manager/doctores-manager';
 
 /**
  * Generated class for the NuevacitaModalPage page.
@@ -35,9 +38,27 @@ export class NuevacitaModalPage {
   isnew:boolean = true;
   selectedDate:string = null;
 
-  date: string;
+  //date: string;
   dateobj:Date;
+  selectedHour:number = 0;
   type: 'string';
+
+date: Date;
+daysInThisMonth: any;
+daysInLastMonth: any;
+daysInNextMonth: any;
+monthNames: string[];
+currentMonth: any;
+currentMonthNum:any;
+currentYear: any;
+currentDate: any;
+
+eventList: any;
+selectedEvent: any;
+isSelected: any;
+
+hours:any[] = new Array();
+hourIntervalMS:number = 30*60*1000;
   
   constructor(
     public navCtrl: NavController, 
@@ -50,11 +71,14 @@ export class NuevacitaModalPage {
     public alert: AlertProvider,
     public wsMessenger: WsMessengerProvider,
     public docData: DoctoresDataProvider,
+    public docMan: DoctoresManagerProvider,
     public permissions: PermissionsProvider,
-    public dateP: DateProvider
+    public dateP: DateProvider,
+    private calendar: Calendar
   ) {
+    
     console.log('GETTING CITA', navParams.get('cita'));
-    moment.locale('es');
+
     let aux_node = navParams.get('cita');
     if(aux_node){
       this.cita = aux_node;
@@ -62,15 +86,47 @@ export class NuevacitaModalPage {
       this.isnew = false;
       //this.selectedDate = Citas.getLocalDateIso(new Date(this.cita.data.field_datemsb['und'][0]['value']));//new Date().toISOString();
       this.dateobj = new Date(this.cita.data.field_datemsb['und'][0]['value']);
+      let dateobj_start = new Date(this.cita.data.field_datemsb['und'][0]['value']);
+      dateobj_start.setHours(0,0,0,0);
+      this.selectedHour = this.dateobj.getTime() - dateobj_start.getTime();
+      console.log('selected hour is:', this.selectedHour);
       console.log(this.selectedDate);
     }else{
       this.isnew = true;
       this.resetNewCita();
       this.cita.date = new Date();
       this.dateobj = new Date();
+      this.selectedHour = 0;
       //this.selectedDate = Citas.getLocalDateIso(new Date());//new Date().toISOString();
     }
   }
+
+  setHours(){
+    let minutes = 24*60*60*1000;
+    let time = 0;
+    this.hours = new Array();
+    for(let i = 0; i < minutes/this.hourIntervalMS; i++){
+      //console.log(new Date(i*this.hourInterval*60*1000));
+      this.hours.push(i*this.hourIntervalMS);
+    }
+  }
+
+  hourDisplay(hourMs):string{
+    let ret = "";
+    return DateProvider.getDisplayableHourfMS(hourMs);
+  }
+
+  checkSelectedHour(hour):boolean{
+    let ret = false;
+    if(this.selectedHour >= hour && this.selectedHour < hour+(this.hourIntervalMS)) ret =  true;
+    return ret;
+  }
+
+  ionViewWillEnter() {
+    this.setHours();
+    this.calendarLoad();
+  }
+
   datechange($event) {
     this.cita.date = $event;
     //console.log($event);
@@ -92,7 +148,10 @@ export class NuevacitaModalPage {
     return DateProvider.getDisplayableDates( this.cita.date);
   }
 
-
+  choseHourClick(hour){
+    console.log(hour);
+    this.selectedHour = hour;
+  }
 
   async createCita(){
     if(!this.basicNewCitaValidation()){ return false; }
@@ -122,6 +181,7 @@ export class NuevacitaModalPage {
         }
       }
   );
+  await this.docMan.pushDisponivilidad(this.cita.data.field_cita_doctor.und[0], this.cita.data.field_datemsb['und'][0]['value'] );
   //await this.citasMan.requestCitas().toPromise();
   this.loader.dismissLoader();
   this.close();
@@ -184,10 +244,90 @@ setCitaDateFromiNPUT(){
   Debugger.log([`saving ${dateUT} for ${new Date(dateUT)}`]);*/
 
   //CODE FOR CALENDAR PICKER
-  let dateUT = this.dateobj.getTime();
+  let aux_date = new Date(this.dateobj.getTime());
+  aux_date.setHours(0,0,0,0);
+  aux_date = new Date(aux_date.getTime()+this.selectedHour);
+  console.log('settingdateinput is',aux_date);
+  let dateUT = aux_date.getTime();//this.aux_date.getTime();
   this.cita.setDateUT(dateUT);
   this.cita.data.field_datemsb['und'][0]['value'] = dateUT;
 }
+
+
+
+
+calendarLoad(){
+  this.date = new Date();
+    this.monthNames = ["Enero","Febrero","Marzo","Abril","Mayi","Junio","Julio","Augosto","Septiembre","Octubre","Noviembre","Dicimbre"];
+    this.getDaysOfMonth();
+    //this.loadEventThisMonth();
+}
+
+
+getDaysOfMonth() {
+  this.daysInThisMonth = new Array();
+  this.daysInLastMonth = new Array();
+  this.daysInNextMonth = new Array();
+  this.currentMonth = this.monthNames[this.date.getMonth()];
+  this.currentMonthNum = this.date.getMonth();
+  this.currentYear = this.date.getFullYear();
+  if(this.date.getMonth() === this.dateobj.getMonth()) {
+    this.currentDate = this.dateobj.getDate();
+  } else {
+    this.currentDate = 999;
+  }
+
+  var firstDayThisMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1).getDay();
+  var prevNumOfDays = new Date(this.date.getFullYear(), this.date.getMonth(), 0).getDate();
+  for(var i = prevNumOfDays-(firstDayThisMonth-1); i <= prevNumOfDays; i++) {
+    this.daysInLastMonth.push(i);
+  }
+
+  var thisNumOfDays = new Date(this.date.getFullYear(), this.date.getMonth()+1, 0).getDate();
+  for (var i = 0; i < thisNumOfDays; i++) {
+    this.daysInThisMonth.push(i+1);
+  }
+
+  var lastDayThisMonth = new Date(this.date.getFullYear(), this.date.getMonth()+1, 0).getDay();
+  var nextNumOfDays = new Date(this.date.getFullYear(), this.date.getMonth()+2, 0).getDate();
+  for (var i = 0; i < (6-lastDayThisMonth); i++) {
+    this.daysInNextMonth.push(i+1);
+  }
+  var totalDays = this.daysInLastMonth.length+this.daysInThisMonth.length+this.daysInNextMonth.length;
+  if(totalDays<36) {
+    for(var i = (7-lastDayThisMonth); i < ((7-lastDayThisMonth)+7); i++) {
+      this.daysInNextMonth.push(i);
+    }
+  }
+}
+
+chosedayClick( day ){
+  let datex = new Date();
+  datex.setFullYear(this.currentYear,this.currentMonthNum,day);
+  this.currentDate = datex.getDate();
+  this.dateobj = datex;
+  this.date = datex;
+}
+
+goToLastMonth() {
+  this.date = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
+  this.getDaysOfMonth();
+}
+
+goToNextMonth() {
+  this.date = new Date(this.date.getFullYear(), this.date.getMonth()+2, 0);
+  this.getDaysOfMonth();
+}
+
+
+
+
+
+
+
+
+
+
 
 }
 

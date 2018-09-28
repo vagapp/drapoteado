@@ -14,6 +14,7 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
 ion-content{
     color:#4D4D4D !important;
 }
@@ -40,7 +41,6 @@ ion-header{
     /*height: 80px;*/
     padding-top: 25px;
 }
-
 
 ion-app.ios [padding] .scroll-content{
     padding:0;
@@ -444,7 +444,7 @@ flex-flow: column;
     text-align: right;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: end;
 }
 
 .modalPage_header{
@@ -586,6 +586,10 @@ border: 0px solid #000000;
         flex-flow: column;
     }
 
+    .nuevaCita_form{
+        padding: 25px 5px;
+    }
+
 }
 
 @media screen and (max-width: 860px){
@@ -597,7 +601,7 @@ border: 0px solid #000000;
 
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 767px){
     ion-modal {
         display: block;
     }

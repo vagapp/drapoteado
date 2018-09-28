@@ -67,7 +67,7 @@ export class MyApp {
 
 
 
-  initializeApp() {
+  initializeApp(){
     this.splashScreen.hide();
     this.rootPage = 'LoginPage';
     this.platform.ready().then(() => {

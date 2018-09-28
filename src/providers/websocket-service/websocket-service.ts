@@ -26,14 +26,17 @@ export class WebsocketServiceProvider {
   }
 
   async init(){
+   this.websocketConnect();
+  }
+
+  websocketConnect(){
     this.websocket = WebSocketSubject.create(this.bu.websocketUrl);
     this.websocket.subscribe(
       (message) => this.serverMessages(message),
-      (err) => console.error(err),
-      () => {console.warn('Completed!'); console.log("over");}
+      (err) => { console.error(err); this.websocketConnect(); },
+      () => {console.log("websocket over");}
       );
       console.log("cosas feas terminadas que pedo");
-      
   }
 
   serverMessages(message:Message){
@@ -68,8 +71,9 @@ export class WebsocketServiceProvider {
   // returns true if one of the doctors this user is listening is contained on the receivers of this message
   FilterMessageCita(message:Message):boolean{
     let ret = false;
+    console.log('filtering msg', message);
     for(let uid of message.receivers){
-      if(this.docData.existsByUid(uid)){ ret = true; break;}
+      if(this.docData.existsByUid(uid)){ console.log('uid found',uid); ret = true; break; }
     }
     return ret;
   }

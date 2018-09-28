@@ -15,6 +15,7 @@ export class Doctores{
     field_alias:string = '';
     playerID:string = '';
     showDate: Citas = null;
+    field_disponibilidad: number[] = new Array();
 
     public constructor(){
       this.citas = new Array();
@@ -59,6 +60,10 @@ export class Doctores{
         this.citaActiva = null;
       }
     
+    }
+
+    setDisponibilidad(field_disp){
+      console.log("setting doc disp",field_disp);
     }
 
    

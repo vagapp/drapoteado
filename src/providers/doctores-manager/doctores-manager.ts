@@ -36,7 +36,6 @@ export class DoctoresManagerProvider {
         //whem there is a change on citas, doctor manager evaluates citas to get nextCitas for these doctors.
        console.log('citas change on doctor manager',val);
        this.evaluateCitas();
-      
       }
     );
     const intervalUntil = setInterval(()=>{ 
@@ -90,6 +89,7 @@ export class DoctoresManagerProvider {
       auxDoc.Uid = doc.uid;
       auxDoc.name = doc.name;
       auxDoc.field_alias = doc.field_alias;
+      auxDoc.setDisponibilidad(doc.field_disponibilidad);
       this.docData.addDoctor(auxDoc);
     }
   }
@@ -182,5 +182,15 @@ export class DoctoresManagerProvider {
       )});
     console.log('filtering citas pendientes',ret);
     return ret;
+  }
+
+  async pushDisponivilidad(uid:number, disponibilidad:number ){
+    let doc = this.docData.getDoctorByUid(uid);
+    doc.field_disponibilidad.push(disponibilidad);
+    let cloneData = {
+      uid:doc.Uid,
+      field_disponibilidad: {und: doc.field_disponibilidad},
+    }
+    await this.userMan.updateUserd(cloneData).toPromise();
   }
 }

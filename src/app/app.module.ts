@@ -51,6 +51,8 @@ import { DrupalNodeEditorProvider } from '../providers/drupal-node-editor/drupal
 import { CitaProgressControllerProvider } from '../providers/cita-progress-controller/cita-progress-controller';
 import { PermissionsProvider } from '../providers/permissions/permissions';
 import { CalendarModule } from "ion2-calendar";
+import { Calendar } from '@ionic-native/calendar';
+import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
 
 
 
@@ -67,6 +69,7 @@ import { CalendarModule } from "ion2-calendar";
   ],
   imports: [
     BrowserModule,
+    DlDateTimePickerDateModule,
     IonicModule.forRoot(MyApp, {
       preloadModules: true,
       monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre' ],
@@ -97,6 +100,7 @@ import { CalendarModule } from "ion2-calendar";
       useClass: TimeoutInterceptor,
       multi: true
     },
+    Calendar,
     StatusBar,
     Clipboard,
     SplashScreen,
@@ -109,7 +113,6 @@ import { CalendarModule } from "ion2-calendar";
     BaseUrlProvider,
     CitasManagerProvider,
     CordovaAvailableProvider,
-    ,
     DoctoresDataProvider,
     PlanesDataProvider,
     SubscriptionDataProvider,
