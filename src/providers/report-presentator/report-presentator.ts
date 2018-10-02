@@ -66,21 +66,24 @@ docuid:number = null;
   }
 
   async openReportModal( report:reportes = null){
-    this.loader.presentLoader('Cargando Reporte ...');
+    /*this.loader.presentLoader('Cargando Reporte ...');
     await this.setReport(report);
     await this.loadReporte();
     let Modal = this.modalCtrl.create("ReporteModalPage", undefined, { cssClass: "bigModal reportModal" });
     this.loader.dismissLoader();
-    Modal.present({});
+    Modal.present({});*/
+    this.openReporte(report);
   }
 
  async openTicket(report:reportes = null){
-  this.loader.presentLoader('Cargando Reporte ...');
+  /*this.loader.presentLoader('Cargando Reporte ...');
   await this.setReport(report);
   await this.loadReporte();
-  let Modal = this.modalCtrl.create("ReporteModalPage", undefined, { cssClass: "smallModal reportModal" });
+  let Modal = this.modalCtrl.create("ReporteTicketPage", undefined, { cssClass: "verysmallModal reportModal" });
   this.loader.dismissLoader();
-  Modal.present({});
+  Modal.present({});*/
+  this.type = ReportPresentatorProvider.REPORT_TICKET;
+  this.openReporte(report);
 }
 
 async openReporte( report:reportes = null){

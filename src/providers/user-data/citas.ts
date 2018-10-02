@@ -408,6 +408,10 @@ export class Citas{
         return ret;
       }
 
+      static dateTOTiers(){
+          
+      }
+
       static getLocalDateIso( date:Date ){
         var tzo = date.getTimezoneOffset(),
         dif = tzo >= 0 ? '+' : '-',

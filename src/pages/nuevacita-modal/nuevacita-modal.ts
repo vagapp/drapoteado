@@ -41,6 +41,7 @@ export class NuevacitaModalPage {
   //date: string;
   dateobj:Date;
   selectedHour:number = 0;
+  selectedHourISO:string = '';
   type: 'string';
 
 date: Date;
@@ -76,15 +77,20 @@ hourIntervalMS:number = 30*60*1000;
     public dateP: DateProvider,
     private calendar: Calendar
   ) {
-    
+    /** 
+     * Al entrar seteas la fecha a este momento:
+     *  setear dia de hoy en calendario
+     *  setear intervalo en las horas correspondiente a esta hora.
+     *
+     * **/
     console.log('GETTING CITA', navParams.get('cita'));
-
     let aux_node = navParams.get('cita');
     if(aux_node){
       this.cita = aux_node;
       Debugger.log(['cita en modal es',this.cita]);
       this.isnew = false;
       //this.selectedDate = Citas.getLocalDateIso(new Date(this.cita.data.field_datemsb['und'][0]['value']));//new Date().toISOString();
+      this.selectedHourISO = Citas.getLocalDateIso(new Date(this.cita.data.field_datemsb['und'][0]['value']));//new Date().toISOString();
       this.dateobj = new Date(this.cita.data.field_datemsb['und'][0]['value']);
       let dateobj_start = new Date(this.cita.data.field_datemsb['und'][0]['value']);
       dateobj_start.setHours(0,0,0,0);
@@ -98,6 +104,7 @@ hourIntervalMS:number = 30*60*1000;
       this.dateobj = new Date();
       this.selectedHour = 0;
       //this.selectedDate = Citas.getLocalDateIso(new Date());//new Date().toISOString();
+      this.selectedHourISO = Citas.getLocalDateIso(this.getDateOnNextTreshold());//new Date().toISOString();
     }
   }
 
@@ -118,9 +125,12 @@ hourIntervalMS:number = 30*60*1000;
 
   checkSelectedHour(hour):boolean{
     let ret = false;
-    if(this.selectedHour >= hour && this.selectedHour < hour+(this.hourIntervalMS)) ret =  true;
+    //if(this.selectedHour >= hour && this.selectedHour < hour+(this.hourIntervalMS)) ret =  true;
+    if(DateProvider.isDateBetweenNumber( this.selectedHour, hour,hour+(this.hourIntervalMS) ) ) ret = true;
     return ret;
   }
+
+
 
   ionViewWillEnter() {
     this.setHours();
@@ -155,6 +165,9 @@ hourIntervalMS:number = 30*60*1000;
 
   async createCita(){
     if(!this.basicNewCitaValidation()){ return false; }
+    this.setCitaDateFromiNPUT();
+    if(!this.citaDateValidation()){ return false; }
+    
     this.loader.presentLoader('creando cita...');
     this.cita.data.field_estado.und["0"].value = 0;
     if(this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])){
@@ -164,7 +177,6 @@ hourIntervalMS:number = 30*60*1000;
       this.cita.data.field_cita_caja.und[0]="_none"; //quien cobro la cita
       this.cita.caja_playerid = null;
       this.cita.data.field_servicios_cita.und = []; //limpiamos los servicios porque nos deja basura
-      this.setCitaDateFromiNPUT();
     await this.citasMan.generateNewCita( this.cita.data ).subscribe(
     (val)=>{
       console.log(val.nid);
@@ -200,9 +212,37 @@ basicNewCitaValidation(){
   return ret;
 }
 
+citaDateValidation():boolean{
+  let ret = true;
+  if(this.cita.data.field_datemsb['und'][0]['value'] < new Date().getTime()){
+    console.log('elegir fecha a futuro.');
+    this.alert.presentAlert('Error','Debe elegir una fecha a futuro');
+    ret = false;
+  }
+  return ret;
+}
+
+getDateOnNextTreshold():Date{
+  let aux_date = new Date();
+  if(aux_date.getMinutes()%15 !== 0){
+    console.log('noes15');
+    let min = 15* Math.ceil(aux_date.getMinutes()/15);
+    if(min >= 60){
+      aux_date.setMinutes(0);
+      aux_date = new Date(aux_date.getTime() + ( 60*60*1000 ));
+    }else{
+      aux_date.setMinutes(min);
+    }
+  }else{
+    console.log('es15');
+  }
+  return aux_date;
+}
+
 async updateCita(){
-  this.loader.presentLoader('actualizando ...');
+  if(!this.citaDateValidation()){ return false; }
   this.setCitaDateFromiNPUT();
+  this.loader.presentLoader('actualizando ...');
   await this.citasMan.updateCita( this.cita.data ).subscribe(
     (val)=>{
       this.wsMessenger.generateWSupdateMessage(this.cita);    
@@ -244,13 +284,58 @@ setCitaDateFromiNPUT(){
   Debugger.log([`saving ${dateUT} for ${new Date(dateUT)}`]);*/
 
   //CODE FOR CALENDAR PICKER
-  let aux_date = new Date(this.dateobj.getTime());
+  /*let aux_date = new Date(this.dateobj.getTime());
   aux_date.setHours(0,0,0,0);
   aux_date = new Date(aux_date.getTime()+this.selectedHour);
   console.log('settingdateinput is',aux_date);
   let dateUT = aux_date.getTime();//this.aux_date.getTime();
   this.cita.setDateUT(dateUT);
-  this.cita.data.field_datemsb['und'][0]['value'] = dateUT;
+  this.cita.data.field_datemsb['und'][0]['value'] = dateUT;*/
+
+ 
+  
+  //console.log('originaltime ', new Date().getTime() );
+  //console.log('-----------------------------' );
+  //console.log('obtained', aux_hour_date.getTime() );
+  //console.log('offset',new Date().getTimezoneOffset() * 60 * 1000);
+ 
+  //console.log('-offset',aux_hour_date.getTime()  - (new Date().getTimezoneOffset() * 60 * 1000));
+  //let min = (aux_hour_date.getHours() * 60) + ( aux_hour_date.getMinutes() );
+  //console.log('minutos obtenidos',min, min/60);
+  
+  //aux_date = new Date(aux_date.getTime()+this.selectedHour);
+  /*console.log('selectedHourIso is',this.selectedHourISO);
+  let auxdatehour = new Date(this.selectedHourISO);
+  console.log('selecteddate is',auxdatehour);
+  let hours = DateProvider.getDayHours(auxdatehour);
+  console.log('setting date is', new Date(aux_date.getTime() + hours));
+  console.log('hours pulled', hours);
+  console.log('settingdateinput is',aux_date);
+  const offset = (new Date().getTimezoneOffset() * 60 * 1000 * 2); // offset is in minutes so 60 * 1000 to get  milliseconds
+  let dateUT = aux_date.getTime();
+  dateUT = dateUT + offset + hours;
+  console.log('dateUTset is',new Date(dateUT));
+  this.cita.setDateUT(dateUT);
+  this.cita.data.field_datemsb['und'][0]['value'] = dateUT;*/
+  
+   //CODE FOR CALENDAR AND HOUR PICKER
+  //obtenemos la fecha sin horas.
+  let aux_date = new Date(this.dateobj.getTime());
+  aux_date.setHours(0,0,0,0);
+  console.log('dia sin horas',aux_date);
+
+  //obtenemos las horas em ms
+  console.log('selectedisohour',this.selectedHourISO);
+  let aux_hour_date = new Date(this.selectedHourISO);
+  aux_hour_date = new Date(aux_hour_date.getTime()  + (new Date().getTimezoneOffset() * 60 * 1000 * 2));
+  console.log(aux_hour_date);
+  let ms =  (aux_hour_date.getHours()*60*60*1000)+(aux_hour_date.getMinutes()*60*1000);
+  console.log('HOUR MS',ms,ms/(1000*60*60));
+
+  let final_date_UT = aux_date.getTime() + ms;
+  console.log('final date is', new Date(final_date_UT));
+  this.cita.setDateUT(final_date_UT);
+  this.cita.data.field_datemsb['und'][0]['value'] = final_date_UT;
 }
 
 

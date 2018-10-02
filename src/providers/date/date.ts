@@ -54,5 +54,25 @@ export class DateProvider {
         date = new Date(date.getTime() + MS);
         return `${DateProvider.formatDateBinaryNumber(date.getHours())}:${DateProvider.formatDateBinaryNumber(date.getMinutes())}`;
     }
+
+    //returns true if date is between min and max dates
+    static isDateBetween(date:Date, mindate:Date, maxdate:Date):boolean{
+        let ret = false;
+        if(DateProvider.isDateBetweenNumber(date.getTime(), mindate.getTime(), maxdate.getTime())){ ret = true;}
+        return ret;
+    }
+
+    static isDateBetweenNumber(date:number, mindate:number, maxdate:number):boolean{
+        let ret = false;
+        if(date >= mindate && date < maxdate ){ ret = true;}
+        return ret;
+    }
+
+    //returns  the hours only milliseconds of the date, ignoring year, month and date
+    static getDayHours( date:Date ):number{
+        let aux_date = new Date(date.getTime()); //cloning date
+        aux_date.setHours(0,0,0,0); // setting it to day start
+        return date.getTime() - aux_date.getTime(); //returning rest
+    }
   
 }

@@ -42,6 +42,7 @@ export class CitaProgressControllerProvider {
 
   openProgress(cita:Citas){
     this.setActiveCita(cita);
+    this.calcularCosto();
     this.startInterval();
     let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
     Modal.present({});
@@ -51,6 +52,7 @@ export class CitaProgressControllerProvider {
   setActiveCita(cita:Citas){
     this.activeCita = cita//navParams.get('cita');
     this.activeCitaDoc = this.citasManager.getDoctorOFCita(this.activeCita);
+    console.log(this.activeCita.addedServices);
   }
 
   finalizarCitaActiva(){
@@ -86,10 +88,13 @@ export class CitaProgressControllerProvider {
   }
 
   calcularCosto(){
+    console.log('calculando costo');
     this.costoCita = 0;
+    console.log(this.activeCita.addedServices);
     this.activeCita.addedServices.forEach(element => {
       this.costoCita += Number(element.costo);
     });
+    console.log(this.costoCita);
   }
 
 

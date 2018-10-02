@@ -19,14 +19,14 @@
     <table class="results_table">
         <thead>
             <tr>
-                <th>ID</th>
+                <!--<th>ID</th>-->
                 <th>Fecha</th>
                 <th></th>
              </tr>
         </thead>
         <tbody>
             <tr *ngIf="this.reportesData.todayReport">
-                <td>{{this.reportesData.todayReport.nid}}</td>
+                <!--<td>{{this.reportesData.todayReport.nid}}</td>-->
                 <td class="fontSecondary">{{this.reportesData.todayReport.dateString}} Diario de hoy</td>
                 <td class="toolCol">
                     <img (click)="openNuevoreporte(this.reportesData.todayReport);" src="assets/imgs/reporte.svg"  class="icon_drapo_big">
@@ -35,7 +35,7 @@
                 </td>
              </tr>
             <tr *ngFor="let report of this.reportesData.reportes">
-                <td>{{report.nid}}</td>
+                <!--<td>{{report.nid}}</td>-->
                 <td class="fontSecondary">{{report.dateString}} <span *ngIf="this.reportesData.todayReport.dialy">Diario</span></td>
                 <td class="toolCol">
                   <img (click)="openNuevoreporte(report);" src="assets/imgs/reporte.svg"  class="icon_drapo_big">

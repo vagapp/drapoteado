@@ -20,14 +20,14 @@
           <span class="spanBlock fonHigh midFont">Alias</span>
         </div>
         <div class="info_tool" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])">
-            <span class="spanBlock midFont"><b>No.</b></span>
-            <span class="spanBlock midFont"><b>01</b></span>
+            <!--<span class="spanBlock midFont"><b>No.</b></span>-->
+            <!--span class="spanBlock midFont"><b>01</b></span>-->
           </div>
           <div class="info_tool">
               <span class="spanBlock midFont"><b>Fecha</b></span>
               <span class="spanBlock fontSecondary midFont">{{this.reportPresentator.actualReport.dateString}}</span>
             </div>
-    <!--<button class="bgColorSecondary generalButton" (click)="generatePDF()" >Exportar</button>-->
+    <button class="bgColorSecondary generalButton" (click)="generatePDF()" >Exportar</button>
   
   </div>
   </div>

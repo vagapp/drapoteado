@@ -20,7 +20,7 @@
     <table class="results_table">
         <thead>
             <tr>
-                <th>no</th>
+                <!--<th>no</th>-->
                 <th>Paciente</th>
                 <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Doctor</th>
                 <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Tipo de Servicio</th>
@@ -31,7 +31,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let cita of this.citasData.citas">
-                <td>{{cita.data.Nid}}</td>
+                <!--<td>{{cita.data.Nid}}</td>-->
                 <td>{{cita.data.field_paciente.und[0].value}}</td>
                 <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}} / {{cita.doctor_alias}}</td>
                 <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">General</td>
@@ -43,8 +43,8 @@
                   <button  *ngIf="cita.checkState(citasData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Activar</button>
                   <button  *ngIf="cita.checkState(citasData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Ver Progreso</button>
                   <button  *ngIf="cita.checkState(citasData.STATE_COBRO) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR, this.userData.TIPO_CAJA, this.userData.TIPO_CAJAYRECEPCION])" (click)="citasPresentator.openProgreso(cita);" class="bgColorSecondary generalButton tableButton">Cobrar</button>
-                  <button  *ngIf="!cita.checkState(citasData.STATE_CANCELADA)" (click)="citasPresentator.updateStatePop(cita, this.citasData.STATE_CANCELADA)" class="bgColorPrimary generalButton tableButton">Cancelar</button>
-                  <button  (click)="citasPresentator.delecitaCitaPop(cita)" class="bgColorPrimary generalButton tableButton">Eliminar</button>
+                  <button  *ngIf="!cita.checkState(citasData.STATE_CANCELADA) && !cita.checkState(citasData.STATE_FINALIZADA)" (click)="citasPresentator.updateStatePop(cita, this.citasData.STATE_CANCELADA)" class="bgColorPrimary generalButton tableButton">Cancelar</button>
+                  <button  *ngIf="!cita.checkState(citasData.STATE_FINALIZADA)" (click)="citasPresentator.delecitaCitaPop(cita)" class="bgColorPrimary generalButton tableButton">Eliminar</button>
                 </td>
              </tr>
         </tbody>

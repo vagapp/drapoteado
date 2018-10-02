@@ -68,7 +68,8 @@ export class HomePage {
 
   openReportModal(){
     //this.reportPresentator.openReportModal();
-    this.reportPresentator.openReportGenerate();
+    //this.reportPresentator.openReportGenerate();
+    this.reportPresentator.openTicket();
   }
 
   openProgreso( cita: Citas){

@@ -20,7 +20,7 @@
             <table class="results_table">
                 <thead>
                     <tr>
-                        <th>no</th>
+                        <!--<th>no</th>-->
                         <th>Paciente</th>
                         <th *ngIf="!(permissions.checkUserPermission([userData.TIPO_DOCTOR]))">Doctor</th>
                         <th> Tiempo Transcurrido:  <span class="fontHigh midFont">{{progressController.activeCita.duracionText }} </span></th>
@@ -28,7 +28,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>01</td>
+                        <!--<td>01</td>-->
                         <td>{{progressController.activeCita.data.field_paciente.und[0].value}}</td>
                         <td *ngIf="!(permissions.checkUserPermission([userData.TIPO_DOCTOR]))">{{progressController.activeCita.data.doctor_name}}/ {{progressController.activeCita.data.doctor_alias}}</td>
                         <td> </td>
@@ -41,14 +41,14 @@
             <b class="midFont">Servicios</b>
             <div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA)">
                 <div class="progreso_service" *ngFor="let added of progressController.activeCita.addedServices">
-                <b>{{added.Nid}}</b>
+                <!--<b>{{added.Nid}}</b>-->
                 {{added.title}} - <span class="fontSecondary">${{added.costo}}</span> <span (click)="progressController.removeService(added);" class="removeServicebtn" >x</span>
               </div>
               </div>
             
               <div class="CitaDetail_services" *ngIf="!progressController.activeCita.checkState(userData.STATE_ACTIVA)">
                     <div class="progreso_service" *ngFor="let added of progressController.activeCita.reporteServicios">
-                    <b>{{added.Nid}}</b>
+                    <!--<b>{{added.Nid}}</b>-->
                     {{added.title}} - <span class="fontSecondary">${{added.costo}}</span> 
                   </div>
                   </div>
@@ -69,8 +69,8 @@
             </div>
             <div class="CitaDetailSection midFont">
               <b>Costo de la Cita</b>
-              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_ACTIVA)" class="floatRight"><span class="fontSecondary">${{progressController.costoCita}}</span> <ion-icon name="menu"></ion-icon> </span>
-              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO)" class="floatRight"><span class="fontSecondary">${{progressController.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
+              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_ACTIVA)" class="floatRight"><span class="fontSecondary">A ${{progressController.costoCita}}</span> <ion-icon name="menu"></ion-icon> </span>
+              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO)" class="floatRight"><span class="fontSecondary">C ${{progressController.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
               costo
               <div *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA])">
               <b>Formas de Pago</b>

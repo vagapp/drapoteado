@@ -27,7 +27,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let servicio of this.servicioMan.servicios">
-                <td><b>{{servicio.Nid}}</b> {{servicio.title}}</td>
+                <td>{{servicio.title}}</td>
                 <td class="fontSecondary">${{servicio.costo}}</td>
                 <td class="toolCol">
                   <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="editServicio(servicio)"/>
