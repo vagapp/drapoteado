@@ -774,7 +774,8 @@ export class UserDataProvider {
       field_hora_iniciomsb:{und:[{value:null}]},
       field_hora_finalmsb:{und:[{value:null}]},
       field_retrasda:{und:[{value:0}]},
-      aux_servicios_json:null
+      aux_servicios_json:null,
+      field_hora_cobromsb:{und:[{value:0}]},
     }
   }
 
@@ -865,7 +866,8 @@ export interface citasData{
     field_hora_iniciomsb:{und:[{value:number}]},
     field_hora_finalmsb:{und:[{value:number}]},
     field_retrasda:{und:[{value:number}]},
-    aux_servicios_json:string
+    aux_servicios_json:string,
+    field_hora_cobromsb:{und:[{value:number}]}
 }
 
 

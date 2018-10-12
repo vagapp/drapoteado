@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { start } from 'repl';
 
 @Injectable()
 export class DateProvider {
@@ -73,6 +74,14 @@ export class DateProvider {
         let aux_date = new Date(date.getTime()); //cloning date
         aux_date.setHours(0,0,0,0); // setting it to day start
         return date.getTime() - aux_date.getTime(); //returning rest
+    }
+
+    static getStartEndOFDate( date:Date ){
+      let startDate = new Date(date.getTime());
+      startDate.setHours(0,0,0,0);
+      let endDate = new Date(date.getTime());
+      endDate.setHours(23,59,59,999);
+      return { start: startDate, end: endDate};
     }
   
 }

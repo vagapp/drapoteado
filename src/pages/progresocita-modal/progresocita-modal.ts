@@ -39,7 +39,7 @@ export class ProgresocitaModalPage {
   }
 
   ionViewDidLoad() {
-    this.progressController.evalServicios();
+   
   }
 
   ionViewWillLeave(){

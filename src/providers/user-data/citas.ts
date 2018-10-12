@@ -26,7 +26,7 @@ export class Citas{
     doctor_playerid:string = null;
     caja_playerid:string = null;
     recepcion_playerid:string = null;
-
+    
     
     constructor(){
         this.init();
@@ -47,6 +47,7 @@ export class Citas{
     get cobroTarjeta(){return Number(this.data.field_cobro_tarjeta.und[0].value);}
     get CantidadRestante(){ return (Number(this.costo) - Number(this.cobro) ); }
     get stateLabel(){ return CitasDataProvider.getStateLabel(Number(this.data.field_estado.und[0].value)); }
+    get stateColor(){ return CitasDataProvider.getStateColor(Number(this.data.field_estado.und[0].value));}
     set cobroCheque(val){ this.data.field_cobro_cheque.und[0].value = Number(val); this.calcularCobroTotal();} 
     set cobroEfectivo(val){ this.data.field_cobro_efectivo.und[0].value = Number(val); this.calcularCobroTotal();}
     set cobroTarjeta(val){ this.data.field_cobro_tarjeta.und[0].value = Number(val); this.calcularCobroTotal();}
@@ -78,6 +79,8 @@ export class Citas{
           this.data.field_datemsb.und[0].value = Number(data_input.field_datemsb.value);
           this.dateMs =  this.data.field_datemsb.und[0].value;
           this.data.field_retrasda.und[0].value = data_input.field_retrasda;
+          this.data.field_hora_cobromsb.und[0].value = 0;
+          if(data_input.field_hora_cobromsb)  this.data.field_hora_cobromsb.und[0].value = data_input.field_hora_cobromsb;
           if(data_input.field_hora_iniciomsb) this.data.field_hora_iniciomsb.und[0].value = Number(data_input.field_hora_iniciomsb.value);
           if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);
           if(data_input['field_servicios_json'] && data_input['field_servicios_json']['value']) this.data.aux_servicios_json = data_input['field_servicios_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);

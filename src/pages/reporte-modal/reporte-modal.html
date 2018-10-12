@@ -28,14 +28,13 @@
               <span class="spanBlock fontSecondary midFont">{{this.reportPresentator.actualReport.dateString}}</span>
             </div>
     <button class="bgColorSecondary generalButton" (click)="generatePDF()" >Exportar</button>
-  
   </div>
   </div>
 
 <div class="ReportGrid">
 <div class="ReporteRow" *ngFor="let cita of this.reportPresentator.actualReport.citas">
   <div class="ReporteRow_head">
-    <span class="rbh_span midFont"> <b>No {{cita.Nid}}</b> </span>
+    <span class="rbh_span midFont"> <b [ngStyle]="{'color':cita.stateColor}">{{cita.getStateString()}}</b> </span>
     <span class="rbh_span midFont"><b>Paciente:</b>{{cita.paciente}}</span>
     <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"><b>Doctor:</b> {{cita.doctor_name}}/{{cita.doctor_alias}}</span>
     <span class="rbh_span midFont"><b>Duración</b> <span class="fontHigh">{{cita.duracionText}}</span></span>
@@ -45,15 +44,15 @@
     </span>-->
   </div>
   <div class="ReporteRow_Services">
-    <b class="rpr_service midFont"> Servicios </b>
+    <b class="rpr_service midFont"> Servicio  s </b>
     <span *ngFor="let servicio of cita.reporteServicios" class="rpr_service midFont"> {{servicio.title}} <span class="fontSecondary">${{servicio.costo}}</span></span>
   </div>
   <div class="ReporteRow_Totals">
     <div class="rrt_left midFont"> <b>Costo</b> <span class="fontPrimary">${{cita.costo}}</span> </div>
     
-    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Pago</b> Total <span class="fontPrimary">${{cita.cobro}}</span> </div>
-    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Pendiente</b> <span class="fontPrimary">${{cita.costo - cita.cobro}}</span> </div>
-    <div class="rrt_right midFont"  *ngIf="cita.costo <= cita.cobro"> <b>Pago</b> Total <span class="fontSecondary">${{cita.cobro}}</span> </div>
+    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Costo</b> Total <span class="fontPrimary">${{cita.cobro}}</span> </div>
+    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Adeudo</b> <span class="fontPrimary">${{cita.costo - cita.cobro}}</span> </div>
+    <div class="rrt_right midFont"  *ngIf="cita.costo <= cita.cobro"> <b>Ingreso</b> Total <span class="fontSecondary">${{cita.cobro}}</span> </div>
     <div class="rrt_right midFont">  Efectivo <span class="fontSecondary">${{cita.cobroEfectivo}}</span> </div>
     <div class="rrt_right midFont">  Tarjeta <span class="fontSecondary">${{cita.cobroTarjeta}}</span> </div>
     <div class="rrt_right midFont">  Cheque <span class="fontSecondary">${{cita.cobroCheque}}</span> </div>
@@ -72,12 +71,15 @@
   </div>
   
   <div class="Totales_Caja">
-      <span class="toin_span midFont"><b>Caja Total<span class="fontSecondary">${{reportPresentator.total}}</span></b></span>
+      <span class="toin_span midFont"><b>ingreso Total<span class="fontSecondary">${{reportPresentator.total}}</span></b></span>
       <span class="toin_span midSubFont">Efectivo:<span class="fontSecondary">${{reportPresentator.totalefectivo}}</span></span>
       <span class="toin_span midSubFont">Tarjeta:<span class="fontSecondary">${{reportPresentator.totalTarjeta}}</span></span>
       <span class="toin_span midSubFont">Cheques:<span class="fontSecondary">${{reportPresentator.totalCheques}}</span></span>
-      <span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontPrimary">${{this.reportPresentator.cajacuentas}}</span></span>
-      <span class="toin_span midSubFont">Pendiente total:<span class="fontPrimary">${{this.reportPresentator.cajaAdeudo}}</span></span>  
+      <!--<span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontPrimary">${{this.reportPresentator.cajacuentas}}</span></span>-->
+      <span class="toin_span midSubFont">Adeudo total:<span class="fontPrimary">${{this.reportPresentator.cajaAdeudo+this.reportPresentator.cajacuentas}}</span></span>  
+  </div>
+  <div class="servicios_totales">
+    <div class="ticket_row midMainFont" *ngFor="let servres of reportPresentator.serviciosResume">{{servres.title}}:{{servres.times}}</div>
   </div>
 </div>
 </ion-content>

@@ -38,10 +38,19 @@ export class CitaProgressControllerProvider {
   
   }
 
+  setInputs(){
+    this.cobroEfectivo=null;
+    this.cobroTarjeta=null;
+    this.cobroCheque=null;
+  }
   
 
-  openProgress(cita:Citas){
+  openProgress(cita:Citas){ //open progress is called from the buttons using citas presentator
+    this.setInputs();
     this.setActiveCita(cita);
+    //this.evalServicios();
+    //this.calcularCosto();
+    this.evalServicios();
     this.calcularCosto();
     this.startInterval();
     let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });

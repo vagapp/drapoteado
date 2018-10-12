@@ -69,10 +69,10 @@
             </div>
             <div class="CitaDetailSection midFont">
               <b>Costo de la Cita</b>
-              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_ACTIVA)" class="floatRight"><span class="fontSecondary">A ${{progressController.costoCita}}</span> <ion-icon name="menu"></ion-icon> </span>
-              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO)" class="floatRight"><span class="fontSecondary">C ${{progressController.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
+              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_ACTIVA)" class="floatRight"><span class="fontSecondary">${{progressController.costoCita}}</span> <ion-icon name="menu"></ion-icon> </span>
+              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO)" class="floatRight"><span class="fontSecondary">${{progressController.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
               costo
-              <div *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA])">
+              <div *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA,  userData.TIPO_CAJAYRECEPCION])">
               <b>Formas de Pago</b>
               <div class="ModalInput_input">
                     Efectivo

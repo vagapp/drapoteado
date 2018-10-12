@@ -28,7 +28,7 @@ export class ReporteCitasProvider {
 
   reporteGetCitasObservable(report:reportes,  doctorUid:number = null){
     if(doctorUid)
-    return this.citasManager.getCitasObservable(
+    return this.citasManager.getCitasObservableReport(
       report.dateStartUTMS,
       report.dateEndUTMS,
       [doctorUid],
@@ -36,7 +36,7 @@ export class ReporteCitasProvider {
       report.recepcionFilter
      );
     else
-    return this.citasManager.getCitasObservable(
+    return this.citasManager.getCitasObservableReport(
       report.dateStartUTMS,
       report.dateEndUTMS,
       report.doctoresFilter,

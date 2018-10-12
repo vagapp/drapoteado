@@ -51,6 +51,13 @@ docuid:number = null;
 	cajacuentas:number;
   cajaAdeudo:number;
 
+  serviciosResume:{
+    nid:number,
+    title:string,
+    costo:number,
+    times:number
+  }[];
+
 
 
   constructor(
@@ -64,6 +71,8 @@ docuid:number = null;
   ) {
     
   }
+
+  
 
   async openReportModal( report:reportes = null){
     /*this.loader.presentLoader('Cargando Reporte ...');
@@ -126,14 +135,13 @@ async openReportGenerate( report:reportes = null ){
   }
 
   async loadReportCitas(){
+    if(Number(this.docuid) === 0){ this.docuid = null; }
     await this.reporteCitas.reporteLoadCitas(this.actualReport, this.docuid);
   }
 
   async loadReportServicios(){
-    await this.reporteServicios.reporteLoadServicios(this.actualReport);
+    this.serviciosResume = this.reporteServicios.getServiciosResume(this.actualReport);
   }
-
-
  
   updateCita( cita:Citas ){
     console.log('here we update a cita when it is updated w a socket call');

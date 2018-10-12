@@ -37,6 +37,7 @@ export class CitasPage {
   ) {}
 
   ionViewDidLoad() {
+    this.citasData.defaultSort();
   }
 
 

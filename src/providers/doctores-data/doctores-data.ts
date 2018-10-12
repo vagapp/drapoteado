@@ -62,6 +62,11 @@ export class DoctoresDataProvider {
    static setDoctorBusy( doc:Doctores , cita:Citas ){
     doc.citaActiva = cita;
    }
+   static setDoctorUnbusy(doc:Doctores ){
+    doc.citaActiva = null;
+   }
+
+   
 
    getDoctorByUid( uid ):Doctores{
     let ret = null;

@@ -16,6 +16,9 @@
       <button *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY]);"  class="bgColorSecondary generalButton" (click)="citasPresentator.openNuevaCita()">Agregar Nueva</button>
     </div>
     </div>
+    <div class="filters_wrapper">
+     <span class="midFont"> Fecha: </span> <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="citasPresentator.dateFilterStart" (ngModelChange)="citasPresentator.filterChange();"></ion-datetime>
+    </div>
   <div class="Citas_grid result_wrapper">
     <table class="results_table">
         <thead>
@@ -36,12 +39,15 @@
                 <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}} / {{cita.doctor_alias}}</td>
                 <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">General</td>
                 <td><span class="fontSecondary">{{cita.getDisplayableDates().date}}</span> - <span class="fontHigh">{{cita.getDisplayableDates().time}}</span></td>
-                <td>{{cita.getStateString()}}</td>
+                <td [ngStyle]="{'color':cita.stateColor}" >{{cita.getStateString()}}</td>
                 <td class="toolCol">
                   <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="citasPresentator.editCita(cita)" *ngIf="this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION]);"/>
                   <button  *ngIf="cita.checkState(citasData.STATE_PENDIENTE) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION])" (click)="citasPresentator.confirmarCita(cita)"  class="bgColorSecondary generalButton tableButton">Confirmar</button>
                   <button  *ngIf="cita.checkState(citasData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Activar</button>
+                  <button  *ngIf="cita.checkState(citasData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.desConfirmarCita(cita);" class="bgColorSecondary generalButton tableButton">Desconfirmar</button>
+  
                   <button  *ngIf="cita.checkState(citasData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Ver Progreso</button>
+                  <button  *ngIf="cita.checkState(citasData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.desactivarCita(cita);" class="bgColorSecondary generalButton tableButton">Desactivar</button>
                   <button  *ngIf="cita.checkState(citasData.STATE_COBRO) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR, this.userData.TIPO_CAJA, this.userData.TIPO_CAJAYRECEPCION])" (click)="citasPresentator.openProgreso(cita);" class="bgColorSecondary generalButton tableButton">Cobrar</button>
                   <button  *ngIf="!cita.checkState(citasData.STATE_CANCELADA) && !cita.checkState(citasData.STATE_FINALIZADA)" (click)="citasPresentator.updateStatePop(cita, this.citasData.STATE_CANCELADA)" class="bgColorPrimary generalButton tableButton">Cancelar</button>
                   <button  *ngIf="!cita.checkState(citasData.STATE_FINALIZADA)" (click)="citasPresentator.delecitaCitaPop(cita)" class="bgColorPrimary generalButton tableButton">Eliminar</button>

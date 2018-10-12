@@ -16,7 +16,6 @@ import { Doctores } from '../user-data/doctores';
 
 @Injectable()
 export class CitasManagerProvider {
- 
 
   constructor(
     public http: HttpClient, 
@@ -31,10 +30,12 @@ export class CitasManagerProvider {
     console.log('Hello CitasManagerProvider Provider');
   }
 
-  requestCitas():Observable<any>{
-    let observable = this.getCitasObservable().share();
+  requestCitas( from:number = this.datep.nowStart, to:number = this.datep.nowEnd+(1000*60*60*24*365*5) ):Observable<any>{
+    let observable = this.getCitasObservable(from,to).share();
     observable.subscribe(
-      (val)=>{ console.log('obtained citas',val);this.setCitas(val);},
+      (val)=>{ console.log('obtained citas',val);
+      this.setCitas(val);
+    },
       response => { console.log('error requestCitas',response);}
     );
     return observable;
@@ -42,10 +43,10 @@ export class CitasManagerProvider {
 
   getCitasObservable(
     from:number = this.datep.nowStart,
-    to:number = this.datep.nowEnd,
+    to:number = this.datep.nowEnd+(1000*60*60*24*365*5),
     doctores:number[] = this.doctores.doctoresIDs,  
     cajas:number[] = null,  
-    recepciones:number[] = null
+    recepciones:number[] = null,
   ):Observable<any>{
     console.log('from',new Date(from));
     console.log('to',new Date(to));
@@ -63,8 +64,33 @@ export class CitasManagerProvider {
     return this.http.get(url);
   }
 
+  getCitasObservableReport(
+    from:number = this.datep.nowStart,
+    to:number = this.datep.nowEnd+(1000*60*60*24*365*5),
+    doctores:number[] = this.doctores.doctoresIDs,  
+    cajas:number[] = null,  
+    recepciones:number[] = null,
+  ):Observable<any>{
+    console.log('from',new Date(from));
+    console.log('to',new Date(to));
+    console.log('is',new Date(1534605765000));
+    console.log('1534605765000');
+    console.log('from',from);
+    console.log('to',to)
+    console.log('doctores',doctores);
+    console.log('cajas',cajas);
+    console.log('recepciones',recepciones);
+    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=all&args[4]=${from}--${to}`;
+    //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
+    let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
+    console.log('url getting citas',url);
+    return this.http.get(url);
+  }
+
+  
+
   getCitaObservable( Nid ):Observable<any>{
-    let url = `${this.baseurl.endpointUrl}rest_citas.json?args[0]=all&args[1]=all&args[2]=all&args[3]=all&args[4]=${Nid}`;
+    let url = `${this.baseurl.endpointUrl}rest_citas.json?args[0]=all&args[1]=all&args[2]=all&args[3]=all&args[4]=all&args[5]=${Nid}`;
     return this.http.get(url);
   }
 
@@ -86,6 +112,10 @@ export class CitasManagerProvider {
       console.log('cita blocked from caja couase doesnt need cobro', citaData);
     }
     return ret;
+  }
+
+  sortCitas(){
+    this.citasData.citas =  CitasDataProvider.sortByStateDate(this.citasData.citas);
   }
 
   generateCita( data ){
@@ -125,6 +155,7 @@ export class CitasManagerProvider {
     cita.data.field_estado.und[0].value = state;
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
+    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){ cita.data.field_hora_cobromsb['und'][0]['value'] = new Date().getTime();  }
     //console.log("tryna update cita:",cita.data);
     return this.updateCita( cita.data ).share();
   }

@@ -11,6 +11,7 @@ import { UserDataProvider } from '../user-data/user-data';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { WsMessengerProvider } from '../ws-messenger/ws-messenger';
 import { CitaProgressControllerProvider } from '../cita-progress-controller/cita-progress-controller';
+import { DateProvider } from '../date/date';
 
 
 /*
@@ -21,6 +22,10 @@ import { CitaProgressControllerProvider } from '../cita-progress-controller/cita
 */
 @Injectable()
 export class CitasPresentatorProvider {
+  dateFilterStart:string = null;
+  filteredResults:boolean = false;
+
+
   constructor(
     public userData: UserDataProvider,
     public citasManager: CitasManagerProvider,
@@ -38,6 +43,7 @@ export class CitasPresentatorProvider {
     let Modal = this.modalCtrl.create("NuevacitaModalPage", undefined, { cssClass: "nuevaCitaModal smallModal" });
     Modal.present({});
   }
+
 
   
   updateStatePop( cita ,state ){
@@ -106,6 +112,28 @@ export class CitasPresentatorProvider {
   }
   }
 
+
+  async desactivarCita(cita:Citas){
+    let aux_doc = this.citasManager.getDoctorOFCita(cita);
+    console.log('doctor of cita is',aux_doc);
+    if(cita.checkState(CitasDataProvider.STATE_ACTIVA) ){
+        this.loader.presentLoader('actualziando...');
+          DoctoresDataProvider.setDoctorUnbusy(aux_doc);
+          await this.citasManager.updateCitaState( cita , CitasDataProvider.STATE_CONFIRMADA).toPromise(); 
+          this.wsMessenger.generateWSupdateMessage(cita);
+          this.loader.dismissLoader(); 
+    }
+  }
+
+  async desConfirmarCita(cita:Citas){
+    if(cita.checkState(CitasDataProvider.STATE_CONFIRMADA) ){
+        this.loader.presentLoader('actualziando...');
+          await this.citasManager.updateCitaState( cita , CitasDataProvider.STATE_PENDIENTE).toPromise(); 
+          this.wsMessenger.generateWSupdateMessage(cita);
+          this.loader.dismissLoader(); 
+    }
+  }
+
   async confirmarCita(cita:Citas){
     this.loader.presentLoader('confirmando cita...');
     let res =  await this.citasManager.updateCitaState( cita , CitasDataProvider.STATE_CONFIRMADA ).toPromise();
@@ -136,6 +164,19 @@ export class CitasPresentatorProvider {
 
   
 
-
+filterChange(){
+  this.loader.presentLoader('cargando...');
+  console.log("changing filter",this.dateFilterStart);
+  let aux_fdate = new Date(this.dateFilterStart);
+  console.log(aux_fdate);
+  this.filteredResults = true;
+  let dateRange = DateProvider.getStartEndOFDate(aux_fdate);
+  this.citasManager.citasData.citas = new Array();
+  this.citasManager.requestCitas(dateRange.start.getTime(), dateRange.end.getTime()).subscribe(
+    (val)=>{
+      this.loader.dismissLoader();
+    }
+  );
+}
 
 }
