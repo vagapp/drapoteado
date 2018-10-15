@@ -22,9 +22,7 @@ import { DateProvider } from '../date/date';
 */
 @Injectable()
 export class CitasPresentatorProvider {
-  dateFilterStart:string = null;
-  filteredResults:boolean = false;
-
+  dateFilterStart:number = 0;
 
   constructor(
     public userData: UserDataProvider,
@@ -165,10 +163,19 @@ export class CitasPresentatorProvider {
   
 
 filterChange(){
-  this.loader.presentLoader('cargando...');
+  console.log('changing filtered data');
+  let date_Filter = DateProvider.dateWOffset(new Date(this.dateFilterStart));
+  this.citasManager.citasData.customFilters = true;
+  this.citasManager.citasData.startDateFilter = date_Filter.setHours(0,0,0,0);
+  this.citasManager.citasData.endDateFilter = date_Filter.setHours(23,59,59,999);
+  console.log(this.citasManager.citasData.startDateFilter);
+  console.log(this.citasManager.citasData.endDateFilter);
+  
+  /*this.loader.presentLoader('cargando...');
   console.log("changing filter",this.dateFilterStart);
-  let aux_fdate = new Date(this.dateFilterStart);
-  console.log(aux_fdate);
+  let aux_fdate = DateProvider.dateWOffset(new Date(this.dateFilterStart));
+  console.log(DateProvider.getStartEndOFDate(new Date()));
+  console.log(DateProvider.getStartEndOFDate(aux_fdate));
   this.filteredResults = true;
   let dateRange = DateProvider.getStartEndOFDate(aux_fdate);
   this.citasManager.citasData.citas = new Array();
@@ -176,7 +183,12 @@ filterChange(){
     (val)=>{
       this.loader.dismissLoader();
     }
-  );
+  );*/
+}
+
+removeFilter(){
+this.dateFilterStart = null;
+this.citasManager.citasData.resetDateFilters();
 }
 
 }

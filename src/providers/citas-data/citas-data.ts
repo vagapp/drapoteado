@@ -5,6 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import { citasData } from '../user-data/user-data';
 import { Doctores } from '../user-data/doctores';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
+import { DateProvider } from '../date/date';
 
 
 
@@ -12,7 +13,12 @@ import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 export class CitasDataProvider{
   citas:Citas[] = new Array();
   citasShowPool:Citas[] = new Array(); //some citas to show based on filters.
+  startDateFilter:number = 0;
+  endDateFilter:number = new Date().getTime()+(1000*60*60*24*365*5);
   citasSubject:Subject<any> = new Subject();
+
+  customDateFilters:boolean = false;
+  customFilters:boolean = false;
 
   //estados de cita:
   public static STATE_PENDIENTE = 0;
@@ -103,6 +109,8 @@ export class CitasDataProvider{
 
   defaultSort(){
     this.citas =  CitasDataProvider.sortByStateDate(this.citas);
+    this.applyFilters();
+    this.citasShowPool =  CitasDataProvider.sortByStateDate(this.citasShowPool);
   }
 
 
@@ -117,6 +125,17 @@ export class CitasDataProvider{
   triggerSubject(){
     this.subject.next(this.citas);
   }
+
+  resetDateFilters(){
+    this.startDateFilter = 0;
+    this.endDateFilter = new Date().getTime()+(1000*60*60*24*365*5);
+  }
+
+  applyFilters(){
+    this.citasShowPool = CitasDataProvider.filterByDates(this.citas, this.startDateFilter, this.endDateFilter);
+    
+  }
+
 
   static getStateColor( state:number ):string{
     let ret = '';
@@ -159,6 +178,15 @@ export class CitasDataProvider{
     if (a.dateMs > b.dateMs)
       return 1;
    return 0;
+    });
+  }
+
+  static filterByDates(citas:Citas[], startDate, endDate){
+    return citas.filter((citas)=>{
+      return 
+      citas.data.field_datemsb.und[0].value >= startDate 
+      &&
+      citas.data.field_datemsb.und[0].value <= endDate
     });
   }
 

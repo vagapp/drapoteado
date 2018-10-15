@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { start } from 'repl';
+
 
 @Injectable()
 export class DateProvider {
@@ -82,6 +82,14 @@ export class DateProvider {
       let endDate = new Date(date.getTime());
       endDate.setHours(23,59,59,999);
       return { start: startDate, end: endDate};
+    }
+
+    static dateWOffset(date:Date):Date{
+        console.log(new Date());
+        console.log(date);
+        let offset = date.getTimezoneOffset();
+        console.log(offset);
+        return new Date(date.getTime()+(offset * 60 * 1000 * 2));
     }
   
 }
