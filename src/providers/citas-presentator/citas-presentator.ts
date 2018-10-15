@@ -23,6 +23,7 @@ import { DateProvider } from '../date/date';
 @Injectable()
 export class CitasPresentatorProvider {
   dateFilterStart:number = 0;
+  filteredCitas:boolean = false;
 
   constructor(
     public userData: UserDataProvider,
@@ -170,7 +171,8 @@ filterChange(){
   this.citasManager.citasData.endDateFilter = date_Filter.setHours(23,59,59,999);
   console.log(this.citasManager.citasData.startDateFilter);
   console.log(this.citasManager.citasData.endDateFilter);
-  
+  this.citasManager.citasData.defaultSort();
+  this.filteredCitas = true;
   /*this.loader.presentLoader('cargando...');
   console.log("changing filter",this.dateFilterStart);
   let aux_fdate = DateProvider.dateWOffset(new Date(this.dateFilterStart));
@@ -187,8 +189,10 @@ filterChange(){
 }
 
 removeFilter(){
-this.dateFilterStart = null;
 this.citasManager.citasData.resetDateFilters();
+this.dateFilterStart = null;
+this.filteredCitas = false;
+this.citasManager.citasData.defaultSort();
 }
 
 }

@@ -133,7 +133,8 @@ export class CitasDataProvider{
 
   applyFilters(){
     this.citasShowPool = CitasDataProvider.filterByDates(this.citas, this.startDateFilter, this.endDateFilter);
-    
+    console.log('endfiltered citas',this.citas);
+    console.log('endfilter showpool',this.citasShowPool);
   }
 
 
@@ -183,10 +184,7 @@ export class CitasDataProvider{
 
   static filterByDates(citas:Citas[], startDate, endDate){
     return citas.filter((citas)=>{
-      return 
-      citas.data.field_datemsb.und[0].value >= startDate 
-      &&
-      citas.data.field_datemsb.und[0].value <= endDate
+      return (citas.data.field_datemsb.und[0].value >= startDate  && citas.data.field_datemsb.und[0].value <= endDate)
     });
   }
 

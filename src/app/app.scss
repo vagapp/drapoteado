@@ -45,6 +45,18 @@ ion-modal{
 }
 
 
+.remover{
+    position: relative;
+    z-index: 9999;
+    height: 100%;
+    color: #C1272D;
+    font-weight: 900;
+    font-size: 3rem;
+    padding: 20px;
+    cursor: pointer;
+}
+
+
 .filters_wrapper ion-datetime {
     width: 250px;
     background: #F6F6F6;

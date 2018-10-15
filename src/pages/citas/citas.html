@@ -19,7 +19,7 @@
     <div class="filters_wrapper">
      <span class="midFont"> Fecha: </span> 
      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="citasPresentator.dateFilterStart" (ngModelChange)="citasPresentator.filterChange();"></ion-datetime>
-     <span class="midFont" (click)="citasPresentator.removeFilter();" >remover filtro</span>
+     <span class="midFont remover"  *ngIf="citasPresentator.filteredCitas" (click)="citasPresentator.removeFilter();" >remover filtro</span>
     </div>
   <div class="Citas_grid result_wrapper">
     <table class="results_table">
@@ -35,7 +35,7 @@
              </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let cita of this.citasData.citas">
+            <tr *ngFor="let cita of this.citasData.citasShowPool">
                 <!--<td>{{cita.data.Nid}}</td>-->
                 <td>{{cita.data.field_paciente.und[0].value}}</td>
                 <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}} / {{cita.doctor_alias}}</td>
