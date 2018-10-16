@@ -14,6 +14,7 @@ export class CitasDataProvider{
   citas:Citas[] = new Array();
   citasShowPool:Citas[] = new Array(); //some citas to show based on filters.
   startDateFilter:number = 0;
+  pacienteFilter:string = null;
   endDateFilter:number = new Date().getTime()+(1000*60*60*24*365*5);
   citasSubject:Subject<any> = new Subject();
 
@@ -129,10 +130,17 @@ export class CitasDataProvider{
   resetDateFilters(){
     this.startDateFilter = 0;
     this.endDateFilter = new Date().getTime()+(1000*60*60*24*365*5);
+    this.pacienteFilter = null;
   }
 
   applyFilters(){
+    console.log('yaweyakiwe',this.startDateFilter,this.endDateFilter);
     this.citasShowPool = CitasDataProvider.filterByDates(this.citas, this.startDateFilter, this.endDateFilter);
+    console.log('oyeme wey',this.citasShowPool);
+    if(this.pacienteFilter !== null){
+      console.log('this.pacienteFilter',this.pacienteFilter);
+      this.citasShowPool = CitasDataProvider.filterByPaciente(this.citasShowPool, this.pacienteFilter);
+    }
     console.log('endfiltered citas',this.citas);
     console.log('endfilter showpool',this.citasShowPool);
   }
@@ -185,6 +193,15 @@ export class CitasDataProvider{
   static filterByDates(citas:Citas[], startDate, endDate){
     return citas.filter((citas)=>{
       return (citas.data.field_datemsb.und[0].value >= startDate  && citas.data.field_datemsb.und[0].value <= endDate)
+    });
+  }
+
+  static filterByPaciente(citas:Citas[], pacienteName ){
+    console.log('estos men');
+    return citas.filter((citas)=>{
+      console.log('filtering by paciente',pacienteName);
+      console.log('paciente es',citas.paciente);
+      return (citas.paciente.includes(pacienteName));
     });
   }
 

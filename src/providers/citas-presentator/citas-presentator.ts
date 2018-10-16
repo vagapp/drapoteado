@@ -23,6 +23,7 @@ import { DateProvider } from '../date/date';
 @Injectable()
 export class CitasPresentatorProvider {
   dateFilterStart:number = 0;
+  pacienteFilter:string = null;
   filteredCitas:boolean = false;
 
   constructor(
@@ -165,6 +166,7 @@ export class CitasPresentatorProvider {
 
 filterChange(){
   console.log('changing filtered data');
+  if(this.dateFilterStart !== null || this.dateFilterStart !== 0){
   let date_Filter = DateProvider.dateWOffset(new Date(this.dateFilterStart));
   this.citasManager.citasData.customFilters = true;
   this.citasManager.citasData.startDateFilter = date_Filter.setHours(0,0,0,0);
@@ -173,6 +175,18 @@ filterChange(){
   console.log(this.citasManager.citasData.endDateFilter);
   this.citasManager.citasData.defaultSort();
   this.filteredCitas = true;
+  }
+  console.log('pacienteFilter',this.pacienteFilter);
+  if(this.pacienteFilter !== null){
+    console.log('filter is',this.pacienteFilter);
+    if(this.pacienteFilter === ''){ this.pacienteFilter = null; }
+    console.log('filter is now',this.pacienteFilter);
+    this.citasManager.citasData.pacienteFilter = this.pacienteFilter;
+    console.log('this.citasManager.citasData.pacienteFilter is now',this.citasManager.citasData.pacienteFilter);
+    this.citasManager.citasData.defaultSort();
+    this.filteredCitas = true;
+  }
+
   /*this.loader.presentLoader('cargando...');
   console.log("changing filter",this.dateFilterStart);
   let aux_fdate = DateProvider.dateWOffset(new Date(this.dateFilterStart));

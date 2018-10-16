@@ -44,6 +44,26 @@ ion-modal{
     padding-left: 20px;
 }
 
+.filters_wrapper .item-cover{
+    position: relative;
+    width: 100%;
+    height: 40px;
+}
+
+.filters_wrapper input{
+    width: 250px;
+    background: #F6F6F6;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border: 0px solid #000000;
+    height: 60px;
+    text-align: center;
+    color: #C1272D;
+    margin: 0 10px;
+    font-size: 2rem;
+}
+
 
 .remover{
     position: relative;
