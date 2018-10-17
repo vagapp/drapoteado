@@ -165,24 +165,17 @@ export class CitasPresentatorProvider {
   
 
 filterChange(){
-  console.log('changing filtered data');
-  if(this.dateFilterStart !== null || this.dateFilterStart !== 0){
+  if(Number(this.dateFilterStart) != null && Number(this.dateFilterStart) !== 0){
   let date_Filter = DateProvider.dateWOffset(new Date(this.dateFilterStart));
   this.citasManager.citasData.customFilters = true;
   this.citasManager.citasData.startDateFilter = date_Filter.setHours(0,0,0,0);
   this.citasManager.citasData.endDateFilter = date_Filter.setHours(23,59,59,999);
-  console.log(this.citasManager.citasData.startDateFilter);
-  console.log(this.citasManager.citasData.endDateFilter);
   this.citasManager.citasData.defaultSort();
   this.filteredCitas = true;
   }
-  console.log('pacienteFilter',this.pacienteFilter);
   if(this.pacienteFilter !== null){
-    console.log('filter is',this.pacienteFilter);
     if(this.pacienteFilter === ''){ this.pacienteFilter = null; }
-    console.log('filter is now',this.pacienteFilter);
     this.citasManager.citasData.pacienteFilter = this.pacienteFilter;
-    console.log('this.citasManager.citasData.pacienteFilter is now',this.citasManager.citasData.pacienteFilter);
     this.citasManager.citasData.defaultSort();
     this.filteredCitas = true;
   }

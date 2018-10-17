@@ -37,7 +37,7 @@
               <input [(ngModel)]="this.cita.data.field_telefono.und[0].value" name="field_telefono" type="text"/>
           </div>
 
-        
+  <div *ngIf="cita.checkState(citasData.STATE_PENDIENTE)">        
   <div class="calendar-header">
     <ion-row class="calendar-month">
       <ion-col col-2 (click)="goToLastMonth()"><ion-icon name="arrow-back"></ion-icon></ion-col>
@@ -69,6 +69,7 @@
   <ion-item>
     <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="selectedHourISO" name="selectedHourISO" minuteValues="00,15,30,45"></ion-datetime>
   </ion-item>
+  </div>
   <!--<ion-grid>
         <ion-row class="calendar-hour">
           <ion-col col-1 *ngFor="let hour of hours" (click)="choseHourClick(hour);">

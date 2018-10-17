@@ -16,6 +16,7 @@ import { DateProvider } from '../../providers/date/date';
 //import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
 import { Calendar } from '@ionic-native/calendar';
 import { DoctoresManagerProvider } from '../../providers/doctores-manager/doctores-manager';
+import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 
 /**
  * Generated class for the NuevacitaModalPage page.
@@ -75,8 +76,10 @@ hourIntervalMS:number = 30*60*1000;
     public docMan: DoctoresManagerProvider,
     public permissions: PermissionsProvider,
     public dateP: DateProvider,
-    private calendar: Calendar
+    private calendar: Calendar,
+    private citasData: CitasDataProvider
   ) {
+    
     /** 
      * Al entrar seteas la fecha a este momento:
      *  setear dia de hoy en calendario

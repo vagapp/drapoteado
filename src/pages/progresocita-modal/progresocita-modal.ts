@@ -47,14 +47,16 @@ export class ProgresocitaModalPage {
   }
 
       finalizarPop(){
-        let exmsg = '';
+        this.finalizarActualCita().then( ()=>{this.close();});
+       
+        /*let exmsg = '';
         if(Number(this.progressController.activeCita.addedServices.length) === 0){ exmsg = 'Aun no se ha agregado ningún servicio a esta cita';}
         this.alert.chooseAlert(
           'Finalizar',
           `Está seguro de que desea Finalizar la consulta? ${exmsg}`,
           ()=>{ this.finalizarActualCita(); },
           ()=>{}
-        );
+        );*/
       }
 
       async finalizarActualCita(){
@@ -69,13 +71,15 @@ export class ProgresocitaModalPage {
         if(this.progressController.CantidadRestante > 0){
           title = 'Cuidado';
           msg = '¿Está seguro de que desea marcar esta cita como pagada con la cantidad insuficiente?';
-        }
           this.alert.chooseAlert(
             title,
             msg,
             ()=>{ this.pagarActualCita() },
             ()=>{}
           );
+        }else{
+          this.pagarActualCita();
+        }
       }
 
       async pagarActualCita(){
