@@ -65,7 +65,7 @@ export class ProgresocitaModalPage {
       }
 
       pagadaPop(){
-        let title = 'Pagada';
+       /* let title = 'Pagada';
         let msg = '¿Está seguro de que desea marcar esta cita como pagada?';
         
         if(this.progressController.CantidadRestante > 0){
@@ -79,7 +79,8 @@ export class ProgresocitaModalPage {
           );
         }else{
           this.pagarActualCita();
-        }
+        }*/
+        this.pagarActualCita();
       }
 
       async pagarActualCita(){
