@@ -92,4 +92,9 @@
             <span class="spanBlock midSubFont">Contraseña:</span>
             <span class="spanBlock midSubFont"> Puedes modificar este y/o agregar más usuarios siempre que lo desees en la sección de Alta de Usuarios y costos en el menú de la Aplicación</span>
             </div>
+            <div class="midAlign" *ngIf="this.tutorial.checkTutorialState() ">
+                <div class="register_button_section">
+                <button (click)="this.dismiss()" class="bgColorSecondary generalButton">Continuar</button>
+                </div>
+              </div>
 </ion-content>

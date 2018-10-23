@@ -52,6 +52,7 @@ export class TutorialProvider {
 
   openTutorial(){
       this.tutorialMainModal = this.modalCtrl.create("WelcomeModalPage");
+      // this.tutorialMainModal = this.modalCtrl.create("WelcomeModalPage", undefined, {enableBackdropDismiss: false});
       this.tutorialMainModal.present({});
   }
 
