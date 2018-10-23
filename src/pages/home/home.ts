@@ -11,6 +11,7 @@ import { ReportesDataProvider } from '../../providers/reportes-data/reportes-dat
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
 import { CitasDataProvider } from '../../providers/citas-data/citas-data';
+import { TutorialProvider } from '../../providers/tutorial/tutorial';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 @IonicPage({
@@ -33,15 +34,16 @@ export class HomePage {
     public reportesData: ReportesDataProvider,
     public permissions: PermissionsProvider,
     public doctoresData: DoctoresDataProvider,
-    public citasData: CitasDataProvider
+    public citasData: CitasDataProvider,
+    public tutoralProvider: TutorialProvider
   ) {
     //console.log('hello',permissions.subsData.subscription);
   }
 
   async ionViewDidLoad(){
     if(this.userData.userData.uid !== 0){
-      
-      if(this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY]) && this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){
+      this.tutoralProvider.checkNStart();
+      /*if(this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY]) && this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){
         let Modal = this.modalCtrl.create("WelcomeModalPage");
         Modal.present({});
         this.userData.userData.tutorial_state.und[0].value = "1";
@@ -51,7 +53,7 @@ export class HomePage {
         }
         await this.userMan.updateUserd(cloneData).toPromise();
         console.log('update tutorial at dismiss');
-    }
+    }*/
   }
   }
 

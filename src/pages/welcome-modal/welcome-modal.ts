@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { TutorialProvider } from '../../providers/tutorial/tutorial';
 
 /**
  * Generated class for the WelcomeModalPage page.
@@ -15,7 +16,12 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 })
 export class WelcomeModalPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) {
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    public viewCtrl: ViewController,
+    public tutorial: TutorialProvider
+  ) {
   }
 
   ionViewDidLoad() {

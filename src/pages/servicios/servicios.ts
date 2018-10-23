@@ -4,6 +4,7 @@ import { ModalController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
 import { LoaderProvider } from '../../providers/loader/loader';
+import { TutorialProvider } from '../../providers/tutorial/tutorial';
 //import { servicios } from '../../providers/user-data/servicios';
 
 

@@ -4,6 +4,7 @@ import { UserDataProvider, serviciosd } from '../../providers/user-data/user-dat
 import { Debugger } from '../../providers/user-data/debugger';
 import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
 import { LoaderProvider } from '../../providers/loader/loader';
+import { TutorialProvider } from '../../providers/tutorial/tutorial';
 
 /**
  * Generated class for the NuevoservicioModalPage page.
@@ -20,6 +21,7 @@ import { LoaderProvider } from '../../providers/loader/loader';
 export class NuevoservicioModalPage {
   newService:serviciosd;
   isnew:boolean;
+  isTutorial:boolean = false;
 
   constructor(
     public navCtrl: NavController, 
@@ -29,7 +31,8 @@ export class NuevoservicioModalPage {
     private toastCtrl: ToastController,
     public viewCtrl: ViewController,
     public servMan: ServiciosManagerProvider,
-    public loader: LoaderProvider
+    public loader: LoaderProvider,
+    public tutorial: TutorialProvider
   ) {
     console.log('loadingservice', navParams.get('servicio'));
     let aux_service = navParams.get('servicio');
@@ -74,7 +77,28 @@ export class NuevoservicioModalPage {
     //this.resetNewService()
   }
 
+  basicValidation():boolean{
+    let ret = true;
+    console.log('title is',this.newService.title, this.newService.title.length === 0);
+    if(this.newService.title.length === 0) ret = false;
+    if(this.newService.field_costo_servicio.und[0].value === null) ret = false;
+    return ret;
+  }
+
+  async createServiceTutorial(){
+    if(!this.basicValidation()){return false;}
+    this.loader.presentLoader('Creando Servicio ...');
+    this.newService.body.und[0].value="automatic description";
+    this.newService.field_doctor_uid.und[0].value= this.userData.userData.uid;
+    console.log("creating a service ",this.newService);
+    let serv_res = await this.servMan.generateNewService( this.newService ).toPromise();
+    let update_res = await this.servMan.loadServicios();
+    this.loader.dismissLoader();
+    this.tutorial.serviceCreated = true;
+  }
+
   async createService(){
+    if(!this.basicValidation()){return false;}
     this.loader.presentLoader('Creando Servicio ...');
     this.newService.body.und[0].value="automatic description";
     this.newService.field_doctor_uid.und[0].value= this.userData.userData.uid;

@@ -53,6 +53,7 @@ import { PermissionsProvider } from '../providers/permissions/permissions';
 import { CalendarModule } from "ion2-calendar";
 import { Calendar } from '@ionic-native/calendar';
 import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
+import { TutorialProvider } from '../providers/tutorial/tutorial';
 
 
 
@@ -139,6 +140,7 @@ import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
     DrupalNodeEditorProvider,
     CitaProgressControllerProvider,
     PermissionsProvider,
+    TutorialProvider,
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

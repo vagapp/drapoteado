@@ -8,6 +8,7 @@ import { LoaderProvider } from '../../providers/loader/loader';
 import { AlertProvider } from '../../providers/alert/alert';
 import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
+import { TutorialProvider } from '../../providers/tutorial/tutorial';
 
 /**
  * Generated class for the NuevousuarioModalPage page.
@@ -39,7 +40,8 @@ export class NuevousuarioModalPage {
     public userMan: DrupalUserManagerProvider,
     public subusersManager: SubusersManagerProvider,
     public loader: LoaderProvider,
-    public alert: AlertProvider
+    public alert: AlertProvider,
+    public tutorial: TutorialProvider
 
   ) {
     console.log('GETTING userd', navParams.get('userd'));

@@ -5,15 +5,28 @@
   Ionic pages and navigation.
 -->
 <ion-content padding>
+
     <div class="modal_closer" (click)="this.dismiss();">Volver</div>
-    <div class="modalPage_header">
+    
+    <div class="modalPage_header" *ngIf="!this.tutorial.checkTutorialState()">
         <div class="modalPage_logo"><img src="assets/imgs/servicios.svg"/></div>
         <div class="modalPage_title">
           <span class="spanBlock largeFont" *ngIf="this.isnew"><b>Nuevo Servicio</b></span>
-          <span class="spanBlock largeFont" *ngIf="!this.isnew"><b>editando {{this.newService.title}}</b></span>
+          <span class="spanBlock largeFont" *ngIf="!this.isnew">-<b>editando {{this.newService.title}}</b></span>
         </div>
     </div>
-    <div class="nuevoservicio_content modalContent">
+
+    <div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState()" >
+        <div class="modalPage_logo"><img src="assets/imgs/servicios.svg"/></div>
+        <span class=" largeFont" *ngIf="this.isnew"><b>Alta de servicio y costos</b></span>
+        <div class="modalPage_title">
+          <span class="spanBlock midSubFont">Drap te permite dar de alta todos tus servicios para que cobrar tus consultas
+            sea más sencillo que nunca, solo debes ingresar un nombre que identifiques
+            rápidamente y el costo unitario del mismo.</span>
+        </div>
+    </div>
+    <div class="centered_bold" *ngIf="this.tutorial.checkTutorialState()">¿Genial no? para comenzar agreguemos un servicio:</div>
+    <div class="nuevoservicio_content modalContent" *ngIf="!this.tutorial.checkTutorialState()  || (this.tutorial.checkTutorialState() && !this.tutorial.serviceCreated)" >
         <div class="ModalInput_input">
             <b>Nombre</b>
             <input [(ngModel)]="this.newService.title" type="text"/>
@@ -23,10 +36,22 @@
             <input [(ngModel)]="this.newService.field_costo_servicio.und[0].value" type="number"/>
         </div>
     </div>
+
+    <div class="nuevoservicio_content modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" >
+        <span class="spanBlock bigBoldFont">!Felicidades!</span>
+        <span class="spanBlock midMainFont"> tu Servicio : Nombre del Servicio ha sido agregado
+        ahora podras seleccionarlo cada que consultes.</span>
+        <span class="spanBlock midSubFont"> Puedes modificar este y/o agregar más servicios siempre que lo desees en la sección de
+        Alta de Servicios y costos en el menú de la Aplicación</span>
+        </div>
+        
+
     <div class="midAlign">
         <div class="register_button_section">
-        <button class="bgColorSecondary generalButton" *ngIf="this.isnew" (click)="createService()">Agregar</button>
-        <button class="bgColorSecondary generalButton" *ngIf="!this.isnew" (click)="updateService()">Actualizar</button>
+        <button class="bgColorSecondary generalButton" *ngIf="this.tutorial.checkTutorialState() && !this.tutorial.serviceCreated" (click)="createServiceTutorial();">Continuar</button>
+        <button class="bgColorSecondary generalButton" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" (click)=" this.tutorial.showUsuarioModal(); this.dismiss();">Continuar</button>
+        <button class="bgColorSecondary generalButton" *ngIf="!this.tutorial.checkTutorialState() && this.isnew" (click)="createService()">Agregar</button>
+        <button class="bgColorSecondary generalButton" *ngIf="!this.tutorial.checkTutorialState() && !this.isnew" (click)="updateService()">Actualizar</button>
         </div>
       </div>
 </ion-content>

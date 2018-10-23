@@ -6,14 +6,26 @@
 -->
 <ion-content padding>
     <div class="modal_closer" (click)="this.dismiss();">Volver</div>
-    <div class="modalPage_header">
+    <div class="modalPage_header" *ngIf="!this.tutorial.checkTutorialState()">
         <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
         <div class="modalPage_title">
           <span *ngIf="this.isnew" class="spanBlock largeFont"><b>Alta de Usuario</b></span>
           <span *ngIf="!this.isnew" class="spanBlock largeFont"><b>Editar Usuario {{this.newUser.name}}</b></span>
         </div>
     </div>
-    <div class="modalContent">
+
+    
+    <div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState()" >
+            <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
+            <span class=" largeFont" *ngIf="this.isnew"><b>Alta de Usuario</b></span>
+            <div class="modalPage_title">
+              <span class="spanBlock midSubFont">Mantener el control de tus administrativos es nuestra prioridad, agrega hasta
+                    2 usuarios adicionales para que te ayuden a gestionar y cobrar tus citas:</span>
+            </div>
+        </div>
+
+
+    <div class="modalContent" *ngIf="!this.tutorial.checkTutorialState()  || (this.tutorial.checkTutorialState() && !this.tutorial.usuarioCreated)">
       <div class="alta_main" *ngIf="initialpage">
         <span class="spanBlock midSubFont">Busca usuarios compartidos o registra uno nuevo</span>
         <span class="spanBlock"> <button class="bgColorSecondary generalButton" (click)="codeuser=true; initialpage=false;">Buscar Usuario</button></span>
@@ -70,4 +82,14 @@
     </div>
   
     </div>
+
+    <div class="modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated" >
+            <span class="spanBlock bigBoldFont">!Felicidades!</span>
+            <span class="spanBlock midMainFont"> tu Usuario : Nombre del Servicio ha sido creado.</span>
+            <span class="spanBlock midSubFont">Te propordcionamos sus datos para que pueda ingresar desde este momento a DRAP</span>
+            <span class="spanBlock midSubFont">Nombre:</span>
+            <span class="spanBlock midSubFont">Correo:</span>
+            <span class="spanBlock midSubFont">Contraseña:</span>
+            <span class="spanBlock midSubFont"> Puedes modificar este y/o agregar más usuarios siempre que lo desees en la sección de Alta de Usuarios y costos en el menú de la Aplicación</span>
+            </div>
 </ion-content>
