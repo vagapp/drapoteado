@@ -44,7 +44,7 @@
     </span>-->
   </div>
   <div class="ReporteRow_Services">
-    <b class="rpr_service midFont"> Servicio  s </b>
+    <b class="rpr_service midFont"> Servicios </b>
     <span *ngFor="let servicio of cita.reporteServicios" class="rpr_service midFont"> {{servicio.title}} <span class="fontSecondary">${{servicio.costo}}</span></span>
   </div>
   <div class="ReporteRow_Totals">
@@ -56,6 +56,7 @@
     <div class="rrt_right midFont">  Efectivo <span class="fontSecondary">${{cita.cobroEfectivo}}</span> </div>
     <div class="rrt_right midFont">  Tarjeta <span class="fontSecondary">${{cita.cobroTarjeta}}</span> </div>
     <div class="rrt_right midFont">  Cheque <span class="fontSecondary">${{cita.cobroCheque}}</span> </div>
+    <div class="rrt_right midFont">  Facturado ${{cita.facturado}}</div>
   </div>
 </div>
 </div>
@@ -75,9 +76,11 @@
       <span class="toin_span midSubFont">Efectivo:<span class="fontSecondary">${{reportPresentator.totalefectivo}}</span></span>
       <span class="toin_span midSubFont">Tarjeta:<span class="fontSecondary">${{reportPresentator.totalTarjeta}}</span></span>
       <span class="toin_span midSubFont">Cheques:<span class="fontSecondary">${{reportPresentator.totalCheques}}</span></span>
+      <span class="toin_span midSubFont">Facturado:<span class="fontSecondary">${{reportPresentator.facturadoTotal}}</span></span>
       <!--<span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontPrimary">${{this.reportPresentator.cajacuentas}}</span></span>-->
       <span class="toin_span midSubFont">Adeudo total:<span class="fontPrimary">${{this.reportPresentator.cajaAdeudo+this.reportPresentator.cajacuentas}}</span></span>  
   </div>
+  
   <div class="servicios_totales">
     <div class="ticket_row midMainFont" *ngFor="let servres of reportPresentator.serviciosResume">{{servres.title}}:{{servres.times}}</div>
   </div>

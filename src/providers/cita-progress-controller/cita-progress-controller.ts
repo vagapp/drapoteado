@@ -23,6 +23,8 @@ export class CitaProgressControllerProvider {
   cobroCheque:number=null;
   activeCitaDoc:Doctores;
   showinterval = null;
+  factura_cantidad:number = 0;
+  factura: number = 0;
   added_services_list:{
     servicio:servicios
     costooverride:number
@@ -75,7 +77,9 @@ export class CitaProgressControllerProvider {
   this.activeCita.cobroEfectivo = this.cobroEfectivo;
   this.activeCita.cobroCheque = this.cobroCheque;
   this.activeCita.cobroTarjeta = this.cobroTarjeta;
-}
+  this.activeCita.data.field_facturar.und[0].value = this.factura;
+  this.activeCita.data.field_facturar_cantidad.und[0].value = this.factura_cantidad;
+  }
 
   addService(){
     let aux_servicio = null;
@@ -87,7 +91,7 @@ export class CitaProgressControllerProvider {
         this.calcularCosto();
         this.selectedService = 0;
        }
-      }
+    }
   }
 
   removeService( servicio:servicios ){

@@ -86,14 +86,20 @@ export class NuevousuarioModalPage {
     delete this.newUser.field_sub_id;
     this.userMan.generateNewUserd( this.newUser ).subscribe(
     async (val)=>{
+      console.log('generated user now what');
       if(!this.subsData.subscription.field_subusuarios) this.subsData.subscription.field_subusuarios = new Array();
       this.subsData.subscription.field_subusuarios.push(val['uid']);
-      let obs = this.subsManager.updateUserSuscription();
+      let obs = this.subsManager.updateUserSuscription().subscribe( (val)=>{console.log('updating subs',val);});
       console.log(obs);
-      await obs.toPromise();
+      //await obs.toPromise();
       await this.subusersManager.cargarSubusuarios();
       this.loader.dismissLoader();
-      this.close();
+      if(this.tutorial.checkTutorialState())
+      {
+        this.tutorial.usuarioCreated = true;
+      }else{
+        this.close();
+      }
     },
     response => {
         for (var key in response.error.form_errors) {
@@ -121,6 +127,10 @@ createUserValidation():boolean{
   }
   if(!(this.newUser.mail.localeCompare(this.newUser.field_useremail.und[0].email) === 0)){
     this.alert.presentAlert("Error", "Los correos no coinciden");
+    ret = false;
+  }
+  if(this.newUser.field_tipo_de_usuario.und[0] === 0 ){
+    this.alert.presentAlert("Error", "Selecciona un tipo de usuario");
     ret = false;
   }
   return ret;
@@ -285,7 +295,12 @@ updateUserValidation():boolean{
       this.alert.presentAlert("Error", "las contraseñas no coinciden");
       ret = false;
     }
+    
   }
+  /*if(this.newUser.field_tipo_de_usuario.und[0] === 0 ){
+    this.alert.presentAlert("Error", "Selecciona un tipo de usuario");
+    ret = false;
+  }*/
   return ret;
 }
 

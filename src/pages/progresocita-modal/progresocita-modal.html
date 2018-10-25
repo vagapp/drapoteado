@@ -92,6 +92,19 @@
                 <span *ngIf="progressController.CantidadRestante < 0" class="spanBlock midAlign fontHigh">
                         Sobrar ${{(progressController.CantidadRestante * -1)}}
                     </span>
+                    <hr>
+                    <div class="ModalInput_input" >
+                        <b>¿Requiere Factura?</b>
+                        <select [(ngModel)]="progressController.factura"  name="field_cita_doctor" class="input_select input">
+                            <option  value="1" >Si</option>
+                            <option  selected value="0" >No</option>
+                          </select>
+                    </div>
+                    <div class="ModalInput_input" *ngIf="progressController.factura"> 
+                        Monto de la factura
+                        <input [(ngModel)]="progressController.factura_cantidad" type="text"/>
+                    </div>
+                    
                 </div>
             </div>
         </div>

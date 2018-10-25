@@ -20,6 +20,7 @@ export class Citas{
     retrasada:boolean = false;
     duracionMs:number;
     duracionText:string;
+    facturado:number = 0;
     serviceDataSet:boolean = false; //describe si los servicios de la cita han sido seteados cuando esta activa, evitando que se actualicen externamente.
     cobroDataSet:boolean = false; //describe si los cobros de la cita han sido seteados cuando esta en cobro, evitando que se actualicen externamente.
     reporteServicios:any[] = new Array();
@@ -87,6 +88,11 @@ export class Citas{
           if(data_input.doctor_playerid) this.doctor_playerid = data_input.doctor_playerid;
           if(data_input.recepcion_playerid)  this.recepcion_playerid = data_input.recepcion_playerid;
           if(data_input.caja_playerid)  this.caja_playerid = data_input.caja_playerid;
+          if(data_input.field_facturar)  this.data.field_facturar.und[0] = data_input.field_facturar;
+          if(data_input.field_facturar_cantidad){  
+              this.data.field_facturar_cantidad.und[0] = data_input.field_facturar_cantidad;
+                this.facturado = Number(data_input.field_facturar_cantidad.value);
+            }
           //this.setDate(data_input.field_date.value);
           this.processData();
           console.log("savedData",this.data);
@@ -96,6 +102,7 @@ export class Citas{
         this.Nid = this.data.Nid
         this.dateMs =  this.data.field_datemsb.und[0].value;
         if(this.data.aux_servicios_json) this.setServiciosReport(this.data.aux_servicios_json);
+        this.facturado = Number( this.data.field_facturar_cantidad.und[0].value);
         this.setDateUT(this.data.field_datemsb.und[0].value);
         this.setDurationDates(this.data.field_hora_iniciomsb.und[0].value,this.data.field_hora_finalmsb.und[0].value);
     }

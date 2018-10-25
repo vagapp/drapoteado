@@ -42,17 +42,20 @@ export class TutorialProvider {
   }
 
   checkTutorialState(){
-    return TutorialProvider.TUTORIAL_ACTIVE;
-    /*if(this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY]) && this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){
+    if(
+      this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY])
+      && this.userData.userData.tutorial_state.und 
+      && Number(this.userData.userData.tutorial_state.und[0].value) === 0
+    ){
       return TutorialProvider.TUTORIAL_ACTIVE;
     }else{
       return TutorialProvider.TUTORIAL_FINISHED;
-    }*/
+    }
   }
 
   openTutorial(){
-      this.tutorialMainModal = this.modalCtrl.create("WelcomeModalPage");
-      // this.tutorialMainModal = this.modalCtrl.create("WelcomeModalPage", undefined, {enableBackdropDismiss: false});
+      //this.tutorialMainModal = this.modalCtrl.create("WelcomeModalPage");
+      this.tutorialMainModal = this.modalCtrl.create("WelcomeModalPage", undefined, {enableBackdropDismiss: false});
       this.tutorialMainModal.present({});
   }
 

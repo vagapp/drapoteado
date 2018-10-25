@@ -31,5 +31,10 @@ export class WelcomeModalPage {
   close(){
     this.viewCtrl.dismiss();
   }
+  
+  finish(){
+    this.tutorial.finishTutorial();
+    this.close();
+  }
 
 }
