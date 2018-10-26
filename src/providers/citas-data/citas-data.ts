@@ -21,6 +21,8 @@ export class CitasDataProvider{
   customDateFilters:boolean = false;
   customFilters:boolean = false;
 
+  daysCitas:DaysCitas[] = new Array();
+
   //estados de cita:
   public static STATE_PENDIENTE = 0;
   public static STATE_CONFIRMADA = 1;
@@ -111,7 +113,54 @@ export class CitasDataProvider{
   defaultSort(){
     this.citas =  CitasDataProvider.sortByStateDate(this.citas);
     this.applyFilters();
+    this.getCitasDaysAndSort();
     this.citasShowPool =  CitasDataProvider.sortByStateDate(this.citasShowPool);
+    //this.citasShowPool =  CitasDataProvider.sortByStateDateDay(this.citasShowPool);
+  }
+
+  getCitasDaysAndSort(){
+    //get days of all citas and add their citas to them.
+    //sort citas of everyday
+    this.daysCitas = new Array();
+    this.getCitasDays();
+    this.sortCitasDays();
+    this.sortDays();
+    console.log('citas days loadded',this.daysCitas);
+  }
+
+  sortCitasDays(){
+    for(let day of this.daysCitas){
+      day.citasShowPool = CitasDataProvider.sortByStateDate(day.citasShowPool);
+    }
+  }
+
+  sortDays(){
+    this.daysCitas = this.daysCitas.sort((a,b)=>{
+      if(a.DayMs > b.DayMs ){ return 1}
+      if(a.DayMs < b.DayMs ){ return -1}
+      return 0;
+    });
+  }
+
+  getCitasDays(){
+    for(let cita of this.citasShowPool){
+      let dayMS = DateProvider.getStartEndOFDate(new Date(cita.dateMs)).start.getTime();
+      let exist = this.daysCitas.find((daycitas)=>{ 
+        return daycitas.DayMs === dayMS;
+      });
+      console.log('found this day',exist);
+      if(exist){
+        exist.citasShowPool.push(cita);
+      }else{
+        let auxday = {
+          DayMs:dayMS,
+          DayName:DateProvider.getStringDate(new Date(dayMS)),
+          citasShowPool: new Array()
+        }
+        auxday.citasShowPool.push(cita);
+        this.daysCitas.push( auxday );
+      }
+    }
   }
 
 
@@ -222,6 +271,43 @@ export class CitasDataProvider{
       });
   }
 
+  static sortByStateDateDay(citas:Citas[]){
+    return citas.sort((a,b)=>{ 
+      console.log('sorging citas by stateday');
+      console.log(CitasDataProvider.getValueOfStateSort(a.data.field_estado.und[0]['value']));
+      console.log(CitasDataProvider.getValueOfStateSort(b.data.field_estado.und[0]['value']));
+      if( DateProvider.getStartEndOFDate(new Date(a.dateMs)).start.getTime() > DateProvider.getStartEndOFDate(new Date(b.dateMs)).start.getTime() ){
+        console.log('oyeme que');
+        let aux_cita = new Citas();
+        aux_cita.data.field_estado.und[0]['value'] = -1;
+        aux_cita.dateMs = DateProvider.getStartEndOFDate(new Date(b.dateMs)).start.getTime();
+        aux_cita.data.field_paciente.und[0].value = DateProvider.getStringDate(new Date(DateProvider.getStartEndOFDate(new Date(b.dateMs)).start.getTime()));
+        citas.push( aux_cita );
+        return 1; 
+      }
+      if( DateProvider.getStartEndOFDate(new Date(a.dateMs)).start.getTime() < DateProvider.getStartEndOFDate(new Date(b.dateMs)).start.getTime() ){ 
+        console.log('oyeme que');
+        let aux_cita = new Citas();
+        aux_cita.data.field_estado.und[0]['value'] = -1;
+        aux_cita.dateMs = DateProvider.getStartEndOFDate(new Date(b.dateMs)).start.getTime();
+        aux_cita.data.field_paciente.und[0].value = DateProvider.getStringDate(new Date(DateProvider.getStartEndOFDate(new Date(b.dateMs)).start.getTime()));
+        citas.push( aux_cita );
+        return -1;
+      }
+      if( DateProvider.getStartEndOFDate(new Date(a.dateMs)).start.getTime() === DateProvider.getStartEndOFDate(new Date(b.dateMs)).start.getTime() ){ 
+        if(CitasDataProvider.getValueOfStateSort(a.data.field_estado.und[0]['value']) > CitasDataProvider.getValueOfStateSort(b.data.field_estado.und[0]['value'])){return 1;}
+        if(CitasDataProvider.getValueOfStateSort(a.data.field_estado.und[0]['value']) < CitasDataProvider.getValueOfStateSort(b.data.field_estado.und[0]['value'])){return -1;}
+        if(CitasDataProvider.getValueOfStateSort(a.data.field_estado.und[0]['value']) === CitasDataProvider.getValueOfStateSort(b.data.field_estado.und[0]['value'])){
+          if (a.dateMs < b.dateMs)
+          return -1;
+        if (a.dateMs > b.dateMs)
+          return 1;
+      return 0;
+        }
+      }
+      });
+  }
+
   static getValueOfStateSort(state):number{
     let ret = 99;
     switch (Number(state)){
@@ -260,4 +346,10 @@ export class CitasDataProvider{
  
 
 
+}
+
+export interface DaysCitas{
+  DayMs:number;
+  DayName:string;
+  citasShowPool:Citas[];
 }

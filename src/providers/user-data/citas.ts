@@ -40,7 +40,7 @@ export class Citas{
 
     get doctor_name(){return this.data.doctor_name;}
     get doctor_alias(){return this.data.doctor_alias;}
-    get paciente(){return this.data.field_paciente.und[0].value;}
+    get paciente(){ return this.data.field_paciente.und[0].value;}
     get costo(){return Number(this.data.field_costo_sobrescribir.und[0].value);}
     get cobro(){return Number(this.data.field_cobro.und[0].value)}
     get cobroCheque(){return Number(this.data.field_cobro_cheque.und[0].value);}
@@ -415,6 +415,14 @@ export class Citas{
         let datestring = `${this.date.getDate()}/${(this.date.getMonth()+1)}/${this.date.getFullYear()}`;
         let timestring =  `${this.date.getHours()}:${this.date.getMinutes()}`;
         ret = { "date":datestring ,"time":timestring};
+        return ret;
+      }
+
+      isDateOnly():boolean{
+        let ret = false;
+        if((Number(this.data.field_estado.und[0]['value']) === -1)){
+            ret = true;
+        }
         return ret;
       }
 

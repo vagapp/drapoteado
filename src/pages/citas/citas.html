@@ -16,6 +16,7 @@
       <button *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY]);"  class="bgColorSecondary generalButton" (click)="citasPresentator.openNuevaCita()">Agregar Nueva</button>
     </div>
     </div>
+    
     <div class="filters_wrapper">
     <div><span class="midFont"> Fecha: </span><input [(ngModel)]="citasPresentator.pacienteFilter" (ngModelChange)="citasPresentator.filterChange();"  type="text" placeholder="paciente"> </div>
      <span class="midFont"> Fecha: </span> 
@@ -23,10 +24,10 @@
      <span class="midFont remover"  *ngIf="citasPresentator.filteredCitas" (click)="citasPresentator.removeFilter();" >remover filtro</span>
     </div>
   <div class="Citas_grid result_wrapper">
-    <table class="results_table">
+    <!--<table class="results_table">
         <thead>
             <tr>
-                <!--<th>no</th>-->
+               
                 <th>Paciente</th>
                 <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Doctor</th>
                 <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Tipo de Servicio</th>
@@ -35,15 +36,27 @@
                 <th></th>
              </tr>
         </thead>
+      </table>-->
+      <table class="results_table"  *ngFor="let day of this.citasData.daysCitas">
+          <thead  class="header_dayname">
+              <tr> 
+                  <th>paciente</th>
+                  <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Doctor</th>
+                  <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Tipo de Servicio</th>
+                  <th>{{day.DayName}}</th>
+                  <th>Estado</th>
+                  <th></th>
+              </tr>
+            </thead>
         <tbody>
-            <tr *ngFor="let cita of this.citasData.citasShowPool">
+            <tr *ngFor="let cita of day.citasShowPool">
                 <!--<td>{{cita.data.Nid}}</td>-->
-                <td>{{cita.data.field_paciente.und[0].value}}</td>
-                <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}} / {{cita.doctor_alias}}</td>
+                <td  >{{cita.data.field_paciente.und[0].value}}</td>
+                <td *ngIf=" !this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}} / {{cita.doctor_alias}}</td>
                 <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">General</td>
-                <td><span class="fontSecondary">{{cita.getDisplayableDates().date}}</span> - <span class="fontHigh">{{cita.getDisplayableDates().time}}</span></td>
-                <td [ngStyle]="{'color':cita.stateColor}" >{{cita.getStateString()}}</td>
-                <td class="toolCol">
+                <td ><span class="fontSecondary">{{cita.getDisplayableDates().date}}</span> - <span class="fontHigh">{{cita.getDisplayableDates().time}}</span></td>
+                <td  [ngStyle]="{'color':cita.stateColor}" >{{cita.getStateString()}}</td>
+                <td  class="toolCol">
                   <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="citasPresentator.editCita(cita)" *ngIf="this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION]);"/>
                   <button  *ngIf="cita.checkState(citasData.STATE_PENDIENTE) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION])" (click)="citasPresentator.confirmarCita(cita)"  class="bgColorSecondary generalButton tableButton">Confirmar</button>
                   <button  *ngIf="cita.checkState(citasData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Activar</button>
@@ -57,7 +70,8 @@
                 </td>
              </tr>
         </tbody>
-    </table>
+      </table>
+   
   </div>
 <footer></footer>
 </ion-content>

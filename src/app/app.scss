@@ -380,6 +380,17 @@ border: 0px solid #000000;
     align-items: center;
 }
 
+.header_dayname{
+    height: 10px;
+    font-weight: 100;
+    font-size: 2rem;
+}
+
+.results_table th, .results_table td {
+    min-width: 120px;
+    width: 20%;
+}
+
 .justify_center{
     justify-content: center;
 }

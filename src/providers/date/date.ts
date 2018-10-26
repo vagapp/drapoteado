@@ -49,6 +49,29 @@ export class DateProvider {
         return ret;
     }
 
+    static getStringDate(date:Date):string{
+        let ret = ""
+        let datestring = `${DateProvider.formatDateBinaryNumber(date.getDate())}/${(DateProvider.formatDateBinaryNumber(date.getMonth()+1))}/${date.getFullYear()}`;
+        ret = DateProvider.getDayOWeekLabel( date.getDay() ) + ', ' + datestring;
+        return ret;
+    }
+
+
+
+    static getDayOWeekLabel(day:number):string{
+        let ret = '';
+        switch( day ){
+            case 0: ret = 'Domingo'; break;
+            case 1: ret = 'Lunes'; break;
+            case 2: ret = 'Martes'; break;
+            case 3: ret = 'Miercoles'; break;
+            case 4: ret = 'Jueves'; break;
+            case 5: ret = 'Viernes'; break;
+            case 6: ret = 'Sabado'; break;
+        }
+        return ret;
+    }
+
     static getDisplayableHourfMS(MS:number){
         let date = new Date();
         date.setHours(0,0,0,0);
