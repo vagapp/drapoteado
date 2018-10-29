@@ -151,11 +151,14 @@ export class CitasManagerProvider {
   generateNewCita( newCita ){return this.nodeMan.generateNewNode(newCita);}
   updateCita( cita ){return this.nodeMan.updateNode(cita);}
   deleteCita( cita ){return this.nodeMan.deleteNode(cita);}
-  updateCitaState( cita:Citas , state){
+  updateCitaState( cita:Citas , state, saveDate:boolean = true){
     cita.data.field_estado.und[0].value = state;
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
-    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){ cita.data.field_hora_cobromsb['und'][0]['value'] = new Date().getTime();  }
+    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA) && saveDate){ console.log('saving date'); cita.data.field_hora_cobromsb['und'][0]['value'] = new Date().getTime();  }else{ 
+      console.log('not saving date');
+      delete cita.data.field_hora_cobromsb;
+    }
     //console.log("tryna update cita:",cita.data);
     return this.updateCita( cita.data ).share();
   }

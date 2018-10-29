@@ -25,6 +25,7 @@ export class CitasPresentatorProvider {
   dateFilterStart:number = 0;
   pacienteFilter:string = null;
   filteredCitas:boolean = false;
+  editfinish:boolean = false;
 
   constructor(
     public userData: UserDataProvider,
@@ -58,7 +59,9 @@ export class CitasPresentatorProvider {
  
   async updateStateRequest ( cita, state ) {
     this.loader.presentLoader("Actualizando...");
-    let state_res = await this.citasManager.updateCitaState(cita,state).toPromise();
+    let saveDate = !this.progresSController.editfinish;
+    console.log('editfinish is',saveDate);
+    let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise();
     if(Number(state) === CitasDataProvider.STATE_CONFIRMADA && cita.doctor_playerid){  //crear notificacion para doctor a quien le confirmaron la cita
       this.notiMan.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
     }
@@ -70,13 +73,27 @@ export class CitasPresentatorProvider {
   } 
 
   editCita( cita ){
+    if(cita.checkState(CitasDataProvider.STATE_FINALIZADA)){
+      this.progresSController.editfinish = true;
+      this.openProgreso(cita);
+    }else{
     let Modal = this.modalCtrl.create("NuevacitaModalPage", { cita: cita }, { cssClass: "nuevaCitaModal smallModal" });
     Modal.present({});
+    }
   }
 
   openProgreso( cita: Citas){
     /*let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
     Modal.present({});*/
+    console.log('opening progreso men');
+    if(cita.checkState(CitasDataProvider.STATE_FINALIZADA)){
+      console.log('tengo cositas aqui = ) ');
+    this.progresSController.cobroEfectivo = cita.cobroEfectivo;
+    this.progresSController.cobroCheque = cita.cobroCheque;
+    this.progresSController.cobroTarjeta = cita.cobroTarjeta;
+    this.progresSController.factura = cita.data.field_facturar.und[0].value;
+    this.progresSController.factura_cantidad = cita.data.field_facturar_cantidad.und[0].value;
+    }
     this.progresSController.openProgress(cita);
   }
 

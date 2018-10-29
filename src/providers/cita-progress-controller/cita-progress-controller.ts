@@ -5,6 +5,7 @@ import { servicios } from '../user-data/servicios';
 import { Doctores } from '../user-data/doctores';
 import { CitasManagerProvider } from '../citas-manager/citas-manager';
 import { ModalController } from 'ionic-angular';
+import { CitasDataProvider } from '../citas-data/citas-data';
 
 /*
   Generated class for the CitaProgressControllerProvider provider.
@@ -23,6 +24,7 @@ export class CitaProgressControllerProvider {
   cobroCheque:number=null;
   activeCitaDoc:Doctores;
   showinterval = null;
+  editfinish:boolean = false;
   factura_cantidad:number = null;
   factura: number = 0;
   added_services_list:{
@@ -44,11 +46,14 @@ export class CitaProgressControllerProvider {
     this.cobroEfectivo=null;
     this.cobroTarjeta=null;
     this.cobroCheque=null;
+    this.editfinish = false;
   }
   
 
   openProgress(cita:Citas){ //open progress is called from the buttons using citas presentator
-    this.setInputs();
+    if(!cita.checkState(CitasDataProvider.STATE_FINALIZADA)){
+      this.setInputs();
+    }
     this.setActiveCita(cita);
     //this.evalServicios();
     //this.calcularCosto();

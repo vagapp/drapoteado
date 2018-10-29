@@ -29,6 +29,7 @@ export class Citas{
     recepcion_playerid:string = null;
     
     
+    
     constructor(){
         this.init();
     }

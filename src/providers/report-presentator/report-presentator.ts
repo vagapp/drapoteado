@@ -181,7 +181,7 @@ async openReportGenerate( report:reportes = null ){
 	    if(cita.cobroTarjeta) this.totalTarjeta+=cita.cobroTarjeta;
       if(cita.cobroCheque) this.totalCheques+=cita.cobroCheque;
       console.log('cita evaluada',cita);
-      if(cita.data.field_facturar.und && cita.data.field_facturar.und[0].value) this.facturadoTotal += cita.data.field_facturar_cantidad.und[0].value;
+      if(cita.data.field_facturar.und && cita.data.field_facturar.und[0].value) this.facturadoTotal += Number(cita.data.field_facturar_cantidad.und[0].value);
     }
     console.log('tota facturar es ',this.facturadoTotal);
     this.duracionTotalStr = DateProvider.getDateDifText(this.duracionTotalMs);

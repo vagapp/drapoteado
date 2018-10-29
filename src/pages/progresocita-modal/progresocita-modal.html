@@ -70,9 +70,9 @@
             <div class="CitaDetailSection midFont">
               <b>Costo de la Cita</b>
               <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_ACTIVA)" class="floatRight"><span class="fontSecondary">${{progressController.costoCita}}</span> <ion-icon name="menu"></ion-icon> </span>
-              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO)" class="floatRight"><span class="fontSecondary">${{progressController.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
+              <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA)" class="floatRight"><span class="fontSecondary">${{progressController.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
               costo
-              <div *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA,  userData.TIPO_CAJAYRECEPCION])">
+              <div *ngIf="(progressController.activeCita.checkState(citasData.STATE_COBRO) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA,  userData.TIPO_CAJAYRECEPCION])) || (progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA) && permissions.checkUserPermission([userData.TIPO_DOCTOR]))">
               <b>Formas de Pago</b>
               <div class="ModalInput_input">
                     Efectivo
@@ -112,6 +112,7 @@
             <div class="register_button_section">
             <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA)"  (click)="finalizarPop()" class="bgColorPrimary generalButton">Finalizar Cita</button>
             <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO)" (click)="pagadaPop()" class="bgColorPrimary generalButton">Pagar</button>
+            <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_FINALIZADA)" (click)="pagadaPop()" class="bgColorPrimary generalButton">Guardar</button>
             </div>
           </div>
       </div>
