@@ -111,7 +111,7 @@
         <div class="midAlign">
             <div class="register_button_section">
             <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA)"  (click)="finalizarPop()" class="bgColorPrimary generalButton">Finalizar Cita</button>
-            <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO)" (click)="pagadaPop()" class="bgColorPrimary generalButton">Marcar como pagada</button>
+            <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO)" (click)="pagadaPop()" class="bgColorPrimary generalButton">Pagar</button>
             </div>
           </div>
       </div>
