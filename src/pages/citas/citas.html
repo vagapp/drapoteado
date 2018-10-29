@@ -18,7 +18,7 @@
     </div>
     
     <div class="filters_wrapper">
-    <div><span class="midFont"> Fecha: </span><input [(ngModel)]="citasPresentator.pacienteFilter" (ngModelChange)="citasPresentator.filterChange();"  type="text" placeholder="paciente"> </div>
+    <div><span class="midFont"> Paciente: </span><input [(ngModel)]="citasPresentator.pacienteFilter" (ngModelChange)="citasPresentator.filterChange();"  type="text" placeholder="paciente"> </div>
      <span class="midFont"> Fecha: </span> 
      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="citasPresentator.dateFilterStart" (ngModelChange)="citasPresentator.filterChange();"></ion-datetime>
      <span class="midFont remover"  *ngIf="citasPresentator.filteredCitas" (click)="citasPresentator.removeFilter();" >remover filtro</span>

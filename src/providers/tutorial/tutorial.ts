@@ -18,6 +18,7 @@ export class TutorialProvider {
   tutorialMainModal: Modal = null;
   serviciosModal: Modal = null;
   usuariosModal: Modal = null;
+  canClose:boolean =false;
 
   static TUTORIAL_ACTIVE = true;
   static TUTORIAL_FINISHED = false;
@@ -37,13 +38,28 @@ export class TutorialProvider {
 
   checkNStart(){
     if(this.checkTutorialState()){
+      this.canClose = false;
       this.openTutorial();
     }
+  }
+
+  openTutorialCanClose(){
+    this.canClose = true;
+    this.openTutorial();
+  }
+
+  tutorialReplayAvailability(){
+    if(this.permissions.checkUserPermission([UserDataProvider.TIPO_DOCTOR])
+      && this.userData.userData.tutorial_state.und 
+      && Number(this.userData.userData.tutorial_state.und[0].value) !== 0
+    ){ return true } 
+    return false;
   }
 
   checkTutorialState(){
     if(
       this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY])
+      && this.permissions.checkUserPermission([UserDataProvider.TIPO_DOCTOR])
       && this.userData.userData.tutorial_state.und 
       && Number(this.userData.userData.tutorial_state.und[0].value) === 0
     ){
@@ -55,7 +71,7 @@ export class TutorialProvider {
 
   openTutorial(){
       //this.tutorialMainModal = this.modalCtrl.create("WelcomeModalPage");
-      this.tutorialMainModal = this.modalCtrl.create("WelcomeModalPage", undefined, {enableBackdropDismiss: false});
+      this.tutorialMainModal = this.modalCtrl.create("WelcomeModalPage", undefined, {enableBackdropDismiss: this.canClose});
       this.tutorialMainModal.present({});
   }
 
@@ -71,7 +87,7 @@ export class TutorialProvider {
   }
 
   showServicioModal(){
-    this.serviciosModal = this.modalCtrl.create("NuevoservicioModalPage", undefined, { enableBackdropDismiss: false , cssClass: "smallModal nuevoservicioModal" });
+    this.serviciosModal = this.modalCtrl.create("NuevoservicioModalPage", undefined, { enableBackdropDismiss: this.canClose , cssClass: "smallModal nuevoservicioModal" });
     this.serviciosModal.present({});
   }
 
@@ -80,7 +96,7 @@ export class TutorialProvider {
   }
 
   showUsuarioModal(){
-    this.usuariosModal = this.modalCtrl.create("NuevousuarioModalPage", undefined, {enableBackdropDismiss: false , cssClass: "smallModal nuevousuarioModal" });
+    this.usuariosModal = this.modalCtrl.create("NuevousuarioModalPage", undefined, {enableBackdropDismiss: this.canClose , cssClass: "smallModal nuevousuarioModal" });
     this.usuariosModal.present({});
   }
 

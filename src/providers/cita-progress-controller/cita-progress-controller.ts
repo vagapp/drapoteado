@@ -23,7 +23,7 @@ export class CitaProgressControllerProvider {
   cobroCheque:number=null;
   activeCitaDoc:Doctores;
   showinterval = null;
-  factura_cantidad:number = 0;
+  factura_cantidad:number = null;
   factura: number = 0;
   added_services_list:{
     servicio:servicios

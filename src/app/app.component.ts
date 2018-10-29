@@ -13,6 +13,7 @@ import { WsMessengerProvider } from '../providers/ws-messenger/ws-messenger';
 import { ServiciosManagerProvider } from '../providers/servicios-manager/servicios-manager';
 import { SubscriptionManagerProvider } from '../providers/subscription-manager/subscription-manager';
 import { PermissionsProvider } from '../providers/permissions/permissions';
+import { TutorialProvider } from '../providers/tutorial/tutorial';
 
 
 
@@ -51,7 +52,8 @@ export class MyApp {
     public wsMessenger: WsMessengerProvider,
     public serviciosManager: ServiciosManagerProvider,
     public subscriptionManager: SubscriptionManagerProvider,
-    public perm: PermissionsProvider
+    public perm: PermissionsProvider,
+    public tutorial: TutorialProvider
   ) {
     this.startdate = new Date().getTime();
     this.initializeApp();
