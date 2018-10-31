@@ -77,7 +77,7 @@ hourIntervalMS:number = 30*60*1000;
     public permissions: PermissionsProvider,
     public dateP: DateProvider,
     private calendar: Calendar,
-    private citasData: CitasDataProvider
+    public citasData: CitasDataProvider
   ) {
     
     /** 

@@ -199,6 +199,18 @@
           </select>
         </div>
     </div>
+
+    <div class="register_ubication register_form_section rfsFlex">
+      <p>Referencia: si alguien te invito a drap ingresa su email aqui.</p>
+      <div class="registerInput">
+        <b>Email:</b><input [(ngModel)]="this.mailsrefer" type="text"/>
+    </div>
+
+    <div class="register_button_section">
+        <button  class="bgColorPrimary generalButton" (click)="actionBuscarRef()" >Buscar</button>
+      </div>
+
+    </div>
    
     <!--
     <div class="register_payment register_form_section rfsFlex">

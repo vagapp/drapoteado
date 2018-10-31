@@ -36,6 +36,9 @@ export class RegisterModalPage {
   grupoOtro:string = null;
   hospitalOotro:string = null; 
   onHospital:boolean = null;
+  mailsrefer:string = null;
+  refuser:number = null;
+  refuserName:string = null;
 
   get enabledButton():boolean{
     return this.selected_source !== null && this.selected_plan !== null;
@@ -93,6 +96,26 @@ export class RegisterModalPage {
     delete aux_userData.field_tipo_de_usuario;
     let res = await this.userMan.updateUserd(aux_userData).toPromise();
     this.loader.dismissLoader();
+  }
+
+  async actionBuscarRef(){
+    console.log('reference to search is', this.mailsrefer);
+    this.loader.presentLoader('Buscando...');
+    this.userMan.searchByMail(this.mailsrefer).subscribe(
+      (val:Array<any>)=>{
+        console.log('hola esto me salio',val);
+        if(Number(val.length) === 0){  this.alert.presentAlert('Nada','No se encontro un usuario con este email.'); }
+        else{
+          this.refuser = val[0].uid;
+          this.refuserName = val[0].field_nombre;
+        }
+        this.loader.dismissLoader();
+      },(error)=>{
+        console.log('ayuda con esto',error);
+        this.alert.presentAlert('Nada','No se encontro un usuario con este email.');
+        this.loader.dismissLoader();
+      }
+    );
   }
 
   actionRegister(){

@@ -32,6 +32,17 @@ export class DrupalUserManagerProvider {
     return this.http.get(url).share();
   }
 
+  searchByMail(mail:string){
+    let obs = this.searchByMailRequest(mail);
+    return obs;
+  }
+  
+  searchByMailRequest(mail:string){
+    let url = `${this.bu.endpointUrl}rest_users?args[0]=all&args[1]=all&args[2]=all&args[3]=${mail}`;
+    console.log('user requesting url is',url);
+    return this.http.get(url).share();
+  }
+
   generateNewUserd( userd ):Observable<any>{
     let body = JSON.stringify(userd);
     let url = `${this.bu.endpointUrl}user/`;

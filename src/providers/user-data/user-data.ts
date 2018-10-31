@@ -871,7 +871,8 @@ export interface citasData{
     aux_servicios_json:string,
     field_hora_cobromsb:{und:[{value:number}]},
     field_facturar:{und:[{value:number}]},
-    field_facturar_cantidad:{und:[{value:number}]}
+    field_facturar_cantidad:{und:[{value:number}]},
+    
 }
 
 
@@ -906,10 +907,8 @@ export interface userd{
     field_planholder:{und:[{ value:boolean}]},
     field_stripe_customer_id:{und:[{ value:string}]},
     field_src_json_info:{und:[{ value:string}]},
+    field_reference_user:{und:number[]}
 }
 
-{
- 
 
-}
 
