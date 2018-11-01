@@ -94,6 +94,17 @@ export class RegisterModalPage {
     let aux_userData = JSON.parse(JSON.stringify(this.userData.userData));
     delete aux_userData.field_sub_id;
     delete aux_userData.field_tipo_de_usuario;
+    
+    if(this.refuser){
+      aux_userData.field_reference_user.und[0] = this.refuser;
+      /*aux_userData.field_reference_user = new Array();
+      aux_userData.field_reference_user['und'] = new Array;
+      aux_userData.field_reference_user['und'][0] = this.refuser;*/
+    }else{
+      delete aux_userData.field_reference_user;
+    }
+    
+    console.log('userdata to update',aux_userData);
     let res = await this.userMan.updateUserd(aux_userData).toPromise();
     this.loader.dismissLoader();
   }
@@ -118,6 +129,11 @@ export class RegisterModalPage {
     );
   }
 
+  removeReference(){
+    this.refuser = null;
+    this.refuserName = null;
+  }
+
   actionRegister(){
     if(!this.basicValidation()){return 0;}
     this.loader.presentLoader('Registrando ...');
@@ -132,6 +148,16 @@ export class RegisterModalPage {
   delete cloneData.field_doctores;
   delete cloneData.field_forma_pago;
   delete cloneData.field_plan_date;
+
+  if(this.refuser){
+    cloneData.field_reference_user.und[0] = this.refuser;
+    /*aux_userData.field_reference_user = new Array();
+    aux_userData.field_reference_user['und'] = new Array;
+    aux_userData.field_reference_user['und'][0] = this.refuser;*/
+  }else{
+    delete cloneData.field_reference_user;
+  }
+  
   
   //Debugger.log(['register',this.userData.userData]);
     let register_observer = this.userData.register(cloneData);
@@ -168,7 +194,7 @@ export class RegisterModalPage {
     return ret;
   }
 
-  dismiss() {
+  dismiss(){
     this.viewCtrl.dismiss();
   }
 

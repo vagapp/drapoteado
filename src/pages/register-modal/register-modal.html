@@ -211,6 +211,9 @@
       </div>
 
     </div>
+    <div class="register_ubication register_form_section rfsFlex" *ngIf="this.refuser" >
+      <span class="user_referenced_name"> {{this.refuserName}} </span> <span class="remove_reference_name" (click)="removeReference()" >X</span>
+      </div>
    
     <!--
     <div class="register_payment register_form_section rfsFlex">

@@ -50,7 +50,8 @@ export class DrupalUserManagerProvider {
   }
 
   updateUserd( userd ):Observable<any>{
-    let body = JSON.stringify(userd);
+    
+    let body = JSON.stringify(userd);console.log('updating user with this',body);
     let url = `${this.bu.endpointUrl}user/${userd.uid}`;
     return this.http.put(url,body).share();
   }
