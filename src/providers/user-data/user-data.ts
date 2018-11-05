@@ -140,7 +140,8 @@ export class UserDataProvider {
       field_sub_id:{und:[]},
       field_planholder:{und:[{value: true}]},
       field_stripe_customer_id: {und:[{value: ""}]},
-      field_src_json_info: {und:[{value: ""}]}
+      field_src_json_info: {und:[{value: ""}]},
+      field_reference_user:{und:[]},
   }
   }
 

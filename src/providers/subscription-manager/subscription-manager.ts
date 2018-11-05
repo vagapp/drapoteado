@@ -65,6 +65,7 @@ export class SubscriptionManagerProvider {
   requestSubscription():Observable<any>{
     const filter=`?args[0]=all&${this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false)?`args[1]=${this.userData.userData.uid}`:'args[1]=all'}&${(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false))?`args[2]=${this.userData.userData.uid}`:'args[2]=all'}&args[3]=all`;
     const  url = `${this.bu.endpointUrl}rest_suscripciones.json${filter}`;
+    console.log('requesting sus',url);
     const observer = this.http.get(url).share();
     return observer;
   }
@@ -149,6 +150,43 @@ export class SubscriptionManagerProvider {
   updateUserSuscription():Observable<any>{
     return this.updateSus(this.subsData.subscription);
   }
+
+  async searchSus( code:string ){
+    let filter=`?args[0]=all&args[1]=all&args[2]=all&args[3]=all&args[4]=${code}`;
+    const url = `${this.bu.endpointUrl}rest_suscripciones.json${filter}`;
+    console.log('searchsus url',url);
+    let observer = this.http.get(url).share();
+    let okai = await observer.toPromise();
+    console.log('searchingsus',okai);
+    let aux_sus = subscriptions.getEmptySuscription();
+    aux_sus.nid = okai[0].nid;
+    aux_sus.field_active = okai[0].field_active.value;
+    aux_sus.field_doctores = okai[0].field_doctores;
+    aux_sus.plan = okai[0].field_plan_sus;
+    return aux_sus;
+  }
+
+  async susAssign( sus ){
+    console.log('sus got is',sus);
+    let plan = this.planesData.planes.find((planes)=>{return Number(planes.nid) === Number(sus.plan)});
+    console.log('assign plan is',plan);
+    if(
+      Number(sus.field_active) === 1
+      &&
+      (plan && PlanesDataProvider.checkForPlanAvailability(sus,plan))
+    ){
+      console.log('ready to save');
+      sus.field_doctores.push(this.userData.userData.uid);
+      let res = await this.updateSus( sus );
+      console.log('updating sus', res);
+      //window.location.reload();
+    }else{
+      console.log('dont save');
+    }
+   
+  }
+
+
 
 
   /*

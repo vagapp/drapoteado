@@ -45,6 +45,10 @@ export class PlanesDataProvider {
     return observable.share();
   }
 
+  static checkForPlanAvailability( sus, plan ){
+    return !(sus.field_doctores.length >= plan.field_no_doctores);
+  }
+
   /**
    * returns true if it updates a plan,
    * returns false if no plan found for this input data nid
