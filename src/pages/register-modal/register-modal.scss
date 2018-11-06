@@ -166,8 +166,15 @@ page-register-modal {
 
 
 
+.button_section_inline{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-
+.button_section_inline button{
+    width: 10%;
+}
 
 .fact_page_wrapper{
     padding-top: 40px;

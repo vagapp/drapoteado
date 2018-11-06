@@ -111,8 +111,8 @@ export class MyApp {
       this.userData.setSessionData(connec_Data);
       await this.userData.loginSetData(connec_Data['user']['uid']);
       if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
-      let sus = await this.subscriptionManager.searchSus('kCsR0Z1ZrSCidi7s4m2jeV064');
-      this.subscriptionManager.susAssign(sus);
+      /*let sus = await this.subscriptionManager.searchSus('kCsR0Z1ZrSCidi7s4m2jeV064');
+      this.subscriptionManager.susAssign(sus);*/
       await this.subscriptionManager.loadSubscription();
       }
       await this.docMan.initDoctoresUids();

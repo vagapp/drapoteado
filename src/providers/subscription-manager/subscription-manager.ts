@@ -158,12 +158,19 @@ export class SubscriptionManagerProvider {
     let observer = this.http.get(url).share();
     let okai = await observer.toPromise();
     console.log('searchingsus',okai);
+    if(okai[0]){
     let aux_sus = subscriptions.getEmptySuscription();
-    aux_sus.nid = okai[0].nid;
+    aux_sus.setData(okai[0]);
+    aux_sus.field_active = okai[0].field_active.value;
+    aux_sus.plan = okai[0].field_plan_sus;
+    /*aux_sus.nid = okai[0].nid;
     aux_sus.field_active = okai[0].field_active.value;
     aux_sus.field_doctores = okai[0].field_doctores;
-    aux_sus.plan = okai[0].field_plan_sus;
+    aux_sus.plan = okai[0].field_plan_sus;*/
     return aux_sus;
+   }
+   else return false;
+    
   }
 
   async susAssign( sus ){
@@ -177,13 +184,23 @@ export class SubscriptionManagerProvider {
     ){
       console.log('ready to save');
       sus.field_doctores.push(this.userData.userData.uid);
-      let res = await this.updateSus( sus );
+      console.log('docs b',sus);
+      //delete sus.field_plan_holder;
+      //delete sus.field_plan_sus;
+      //console.log('docs a',sus);
+      let res = await this.updateSus( sus ).subscribe(
+        (val)=>{
+          console.log('redysave val',val);
+          window.location.reload();
+        },(error)=>{
+          console.log('redysave error',error);
+        }
+      );
       console.log('updating sus', res);
       //window.location.reload();
     }else{
       console.log('dont save');
     }
-   
   }
 
 

@@ -18,13 +18,22 @@
           <span class="myplan_block">Plan activo: {{subsData.subscription.plan.title}}</span>
         </div>
       </div>
-    <div class="fact_page_content" *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY])" >
+      <div class="fact_page_content" *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY]) && this.onGroup" >
+        <p>ingresa el codigo del grupo medico al que perteneces.</p>
+        <div class="button_section_inline">
+        <div class="registerInput">
+            <b>Codigo:</b><input [(ngModel)]="this.searchCode" type="text"/>
+          </div>
+              <button (click)="searchsub()" ion-button block large>Buscar</button>
+              </div>
+        </div>
+    <div class="fact_page_content" *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY]) && !this.onGroup" >
         <div class="modal_header">
             <span class="spanBlock header_title"><img class="modal_title_logo" src="assets/imgs/logo-rojo-gris.svg"/></span>
             <span class="spanBlock header_subtitle">¡ Bienvenido !</span>
             <p>Gracias por usar nuestra aplicación, para comenzar a utilizarla es necesario que elijas uno de nuestros planes</p>
           </div>
-          <div class="medicgroup_opendiv"> Perteneces a un grupo medico? haz click aqui.</div>
+          <div class="medicgroup_opendiv fontPrimary" (click)="this.onGroup = true"> Perteneces a un grupo medico? haz click aqui.</div>
         <div class="subscribe_wrap">
         <div class="fact_myplan noplan " >
             <span class="fact_label left_label">Seleccione un plan</span>

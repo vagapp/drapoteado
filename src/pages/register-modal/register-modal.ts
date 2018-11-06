@@ -40,6 +40,8 @@ export class RegisterModalPage {
   refuser:number = null;
   refuserName:string = null;
 
+  searchCode:string = null;
+
   get enabledButton():boolean{
     return this.selected_source !== null && this.selected_plan !== null;
   }
@@ -180,6 +182,26 @@ export class RegisterModalPage {
       () => {
        
       });
+  }
+
+  async searchsub(){
+    if(this.searchsubValidation()){
+      this.loader.presentLoader('buscando...');
+      let sus = await this.subsManager.searchSus(this.searchCode);
+      console.log('sus found',sus);
+      if(sus){
+        await this.subsManager.susAssign(sus);
+      }else{
+        this.alert.presentAlert('Nada','No se encontro ningun grupo medico');
+      }
+      this.loader.dismissLoader();
+    }
+  }
+
+  searchsubValidation():boolean{
+    let ret = true;
+    if(this.searchCode === null ) ret = false;
+    return ret;
   }
 
   basicValidation():boolean{
