@@ -60,6 +60,19 @@ export class SubusersManagerProvider {
     console.log('loaded subusers', this.subusersData.subUsers);
   }
 
+  async loadGroupUsers(){
+   let res = await this.requestGroupUsers().toPromise();
+   for(let us of res){
+    //this.setGroupUserResult(us,SubusersDataProvider.SUBUSERS_SUBSCRIPTION);
+    }
+    console.log('loaded GroupUsers', this.subusersData.subUsers);
+  }
+
+  requestGroupUsers():Observable<any>{
+    console.log('subdoctores',this.subsData.subscription.field_doctores);
+    return this.userMan.requestUsers([this.subsData.subscription.field_doctores], null, null).share();
+  }
+
   requestSubusuarios():Observable<any>{
     return this.userMan.requestUsers([this.userData.userData.uid], null, null).share();
   }

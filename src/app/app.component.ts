@@ -14,6 +14,7 @@ import { ServiciosManagerProvider } from '../providers/servicios-manager/servici
 import { SubscriptionManagerProvider } from '../providers/subscription-manager/subscription-manager';
 import { PermissionsProvider } from '../providers/permissions/permissions';
 import { TutorialProvider } from '../providers/tutorial/tutorial';
+import { SubusersManagerProvider } from '../providers/subusers-manager/subusers-manager';
 
 
 
@@ -52,6 +53,7 @@ export class MyApp {
     public wsMessenger: WsMessengerProvider,
     public serviciosManager: ServiciosManagerProvider,
     public subscriptionManager: SubscriptionManagerProvider,
+    public subUserMan: SubusersManagerProvider,
     public perm: PermissionsProvider,
     public tutorial: TutorialProvider
   ) {
@@ -114,6 +116,7 @@ export class MyApp {
       /*let sus = await this.subscriptionManager.searchSus('kCsR0Z1ZrSCidi7s4m2jeV064');
       this.subscriptionManager.susAssign(sus);*/
       await this.subscriptionManager.loadSubscription();
+      await this.subUserMan.requestGroupUsers();
       }
       await this.docMan.initDoctoresUids();
       await this.subscriptionManager.loadDoctorsSubscriptions();
