@@ -47,6 +47,8 @@ export class CitaProgressControllerProvider {
     this.cobroTarjeta=null;
     this.cobroCheque=null;
     this.editfinish = false;
+    this.factura = 0;
+    this.factura_cantidad = null;
   }
   
 

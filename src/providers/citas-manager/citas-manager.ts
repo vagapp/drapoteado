@@ -125,6 +125,7 @@ export class CitasManagerProvider {
   }
 
   generateCitaFullData( data ){
+    console.log('generate fullcita data',data);
     let aux_cita = new Citas();
     aux_cita.data = data;
     aux_cita.processData();
@@ -155,7 +156,13 @@ export class CitasManagerProvider {
     cita.data.field_estado.und[0].value = state;
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
-    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA) && saveDate){ console.log('saving date'); cita.data.field_hora_cobromsb['und'][0]['value'] = new Date().getTime();  }else{ 
+    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA) && saveDate){ 
+      console.log('saving date'); 
+      console.log('citas data',cita.data);
+      if(!cita.data.field_hora_cobromsb){
+        cita.data.field_hora_cobromsb = {'und':[{'value': 0}]} ;
+      }
+      cita.data.field_hora_cobromsb['und'][0]['value'] = new Date().getTime();  }else{ 
       console.log('not saving date');
       delete cita.data.field_hora_cobromsb;
     }
