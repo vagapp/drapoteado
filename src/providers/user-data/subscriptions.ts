@@ -166,6 +166,13 @@ export class subscriptions{
         return aux_sus;
     }
 
+    removeUserFromSubs( uid ){
+        console.log('field doctores insubs',this.field_doctores);
+        this.field_doctores = this.field_doctores.filter((docs)=>{ return Number(docs) !== Number(uid)});
+        console.log(this.field_doctores);
+        //this.field_doctores = this.field_doctores.filter();
+    }
+
 
     removeSubUserFromSubs( userd ){
         this.field_subusuarios = this.field_subusuarios.filter((s_uid)=>{ return Number(s_uid) !== Number(userd['uid']) });

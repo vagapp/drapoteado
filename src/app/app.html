@@ -15,6 +15,9 @@
       <button *ngIf="perm.checkUserFeature([userData.TIPO_ANY],[userData.PLAN_ANY])" menuClose ion-item  (click)="openHomePage()">
           Home
       </button>
+      <button *ngIf="perm.checkUserFeature([userData.TIPO_ANY],[userData.PLAN_ANY])" menuClose ion-item  (click)="openGrupoPage()">
+          Grupo
+      </button>
       <button *ngIf="perm.checkUserFeature([userData.TIPO_ANY],[userData.PLAN_ANY])" menuClose ion-item  (click)="openCitasPage()">
           Citas
       </button>

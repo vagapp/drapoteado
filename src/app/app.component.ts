@@ -114,6 +114,7 @@ export class MyApp {
       /*let sus = await this.subscriptionManager.searchSus('kCsR0Z1ZrSCidi7s4m2jeV064');
       this.subscriptionManager.susAssign(sus);*/
       await this.subscriptionManager.loadSubscription();
+      this.subscriptionManager.subsData.subscription.removeUserFromSubs(189);
       }
       await this.docMan.initDoctoresUids();
       await this.subscriptionManager.loadDoctorsSubscriptions();
@@ -136,6 +137,7 @@ export class MyApp {
   }
   
   openHomePage(){this.nav.setRoot(this.Home);}
+  openGrupoPage(){this.nav.setRoot("GroupPage");}
   openCitasPage(){this.nav.setRoot("CitasPage");}
   openServiciosPage(){this.nav.setRoot("ServiciosPage");}
   openUsuariosPage(){this.nav.setRoot("UsuariosPage");}

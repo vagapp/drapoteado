@@ -374,7 +374,8 @@ export class RegisterModalPage {
       let new_source = new sources();
       new_source.setData(this.userData.userData.field_src_json_info.und[i]);
       this.sources.push(new_source);
-      if(old_selected !== null && new_source.src_id === old_selected.src_id) this.selected_source = new_source;
+      if(old_selected !== null && new_source.src_id === old_selected.src_id){ this.selected_source = new_source; this.selected_source.set_selected()}
+      else  if(old_selected === null ){ this.selected_source = new_source; this.selected_source.set_selected()}
     }
   }
   }
@@ -440,6 +441,7 @@ export class RegisterModalPage {
                             };
           this.userData.userData.field_src_json_info['und'].push({value: JSON.stringify(cu_src_data)});
         }
+        /*let updateUser_res = */ /*await this.userData.updateUser().subscribe((val)=>{ console.log(val);},(error)=>{ console.log(error) });*/
         let updateUser_res = await this.userData.updateUser().toPromise();
         this.loadSources();
         this.loader.dismissLoader();
