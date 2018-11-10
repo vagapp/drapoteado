@@ -1,0 +1,33 @@
+<!--
+  Generated template for the GroupPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+--><header></header>
+
+<ion-content padding>
+    <div class="modalPage_header">
+        <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
+        <div class="modalPage_title">
+          <span class="spanBlock midFont"><b>Grupo Medico</b></span>
+          <span class="spanBlock midSubFont">Revisa y administra los doctores de tu grupo</span>
+        </div>
+        </div>
+    <table class="results_table">
+        <thead>
+            <tr> 
+                <th>Nombre</th>
+                <th></th>
+            </tr>
+          </thead>
+      <tbody>
+        <tr *ngFor="let doc of this.docs">
+          <td> {{doc['name']}} </td>
+          <td  class="toolCol">
+              <button *ngIf="!isThis(doc['uid'])" (click)="removerSubsUser(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Remover</button>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  <footer></footer>
+</ion-content>

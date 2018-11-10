@@ -717,6 +717,9 @@ export class UserDataProvider {
     let aux_userData = JSON.parse(JSON.stringify(this.userData));
     aux_userData.field_tipo_de_usuario = UserDataProvider.cleanUserDataReferenceField(this.userData.field_tipo_de_usuario);
     Debugger.log(['this.userData.field_sub_id',this.userData.field_sub_id])
+    if(Number(this.userData.field_reference_user['und']['0'])===0){
+      delete aux_userData.field_reference_user;
+    }
     if(this.userData.field_sub_id['und']['0']){
       Debugger.log(['subid setted']);
     }else{

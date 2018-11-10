@@ -99,6 +99,7 @@ export class CitasPresentatorProvider {
 
 
   async iniciarCita( cita:Citas ){
+    console.log('iniciando cita',cita)
     let aux_doc = this.citasManager.getDoctorOFCita(cita);
     console.log('doctor of cita is',aux_doc);
     if(cita.checkState(CitasDataProvider.STATE_ACTIVA) || cita.checkState(CitasDataProvider.STATE_COBRO)){

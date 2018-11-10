@@ -53,6 +53,7 @@ export class WsMessengerProvider {
   }
 
   generateWSupdateMessage( cita:Citas ){
+    console.log('generating update message',cita);
     let uid = cita.data.field_cita_doctor.und[0];
     let doctor = this.docData.getDoctorByUid(uid);
     cita.data.doctor_name = doctor.name;

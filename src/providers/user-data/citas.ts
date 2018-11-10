@@ -105,6 +105,7 @@ export class Citas{
         if(this.data.aux_servicios_json) this.setServiciosReport(this.data.aux_servicios_json);
         this.facturado = Number( this.data.field_facturar_cantidad.und[0].value);
         this.setDateUT(this.data.field_datemsb.und[0].value);
+        console.log('processdata hora cobro check',this.data.field_hora_cobromsb);
         this.setDurationDates(this.data.field_hora_iniciomsb.und[0].value,this.data.field_hora_finalmsb.und[0].value);
     }
 
