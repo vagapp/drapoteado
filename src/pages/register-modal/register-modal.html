@@ -42,14 +42,14 @@
             </div>
         </div>
       <div class="fact_payment_methods" *ngIf="this.checkStripeSetup()"> <!--*ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])"-->
-        <span class="fact_label left_label">seleccione un método de pago:</span>
+        <!--<span class="fact_label left_label">seleccione un método de pago:</span>
         <div class="sources_wrapper">
         <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado metodos de pago </div>
         <div *ngFor="let src of this.sources" (click)="selectCard(src)"   [class.selectedsrc]="src.selected" class="fact_src_unit">
           {{src.brand}} **** **** **** {{src.last4}}
         </div>
         </div>
-      <span class="fact_label left_label">o agregue un método de pago:</span>
+      <span class="fact_label left_label">o agregue un método de pago:</span>-->
       <div class="forwrapper">
       <form action="/" method="post" id="payment-form">
         
@@ -61,19 +61,19 @@
           <!-- Used to display Element errors -->
           <div id="card-errors" role="alert"></div>
         </div>
-      <button ion-button block large>Agregar Tarjeta</button>
+      <button [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup()" ion-button block large>Suscribirse</button>
       </form>
       </div>
       </div>
       </div>
     </div>
     </div>
-    <div class="checkout">
+    <!--<div class="checkout">
       <div class="details"></div>
       <div class="button_section">
           <button (click)="suscribirse()" [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup()" ion-button block large>Suscribirse</button>
       </div>
-    </div>
+    </div>-->
 
   <div class="register_contet_head"  *ngIf="permissions.checkUserSuscription([userData.PLAN_ANY])">
     <div class="bigFont" *ngIf="this.isnew"> <span class="fontPrimary"><b>Registro</b></span> <span class="lightFont">de Nuevo Usuario</span></div>

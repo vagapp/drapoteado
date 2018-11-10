@@ -89,6 +89,12 @@ export class ProgresocitaModalPage {
         this.close();
       }
 
+      async allsaveActualCita(){
+        console.log('allsaveActualCita');
+        this.progressController.updateCitaActiva();
+        await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
+      }
+
   
       close(){
         this.viewCtrl.dismiss();

@@ -43,7 +43,8 @@ export class RegisterModalPage {
   searchCode:string = null;
 
   get enabledButton():boolean{
-    return this.selected_source !== null && this.selected_plan !== null;
+    //return this.selected_source !== null && this.selected_plan !== null;
+    return this.selected_plan !== null;
   }
   
   get onCordova(){
@@ -426,12 +427,14 @@ export class RegisterModalPage {
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', event => {
       event.preventDefault();
+      if(!this.enabledButton) return false;
       this.loader.presentLoader('Agregando tarjeta...');
       this.stripe.createSource(this.card).then( async result => {
         if (result.error) {
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
           this.loader.dismissLoader();
+          return false;
         } else {
           let cu_src_data = {
                             id:result.source.id,
@@ -444,7 +447,11 @@ export class RegisterModalPage {
         /*let updateUser_res = */ /*await this.userData.updateUser().subscribe((val)=>{ console.log(val);},(error)=>{ console.log(error) });*/
         let updateUser_res = await this.userData.updateUser().toPromise();
         this.loadSources();
-        this.loader.dismissLoader();
+
+        if(!this.enabledButton) return false;
+        await this.subsManager.subscribe( this.selected_plan,this.selected_source);
+        window.location.reload();
+        
       });
     });
   }
