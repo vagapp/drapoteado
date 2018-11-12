@@ -42,5 +42,34 @@
     </table>
     
   </div>
+<div class="medic_group_header">
+
+</div>
+  <div class="Citas_grid result_wrapper">
+      <div class="subusers_subscription_div midFont">Sub-usuarios administrando citas de este doctor</div>
+    <table class="results_table">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Tipo de Usuario</th>
+                <th>Codigo</th>
+                <th></th>
+             </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of this.subuserData.subUsers">
+                <td>{{user.name}}</td>
+                <td class="fontHight">{{this.userData.getTipoUsuarioString(user.field_tipo_de_usuario.und[0])}}</td>
+                <td class="fontHight"><input type="text" value="{{user.field_codigo}}" class="field left" readonly></td>
+                <td class="toolCol">
+                  <img     *ngIf="this.permissions.checkUserPlanHolder()"  src="assets/imgs/editar.svg" class="icon_drapo" (click)="editUsuario(user)">
+                  <button  *ngIf="user.field_doctores.und.indexOf(this.userData.userData.uid) >= 0"  (click)="removeUsuariopop(user)" class="bgColorPrimary generalButton tableButton">Remover</button>
+                  <button  *ngIf="user.field_doctores.und.indexOf(this.userData.userData.uid) === -1"  (click)="agregarusuariopop(user)" class="bgColorPrimary generalButton tableButton">Agregar</button>
+                </td>
+             </tr>
+        </tbody>
+    </table>
+    
+  </div>
 <footer></footer>
 </ion-content>

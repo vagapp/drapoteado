@@ -88,6 +88,17 @@ export class CitaProgressControllerProvider {
   this.activeCita.data.field_facturar_cantidad.und[0].value = this.factura_cantidad;
   }
 
+  updateCitaActiva(){
+    this.calcularCosto();
+    this.activeCita.data.field_costo_sobrescribir.und[0].value = this.costoCita;
+    this.activeCita.setServicesData();
+    this.activeCita.cobroEfectivo = this.cobroEfectivo;
+  this.activeCita.cobroCheque = this.cobroCheque;
+  this.activeCita.cobroTarjeta = this.cobroTarjeta;
+  this.activeCita.data.field_facturar.und[0].value = this.factura;
+  this.activeCita.data.field_facturar_cantidad.und[0].value = this.factura_cantidad;
+  }
+
   addService(){
     let aux_servicio = null;
     console.log(this.selectedService);
@@ -113,6 +124,7 @@ export class CitaProgressControllerProvider {
     console.log(this.activeCita.addedServices);
     this.activeCita.addedServices.forEach(element => {
       this.costoCita += Number(element.costo);
+      this.activeCita.data.field_costo_sobrescribir.und[0].value = this.costoCita;
     });
     console.log(this.costoCita);
   }
