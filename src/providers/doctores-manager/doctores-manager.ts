@@ -91,6 +91,7 @@ export class DoctoresManagerProvider {
       auxDoc.field_alias = doc.field_alias;
       auxDoc.setDisponibilidad(doc.field_disponibilidad);
       this.docData.addDoctor(auxDoc);
+      console.log(this.docData.doctores);
     }
   }
 

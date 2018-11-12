@@ -30,7 +30,7 @@
                     <tr>
                         <!--<td>01</td>-->
                         <td>{{progressController.activeCita.data.field_paciente.und[0].value}}</td>
-                        <td *ngIf="!(permissions.checkUserPermission([userData.TIPO_DOCTOR]))">{{progressController.activeCita.data.doctor_name}}/ {{progressController.activeCita.data.doctor_alias}}</td>
+                        <td *ngIf="!(permissions.checkUserPermission([userData.TIPO_DOCTOR]))">{{progressController.activeCita.data.doctor_name}}</td>
                         <td> </td>
                     </tr>
                 </tbody>

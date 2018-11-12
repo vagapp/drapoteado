@@ -36,7 +36,7 @@
   <div class="ReporteRow_head">
     <span class="rbh_span midFont"> <b [ngStyle]="{'color':cita.stateColor}">{{cita.getStateString()}}</b> </span>
     <span class="rbh_span midFont"><b>Paciente:</b>{{cita.paciente}}</span>
-    <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"><b>Doctor:</b> {{cita.doctor_name}}/{{cita.doctor_alias}}</span>
+    <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"><b>Doctor:</b> {{cita.doctor_name}}</span>
     <span class="rbh_span midFont"><b>Duración</b> <span class="fontHigh">{{cita.duracionText}}</span></span>
     <!--<span class="rbh_span_toolbar">
         <img src="assets/imgs/editar.svg" class="drap_edit_icon" />

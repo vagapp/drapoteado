@@ -32,6 +32,7 @@ export class subscriptions{
     }
 
     setData(input_data):boolean{
+        console.log('setting this data men', input_data);
         let ret = false;
         if(!input_data) return ret;
         ret = true;
@@ -143,6 +144,7 @@ export class subscriptions{
        return ret; 
     }
     
+    
     checkfullness(){
         //Debugger.log(['checking fullness from plan',this.plan]);
         if(this.plan && this.plan.nid){
@@ -177,11 +179,9 @@ export class subscriptions{
     removeSubUserFromSubs( userd ){
         this.field_subusuarios = this.field_subusuarios.filter((s_uid)=>{ return Number(s_uid) !== Number(userd['uid']) });
         /*if(this.field_subusuarios){
-           
             let aux_index = this.field_subusuarios.indexOf(userd['uid']);
             if(aux_index !== -1)this.field_subusuarios.splice(aux_index,1);
            
         }*/
-
     }
 }

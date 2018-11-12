@@ -37,6 +37,7 @@ export class SubscriptionManagerProvider {
 
 
   async loadSubscription(nid = null){
+    console.log('loadSubscription');
     let sus_data = await this.requestSubscription().toPromise();
     if(sus_data && sus_data[0]){
     console.log('sus_data', sus_data);
@@ -48,6 +49,7 @@ export class SubscriptionManagerProvider {
   }
 
   async loadDoctorsSubscriptions(){
+    console.log('loadDoctorsSubscriptions');
     if(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
       console.log('loadDoctorsSubscriptions not a doc');
       let docs_subs_data = await this.requestDocsSubscription().toPromise();
@@ -72,7 +74,8 @@ export class SubscriptionManagerProvider {
 
   requestDocsSubscription():Observable<any>{
     //const filter=`?args[0]=all&${this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false)?`args[1]=${this.userData.userData.uid}`:'args[1]=all'}&${(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false))?`args[2]=${this.userData.userData.uid}`:'args[2]=all'}&args[3]=all`;
-    const filter = `?args[0]=all&args[1]=all&args[2]=all&args[3]=${this.docData.doctoresIDs}`;
+    //const filter = `?args[0]=all&args[1]=all&args[2]=all&args[3]=${this.docData.doctoresIDs}`;
+    const filter = `?args[0]=all&args[1]=${this.docData.doctoresIDs}`;
     const url = `${this.bu.endpointUrl}rest_suscripciones.json${filter}`;
     console.log('requesting docs subs url',url);
     const observer = this.http.get(url).share();
@@ -80,16 +83,26 @@ export class SubscriptionManagerProvider {
   }
 
   checkSusOfDoctor(nid:number){
+    /* No necesitamos que sea el plan holder pero que este en los doctores.*/
     let ret = false;
     console.log('in subs:',this.doc_subscriptions);
-    let subs = this.doc_subscriptions.find((subs)=>{ 
+    let found = this.doc_subscriptions.find(
+      /*(subs)=>{ 
       console.log(subs.field_plan_holder,nid);
       console.log(subs.field_active);
       return (Number(subs.field_plan_holder) === Number(nid)) 
       && Number(subs.field_active) === 1
-    });
-    console.log('subs result',subs);
-    if(subs) ret = true;
+    }*/
+    //el metodo de arriba es para encontrar planholders, el de abajo para encontrar docs listados en el field doctors.
+    (subs)=>{ 
+      console.log(subs.field_doctores,nid,subs.field_doctores.indexOf(nid));
+      console.log(subs.field_active);
+      return (subs.field_doctores.indexOf(nid) >= 0) 
+      && Number(subs.field_active) === 1
+    }
+  );
+    console.log('subs result',found);
+    if(found) ret = true;
     return ret;
   }
   

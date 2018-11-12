@@ -76,7 +76,7 @@
                                                 <tr *ngFor="let cita of day.citasShowPool">
                                                     <!--<td>{{cita.data.Nid}}</td>-->
                                                     <td  >{{cita.data.field_paciente.und[0].value}}</td>
-                                                    <td *ngIf=" !this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}} / {{cita.doctor_alias}}</td>
+                                                    <td *ngIf=" !this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}}</td>
                                                     <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">General</td>
                                                     <td ><span class="fontSecondary">{{cita.getDisplayableDates().date}}</span> - <span class="fontHigh">{{cita.getDisplayableDates().time}}</span></td>
                                                     <td  [ngStyle]="{'color':cita.stateColor}" >{{cita.getStateString()}}</td>
