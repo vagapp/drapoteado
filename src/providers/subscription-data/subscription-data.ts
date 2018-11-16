@@ -19,8 +19,13 @@ export class SubscriptionDataProvider {
   field_plan_sus:number=null //nid del plan
   field_subusuarios:number[]=null; //array of sub acound uids
   field_active:boolean = false;
+  docs = new Array();
 
   constructor() {
+  }
+
+  setDoctores(){
+    this.docs = JSON.parse(this.subscription.field_doctores_json);
   }
 
   getSubusersIDs():Array<number>{

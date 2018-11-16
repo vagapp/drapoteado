@@ -9,6 +9,8 @@ import { CitasDataProvider } from '../citas-data/citas-data';
 import { Citas } from '../user-data/citas';
 import { ReportPresentatorProvider } from '../report-presentator/report-presentator';
 import { DoctoresManagerProvider } from '../doctores-manager/doctores-manager';
+import { subscriptions } from '../user-data/subscriptions';
+import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 
 
 @Injectable()
@@ -20,7 +22,8 @@ export class WebsocketServiceProvider {
     public userData: UserDataProvider,
     public docData: DoctoresDataProvider,
     public reportPresentator: ReportPresentatorProvider,
-    public doctoresManager: DoctoresManagerProvider
+    public doctoresManager: DoctoresManagerProvider,
+    public subsData: SubscriptionDataProvider
   ) {
     this.init();
   }
@@ -45,7 +48,20 @@ export class WebsocketServiceProvider {
       case 'addCita': this.addCita(message); break;
       case 'removeCita': this.removeCita(message); break;
       case 'loadedReport': this.loadedReport(message); break;
+      case 'addSubUser': this.addSubsUser(message); break;
+      case 'removeSubUser': this.removeSubsUser(message); break;
     }
+  }
+
+  addSubsUser(message){
+    console.log('addSubsUser',message);
+  }
+
+  removeSubsUser(message){
+    console.log('removeSubsUser',message);
+    console.log(this.subsData.docs);
+    this.subsData.docs = this.subsData.docs.filter((docs)=>{ return Number(docs.uid) !== Number(message.content)});
+    console.log(this.subsData.docs);
   }
 
   /**

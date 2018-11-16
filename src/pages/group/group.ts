@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
 import { UserDataProvider } from '../../providers/user-data/user-data';
+import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 
 /**
  * Generated class for the GroupPage page.
@@ -20,7 +23,10 @@ export class GroupPage {
 
   constructor(
     public subsData: SubscriptionDataProvider,
-    public userData: UserDataProvider
+    public userData: UserDataProvider,
+    public subsMan: SubscriptionManagerProvider,
+    public loader: LoaderProvider,
+    public WS:WsMessengerProvider
   ) {
     
    
@@ -28,14 +34,22 @@ export class GroupPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad GroupPage');
+    console.log('code is', this.subsData.subscription.field_invitation_code);
     if(this.subsData.subscription.field_doctores_json){
-    this.docs = JSON.parse(this.subsData.subscription.field_doctores_json);
+    //this.docs = JSON.parse(this.subsData.subscription.field_doctores_json);
+    this.subsData.setDoctores();
     console.log('this.docs',this.docs);
     }
   }
 
-  removerSubsUser(uid){
+ 
+
+  async removerSubsUser(uid){
     console.log('toremove',uid);
+    this.loader.presentLoader("Removiendo...");
+    //await this.subsMan.removeUser(uid);
+    this.WS.generateSubsRemoveMessage(uid);
+    this.loader.dismissLoader();
   }
 
   isThis(uid){

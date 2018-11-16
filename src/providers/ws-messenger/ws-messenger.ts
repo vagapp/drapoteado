@@ -4,6 +4,7 @@ import { Citas } from '../user-data/citas';
 import { UserDataProvider } from '../user-data/user-data';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { CitasDataProvider } from '../citas-data/citas-data';
+import { subscriptions } from '../user-data/subscriptions';
 
 /*
 This class is a message generator for  the websocketService
@@ -66,6 +67,7 @@ export class WsMessengerProvider {
       true
     );
   }
+  
 
   generateWSremoveCitaMessage( cita:Citas ){
     this.generateMessage(
@@ -77,4 +79,26 @@ export class WsMessengerProvider {
     );
   }
 
+
+  generateSubsRemoveMessage( uid:number ){
+    this.generateMessage(
+      this.docData.doctoresIDs,
+      'removeSubUser',
+      `${this.userData.userData.uid}`,
+      uid,
+      true
+    );
+  }
+
+  generateSubsAddedMessage( uid, name){
+    this.generateMessage(
+      this.docData.doctoresIDs,
+      'addSubUser',
+      `${this.userData.userData.uid}`,
+      {"uid":uid,"name":name },
+      true
+    );
+  }
+
+ 
 }

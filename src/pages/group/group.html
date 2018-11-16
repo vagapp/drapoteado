@@ -22,7 +22,7 @@
             </tr>
           </thead>
       <tbody>
-        <tr *ngFor="let doc of this.docs">
+        <tr *ngFor="let doc of this.subsData.docs">
           <td> {{doc['name']}} </td>
           <td  class="toolCol">
               <button *ngIf="!isThis(doc['uid'])" (click)="removerSubsUser(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Remover</button>
