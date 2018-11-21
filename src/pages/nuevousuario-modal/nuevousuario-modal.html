@@ -32,6 +32,7 @@
         <span class="spanBlock" *ngIf="this.userData.checkUserPlanHolder()"> <button class="bgColorSecondary generalButton" (click)="newuser=true; initialpage=false;">Registrar Nuevo</button></span>
       </div>
     <div class="nuevoservicio_content modalContent" *ngIf="codeuser">
+        <span class="spanBlock optionspan" (click)="newuser=false; codeuser=false; initialpage=true" > atras </span>
         <div class="ModalInput_input">
             <b>Introducir Código</b>
             <input  [(ngModel)]="this.newUserCode" type="text"/>
@@ -43,6 +44,7 @@
           </div>
     </div>
     <div class="nuevoservicio_content modalContent" *ngIf="newuser">
+            <span class="spanBlock optionspan" (click)="newuser=false; codeuser=false; initialpage=true" > atras </span>
         <div *ngIf="this.isnew" class="ModalInput_input">
             <b>username</b>
             <input  [(ngModel)]="this.newUser.name" type="text"/>

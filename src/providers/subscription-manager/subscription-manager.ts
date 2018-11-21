@@ -12,6 +12,7 @@ import { planes } from '../user-data/planes';
 import { sources } from '../user-data/sources';
 import { PermissionsProvider } from '../permissions/permissions';
 
+
 /*
   Generated class for the SubscriptionManagerProvider provider.
 
@@ -151,6 +152,14 @@ export class SubscriptionManagerProvider {
     this.subsData.subscription.removeSubUserFromSubs(user);
     let obs = this.nodeManager.updateNode(this.subsData.subscription.getData());
     await obs.toPromise();
+    console.log('sub removed and saved');
+  }
+
+  async removeUser( uid:number ){
+    this.subsData.subscription.removeUserFromSubs(uid);
+    let obs = this.nodeManager.updateNode(this.subsData.subscription.getData());
+    //await obs.toPromise();
+    //this.wsMessenger.generateSubsRemoveMessage(this.subsData.subscription);
     console.log('sub removed and saved');
   }
 
