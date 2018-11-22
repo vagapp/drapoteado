@@ -5,6 +5,7 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
 
 /**
  * Generated class for the GroupPage page.
@@ -26,15 +27,21 @@ export class GroupPage {
     public userData: UserDataProvider,
     public subsMan: SubscriptionManagerProvider,
     public loader: LoaderProvider,
-    public WS:WsMessengerProvider
+    public WS:WsMessengerProvider,
+    public perm: PermissionsProvider,
+    public navCtrl: NavController
   ) {
     
    
   }
 
   ionViewDidLoad() {
+    /*if(!this.perm.checkUserFeature([UserDataProvider.PLAN_ANY],[PermissionsProvider.PLAN_GROUP])){
+      this.navCtrl.setRoot("HomePage");
+    }*/
     console.log('ionViewDidLoad GroupPage');
     console.log('code is', this.subsData.subscription.field_invitation_code);
+    console.log();
     if(this.subsData.subscription.field_doctores_json){
     //this.docs = JSON.parse(this.subsData.subscription.field_doctores_json);
     this.subsData.setDoctores();
@@ -47,13 +54,23 @@ export class GroupPage {
   async removerSubsUser(uid){
     console.log('toremove',uid);
     this.loader.presentLoader("Removiendo...");
-    //await this.subsMan.removeUser(uid);
+    await this.subsMan.removeUser(uid);
     this.WS.generateSubsRemoveMessage(uid);
     this.loader.dismissLoader();
   }
 
+  async getOut(uid){
+    await this.removerSubsUser(uid);
+    window.location.reload();
+  }
+
   isThis(uid){
     return Number(uid) === Number(this.userData.userData.uid);
+  }
+
+  isplanHolder(){
+    console.log('isplanHolder',this.perm.checkUserPlanHolder());
+   return this.perm.checkUserPlanHolder();
   }
 
 }

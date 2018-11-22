@@ -5,6 +5,11 @@ import { SubscriptionDataProvider } from '../subscription-data/subscription-data
 @Injectable()
 export class PermissionsProvider {
 
+  static PLAN_GROUP:number = 1205 ; 
+
+  get PLAN_GROUP(){ return PermissionsProvider.PLAN_GROUP }
+  checkPlan = false;
+
   constructor(
     public userData: UserDataProvider,
     public subsData: SubscriptionDataProvider
@@ -60,7 +65,10 @@ checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean
 
 
 checkUserPlanHolder(){
-  return this.checkUserPermission([UserDataProvider.TIPO_DOCTOR]);
+  console.log('checkUserPlanHolder');
+  console.log(this.subsData.subscription.field_plan_holder );
+  console.log(this.userData.userData.uid);
+  return this.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) && (Number(this.subsData.subscription.field_plan_holder) === Number(this.userData.userData.uid));
 }
 
 

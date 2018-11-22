@@ -9,6 +9,7 @@ import { AlertProvider } from '../../providers/alert/alert';
 import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { TutorialProvider } from '../../providers/tutorial/tutorial';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 /**
  * Generated class for the NuevousuarioModalPage page.
@@ -30,6 +31,7 @@ export class NuevousuarioModalPage {
   checkpass:string;
   newUserCode:string;
   codeuser=false;
+  codeuserNP=false; //if tutorial user is gotten by code this disables password show
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -144,10 +146,23 @@ async getUserByCode(){
     console.log('user found',res[0]);
     await this.addUserFromCode(res[0]);
     await this.subusersManager.cargarSubusuarios();
+    this.loader.dismissLoader();
+    if(this.tutorial.checkTutorialState())
+    {
+      this.newUser = res[0];
+      this.codeuserNP=true;
+      this.tutorial.usuarioCreated = true;
+    }else{
+      this.alert.presentAlert("Hecho",`Se le ha asignado el usuario ${res[0]['name']}`);
+      this.close();
+    }
   }else{
     this.alert.presentAlert("Nada", "No se encontró ningún usuario usando este código");
+    this.loader.dismissLoader();
   }
-  this.loader.dismissLoader();
+
+
+ 
 
 /*
   this.userMan.requestUsers(new Array(),this.newUserCode).subscribe(
@@ -235,10 +250,11 @@ async addUserFromCode( user_data ){
         delete aux_user.field_tipo_de_usuario;
         delete aux_user.field_sub_id;
         //for(let element of user_data.field_tipo_de_usuario){ aux_user.field_tipo_de_usuario.und.push(element.uid); }for(let element of user_data.field_tipo_de_usuario){ aux_user.field_tipo_de_usuario.und.push(element.uid); }
-        aux_user.field_doctores.und.push(this.userData.userData.uid);
-        console.log(aux_user);
-        let res = await this.userMan.updateUserd(aux_user).toPromise(); 
-        /*this.userMan.updateUserd( aux_user).subscribe(
+        aux_user.field_doctores.und.push(Number(this.userData.userData.uid));
+        console.log('user2save',aux_user);
+        console.log('user2save fdocs',aux_user.field_doctores.und);
+        //let res = await this.userMan.updateUserd(aux_user).toPromise(); 
+        this.userMan.updateUserd( aux_user).subscribe(
           (val)=>{
             console.log("usuarioUpdated");
           
@@ -247,7 +263,7 @@ async addUserFromCode( user_data ){
             console.log("POST call in error", response);
            
           }
-        );*/
+        );
           /*this.userMan.updateUserd( aux_user).subscribe(
             (val)=>{
               console.log("usuarioUpdated");
@@ -313,9 +329,11 @@ updateUserValidation():boolean{
   toast.present();
 }*/
 
-close(){
+close( iscreated:boolean = false){
   this.viewCtrl.dismiss();
 }
+
+
 
 /*presentAlert(key,Msg) {
   let alert = this.alertCtrl.create({
