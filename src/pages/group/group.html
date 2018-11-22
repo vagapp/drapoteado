@@ -3,8 +3,8 @@
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
---><header></header>
-
+-->
+<header></header>
 <ion-content padding>
     <div class="modalPage_header">
         <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
@@ -25,7 +25,8 @@
         <tr *ngFor="let doc of this.subsData.docs">
           <td> {{doc['name']}} </td>
           <td  class="toolCol">
-              <button *ngIf="!isThis(doc['uid'])" (click)="removerSubsUser(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Remover</button>
+              <button *ngIf="!isThis(doc['uid']) && isplanHolder()" (click)="removerSubsUser(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Remover</button>
+              <button *ngIf="isThis(doc['uid']) && !isplanHolder()" (click)="getOut(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Salir</button>
             </td>
         </tr>
       </tbody>

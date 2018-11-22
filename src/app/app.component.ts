@@ -138,6 +138,11 @@ export class MyApp {
   openPage(page) {
     this.nav.setRoot(page.component);
   }
+
+  async logout(){
+    await this.userData.logout();
+    this.nav.setRoot("LoginPage");
+  }
   
   openHomePage(){this.nav.setRoot(this.Home);}
   openGrupoPage(){this.nav.setRoot("GroupPage");}
