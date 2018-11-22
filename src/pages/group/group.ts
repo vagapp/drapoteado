@@ -34,11 +34,8 @@ export class GroupPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad GroupPage');
-<<<<<<< HEAD
     console.log('susdata is',this.subsData.subscription);
-=======
     console.log('code is', this.subsData.subscription.field_invitation_code);
->>>>>>> 0248f9e58445ef1211b1a8adb88b82ad03e5e227
     if(this.subsData.subscription.field_doctores_json){
     //this.docs = JSON.parse(this.subsData.subscription.field_doctores_json);
     this.subsData.setDoctores();
