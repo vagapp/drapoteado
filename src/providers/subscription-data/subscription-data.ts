@@ -11,7 +11,11 @@ import { subscriptions } from '../user-data/subscriptions';
 */
 @Injectable()
 export class SubscriptionDataProvider {
+
+  static PLAN_GROUP:number = 1205 ; 
+
   subscription: subscriptions = null;
+  
 
   nid:number = null; //nid de la subscripcion
   uid:number = null; //uid del doctor
@@ -21,11 +25,22 @@ export class SubscriptionDataProvider {
   field_active:boolean = false;
   docs = new Array();
 
+  get isGroup(){
+    return this.isGroupPlan();
+  }
+
   constructor() {
   }
 
   setDoctores(){
     this.docs = JSON.parse(this.subscription.field_doctores_json);
+  }
+
+
+  isGroupPlan(){
+    console.log('SubscriptionDataProvider isGroupPlan');
+    console.log(this.subscription.field_plan_sus);
+    return Number(this.subscription.field_plan_sus) === Number(SubscriptionDataProvider.PLAN_GROUP)
   }
 
   getSubusersIDs():Array<number>{
@@ -35,6 +50,7 @@ export class SubscriptionDataProvider {
     console.log('getting subusers ids',ret);
     return ret;
   }
+
 
 
 }

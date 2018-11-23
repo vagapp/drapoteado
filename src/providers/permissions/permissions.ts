@@ -5,9 +5,9 @@ import { SubscriptionDataProvider } from '../subscription-data/subscription-data
 @Injectable()
 export class PermissionsProvider {
 
-  static PLAN_GROUP:number = 1205 ; 
+ 
 
-  get PLAN_GROUP(){ return PermissionsProvider.PLAN_GROUP }
+  get PLAN_GROUP(){ return SubscriptionDataProvider.PLAN_GROUP }
   checkPlan = false;
 
   constructor(
@@ -17,10 +17,11 @@ export class PermissionsProvider {
     console.log('pmp online');
   }
 
-   /**
-   * CheckUserFeature resolves if a feature should appear for this user giving the user roles (permision) and the user plan suscriptions (suscriptions)
-   * and has been created to simplify the check on features that requiere both.
+  /**
+  * CheckUserFeature resolves if a feature should appear for this user giving the user roles (permision) and the user plan suscriptions (suscriptions)
+  * and has been created to simplify the check on features that requiere both.
   */
+
  checkUserFeature( permision:Array<number>,suscriptions:Array<number>, debug:boolean = false):boolean{
   let ret = false;
   let permisioncheck = false;

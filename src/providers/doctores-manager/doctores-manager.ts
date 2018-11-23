@@ -54,10 +54,15 @@ export class DoctoresManagerProvider {
    * si es una subcuenta carga los uids de todos los doctores que esta manejando.
   */
   async initDoctoresUids(){
+    console.log('initDoctoresUids');
     if(this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
       this.setDoctores([this.userData.userData.uid]);
     }else{
       console.log('not a doctor setting docs uids');
+      if(this.subsMan.subsData.isGroup){
+        console.log('is on a group, loading subs doctors');
+        console.log('subsdata is', this.subsMan.subsData);
+      }
       console.log(this.userData.userData.field_doctores);
       if(this.userData.userData.field_doctores && this.userData.userData.field_doctores.und.length > 0){
         console.log('it has docs');

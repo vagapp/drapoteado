@@ -171,7 +171,7 @@ export class subscriptions{
     removeUserFromSubs( uid ){
         console.log('field doctores insubs',this.field_doctores);
         this.field_doctores = this.field_doctores.filter((docs)=>{ return Number(docs) !== Number(uid)});
-        console.log(this.field_doctores);
+        console.log('remvoed',uid,this.field_doctores);
         //this.field_doctores = this.field_doctores.filter();
     }
 

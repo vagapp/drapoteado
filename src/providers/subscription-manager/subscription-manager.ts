@@ -51,6 +51,7 @@ export class SubscriptionManagerProvider {
 
   async loadDoctorsSubscriptions(){
     console.log('loadDoctorsSubscriptions');
+    console.log('isgrouo?', this.subsData.isGroup);
     if(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
       console.log('loadDoctorsSubscriptions not a doc');
       let docs_subs_data = await this.requestDocsSubscription().toPromise();
