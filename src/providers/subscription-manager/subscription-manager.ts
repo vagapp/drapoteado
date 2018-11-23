@@ -51,7 +51,6 @@ export class SubscriptionManagerProvider {
 
   async loadDoctorsSubscriptions(){
     console.log('loadDoctorsSubscriptions');
-    console.log('isgrouo?', this.subsData.isGroup);
     if(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
       console.log('loadDoctorsSubscriptions not a doc');
       let docs_subs_data = await this.requestDocsSubscription().toPromise();
@@ -63,6 +62,23 @@ export class SubscriptionManagerProvider {
         this.doc_subscriptions.push(aux_sus);
        }
        console.log('loaded doctor subs',this.doc_subscriptions);
+    }
+  }
+
+  /**
+   * este metodo carga las subscripciones en las que este subusuario esta asignado.
+   * **/
+  async loadGroupSubuserSubs(){
+    console.log('loadGroupSubuserSubs');
+    if(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
+      let groups_subs_data = await this.requestGroupSubscriptions().toPromise();
+      if(groups_subs_data) 
+       for(let group_sus of groups_subs_data){
+         console.log('sus found is',group_sus);
+        let aux_sus = new subscriptions();
+        aux_sus.setData(group_sus);
+        this.subsData.Groups.push(aux_sus);
+       }
     }
   }
 
@@ -80,6 +96,17 @@ export class SubscriptionManagerProvider {
     const filter = `?args[0]=all&args[1]=${this.docData.doctoresIDs}`;
     const url = `${this.bu.endpointUrl}rest_suscripciones.json${filter}`;
     console.log('requesting docs subs url',url);
+    const observer = this.http.get(url).share();
+    return observer;
+  }
+
+  /**
+   * este metodo obtiene las subscripciones donde este sub usuario esta agregado
+   * **/
+  requestGroupSubscriptions():Observable<any>{
+    const filter = `?args[0]=all&args[1]=all&args[2]=all&args[3]=${this.userData.userData.uid}`;
+    const url = `${this.bu.endpointUrl}rest_suscripciones.json${filter}`;
+    console.log('requesting subuser subs url',url);
     const observer = this.http.get(url).share();
     return observer;
   }

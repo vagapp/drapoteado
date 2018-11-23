@@ -53,6 +53,7 @@ export class DoctoresManagerProvider {
    * si es un doctor carga su propio uid
    * si es una subcuenta carga los uids de todos los doctores que esta manejando.
   */
+ 
   async initDoctoresUids(){
     console.log('initDoctoresUids');
     if(this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
@@ -77,7 +78,13 @@ export class DoctoresManagerProvider {
     }
   }
 
-
+  loadGroupDoctors(){
+    if(this.subsMan.subsData.Groups.length > 0){
+      for(let group of this.subsMan.subsData.Groups){
+        console.log('groups group',group);
+      }
+    }
+  }
 
   setDoctores(Uids:number[]){
     for(let uid of Uids){

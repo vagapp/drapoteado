@@ -118,6 +118,11 @@ export class MyApp {
       await this.subscriptionManager.loadSubscription();
       //await this.subUserMan.requestGroupUsers();
       //this.subscriptionManager.subsData.subscription.removeUserFromSubs(189);
+      }else{
+        //si son subusuarios buscar suscripciones a las que esten agregados
+        console.log('looking for subscriptions where this sub user is added');
+        await this.subscriptionManager.loadGroupSubuserSubs();
+        this.docMan.loadGroupDoctors();
       }
       await this.docMan.initDoctoresUids();
       await this.subscriptionManager.loadDoctorsSubscriptions();

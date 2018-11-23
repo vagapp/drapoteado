@@ -15,6 +15,7 @@ export class SubscriptionDataProvider {
   static PLAN_GROUP:number = 1205 ; 
 
   subscription: subscriptions = null;
+  Groups: subscriptions[] = new Array();
   
 
   nid:number = null; //nid de la subscripcion
@@ -39,8 +40,9 @@ export class SubscriptionDataProvider {
 
   isGroupPlan(){
     console.log('SubscriptionDataProvider isGroupPlan');
-    console.log(this.subscription.field_plan_sus);
-    return Number(this.subscription.field_plan_sus) === Number(SubscriptionDataProvider.PLAN_GROUP)
+    if(this.subscription && this.subscription.field_plan_sus) return Number(this.subscription.field_plan_sus) === Number(SubscriptionDataProvider.PLAN_GROUP)
+    return false;
+    
   }
 
   getSubusersIDs():Array<number>{
