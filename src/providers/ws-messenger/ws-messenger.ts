@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WebsocketServiceProvider, Message } from '../websocket-service/websocket-service';
 import { Citas } from '../user-data/citas';
-import { UserDataProvider } from '../user-data/user-data';
+import { UserDataProvider, userd } from '../user-data/user-data';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { subscriptions } from '../user-data/subscriptions';
@@ -98,6 +98,33 @@ export class WsMessengerProvider {
       {"uid":uid,"name":name },
       true
     );
+  }
+
+  generateSubUserAddedMessage( uid:number, name:string, docs:Array<any> , userd:userd ){
+  //generar un mensaje por medio del que se agrega un subusuario a una suscripcion.
+  //agregar este subusuario a las listas de las suscripciones de los doctores.
+    this.generateMessage(
+      docs.map( (docs)=>{return docs.uid }),
+      'groupAddSubSubs',
+      `${this.userData.userData.uid}`,
+      {"uid":uid,"name":name },
+      true
+    );
+  //agregar los doctores de la suscripcion a las del usuario.
+  let arruid = new Array();
+  arruid.push(uid);
+  this.generateMessage(
+    arruid,
+    'groupAddSubDocs',
+    `${this.userData.userData.uid}`,
+    JSON.stringify(docs),
+    true
+  );
+
+  }
+
+  generateSubUserRemovedMessage(uid){
+
   }
 
  

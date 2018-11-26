@@ -12,6 +12,7 @@ import { Citas } from '../user-data/citas';
 */
 @Injectable()
 export class DoctoresDataProvider {
+  docIdsToLoad: number[] = new Array();
   doctores: Doctores[] = new Array;
   doctoresSubject:Subject<any> = new Subject();
   
@@ -64,6 +65,14 @@ export class DoctoresDataProvider {
    }
    static setDoctorUnbusy(doc:Doctores ){
     doc.citaActiva = null;
+   }
+
+   addDoctorToIdList(uid:number){
+    let exists =  this.docIdsToLoad.find( (docs)=>{ return Number(docs) === Number(uid)});
+    if(!exists){
+      console.log('new group doctor',uid);
+      this.docIdsToLoad.push(uid);
+    }
    }
 
    

@@ -55,23 +55,26 @@ export class DoctoresManagerProvider {
   */
  
   async initDoctoresUids(){
+    
     console.log('initDoctoresUids');
+    this.docData.docIdsToLoad = new Array();
     if(this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
       this.setDoctores([this.userData.userData.uid]);
     }else{
       console.log('not a doctor setting docs uids');
-      if(this.subsMan.subsData.isGroup){
-        console.log('is on a group, loading subs doctors');
-        console.log('subsdata is', this.subsMan.subsData);
-      }
+      this.loadGroupDoctors();
       console.log(this.userData.userData.field_doctores);
       if(this.userData.userData.field_doctores && this.userData.userData.field_doctores.und.length > 0){
-        console.log('it has docs');
+      console.log('it has docs');
       //this.setDoctores(this.userData.userData.field_doctores.und);
       console.log('docs ids',this.userData.userData.field_doctores.und);
       const docfilter = this.nodeEditor.getCleanField(DrupalNodeEditorProvider.FIELD_RELATION,this.userData.userData,'field_doctores',false);
       console.log('cleaned docfilter',docfilter);
-      let docs_data = await this.userMan.requestUsers(null,null,docfilter).toPromise();
+      for( let doc of docfilter){
+        console.log('hecking',doc);
+        this.docData.addDoctorToIdList(doc);
+      }
+      let docs_data = await this.userMan.requestUsers(null,null,this.docData.docIdsToLoad).toPromise();
       this.setDoctoresData(docs_data);
       //for(let doc of doc_data){
       }
@@ -82,6 +85,9 @@ export class DoctoresManagerProvider {
     if(this.subsMan.subsData.Groups.length > 0){
       for(let group of this.subsMan.subsData.Groups){
         console.log('groups group',group);
+        for(let doc of group.field_doctores){
+          this.docData.addDoctorToIdList(doc);
+        }
       }
     }
   }

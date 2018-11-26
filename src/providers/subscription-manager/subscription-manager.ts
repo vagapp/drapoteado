@@ -104,7 +104,7 @@ export class SubscriptionManagerProvider {
    * este metodo obtiene las subscripciones donde este sub usuario esta agregado
    * **/
   requestGroupSubscriptions():Observable<any>{
-    const filter = `?args[0]=all&args[1]=all&args[2]=all&args[3]=${this.userData.userData.uid}`;
+    const filter = `?args[0]=all&args[1]=all&args[2]=${this.userData.userData.uid}`;
     const url = `${this.bu.endpointUrl}rest_suscripciones.json${filter}`;
     console.log('requesting subuser subs url',url);
     const observer = this.http.get(url).share();

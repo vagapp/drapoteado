@@ -124,6 +124,16 @@ export class MyApp {
         await this.subscriptionManager.loadGroupSubuserSubs();
         this.docMan.loadGroupDoctors();
       }
+      
+        /*let subusuerArray = new Array();
+        subusuerArray.push(119);*/
+
+        /*let docsArray = new Array();
+        docsArray.push({uid:76,name:'do1'});
+        docsArray.push({uid:189,name:'do2do'});
+        //docsArray.push({uid:1202,name:'do3dx'});
+        */
+        
       await this.docMan.initDoctoresUids();
       await this.subscriptionManager.loadDoctorsSubscriptions();
       console.log('subscription initload is', this.subscriptionManager.subsData.subscription);

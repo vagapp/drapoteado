@@ -11,6 +11,8 @@ import { ReportPresentatorProvider } from '../report-presentator/report-presenta
 import { DoctoresManagerProvider } from '../doctores-manager/doctores-manager';
 import { subscriptions } from '../user-data/subscriptions';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
+import { Doctores } from '../user-data/doctores';
+import { SubusersDataProvider } from '../subusers-data/subusers-data';
 
 
 @Injectable()
@@ -23,7 +25,8 @@ export class WebsocketServiceProvider {
     public docData: DoctoresDataProvider,
     public reportPresentator: ReportPresentatorProvider,
     public doctoresManager: DoctoresManagerProvider,
-    public subsData: SubscriptionDataProvider
+    public subsData: SubscriptionDataProvider,
+    public subuserData: SubusersDataProvider
   ) {
     this.init();
   }
@@ -50,7 +53,34 @@ export class WebsocketServiceProvider {
       case 'loadedReport': this.loadedReport(message); break;
       case 'addSubUser': this.addSubsUser(message); break;
       case 'removeSubUser': this.removeSubsUser(message); break;
+      case 'groupAddSubSubs': this.groupAddSubSubs(message); break;
+      case 'groupAddSubDocs': this.groupAddSubDocs(message); break;
     }
+  }
+
+  
+  groupAddSubSubs(message){
+    if(this.filterMessageById(message)){
+    console.log('groupAddSubSubs',message);
+    console.log(this.subuserData.subUsers);
+    //add the subuser to your subscription.
+    }
+  }
+  groupAddSubDocs(message){
+    if(this.filterMessageById(message)){
+      console.log('groupAddSubDocs',message);
+      console.log(this.docData.doctores);
+      let gropdocs = JSON.parse( message.content );
+      for(let gdoc of gropdocs){
+        console.log(' adding ',gdoc);
+        const auxDoc = new Doctores();
+      auxDoc.Uid = gdoc.uid;
+      auxDoc.name = gdoc.name;
+      this.docData.addDoctor(auxDoc);
+      }
+      console.log('finished docdata is',this.docData.doctores);
+    
+      }
   }
 
   addSubsUser(message){
@@ -59,9 +89,11 @@ export class WebsocketServiceProvider {
 
   removeSubsUser(message){
     console.log('removeSubsUser',message);
-    console.log(this.subsData.docs);
-    this.subsData.docs = this.subsData.docs.filter((docs)=>{ return Number(docs.uid) !== Number(message.content)});
-    console.log(this.subsData.docs);
+    if(this.filterMessageById(message)){
+      console.log(this.subsData.docs);
+      this.subsData.docs = this.subsData.docs.filter((docs)=>{ return Number(docs.uid) !== Number(message.content)});
+      console.log(this.subsData.docs);
+    }
   }
 
   /**
@@ -91,6 +123,17 @@ export class WebsocketServiceProvider {
     for(let uid of message.receivers){
       if(this.docData.existsByUid(uid)){ console.log('uid found',uid); ret = true; break; }
     }
+    return ret;
+  }
+
+  filterMessageById(message:Message){
+    console.log('filtering message by ids');
+    console.log('message.receivers',message.receivers);
+    console.log('this.userData.userData.uid',this.userData.userData.uid);
+    let ret = false;
+    let exists =  message.receivers.find( (uids)=>{ return Number(this.userData.userData.uid) === Number(uids); });
+    console.log('exists',exists);
+    if(exists) ret = true;
     return ret;
   }
 
