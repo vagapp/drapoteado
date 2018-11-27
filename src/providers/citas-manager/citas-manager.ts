@@ -80,7 +80,7 @@ export class CitasManagerProvider {
     console.log('doctores',doctores);
     console.log('cajas',cajas);
     console.log('recepciones',recepciones);
-    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=all&args[4]=${from}--${to}`;
+    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=all&args[4]=all&args[5]=all&args[6]=${from}--${to}`;
     //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
     let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
     console.log('url getting citas',url);
@@ -156,7 +156,8 @@ export class CitasManagerProvider {
     cita.data.field_estado.und[0].value = state;
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
-    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA) && saveDate){ 
+   
+    if((Number(state) === Number(CitasDataProvider.STATE_CANCELADA)) || (Number(state) === Number(CitasDataProvider.STATE_FINALIZADA) && saveDate)){ 
       console.log('saving date'); 
       console.log('citas data',cita.data);
       if(!cita.data.field_hora_cobromsb){

@@ -50,7 +50,7 @@
   <div class="ReporteRow_Totals">
     <div class="rrt_left midFont"> <b>Costo</b> <span class="fontPrimary">${{cita.costo}}</span> </div>
     
-    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Costo</b> Total <span class="fontPrimary">${{cita.cobro}}</span> </div>
+    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Cobro</b> Total <span class="fontPrimary">${{cita.cobro}}</span> </div>
     <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Adeudo</b> <span class="fontPrimary">${{cita.costo - cita.cobro}}</span> </div>
     <div class="rrt_right midFont"  *ngIf="cita.costo <= cita.cobro"> <b>Ingreso</b> Total <span class="fontSecondary">${{cita.cobro}}</span> </div>
     <div class="rrt_right midFont">  Efectivo <span class="fontSecondary">${{cita.cobroEfectivo}}</span> </div>

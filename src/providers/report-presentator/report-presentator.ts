@@ -168,6 +168,7 @@ async openReportGenerate( report:reportes = null ){
   evaluateCitas(){
     console.log('evaluating citas of actual report');
     this.resetVars();
+    console.log('citas en evaluate citas report', this.actualReport.citas);
     this.noCitas = this.actualReport.citas.length;
     this.noCancel = this.actualReport.citas.filter((citas)=>{return citas.checkState(CitasDataProvider.STATE_CANCELADA)} ).length;
     this.calcularCitasPorCobrar();

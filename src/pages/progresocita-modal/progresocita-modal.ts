@@ -65,6 +65,16 @@ export class ProgresocitaModalPage {
       }
 
       pagadaPop(){
+        if( Number(this.progressController.CantidadRestante) === (Number(this.progressController.activeCita.costo))){
+          this.alert.presentAlert('Error','Introducir monto a pagar');
+          return false;
+        }
+        if(
+          this.progressController.factura_cantidad > this.progressController.activeCita.costo
+        ){
+          this.alert.presentAlert('Error','El monto facturado no puede exceder el total de la consulta');
+          return false;
+        }
        /* let title = 'Pagada';
         let msg = '¿Está seguro de que desea marcar esta cita como pagada?';
         
