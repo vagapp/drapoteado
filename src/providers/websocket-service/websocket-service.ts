@@ -13,6 +13,7 @@ import { subscriptions } from '../user-data/subscriptions';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 import { Doctores } from '../user-data/doctores';
 import { SubusersDataProvider } from '../subusers-data/subusers-data';
+import { SubusersManagerProvider } from '../subusers-manager/subusers-manager';
 
 
 @Injectable()
@@ -26,6 +27,7 @@ export class WebsocketServiceProvider {
     public reportPresentator: ReportPresentatorProvider,
     public doctoresManager: DoctoresManagerProvider,
     public subsData: SubscriptionDataProvider,
+    public subusersManager: SubusersManagerProvider,
     public subuserData: SubusersDataProvider
   ) {
     this.init();
@@ -63,9 +65,11 @@ export class WebsocketServiceProvider {
     if(this.filterMessageById(message)){
     console.log('groupAddSubSubs',message);
     console.log(this.subuserData.subUsers);
+    this.subusersManager.cargarSubusuarios();
     //add the subuser to your subscription.
     }
   }
+  
   groupAddSubDocs(message){
     if(this.filterMessageById(message)){
       console.log('groupAddSubDocs',message);

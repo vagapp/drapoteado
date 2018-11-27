@@ -46,6 +46,7 @@ export class SubscriptionManagerProvider {
     this.subsData.subscription.setData(sus_data[0]);
     this.subsData.subscription.setPlanFromList(this.planesData.planes);
     console.log('subscription is ',this.subsData.subscription);
+    console.log('isgroup',this.subsData.isGroup);
    }
   }
 

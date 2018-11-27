@@ -10,6 +10,8 @@ import { SubscriptionDataProvider } from '../../providers/subscription-data/subs
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { TutorialProvider } from '../../providers/tutorial/tutorial';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
+import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 
 /**
  * Generated class for the NuevousuarioModalPage page.
@@ -43,7 +45,8 @@ export class NuevousuarioModalPage {
     public subusersManager: SubusersManagerProvider,
     public loader: LoaderProvider,
     public alert: AlertProvider,
-    public tutorial: TutorialProvider
+    public tutorial: TutorialProvider,
+    public wsMessenger: WsMessengerProvider
 
   ) {
     console.log('GETTING userd', navParams.get('userd'));
@@ -88,13 +91,15 @@ export class NuevousuarioModalPage {
     delete this.newUser.field_sub_id;
     this.userMan.generateNewUserd( this.newUser ).subscribe(
     async (val)=>{
-      console.log('generated user now what');
+      console.log('generated user now what',val);
+      console.log('subsisgrouo',this.subsData.isGroup);
       if(!this.subsData.subscription.field_subusuarios) this.subsData.subscription.field_subusuarios = new Array();
       this.subsData.subscription.field_subusuarios.push(val['uid']);
       let obs = this.subsManager.updateUserSuscription().subscribe( (val)=>{console.log('updating subs',val);});
       console.log(obs);
       //await obs.toPromise();
-      await this.subusersManager.cargarSubusuarios();
+      if(this.subsData.isGroup) this.wsMessenger.generateSubUserAddedMessage( val['uid'], this.newUser.field_nombre.und[0].value, this.subsData.subscription.field_doctores);
+      else await this.subusersManager.cargarSubusuarios();
       this.loader.dismissLoader();
       if(this.tutorial.checkTutorialState())
       {
