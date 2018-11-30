@@ -100,7 +100,7 @@ export class WsMessengerProvider {
     );
   }
 
-  generateSubUserAddedMessage( uid:number, name:string, docs:Array<any> , userd:userd ){
+  generateSubUserAddedMessage( uid:number, name:string, docs:Array<any> ){
   //generar un mensaje por medio del que se agrega un subusuario a una suscripcion.
   //agregar este subusuario a las listas de las suscripciones de los doctores.
     this.generateMessage(

@@ -41,6 +41,7 @@ export class RegisterModalPage {
   refuserName:string = null;
 
   searchCode:string = null;
+  currentpasswordNeeded: boolean = false; //especifica si es necesario incluir el pass actual, esto se requiere al cambiar pass o email.
 
   get enabledButton():boolean{
     //return this.selected_source !== null && this.selected_plan !== null;
@@ -59,6 +60,9 @@ export class RegisterModalPage {
   invitationCode:string = null;
   invitationshow:boolean = false;
   isnew = true;
+
+  currentPass:string = null;
+  currentMail:string = null;
   
   constructor(
     public navCtrl: NavController, 
@@ -83,6 +87,11 @@ export class RegisterModalPage {
     console.log(this.subsData.subscription);
     this.isnew = !this.userData.checkIsLoggedin();
     console.log('openingregister modal isnew? ',this.isnew);
+    console.log('pass',this.userData.userData.pass);
+    if(!this.isnew){
+      this.currentpasswordNeeded = false;
+      this.currentMail = this.userData.userData.mail
+    }
   }
 
   ionViewDidEnter(){
@@ -93,6 +102,16 @@ export class RegisterModalPage {
 
   async actionUpdate(){
     if(!this.basicValidation()){return 0;}
+   console.log('basic validation ret ??? ');
+    if(this.passwordNeededValidation() ){
+
+    }else{
+      await this.update();
+  }
+  
+  }
+
+  async update(){
     this.loader.presentLoader('Actualizando...');
     let aux_userData = JSON.parse(JSON.stringify(this.userData.userData));
     delete aux_userData.field_sub_id;
@@ -100,16 +119,72 @@ export class RegisterModalPage {
     
     if(this.refuser){
       aux_userData.field_reference_user.und[0] = this.refuser;
-      /*aux_userData.field_reference_user = new Array();
-      aux_userData.field_reference_user['und'] = new Array;
-      aux_userData.field_reference_user['und'][0] = this.refuser;*/
     }else{
       delete aux_userData.field_reference_user;
     }
-    
+
+    if(this.currentpasswordNeeded){
+      aux_userData.pass = new Array();
+      aux_userData.pass.push({'existing': this.currentPass});
+      aux_userData['current_pass'] = this.currentPass;
+      if(this.checkForPasswordChange()){
+        console.log('checkforpassword change is on');
+        aux_userData.pass.push({"value": this.userData.userData.pass});
+      }
+    }
+
     console.log('userdata to update',aux_userData);
-    let res = await this.userMan.updateUserd(aux_userData).toPromise();
-    this.loader.dismissLoader();
+    //let res = await this.userMan.updateUserd(aux_userData).toPromise();
+    this.userMan.updateUserd(aux_userData).subscribe(
+      (val)=>{
+        console.log('actionUpdate change done, result',val);
+        this.loader.dismissLoader();
+      },
+      (error)=>{ console.log('actionUpdate error is',error); 
+      this.loader.dismissLoader();
+      },
+    );
+  }
+
+  passwordNeededValidation(){
+    let ret = true;
+    this.checkforEmailChange();
+    this.checkForPasswordChange();
+    if(this.currentpasswordNeeded){
+     
+      this.alert.presentPrompt(
+        'Password','Se requiere contraseña',
+        [
+          {
+            name: 'password',
+            placeholder: 'Password',
+            type: 'password'
+          }
+        ], async (data)=>{ console.log('passwod to set',data.passwod); this.currentPass = data.password; await this.update()},
+        ()=>{ ret = false; console.log('this was canceled'); }
+      );
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  checkforEmailChange(){
+    if(this.userData.userData.mail !== this.currentMail){
+      this.currentpasswordNeeded = true;
+    }
+  }
+
+  checkForPasswordChange(){
+    let ret = false;
+    console.log('checkForPasswordChange');
+    console.log(this.userData.userData.pass);
+    console.log(this.passconfirm);
+    if(this.userData.userData.pass !== null || this.passconfirm !== null){
+      this.currentpasswordNeeded = true;
+      ret = true;
+    }
+    return ret;
   }
 
   async actionBuscarRef(){
@@ -208,6 +283,7 @@ export class RegisterModalPage {
   basicValidation():boolean{
     let ret = true;
     if(this.userData.userData.pass && !this.passconfirm || !this.userData.userData.pass && this.passconfirm){
+      ret = false;
       this.alert.presentAlert('Error','Confirmar contraseña.');
     }
     if(this.userData.userData.pass && this.passconfirm && this.passconfirm.localeCompare(this.userData.userData.pass) !== 0){

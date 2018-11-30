@@ -27,6 +27,25 @@ export class AlertProvider {
     alert.present();
   }
 
+  presentPrompt(title, msg, inputs, inputcallback, cancelCallback){
+    let alert = this.alertCtrl.create({
+      title: title,
+      inputs: inputs,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: cancelCallback
+        },
+        {
+          text: 'ok',
+          handler: inputcallback
+        }
+      ]
+    });
+    alert.present();
+  }
+
   chooseAlert(title:string, msg:string, yesCallback, noCallback){
     let alert = this.alertCtrl.create({
       title: title,
