@@ -140,9 +140,8 @@ export class SubscriptionManagerProvider {
   async subscribe(plan:planes, source:sources){
     console.log('subscribing');
     let ns_res = await this.getSubscribeObs(plan,source).toPromise();
-    console.log('this');
-    if(ns_res && this.checkForSubscription()) 
-    await this.deletesSus(this.subsData.subscription).toPromise();
+    /*if(ns_res && this.checkForSubscription()) 
+    await this.deletesSus(this.subsData.subscription).toPromise();*/
   }
 
   getSubscribeObs(plan:planes, source:sources):Observable<any>{
@@ -150,7 +149,8 @@ export class SubscriptionManagerProvider {
     console.log(plan);
     console.log(source);
     let ret = null;
-    if(!this.permissions.checkUserPlanHolder()) return ret;
+    //cant check if plan holder cuz its not. why was i checking if its plan holder men. dont get it. but its supposed to return false
+    //if(!this.permissions.checkUserPlanHolder()) return ret;
     let aux_sus = subscriptions.getEmptySuscription();
     if(this.checkForSubscription()){
       aux_sus.field_doctores = this.subsData.subscription.field_doctores;

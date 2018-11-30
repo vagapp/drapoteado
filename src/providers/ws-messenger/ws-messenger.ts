@@ -103,6 +103,7 @@ export class WsMessengerProvider {
   generateSubUserAddedMessage( uid:number, name:string, docs:Array<any> ){
   //generar un mensaje por medio del que se agrega un subusuario a una suscripcion.
   //agregar este subusuario a las listas de las suscripciones de los doctores.
+  /*DEACTIVADO PORQAUE NO ESTORBE ESTO EN PRUEBAS 27/11/2018
     this.generateMessage(
       docs.map( (docs)=>{return docs.uid }),
       'groupAddSubSubs',
@@ -119,7 +120,7 @@ export class WsMessengerProvider {
     `${this.userData.userData.uid}`,
     JSON.stringify(docs),
     true
-  );
+  );*/
 
   }
 
