@@ -781,6 +781,7 @@ export class UserDataProvider {
       field_retrasda:{und:[{value:0}]},
       aux_servicios_json:null,
       field_hora_cobromsb:{und:[{value:0}]},
+      field_fecha_reporte:{und:[{value:0}]},
       field_facturar:{und:[{value:0}]},
       field_facturar_cantidad:{und:[{value:0}]},
     }
@@ -876,6 +877,7 @@ export interface citasData{
     field_retrasda:{und:[{value:number}]},
     aux_servicios_json:string,
     field_hora_cobromsb:{und:[{value:number}]},
+    field_fecha_reporte:{und:[{value:number}]},
     field_facturar:{und:[{value:number}]},
     field_facturar_cantidad:{und:[{value:number}]},
     

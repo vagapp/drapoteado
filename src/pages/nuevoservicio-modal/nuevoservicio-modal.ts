@@ -22,6 +22,7 @@ export class NuevoservicioModalPage {
   newService:serviciosd;
   isnew:boolean;
   isTutorial:boolean = false;
+  newTutService:boolean = true;
 
   constructor(
     public navCtrl: NavController, 
@@ -77,6 +78,12 @@ export class NuevoservicioModalPage {
     //this.resetNewService()
   }
 
+  resetServicio(){
+    this.tutorial.serviceCreated = false;
+    this.resetNewService();
+    this.newTutService = false;
+  }
+
   basicValidation():boolean{
     let ret = true;
     console.log('title is',this.newService.title, this.newService.title.length === 0);
@@ -86,6 +93,7 @@ export class NuevoservicioModalPage {
   }
 
   async createServiceTutorial(){
+    this.newTutService = false;
     if(!this.basicValidation()){return false;}
     this.loader.presentLoader('Creando Servicio ...');
     this.newService.body.und[0].value="automatic description";

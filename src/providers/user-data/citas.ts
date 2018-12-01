@@ -82,6 +82,8 @@ export class Citas{
           this.dateMs =  this.data.field_datemsb.und[0].value;
           this.data.field_retrasda.und[0].value = data_input.field_retrasda;
           this.data.field_hora_cobromsb.und[0].value = 0;
+          this.data.field_fecha_reporte.und[0].value = 0;
+          if(data_input.field_fecha_reporte)  this.data.field_fecha_reporte.und[0].value = data_input.field_fecha_reporte;
           if(data_input.field_hora_cobromsb)  this.data.field_hora_cobromsb.und[0].value = data_input.field_hora_cobromsb;
           if(data_input.field_hora_iniciomsb) this.data.field_hora_iniciomsb.und[0].value = Number(data_input.field_hora_iniciomsb.value);
           if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);

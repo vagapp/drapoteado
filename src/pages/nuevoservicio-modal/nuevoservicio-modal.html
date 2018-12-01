@@ -25,7 +25,7 @@
             rápidamente y el costo unitario del mismo.</span>
         </div>
     </div>
-    <div class="centered_bold" *ngIf="this.tutorial.checkTutorialState()">¿Genial no? para comenzar agreguemos un servicio:</div>
+    <div class="centered_bold" *ngIf="this.tutorial.checkTutorialState() && newTutService">¿Genial no? para comenzar agreguemos un servicio:</div>
     <div class="nuevoservicio_content modalContent" *ngIf="!this.tutorial.checkTutorialState()  || (this.tutorial.checkTutorialState() && !this.tutorial.serviceCreated)" >
         <div class="ModalInput_input">
             <b>Nombre</b>
@@ -38,9 +38,8 @@
     </div>
 
     <div class="nuevoservicio_content modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" >
-        <span class="spanBlock bigBoldFont">!Felicidades!</span>
-        <span class="spanBlock midMainFont"> tu Servicio : Nombre del Servicio ha sido agregado
-        ahora podras seleccionarlo cada que consultes.</span>
+        <span class="spanBlock bigBoldFont">¡Felicidades!</span>
+        <span class="spanBlock midMainFont"> Tu servicio : {{this.newService.title}} ha sido agregado. ahora podras seleccionarlo cada que consultes.</span>
         <span class="spanBlock midSubFont"> Puedes modificar este y/o agregar más servicios siempre que lo desees en la sección de
         Alta de Servicios y costos en el menú de la Aplicación</span>
         </div>
@@ -48,6 +47,7 @@
 
     <div class="midAlign">
         <div class="register_button_section">
+                <button class="bgColorSecondary generalButton" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" (click)="resetServicio();">Crear otro</button>
         <button class="bgColorSecondary generalButton" *ngIf="this.tutorial.checkTutorialState() && !this.tutorial.serviceCreated" (click)="createServiceTutorial();">Continuar</button>
         <button class="bgColorSecondary generalButton" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" (click)=" this.tutorial.showUsuarioModal(); this.dismiss();">Continuar</button>
         <button class="bgColorSecondary generalButton" *ngIf="!this.tutorial.checkTutorialState() && this.isnew" (click)="createService()">Agregar</button>

@@ -154,21 +154,36 @@ export class CitasManagerProvider {
   deleteCita( cita ){return this.nodeMan.deleteNode(cita);}
   updateCitaState( cita:Citas , state, saveDate:boolean = true){
     cita.data.field_estado.und[0].value = state;
+    let reportedateset = false;
+    let fechacobroset = false;
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
-    if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  }
-   
-    if((Number(state) === Number(CitasDataProvider.STATE_CANCELADA)) || (Number(state) === Number(CitasDataProvider.STATE_FINALIZADA) && saveDate)){ 
-      console.log('saving date'); 
-      console.log('citas data',cita.data);
-      if(!cita.data.field_hora_cobromsb){
-        cita.data.field_hora_cobromsb = {'und':[{'value': 0}]} ;
-      }
-      cita.data.field_hora_cobromsb['und'][0]['value'] = new Date().getTime();  }else{ 
-      console.log('not saving date');
-      delete cita.data.field_hora_cobromsb;
-    }
-    //console.log("tryna update cita:",cita.data);
+    if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  this.setCitaFechaReporte(cita,saveDate); reportedateset=true;  }
+    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){ fechacobroset = this.setCitaFechaCobro(cita,saveDate); this.setCitaFechaReporte(cita,saveDate); reportedateset = true; }
+    if(!reportedateset){ delete cita.data.field_fecha_reporte; }
+    if(!fechacobroset){ delete cita.data.field_hora_cobromsb; }
     return this.updateCita( cita.data ).share();
+  }
+
+  setCitaFechaCobro( cita:Citas, saveDate:boolean = true, date:Date = new Date() ){
+    if(!saveDate) return false;
+    console.log('saving date'); 
+    console.log('citas data',cita.data);
+    if(!cita.data.field_hora_cobromsb){
+      cita.data.field_hora_cobromsb = {'und':[{'value': 0}]} ;
+    }
+    cita.data.field_hora_cobromsb['und'][0]['value'] = date.getTime();
+    return true;
+  }
+
+  setCitaFechaReporte(cita:Citas,saveDate:boolean = true, date:Date = new Date()){
+    if(!saveDate) return false;
+    console.log('saving date'); 
+    console.log('citas data',cita.data);
+    if(!cita.data.field_fecha_reporte){
+      cita.data.field_fecha_reporte = {'und':[{'value': 0}]} ;
+    }
+    cita.data.field_fecha_reporte['und'][0]['value'] = date.getTime();
+    return true;
   }
 
 
