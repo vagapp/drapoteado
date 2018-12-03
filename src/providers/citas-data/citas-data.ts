@@ -75,7 +75,7 @@ export class CitasDataProvider{
 
 
 
-  constructor() {}
+  constructor( ) {}
   get subject():Subject<any>{return this.citasSubject;}
 
   addCita( cita:Citas, call:boolean = true){
@@ -111,6 +111,7 @@ export class CitasDataProvider{
   }
 
   defaultSort(){
+    console.log('defaultsorting citas');
     this.citas =  CitasDataProvider.sortByStateDate(this.citas);
     this.applyFilters();
     this.getCitasDaysAndSort();
@@ -121,6 +122,7 @@ export class CitasDataProvider{
   getCitasDaysAndSort(){
     //get days of all citas and add their citas to them.
     //sort citas of everyday
+    console.log('getting citas days');
     this.daysCitas = new Array();
     this.getCitasDays();
     this.sortCitasDays();
@@ -152,6 +154,7 @@ export class CitasDataProvider{
       if(exist){
         exist.citasShowPool.push(cita);
       }else{
+        console.log('creating day',dayMS,DateProvider.getStringDate(new Date(dayMS)));
         let auxday = {
           DayMs:dayMS,
           DayName:DateProvider.getStringDate(new Date(dayMS)),

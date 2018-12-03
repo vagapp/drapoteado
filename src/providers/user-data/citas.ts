@@ -27,6 +27,7 @@ export class Citas{
     doctor_playerid:string = null;
     caja_playerid:string = null;
     recepcion_playerid:string = null;
+
     
     
     
@@ -53,6 +54,7 @@ export class Citas{
     set cobroCheque(val){ this.data.field_cobro_cheque.und[0].value = Number(val); this.calcularCobroTotal();} 
     set cobroEfectivo(val){ this.data.field_cobro_efectivo.und[0].value = Number(val); this.calcularCobroTotal();}
     set cobroTarjeta(val){ this.data.field_cobro_tarjeta.und[0].value = Number(val); this.calcularCobroTotal();}
+  
     calcularCobroTotal(){ this.data.field_cobro.und[0].value = this.cobroTarjeta + this.cobroCheque + this.cobroEfectivo }
 
     
@@ -102,6 +104,7 @@ export class Citas{
         }
 
     processData(){
+        console.log('cita processing data')
         this.Nid = this.data.Nid
         this.dateMs =  this.data.field_datemsb.und[0].value;
         if(this.data.aux_servicios_json) this.setServiciosReport(this.data.aux_servicios_json);
@@ -109,6 +112,7 @@ export class Citas{
         this.setDateUT(this.data.field_datemsb.und[0].value);
         console.log('processdata hora cobro check',this.data.field_hora_cobromsb);
         this.setDurationDates(this.data.field_hora_iniciomsb.und[0].value,this.data.field_hora_finalmsb.und[0].value);
+       
     }
 
             /**
@@ -189,6 +193,10 @@ export class Citas{
             this.retrasada=true;
             Debugger.log(['esta cita esta retrasada']);
         }
+        this.readableDate = this.getDisplayableDates().date;
+        this.readableTime = this.getDisplayableDates().time;
+        console.log('this.readableDate',this.readableDate);
+        console.log('this.readableTime',this.readableTime);
 }
 
 

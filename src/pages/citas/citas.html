@@ -54,7 +54,7 @@
                 <td  >{{cita.data.field_paciente.und[0].value}}</td>
                 <td *ngIf=" !this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}}</td>
                 <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">General</td>
-                <td ><span class="fontSecondary">{{cita.getDisplayableDates().date}}</span> - <span class="fontHigh">{{cita.getDisplayableDates().time}}</span></td>
+                <td ><span class="fontSecondary">{{cita.displayDate}}</span> - <span class="fontHigh">{{cita.displayTime}}</span></td>
                 <td  [ngStyle]="{'color':cita.stateColor}" >{{cita.getStateString()}}</td>
                 <td  class="toolCol">
                   <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="citasPresentator.editCita(cita)" *ngIf=" (!cita.checkState(citasData.STATE_FINALIZADA) && this.userData.checkUserPermission([this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION]) || this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]) );"/>
