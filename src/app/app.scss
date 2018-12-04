@@ -146,7 +146,7 @@ ion-app.ios [padding] .scroll-content{
 
 .section_grid{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;   
+    grid-template-columns: 1fr 1fr;   
     /*flex-flow: row;*/
     /*flex-wrap: wrap;*/
     /*align-items: center;*/
@@ -273,6 +273,16 @@ ion-app.ios [padding] .scroll-content{
     text-align: center;
     position: absolute;
     bottom: 0;
+}
+
+.section_button_home {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
+
+.section_button_vertical button{
+    display: block;
 }
 
 .notiPopover .popover-content{
@@ -744,6 +754,8 @@ border: 0px solid #000000;
     .section_button{
         position: unset;
     }
+
+    
 
     .bigFont{
         font-size: 2.5rem;

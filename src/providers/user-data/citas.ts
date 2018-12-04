@@ -107,6 +107,7 @@ export class Citas{
         console.log('cita processing data')
         this.Nid = this.data.Nid
         this.dateMs =  this.data.field_datemsb.und[0].value;
+        console.log('setting processData dateMs',this.dateMs);
         if(this.data.aux_servicios_json) this.setServiciosReport(this.data.aux_servicios_json);
         this.facturado = Number( this.data.field_facturar_cantidad.und[0].value);
         this.setDateUT(this.data.field_datemsb.und[0].value);
