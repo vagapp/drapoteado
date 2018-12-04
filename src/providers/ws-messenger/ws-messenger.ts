@@ -56,7 +56,7 @@ export class WsMessengerProvider {
   generateWSupdateMessage( cita:Citas ){
     console.log('generating update message',cita);
     let uid = cita.data.field_cita_doctor.und[0];
-    let doctor = this.docData.getDoctorByUid(uid);
+    let doctor = this.docData.getDoctorByUid(uid); //los sub usuarios "atrapan" las citas que tienen el uid de los doctores que administran.
     cita.data.doctor_name = doctor.name;
     cita.data.doctor_alias = doctor.field_alias;
     this.generateMessage(

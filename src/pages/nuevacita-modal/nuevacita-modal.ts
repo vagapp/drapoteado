@@ -243,6 +243,7 @@ getDateOnNextTreshold():Date{
 }
 
 async updateCita(){
+  //poner que el websocket envie la informacion al updatear cita morro >=0
   if(!this.citaDateValidation()){ return false; }
   this.setCitaDateFromiNPUT();
   this.loader.presentLoader('actualizando ...');
