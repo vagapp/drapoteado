@@ -39,20 +39,20 @@
         <div class="CitaDetailSections">
           <div class="CitaDetailSection borderRight">
             <b class="midFont">Servicios</b>
-            <div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA) || progressController.activeCita.checkState(citasData.STATE_FINALIZADA)">
+            <div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA) || progressController.activeCita.checkState(citasData.STATE_FINALIZADA) || (progressController.activeCita.checkState(citasData.STATE_COBRO) && this.permissions.checkUserPermission([userData.TIPO_DOCTOR]))">
                 <div class="progreso_service" *ngFor="let added of progressController.activeCita.addedServices">
                 <!--<b>{{added.Nid}}</b>-->
                 {{added.title}} - <span class="fontSecondary">${{added.costo}}</span> <span (click)="progressController.removeService(added);" class="removeServicebtn" >x</span>
               </div>
               </div>
             
-              <div class="CitaDetail_services" *ngIf="! (progressController.activeCita.checkState(citasData.STATE_ACTIVA) || progressController.activeCita.checkState(citasData.STATE_FINALIZADA) ) ">
+              <div class="CitaDetail_services" *ngIf="! (progressController.activeCita.checkState(citasData.STATE_ACTIVA) || progressController.activeCita.checkState(citasData.STATE_FINALIZADA) || (progressController.activeCita.checkState(citasData.STATE_COBRO) && this.permissions.checkUserPermission([userData.TIPO_DOCTOR]))) ">
                     <div class="progreso_service" *ngFor="let added of progressController.activeCita.reporteServicios">
                     <!--<b>{{added.Nid}}</b>-->
                     {{added.title}} - <span class="fontSecondary">${{added.costo}}</span> 
                   </div>
                   </div>
-                  <div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA) || progressController.activeCita.checkState(citasData.STATE_FINALIZADA) && permissions.checkUserPermission([userData.TIPO_DOCTOR])">
+                  <div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA) || ( ( progressController.activeCita.checkState(citasData.STATE_FINALIZADA) || progressController.activeCita.checkState(citasData.STATE_COBRO)) && permissions.checkUserPermission([userData.TIPO_DOCTOR]) )">
                     <div class="registerInput">
                       <select [(ngModel)]="progressController.selectedService"  name="selectedService" class="input_select input" >
                           <option selected disabled value="0">Select</option>

@@ -97,6 +97,7 @@
             </div>
             <div class="midAlign" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated">
                 <div class="register_button_section">
+                <button (click)="this.restart()" class="bgColorSecondary generalButton">Crear Otro</button>
                 <button (click)="this.dismiss()" class="bgColorSecondary generalButton">Continuar</button>
                 </div>
               </div>

@@ -118,6 +118,12 @@ export class NuevousuarioModalPage {
 }
 }
 
+restart(){
+  this.resetNewUser();
+  this.checkpass = "";
+  this.tutorial.usuarioCreated = false;
+}
+
 createUserValidation():boolean{
   let ret = true;
   if( !this.userData.checkUserPlanHolder() ){

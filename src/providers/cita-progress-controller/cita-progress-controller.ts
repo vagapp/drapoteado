@@ -46,7 +46,7 @@ export class CitaProgressControllerProvider {
     this.cobroEfectivo=null;
     this.cobroTarjeta=null;
     this.cobroCheque=null;
-    this.editfinish = false;
+   
     this.factura = 0;
     this.factura_cantidad = null;
   }
@@ -55,6 +55,9 @@ export class CitaProgressControllerProvider {
   openProgress(cita:Citas){ //open progress is called from the buttons using citas presentator
     if(!cita.checkState(CitasDataProvider.STATE_FINALIZADA)){
       this.setInputs();
+    }
+    if(!cita.checkState(CitasDataProvider.STATE_FINALIZADA) || !cita.checkState(CitasDataProvider.STATE_COBRO)){
+      this.editfinish = false;
     }
     this.setActiveCita(cita);
     //this.evalServicios();

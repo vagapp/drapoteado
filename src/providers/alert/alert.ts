@@ -22,7 +22,7 @@ export class AlertProvider {
     let alert = this.alertCtrl.create({
       title: title,
       message: msg,
-      buttons: ['Dismiss']
+      buttons: ['Cerrar']
     });
     alert.present();
   }

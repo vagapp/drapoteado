@@ -65,8 +65,13 @@ export class ProgresocitaModalPage {
       }
 
       pagadaPop(){
-        if( Number(this.progressController.CantidadRestante) === (Number(this.progressController.activeCita.costo))){
+        /*if( Number(this.progressController.CantidadRestante) === (Number(this.progressController.activeCita.costo))){
           this.alert.presentAlert('Error','Introducir monto a pagar');
+          return false;
+        }*/
+        console.log('cantidad restante es',this.progressController.CantidadRestante);
+        if( Number(this.progressController.CantidadRestante) < 0 ){
+          this.alert.presentAlert('Error','Esta introduciendo un monto mayor al costo de la cita.');
           return false;
         }
         if(
