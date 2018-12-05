@@ -51,6 +51,7 @@ export class subscriptions{
         this.field_stripe_src_sus_id = input_data['field_stripe_src_sus_id'];
         this.field_stripe_cus_sub_id = input_data['field_stripe_cus_sub_id'];
         this.field_doctores_info = new Array();
+       
         if(input_data['field_doctores']){
             this.field_doctores = new Array();
             input_data['field_doctores'].forEach(element => {
@@ -63,11 +64,17 @@ export class subscriptions{
                 this.field_subusuarios.push(element['uid']);
             });
         }
+       
         //Debugger.log(['field_subusuarios at set data subscription',this.field_subusuarios]);
         this.field_doctores_info = JSON.parse(this.field_doctores_json);
         if(this.field_subusuarios)
         this.noSubcuentas = this.field_subusuarios.length;
+        this.validateSuscriptionActive();
         return ret;
+    }
+
+    validateSuscriptionActive(){ //this methods validates everything that needs to be in order to really be an active suscription. and sets field active acordingly
+        if(!this.field_plan_sus){this.field_active = 0;} //checking what kind of plan do you have before deciding if its active.
     }
 
     getData():any{
