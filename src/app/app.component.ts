@@ -166,6 +166,9 @@ export class MyApp {
   openUsuariosPage(){this.nav.setRoot("UsuariosPage");}
   openReportesPage(){this.nav.setRoot("ReportesPage");}
   openFacturacionPage(){this.nav.setRoot("FacturacionPage");}
+  openMiplan(){
+    this.nav.setRoot("MiplanPage");
+  }
   openRegister(){
     //console.log("open Register");
     let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
