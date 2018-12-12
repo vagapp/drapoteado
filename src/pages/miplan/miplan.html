@@ -5,57 +5,94 @@
       <span class="spanBlock midFont"><b>Mi Plan</b></span>
       <span class="spanBlock midSubFont">actualiza, cambia o cancela tu plan</span>
     </div>
-    <div class="modalPage_btn_wrapper">
-      Total de tu suscripción mensual: $279.00
-      vence al 00/00/0000
+    <div class="modalPage_lpane" *ngIf="!onplanchange && subsData.subscription">
+      <span class="spanBlock midFont">Total de tu suscripción mensual: <span class="fontPrimary bold">${{subsData.subscription.field_cantidad}}</span> </span>
+      <span class="spanBlock midSubFont"> vence al {{subsData.subscription.field_next_cobro}}</span>
     </div>
     </div>
-    <div class="plans_block">
-      <span class="blockSpan info_plan_title"> Información del Plan </span>
+    <!-- Seccion con informacion de planes  -->
 
-      <div class="plan_section" >
-        <div class="plan_section_hr"> check </div>
-        <div class="plan_section_hr">  <span class="spanBlock">Plan nombre</span> <span class="spanBlock">$00.00</span> </div>
-        <div class="plan_section_hr"> <span class="spanBlock">caracteristicas</span>  <span class="spanBlock">Obten reportes detallados de tu actividad al cierre del dia</span> </div>
+    <div class="plans_block" *ngIf="onplanchange"> <!-- Seleccion de plan cuando onplanchange  -->
+      <span class="blockSpan info_plan_title" >Seleciciona un Plan </span>
+
+      <div class="plan_section"  *ngFor="let plan of this.planesData.planes" >
+        <div class="plan_section_hr">  <!-- Plan selection check start -->
+            <div class="control-group"> 
+                <label class="control control-radio">
+                    <!--<input type="radio" name="rtype" value=""  [(ngModel)]="this.reportPresentator.type" checked="true"/>-->
+                    <input type="radio" name="rtype" value="" disabled/>
+                    <div class="control_indicator"></div>
+                </label> 
+                </div>  
+        </div> <!-- Plan selection check end -->
+        <div class="plan_section_hr">  <span class="spanBlock bigSubFont">Plan <span class="fontPrimary bold"> {{plan.title}} </span></span> <span class="spanBlock"> <span class="midSubFont">costo base:</span> <span class="largeFont">${{plan.field_costo}}</span></span> </div>
+        <div class="plan_section_hr"> <span class="spanBlock midFont">caracteristicas</span>  <span class="spanBlock midSubFont">{{plan.field_descripcion}}</span> </div>
       </div><!-- fin de plans section -->
 
-      <div class="plan_section" >
-          <div class="plan_section_hr"> check </div>
-          <div class="plan_section_hr">  <span class="spanBlock">Plan nombre</span> <span class="spanBlock">$00.00</span> </div>
-          <div class="plan_section_hr"> <span class="spanBlock">caracteristicas</span>  <span class="spanBlock">Obten reportes detallados de tu actividad al cierre del dia</span> </div>
-        </div><!-- fin de plans section -->
+     
 
-    </div><!-- fin de plans block -->
+    </div><!-- fin de plans block en onplanchange-->
+
+    <div class="plans_block" *ngIf="!onplanchange && subsData.subscription"> <!-- Informacion de plan cuando no en onplanchange  -->
+      <span class="blockSpan info_plan_title" >Informacion de tu Plan</span>
+
+      <div class="plan_section">
+        <div class="plan_section_hr">  <!-- Plan selection check start -->
+            <div class="control-group"> 
+                <label class="control control-radio">
+                    <!--<input type="radio" name="rtype" value=""  [(ngModel)]="this.reportPresentator.type" checked="true"/>-->
+                    <input type="radio" name="rtype" value="" checked="true" />
+                    <div class="control_indicator"></div>
+                </label> 
+                </div>  
+        </div> <!-- Plan selection check end -->
+        <div class="plan_section_hr">  <span class="spanBlock bigSubFont">Plan <span class="fontPrimary bold"> {{subsData.subscription.plan.title}} </span></span> <span class="spanBlock"> <span class="midSubFont">costo base:</span> <span class="largeFont">${{subsData.subscription.plan.field_costo}}</span></span> </div>
+        <div class="plan_section_hr"> <span class="spanBlock midFont">caracteristicas</span>  <span class="spanBlock midSubFont">{{subsData.subscription.plan.field_descripcion}}</span> </div>
+      </div><!-- fin de plans section -->
+
+     
+
+    </div><!-- fin de plans block cuando no onplanchange-->
+  <!-- fin de Seccion con informacion de planes  -->
+
+
     <div class="plans_extras bisectional">
-      <div class="plans_extras_section bisectional_section">
-        <span class="spanBlock">¿Deseas agregar mas subusuarios a tu plan?</span> 
-        <p> Los subusuarios adicionales a tu plan tienen un costo de $40.00 y se agregan al pago de tu suscripción mensual</p>
+      <div class="plans_extras_section bisectional_section right_align">
+        <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar mas subusuarios a tu plan?</span> 
+        <p class="midSubFont"> Los subusuarios adicionales a tu plan tienen un costo de $40.00 y se agregan al pago de tu suscripción mensual</p>
       </div>
-      <div class="plans_extras_section bisectional_section">
-        <span class="spanBlock">
-          <select>
+
+      <div class="plans_extras_section bisectional_section center_align" *ngIf="onplanchange"> <!-- Usuarios adicionales onplanchange-->
+        <span class="spanBlock" > 
+          <select class="drap_default_select">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
           </select>
         </span>
-        <span class="spanBlock"> actualmente cuentas con x adicionales</span>
-        <span class="spanBlock"> Total de subusuarios: $80.00</span>
-      </div>
+        <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">x adicionales</span></span>
+        <span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">$80.00</span></span>
+      </div> <!-- fin de usuarios adicionales onplanchange-->
+
+      <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
+        <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span></span>
+        <span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">${{this.subsData.subscription.field_adicionales*40}}.00</span></span>
+      </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
+
     </div><!-- fin de plans extras -->
     <div class="informacion_pagos">
-      <span class="spanBlock info_plan_title">Información de pagos</span>
+      <span class="spanBlock info_plan_title">metodos de pago</span>
       <div class="bisectional pagos_block">
-         <div class="bisectional_section metodos_pago"></div>
-         <div class="bisectional_section neuvo_metodo_pago"></div>
+         <div class="bisectional_section metodos_pago"> metodos aqui </div>
+         <div class="bisectional_section neuvo_metodo_pago"> insert aqui </div>
       </div>
       <div class="subtotal_pago">
-        <span class="spanBlock"> Total de suscripción mensual: <span class="primaryFont">$000.00</span></span>
-        <p> Cualquier cambio en el monto total de tu suscripcion se vera reflejado en tu proxima mensualidad al 00/00/0000</p>
+        <span class="spanBlock midFont"> Total de suscripción mensual: <span class="fontPrimary">$000.00</span></span>
+        <p class="midSubFont"> Cualquier cambio en el monto total de tu suscripcion se vera reflejado en tu proxima mensualidad al 00/00/0000</p>
       </div>
       <div class="button_section">
-        <button>Guardar</button>
-        <button>Cancelar</button>
+        <button class="generalButton bgColorPrimary ">Guardar</button>
+        <button class="generalButton bgColorPrimary ">Cancelar</button>
       </div>
     </div>
 </ion-content>

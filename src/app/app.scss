@@ -154,6 +154,22 @@ ion-app.ios [padding] .scroll-content{
     margin-bottom: 150px;
 }
 
+.plan_section {
+    display: grid;
+    grid-template-columns: 1fr 4fr 4fr;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    padding: 15px;
+    min-width: 1000px;
+    margin: 20px 0px 1px 0px;
+
+    border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
+border: 2px solid #B8B8B8;
+}
+
 .fontPrimary{
     color: #C1272D;
 }
@@ -422,6 +438,29 @@ border: 0px solid #000000;
     font-size: 2rem;
     font-weight: 900;
     margin-top: 17px;
+}
+
+.bold{
+    font-weight: 900;
+}
+
+.drap_default_select {
+    background: #F2F2F2;
+    border: none;
+    padding: 7px 30px;
+    font-weight: bold;
+    font-size: large;
+}
+.right_align{
+    text-align: right;
+}
+
+.left_align{
+    text-align: left
+}
+
+.center_align{
+    text-align: center;
 }
 
 .modalPage_toolbar{

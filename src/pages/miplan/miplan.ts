@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
+import { PlanesDataProvider } from '../../providers/planes-data/planes-data';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
 
 /**
  * Generated class for the MiplanPage page.
@@ -15,16 +18,31 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
   templateUrl: 'miplan.html',
 })
 export class MiplanPage {
+  onplanchange:boolean = false;
 
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    public userData: UserDataProvider
+    public userData: UserDataProvider,
+    public permissions: PermissionsProvider,
+    public planesData: PlanesDataProvider,
+    public subsData: SubscriptionDataProvider
   ) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MiplanPage');
+    console.log('planesdata is',this.planesData.planes);
+    console.log('my sub is',this.subsData.subscription)
+    if(!this.permissions.checkUserSuscription([this.userData.PLAN_ANY])){
+      this.activateChangePlanMode();
+    }else{
+      this.onplanchange = false;
+    }
+  }
+
+  activateChangePlanMode(){
+    this.onplanchange = true;
   }
 
 }

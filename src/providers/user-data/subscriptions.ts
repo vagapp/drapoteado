@@ -26,6 +26,8 @@ export class subscriptions{
     noSubcuentas:number = 0;
     isDocfull:boolean = true;
     isSubFull:boolean = true;
+    field_cantidad:number = 0;
+    field_adicionales:number = 0;
 
 
     constructor(){
@@ -50,6 +52,10 @@ export class subscriptions{
         this.field_stripe_sus_id = input_data['field_stripe_sus_id'];
         this.field_stripe_src_sus_id = input_data['field_stripe_src_sus_id'];
         this.field_stripe_cus_sub_id = input_data['field_stripe_cus_sub_id'];
+        this.field_cantidad = input_data['field_cantidad'];
+        this.field_adicionales = input_data['field_adicionales'];
+        if(!input_data['field_cantidad']){this.field_cantidad = 0;}
+        if(!input_data['field_adicionales']){this.field_adicionales = 0;}
         this.field_doctores_info = new Array();
        
         if(input_data['field_doctores']){
@@ -95,6 +101,8 @@ export class subscriptions{
             field_stripe_sus_id:{und:[{value:this.field_stripe_sus_id}]}, 
             field_stripe_src_sus_id:{und:[{value:this.field_stripe_src_sus_id}]}, 
             field_stripe_cus_sub_id:{und:[{value:this.field_stripe_cus_sub_id}]}, 
+            field_cantidad:{und:[{value:this.field_cantidad}]},
+            field_adicionales:{und:[{value:this.field_adicionales}]},
         }
         if(this.field_doctores){
             this.field_doctores.forEach(element => {
@@ -121,6 +129,8 @@ export class subscriptions{
             field_stripe_sus_id:{und:[{value:this.field_stripe_sus_id}]}, 
             field_stripe_src_sus_id:{und:[{value:this.field_stripe_src_sus_id}]}, 
             field_stripe_cus_sub_id:{und:[{value:this.field_stripe_cus_sub_id}]}, 
+            field_cantidad:{und:[{value:this.field_cantidad}]},
+            field_adicionales:{und:[{value:this.field_adicionales}]},
         }
         if(this.field_doctores !== null){
             this.field_doctores.forEach(element => {

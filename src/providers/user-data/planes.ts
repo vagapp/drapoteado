@@ -8,6 +8,7 @@ export class planes{
     field_no_doctores:number = null;
     field_no_subcuentas:number = null;
     field_stripe_id:string = null;
+    field_descripcion:string = null;
 
     css_fact_selected:boolean = false;
 
@@ -23,6 +24,7 @@ export class planes{
         this.field_no_doctores = input_data['field_no_doctores'];
         this.field_no_subcuentas = input_data['field_no_subcuentas'];
         this.field_stripe_id = input_data['field_stripe_id'];
+        this.field_descripcion = input_data['field_descripcion'];
     }
 
     checkNid( nid:number ):boolean{

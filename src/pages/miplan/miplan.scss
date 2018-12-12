@@ -1,3 +1,77 @@
 page-miplan {
+    ion-content{
+        margin-top: 70px;
+        padding: 0;
+    }
+    .modalPage_header {
+    border-bottom: none;
+    display: flex;
+    justify-content: space-between;
+    }
+
+    .plans_block{
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .info_plan_title{
+    width: 100%;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    background: #F6F6F6;
+    font-size: x-large;
+    }
+    
+    .control_indicator{
+        position: absolute;
+    height: 30px;
+    width: 30px;
+    left: 35px;
+    top: -10px;
+    background: #e6e6e6;
+    border: 0px solid #000000;
+    }
+
+    .subtotal_pago {
+        border-bottom: 2px solid #B8B8B8;
+        border-top: 2px solid #B8B8B8;
+        padding: 15px 120px;
+        text-align: right;
+    }
+
+    .bisectional {
+        display: flex;
+        flex: 1 1;
+        flex-flow: row;
+        justify-content: space-between;
+        padding: 0px 193px;
+        margin: 32px 0px;
+    }
+
+    .bisectional_section {
+        width: 45%;
+        padding: 15px;
+    }
+
+    .bisectional_section .spanBlock{
+        margin: 5px;
+    }
+
+    .button_section {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        margin-bottom: 100px;
+        justify-content: flex-end;
+        padding: 10px 85px;
+    }
+
+  
+
 
 }
