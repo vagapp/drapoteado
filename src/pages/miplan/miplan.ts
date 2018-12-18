@@ -20,6 +20,7 @@ import { SubscriptionDataProvider } from '../../providers/subscription-data/subs
 export class MiplanPage {
   onplanchange:boolean = false;
   selectedPlan= null; //cargar selected plan
+  selectedAditionals = 0;
 
   constructor(
     public navCtrl: NavController, 
@@ -58,6 +59,13 @@ export class MiplanPage {
   cancelar(){
     console.log('canceling to onplanchange false');
     this.onplanchange = false;
+  }
+
+  operateExtra(operand:number){
+    console.log('operateExtra',operand);
+    this.selectedAditionals += operand;
+    if (this.selectedAditionals < 0) this.selectedAditionals = 0;
+    console.log('aditionals are',this.selectedAditionals);
   }
   
 

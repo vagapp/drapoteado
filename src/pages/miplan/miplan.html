@@ -20,7 +20,7 @@
             <div class="control-group"> 
                 <label class="control control-radio">
                     <!--<input type="radio" name="rtype" value=""  [(ngModel)]="this.reportPresentator.type" checked="true"/>-->
-                    <input type="radio" name="rtype" value="" disabled/>
+                    <input type="radio" name="selectedPlan" value="{{plan.nid}}" [(ngModel)]="this.selectedPlan"/>
                     <div class="control_indicator"></div>
                 </label> 
                 </div>  
@@ -64,11 +64,7 @@
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="onplanchange"> <!-- Usuarios adicionales onplanchange-->
         <span class="spanBlock" > 
-          <select class="drap_default_select">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
+          <span class="operator" (click)="operateExtra(-1)" >-</span><input type="number" [(ngModel)]="this.selectedAditionals"/><span class="operator" (click)="operateExtra(1)">+</span>
         </span>
         <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">x adicionales</span></span>
         <span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">$80.00</span></span>

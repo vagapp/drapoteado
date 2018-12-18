@@ -192,10 +192,10 @@ export class RegisterModalPage {
     this.loader.presentLoader('Buscando...');
     this.userMan.searchByMail(this.mailsrefer).subscribe(
       (val:Array<any>)=>{
-        console.log('hola esto me salio',val);
+        console.log('hola esto me salio',val,val[0]['field_tipo_de_usuario']['value']);
         if(Number(val.length) === 0){  this.alert.presentAlert('Nada','No se encontro un usuario con este email.'); }
         else{
-          if(Number(val[0]['field_tipo_de_usuario']['value']) !== 0){
+          if(Number(val[0]['field_tipo_de_usuario']['value']) !== 1){
             this.alert.presentAlert('Nada','No se encontro un usuario con este email.');
           }else{
           this.refuser = val[0].uid;

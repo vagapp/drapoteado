@@ -6,4 +6,34 @@ page-nuevousuario-modal {
     .registerInput b{
         display:block;
     }
+
+
+      //user tutorial
+      .user_explain, .user_tutorial_selection {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding-top: 20px;
+    }
+
+    .trisectional{
+        display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .user_explain .trisectional{
+        margin: 20px;
+    }
+    .user_explain .trisectional_section{
+        margin: 10px;
+    }
+
+    .user_explain .trisectional_section .spanBlock{
+        margin:10px;
+    }
+
+ 
+
 }

@@ -71,6 +71,21 @@ page-miplan {
         padding: 10px 85px;
     }
 
+    .plans_extras_section input {
+        background: lightgray;
+        border: none;
+        text-align: center;
+        padding: 10px;
+        font-size: larger;
+    }
+
+    .plans_extras_section .operator {
+        margin: 10px;
+        font-size: 3em;
+        color: #C1272D;
+        cursor: pointer;
+    }
+
   
 
 

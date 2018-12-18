@@ -14,6 +14,33 @@
         </div>
     </div>
 
+    <div class="user_explain"><!-- Drap agregar usuarios explicacion block-->
+        <span class="spanBlock midSubFont">Drap te permite crear tres tipos de subusuarios:</span>
+        <div class="trisectional">
+            <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Recepción:</span><span class="spanBlock midSubFont">Crea Citas</span></div>
+            <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Caja:</span><span class="spanBlock midSubFont">Crea Citas</span></div>
+            <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Caja & Recepción:</span><span class="spanBlock midSubFont">Crea y Cobra Citas</span></div>
+        </div>
+    </div>
+
+    <div class="user_tutorial_selection">
+        <span class="spanBlock midSubFont">Seleccione el que mejor describe su situacion</span>
+        <div class="bisectional">
+            <div class="bisectional_section">
+                <span class="spanBlock"> ¿Tienes un empleado para caja y otro para recepción?</span>
+                <span class="spanBlock"> Crea dos usuarios para <span class="fontPrimary">Caja</span> y <span class="fontPrimary">Recepción</span> </span>
+            </div>
+            <div class="bisectional_section">
+                <span class="spanBlock"> ¿Tienes un solo empleado que funciona como caja y recepción?</span>
+                <span class="spanBlock"> Crea un usuario de <span class="fontPrimary">Caja & Recepción</span></span>
+            </div>
+
+        </div>
+        <div class="buttonsection">
+            <button class="generalButton">Continuar</button>
+        </div>
+    </div>
+
     
     <div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState()" >
             <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
