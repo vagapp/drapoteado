@@ -89,10 +89,11 @@
       <div class="subtotal_pago">
         <span class="spanBlock midFont"> Total de suscripción mensual: <span class="fontPrimary">$000.00</span></span>
         <p class="midSubFont"> Cualquier cambio en el monto total de tu suscripcion se vera reflejado en tu proxima mensualidad al 00/00/0000</p>
-      </div>
-      <div class="button_section">
-        <button class="generalButton bgColorPrimary ">Guardar</button>
-        <button class="generalButton bgColorPrimary ">Cancelar</button>
+      </div> guardar 
+      <div class="button_section"> 
+        <button class="generalButton bgColorPrimary " *ngIf="onplanchange" (click)="guardar()" >Guardar</button>
+        <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()" >Editar</button>
+        <button class="generalButton bgColorPrimary " *ngIf="onplanchange" (click)="cancelar()" >Cancelar</button>
       </div>
     </div>
 </ion-content>

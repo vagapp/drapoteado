@@ -19,6 +19,7 @@ import { SubscriptionDataProvider } from '../../providers/subscription-data/subs
 })
 export class MiplanPage {
   onplanchange:boolean = false;
+  selectedPlan= null; //cargar selected plan
 
   constructor(
     public navCtrl: NavController, 
@@ -38,11 +39,26 @@ export class MiplanPage {
       this.activateChangePlanMode();
     }else{
       this.onplanchange = false;
+      this.selectedPlan = this.subsData.subscription.field_plan_sus
     }
   }
 
   activateChangePlanMode(){
     this.onplanchange = true;
   }
+
+  editar(){
+    console.log('change to onplanchange true');
+    this.onplanchange = true;
+  }
+  guardar(){
+    console.log('saving to  onplanchange false');
+    this.onplanchange = false;
+  }  
+  cancelar(){
+    console.log('canceling to onplanchange false');
+    this.onplanchange = false;
+  }
+  
 
 }
