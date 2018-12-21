@@ -22,6 +22,17 @@ export class MiplanPage {
   selectedPlan= null; //cargar selected plan
   selectedAditionals = 0;
 
+  get selectedTotal():number{
+    let ret = 0;
+    if(this.onplanchange){
+      console.log('this.selectedPlan',this.selectedPlan);
+      console.log('this.selectedAditionals',this.selectedAditionals);
+      console.log('this.subsData.subscription.field_adicionales',this.subsData.subscription.field_adicionales);
+    //ret = this.selectedPlan.field_costo + (this.selectedAditionals*40) + (this.subsData.subscription.field_adicionales*40)
+    }
+    return ret;
+  }
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,

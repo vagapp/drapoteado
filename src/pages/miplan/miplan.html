@@ -66,13 +66,14 @@
         <span class="spanBlock" > 
           <span class="operator" (click)="operateExtra(-1)" >-</span><input type="number" [(ngModel)]="this.selectedAditionals"/><span class="operator" (click)="operateExtra(1)">+</span>
         </span>
-        <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">x adicionales</span></span>
-        <span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">$80.00</span></span>
+        <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span></span>
+        <span class="spanBlock midSubFont"> añadir <span class="fontPrimary">{{this.selectedAditionals}} adicionales</span> por <span class="fontPrimary">${{this.selectedAditionals*40}}</span></span>
+        <span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">${{(this.selectedAditionals*40) + (this.subsData.subscription.field_adicionales*40)}}.00</span></span>
       </div> <!-- fin de usuarios adicionales onplanchange-->
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
-        <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span></span>
-        <span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">${{this.subsData.subscription.field_adicionales*40}}.00</span></span>
+        <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span> </span>
+        <span class="spanBlock midFont"> Total extra de subusuarios:  <span class="fontPrimary">${{this.subsData.subscription.field_adicionales*40}}.00</span></span>
       </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
 
     </div><!-- fin de plans extras -->
@@ -83,8 +84,9 @@
          <div class="bisectional_section neuvo_metodo_pago"> insert aqui </div>
       </div>
       <div class="subtotal_pago">
-        <span class="spanBlock midFont"> Total de suscripción mensual: <span class="fontPrimary">$000.00</span></span>
-        <p class="midSubFont"> Cualquier cambio en el monto total de tu suscripcion se vera reflejado en tu proxima mensualidad al 00/00/0000</p>
+        <span class="spanBlock midFont" *ngIf="this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{selectedTotal}}.00</span></span>
+        <span class="spanBlock midFont" *ngIf="!this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{this.subsData.subscription.costo}}.00</span></span>
+        <p class="midSubFont" *ngIf="this.onplanchange"> Cualquier cambio en el monto total de tu suscripcion se vera reflejado en tu proxima mensualidad al ${{this.subsData.subscription.field_next_cobro}}</p>
       </div> guardar 
       <div class="button_section"> 
         <button class="generalButton bgColorPrimary " *ngIf="onplanchange" (click)="guardar()" >Guardar</button>
