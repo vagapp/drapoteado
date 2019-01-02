@@ -80,16 +80,36 @@
     <div class="informacion_pagos">
       <span class="spanBlock info_plan_title">metodos de pago</span>
       <div class="bisectional pagos_block">
-         <div class="bisectional_section metodos_pago"> metodos aqui </div>
-         <div class="bisectional_section neuvo_metodo_pago"> insert aqui </div>
+         <div class="bisectional_section metodos_pago"> 
+            <form action="/" method="post" id="payment-form"><!-- INICIO FORM STRIPE ELEMENTS-->
+        
+              <div class="form-row">
+                <div id="card-element">
+                  <!-- a Stripe Element will be inserted here. -->
+                </div>
+          
+                <!-- Used to display Element errors -->
+                <div id="card-errors" role="alert"></div>
+              </div>
+            
+            </form>   <!-- FIN FORM STRIPE ELEMENTS-->
+        </div>
+         <div class="bisectional_section neuvo_metodo_pago"> 
+            <div class="sources_wrapper"> <!-- INICIO STRIPE LISTED SOURCES-->
+                <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado metodos de pago </div>
+                <div *ngFor="let src of this.sources" (click)="selectCard(src)"   [class.selectedsrc]="src.selected" class="fact_src_unit">
+                  {{src.brand}} **** **** **** {{src.last4}}
+                </div>
+                </div> <!-- FIN STRIPE LISTED SOURCES-->  
+        </div>
       </div>
       <div class="subtotal_pago">
         <span class="spanBlock midFont" *ngIf="this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{selectedTotal}}.00</span></span>
-        <span class="spanBlock midFont" *ngIf="!this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{this.subsData.subscription.costo}}.00</span></span>
+        <span class="spanBlock midFont" *ngIf="!this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{this.subsData.subscription.field_cantidad}}.00</span></span>
         <p class="midSubFont" *ngIf="this.onplanchange"> Cualquier cambio en el monto total de tu suscripcion se vera reflejado en tu proxima mensualidad al ${{this.subsData.subscription.field_next_cobro}}</p>
-      </div> guardar 
+      </div>  
       <div class="button_section"> 
-        <button class="generalButton bgColorPrimary " *ngIf="onplanchange" (click)="guardar()" >Guardar</button>
+        <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup()"  (click)="guardar()" >Guardar</button>
         <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()" >Editar</button>
         <button class="generalButton bgColorPrimary " *ngIf="onplanchange" (click)="cancelar()" >Cancelar</button>
       </div>

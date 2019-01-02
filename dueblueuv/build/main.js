@@ -2375,6 +2375,7 @@ var subscriptions = /** @class */ (function () {
             });
         }
         //Debugger.log(['field_subusuarios at set data subscription',this.field_subusuarios]);
+        console.log('error on this',this.field_doctores_json);
         this.field_doctores_info = JSON.parse(this.field_doctores_json);
         if (this.field_subusuarios)
             this.noSubcuentas = this.field_subusuarios.length;

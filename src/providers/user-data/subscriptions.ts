@@ -43,6 +43,8 @@ export class subscriptions{
         this.field_plan_sus = input_data['field_plan_sus'];
         this.field_plan_holder = input_data['field_plan_holder'];
         this.field_doctores = null;
+        console.log('doctors error comming from this',input_data['field_doctores_json']);
+        /* parece que los json se pueden joder inesperadamente,*/
         this.field_doctores_json = input_data['field_doctores_json'];
         this.field_subusuarios = null; 
         this.field_invitation_code = input_data['field_invitation_code'];
@@ -72,7 +74,13 @@ export class subscriptions{
         }
        
         //Debugger.log(['field_subusuarios at set data subscription',this.field_subusuarios]);
-        this.field_doctores_info = JSON.parse(this.field_doctores_json);
+        try {
+            this.field_doctores_info = JSON.parse(this.field_doctores_json);
+        } catch (e) {
+          console.log('subscriptions:setData error on json ',this.field_doctores_json);
+          this.field_doctores_info = new Array();
+        }
+       
         if(this.field_subusuarios)
         this.noSubcuentas = this.field_subusuarios.length;
         this.validateSuscriptionActive();

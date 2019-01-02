@@ -13,12 +13,13 @@
           </ion-item>
           <button class="generalButton largeButton bgColorPrimary" (click)="invitationSub()" >Enviar</button>  
         </div>-->
-      <div class="fact_subs_info">
+
+      <!--<div class="fact_subs_info">
         <div class="fact_myplan" *ngIf="permissions.checkUserSuscription([userData.PLAN_ANY])">
           <span class="myplan_block">Plan activo: {{subsData.subscription.plan.title}}</span>
         </div>
-      </div>
-      <div class="fact_page_content" *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY]) && this.onGroup" >
+      </div>-->
+      <!--<div class="fact_page_content" *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY]) && this.onGroup" >
         <p>ingresa el codigo del grupo medico al que perteneces.</p>
         <div class="button_section_inline">
         <div class="registerInput">
@@ -26,7 +27,7 @@
           </div>
               <button (click)="searchsub()" ion-button block large>Buscar</button>
               </div>
-        </div>
+        </div>-->
     <div class="fact_page_content" *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY]) && !this.onGroup" >
         <div class="modal_header">
             <span class="spanBlock header_title"><img class="modal_title_logo" src="assets/imgs/logo-rojo-gris.svg"/></span>
@@ -67,6 +68,7 @@
       </div>
       </div>
     </div>
+  -->
     </div>
     <!--<div class="checkout">
       <div class="details"></div>

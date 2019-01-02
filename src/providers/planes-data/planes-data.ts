@@ -65,5 +65,9 @@ export class PlanesDataProvider {
     return ret;
   }
 
+  getPlanById(plan_nid:number):planes{
+    return this.planes.find((planes)=>{ return Number(planes.nid) === Number(plan_nid) });
+  }
+
 
 }

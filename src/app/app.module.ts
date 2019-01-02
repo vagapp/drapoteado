@@ -54,6 +54,7 @@ import { CalendarModule } from "ion2-calendar";
 import { Calendar } from '@ionic-native/calendar';
 import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
 import { TutorialProvider } from '../providers/tutorial/tutorial';
+import { JsonUtilProvider } from '../providers/json-util/json-util';
 
 
 
@@ -141,6 +142,7 @@ import { TutorialProvider } from '../providers/tutorial/tutorial';
     CitaProgressControllerProvider,
     PermissionsProvider,
     TutorialProvider,
+    JsonUtilProvider,
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

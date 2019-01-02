@@ -1,0 +1,567 @@
+[18-Jun-2018 17:09:27 UTC] object(stdClass)#1 (9) {
+  ["created"]=>
+  int(1326853478)
+  ["livemode"]=>
+  bool(false)
+  ["id"]=>
+  string(18) "evt_00000000000000"
+  ["type"]=>
+  string(29) "customer.subscription.created"
+  ["object"]=>
+  string(5) "event"
+  ["request"]=>
+  NULL
+  ["pending_webhooks"]=>
+  int(1)
+  ["api_version"]=>
+  string(10) "2018-05-21"
+  ["data"]=>
+  object(stdClass)#2 (1) {
+    ["object"]=>
+    object(stdClass)#3 (24) {
+      ["id"]=>
+      string(18) "sub_00000000000000"
+      ["object"]=>
+      string(12) "subscription"
+      ["application_fee_percent"]=>
+      NULL
+      ["billing"]=>
+      string(20) "charge_automatically"
+      ["billing_cycle_anchor"]=>
+      int(1529341765)
+      ["cancel_at_period_end"]=>
+      bool(false)
+      ["canceled_at"]=>
+      NULL
+      ["created"]=>
+      int(1529341765)
+      ["current_period_end"]=>
+      int(1531933765)
+      ["current_period_start"]=>
+      int(1529341765)
+      ["customer"]=>
+      string(18) "cus_00000000000000"
+      ["days_until_due"]=>
+      NULL
+      ["discount"]=>
+      NULL
+      ["ended_at"]=>
+      NULL
+      ["items"]=>
+      object(stdClass)#4 (5) {
+        ["object"]=>
+        string(4) "list"
+        ["data"]=>
+        array(1) {
+          [0]=>
+          object(stdClass)#5 (7) {
+            ["id"]=>
+            string(17) "si_D4a16isq2B3hsz"
+            ["object"]=>
+            string(17) "subscription_item"
+            ["created"]=>
+            int(1529341765)
+            ["metadata"]=>
+            object(stdClass)#6 (0) {
+            }
+            ["plan"]=>
+            object(stdClass)#7 (19) {
+              ["id"]=>
+              string(19) "plan_D4ZhQ174l9xwMQ"
+              ["object"]=>
+              string(4) "plan"
+              ["active"]=>
+              bool(true)
+              ["aggregate_usage"]=>
+              NULL
+              ["amount"]=>
+              int(999)
+              ["billing_scheme"]=>
+              string(8) "per_unit"
+              ["created"]=>
+              int(1529340584)
+              ["currency"]=>
+              string(3) "usd"
+              ["interval"]=>
+              string(5) "month"
+              ["interval_count"]=>
+              int(1)
+              ["livemode"]=>
+              bool(false)
+              ["metadata"]=>
+              object(stdClass)#8 (0) {
+              }
+              ["nickname"]=>
+              NULL
+              ["product"]=>
+              string(19) "prod_D4ZhzosuK2n5F7"
+              ["tiers"]=>
+              NULL
+              ["tiers_mode"]=>
+              NULL
+              ["transform_usage"]=>
+              NULL
+              ["trial_period_days"]=>
+              NULL
+              ["usage_type"]=>
+              string(8) "licensed"
+            }
+            ["quantity"]=>
+            int(1)
+            ["subscription"]=>
+            string(18) "sub_D4a1s1QnzXxsP5"
+          }
+        }
+        ["has_more"]=>
+        bool(false)
+        ["total_count"]=>
+        int(1)
+        ["url"]=>
+        string(54) "/v1/subscription_items?subscription=sub_D4a1s1QnzXxsP5"
+      }
+      ["livemode"]=>
+      bool(false)
+      ["metadata"]=>
+      object(stdClass)#9 (0) {
+      }
+      ["plan"]=>
+      object(stdClass)#10 (19) {
+        ["id"]=>
+        string(19) "plan_00000000000000"
+        ["object"]=>
+        string(4) "plan"
+        ["active"]=>
+        bool(true)
+        ["aggregate_usage"]=>
+        NULL
+        ["amount"]=>
+        int(999)
+        ["billing_scheme"]=>
+        string(8) "per_unit"
+        ["created"]=>
+        int(1529340584)
+        ["currency"]=>
+        string(3) "usd"
+        ["interval"]=>
+        string(5) "month"
+        ["interval_count"]=>
+        int(1)
+        ["livemode"]=>
+        bool(false)
+        ["metadata"]=>
+        object(stdClass)#11 (0) {
+        }
+        ["nickname"]=>
+        NULL
+        ["product"]=>
+        string(19) "prod_00000000000000"
+        ["tiers"]=>
+        NULL
+        ["tiers_mode"]=>
+        NULL
+        ["transform_usage"]=>
+        NULL
+        ["trial_period_days"]=>
+        NULL
+        ["usage_type"]=>
+        string(8) "licensed"
+      }
+      ["quantity"]=>
+      int(1)
+      ["start"]=>
+      int(1529341765)
+      ["status"]=>
+      string(6) "active"
+      ["tax_percent"]=>
+      NULL
+      ["trial_end"]=>
+      NULL
+      ["trial_start"]=>
+      NULL
+    }
+  }
+}
+
+[18-Jun-2018 17:12:03 UTC] object(stdClass)#1 (9) {
+  ["created"]=>
+  int(1326853478)
+  ["livemode"]=>
+  bool(false)
+  ["id"]=>
+  string(18) "evt_00000000000000"
+  ["type"]=>
+  string(29) "customer.subscription.created"
+  ["object"]=>
+  string(5) "event"
+  ["request"]=>
+  NULL
+  ["pending_webhooks"]=>
+  int(1)
+  ["api_version"]=>
+  string(10) "2018-05-21"
+  ["data"]=>
+  object(stdClass)#2 (1) {
+    ["object"]=>
+    object(stdClass)#3 (24) {
+      ["id"]=>
+      string(18) "sub_00000000000000"
+      ["object"]=>
+      string(12) "subscription"
+      ["application_fee_percent"]=>
+      NULL
+      ["billing"]=>
+      string(20) "charge_automatically"
+      ["billing_cycle_anchor"]=>
+      int(1529341920)
+      ["cancel_at_period_end"]=>
+      bool(false)
+      ["canceled_at"]=>
+      NULL
+      ["created"]=>
+      int(1529341920)
+      ["current_period_end"]=>
+      int(1531933920)
+      ["current_period_start"]=>
+      int(1529341920)
+      ["customer"]=>
+      string(18) "cus_00000000000000"
+      ["days_until_due"]=>
+      NULL
+      ["discount"]=>
+      NULL
+      ["ended_at"]=>
+      NULL
+      ["items"]=>
+      object(stdClass)#4 (5) {
+        ["object"]=>
+        string(4) "list"
+        ["data"]=>
+        array(1) {
+          [0]=>
+          object(stdClass)#5 (7) {
+            ["id"]=>
+            string(17) "si_D4a3xjg1HAnOFD"
+            ["object"]=>
+            string(17) "subscription_item"
+            ["created"]=>
+            int(1529341921)
+            ["metadata"]=>
+            object(stdClass)#6 (0) {
+            }
+            ["plan"]=>
+            object(stdClass)#7 (19) {
+              ["id"]=>
+              string(19) "plan_D4ZhQ174l9xwMQ"
+              ["object"]=>
+              string(4) "plan"
+              ["active"]=>
+              bool(true)
+              ["aggregate_usage"]=>
+              NULL
+              ["amount"]=>
+              int(999)
+              ["billing_scheme"]=>
+              string(8) "per_unit"
+              ["created"]=>
+              int(1529340584)
+              ["currency"]=>
+              string(3) "usd"
+              ["interval"]=>
+              string(5) "month"
+              ["interval_count"]=>
+              int(1)
+              ["livemode"]=>
+              bool(false)
+              ["metadata"]=>
+              object(stdClass)#8 (0) {
+              }
+              ["nickname"]=>
+              NULL
+              ["product"]=>
+              string(19) "prod_D4ZhzosuK2n5F7"
+              ["tiers"]=>
+              NULL
+              ["tiers_mode"]=>
+              NULL
+              ["transform_usage"]=>
+              NULL
+              ["trial_period_days"]=>
+              NULL
+              ["usage_type"]=>
+              string(8) "licensed"
+            }
+            ["quantity"]=>
+            int(1)
+            ["subscription"]=>
+            string(18) "sub_D4a3Ln01TVXCga"
+          }
+        }
+        ["has_more"]=>
+        bool(false)
+        ["total_count"]=>
+        int(1)
+        ["url"]=>
+        string(54) "/v1/subscription_items?subscription=sub_D4a3Ln01TVXCga"
+      }
+      ["livemode"]=>
+      bool(false)
+      ["metadata"]=>
+      object(stdClass)#9 (0) {
+      }
+      ["plan"]=>
+      object(stdClass)#10 (19) {
+        ["id"]=>
+        string(19) "plan_00000000000000"
+        ["object"]=>
+        string(4) "plan"
+        ["active"]=>
+        bool(true)
+        ["aggregate_usage"]=>
+        NULL
+        ["amount"]=>
+        int(999)
+        ["billing_scheme"]=>
+        string(8) "per_unit"
+        ["created"]=>
+        int(1529340584)
+        ["currency"]=>
+        string(3) "usd"
+        ["interval"]=>
+        string(5) "month"
+        ["interval_count"]=>
+        int(1)
+        ["livemode"]=>
+        bool(false)
+        ["metadata"]=>
+        object(stdClass)#11 (0) {
+        }
+        ["nickname"]=>
+        NULL
+        ["product"]=>
+        string(19) "prod_00000000000000"
+        ["tiers"]=>
+        NULL
+        ["tiers_mode"]=>
+        NULL
+        ["transform_usage"]=>
+        NULL
+        ["trial_period_days"]=>
+        NULL
+        ["usage_type"]=>
+        string(8) "licensed"
+      }
+      ["quantity"]=>
+      int(1)
+      ["start"]=>
+      int(1529341920)
+      ["status"]=>
+      string(6) "active"
+      ["tax_percent"]=>
+      NULL
+      ["trial_end"]=>
+      NULL
+      ["trial_start"]=>
+      NULL
+    }
+  }
+}
+
+[18-Jun-2018 17:12:03 UTC] /////////////
+[18-Jun-2018 17:12:26 UTC] object(stdClass)#1 (9) {
+  ["created"]=>
+  int(1326853478)
+  ["livemode"]=>
+  bool(false)
+  ["id"]=>
+  string(18) "evt_00000000000000"
+  ["type"]=>
+  string(29) "customer.subscription.created"
+  ["object"]=>
+  string(5) "event"
+  ["request"]=>
+  NULL
+  ["pending_webhooks"]=>
+  int(1)
+  ["api_version"]=>
+  string(10) "2018-05-21"
+  ["data"]=>
+  object(stdClass)#2 (1) {
+    ["object"]=>
+    object(stdClass)#3 (24) {
+      ["id"]=>
+      string(18) "sub_00000000000000"
+      ["object"]=>
+      string(12) "subscription"
+      ["application_fee_percent"]=>
+      NULL
+      ["billing"]=>
+      string(20) "charge_automatically"
+      ["billing_cycle_anchor"]=>
+      int(1529341945)
+      ["cancel_at_period_end"]=>
+      bool(false)
+      ["canceled_at"]=>
+      NULL
+      ["created"]=>
+      int(1529341945)
+      ["current_period_end"]=>
+      int(1531933945)
+      ["current_period_start"]=>
+      int(1529341945)
+      ["customer"]=>
+      string(18) "cus_00000000000000"
+      ["days_until_due"]=>
+      NULL
+      ["discount"]=>
+      NULL
+      ["ended_at"]=>
+      NULL
+      ["items"]=>
+      object(stdClass)#4 (5) {
+        ["object"]=>
+        string(4) "list"
+        ["data"]=>
+        array(1) {
+          [0]=>
+          object(stdClass)#5 (7) {
+            ["id"]=>
+            string(17) "si_D4a4jdUhs6wuCf"
+            ["object"]=>
+            string(17) "subscription_item"
+            ["created"]=>
+            int(1529341945)
+            ["metadata"]=>
+            object(stdClass)#6 (0) {
+            }
+            ["plan"]=>
+            object(stdClass)#7 (19) {
+              ["id"]=>
+              string(19) "plan_D4ZhQ174l9xwMQ"
+              ["object"]=>
+              string(4) "plan"
+              ["active"]=>
+              bool(true)
+              ["aggregate_usage"]=>
+              NULL
+              ["amount"]=>
+              int(999)
+              ["billing_scheme"]=>
+              string(8) "per_unit"
+              ["created"]=>
+              int(1529340584)
+              ["currency"]=>
+              string(3) "usd"
+              ["interval"]=>
+              string(5) "month"
+              ["interval_count"]=>
+              int(1)
+              ["livemode"]=>
+              bool(false)
+              ["metadata"]=>
+              object(stdClass)#8 (0) {
+              }
+              ["nickname"]=>
+              NULL
+              ["product"]=>
+              string(19) "prod_D4ZhzosuK2n5F7"
+              ["tiers"]=>
+              NULL
+              ["tiers_mode"]=>
+              NULL
+              ["transform_usage"]=>
+              NULL
+              ["trial_period_days"]=>
+              NULL
+              ["usage_type"]=>
+              string(8) "licensed"
+            }
+            ["quantity"]=>
+            int(1)
+            ["subscription"]=>
+            string(18) "sub_D4a4I0UEDdzZtv"
+          }
+        }
+        ["has_more"]=>
+        bool(false)
+        ["total_count"]=>
+        int(1)
+        ["url"]=>
+        string(54) "/v1/subscription_items?subscription=sub_D4a4I0UEDdzZtv"
+      }
+      ["livemode"]=>
+      bool(false)
+      ["metadata"]=>
+      object(stdClass)#9 (0) {
+      }
+      ["plan"]=>
+      object(stdClass)#10 (19) {
+        ["id"]=>
+        string(19) "plan_00000000000000"
+        ["object"]=>
+        string(4) "plan"
+        ["active"]=>
+        bool(true)
+        ["aggregate_usage"]=>
+        NULL
+        ["amount"]=>
+        int(999)
+        ["billing_scheme"]=>
+        string(8) "per_unit"
+        ["created"]=>
+        int(1529340584)
+        ["currency"]=>
+        string(3) "usd"
+        ["interval"]=>
+        string(5) "month"
+        ["interval_count"]=>
+        int(1)
+        ["livemode"]=>
+        bool(false)
+        ["metadata"]=>
+        object(stdClass)#11 (0) {
+        }
+        ["nickname"]=>
+        NULL
+        ["product"]=>
+        string(19) "prod_00000000000000"
+        ["tiers"]=>
+        NULL
+        ["tiers_mode"]=>
+        NULL
+        ["transform_usage"]=>
+        NULL
+        ["trial_period_days"]=>
+        NULL
+        ["usage_type"]=>
+        string(8) "licensed"
+      }
+      ["quantity"]=>
+      int(1)
+      ["start"]=>
+      int(1529341945)
+      ["status"]=>
+      string(6) "active"
+      ["tax_percent"]=>
+      NULL
+      ["trial_end"]=>
+      NULL
+      ["trial_start"]=>
+      NULL
+    }
+  }
+}
+
+[18-Jun-2018 17:49:51 UTC] PHP Fatal error:  require_once(): Failed opening required 'vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/drapp/public_html/backend/sites/all/modules/stripein/endpoint_subscription.php on line 2
+[18-Jun-2018 17:54:11 UTC] PHP Fatal error:  Class 'EntityFieldQuery' not found in /home/drapp/public_html/backend/sites/all/modules/stripein/endpoint_subscription.php on line 4
+[18-Jun-2018 17:55:59 UTC] PHP Fatal error:  Call to undefined function module_load_include() in /home/drapp/public_html/backend/sites/all/modules/stripein/endpoint_subscription.php on line 4
+[18-Jun-2018 18:15:37 UTC] PHP Fatal error:  require_once(): Failed opening required 'includes/bootstrap.inc' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/drapp/public_html/backend/sites/all/modules/stripein/endpoint_subscription.php on line 4
+[18-Jun-2018 18:18:05 UTC] PHP Fatal error:  Call to undefined function drupal_bootstrap() in /home/drapp/public_html/backend/sites/all/modules/stripein/endpoint_subscription.php on line 5
+[18-Jun-2018 18:21:31 UTC] PHP Fatal error:  Call to undefined function drupal_bootstrap() in /home/drapp/public_html/backend/sites/all/modules/stripein/endpoint_subscription.php on line 6
+[18-Jun-2018 18:24:01 UTC] PHP Fatal error:  Call to undefined function drupal_bootstrap() in /home/drapp/public_html/backend/sites/all/modules/stripein/endpoint_subscription.php on line 6
+[18-Jun-2018 18:25:51 UTC] PHP Fatal error:  Call to undefined function drupal_bootstrap() in /home/drapp/public_html/backend/sites/all/modules/stripein/endpoint_subscription.php on line 6
+[18-Jun-2018 19:09:40 UTC] PHP Fatal error:  require_once(): Failed opening required '/var/www/html/backend/includes/bootstrap.inc' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/drapp/public_html/backend/sites/all/modules/stripein/endpoint_subscription.php on line 4
+[18-Jun-2018 19:13:47 UTC] PHP Fatal error:  require_once(): Failed opening required 'vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/drapp/public_html/backend/sites/all/modules/stripein/stripein.module on line 2
+[18-Jun-2018 19:14:40 UTC] PHP Fatal error:  require_once(): Failed opening required 'vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/drapp/public_html/backend/sites/all/modules/stripein/stripein.module on line 2
+[18-Jun-2018 19:23:22 UTC] PHP Fatal error:  require_once(): Failed opening required 'vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/drapp/public_html/backend/sites/all/modules/stripein/stripein.module on line 2
+[18-Jun-2018 19:24:09 UTC] PHP Fatal error:  Class 'EntityFieldQuery' not found in /home/drapp/public_html/backend/sites/all/modules/stripein/endpoint_subscription.php on line 7
+[18-Jun-2018 20:10:33 UTC] PHP Fatal error:  Class 'EntityFieldQuery' not found in /home/drapp/public_html/backend/sites/all/modules/stripein/endpoint_subscription.php on line 7

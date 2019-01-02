@@ -1,0 +1,4 @@
+name = Stripein
+description = "stripe utilery."
+package = stripein
+core = 7.x
