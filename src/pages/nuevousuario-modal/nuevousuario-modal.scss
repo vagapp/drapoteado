@@ -60,11 +60,17 @@ page-nuevousuario-modal {
     }
 
     .selectedOption{
-        background-color: #f3f3f3;
+        background-color: #dcdcdc;
     }
 
     .disabledsubbtn{
         background-color: gray;
+    }
+
+    .tutorial_explain_text {
+        font-size: 2rem;
+        margin: 19px;
+        display: block;
     }
  
 

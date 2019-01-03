@@ -14,7 +14,12 @@
         </div>
     </div>
 
-    <div class="user_explain"><!-- Drap agregar usuarios explicacion block-->
+    <div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState() && initialpage" >
+            <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
+            <span class=" largeFont" *ngIf="this.isnew"><b>Alta de Usuario</b></span>
+        </div>
+
+    <div class="user_explain" *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.usuarioCreated === false" ><!-- Drap agregar usuarios explicacion block-->
         <span class="spanBlock midSubFont">Drap te permite crear tres tipos de subusuarios:</span>
         <div class="trisectional">
             <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Recepción:</span><span class="spanBlock midSubFont">Crea Citas</span></div>
@@ -23,7 +28,7 @@
         </div>
     </div>
 
-    <div class="user_tutorial_selection">
+    <div class="user_tutorial_selection" *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.usuarioCreated === false">
         <span class="spanBlock midSubFont">Seleccione el que mejor describe su situacion</span>
         <div class="bisectional">
             <div class="bisectional_section" (click)="selectOption(2)"  [class.selectedOption]="checkSelectedOption(2)">
@@ -42,18 +47,10 @@
     </div>
 
     
-    <div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState()" >
-            <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
-            <span class=" largeFont" *ngIf="this.isnew"><b>Alta de Usuario</b></span>
-            <div class="modalPage_title">
-              <span class="spanBlock midSubFont">Mantener el control de tus administrativos es nuestra prioridad, agrega hasta
-                    2 usuarios adicionales para que te ayuden a gestionar y cobrar tus citas:</span>
-            </div>
-        </div>
 
 
-    <div class="modalContent" *ngIf="!this.tutorial.checkTutorialState()  || (this.tutorial.checkTutorialState() && !this.tutorial.usuarioCreated)">
-      <div class="alta_main" *ngIf="initialpage">
+    <div class="modalContent">
+      <div class="alta_main" *ngIf="initialpage && !this.tutorial.checkTutorialState()"  >
         <span class="spanBlock midSubFont">Busca usuarios compartidos o registra uno nuevo</span>
         <span class="spanBlock"> <button class="bgColorSecondary generalButton" (click)="codeuser=true; initialpage=false;">Buscar Usuario</button></span>
         <span class="spanBlock" *ngIf="this.userData.checkUserPlanHolder()"> <button class="bgColorSecondary generalButton" (click)="newuser=true; initialpage=false;">Registrar Nuevo</button></span>
@@ -70,21 +67,32 @@
             </div>
           </div>
     </div>
-    <div class="nuevoservicio_content modalContent" *ngIf="newuser">
-            <span class="spanBlock optionspan" (click)="newuser=false; codeuser=false; initialpage=true" > atras </span>
+    <div class="nuevoservicio_content modalContent" *ngIf="this.newuser">
+            <span class="spanBlock optionspan" (click)="newuser=false; codeuser=false; initialpage=true" *ngIf="!this.tutorial.checkTutorialState()"> atras </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> Crea un usuario para caja. </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> Crea un usuario para Recepción. </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> Crea un usuario para Caja & Recepción. </span>
         <div *ngIf="this.isnew" class="ModalInput_input">
             <b>username</b>
             <input  [(ngModel)]="this.newUser.name" type="text"/>
         </div>
-        <div class="ModalInput_input">
+        <div class="ModalInput_input" *ngIf="!this.tutorial.checkTutorialState()">
             <b>Tipo de Usuario:</b>
-          <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und" class="input_select input">
+          <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und" class="input_select input" >
               <option selected disabled value="0">SELECT</option>
               <option value="2">recepción</option>
               <option value="3">caja</option>
               <option value="4">recepción&caja</option>
             </select>
           </div>
+          <div class="ModalInput_input" *ngIf="this.tutorial.checkTutorialState()">
+                <b>Tipo de Usuario:</b>
+              <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und" class="input_select input" disabled>
+                  <option value="2" selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION">recepción</option>
+                  <option value="3"  selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA">caja</option>
+                  <option value="4"  selected  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR">recepción&caja</option>
+                </select>
+              </div>
           <div class="ModalInput_input">
             <b>Correo Electrónico</b>
             <input [(ngModel)]="this.newUser.field_useremail.und[0].email" type="text"/>
@@ -115,8 +123,8 @@
 
     <div class="modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated" >
             <span class="spanBlock bigBoldFont">!Felicidades!</span>
-            <span class="spanBlock midMainFont"> tu Usuario ha sido creado.</span>
-            <span class="spanBlock midSubFont">Te propordcionamos sus datos para que pueda ingresar desde este momento a DRAP</span>
+            <span class="spanBlock midMainFont"> Tu Usuario ha sido creado.</span>
+            <span class="spanBlock midSubFont">Te proporcionamos sus datos para que pueda ingresar desde este momento a DRAP</span>
             <span class="spanBlock midSubFont">Nombre: <span class="fontHigh">{{this.newUser.name}}</span></span>
             <span class="spanBlock midSubFont">Correo: <span class="fontHigh">{{this.newUser.mail}}</span></span>
             <span class="spanBlock midSubFont" *ngIf="!this.codeuserNP">Contraseña: <span class="fontHigh">{{this.checkpass}}</span></span>
@@ -124,8 +132,10 @@
             </div>
             <div class="midAlign" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated">
                 <div class="register_button_section">
-                <button (click)="this.restart()" class="bgColorSecondary generalButton">Crear Otro</button>
-                <button (click)="this.dismiss()" class="bgColorSecondary generalButton">Continuar</button>
+                <button (click)="this.nextUser()"  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA" class="bgColorSecondary generalButton">Continuar</button>
+                <button (click)="this.endUsers()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR || this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION" class="bgColorSecondary generalButton">Continuar</button>
+                <!--<button (click)="this.restart()" class="bgColorSecondary generalButton">Crear Otro</button>-->
+                <!--<button (click)="this.dismiss()" class="bgColorSecondary generalButton">Continuar</button>-->
                 </div>
               </div>
 </ion-content>

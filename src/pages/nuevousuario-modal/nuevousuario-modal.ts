@@ -80,7 +80,6 @@ export class NuevousuarioModalPage {
 
   selectOption( selected:number ){
     this.selectedUsersOptions = Number(selected);
-
   }
 
   checkSelectedOption(selected:number ){
@@ -93,6 +92,30 @@ export class NuevousuarioModalPage {
 
   userTutorialStart(){
     console.log('start tutorial');
+    this.newuser=true; 
+    this.initialpage=false;
+    this.tutorial.tutorial_users_selected_option = this.selectedUsersOptions;
+    if(this.tutorial.tutorial_users_selected_option === TutorialProvider.TUTORIAL_USER_BOTH){
+      this.newUser.field_tipo_de_usuario.und = [3];
+      this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_CAJA;
+    }else{
+      this.newUser.field_tipo_de_usuario.und = [4];
+    }
+  }
+
+  nextUser(){ //despues de crear caja se crea recepcion, se reinician las variables para manipular el template.
+    this.newuser = true;
+    this.initialpage=false;
+    this.tutorial.usuarioCreated = false;
+    this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_RECEPCION;
+    this.restart();
+    this.newUser.field_tipo_de_usuario.und = [2];
+ 
+  }
+
+  endUsers(){
+    this.tutorial.usuarioCreated = true;
+    this.dismiss();
   }
 
 
@@ -124,6 +147,7 @@ export class NuevousuarioModalPage {
       if(this.tutorial.checkTutorialState())
       {
         this.tutorial.usuarioCreated = true;
+        this.newuser=false;
       }else{
         this.close();
       }
