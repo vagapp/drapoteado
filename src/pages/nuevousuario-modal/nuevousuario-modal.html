@@ -23,21 +23,21 @@
         </div>
     </div>
 
-    <div classa4 dru="user_tutorial_selection">
+    <div class="user_tutorial_selection">
         <span class="spanBlock midSubFont">Seleccione el que mejor describe su situacion</span>
         <div class="bisectional">
-            <div class="bisectional_section">
+            <div class="bisectional_section" (click)="selectOption(2)"  [class.selectedOption]="checkSelectedOption(2)">
                 <span class="spanBlock"> ¿Tienes un empleado para caja y otro para recepción?</span>
                 <span class="spanBlock"> Crea dos usuarios para <span class="fontPrimary">Caja</span> y <span class="fontPrimary">Recepción</span> </span>
             </div>
-            <div class="bisectional_section">
+            <div class="bisectional_section"  (click)="selectOption(1)" [class.selectedOption]="checkSelectedOption(1)">
                 <span class="spanBlock"> ¿Tienes un solo empleado que funciona como caja y recepción?</span>
                 <span class="spanBlock"> Crea un usuario de <span class="fontPrimary">Caja & Recepción</span></span>
             </div>
 
         </div>
         <div class="buttonsection">
-            <button class="generalButton">Continuar</button>
+            <button class="generalButton bgColorSecondary"[class.disabledsubbtn]="!isSelectedOption" [disabled]="!isSelectedOption()" (click)="userTutorialStart()">Continuar</button>
         </div>
     </div>
 

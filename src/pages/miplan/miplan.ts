@@ -29,6 +29,7 @@ export class MiplanPage {
   /** Things from stripe from register-modal **/
   stripe = Stripe('pk_test_4CJTbKZki9tC21cGTx4rLPLO');
   card: any;
+
   sources:sources[] = new Array();
   selected_source:sources = null;
 
@@ -171,25 +172,29 @@ export class MiplanPage {
       this.subsData.subscription.field_cantidad = this.selectedTotal;
       this.subsData.subscription.field_plan_sus = this.selectedPlan
       this.subsData.subscription.field_adicionales = Number( this.subsData.subscription.field_adicionales ) + Number(this.selectedAditionals);
-      await this.subsManager.updateSus(this.subsData.subscription);
+      let ret = await this.subsManager.updateSus(this.subsData.subscription).toPromise();
+      this.loader.dismissLoader();
+      console.log('sus udate returned',ret);
+
     }else{
       await this.subsManager.subscribe( this.selectedPlanObject,this.selectedMethod);
+      this.loader.dismissLoader();
+      window.location.reload();
     }
+
     console.log('before this');
-    window.location.reload();
+    
     
   }
 
   /*STRIPE METHODS*/
 
   checkStripeSetup(){
-    console.log('checking stripe');
     let ret = (
       this.onplanchange && 
       this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) 
       /*&& ( this.subsData.subscription === null || this.subsData.subscription.plan === null)*/
       );
-      console.log('stripe ret is');
       return ret;
   }
 

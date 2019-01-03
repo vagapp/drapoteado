@@ -34,6 +34,9 @@ export class NuevousuarioModalPage {
   newUserCode:string;
   codeuser=false;
   codeuserNP=false; //if tutorial user is gotten by code this disables password show
+
+  selectedUsersOptions: number = 0;
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -73,6 +76,23 @@ export class NuevousuarioModalPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NuevousuarioModalPage');
+  }
+
+  selectOption( selected:number ){
+    this.selectedUsersOptions = Number(selected);
+
+  }
+
+  checkSelectedOption(selected:number ){
+    return Number(this.selectedUsersOptions) === Number(selected);
+  }
+
+  isSelectedOption(){
+    return this.selectedUsersOptions !== 0;
+  }
+
+  userTutorialStart(){
+    console.log('start tutorial');
   }
 
 

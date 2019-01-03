@@ -53,10 +53,11 @@ export class RegisterModalPage {
   }
 
   stripe = Stripe('pk_test_4CJTbKZki9tC21cGTx4rLPLO');
+  card: any;
   sources:sources[] = new Array();
   selected_source:sources = null;
   selected_plan:planes = null;
-  card: any;
+
   invitationCode:string = null;
   invitationshow:boolean = false;
   isnew = true;
