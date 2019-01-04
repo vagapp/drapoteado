@@ -27,11 +27,7 @@ import { SubscriptionDataProvider } from '../../providers/subscription-data/subs
 export class UsuariosPage {
   //usersd:userd[];
   get subusersLimit():number{
-    let ret = 0;
-    if(this.subsData.subscription && this.subsData.subscription.plan){
-      ret = this.subsData.subscription.plan.field_no_subcuentas;
-    }
-    return ret;
+   return this.subsData.getSubAccountsTotal();
   }
 
   constructor(
@@ -53,7 +49,9 @@ export class UsuariosPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad UsuariosPage');
+    console.log('getting subusers limit',this.subsData.getSubAccountsLeft());
     this.cargarUsuarios();
+    
   }
 
   /*
