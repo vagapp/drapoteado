@@ -119,6 +119,11 @@ export class NuevousuarioModalPage {
   }
 
 
+  
+
+
+
+
 
   createUserd(){
    if(this.createUserValidation()){
@@ -312,7 +317,9 @@ async addUserFromCode( user_data ){
         this.userMan.updateUserd( aux_user).subscribe(
           (val)=>{
             console.log("usuarioUpdated");
-          
+            if(!this.subsData.subscription.field_subusuarios) this.subsData.subscription.field_subusuarios = new Array();
+            this.subsData.subscription.field_subusuarios.push(val['uid']);
+            let obs = this.subsManager.updateUserSuscription().subscribe( (val)=>{console.log('updating subs',val);});
           },
           response => {
             console.log("POST call in error", response);

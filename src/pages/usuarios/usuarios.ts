@@ -29,6 +29,9 @@ export class UsuariosPage {
   get subusersLimit():number{
    return this.subsData.getSubAccountsTotal();
   }
+  get subUsersLeft(){
+    return this.subsData.getSubAccountsLeft();
+  }
 
   constructor(
     public navCtrl: NavController, 
@@ -113,8 +116,13 @@ export class UsuariosPage {
 }
 
   openNuevousuario(){
+    console.log('subs restantes',this.subsData.getSubAccountsLeft());
+    if(this.subsData.getSubAccountsLeft() > 0  ){ 
     let Modal = this.modalCtrl.create("NuevousuarioModalPage", undefined, { cssClass: "smallModal nuevousuarioModal" });
     Modal.present({});
+  }else{
+    this.alert.presentAlert('Error','No puedes agregar mas usuarios')
+  }
   }
 
   editUsuario( userd ){
@@ -136,18 +144,20 @@ export class UsuariosPage {
     this.alert.chooseAlert(
       'Remover',
       '¿Está seguro de que desea remover? El usuario no se borrará, solo dejará de administrar sus citas',
-      ()=>{  this.removeUsuario( userd ); },
+      ()=>{  /*this.removeUsuario( userd );*/ this.removeSubUserFromSubs(userd); },
       ()=>{}
     );
   }
 
   agregarusuariopop( userd ){
+  
     this.alert.chooseAlert(
       'Agregar',
       '¿Está seguro de que desea asignarse a este usuario? El usuario administrara sus citas',
       ()=>{  this.addUsuario( userd ); },
       ()=>{}
     );
+    
   }
 
 
