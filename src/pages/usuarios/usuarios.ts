@@ -144,7 +144,7 @@ export class UsuariosPage {
     this.alert.chooseAlert(
       'Remover',
       '¿Está seguro de que desea remover? El usuario no se borrará, solo dejará de administrar sus citas',
-      ()=>{  /*this.removeUsuario( userd );*/ this.removeSubUserFromSubs(userd); },
+      ()=>{  /*this.removeUsuario( userd );*/ /*this.removeSubUserFromSubs(userd);*/ this.completeSubUserRemove( userd ); },
       ()=>{}
     );
   }
@@ -240,6 +240,20 @@ export class UsuariosPage {
         }
       );
     }*/
+  }
+
+  async completeSubUserRemove( userd ){ //ya hice este metodo despues de tantos cambios maldicion
+    console.log('CHEKAME WEY');
+    this.loader.presentLoader('Removiendo usuario ...');
+    //await this.subusersManager.removeSubuser(userd);
+    await this.subusersManager.removeUserFromSubscription( userd );
+    console.log('CHEKAME WEY a ');
+    await this.subusersManager.removeSubuser(userd);
+    console.log('CHEKAME WEY b');
+    await this.subusersManager.cargarSubusuarios();
+    console.log('CHEKAME WEY c');
+    //console.log('is removed yet?');
+    this.loader.dismissLoader();
   }
 
 

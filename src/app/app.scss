@@ -48,6 +48,7 @@ ion-modal{
     margin-top: 20px;
     /* width: 80%; */
     padding-left: 20px;
+    justify-content: center;
 }
 
 .filters_wrapper .item-cover{
@@ -117,7 +118,7 @@ ion-app.ios [padding] .scroll-content{
 }
 
 .bigFont{
-    font-size: 4.5rem;
+    font-size: 3.5rem;
 }
 
 .bigSubFont{
@@ -293,8 +294,31 @@ border: 2px solid #B8B8B8;
 
 .section_button_home {
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+.home_halfbtn {
+    font-size: 1.8em;
+    margin: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    line-height: 1.5;
     justify-content: center;
+    align-content: center;
+}
+
+
+
+.icon_drapo{
+    height: 45px;
+    margin-right: 10px;
+}
+
+.icon_drapo_sm{
+    height: 15px;
+    margin-right: 10px;
 }
 
 .section_button_vertical button{
@@ -421,6 +445,7 @@ border: 0px solid #000000;
 .results_table th, .results_table td {
     min-width: 120px;
     width: 20%;
+    text-align: center;
 }
 
 .justify_center{
@@ -585,6 +610,7 @@ flex-flow: column;
 .results_table th, .results_table td{
     padding-left: 20px;
     height: 60px;
+    text-align: center;
 }
 
 .toolCol{

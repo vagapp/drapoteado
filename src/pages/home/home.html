@@ -1,7 +1,7 @@
 
 <header></header>
 <ion-content class="contentdown">
-  <div class="section_grid">
+  <div class="section_grid homegrid">
         <div class="section">
                 <span class="spanBlock bigFont"><span class="fontPrimary"><b>Bienvenido</b></span> <span class="spanBlock">{{this.userData.userData.name}} </span><!--<span class="rol_title" *ngIf="this.userData.checkUserFeature([this.userData.TIPO_CAJA,this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);" >( {{this.userData.getTipoUsuarioString(this.userData.userData.field_tipo_de_usuario['und'][0]['value'])}} )</span>--></span>
                 <span class="spanBlock bigSubFont">¿En qué podemos ayudarte hoy?</span>
@@ -11,8 +11,10 @@
                              <!--<span class="spanBlock bigSubFont">Citas Programadas para Hoy: <span class="fontPrimary">{{0}}</span></span>-->
                         </div>
                        <div class="section_button_home section_button_vertical">
-                        <button class="generalButton bgColorSecondary" (click)="openReportModal(this.reportesData.todayReport)">Resumen</button>
-                        <button  *ngIf="this.permissions.checkUserFeature([this.userData.TIPO_DOCTOR, this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);"  class="bgColorSecondary generalButton" (click)="openNuevaCita()">Agregar Nueva Cita</button>
+                        <span class="home_halfbtn" *ngIf="this.permissions.checkUserFeature([this.userData.TIPO_DOCTOR, this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);" (click)="openNuevaCita()"> <img src="assets/imgs/nueva-cita.svg"  class="icon_drapo"> Nueva Cita</span>
+                        <span class="home_halfbtn" (click)="openReportModal(this.reportesData.todayReport)">  <img src="assets/imgs/ver-resumen.svg"  class="icon_drapo">Ver Resumen</span>
+                        <!--<button class="generalButton bgColorSecondary" (click)="openReportModal(this.reportesData.todayReport)">Resumen</button>-->
+                        <!--<button  *ngIf="this.permissions.checkUserFeature([this.userData.TIPO_DOCTOR, this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);"  class="bgColorSecondary generalButton" (click)="openNuevaCita()">Nueva Cita</button>-->
                         </div>
         </div>
 
@@ -45,10 +47,10 @@
                             </div>
                             </div>-->
                             <div class="filters_wrapper">
-                                        <div><span class="midFont"> Paciente: </span><input [(ngModel)]="citasPresentator.pacienteFilter" (ngModelChange)="citasPresentator.filterChange();"  type="text" placeholder="paciente"> </div>
-                                         <span class="midFont"> Fecha: </span> 
-                                         <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="citasPresentator.dateFilterStart" (ngModelChange)="citasPresentator.filterChange();"></ion-datetime>
-                                         <span class="midFont remover"  *ngIf="citasPresentator.filteredCitas" (click)="citasPresentator.removeFilter();" >remover filtro</span>
+                                        <div><span class="midFont"> <img src="assets/imgs/buscar.svg"  class="icon_drapo"> </span><input [(ngModel)]="citasPresentator.pacienteFilter" (ngModelChange)="citasPresentator.filterChange();"  type="text" placeholder="Nombre del Paciente"> </div>
+                                         <span class="midFont"> <img src="assets/imgs/fecha.svg"  class="icon_drapo"></span> 
+                                         <ion-datetime  placeholder="Fecha" [(ngModel)]="citasPresentator.dateFilterStart" (ngModelChange)="citasPresentator.filterChange();" ></ion-datetime>
+                                         <span class="midFont remover"  *ngIf="citasPresentator.filteredCitas" (click)="citasPresentator.removeFilter();" > <img src="assets/imgs/x.svg"  class="icon_drapo_sm"></span>
                                         </div>
                                       <div class="Citas_grid result_wrapper">
                                         <!--<table class="results_table">

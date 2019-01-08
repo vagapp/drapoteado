@@ -184,6 +184,8 @@ export class CitasPresentatorProvider {
   
 
 filterChange(){
+  console.log('this.dateFilterStart',this.dateFilterStart);
+  //2019-01-08
   if(Number(this.dateFilterStart) != null && Number(this.dateFilterStart) !== 0){
   let date_Filter = DateProvider.dateWOffset(new Date(this.dateFilterStart));
   this.citasManager.citasData.customFilters = true;
@@ -198,7 +200,7 @@ filterChange(){
     this.citasManager.citasData.defaultSort();
     this.filteredCitas = true;
   }
-
+  console.log('this.dateFilterStart END',this.dateFilterStart);
   /*this.loader.presentLoader('cargando...');
   console.log("changing filter",this.dateFilterStart);
   let aux_fdate = DateProvider.dateWOffset(new Date(this.dateFilterStart));

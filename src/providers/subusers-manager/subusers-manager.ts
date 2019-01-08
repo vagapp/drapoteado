@@ -146,7 +146,8 @@ export class SubusersManagerProvider {
       SubusersManagerProvider.removeDoctorFromSubUser(userd,this.userData.userData.uid);
       console.log('actualizando usuario sin doc id ',userd);
       delete userd.field_sub_id;
-      await this.userMan.updateUserd(userd).toPromise();
+      console.log('field doctores is',userd.field_doctores);
+      await this.userMan.updateUserd(userd).subscribe((val)=>{console.log('removeSubuser updateuserd res',val);},(error)=>{ console.log('removeSubuser updateuserd error',error); });
       this.subusersData.removeUser(userd);
     }
 
