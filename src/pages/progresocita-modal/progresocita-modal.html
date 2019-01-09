@@ -54,10 +54,13 @@
                   </div>
                   <div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA) || ( ( progressController.activeCita.checkState(citasData.STATE_FINALIZADA) || progressController.activeCita.checkState(citasData.STATE_COBRO)) && permissions.checkUserPermission([userData.TIPO_DOCTOR]) )">
                     <div class="registerInput">
-                      <select [(ngModel)]="progressController.selectedService"  name="selectedService" class="input_select input" >
+                      <!--<select [(ngModel)]="progressController.selectedService"  name="selectedService" class="input_select input" >
                           <option selected disabled value="0">Select</option>
+                          <option value="-1">cortesía</option>
                           <option *ngFor="let service of progressController.available_services" value="{{service.Nid}}">{{service.title}}</option>
-                        </select>
+                        </select>-->
+                        <ion-checkbox>Cortesía</ion-checkbox>
+                        <ion-checkbox *ngFor="let service of progressController.available_services" (ionChange)="updateCheckedOptions(service.Nid,$event)">{{service.title}}</ion-checkbox>
                       </div>
                       <div class="midAlign">
                             <div class="register_button_section">

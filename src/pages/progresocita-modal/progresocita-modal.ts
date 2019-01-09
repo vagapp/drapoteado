@@ -59,6 +59,10 @@ export class ProgresocitaModalPage {
         );*/
       }
 
+      updateCheckedOptions(Nid,event){
+        console.log('updateCheckedOptions',Nid,event.checked);
+      }
+
       async finalizarActualCita(){
         this.progressController.finalizarCitaActiva();
         await this.citasPresentator.updateStateRequest( this.progressController.activeCita ,CitasDataProvider.STATE_COBRO );
