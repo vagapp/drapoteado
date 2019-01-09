@@ -27,6 +27,7 @@ export class Citas{
     doctor_playerid:string = null;
     caja_playerid:string = null;
     recepcion_playerid:string = null;
+    opendetail=false;
 
     
     

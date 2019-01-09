@@ -33,31 +33,25 @@
 
 <div class="ReportGrid">
 <div class="ReporteRow" *ngFor="let cita of this.reportPresentator.actualReport.citas">
-  <div class="ReporteRow_head">
-    <span class="rbh_span midFont"> <b [ngStyle]="{'color':cita.stateColor}">{{cita.getStateString()}}</b> </span>
-    <span class="rbh_span midFont"><b>Paciente:</b>{{cita.paciente}}</span>
-    <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"><b>Doctor:</b> {{cita.doctor_name}}</span>
-    <span class="rbh_span midFont"><b>Duración</b> <span class="fontHigh">{{cita.duracionText}}</span></span>
-    <!--<span class="rbh_span_toolbar">
-        <img src="assets/imgs/editar.svg" class="drap_edit_icon" />
-        <button class="bgColorPrimary generalButton">Eliminar</button>
-    </span>-->
-  </div>
-  <div class="ReporteRow_Services">
-    <b class="rpr_service midFont"> Servicios </b>
-    <span *ngFor="let servicio of cita.reporteServicios" class="rpr_service midFont"> {{servicio.title}} <span class="fontSecondary">${{servicio.costo}}</span></span>
-  </div>
-  <div class="ReporteRow_Totals">
-    <div class="rrt_left midFont"> <b>Costo</b> <span class="fontPrimary">${{cita.costo}}</span> </div>
-    
-    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Cobro</b> Total <span class="fontPrimary">${{cita.cobro}}</span> </div>
-    <div class="rrt_right midFont" *ngIf="cita.costo > cita.cobro"> <b>Adeudo</b> <span class="fontPrimary">${{cita.costo - cita.cobro}}</span> </div>
-    <div class="rrt_right midFont"  *ngIf="cita.costo <= cita.cobro"> <b>Ingreso</b> Total <span class="fontSecondary">${{cita.cobro}}</span> </div>
-    <div class="rrt_right midFont">  Efectivo <span class="fontSecondary">${{cita.cobroEfectivo}}</span> </div>
-    <div class="rrt_right midFont">  Tarjeta <span class="fontSecondary">${{cita.cobroTarjeta}}</span> </div>
-    <div class="rrt_right midFont">  Cheque <span class="fontSecondary">${{cita.cobroCheque}}</span> </div>
-    <div class="rrt_right midFont">  Facturado ${{cita.facturado}}</div>
-  </div>
+    <div class="ReporteRow_head">
+        <span class="rbh_span midFont" *ngIf="cita.opendetail" (click)="setOpendetail(cita,false);"> <img src="assets/imgs/chevron-verde.svg"  class="icon_drapo_sm"> </span>
+        <span class="rbh_span midFont" *ngIf="!cita.opendetail" (click)="setOpendetail(cita,true);"> <img src="assets/imgs/chrevron-rojo.svg"  class="icon_drapo_sm"> </span>
+        <span class="rbh_span midFont"> <span class="bold"> ">Paciente</span><span class="">{{ cita.paciente }}</span> </span>
+        <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"> <span class="bold">Doctor</span><span class="">{{ cita.doctor_name }}</span> </span>
+        <span class="rbh_span midFont"> <span class="bold">Caja</span><span class="">Nombre de caja </span> </span>
+        <span class="rbh_span midFont"> <span class="bold">Duracion</span><span class="">{{ cita.duracionText }}</span> </span>
+    </div>
+    <div class="ReporteRow_TotalServicios">
+        <span class="rrt_span midFont"> <span class="bold">Total de Servicios</span><span class="midFont">${{cita.costo}}</span></span>
+        <span class="rrt_span midFont"> <span class="bold">Efectivo</span><span class="midFont">${{cita.cobroEfectivo}}</span> </span>
+        <span class="rrt_span midFont"> <span class="bold">Tarjeta</span><span class="midFont">${{cita.cobroTarjeta}}</span> </span>
+        <span class="rrt_span midFont"> <span class="bold">Cheque</span><span class="midFont">${{cita.cobroCheque}}</span> </span>
+        <span class="rrt_span midFont"> <span class="bold">Facturado</span><span class="midFont">${{cita.facturado}}</span> </span>
+        <span class="rrt_span midFont" *ngIf="cita.costo > cita.cobro"> <span class="">Adeudo</span><span class="">${{cita.costo - cita.cobro}}</span> </span>
+    </div>
+    <div class="ReporteRow_Desglose" *ngIf="cita.opendetail">
+      <div class="ReporteRow_Desglose_row midFont" *ngFor="let servicio of cita.reporteServicios">{{servicio.title}}: ${{servicio.costo}}</div>
+    </div>
 </div>
 </div>
 <div class="ReportesTotales">

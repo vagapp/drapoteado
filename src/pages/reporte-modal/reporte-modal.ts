@@ -8,6 +8,7 @@ import { ReportesManagerProvider } from '../../providers/reportes-manager/report
 import { ReporteCitasProvider } from '../../providers/reporte-citas/reporte-citas';
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { Citas } from '../../providers/user-data/citas';
 
 
 /**
@@ -154,6 +155,11 @@ export class ReporteModalPage {
       
       dismiss() {
         this.viewCtrl.dismiss();
+      }
+
+      setOpendetail(cita:Citas, as:boolean){
+        console.log('setOpendetail ',cita,as);
+        cita.opendetail = as;
       }
 
 
