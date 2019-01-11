@@ -171,4 +171,9 @@ export class CitaProgressControllerProvider {
       console.log('added',this.activeCita.addedServices);
     }
 
+    checkChecked(Nid:number):boolean{
+      console.log('checkChecked',Nid);
+      return true;
+    }
+
 }
