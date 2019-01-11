@@ -61,6 +61,8 @@ export class ProgresocitaModalPage {
 
       updateCheckedOptions(Nid,event){
         console.log('updateCheckedOptions',Nid,event.checked);
+        this.progressController.updateCheckedOption(Nid,event.checked);
+        console.log('finish');
       }
 
       async finalizarActualCita(){

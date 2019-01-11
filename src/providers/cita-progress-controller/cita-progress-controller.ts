@@ -32,6 +32,9 @@ export class CitaProgressControllerProvider {
     costooverride:number
   };
 
+  checkboxMode:boolean = true;//checkbox mode porque quisieron checkbox pero no es tan viable a ver que pasa.
+  checkboxServicesList
+
   get CantidadRestante(){ return 0+ ( (Number(this.activeCita.costo)) - (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) ) ); }
 
 
@@ -121,6 +124,12 @@ export class CitaProgressControllerProvider {
     this.calcularCosto();
   }
 
+  removeServiceWnid( Nid:number ){
+    this.activeCita.removeServicioNid(Nid);
+    this.available_services = this.activeCita.getServiciosAvailable(this.activeCitaDoc.servicios);
+    this.calcularCosto();
+  }
+
   calcularCosto(){
     console.log('calculando costo');
     this.costoCita = 0;
@@ -149,6 +158,17 @@ export class CitaProgressControllerProvider {
       clearInterval(this.showinterval);
       this.showinterval = null;
       }
+    }
+
+    updateCheckedOption(Nid,State){
+      console.log('progresscontroller updateCheckedOption',Nid,State);
+      if(State){
+        this.selectedService = Nid;
+        this.addService();
+      }else{
+        this.removeServiceWnid(Nid);
+      }
+      console.log('added',this.activeCita.addedServices);
     }
 
 }

@@ -350,9 +350,13 @@ export class Citas{
    }
 
    removeServicio( servicio:servicios ):boolean {
-       let ret = false;
-       this.addedServices = this.addedServices.filter( (servicios)=>{ return Number(servicios.Nid) !== Number(servicio.Nid)});
-       return ret = true;
+     return this.removeServicioNid(Number(servicio.Nid));
+   }
+
+   removeServicioNid( Nid ):boolean{
+    let ret = false;
+    this.addedServices = this.addedServices.filter( (servicios)=>{ return Number(servicios.Nid) !== Number(Nid)});
+    return ret = true;
    }
 
    /**

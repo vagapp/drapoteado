@@ -39,12 +39,12 @@
         <div class="CitaDetailSections">
           <div class="CitaDetailSection borderRight">
             <b class="midFont">Servicios</b>
-            <div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA) || progressController.activeCita.checkState(citasData.STATE_FINALIZADA) || (progressController.activeCita.checkState(citasData.STATE_COBRO) && this.permissions.checkUserPermission([userData.TIPO_DOCTOR]))">
+            <!--<div class="CitaDetail_services" *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA) || progressController.activeCita.checkState(citasData.STATE_FINALIZADA) || (progressController.activeCita.checkState(citasData.STATE_COBRO) && this.permissions.checkUserPermission([userData.TIPO_DOCTOR]))">
                 <div class="progreso_service" *ngFor="let added of progressController.activeCita.addedServices">
-                <!--<b>{{added.Nid}}</b>-->
+               
                 {{added.title}} - <span class="fontSecondary">${{added.costo}}</span> <span (click)="progressController.removeService(added);" class="removeServicebtn" >x</span>
               </div>
-              </div>
+              </div>-->
             
               <div class="CitaDetail_services" *ngIf="! (progressController.activeCita.checkState(citasData.STATE_ACTIVA) || progressController.activeCita.checkState(citasData.STATE_FINALIZADA) || (progressController.activeCita.checkState(citasData.STATE_COBRO) && this.permissions.checkUserPermission([userData.TIPO_DOCTOR]))) ">
                     <div class="progreso_service" *ngFor="let added of progressController.activeCita.reporteServicios">
@@ -59,14 +59,14 @@
                           <option value="-1">cortesía</option>
                           <option *ngFor="let service of progressController.available_services" value="{{service.Nid}}">{{service.title}}</option>
                         </select>-->
-                        <ion-checkbox>Cortesía</ion-checkbox>
-                        <ion-checkbox *ngFor="let service of progressController.available_services" (ionChange)="updateCheckedOptions(service.Nid,$event)">{{service.title}}</ion-checkbox>
+                        <span class="checkbox_wrapper_progreso spanBlock"><ion-checkbox (ionChange)="updateCheckedOptions(-1,$event)"></ion-checkbox> Cortesía </span>
+                        <span class="checkbox_wrapper_progreso spanBlock" *ngFor="let service of progressController.activeCitaDoc.servicios" ><ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">${{service.costo}}</span> </span>
                       </div>
-                      <div class="midAlign">
+                      <!--<div class="midAlign">
                             <div class="register_button_section">
                             <button (click)="progressController.addService()"  class="bgColorSecondary generalButton">Agregar</button>
                             </div>
-                          </div>
+                          </div>-->
                   </div>
 
             </div>
