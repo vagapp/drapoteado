@@ -62,6 +62,7 @@ export class CitasPresentatorProvider {
     let saveDate = !this.progresSController.editfinish;
     console.log('editfinish is',saveDate);
     let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise();
+    //let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).subscribe((val)=>{console.log('wele a pedo',val),(error)=>{console.log('wele a pedo',error)}});
     if(Number(state) === CitasDataProvider.STATE_CONFIRMADA && cita.doctor_playerid){  //crear notificacion para doctor a quien le confirmaron la cita
       this.notiMan.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
     }

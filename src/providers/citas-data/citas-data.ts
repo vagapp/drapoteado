@@ -48,6 +48,8 @@ export class CitasDataProvider{
   public static STATE_CANCELADA_COLOR = '#800005';
   public static STATE_ELIMINADA_COLOR = '#800005';
 
+  public static SERVICIO_CORTESIA_NID = "1647";
+
 
   get STATE_PENDIENTE(){return CitasDataProvider.STATE_PENDIENTE;}
   get STATE_CONFIRMADA(){return CitasDataProvider.STATE_CONFIRMADA;}

@@ -12,6 +12,7 @@ import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
 import { CitaProgressControllerProvider } from '../../providers/cita-progress-controller/cita-progress-controller';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { IfObservable } from 'rxjs/observable/IfObservable';
 
 
 @IonicPage()
@@ -36,6 +37,10 @@ export class ProgresocitaModalPage {
     public progressController: CitaProgressControllerProvider,
     public permissions: PermissionsProvider
   ) {
+  }
+
+  get SERVICIO_CORTESIA_NID(){
+    return CitasDataProvider.SERVICIO_CORTESIA_NID;
   }
 
   ionViewDidLoad() {

@@ -40,7 +40,7 @@ export class CitaProgressControllerProvider {
 
   constructor(
     public citasManager: CitasManagerProvider,
-    public modalCtrl:ModalController
+    public modalCtrl:ModalController,
   ) {
   
   }
@@ -49,7 +49,7 @@ export class CitaProgressControllerProvider {
     this.cobroEfectivo=null;
     this.cobroTarjeta=null;
     this.cobroCheque=null;
-   
+  
     this.factura = 0;
     this.factura_cantidad = null;
   }
@@ -66,8 +66,10 @@ export class CitaProgressControllerProvider {
     //this.evalServicios();
     //this.calcularCosto();
     this.evalServicios();
+    this.setCortesia();
     this.calcularCosto();
     this.startInterval();
+    
     let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
     Modal.present({});
   }
@@ -116,6 +118,24 @@ export class CitaProgressControllerProvider {
         this.selectedService = 0;
        }
     }
+  }
+
+  setCortesia(){
+    let found = this.available_services.find((services)=>{ return Number(services.Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)});
+    if(!found){
+      const aux_serv = new servicios();
+      aux_serv.Nid = Number(CitasDataProvider.SERVICIO_CORTESIA_NID);
+      aux_serv.Uid = 1;
+      aux_serv.title = 'Cortesía';
+      aux_serv.costo = 0;
+      this.available_services.push(aux_serv);
+    }
+    console.log('adding cortesia',this.available_services);
+  }
+
+  unsetCortesia(){
+    this.available_services = this.available_services.filter((servicios)=>{ return Number(servicios.Nid) !== Number(CitasDataProvider.SERVICIO_CORTESIA_NID);  });
+    console.log('removing cortesia',this.available_services);
   }
 
   removeService( servicio:servicios ){

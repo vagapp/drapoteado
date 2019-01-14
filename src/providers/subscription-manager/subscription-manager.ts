@@ -321,4 +321,9 @@ export class SubscriptionManagerProvider {
   }
 */
 
+
+async pushSubUser( val ){ //este metodo se usa para agregar un subusuario a la suscripcion.
+
+}
+
 }
