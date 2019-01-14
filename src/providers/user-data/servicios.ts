@@ -6,6 +6,7 @@ export class servicios{
     Uid:number = null;
     title:string = null;
     costo:number = null;
+    order:number = 0;
 
     constructor(){
       

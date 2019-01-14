@@ -5,6 +5,7 @@ import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { servicios } from '../user-data/servicios';
 import { BaseUrlProvider } from '../base-url/base-url';
 import { Observable } from 'rxjs/Observable';
+import { CitasDataProvider } from '../citas-data/citas-data';
 
 /*
   Generated class for the ServiciosManagerProvider provider.
@@ -30,7 +31,35 @@ export class ServiciosManagerProvider {
     console.log(this.docData.doctoresIDs);
     let servicios_data = await this.requestServiciosDoctors(this.docData.doctoresIDs).toPromise();
     for(let servicio_data of servicios_data){this.addServicio(servicio_data);}
-    this.docData.doctores.forEach(doc => {doc.setServicios(this.servicios);});
+    this.docData.doctores.forEach(doc => {
+      doc.setServicios(this.servicios);
+      doc.servicios.push(this.getCortesia());
+      doc.servicios = this.defaultSort(doc.servicios);
+    });
+  }
+
+  defaultSort(servicios:servicios[]){
+    return servicios.sort((a,b)=>{
+      if(a.order < b.order){return 1;}
+      if(a.order > b.order){return -1;}
+      if(a.order === b.order){
+        if (a.title < b.title)
+        return -1;
+      if (a.title > b.title)
+        return 1;
+     return 0;
+      }
+    });
+  }
+  
+  getCortesia(){
+    const aux_serv = new servicios();
+    aux_serv.Nid = Number(CitasDataProvider.SERVICIO_CORTESIA_NID);
+    aux_serv.Uid = 1;
+    aux_serv.title = 'Cortesía';
+    aux_serv.costo = 0;
+    aux_serv.order = 5;
+    return aux_serv;
   }
 
   /**

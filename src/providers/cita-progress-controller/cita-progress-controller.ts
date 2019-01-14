@@ -66,7 +66,7 @@ export class CitaProgressControllerProvider {
     //this.evalServicios();
     //this.calcularCosto();
     this.evalServicios();
-    this.setCortesia();
+    //this.setCortesia();
     this.calcularCosto();
     this.startInterval();
     
@@ -112,7 +112,9 @@ export class CitaProgressControllerProvider {
     console.log(this.selectedService);
     if(Number(this.selectedService) !== Number(0)){
       let service_to_add = this.available_services.find((services)=>{ return Number(services.Nid) === Number(this.selectedService)});
+      console.log('service to add',service_to_add);
       if(this.activeCita.addServicio(service_to_add)){
+        console.log('servicio added');
         this.available_services = this.activeCita.getServiciosAvailable(this.activeCitaDoc.servicios);
         this.calcularCosto();
         this.selectedService = 0;
@@ -120,7 +122,7 @@ export class CitaProgressControllerProvider {
     }
   }
 
-  setCortesia(){
+  /*setCortesia(){
     let found = this.available_services.find((services)=>{ return Number(services.Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)});
     if(!found){
       const aux_serv = new servicios();
@@ -136,7 +138,7 @@ export class CitaProgressControllerProvider {
   unsetCortesia(){
     this.available_services = this.available_services.filter((servicios)=>{ return Number(servicios.Nid) !== Number(CitasDataProvider.SERVICIO_CORTESIA_NID);  });
     console.log('removing cortesia',this.available_services);
-  }
+  }*/
 
   removeService( servicio:servicios ){
     this.activeCita.removeServicio(servicio);

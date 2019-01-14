@@ -340,10 +340,12 @@ export class Citas{
     }
 
    addServicio( servicio:servicios ):boolean{
+       console.log('adding servicio',servicio);
        let ret = false;
        if(!servicio) return false;
         if(!this.checkServicio(servicio)){
             this.addedServices.push(servicio);
+            console.log('addServicio added services ',this.addedServices);
             ret = true;
         }
         return ret;
