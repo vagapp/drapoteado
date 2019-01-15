@@ -9,6 +9,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Clipboard } from '@ionic-native/clipboard';
 import { OneSignal } from '@ionic-native/onesignal';
 
+import { ConektaComponent } from '../components/conekta/conekta';
 import { ComponentsModule } from '../components/components.module';
 import { DirectivesModule } from '../directives/directives.module';
 import { UserDataProvider } from '../providers/user-data/user-data';
@@ -143,6 +144,7 @@ import { JsonUtilProvider } from '../providers/json-util/json-util';
     PermissionsProvider,
     TutorialProvider,
     JsonUtilProvider,
+    ConektaComponent
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

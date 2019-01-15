@@ -9,6 +9,7 @@ import { planes } from '../../providers/user-data/planes';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { sources } from '../../providers/user-data/sources';
+import { ConektaComponent } from '../../components/conekta/conekta'
 
 declare var Stripe;
 
@@ -27,7 +28,7 @@ declare var Stripe;
 })
 export class MiplanPage {
   /** Things from stripe from register-modal **/
-  stripe = Stripe('pk_test_4CJTbKZki9tC21cGTx4rLPLO');
+  //stripe = Stripe('pk_test_4CJTbKZki9tC21cGTx4rLPLO');
   card: any;
 
   sources:sources[] = new Array();
@@ -89,14 +90,51 @@ export class MiplanPage {
     public subsData: SubscriptionDataProvider,
     public alert:AlertProvider,
     public loader:LoaderProvider,
-    public subsManager: SubscriptionManagerProvider
+    public subsManager: SubscriptionManagerProvider,
+    public conekta: ConektaComponent
   ) {
+    conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
+      //Este success se ejecuta con el javascript se cargó correctamente
+      console.log(c);
+    }).catch((err) => {
+      //Este error se ejecuta cuando el javascript no cargó, Ej. Error de conexión
+      console.log(err);
+    });
   }
+
+  /*ERROR Y SUCCESS CONEKTA*/
+  async successToken(token:any){
+    /*brand: "visa"
+    cardNumber: "4242"
+    id: "tok_2jxTTjKKjFegNxbJK"
+    livemode: false
+    object: "token"
+    used: false*/
+    //Esta función se agrega al atributo (successToken) para recibir el resultado de generar el token
+    let cu_src_data = {
+      id: token.id,
+      last4: token.cardNumber,
+      client_secret: token.id,
+      brand: token.brand
+    };
+    this.userData.userData.field_src_json_info['und'].push({value: JSON.stringify(cu_src_data)});
+    let updateUser_res = await this.userData.updateUser().toPromise();
+    this.loadSources();
+
+    if(!this.enabledButton) return false;
+    window.location.reload();
+    console.log(token);
+  }
+  errorToken(error:any){
+    //Esta función se agrega al atributo (errorToken) para recibir lo errores al momento de generar un token
+    console.log(error);
+  }
+  /*FIN ERROR Y SUCCESS CONEKTA*/
 
   
   ionViewDidEnter(){
     console.log('ionViewDidEnter miplan.ts');
-    this.setupStripe();
+    //this.setupStripe();
     this.loadSources();
   }
 
@@ -124,7 +162,7 @@ export class MiplanPage {
 
   activateChangePlanMode(){
     this.onplanchange = true;
-    this.setupStripe();
+    //this.setupStripe();
     this.loadSources();
   }
 
@@ -199,7 +237,7 @@ export class MiplanPage {
   }
 
 
-  setupStripe(){
+  /*setupStripe(){
     console.log('setting stripe');
     if(this.checkStripeSetup()){
       console.log(' stripe checked and needed');
@@ -254,7 +292,7 @@ export class MiplanPage {
                             };
           this.userData.userData.field_src_json_info['und'].push({value: JSON.stringify(cu_src_data)});
         }
-        /*let updateUser_res = */ /*await this.userData.updateUser().subscribe((val)=>{ console.log(val);},(error)=>{ console.log(error) });*/
+        //let updateUser_res =  /await this.userData.updateUser().subscribe((val)=>{ console.log(val);},(error)=>{ console.log(error) });
         let updateUser_res = await this.userData.updateUser().toPromise();
         this.loadSources();
 
@@ -262,10 +300,10 @@ export class MiplanPage {
         //await this.subsManager.subscribe( this.selectedPlanObject,this.selected_source);
         window.location.reload();
         
+        });
       });
-    });
-  }
-}
+    }
+  }*/
 
 loadSources(){
   //Debugger.log(['loading srcs']);

@@ -4,6 +4,7 @@ import { IonicModule } from 'ionic-angular';
 import { FooterComponent } from './footer/footer';
 import { DirectivesModule } from '../directives/directives.module';
 import { NlistComponent } from './nlist/nlist';
+import { ConektaComponent } from './conekta/conekta';
 
 
 
@@ -13,6 +14,7 @@ import { NlistComponent } from './nlist/nlist';
     HeaderComponent,
     FooterComponent,
     NlistComponent,
+    ConektaComponent
 
     
 ],
@@ -23,6 +25,7 @@ import { NlistComponent } from './nlist/nlist';
 	exports: [HeaderComponent,
     FooterComponent,
     NlistComponent,
+    ConektaComponent
 
     
 ]
