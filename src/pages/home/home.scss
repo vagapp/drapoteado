@@ -10,7 +10,7 @@ page-home {
     }
     
   .filters_wrapper div{
-      margin: 0 50px;
+      margin: 0px;
   }
 
     .datetime-md{
@@ -29,4 +29,16 @@ page-home {
             min-width: 1000px;
         }
     }
+
+    @media screen and (max-width: 1200px){
+        .tableButton{
+            display: block;
+        }
+        .toolCol {
+            text-align: center !important;
+            padding: .8em 0 !important;
+        }
+    
+    }
 }
+

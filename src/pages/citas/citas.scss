@@ -3,4 +3,14 @@ page-citas {
         margin-top: 50px;
         padding: 0;
     }
+
+    @media screen and (max-width: 1200px){
+        .tableButton{
+            display: block;
+        }
+        .toolCol {
+            text-align: center !important;
+        }
+    
+    }
 }

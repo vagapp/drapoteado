@@ -86,7 +86,58 @@ page-miplan {
         cursor: pointer;
     }
 
-  
+    @media screen and (max-width: 1200px){
+        .bisectional {
+            display: block;
+            padding: 1em;
+            margin: 1em;
+        }
+       .bisectional_section {
+            width: 80%;
+            padding: 5px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .neuvo_metodo_pago {
+            border-top:1px solid lightgray;
+            margin-top:1em;
+        }
+    
+    }
+
+    @media screen and (max-width: 1030px){
+
+       .plan_section {
+        grid-template-columns: 1fr;
+        width: 80%;
+        min-width: auto;
+        text-align: center;
+        grid-row-gap: 10px;     
+        }
+
+        .plan_section .largeFont {
+            font-size: 2rem;
+        }
+
+        .control {
+            margin-bottom: 0px;
+            font-size: 25px;
+        }
+
+        .control input {
+            position: initial;
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .control_indicator {
+            position: absolute;        
+            left: 50%;
+            top: 0%;
+        }
+
+    }
 
 
 }
