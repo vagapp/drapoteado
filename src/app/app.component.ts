@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, LoadingController, ModalController } from 'ionic-angular';
+import { Nav, Platform, LoadingController, ModalController, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { UserDataProvider } from '../providers/user-data/user-data';
@@ -55,8 +55,9 @@ export class MyApp {
     public subscriptionManager: SubscriptionManagerProvider,
     public subUserMan: SubusersManagerProvider,
     public perm: PermissionsProvider,
-    public tutorial: TutorialProvider
+    public tutorial: TutorialProvider,
   ) {
+    this.rootPage = 'LoginPage';
     this.startdate = new Date().getTime();
     this.initializeApp();
     this.pages = [

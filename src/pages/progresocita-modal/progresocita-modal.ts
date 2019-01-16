@@ -13,6 +13,7 @@ import { CitasPresentatorProvider } from '../../providers/citas-presentator/cita
 import { CitaProgressControllerProvider } from '../../providers/cita-progress-controller/cita-progress-controller';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { IfObservable } from 'rxjs/observable/IfObservable';
+import { BaseUrlProvider } from '../../providers/base-url/base-url';
 
 
 @IonicPage()
@@ -36,6 +37,7 @@ export class ProgresocitaModalPage {
     public citasPresentator: CitasPresentatorProvider,
     public progressController: CitaProgressControllerProvider,
     public permissions: PermissionsProvider
+   
   ) {
   }
 

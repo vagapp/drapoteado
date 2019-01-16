@@ -22,5 +22,11 @@ export class BaseUrlProvider {
   get baseUrl():string{  return `${this.protocol}${this.hostname}`; }
   get backendUrl():string{  return `${this.baseUrl}backend/`; }
   get endpointUrl():string{  return `${this.backendUrl}appoint/`; }
+  get HomeUrl():string{ return window.location.href.replace( /[\?#].*|$/, "#/home" ); }
+  
+  locationReload(){ //goes home, then reloads location. this prevents some template errors.
+    window.location.href = this.HomeUrl;
+    window.location.reload();
+  }
 
 }

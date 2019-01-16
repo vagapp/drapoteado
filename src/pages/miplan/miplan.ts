@@ -10,6 +10,8 @@ import { LoaderProvider } from '../../providers/loader/loader';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { sources } from '../../providers/user-data/sources';
 import { ConektaComponent } from '../../components/conekta/conekta'
+import { HomePage } from '../home/home';
+import { BaseUrlProvider } from '../../providers/base-url/base-url';
 
 declare var Stripe;
 
@@ -64,9 +66,9 @@ export class MiplanPage {
       if(this.selectedAditionals += 0 ){
         ret += Number(this.selectedAditionals*40);
       }
-      if(this.subsData.subscription){
+     /* if(this.subsData.subscription){
       ret += Number(this.subsData.subscription.field_adicionales*40);
-    }
+    }*/
     }
     return ret;
     }
@@ -91,7 +93,8 @@ export class MiplanPage {
     public alert:AlertProvider,
     public loader:LoaderProvider,
     public subsManager: SubscriptionManagerProvider,
-    public conekta: ConektaComponent
+    public conekta: ConektaComponent,
+    public bu: BaseUrlProvider
   ) {
     conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
       //Este success se ejecuta con el javascript se cargó correctamente
@@ -122,7 +125,7 @@ export class MiplanPage {
     this.loadSources();
 
     if(!this.enabledButton) return false;
-    window.location.reload();
+    this.bu.locationReload();
     console.log(token);
   }
   errorToken(error:any){
@@ -161,27 +164,32 @@ export class MiplanPage {
   }
 
   activateChangePlanMode(){
-    this.onplanchange = true;
+   
     //this.setupStripe();
+    console.log(' this.subsData.subscription', this.subsData.subscription);
+    this.selectedAditionals = Number(this.subsData.subscription.field_adicionales);
+    this.onplanchange = true;
     this.loadSources();
   }
 
   editar(){
     console.log('change to onplanchange true');
     this.activateChangePlanMode();
-   
   }
   async guardar(){
     console.log('saving to  onplanchange false');
     if(this.guardar_basic_validation()){
     await this.suscribirse();
     this.onplanchange = false;
+    
     }
   }  
 
   guardar_basic_validation():boolean{
     let ret = true;
+    console.log('guardar_basic_validation',this.selectedPlan);
     if(!this.selectedPlan){  ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un plan'); }
+    console.log('guardar_basic_validation ret',ret);
     //if(!this.selectedMethod){ ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un Método de Pago'); }
     return ret;
   }
@@ -200,24 +208,28 @@ export class MiplanPage {
 
 
   async suscribirse(){
+    console.log('suscribirse start');
     if(!this.enabledButton()) return false;
     this.loader.presentLoader('Subscribiendo ...');
-    console.log(this.selectedMethod);
-    console.log(this.selectedPlanObject);
+    console.log('suscribirse this.selectedMethod',this.selectedMethod);
+    console.log('suscribirse this.selectedPlanObject',this.selectedPlanObject);
     //Tengo para crear una suscripcion, pero no para editar una suscripcion. vamos a hacer un codigo para editar suscripcion.
     //must set custom price.
     if(this.subsManager.checkForSubscription()){ 
+      console.log('checked for subs did tru');
       this.subsData.subscription.field_cantidad = this.selectedTotal;
       this.subsData.subscription.field_plan_sus = this.selectedPlan
-      this.subsData.subscription.field_adicionales = Number( this.subsData.subscription.field_adicionales ) + Number(this.selectedAditionals);
+      this.subsData.subscription.field_adicionales = Number(this.selectedAditionals);
       let ret = await this.subsManager.updateSus(this.subsData.subscription).toPromise();
       this.loader.dismissLoader();
       console.log('sus udate returned',ret);
+      this.bu.locationReload();
 
     }else{
       await this.subsManager.subscribe( this.selectedPlanObject,this.selectedMethod);
       this.loader.dismissLoader();
-      window.location.reload();
+      this.bu.locationReload();
+    
     }
 
     console.log('before this');
@@ -327,6 +339,7 @@ selectCard( input_src:sources ){
 
 
   enabledButton():boolean{
+    console.log('enabledButton',this.selectedPlan !== null);
     //return this.selected_source !== null && this.selected_plan !== null;
     return this.selectedPlan !== null;
   }

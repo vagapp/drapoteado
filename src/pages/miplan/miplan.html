@@ -5,10 +5,15 @@
       <span class="spanBlock midFont"><b>Mi Plan</b></span>
       <span class="spanBlock midSubFont">actualiza, cambia o cancela tu plan</span>
     </div>
+    <button class="generalButton bgColorPrimary " *ngIf="onplanchange" (click)="cancelar()" >Cancelar</button>
     <div class="modalPage_lpane" *ngIf="!onplanchange && subsData.subscription">
+       
+       
       <span class="spanBlock midFont">Total de tu suscripción mensual: <span class="fontPrimary bold">${{subsData.subscription.field_cantidad}}</span> </span>
       <span class="spanBlock midSubFont"> vence al {{subsData.subscription.field_next_cobro}}</span>
+      <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()" >Editar</button>
     </div>
+   
     </div>
     <!-- Seccion con informacion de planes  -->
 
@@ -66,9 +71,10 @@
         <span class="spanBlock" > 
           <span class="operator" (click)="operateExtra(-1)" >-</span><input type="number" [(ngModel)]="this.selectedAditionals"/><span class="operator" (click)="operateExtra(1)">+</span>
         </span>
-        <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span></span>
+       <!-- <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span></span>-->
         <span class="spanBlock midSubFont"> añadir <span class="fontPrimary">{{this.selectedAditionals}} adicionales</span> por <span class="fontPrimary">${{this.selectedAditionals*40}}</span></span>
-        <span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">${{(this.selectedAditionals*40) + (this.subsData.subscription.field_adicionales*40)}}.00</span></span>
+        <!--<span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">${{(this.selectedAditionals*40) + (this.subsData.subscription.field_adicionales*40)}}.00</span></span>-->
+        <span class="spanBlock midFont" *ngIf="!onplanchange"> Total de subusuarios:  <span class="fontPrimary">${{(this.selectedAditionals*40)}}.00</span></span>
       </div> <!-- fin de usuarios adicionales onplanchange-->
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
