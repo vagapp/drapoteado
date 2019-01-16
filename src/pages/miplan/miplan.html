@@ -5,7 +5,10 @@
       <span class="spanBlock midFont"><b>Mi Plan</b></span>
       <span class="spanBlock midSubFont">actualiza, cambia o cancela tu plan</span>
     </div>
+    <div class="modalPage_lpane" *ngIf="onplanchange">
+    <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup()"  (click)="guardar()" >Guardar</button>
     <button class="generalButton bgColorPrimary " *ngIf="onplanchange" (click)="cancelar()" >Cancelar</button>
+    </div>
     <div class="modalPage_lpane" *ngIf="!onplanchange && subsData.subscription">
        
        
