@@ -9,20 +9,7 @@ import { ReporteCitasProvider } from '../../providers/reporte-citas/reporte-cita
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { Citas } from '../../providers/user-data/citas';
-
-
-import { ModalController } from 'ionic-angular';
-
-import { CitasDataProvider } from '../../providers/citas-data/citas-data';
-import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
-import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
-
-import { AlertProvider } from '../../providers/alert/alert';
-import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
-import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
-import { DateProvider } from '../../providers/date/date';
-
-
+import {Platform} from 'ionic-angular';
 /**
  * Generated class for the ReportePage page.
  *
@@ -38,7 +25,7 @@ import { DateProvider } from '../../providers/date/date';
 })
 export class ReportePage {
   
-    
+    smallMode:boolean = false;
 
   constructor(
     public navCtrl: NavController, 
@@ -48,13 +35,30 @@ export class ReportePage {
     public reportesManager: ReportesManagerProvider,
     public loader: LoaderProvider,
     public reportPresentator: ReportPresentatorProvider,
-    public permissions:PermissionsProvider
+    public permissions:PermissionsProvider,
+    public plat: Platform
   ) {
    
   }
 
   ionViewDidLoad() {
-    
+    this.setsmallMode();
+  }
+
+  verTotales(){
+    this.reportPresentator.openTicket();
+  }
+
+  setsmallMode(){
+    console.log('setsmallmode');
+    this.plat.ready().then((readySource) => {
+      if(this.plat.width() < 1000){
+        this.smallMode = true;
+      }
+      //console.log('Width: ' + this.plat.width());
+      //console.log('Height: ' + this.plat.height());
+    });
+    this.smallMode = true;
   }
 
   /**

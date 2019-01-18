@@ -43,6 +43,7 @@ export class Citas{
 
     get doctor_name(){return this.data.doctor_name;}
     get doctor_alias(){return this.data.doctor_alias;}
+    get caja_name(){ return this.data.field_caja_nombre.und[0].value;}
     get paciente(){ return this.data.field_paciente.und[0].value;}
     get costo(){return Number(this.data.field_costo_sobrescribir.und[0].value);}
     get cobro(){return Number(this.data.field_cobro.und[0].value)}
@@ -86,6 +87,7 @@ export class Citas{
           this.data.field_retrasda.und[0].value = data_input.field_retrasda;
           this.data.field_hora_cobromsb.und[0].value = 0;
           this.data.field_fecha_reporte.und[0].value = 0;
+          this.data.field_caja_nombre.und[0].value = data_input.field_caja_nombre ? data_input.field_caja_nombre : "sin nombre";
           if(data_input.field_fecha_reporte)  this.data.field_fecha_reporte.und[0].value = data_input.field_fecha_reporte;
           if(data_input.field_hora_cobromsb)  this.data.field_hora_cobromsb.und[0].value = data_input.field_hora_cobromsb;
           if(data_input.field_hora_iniciomsb) this.data.field_hora_iniciomsb.und[0].value = Number(data_input.field_hora_iniciomsb.value);

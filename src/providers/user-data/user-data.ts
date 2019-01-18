@@ -784,6 +784,7 @@ export class UserDataProvider {
       field_fecha_reporte:{und:[{value:0}]},
       field_facturar:{und:[{value:0}]},
       field_facturar_cantidad:{und:[{value:0}]},
+      field_caja_nombre:{und:[{value:""}]},
     }
   }
 
@@ -833,6 +834,7 @@ export class UserDataProvider {
         field_stripe_customer_id:{und:[{value: ""}]},
         field_src_json_info:{und:[{value: ""}]},
         field_reference_user:{und:[0]},
+        
     }
   }
 }
@@ -880,6 +882,7 @@ export interface citasData{
     field_fecha_reporte:{und:[{value:number}]},
     field_facturar:{und:[{value:number}]},
     field_facturar_cantidad:{und:[{value:number}]},
+    field_caja_nombre:{und:[{value:""}]},
     
 }
 

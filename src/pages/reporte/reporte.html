@@ -12,11 +12,9 @@
 <div class="modalPage_toolbar">
     <div class="info_tool" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])">
         <span class="spanBlock midFont"><b>Alias</b></span>
-        <span class="spanBlock fonHigh midFont">Alias</span>
+        <span class="spanBlock fonHigh midFont">{{this.docAlias}}</span>
       </div>
       <div class="info_tool" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])">
-          <!--<span class="spanBlock midFont"><b>No.</b></span>-->
-          <!--span class="spanBlock midFont"><b>01</b></span>-->
         </div>
         <div class="info_tool">
             <span class="spanBlock midFont"><b>Fecha</b></span>
@@ -33,8 +31,9 @@
       <span class="rbh_span midFont" *ngIf="!cita.opendetail" (click)="setOpendetail(cita,true);"> <img src="assets/imgs/chrevron-rojo.svg"  class="icon_drapo_sm"> </span>
       <span class="rbh_span midFont"> <span class="bold">Paciente</span><span class="">{{ cita.paciente }}</span> </span>
       <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"> <span class="bold">Doctor</span><span class="">{{ cita.doctor_name }}</span> </span>
-      <span class="rbh_span midFont"> <span class="bold">Caja</span><span class="">Nombre de caja </span> </span>
+      <span class="rbh_span midFont"> <span class="bold">Caja</span><span class="">{{cita.caja_name}} </span> </span>
       <span class="rbh_span midFont"> <span class="bold">Duracion</span><span class="fontHigh">{{ cita.duracionText }}</span> </span>
+      <span class="rbh_span midFont"> <span class="bold">Estado</span><span class="fontHigh"  [ngStyle]="{'color':cita.stateColor}">{{ cita.getStateString() }}</span> </span>
   </div>
   <div class="ReporteRow_TotalServicios">
       <span class="rrt_span midFont"> <span class="bold">Total de Servicios</span><span class="midFont fontSecondary">${{cita.costo}}</span></span>
@@ -53,7 +52,7 @@
   </div>
 </div>
 </div>
-<div class="ReportesTotales">
+<div class="ReportesTotales" *ngIf="!smallMode">
   <div class="servicios_totales">
       <span class="bold">No. de Servicios</span>
       <div class="ticket_row midMainFont" *ngFor="let servres of reportPresentator.serviciosResume">{{servres.title}}<span class="midFont fontSecondary">{{servres.times}}</span></div>
@@ -76,9 +75,12 @@
     <span class="toin_span midSubFont">Cheques:<span class="fontSecondary">${{reportPresentator.totalCheques}}</span></span>
     <span class="toin_span midSubFont">Facturado:<span class="fontSecondary">${{reportPresentator.facturadoTotal}}</span></span>
     <!--<span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontPrimary">${{this.reportPresentator.cajacuentas}}</span></span>-->
-    <span class="toin_span midSubFont">Pendiente:<span class="fontPrimary">${{this.reportPresentator.cajaAdeudo+this.reportPresentator.cajacuentas}}</span></span>  
+    <span class="toin_span midSubFont">Pendiente:<span class="fontPrimary">${{this.reportPresentator.pendiente}}</span></span>  
+</div>
 </div>
 
-
+<div class="floating_buttons" *ngIf="smallMode">
+    <button class="bgColorSecondary floatingbutton" (click)="verTotales()"> Ver Totales </button>
+    <button class="bgColorSecondary floatingbutton" (click)="generatePDF()"> Exportar </button>
 </div>
 </ion-content>

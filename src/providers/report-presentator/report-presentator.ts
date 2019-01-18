@@ -13,6 +13,8 @@ import { ReporteServiciosProvider } from '../reporte-servicios/reporte-servicios
 import { ReportesDataProvider } from '../reportes-data/reportes-data';
 import { ReportesManagerProvider } from '../reportes-manager/reportes-manager';
 import { ModalController } from 'ionic-angular';
+import { DoctoresDataProvider } from '../doctores-data/doctores-data';
+import { SubusersDataProvider } from '../subusers-data/subusers-data';
 
 /*
   Generated class for the ReportPresentatorProvider provider.
@@ -29,6 +31,8 @@ export class ReportPresentatorProvider {
 actualReport:reportes = null;
 type:number = 1;
 docuid:number = null;
+docName:string = null;
+docAlias:string = null;
 
   noCitas:number;
   noShow:number;
@@ -53,6 +57,10 @@ docuid:number = null;
 	cajacuentas:number;
   cajaAdeudo:number;
 
+  get pendiente():number{
+    return Number(this.cajaAdeudo ? this.cajaAdeudo: 0 )+Number(this.cajacuentas ? this.cajacuentas: 0);
+  }
+
   serviciosResume:{
     nid:number,
     title:string,
@@ -67,6 +75,8 @@ docuid:number = null;
     public reporteServicios: ReporteServiciosProvider,
     public loader: LoaderProvider,
     public userData: UserDataProvider,
+    public docData: DoctoresDataProvider,
+    public subUserData: SubusersDataProvider,
     public reportesData: ReportesDataProvider,
     public reportesManager: ReportesManagerProvider,
     public modalCtrl: ModalController
@@ -83,6 +93,7 @@ docuid:number = null;
     let Modal = this.modalCtrl.create("ReporteModalPage", undefined, { cssClass: "bigModal reportModal" });
     this.loader.dismissLoader();
     Modal.present({});*/
+    
     this.openReporte(report);
   }
 
@@ -113,7 +124,9 @@ async openReporte( report:reportes = null){
 }
 
 async loadReportNM(report:reportes = null, loadReport:boolean = true){ //este metodo lo cree a partir de querer abrir el reporte no en modal para cargar el reporte y retornar un valor que indique que esta cargado y abrir la pagina en el layout.
-  console.log('loadReportNM');
+  console.log('subUsers',this.subUserData.subUsers);
+    console.log('subscriptionSubUsers',this.subUserData.subscriptionSubUsers);
+  console.log('loadReportNM',loadReport);
   this.loader.presentLoader('Cargando Reporte ...');
   await this.setReport(report);
   if(loadReport) await this.loadReporte();
@@ -150,6 +163,12 @@ async openReportGenerate( report:reportes = null ){
 
   async loadReportCitas(){
     if(Number(this.docuid) === 0){ this.docuid = null; }
+    if(this.docuid !== null ){
+      const aux_doc = this.docData.getDoctorByUid(this.docuid);
+      this.docName = aux_doc.name;
+      this.docAlias = aux_doc.field_alias;
+      console.log('docfound in report is',aux_doc);
+    }
     await this.reporteCitas.reporteLoadCitas(this.actualReport, this.docuid);
   }
 

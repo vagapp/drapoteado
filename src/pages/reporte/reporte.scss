@@ -3,6 +3,22 @@ page-reporte {
         margin-top: 50px;
         padding: 0;
     }
+
+    .floatingbutton {
+        display: inline-block;
+        padding: 20px;
+        margin: 20px;
+    }
+
+    .floating_buttons {
+        position: absolute;
+        bottom: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: row;
+        width: 100%;
+    }
     
     .ReportGrid{
         display: -webkit-flex;
