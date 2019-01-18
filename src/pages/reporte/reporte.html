@@ -1,0 +1,84 @@
+<header></header>
+<ion-content id="reporte_identifier">
+  <div class="modal_closer"  (click)="this.dismiss();">Volver</div>
+<div class="reporte_header">
+<div class="modalPage_header">
+<div class="modalPage_logo"><img src="assets/imgs/reportes.svg"/></div>
+<div class="modalPage_title">
+  <span class="spanBlock midFont"><b>Resumen Diaro</b></span>
+  <span class="spanBlock midSubFont">Resumen de tu actvidad durante el día de hoy</span>
+</div>
+</div>
+<div class="modalPage_toolbar">
+    <div class="info_tool" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])">
+        <span class="spanBlock midFont"><b>Alias</b></span>
+        <span class="spanBlock fonHigh midFont">Alias</span>
+      </div>
+      <div class="info_tool" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])">
+          <!--<span class="spanBlock midFont"><b>No.</b></span>-->
+          <!--span class="spanBlock midFont"><b>01</b></span>-->
+        </div>
+        <div class="info_tool">
+            <span class="spanBlock midFont"><b>Fecha</b></span>
+            <span class="spanBlock fontSecondary midFont">{{this.reportPresentator.actualReport.dateString}}</span>
+          </div>
+  <button class="bgColorSecondary generalButton" (click)="generatePDF()" >Exportar</button>
+</div>
+</div>
+
+<div class="ReportGrid">
+<div class="ReporteRow" *ngFor="let cita of this.reportPresentator.actualReport.citas">
+  <div class="ReporteRow_head">
+      <span class="rbh_span midFont" *ngIf="cita.opendetail" (click)="setOpendetail(cita,false);"> <img src="assets/imgs/chevron-verde.svg"  class="icon_drapo_sm"> </span>
+      <span class="rbh_span midFont" *ngIf="!cita.opendetail" (click)="setOpendetail(cita,true);"> <img src="assets/imgs/chrevron-rojo.svg"  class="icon_drapo_sm"> </span>
+      <span class="rbh_span midFont"> <span class="bold">Paciente</span><span class="">{{ cita.paciente }}</span> </span>
+      <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"> <span class="bold">Doctor</span><span class="">{{ cita.doctor_name }}</span> </span>
+      <span class="rbh_span midFont"> <span class="bold">Caja</span><span class="">Nombre de caja </span> </span>
+      <span class="rbh_span midFont"> <span class="bold">Duracion</span><span class="fontHigh">{{ cita.duracionText }}</span> </span>
+  </div>
+  <div class="ReporteRow_TotalServicios">
+      <span class="rrt_span midFont"> <span class="bold">Total de Servicios</span><span class="midFont fontSecondary">${{cita.costo}}</span></span>
+      <span class="rrt_span midFont"> <span class="bold">Efectivo</span><span class="midFont fontSecondary">${{cita.cobroEfectivo}}</span> </span>
+      <span class="rrt_span midFont"> <span class="bold">Tarjeta</span><span class="midFont fontSecondary">${{cita.cobroTarjeta}}</span> </span>
+      <span class="rrt_span midFont"> <span class="bold">Cheque</span><span class="midFont fontSecondary">${{cita.cobroCheque}}</span> </span>
+      <span class="rrt_span midFont"> <span class="bold">Facturado</span><span class="midFont  fontHigh">${{cita.facturado}}</span> </span>
+      <span class="rrt_span midFont" *ngIf="cita.costo > cita.cobro"> <span class="bold">Adeudo</span><span class="fontPrimary">${{cita.costo - cita.cobro}}</span> </span>
+  </div>
+  <div class="ReporteRow_Desglose" *ngIf="cita.opendetail">
+    <div class="ReporteRow_Desglose_row midFont" *ngFor="let servicio of cita.reporteServicios">
+     <span class="servicio-item">
+       {{servicio.title}}: <span class="midFont fontSecondary">${{servicio.costo}}</span>
+      </span> 
+    </div>
+  </div>
+</div>
+</div>
+<div class="ReportesTotales">
+  <div class="servicios_totales">
+      <span class="bold">No. de Servicios</span>
+      <div class="ticket_row midMainFont" *ngFor="let servres of reportPresentator.serviciosResume">{{servres.title}}<span class="midFont fontSecondary">{{servres.times}}</span></div>
+    </div>
+<div class="resumen_totales">
+  <span class="totalespan midFont"><b>Citas Totales:</b> <span class="fontSecondary">{{reportPresentator.noCitas}}</span></span>
+  <span class="totalespan midFont"><b>Citas Canceladas:</b> <span class="fontPrimary">{{reportPresentator.noCancel}}</span></span>
+  <!--<span class="totalespan midFont"><b>No Show:</b> <span class="fontPrimary">{{reportPresentator.noShow}}</span></span>-->
+  <span class="totalespan midFont"><b>Duración Total:</b> <span class="fontHigh">{{reportPresentator.duracionTotalStr}}</span></span>
+</div>
+<!--div class="Totales_Ingreso">
+    
+</div-->
+
+<div class="Totales_Caja">
+    <span class="toin_span midFont"><b>Total de Servicios<span class="fontPrimary">${{reportPresentator.costoTotal}}</span></b></span>
+    <span class="toin_span midFont"><b>Importe Total<span class="fontSecondary">${{reportPresentator.total}}</span></b></span>
+    <span class="toin_span midSubFont">Efectivo:<span class="fontSecondary">${{reportPresentator.totalefectivo}}</span></span>
+    <span class="toin_span midSubFont">Tarjeta:<span class="fontSecondary">${{reportPresentator.totalTarjeta}}</span></span>
+    <span class="toin_span midSubFont">Cheques:<span class="fontSecondary">${{reportPresentator.totalCheques}}</span></span>
+    <span class="toin_span midSubFont">Facturado:<span class="fontSecondary">${{reportPresentator.facturadoTotal}}</span></span>
+    <!--<span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontPrimary">${{this.reportPresentator.cajacuentas}}</span></span>-->
+    <span class="toin_span midSubFont">Pendiente:<span class="fontPrimary">${{this.reportPresentator.cajaAdeudo+this.reportPresentator.cajacuentas}}</span></span>  
+</div>
+
+
+</div>
+</ion-content>

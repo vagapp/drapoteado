@@ -99,6 +99,7 @@ docuid:number = null;
 
 async openReporte( report:reportes = null){
   console.log('opening reporte', this.type);
+  
   this.loader.presentLoader('Cargando Reporte ...');
   await this.setReport(report);
   await this.loadReporte();
@@ -111,6 +112,15 @@ async openReporte( report:reportes = null){
 
 }
 
+async loadReportNM(report:reportes = null, loadReport:boolean = true){ //este metodo lo cree a partir de querer abrir el reporte no en modal para cargar el reporte y retornar un valor que indique que esta cargado y abrir la pagina en el layout.
+  console.log('loadReportNM');
+  this.loader.presentLoader('Cargando Reporte ...');
+  await this.setReport(report);
+  if(loadReport) await this.loadReporte();
+  this.loader.dismissLoader();
+  return true;
+}
+
 async openReportGenerate( report:reportes = null ){
   this.loader.presentLoader('Cargando Reporte ...');
   await this.setReport(report);
@@ -121,6 +131,7 @@ async openReportGenerate( report:reportes = null ){
   
 
   async setReport(report:reportes = null){
+    console.log('setReport');
     if(report){this.actualReport = report;
     }else{
       if(!this.reportesData.todayReport){
@@ -131,6 +142,7 @@ async openReportGenerate( report:reportes = null ){
   }
 
   async loadReporte(){
+    console.log('loadReporte');
     await this.loadReportCitas();
     await this.loadReportServicios();
     this.evaluateCitas();

@@ -196,7 +196,7 @@ hourIntervalMS:number = 30*60*1000;
         }
       }
   );
-  await this.docMan.pushDisponivilidad(this.cita.data.field_cita_doctor.und[0], this.cita.data.field_datemsb['und'][0]['value'] );
+  //await this.docMan.pushDisponivilidad(this.cita.data.field_cita_doctor.und[0], this.cita.data.field_datemsb['und'][0]['value'] );
   //await this.citasMan.requestCitas().toPromise();
   this.loader.dismissLoader();
   this.close();
