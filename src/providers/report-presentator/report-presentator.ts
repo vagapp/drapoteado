@@ -123,12 +123,12 @@ async openReporte( report:reportes = null){
 
 }
 
-async loadReportNM(report:reportes = null, loadReport:boolean = true){ //este metodo lo cree a partir de querer abrir el reporte no en modal para cargar el reporte y retornar un valor que indique que esta cargado y abrir la pagina en el layout.
+async loadReportNM(loadReport:boolean = true){ //este metodo lo cree a partir de querer abrir el reporte no en modal para cargar el reporte y retornar un valor que indique que esta cargado y abrir la pagina en el layout.
   console.log('subUsers',this.subUserData.subUsers);
     console.log('subscriptionSubUsers',this.subUserData.subscriptionSubUsers);
   console.log('loadReportNM',loadReport);
   this.loader.presentLoader('Cargando Reporte ...');
-  await this.setReport(report);
+  //await this.setReport(report);
   if(loadReport) await this.loadReporte();
   this.loader.dismissLoader();
   return true;

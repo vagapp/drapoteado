@@ -65,6 +65,7 @@ export class ReportesManagerProvider {
 
   async getTodayReport(){
    let todayReport_Data = await this.requestReportes(1).toPromise();
+   console.log('getting todayreport',todayReport_Data);
    if(todayReport_Data.length > 0){
     this.reportesData.addReporte(todayReport_Data[0], true);
    }else{
@@ -99,6 +100,12 @@ export class ReportesManagerProvider {
     data['field_dateendutmb'] = {'value': data['field_dateendutmb']}
     console.log('data ends as',data);
     this.reportesData.addReporte(data,true);
+  }
+
+  async updateReporte(reporte){
+    let val = await this.nodeMan.updateNode(reporte.getData()).toPromise();+
+    console.log('reporte actualizado ',val);
+    return val;
     
   }
 

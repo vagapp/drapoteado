@@ -26,8 +26,12 @@
     <div class="ticket_row midSubFont">Facturado <span class="fontHigh">${{this.reportPresentator.facturadoTotal}}</span></div>
   </div>
   <div class="ticket_row_block">
+    <div class="ticket_row midMainFont">Detalle de Servicios</div>
+    <div class="ticket_row midSubFont" *ngFor="let servicio of this.reportPresentator.serviciosResume">{{servicio.title}} <span class="fontPrimary">${{servicio.costo}}({{servicio.times}})</span></div>
+  </div>
+  <div class="ticket_row_block">
       <div class="ticket_row midMainFont">Citas Totales: <span class="fontSecondary">{{reportPresentator.noCitas}}</span></div>
-      <div class="ticket_row midSubFont">Citas Canceladas: <span class="fontPrimary">{{reportPresentator.noCancel}}</span></div>
+      <div class="ticket_row midSubFont">Citas Canceladas: <span class="fontPrimary">{{reportPresentator.actualReport.nocancel}}</span></div>
       <div class="ticket_row midMainFont">Duracion total: <span class="fontHigh">{{reportPresentator.duracionTotalStr}}</span></div>
     </div>
     <!--<div class="ticket_row_block">

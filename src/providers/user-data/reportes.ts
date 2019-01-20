@@ -15,6 +15,7 @@ export class reportes{
     dateEndUTMS:number = 0;
     date:Date;
     dateString:string;
+    nocancel:number = 0;
 
     constructor(){
     }
@@ -46,6 +47,8 @@ export class reportes{
             Debugger.log([this.date]);
             this.dateString = `${this.date.getDate()}/${(this.date.getMonth()+1)}/${this.date.getFullYear()}`; 
         }
+        this.nocancel = input_data['field_nocancel'] ? input_data['field_nocancel'] : 0;
+        console.log('setdatanocancel',this.nocancel,input_data['field_nocancel']);
         if(input_data['field_dateendutmb']){this.dateEndUTMS = Number(input_data['field_dateendutmb'].value);}
         
        
@@ -72,6 +75,7 @@ export class reportes{
             field_dialy:{und:[{value:this.dialy===true?1:0}]},
             field_datestartutmb:{und:[{value:this.dateStartUTMS}]},
             field_dateendutmb:{und:[{value:this.dateEndUTMS}]},
+            field_nocancel:{und:[{value:this.nocancel}]},
         }
         if(this.doctores.length > 0){
             this.doctores.forEach(element => {
@@ -101,6 +105,7 @@ export class reportes{
             field_dialy:{und:[{value:this.dialy===true?1:0}]},
             field_datestartutmb:{und:[{value:this.dateStartUTMS}]},
             field_dateendutmb:{und:[{value:this.dateEndUTMS}]},
+            field_nocancel:{und:[{value:this.nocancel}]},
         }
         if(this.doctores.length > 0){
             this.doctores.forEach(element => {

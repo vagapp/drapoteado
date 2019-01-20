@@ -12,6 +12,7 @@ import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-ma
 import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
 import { Message } from '../websocket-service/websocket-service';
 import { Doctores } from '../user-data/doctores';
+import { ReportesDataProvider } from '../reportes-data/reportes-data';
 
 
 @Injectable()
@@ -25,7 +26,8 @@ export class CitasManagerProvider {
     public doctores: DoctoresDataProvider,
     public nodeMan: DrupalNodeManagerProvider,
     public userMan: DrupalUserManagerProvider,
-    public userData:UserDataProvider
+    public userData:UserDataProvider,
+    public reportesData: ReportesDataProvider,
   ) {
     console.log('Hello CitasManagerProvider Provider');
   }
@@ -158,12 +160,29 @@ export class CitasManagerProvider {
     let fechacobroset = false;
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  this.setCitaFechaReporte(cita,saveDate); reportedateset=true;  }
-    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){ fechacobroset = this.setCitaFechaCobro(cita,saveDate); this.setCitaFechaReporte(cita,saveDate); reportedateset = true; }
+    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){ fechacobroset = this.setCitaFechaCobro(cita,saveDate); this.setCaja(cita); this.setCitaFechaReporte(cita,saveDate); reportedateset = true; }
+    if(Number(state) === Number(CitasDataProvider.STATE_CANCELADA)){
+      console.log('cancelando cita'); 
+      
+      console.log(' this.reportesData.todayReport', this.reportesData.todayReport);
+      this.reportesData.todayReport.nocancel++;
+      this.nodeMan.updateNode(this.reportesData.todayReport.getData()).subscribe((val)=>{console.log('updated report',val);},(error)=>{console.log('updated report error',error);});
+    }
     if(!reportedateset){ delete cita.data.field_fecha_reporte; }
     if(!fechacobroset){ delete cita.data.field_hora_cobromsb; }
+    console.log('updating cita',cita.data);
     return this.updateCita( cita.data ).share();
   }
 
+  setCaja(cita){
+    console.log('setting caja',this.userData.userData.uid,this.userData.userData.name);
+    cita.data.field_cita_caja.und[0] = this.userData.userData.uid;
+    cita.data.field_caja_nombre = {'und':[{'value': this.userData.userData.name}]}; 
+  }
+/*
+  {"receivers":["76"],
+  "action":"addCita","sender":"76","content":{"Nid":"1760","type":"citas","field_date":{"und":[{"value":{"date":"20/01/2019","time":"05:30"}}]},"field_hora_inicio":{"und":[{"value":{"date":"20/1/2019","time":"5:29"}}]},"field_hora_final":{"und":[{"value":{"date":"20/1/2019","time":"5:29"}}]},"field_costo_sobrescribir":{"und":[{"value":2123}]},"field_paciente":{"und":[{"value":"testNombrecaja"}]},"field_email":{"und":[{"email":""}]},"field_telefono":{"und":[{"value":0}]},"field_estado":{"und":[{"value":4}]},"field_cita_doctor":{"und":["76"]},"field_cita_caja":{"und":["76"]},"field_cita_recepcion":{"und":["76"]},"field_alias":0,"doctor_name":"","doctor_alias":"","field_servicios_cita":{"und":["401","1577"]},"field_cobro":{"und":[{"value":0}]},"field_cobro_efectivo":{"und":[{"value":0}]},"field_cobro_tarjeta":{"und":[{"value":0}]},"field_cobro_cheque":{"und":[{"value":0}]},"field_datemsb":{"und":[{"value":1547962200000}]},"field_hora_iniciomsb":{"und":[{"value":1547962176569}]},"field_hora_finalmsb":{"und":[{"value":1547962184799}]},"field_retrasda":{"und":[{"value":0}]},"aux_servicios_json":null,"field_facturar":{"und":[{"value":0}]},"field_facturar_cantidad":{"und":[{"value":null}]},"field_caja_nombre":{"und":["pruebaform1"]},"field_fecha_reporte":{"und":[{"value":1547962206215}]},"field_hora_cobromsb":{"und":[{"value":1547962206215}]}},"isBroadcast":true}
+*/
   setCitaFechaCobro( cita:Citas, saveDate:boolean = true, date:Date = new Date() ){
     if(!saveDate) return false;
     console.log('saving date'); 

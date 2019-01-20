@@ -45,4 +45,14 @@ export class ReporteGeneratePage {
     this.viewCtrl.dismiss();
   }
 
+
+  openReportNoModal(){
+    this.reportPresentator.loadReportNM().then(()=>{
+      console.log('report loaded');
+      this.dismiss();
+      this.navCtrl.setRoot('ReportePage');
+    });
+  }
+
+
 }

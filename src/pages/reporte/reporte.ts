@@ -52,13 +52,12 @@ export class ReportePage {
   setsmallMode(){
     console.log('setsmallmode');
     this.plat.ready().then((readySource) => {
-      if(this.plat.width() < 1000){
+      if(this.plat.width() < 700){
         this.smallMode = true;
       }
       //console.log('Width: ' + this.plat.width());
       //console.log('Height: ' + this.plat.height());
     });
-    this.smallMode = true;
   }
 
   /**

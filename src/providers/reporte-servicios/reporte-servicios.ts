@@ -28,12 +28,12 @@ export class ReporteServiciosProvider {
         console.log('servicio found is',found);
         if(found){
           found.times++;
-          found.costo += servicio.costo;
+          found.costo += Number(servicio.costo);
         }else{
           let aux_servresume = {
             nid:Number(servicio.Nid),
             title:servicio.title,
-            costo:servicio.costo,
+            costo:Number(servicio.costo),
             times:1
           }
           ret.push(aux_servresume);

@@ -12,6 +12,7 @@ import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { WsMessengerProvider } from '../ws-messenger/ws-messenger';
 import { CitaProgressControllerProvider } from '../cita-progress-controller/cita-progress-controller';
 import { DateProvider } from '../date/date';
+import { ReportesManagerProvider } from '../reportes-manager/reportes-manager';
 
 
 /*
@@ -35,7 +36,8 @@ export class CitasPresentatorProvider {
     public loader: LoaderProvider,
     public modalCtrl: ModalController,
     public wsMessenger: WsMessengerProvider,
-    public progresSController: CitaProgressControllerProvider
+    public progresSController: CitaProgressControllerProvider,
+    public reportesMan: ReportesManagerProvider
   ) {
 
   }
@@ -59,6 +61,7 @@ export class CitasPresentatorProvider {
  
   async updateStateRequest ( cita, state ) {
     this.loader.presentLoader("Actualizando...");
+    if(!this.reportesMan.reportesData.isSetTodayReport) await this.reportesMan.getTodayReport();
     let saveDate = !this.progresSController.editfinish;
     console.log('editfinish is',saveDate);
     let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise();

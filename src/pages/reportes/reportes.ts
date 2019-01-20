@@ -47,21 +47,22 @@ export class ReportesPage {
   }
 
   openNuevoreporte(report:reportes){
+    console.log('openingnuevoreporte');
    /* let Modal = this.modalCtrl.create("NuevoreporteModalPage", undefined, { cssClass: "smallModal nuevoreporteModal" });
     Modal.present({});*/
-    this.openNuevoreporteNoModal();
-    //this.reportPresentator.openReportGenerate(report);
+    //this.openNuevoreporteNoModal();
+    this.reportPresentator.openReportGenerate(report);
   }
   
   openReportModal( report:reportes ){
-    //this.reportPresentator.openReportModal(report);
-    this.openReportNoModal();
+    this.reportPresentator.openReportModal(report);
+    //this.openReportNoModal();
     /*let Modal = this.modalCtrl.create("ReporteModalPage", {reporte:report}, { cssClass: "bigModal reportModal" });
     Modal.present({});*/
   }
 
   openNuevoreporteNoModal(){
-    this.reportPresentator.loadReportNM(null,false).then(()=>{
+    this.reportPresentator.loadReportNM().then(()=>{
       console.log('report loaded');
       this.navCtrl.setRoot('ReportePage');
     });
