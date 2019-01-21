@@ -28,8 +28,6 @@ export class Citas{
     caja_playerid:string = null;
     recepcion_playerid:string = null;
     opendetail=false;
-
-    
     
     
     constructor(){
@@ -105,6 +103,8 @@ export class Citas{
           this.processData();
           console.log("savedData",this.data);
         }
+
+    
 
     processData(){
         console.log('cita processing data')

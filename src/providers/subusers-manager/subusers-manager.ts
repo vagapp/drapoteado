@@ -33,11 +33,15 @@ export class SubusersManagerProvider {
     await this.cargarSubusuarios();
     await this.cargarSubusuariosSubs();
   }*/
-
+ 
+  /** 
+   * Cargamos sub usuarios. dejamos de usar el loadsubusers normal porque no se aplica la carga de usuarios por los usuarios que tengan agregado al doctor.
+   * ahora se cargan solo los usuarios en la suscripcion.
+  */
   async cargarSubusuarios(){
     //this.subusersData.subscriptionSubUsers = new Array();
     //this.subusersData.subUsers = new Array();
-    await this.loadSubusers();
+    //await this.loadSubusers();
     await this.loadSubusersSubs();
   }
 
@@ -73,7 +77,8 @@ export class SubusersManagerProvider {
     return this.userMan.requestUsers([this.subsData.subscription.field_doctores], null, null).share();
   }
 
-  requestSubusuarios():Observable<any>{
+
+  requestSubusuarios():Observable<any>{ 
     return this.userMan.requestUsers([this.userData.userData.uid], null, null).share();
   }
 
@@ -81,12 +86,20 @@ export class SubusersManagerProvider {
     return this.userMan.requestUsers(null, null,this.subsData.getSubusersIDs()).share();
   }
 
+  /**
+   * Setea los resultados de la carga de usuarios.
+   * 
+   * se diferenciaba de usuarios de la suscripcion y usuarios administradores de citas. pero ahora no se hace asi y ambos tipos se cargan a al misma pila
+   * y no se cargan los usuarios que tengan al doctor actual en su lista.
+   * @param user_data 
+   * @param subuser_type 
+   */
   setSubusuariosResult( user_data, subuser_type:number = SubusersDataProvider.SUBUSER_CONSUMERS ){
     console.log('setSubusuariosResult data',user_data,subuser_type);
     let aux_user = this.generateUserdFromData(user_data);
     switch(subuser_type){
       case SubusersDataProvider.SUBUSER_CONSUMERS: this.subusersData.addUser(aux_user); break;
-      case SubusersDataProvider.SUBUSERS_SUBSCRIPTION: this.subusersData.addUserSubs(aux_user); break;
+      case SubusersDataProvider.SUBUSERS_SUBSCRIPTION: this.subusersData.addUser(aux_user); /*this.subusersData.addUserSubs(aux_user);*/ break;
     }
     }
 
