@@ -64,14 +64,12 @@ export class ReportesPage {
   openNuevoreporteNoModal(){
     this.reportPresentator.loadReportNM().then(()=>{
       console.log('report loaded');
-      this.navCtrl.setRoot('ReportePage');
     });
   }
 
   openReportNoModal(){
     this.reportPresentator.loadReportNM().then(()=>{
       console.log('report loaded');
-      this.navCtrl.setRoot('ReportePage');
     });
   }
 

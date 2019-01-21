@@ -15,6 +15,8 @@ import { ReportesManagerProvider } from '../reportes-manager/reportes-manager';
 import { ModalController } from 'ionic-angular';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { SubusersDataProvider } from '../subusers-data/subusers-data';
+import { Subject } from 'rxjs/Subject';
+import { PermissionsProvider } from '../permissions/permissions';
 
 /*
   Generated class for the ReportPresentatorProvider provider.
@@ -28,8 +30,11 @@ export class ReportPresentatorProvider {
   static REPORT_COMPLETE = 1;
   get REPORT_TICKET(){ return ReportPresentatorProvider.REPORT_TICKET;}
   get REPORT_COMPLETE(){ return ReportPresentatorProvider.REPORT_COMPLETE;}
+
+  reportSubject:Subject<any> = new Subject();
 actualReport:reportes = null;
 type:number = 1;
+docLoaded:boolean = false;
 docuid:number = null;
 docName:string = null;
 docAlias:string = null;
@@ -79,7 +84,8 @@ docAlias:string = null;
     public subUserData: SubusersDataProvider,
     public reportesData: ReportesDataProvider,
     public reportesManager: ReportesManagerProvider,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    public permissions: PermissionsProvider
   ) {
     
   }
@@ -124,19 +130,31 @@ async openReporte( report:reportes = null){
 }
 
 async loadReportNM(loadReport:boolean = true){ //este metodo lo cree a partir de querer abrir el reporte no en modal para cargar el reporte y retornar un valor que indique que esta cargado y abrir la pagina en el layout.
+  console.log('docuid loadreportnm a',JSON.stringify(this.docuid));
+
   console.log('subUsers',this.subUserData.subUsers);
     console.log('subscriptionSubUsers',this.subUserData.subscriptionSubUsers);
   console.log('loadReportNM',loadReport);
   this.loader.presentLoader('Cargando Reporte ...');
   //await this.setReport(report);
   if(loadReport) await this.loadReporte();
+  console.log('docuid loadreportnm b',JSON.stringify(this.docuid));
+ 
   this.loader.dismissLoader();
-  return true;
+  console.log('docuid loadreportnm c',JSON.stringify(this.docuid));
+  this.reportSubject.next(1);
 }
 
 async openReportGenerate( report:reportes = null ){
   this.loader.presentLoader('Cargando Reporte ...');
   await this.setReport(report);
+  if(this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR])){
+    this.docuid = this.userData.userData.uid;
+    console.log('permisos doctor, obtener uid del doctor',this.docuid);
+  }else{
+    this.docuid= 0;
+    console.log('permisos no doctor, no obtener uid del doctor',this.docuid);
+  }
   let Modal = this.modalCtrl.create("ReporteGeneratePage", undefined, { cssClass: "smallModal nuevoreporteModal" });
   this.loader.dismissLoader();
   Modal.present({});
@@ -165,9 +183,10 @@ async openReportGenerate( report:reportes = null ){
     if(Number(this.docuid) === 0){ this.docuid = null; }
     if(this.docuid !== null ){
       const aux_doc = this.docData.getDoctorByUid(this.docuid);
+      this.docLoaded = true;
       this.docName = aux_doc.name;
       this.docAlias = aux_doc.field_alias;
-      console.log('docfound in report is',aux_doc);
+      console.log('docfound in report is',aux_doc,this.docName,this.docAlias);
     }
     await this.reporteCitas.reporteLoadCitas(this.actualReport, this.docuid);
   }

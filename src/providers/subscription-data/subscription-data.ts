@@ -42,7 +42,7 @@ export class SubscriptionDataProvider {
     if( this.checkForPlan() ){
       ret += Number(this.subscription.plan.field_no_subcuentas);
       ret += Number(this.subscription.field_adicionales);
-      console.log('adicionales en la sus',this.subscription.field_adicionales);
+      console.log('adicionales en la sus',this.subscription.field_adicionales,this.subscription.plan.field_no_subcuentas);
     }
     console.log('total subacounts',ret);
     return ret;
@@ -54,13 +54,14 @@ export class SubscriptionDataProvider {
     let ret = Number(0);
     if(this.checkForSub()){
       ret = Number(this.subscription.field_subusuarios.length);
-      console.log('field subusuarios en este sub', this.subscription.field_subusuarios);
+      //console.log('field subusuarios en este sub', this.subscription.field_subusuarios);
     }
-    console.log('total used subacounts',ret);
+    //console.log('total used subacounts',ret);
     return ret;
   }
 
   getSubAccountsLeft():number{
+    //console.log('getSubAccountsLeft',this.getSubAccountsTotal(),this.getUsedSubAccounts());
     let ret = 0;
     if(this.checkForPlan()){
       ret = this.getSubAccountsTotal() - this.getUsedSubAccounts();

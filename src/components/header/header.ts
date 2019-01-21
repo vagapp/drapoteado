@@ -6,6 +6,7 @@ import { Citas } from '../../providers/user-data/citas';
 import { NotificationsDataProvider } from '../../providers/notifications-data/notifications-data';
 import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 
 
 /**
@@ -24,6 +25,7 @@ export class HeaderComponent{
   fntColor:"FFFFFF";
   authObservable = null;
   susObservable = null;
+  reportObservable = null;
   showNotifications:boolean = false;
   pagename = null;
  
@@ -35,11 +37,13 @@ export class HeaderComponent{
     public modalCtrl: ModalController,
     public notificationData: NotificationsDataProvider,
     public notiMan: NotificationsManagerProvider,
-    public perm:PermissionsProvider
+    public perm:PermissionsProvider,
+    public reportPresentator: ReportPresentatorProvider
   ) {
     //this.pagename = this.navCtrl.getActive().name;
     this.authObservable = userData.AuthSubject;
     this.susObservable = userData.susSubject;
+    this.reportObservable = this.reportPresentator.reportSubject;
    
     this.susObservable.subscribe(
       (val)=>{
@@ -60,6 +64,13 @@ export class HeaderComponent{
       if(Number(val) === Number(0) ) 
         this.navCtrl.setRoot("LoginPage");
     });
+
+    this.reportObservable.subscribe(
+      (val)=>{
+       console.log('reportObservable');
+       this.navCtrl.setRoot('ReportePage');
+        }
+    );
     
     } //fin constructor
 

@@ -344,12 +344,19 @@ async addUserFromCode( user_data ){
           );*/
 }
 
+/*
+updating user with this {"uid":"155","name":"cinthyaR","pass":"","mail":"adsd@www.com","status":"1","roles":[0],"field_tipo_de_usuario":{"und":["2"]},"field_useremail":{"und":[{"email":"adsd@www.com"}]},"field_nombre":{"und":[{"value":"Subusuario"}]},"field_apellidos":{"und":[{"value":"Subusuario"}]},"field_especialidad":{"und":[{"value":""}]},"field_alias":{"und":[{"value":null}]},"field_calle":{"und":[{"value":""}]},"field_no_ext":{"und":[{"value":""}]},"field_no_int":{"und":[{"value":""}]},"field_codigo_postal":{"und":[{"value":""}]},"field_ciudad":{"und":[{"value":""}]},"field_colonia":{"und":[{"value":""}]},"field_pais":{"und":[{"value":""}]},"field_municipio":{"und":[{"value":""}]},"field_estado_ubicacion":{"und":[{"value":""}]},"field_plan_date":{"und":[{"value":{"date":""}}]},"field_forma_pago":{"und":[{"value":""}]},"tutorial_state":{"und":[{"value":0}]},"field_codigo":"kQUiKJ1sXviGYzRi8oNxHp94o","field_doctores":{"und":["150","76"]},"field_planholder":{"und":[{"value":true}]},"field_stripe_customer_id":{"und":[{"value":""}]},"field_src_json_info":{"und":[{"value":""}]}}*/
+
 updateUserd(){
   if(this.updateUserValidation()){
   this.loader.presentLoader('Guardando usuario ...');
   this.newUser.mail = this.newUser.field_useremail.und[0].email;
   this.newUser.status = ""+1;
   delete this.newUser.field_sub_id;
+  //this.newUser.field_doctores = {'und':[76]};
+  console.log('doctores',this.newUser.field_doctores);
+  
+  console.log('guardando usuario', this.newUser);
   this.userMan.updateUserd( this.newUser ).subscribe(
     async (val)=>{
       await this.subusersManager.cargarSubusuarios();

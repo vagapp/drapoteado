@@ -12,6 +12,12 @@ import { userd } from '../user-data/user-data';
 export class SubusersDataProvider {
   subUsers:userd[] = new Array();
   subscriptionSubUsers: userd[] = new Array();
+
+  /**
+   * esta cosa esta listando los sub users. 
+   * pero usa subscriptionsubusers para calcular los restantes en el plan. 
+   * asi que vamos a cambiar a subscriptionsubusers. ?
+  */
   
   static SUBUSER_CONSUMERS = 0;
   static SUBUSERS_SUBSCRIPTION = 1;

@@ -104,26 +104,30 @@ export class MyApp {
 
   //loads token and planes syncronous
   async initLoad(){
-    let token_data = await this.userData.requestToken().toPromise();
-    if( token_data ) this.userData.sessionData.token = token_data['token'];
-    let planes_data = await this.planes.requestPlanes().toPromise();
-    if( planes_data ) this.planes.setPlanes(planes_data);
-    let connec_Data = await this.userData.checkConnect().toPromise();
-    if(connec_Data && connec_Data['user']['uid'] != 0){
+    let token_data = await this.userData.requestToken().toPromise(); //obtener token de drupal
+    if( token_data ) this.userData.sessionData.token = token_data['token']; //si se obtiene el token se asigna a userdata
+    let planes_data = await this.planes.requestPlanes().toPromise(); //obtener lista de planes disponibles
+    if( planes_data ) this.planes.setPlanes(planes_data); //si se obtiene la informacion setearla
+    let connec_Data = await this.userData.checkConnect().toPromise(); //obtener connect data. este es un evento del endpoint de drupal que da informacion de la sesion de drupal actual
+    if(connec_Data && connec_Data['user']['uid'] != 0){ //si se esta conectado
       //if logged in set session and userdata
-      this.userData.setSessionData(connec_Data);
-      await this.userData.loginSetData(connec_Data['user']['uid']);
-      if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
+      this.userData.setSessionData(connec_Data); //setear data de connect
+      await this.userData.loginSetData(connec_Data['user']['uid']); //esto no recuerdo bien que hacia
+      if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){ //si es doctor se carga la suscripcion
+        /**
+         * ACLARACION DE LOS SUBUSUARIOS:
+         *  los subusuarios no se "cargan" hasta que se abre la pagina de usuarios, sin embargo estos subusuarios estan listados en la suscripcion, asi que se tiene el numero de agregados en ese lugar para administrar el plan sin tener que cargar los subusuarios.
+         */
       /*let sus = await this.subscriptionManager.searchSus('kCsR0Z1ZrSCidi7s4m2jeV064');
       this.subscriptionManager.susAssign(sus);*/
       await this.subscriptionManager.loadSubscription();
       //await this.subUserMan.requestGroupUsers();
       //this.subscriptionManager.subsData.subscription.removeUserFromSubs(189);
-      }else{
+      }else{ 
         //si son subusuarios buscar suscripciones a las que esten agregados
         console.log('looking for subscriptions where this sub user is added');
-        await this.subscriptionManager.loadGroupSubuserSubs();
-        this.docMan.loadGroupDoctors();
+        await this.subscriptionManager.loadGroupSubuserSubs(); //se cargan subscripciones a las que estan agregados.
+        this.docMan.loadGroupDoctors(); //se cargan los doctores de las suscripciones a las que estan agregados.
       }
       
         /*let subusuerArray = new Array();

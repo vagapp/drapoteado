@@ -102,9 +102,9 @@ export class SubusersManagerProvider {
       aux_user.mail = user_data.mail;
       aux_user.status = "1";
       aux_user.field_codigo = user_data.field_codigo;
-      aux_user.field_doctores.und = new Array();
+      aux_user.field_doctores['und'] = new Array();
       for( let doc of user_data.field_doctores){
-        aux_user.field_doctores.und.push(doc.uid);
+        aux_user.field_doctores['und'].push(Number(doc.uid));
       }
       aux_user.field_tipo_de_usuario.und = new Array();
       if(user_data.field_tipo_de_usuario.value) aux_user.field_tipo_de_usuario.und.push(user_data.field_tipo_de_usuario.value);

@@ -37,7 +37,8 @@ export class SubscriptionManagerProvider {
   }
 
 
-  async loadSubscription(nid = null){
+  /** Obtiene la subscripcion del usuario actual */
+  async loadSubscription(){
     console.log('loadSubscription');
     let sus_data = await this.requestSubscription().toPromise();
     if(sus_data && sus_data[0]){
@@ -49,7 +50,7 @@ export class SubscriptionManagerProvider {
     console.log('isgroup',this.subsData.isGroup);
    }
   }
-
+ /** Obtiene las suscripciones de la lista de doctores, la lista de doctores se maneja mas cuando se trata de un subusuario y este metodo valida que el usuario actual no sea un doctor */
   async loadDoctorsSubscriptions(){
     console.log('loadDoctorsSubscriptions');
     if(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
@@ -75,7 +76,7 @@ export class SubscriptionManagerProvider {
       let groups_subs_data = await this.requestGroupSubscriptions().toPromise();
       if(groups_subs_data) 
        for(let group_sus of groups_subs_data){
-         console.log('sus found is',group_sus);
+         console.log('loadGroupSubuserSubs sus found is',group_sus);
         let aux_sus = new subscriptions();
         aux_sus.setData(group_sus);
         this.subsData.Groups.push(aux_sus);
@@ -83,6 +84,9 @@ export class SubscriptionManagerProvider {
     }
   }
 
+  /** 
+   * hace un request a la suscripcion del usuario actual 
+   * */
   requestSubscription():Observable<any>{
     const filter=`?args[0]=all&${this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false)?`args[1]=${this.userData.userData.uid}`:'args[1]=all'}&${(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false))?`args[2]=${this.userData.userData.uid}`:'args[2]=all'}&args[3]=all`;
     const  url = `${this.bu.endpointUrl}rest_suscripciones.json${filter}`;
@@ -91,6 +95,9 @@ export class SubscriptionManagerProvider {
     return observer;
   }
 
+  /** 
+   * Hace un request de las suscripciones de los doctores guardados en docData, estos doctores se cargan al iniciar el app. en doctoresManager
+  */
   requestDocsSubscription():Observable<any>{
     //const filter=`?args[0]=all&${this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false)?`args[1]=${this.userData.userData.uid}`:'args[1]=all'}&${(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR],false))?`args[2]=${this.userData.userData.uid}`:'args[2]=all'}&args[3]=all`;
     //const filter = `?args[0]=all&args[1]=all&args[2]=all&args[3]=${this.docData.doctoresIDs}`;
@@ -112,7 +119,10 @@ export class SubscriptionManagerProvider {
     return observer;
   }
 
-  checkSusOfDoctor(nid:number){
+  /**
+   * Revisa que el doctor especificado se encuentre en alguna de las suscripciones que se maneja, no recuerdo para que se usa = ( 
+   */
+  checkSusOfDoctor(nid:number):boolean{
     /* No necesitamos que sea el plan holder pero que este en los doctores.*/
     let ret = false;
     console.log('in subs:',this.doc_subscriptions);
@@ -136,7 +146,11 @@ export class SubscriptionManagerProvider {
     return ret;
   }
   
-
+  /**
+   * Este metodo subscribe el usuario actual al plan especificado pagando con el source especificado
+   * @param plan 
+   * @param source 
+   */
   async subscribe(plan:planes, source:sources){
     console.log('subscribing');
     let ns_res = await this.getSubscribeObs(plan,source).toPromise();
@@ -144,6 +158,11 @@ export class SubscriptionManagerProvider {
     await this.deletesSus(this.subsData.subscription).toPromise();*/
   }
 
+  /**
+   * Este metodo se encarga de obtener el request para suscribir el usuario actual al plan especificado pagando con el source especificado, el proceso de conekta se maneja en un hook de drupal
+   * @param plan 
+   * @param source 
+   */
   getSubscribeObs(plan:planes, source:sources):Observable<any>{
     console.log('getSubscribeObs');
     console.log(plan);
@@ -173,11 +192,14 @@ export class SubscriptionManagerProvider {
     return ret;
   }
 
+  /**
+   * revisa que de plano este el dato de la suscripcion, si esto es falzo normalmente significa que no tiene suscripcion, aveces podria ser un error de plano.
+   */
   checkForSubscription(){
     return this.subsData.subscription !== null ? true: false;
   }
 
-  async removeSubuser( user: userd){
+  /*async removeSubuser( user: userd){
     this.subsData.subscription.removeSubUserFromSubs(user);
     let obs = this.nodeManager.updateNode(this.subsData.subscription.getData());
     await obs.toPromise();
@@ -190,7 +212,7 @@ export class SubscriptionManagerProvider {
     //await obs.toPromise();
     //this.wsMessenger.generateSubsRemoveMessage(this.subsData.subscription);
     console.log('sub removed and saved');
-  }
+  }*/
 
   generateNewSus( suscription ){return this.nodeManager.generateNewNode(suscription.getData());}
   updateSus( suscription ){return this.nodeManager.updateNode(suscription.getData());}
@@ -202,6 +224,10 @@ export class SubscriptionManagerProvider {
     return this.updateSus(this.subsData.subscription);
   }
 
+  /**
+   * Este metodo busca en drupal una suscripcion en base a un codigo. es una forma de entrar a grupos medicos.
+   * @param code 
+   */
   async searchSus( code:string ){
     let filter=`?args[0]=all&args[1]=all&args[2]=all&args[3]=all&args[4]=${code}`;
     const url = `${this.bu.endpointUrl}rest_suscripciones.json${filter}`;
@@ -224,6 +250,10 @@ export class SubscriptionManagerProvider {
     
   }
 
+  /**
+   * Este metodo asigna el usuario actual a la suscripcion especificada.
+   * @param sus 
+   */
   async susAssign( sus ){
     console.log('sus got is',sus);
     let plan = this.planesData.planes.find((planes)=>{return Number(planes.nid) === Number(sus.plan)});
@@ -322,8 +352,6 @@ export class SubscriptionManagerProvider {
 */
 
 
-async pushSubUser( val ){ //este metodo se usa para agregar un subusuario a la suscripcion.
 
-}
 
 }

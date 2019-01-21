@@ -242,6 +242,10 @@ export class UsuariosPage {
     }*/
   }
 
+  async completeSubUserAdd( ){
+    
+  }
+
   async completeSubUserRemove( userd ){ //ya hice este metodo despues de tantos cambios maldicion
     console.log('CHEKAME WEY');
     this.loader.presentLoader('Removiendo usuario ...');

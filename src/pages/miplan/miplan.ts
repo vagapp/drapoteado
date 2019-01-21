@@ -178,11 +178,12 @@ export class MiplanPage {
   }
   async guardar(){
     console.log('saving to  onplanchange false');
-    if(this.guardar_basic_validation()){
+    if(!this.guardar_basic_validation()) return false;
+    if(!this.guardar_subusernumber_validation()) return false;
     await this.suscribirse();
     this.onplanchange = false;
     
-    }
+    
   }  
 
   guardar_basic_validation():boolean{
@@ -191,6 +192,16 @@ export class MiplanPage {
     if(!this.selectedPlan){  ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un plan'); }
     console.log('guardar_basic_validation ret',ret);
     //if(!this.selectedMethod){ ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un Método de Pago'); }
+    return ret;
+  }
+
+  guardar_subusernumber_validation():boolean{
+    let ret = true;
+    console.log('guardar_subusernumber_validation',this.selectedAditionals,this.subsData.getSubAccountsTotal());
+    if(this.selectedAditionals > this.subsData.getSubAccountsTotal()){
+     console.log('no suficientes espacios mija');
+     ret = false;
+    }
     return ret;
   }
 

@@ -10,12 +10,10 @@
 </div>
 </div>
 <div class="modalPage_toolbar">
-    <div class="info_tool" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])">
-        <span class="spanBlock midFont"><b>Alias</b></span>
-        <span class="spanBlock fonHigh midFont">{{this.docAlias}}</span>
+    <div class="info_tool" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]) && this.reportPresentator.docLoaded">
+        <span class="spanBlock midFont"><b>Doctor</b></span>
+        <span class="spanBlock fonHigh midFont">{{this.reportPresentator.docName}}</span>
       </div>
-      <div class="info_tool" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])">
-        </div>
         <div class="info_tool">
             <span class="spanBlock midFont"><b>Fecha</b></span>
             <span class="spanBlock fontSecondary midFont">{{this.reportPresentator.actualReport.dateString}}</span>
