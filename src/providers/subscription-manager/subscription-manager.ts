@@ -199,6 +199,12 @@ export class SubscriptionManagerProvider {
     return this.subsData.subscription !== null ? true: false;
   }
 
+  async removeUser( uid:number ){
+    this.subsData.subscription.removeUserFromSubs(uid);
+    let obs = this.nodeManager.updateNode(this.subsData.subscription.getData());
+    await obs.toPromise();
+  }
+
   /*async removeSubuser( user: userd){
     this.subsData.subscription.removeSubUserFromSubs(user);
     let obs = this.nodeManager.updateNode(this.subsData.subscription.getData());
