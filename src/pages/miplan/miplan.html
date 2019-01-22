@@ -87,15 +87,16 @@
 
     </div><!-- fin de plans extras -->
     <div class="informacion_pagos">
-      <span class="spanBlock info_plan_title">metodos de pago</span>
+      <span class="spanBlock info_plan_title">Métodos de pago</span>
       <div class="bisectional pagos_block">
         <div class="bisectional_section metodos_pago"> 
-          <conekta *ngIf="onplanchange == true" (successToken)='successToken($event)' (errorToken)='errorToken($event)'></conekta>
+          <conekta *ngIf="onplanchange == true " (successToken)='successToken($event)' (errorToken)='errorToken($event)'></conekta>
         </div>
          <div class="bisectional_section neuvo_metodo_pago"> 
             <div class="sources_wrapper"> <!-- INICIO STRIPE LISTED SOURCES-->
+              <h3>Metodos de pago activos</h3>
                 <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado metodos de pago </div>
-                <div *ngFor="let src of this.sources" (click)="selectCard(src)"   [class.selectedsrc]="src.selected" class="fact_src_unit">
+                <div *ngFor="let src of this.sources" (click)="selectCard(src)"   [class.selectedsrc]="src.default" class="fact_src_unit">
                   {{src.brand}} **** **** **** {{src.last4}}
                 </div>
                 </div> <!-- FIN STRIPE LISTED SOURCES-->  

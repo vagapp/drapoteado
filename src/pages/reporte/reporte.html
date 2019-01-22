@@ -18,7 +18,7 @@
             <span class="spanBlock midFont"><b>Fecha</b></span>
             <span class="spanBlock fontSecondary midFont">{{this.reportPresentator.actualReport.dateString}}</span>
           </div>
-  <button class="bgColorSecondary generalButton" (click)="generatePDF()" >Exportar</button>
+  <button class="bgColorSecondary generalButton export-big" (click)="generatePDF()" >Exportar</button>
 </div>
 </div>
 
@@ -31,7 +31,7 @@
       <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"> <span class="bold">Doctor</span><span class="">{{ cita.doctor_name }}</span> </span>
       <span class="rbh_span midFont"> <span class="bold">Caja</span><span class="">{{cita.caja_name}} </span> </span>
       <span class="rbh_span midFont"> <span class="bold">Duracion</span><span class="fontHigh">{{ cita.duracionText }}</span> </span>
-      <span class="rbh_span midFont"> <span class="bold">Estado</span><span class="fontHigh"  [ngStyle]="{'color':cita.stateColor}">{{ cita.getStateString() }}</span> </span>
+      <span class="rbh_span midFont estado-cita-reporte"> <span class="fontHigh"  [ngStyle]="{'color':cita.stateColor}">{{ cita.getStateString() }}</span> </span>
   </div>
   <div class="ReporteRow_TotalServicios">
       <span class="rrt_span midFont"> <span class="bold">Total de Servicios</span><span class="midFont fontSecondary">${{cita.costo}}</span></span>

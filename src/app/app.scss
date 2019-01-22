@@ -176,14 +176,14 @@ ion-app.ios [padding] .scroll-content{
     align-items: center;
     justify-content: center;
     width: 80%;
-    padding: 15px;
+    padding: 1.5em;
     min-width: 1000px;
     margin: 20px 0px 1px 0px;
 
     border-radius: 10px 10px 10px 10px;
 -moz-border-radius: 10px 10px 10px 10px;
 -webkit-border-radius: 10px 10px 10px 10px;
-border: 2px solid #B8B8B8;
+border: 1px solid lightgray;
 }
 
 .fontPrimary{
@@ -804,6 +804,36 @@ border: 0px solid #000000;
     border: 0px solid #000000;
 }
 
+ion-menu {
+    top:80px;
+}
+
+@media screen and (max-width: 450px){
+
+    ion-menu {
+        top:67px;
+    }
+}
+
+.menu-inner .header {
+    display: none;
+}
+
+.menu-inner .list-md {
+    padding-top: 2em;
+}
+
+.menu-inner .item-md {
+    font-size: 1.6rem;
+    color: #353232;
+    text-align: center;
+    padding-bottom: .5em;
+    padding-top: .5em;
+}
+
+.menu-inner .item-md:hover {
+    color: #C1272D;
+}
 
 
 
