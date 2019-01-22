@@ -94,12 +94,34 @@
         </div>
          <div class="bisectional_section neuvo_metodo_pago"> 
             <div class="sources_wrapper"> <!-- INICIO STRIPE LISTED SOURCES-->
-              <h3>Metodos de pago activos</h3>
-                <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado metodos de pago </div>
-                <div *ngFor="let src of this.sources" (click)="selectCard(src)"   [class.selectedsrc]="src.default" class="fact_src_unit">
-                  {{src.brand}} **** **** **** {{src.last4}}
-                </div>
-                </div> <!-- FIN STRIPE LISTED SOURCES-->  
+              <h3>Tarjetas activas</h3>
+              <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado metodos de pago </div>
+              <ion-row *ngFor="let src of this.sources; let indice = index">
+                <ion-col col-10 [class.selectedsrc]="src.default" class="fact_src_unit">
+                  <ion-row>
+                    <ion-col no-padding col-2>
+                      {{src.brand}}
+                      <ion-row *ngIf="src.default">
+                        <ion-col no-padding>
+                          Pred.
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+                    <ion-col no-padding col-10>
+                      **** **** **** {{src.last4}}
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+                <ion-col *ngIf="onplanchange == true " class="cont-buttons-srcs" col-2 no-padding>
+                  <button ion-button icon-only full small clear (click)="selectCard(src)">
+                    <ion-icon name="star"></ion-icon>
+                  </button>
+                  <button ion-button icon-only full small clear (click)="removeCard(indice,src)">
+                    <ion-icon name="close"></ion-icon>
+                  </button>
+                </ion-col>
+              </ion-row>
+            </div> <!-- FIN STRIPE LISTED SOURCES-->  
         </div>
       </div>
       <div class="subtotal_pago">

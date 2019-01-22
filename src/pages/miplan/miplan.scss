@@ -230,5 +230,38 @@ page-miplan {
 
     }
 
-
+    .fact_src_unit {
+        width: 100%;
+        /*height: 50px;*/
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 1.5rem;
+        background-color: #F6F6F6;
+        padding: 1em;
+        padding-left: 1.5em;
+        cursor: pointer;
+        margin:0;
+        border-radius: .5em;
+        color: #7d7d7d;
+    }
+    .cont-buttons-srcs button{
+        margin:  0;
+    }
+    .cont-buttons-srcs ion-icon[name="star"]{
+        color: #6DB5DE;
+    }
+    .fact_src_unit ion-row{
+        width: 100%;
+    }
+    .fact_src_unit ion-col{
+        margin: 0 !important;
+    }
+    .fact_src_unit ion-col:first-child{
+        font-size: 1rem;
+    }
+    .selectedsrc{
+        background: linear-gradient(to right, #03a9f4a8, #94b71b);
+        color: white;
+    }
 }
