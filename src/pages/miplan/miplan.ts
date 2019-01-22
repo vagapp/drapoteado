@@ -13,6 +13,8 @@ import { ConektaComponent } from '../../components/conekta/conekta'
 import { HomePage } from '../home/home';
 import { BaseUrlProvider } from '../../providers/base-url/base-url';
 
+import { HttpClient } from '@angular/common/http';
+
 declare var Stripe;
 
 
@@ -94,7 +96,8 @@ export class MiplanPage {
     public loader:LoaderProvider,
     public subsManager: SubscriptionManagerProvider,
     public conekta: ConektaComponent,
-    public bu: BaseUrlProvider
+    public bu: BaseUrlProvider,
+    public http: HttpClient,
   ) {
     conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
       //Este success se ejecuta con el javascript se cargó correctamente
@@ -120,13 +123,13 @@ export class MiplanPage {
       client_secret: token.id,
       brand: token.brand
     };
-    this.userData.userData.field_src_json_info['und'].push({value: JSON.stringify(cu_src_data)});
-    let updateUser_res = await this.userData.updateUser().toPromise();
+    //this.userData.userData.field_src_json_info['und'].push({value: JSON.stringify(cu_src_data)});
+    /*let updateUser_res = await this.userData.updateUser().toPromise();
     this.loadSources();
 
     if(!this.enabledButton) return false;
     this.bu.locationReload();
-    console.log(token);
+    console.log(token);*/
   }
   errorToken(error:any){
     //Esta función se agrega al atributo (errorToken) para recibir lo errores al momento de generar un token
@@ -329,8 +332,12 @@ export class MiplanPage {
   }*/
 
 loadSources(){
+  console.log(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid);
+  this.http.get(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid).subscribe( (res:any) => {
+    this.parseSources(res);
+  });
   //Debugger.log(['loading srcs']);
-  let old_selected = this.selected_source;
+  /*let old_selected = this.selected_source;
   this.sources = new Array();
   for(let i = 0; i < this.userData.userData.field_src_json_info.und.length; i++){
     let new_source = new sources();
@@ -338,14 +345,29 @@ loadSources(){
     this.sources.push(new_source);
     if(old_selected !== null && new_source.src_id === old_selected.src_id){ this.selected_source = new_source; this.selected_source.set_selected()}
     else  if(old_selected === null ){ this.selected_source = new_source; this.selected_source.set_selected()}
-  }
-
+  }*/
 }
 
-selectCard( input_src:sources ){
+parseSources(src){
+  this.sources = new Array();
+  console.log(src.data);
+  this.sources = src.data;
+}
+
+selectCard( input_src:any ){
   //Debugger.log(['selecting source',input_src]);
-  this.selected_source = input_src;
-  this.selected_source.set_selected()
+  /*this.selected_source = input_src;
+  this.selected_source.set_selected();*/
+  console.log(input_src.id);
+  let info = {
+    "action":"update",
+    "data":{
+      "source":input_src.id
+    }
+  };
+  this.http.post(this.bu.endpointUrl+'payment_methods',info).subscribe( (res:any) => {
+    this.parseSources(res);
+  });
 }
 
 
