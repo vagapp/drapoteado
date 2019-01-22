@@ -135,7 +135,7 @@ export class UsuariosPage {
     this.alert.chooseAlert(
       'Eliminar',
       '¿Está seguro de que desea eliminar este usuario de la subscripción?',
-      ()=>{ this.removeSubUserFromSubs(userd); },
+      ()=>{ /*this.removeSubUserFromSubs(userd);*/this.completeSubUserRemove( userd );  },
       ()=>{}
     );
   }

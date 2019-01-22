@@ -24,8 +24,8 @@ import {Platform} from 'ionic-angular';
   templateUrl: 'reporte.html',
 })
 export class ReportePage {
-  
     smallMode:boolean = false;
+    
 
   constructor(
     public navCtrl: NavController, 
@@ -52,12 +52,13 @@ export class ReportePage {
   setsmallMode(){
     console.log('setsmallmode');
     this.plat.ready().then((readySource) => {
-      if(this.plat.width() < 700){
+      if(this.plat.width() < 1024){
         this.smallMode = true;
       }
       //console.log('Width: ' + this.plat.width());
       //console.log('Height: ' + this.plat.height());
     });
+    this.smallMode = true;
   }
 
   /**
