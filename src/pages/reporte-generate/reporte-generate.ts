@@ -48,9 +48,13 @@ export class ReporteGeneratePage {
 
   openReportNoModal(){
     console.log('this.reportPresentator.docuid',this.reportPresentator.docuid);
+    if(Number(this.reportPresentator.type) === Number(this.reportPresentator.REPORT_TICKET) ){
+      this.reportPresentator.openTicket(this.reportPresentator.actualReport);
+    }else{
     this.reportPresentator.loadReportNM().then(()=>{
       this.dismiss();
     });
+  }
   }
 
 
