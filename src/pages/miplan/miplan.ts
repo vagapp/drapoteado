@@ -196,7 +196,7 @@ export class MiplanPage {
     console.log('guardar_basic_validation',this.selectedPlan);
     if(!this.selectedPlan){  ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un plan'); }
     console.log('guardar_basic_validation ret',ret);
-    //if(!this.selectedMethod){ ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un Método de Pago'); }
+    if(!this.selectedMethod){ ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un Método de Pago'); }
     return ret;
   }
 
