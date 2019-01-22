@@ -18,6 +18,16 @@ export class AlertProvider {
     console.log('Hello AlertProvider Provider');
   }
 
+
+  resetStrings(){
+    this.yesString = 'Si';
+    this.noString = 'No';
+  }
+
+  setStrings(yes:string, no:string){
+    this.yesString = yes;
+    this.noString = no;
+  }
   presentAlert(title:string, msg:string){
     let alert = this.alertCtrl.create({
       title: title,

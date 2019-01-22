@@ -201,9 +201,19 @@ export class MiplanPage {
   guardar_subusernumber_validation():boolean{
     let ret = true;
     console.log('guardar_subusernumber_validation',this.selectedAditionals,this.subsData.getSubAccountsTotal());
-    if(this.selectedAditionals > this.subsData.getSubAccountsTotal()){
+    if((this.selectedAditionals + this.subsData.getplanAccounts()) < this.subsData.getUsedSubAccounts()){
      console.log('no suficientes espacios mija');
      ret = false;
+     //title, msg, inputs, inputcallback, cancelCallback
+     this.alert.setStrings('Usuarios','Cancelar');
+     this.alert.chooseAlert('Error','No puedes reducir tus usuarios adicionales por debajo del numero de usuarios con los que cuentas actualmente.',
+    ()=>{
+      this.alert.resetStrings();
+      this.navCtrl.setRoot('UsuariosPage');
+    },()=>{
+      this.alert.resetStrings();
+    });
+  
     }
     return ret;
   }
@@ -333,7 +343,9 @@ export class MiplanPage {
 
 loadSources(){
   console.log(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid);
+  this.sources = new Array();
   this.http.get(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid).subscribe( (res:any) => {
+    console.log('wegot',res);
     this.parseSources(res);
   });
   //Debugger.log(['loading srcs']);
@@ -349,7 +361,6 @@ loadSources(){
 }
 
 parseSources(src){
-  this.sources = new Array();
   console.log(src.data);
   this.sources = src.data;
 }

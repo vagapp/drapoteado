@@ -222,6 +222,8 @@ async getUserByCode(){
   }
 
 
+
+
  
 
 /*
@@ -283,6 +285,16 @@ async getUserByCode(){
        console.log("POST call in error", response);
      }
     );*/
+  }
+}
+
+gobackuser(){
+  console.log('gobackuser',this.isnew);
+  if(this.isnew){
+    this.newuser=false; this.codeuser=false; this.initialpage=true;
+  }else{
+    console.log('okei no es new');
+    this.dismiss();
   }
 }
 

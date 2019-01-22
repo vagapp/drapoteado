@@ -48,6 +48,14 @@ export class SubscriptionDataProvider {
     return ret;
   }
 
+  getplanAccounts():number{
+    let ret = Number(0);
+    if( this.checkForPlan() ){
+    ret += Number(this.subscription.plan.field_no_subcuentas);
+  }
+  return ret;
+  }
+
  
 
   getUsedSubAccounts():number{

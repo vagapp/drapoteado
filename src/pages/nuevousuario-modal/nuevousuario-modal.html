@@ -56,7 +56,7 @@
         <span class="spanBlock" *ngIf="this.userData.checkUserPlanHolder()"> <button class="bgColorSecondary generalButton" (click)="newuser=true; initialpage=false;">Registrar Nuevo</button></span>
       </div>
     <div class="nuevoservicio_content modalContent" *ngIf="codeuser">
-        <span class="spanBlock optionspan" (click)="newuser=false; codeuser=false; initialpage=true" > atras </span>
+        <span class="spanBlock optionspan" (click)="gobackuser()" > atras </span>
         <div class="ModalInput_input">
             <b>Introducir Código</b>
             <input  [(ngModel)]="this.newUserCode" type="text"/>
@@ -68,7 +68,7 @@
           </div>
     </div>
     <div class="nuevoservicio_content modalContent" *ngIf="this.newuser">
-            <span class="spanBlock optionspan" (click)="newuser=false; codeuser=false; initialpage=true" *ngIf="!this.tutorial.checkTutorialState()"> atras </span>
+            <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="!this.tutorial.checkTutorialState()"> atras </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> Crea un usuario para caja. </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> Crea un usuario para Recepción. </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> Crea un usuario para Caja & Recepción. </span>

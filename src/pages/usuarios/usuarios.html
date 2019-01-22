@@ -37,7 +37,7 @@
                 <td class="fontHight"><input type="text" value="{{user.field_codigo}}" class="field left codigo" readonly></td>
                 <td class="toolCol">
                   <img     *ngIf="this.permissions.checkUserPlanHolder()"  src="assets/imgs/editar.svg" class="icon_drapo" (click)="editUsuario(user)">
-                  <button  *ngIf="user.field_doctores.und.indexOf(this.userData.userData.uid) >= 0"  (click)="removeUsuariopop(user)" class="bgColorPrimary generalButton tableButton">Remover</button>
+                  <button  *ngIf="this.permissions.checkUserPlanHolder()"  (click)="removeUsuariopop(user)" class="bgColorPrimary generalButton tableButton">Remover</button>
                   <!--<button  *ngIf="user.field_doctores.und.indexOf(this.userData.userData.uid) === -1"  (click)="agregarusuariopop(user)" class="bgColorPrimary generalButton tableButton">Agregar</button>-->
                 </td>
              </tr>

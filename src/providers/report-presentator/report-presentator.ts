@@ -132,9 +132,9 @@ async openReporte( report:reportes = null){
 async loadReportNM(loadReport:boolean = true){ //este metodo lo cree a partir de querer abrir el reporte no en modal para cargar el reporte y retornar un valor que indique que esta cargado y abrir la pagina en el layout.
   console.log('docuid loadreportnm a',JSON.stringify(this.docuid));
 
-  console.log('subUsers',this.subUserData.subUsers);
-    console.log('subscriptionSubUsers',this.subUserData.subscriptionSubUsers);
-  console.log('loadReportNM',loadReport);
+  /*console.log('subUsers',this.subUserData.subUsers);
+    console.log('subscriptionSubUsers',this.subUserData.subscriptionSubUsers);*/
+ // console.log('loadReportNM',loadReport);
   this.loader.presentLoader('Cargando Reporte ...');
   //await this.setReport(report);
   if(loadReport) await this.loadReporte();
@@ -180,6 +180,7 @@ async openReportGenerate( report:reportes = null ){
   }
 
   async loadReportCitas(){
+    console.log('loadReportCitas');
     if(Number(this.docuid) === 0){ this.docuid = null; }
     if(this.docuid !== null ){
       const aux_doc = this.docData.getDoctorByUid(this.docuid);
@@ -188,6 +189,7 @@ async openReportGenerate( report:reportes = null ){
       this.docAlias = aux_doc.field_alias;
       console.log('docfound in report is',aux_doc,this.docName,this.docAlias);
     }
+    console.log('this.docuid af',this.docuid);
     await this.reporteCitas.reporteLoadCitas(this.actualReport, this.docuid);
   }
 
