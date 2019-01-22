@@ -1,6 +1,6 @@
 page-reporte {
     ion-content{
-        margin-top: 50px;
+        margin-top: 70px;
         padding: 0;
     }
 
@@ -42,6 +42,7 @@ page-reporte {
         display: flex;
         flex-flow: row;
         flex-wrap: wrap;
+        justify-content: space-around;
     }
     
     .reporte_header .modalPage_header{
@@ -50,14 +51,19 @@ page-reporte {
     }
 
     .reporte_header .modalPage_toolbar{
-        width: 20%;
+        width: 49%;
         min-width: 250px;
-        text-align: right;
+        text-align: center;
         display: -webkit-box;
         display: flex;
         flex-flow: space-around;
         flex-wrap: wrap;
         justify-content: space-around;
+        font-size: 1.6rem;   
+    }
+
+    .reporte_header .midFont {
+        font-size: 1.6rem;
     }
 
     .ReporteRow_TotalServicios {
@@ -209,8 +215,136 @@ page-reporte {
         margin-left: 5px;
     }
 
+    .estado-cita-reporte {
+        margin-bottom: 0 !important;
+        float: right;
+        margin-top: 0 !important;
+    }
+
+    ion-footer {display:none;}
+
+    ion-footer .toolbar{ 
+        padding: 0!important;
+    }
+
+    ion-footer ion-col{ 
+        padding: 0!important;
+    }
+
+    .toolbar:last-child {
+        padding-bottom: 0 !important;
+        min-height: auto!important;
+    }
+
+    ion-footer button {
+        margin: 0 !important;
+        height: 6.6rem !important;
+       
+    }
+
+    .ReportesTotales {
+        padding-bottom: 10rem;
+    }
+
+    .reporte-movil {
+        display: none;
+        border-bottom: transparent;
+    }
+
+    .reporte-movil  .ReporteRow_head {
+        display: grid;
+    grid-template-columns: 1fr 5fr 3fr;
+    justify-content: center;
+    align-items: center;
+    padding: .5em;
+    }
+
+    .reporte-movil .totalycitas span, {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin: 5px 0;
+    }
+
+    .reporte-movil .nombres-reporte  .rbh_span {
+        display: block;
+        margin: .5em;
+    }
+
+    .reporte-movil .bold {
+        margin-right: 5px;
+        margin-left: 0;
+    }
 
 
+
+    @media screen and (max-width: 1024px){
+    ion-footer {
+        display:block;}
+
+     
+        .reporte_header .modalPage_toolbar{
+            margin: 1em 0;
+        }
+    .ReportesTotales, .export-big, .modalPage_title .midSubFon, .reporte-desk   {display:none;}
+
+    .reporte_header .modalPage_header {
+        width: auto;
+        min-width: auto;
+        display: flex;
+        padding: 1em;
+    }
+
+    .modalPage_toolbar .spanBlock {
+        display: inline-block;
+        width: auto;
+        margin: 5px;
+        font-size: 1.6rem;
+    }
+
+    .modalPage_logo {
+        height: 50px;
+        width: 50px;}
+
+    
+        ion-content {
+            margin-top: 70px;}
+
+    .ReporteRow:last-child {
+        padding-bottom: 15rem;
+    }
+
+    .reporte-movil {
+        display: flex;
+    }
+
+    .reporte-movil {
+        .ReporteRow_Desglose {
+            border-top: 1px solid lightgray;
+            padding: .8em 1em;
+            text-align: left;
+        }
+        .ReporteRow_TotalServicios {
+            margin: 1em 0;
+            padding: 1em 0;
+            border-top: 1px solid lightgray;
+            border-bottom: 1px solid lightgray;
+        }
+        .ReporteRow_Desglose_row {
+            width: 100%;
+        }
+
+        .ReporteRow_Desglose_row .rbh_span, .ReporteRow_Desglose_row .rrt_span {
+            margin-right: .5em;
+            margin-bottom: .5em;
+            display: inline-block;
+        }
+    }
+
+   
+
+
+    }
 
     @media screen and (max-width: 450px){
     .reporte_header .modalPage_toolbar{
@@ -266,7 +400,7 @@ page-reporte {
         width: 100%;
         padding: 1px;
         margin: 0px;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
 
     .ReporteRow{
