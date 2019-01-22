@@ -46,7 +46,7 @@ export class ReportePage {
   }
 
   verTotales(){
-    this.reportPresentator.openTicket();
+    this.reportPresentator.openTicket(this.reportPresentator.actualReport);
   }
 
   setsmallMode(){
@@ -58,7 +58,6 @@ export class ReportePage {
       //console.log('Width: ' + this.plat.width());
       //console.log('Height: ' + this.plat.height());
     });
-   
   }
 
   /**
