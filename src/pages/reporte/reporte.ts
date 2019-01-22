@@ -58,7 +58,7 @@ export class ReportePage {
       //console.log('Width: ' + this.plat.width());
       //console.log('Height: ' + this.plat.height());
     });
-    this.smallMode = true;
+   
   }
 
   /**
