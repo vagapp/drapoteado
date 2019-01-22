@@ -110,12 +110,6 @@ export class MiplanPage {
 
   /*ERROR Y SUCCESS CONEKTA*/
   async successToken(token:any){
-    /*brand: "visa"
-    cardNumber: "4242"
-    id: "tok_2jxTTjKKjFegNxbJK"
-    livemode: false
-    object: "token"
-    used: false*/
     //Esta función se agrega al atributo (successToken) para recibir el resultado de generar el token
     let cu_src_data = {
       id: token.id,
@@ -123,17 +117,25 @@ export class MiplanPage {
       client_secret: token.id,
       brand: token.brand
     };
-    //this.userData.userData.field_src_json_info['und'].push({value: JSON.stringify(cu_src_data)});
-    /*let updateUser_res = await this.userData.updateUser().toPromise();
-    this.loadSources();
-
-    if(!this.enabledButton) return false;
-    this.bu.locationReload();
-    console.log(token);*/
+    let info = {
+      "action":"add",
+      "data":{
+        "token":token.id
+      }
+    };
+    this.http.post(this.bu.endpointUrl+'payment_methods',info).subscribe( (res:any) => {
+      this.parseSources(res);
+    });
   }
   errorToken(error:any){
     //Esta función se agrega al atributo (errorToken) para recibir lo errores al momento de generar un token
     console.log(error);
+    let alerta = this.alert.alertCtrl.create({
+      title: "Error",
+      subTitle: error.message_to_purchaser,
+      buttons: ["OK"]
+    });
+    alerta.present();
   }
   /*FIN ERROR Y SUCCESS CONEKTA*/
 
@@ -365,20 +367,67 @@ parseSources(src){
   this.sources = src.data;
 }
 
-selectCard( input_src:any ){
-  //Debugger.log(['selecting source',input_src]);
-  /*this.selected_source = input_src;
-  this.selected_source.set_selected();*/
-  console.log(input_src.id);
-  let info = {
-    "action":"update",
-    "data":{
-      "source":input_src.id
-    }
-  };
-  this.http.post(this.bu.endpointUrl+'payment_methods',info).subscribe( (res:any) => {
-    this.parseSources(res);
+removeCard(index,card){
+  let alerta = this.alert.alertCtrl.create({
+    title: "Eliminar tarjeta",
+    message:"¿Desea eliminar esta tarjeta?",
+    buttons: [
+      {
+        text: "Cancelar",
+        role: "cancel",
+        handler: () =>  {
+          console.log('se canceló')
+        }
+      },
+      {
+        text: "Eliminar",
+        handler: () => {
+          let info = {
+            "action":"delete",
+            "data":{
+              "position":index
+            }
+          };
+          this.http.post(this.bu.endpointUrl+'payment_methods',info).subscribe( (res:any) => {
+            this.parseSources(res);
+          });
+        }
+      }
+    ]
   });
+  alerta.present();
+}
+
+selectCard( input_src:any ){
+  let alerta = this.alert.alertCtrl.create({
+    title: "Confirmar tarjeta",
+    subTitle:"¿Desea asignar esta tarjeta como predeterminada?",
+    message: "Todos sus pagos se realizarán por defecto con esta tarjeta.",
+    buttons: [
+      {
+        text: "Cancelar",
+        role: "cancel",
+        handler: () =>  {
+          console.log('se canceló')
+        }
+      },
+      {
+        text: "Predeterminar",
+        handler: () => {
+          let info = {
+            "action":"update",
+            "data":{
+              "source":input_src.id
+            }
+          };
+          this.http.post(this.bu.endpointUrl+'payment_methods',info).subscribe( (res:any) => {
+            this.parseSources(res);
+          });
+        }
+      }
+    ]
+  });
+  alerta.present();
 }
 
 
