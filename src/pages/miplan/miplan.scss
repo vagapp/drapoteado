@@ -72,11 +72,12 @@ page-miplan {
     }
 
     .plans_extras_section input {
-        background: lightgray;
+        background: #d3d3d34d;
         border: none;
         text-align: center;
         padding: 10px;
         font-size: larger;
+        border-radius: 5px;
     }
 
     .plans_extras_section .operator {
@@ -84,6 +85,70 @@ page-miplan {
         font-size: 3em;
         color: #C1272D;
         cursor: pointer;
+    }
+
+    .informacion_pagos ion-label {
+        color: #7d7d7d;
+    }
+
+   
+    .informacion_pagos ion-input {
+        border-bottom: 1px solid lightgray;
+    width: 100%;
+    padding-bottom: 0;
+    transition: .5s;
+    }
+
+    .informacion_pagos ion-input:hover, .informacion_pagos ion-input:focus, .informacion_pagos ion-input:active {
+        background-color: #d3d3d34d;
+    }
+
+    .informacion_pagos .text-input-md {
+        margin: 0;
+        padding: .5em;
+      
+    }
+
+    .informacion_pagos ion-select {
+        width: 100%;
+    background-color: #d3d3d34d;
+    text-align: center;
+    padding: .5em;
+    border-radius: 3px;
+    }
+
+    .informacion_pagos .col {
+        margin-bottom: 1em;
+    }
+
+    .metodos_pago .button-md {
+        width: 35%;
+        margin: 1em auto;
+        box-shadow: none;
+        border-radius: 10px;
+        padding: 1.5em 0;
+    }
+
+    .neuvo_metodo_pago h3 {
+        font-size: 1.5rem;
+        text-align: left;
+        margin-top: 1em;
+        color: #7d7d7d;
+    }
+
+     .select input {
+        max-width: none !important;
+    }
+
+    @media screen and (max-width: 1510px){
+        .bisectional{
+            padding: 0px 4%;
+        }
+
+        .metodos_pago .button-md {
+            width: 50%;
+        }
+
     }
 
     @media screen and (max-width: 1200px){
@@ -135,6 +200,32 @@ page-miplan {
             position: absolute;        
             left: 50%;
             top: 0%;
+        }
+
+    }
+
+    @media screen and (max-width: 800px){
+        .generalButton {
+            margin-top:1em;
+            font-size: 1.8rem;
+        }
+
+        .bisectional {padding: 0;}
+
+       
+    }
+
+    @media screen and (max-width: 500px){
+        .metodos_pago .button-md {
+            width: 80%;
+        }
+
+        .subtotal_pago {
+            padding: 2em;
+        }
+
+        .button_section {
+            padding: 1em;
         }
 
     }

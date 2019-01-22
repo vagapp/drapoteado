@@ -18,11 +18,13 @@
     </div>
     
     <div class="filters_wrapper">
-    <div><span class="midFont"> Paciente: </span><input [(ngModel)]="citasPresentator.pacienteFilter" (ngModelChange)="citasPresentator.filterChange();"  type="text" placeholder="paciente"> </div>
-     <span class="midFont"> Fecha: </span> 
-     <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="citasPresentator.dateFilterStart" (ngModelChange)="citasPresentator.filterChange();"></ion-datetime>
-     <span class="midFont remover"  *ngIf="citasPresentator.filteredCitas" (click)="citasPresentator.removeFilter();" >remover filtro</span>
-    </div>
+      <div class="filtro-nombre"><span class="midFont"> <img src="assets/imgs/buscar.svg"  class="icon_drapo"> </span><input [(ngModel)]="citasPresentator.pacienteFilter" (ngModelChange)="citasPresentator.filterChange();"  type="text" placeholder="Nombre del Paciente"> </div>
+       <div  class="filtro-fecha">
+         <span class="midFont"> <img src="assets/imgs/fecha.svg"  class="icon_drapo"></span> 
+       <ion-datetime  placeholder="Filtrar por Fecha" [(ngModel)]="citasPresentator.dateFilterStart" (ngModelChange)="citasPresentator.filterChange();" ></ion-datetime>
+       <span class="midFont remover"  *ngIf="citasPresentator.filteredCitas" (click)="citasPresentator.removeFilter();" > <img src="assets/imgs/x.svg"  class="icon_drapo_sm"></span>
+      </div>
+</div>
   <div class="Citas_grid result_wrapper">
     <!--<table class="results_table">
         <thead>

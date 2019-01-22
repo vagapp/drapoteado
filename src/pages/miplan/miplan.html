@@ -94,6 +94,7 @@
         </div>
          <div class="bisectional_section neuvo_metodo_pago"> 
             <div class="sources_wrapper"> <!-- INICIO STRIPE LISTED SOURCES-->
+              <h3>Metodos de pago activos</h3>
                 <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado metodos de pago </div>
                 <div *ngFor="let src of this.sources" (click)="selectCard(src)"   [class.selectedsrc]="src.default" class="fact_src_unit">
                   {{src.brand}} **** **** **** {{src.last4}}
