@@ -12,7 +12,7 @@
 <div class="modalPage_toolbar">
     <div class="info_tool" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]) && this.reportPresentator.docLoaded">
         <span class="spanBlock midFont"><b>Doctor</b></span>
-        <span class="spanBlock fonHigh midFont">{{this.reportPresentator.docName}}</span>
+        <span class="spanBlock fonHigh midFont">{{this.reportPresentator.docName}} / {{this.reportPresentator.docAlias}}</span>
       </div>
         <div class="info_tool">
             <span class="spanBlock midFont"><b>Fecha</b></span>
