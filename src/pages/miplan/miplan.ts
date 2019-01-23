@@ -128,7 +128,12 @@ export class MiplanPage {
       }
     };
     this.http.post(this.bu.endpointUrl+'payment_methods',info).subscribe( (res:any) => {
-      this.parseSources(res);
+      if(res!=null){
+        this.selectedMethod = res.default_payment_source_id;
+        this.parseSources(res);
+      }else{
+        this.selectedMethod = null;
+      }
     });
   }
   errorToken(error:any){
@@ -349,10 +354,12 @@ export class MiplanPage {
 
 loadSources(){
   console.log(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid);
-  this.sources = new Array();
   this.http.get(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid).subscribe( (res:any) => {
-    console.log('wegot',res);
     this.parseSources(res);
+    if(res!=null){
+      this.selectedMethod = res.default_payment_source_id;
+      this.parseSources(res);
+    }
   });
   //Debugger.log(['loading srcs']);
   /*let old_selected = this.selected_source;
@@ -393,7 +400,13 @@ removeCard(index,card){
             }
           };
           this.http.post(this.bu.endpointUrl+'payment_methods',info).subscribe( (res:any) => {
-            this.parseSources(res);
+            if(res!=null){
+              this.selectedMethod = res.default_payment_source_id;
+              this.parseSources(res);
+            }else{
+              this.selectedMethod = null;
+              this.sources = [];
+            }
           });
         }
       }
@@ -425,7 +438,12 @@ selectCard( input_src:any ){
             }
           };
           this.http.post(this.bu.endpointUrl+'payment_methods',info).subscribe( (res:any) => {
-            this.parseSources(res);
+            if(res!=null){
+              this.selectedMethod = res.default_payment_source_id;
+              this.parseSources(res);
+            }else{
+              this.selectedMethod = null;
+            }
           });
         }
       }
