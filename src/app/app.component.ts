@@ -85,8 +85,9 @@ export class MyApp {
         if(this.userData.userData.uid !== 0){
           this.rootPage = 'HomePage';
           if(!this.perm.checkUserSuscription([UserDataProvider.PLAN_ANY])){
-            let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
-            Modal.present({});
+            this.rootPage = 'MiplanPage';
+            /*let Modal = this.modalCtrl.create("Miplanpage", undefined, { cssClass: "bigModal" });
+            Modal.present({});*/
           }
         }
         loading.dismiss();

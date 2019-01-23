@@ -45,6 +45,10 @@ export class MiplanPage {
   selectedAditionals = 0;
   selectedMethod = null;
 
+  get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
+  get nextCobro(){ return this.subsData.checkForSub() ? this.subsData.subscription.field_next_cobro : 0; }
+  get subAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_adicionales) : 0;  }
+
   get selectedTotal():number{
     let ret = 0;
     if(this.onplanchange){ 
@@ -77,7 +81,7 @@ export class MiplanPage {
 
     getTotal_noChangePlan(){
       let ret:number = 0;
-      if(!this.onplanchange && this.subsData.subscription){
+      if(!this.onplanchange && this.subsData.subscription && this.subsData.subscription.field_cantidad){
         ret += Number((this.subsData.subscription.field_cantidad));
       }
       return ret;
@@ -172,7 +176,7 @@ export class MiplanPage {
    
     //this.setupStripe();
     console.log(' this.subsData.subscription', this.subsData.subscription);
-    this.selectedAditionals = Number(this.subsData.subscription.field_adicionales);
+    this.selectedAditionals =  this.subAdicionales;
     this.onplanchange = true;
     this.loadSources();
   }

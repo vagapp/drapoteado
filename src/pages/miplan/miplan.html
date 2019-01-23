@@ -12,8 +12,8 @@
     <div class="modalPage_lpane" *ngIf="!onplanchange && subsData.subscription">
        
        
-      <span class="spanBlock midFont">Total de tu suscripción mensual: <span class="fontPrimary bold">${{subsData.subscription.field_cantidad}}</span> </span>
-      <span class="spanBlock midSubFont"> vence al {{subsData.subscription.field_next_cobro}}</span>
+      <span class="spanBlock midFont">Total de tu suscripción mensual: <span class="fontPrimary bold">${{cantidad}}</span> </span>
+      <span class="spanBlock midSubFont"> vence al {{nextCobro}}</span>
       <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()" >Editar</button>
     </div>
    
@@ -81,8 +81,8 @@
       </div> <!-- fin de usuarios adicionales onplanchange-->
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
-        <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span> </span>
-        <span class="spanBlock midFont"> Total extra de subusuarios:  <span class="fontPrimary">${{this.subsData.subscription.field_adicionales*40}}.00</span></span>
+        <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{subAdicionales}} adicionales</span> </span>
+        <span class="spanBlock midFont"> Total extra de subusuarios:  <span class="fontPrimary">${{subAdicionales*40}}.00</span></span>
       </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
 
     </div><!-- fin de plans extras -->
@@ -126,8 +126,8 @@
       </div>
       <div class="subtotal_pago">
         <span class="spanBlock midFont" *ngIf="this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{selectedTotal}}.00</span></span>
-        <span class="spanBlock midFont" *ngIf="!this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{this.subsData.subscription.field_cantidad}}.00</span></span>
-        <p class="midSubFont" *ngIf="this.onplanchange"> Cualquier cambio en el monto total de tu suscripcion se vera reflejado en tu proxima mensualidad al ${{this.subsData.subscription.field_next_cobro}}</p>
+        <span class="spanBlock midFont" *ngIf="!this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{cantidad}}.00</span></span>
+        <p class="midSubFont" *ngIf="this.onplanchange"> Cualquier cambio en el monto total de tu suscripcion se vera reflejado en tu proxima mensualidad al ${{nextCobro}}</p>
       </div>  
       <div class="button_section"> 
         <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup()"  (click)="guardar()" >Guardar</button>
