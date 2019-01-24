@@ -19,12 +19,14 @@ export class DrupalNodeManagerProvider {
   }
 
   generateNewNode( newNode ):Observable<any>{
+    console.log('generating newNode w',newNode);
     let body = JSON.stringify(newNode);
     let url = `${this.bu.endpointUrl}node/`;
     return this.http.post(url,body).share();
   }
 
   updateNode( node ):Observable<any>{
+    console.log('update node w',node);
     let body = JSON.stringify(node);
     let url = `${this.bu.endpointUrl}node/${node.Nid}`;
     return this.http.put(url,body).share();

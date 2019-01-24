@@ -151,9 +151,9 @@ export class SubscriptionManagerProvider {
    * @param plan 
    * @param source 
    */
-  async subscribe(plan:planes, source:sources = null){
+  async subscribe(plan:planes, suscription:subscriptions){
     console.log('subscribing');
-    let ns_res = await this.getSubscribeObs(plan,source).toPromise();
+    let ns_res = await this.getSubscribeObs(plan,suscription).toPromise();
     /*if(ns_res && this.checkForSubscription()) 
     await this.deletesSus(this.subsData.subscription).toPromise();*/
   }
@@ -163,15 +163,16 @@ export class SubscriptionManagerProvider {
    * @param plan 
    * @param source 
    */
-  getSubscribeObs(plan:planes, source:sources = null):Observable<any>{
+  getSubscribeObs(plan:planes, suscription:subscriptions = null):Observable<any>{
     console.log('getSubscribeObs');
     console.log(plan);
-    console.log(source);
+
     let ret = null;
     //cant check if plan holder cuz its not. why was i checking if its plan holder men. dont get it. but its supposed to return false
     //if(!this.permissions.checkUserPlanHolder()) return ret;
-    let aux_sus = subscriptions.getEmptySuscription();
+    let aux_sus = suscription;
     if(this.checkForSubscription()){
+      let aux_sus = subscriptions.getEmptySuscription();
       aux_sus.field_doctores = this.subsData.subscription.field_doctores;
       aux_sus.field_subusuarios = this.subsData.subscription.field_subusuarios;
       aux_sus.plan = plan;
@@ -187,6 +188,7 @@ export class SubscriptionManagerProvider {
       aux_sus.field_doctores.push(this.userData.userData.uid);
       aux_sus.field_stripe_src_sus_id = '0';
       aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
+      console.log('wakaheheee',aux_sus);
     }
     ret = this.generateNewSus(aux_sus);
     return ret;

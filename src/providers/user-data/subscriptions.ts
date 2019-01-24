@@ -92,7 +92,7 @@ export class subscriptions{
     }
 
     getData():any{
-        //Debugger.log(['tryna get data from',this]);
+       
         let ret = null;
         if(this.nid !== null){
         ret =  {

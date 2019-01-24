@@ -13,7 +13,9 @@ import { ConektaComponent } from '../../components/conekta/conekta'
 import { HomePage } from '../home/home';
 import { BaseUrlProvider } from '../../providers/base-url/base-url';
 
+
 import { HttpClient } from '@angular/common/http';
+import { subscriptions } from '../../providers/user-data/subscriptions';
 
 declare var Stripe;
 
@@ -134,7 +136,7 @@ export class MiplanPage {
     };
     this.http.post(this.bu.endpointUrl+'payment_methods',info).subscribe( (res:any) => {
       if(res!=null){
-        //this.selectedMethod = res.default_payment_source_id;
+        this.selectedMethod = res.default_payment_source_id;
         //this.setdefaultPaymentSource(res.default_payment_source_id);
         this.parseSources(res);
       }else{
@@ -274,7 +276,11 @@ export class MiplanPage {
 
     }else{
       console.log('akiwe');
-      await this.subsManager.subscribe( this.selectedPlanObject);
+      let aux_sus = subscriptions.getEmptySuscription();
+      aux_sus.field_cantidad = this.selectedTotal;
+      aux_sus.field_plan_sus = this.selectedPlan;
+      aux_sus.field_adicionales = Number(this.selectedAditionals);
+      await this.subsManager.subscribe( this.selectedPlanObject, aux_sus);
       this.loader.dismissLoader();
       this.bu.locationReload();
     
