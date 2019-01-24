@@ -151,7 +151,7 @@ export class SubscriptionManagerProvider {
    * @param plan 
    * @param source 
    */
-  async subscribe(plan:planes, source:sources){
+  async subscribe(plan:planes, source:sources = null){
     console.log('subscribing');
     let ns_res = await this.getSubscribeObs(plan,source).toPromise();
     /*if(ns_res && this.checkForSubscription()) 
@@ -163,7 +163,7 @@ export class SubscriptionManagerProvider {
    * @param plan 
    * @param source 
    */
-  getSubscribeObs(plan:planes, source:sources):Observable<any>{
+  getSubscribeObs(plan:planes, source:sources = null):Observable<any>{
     console.log('getSubscribeObs');
     console.log(plan);
     console.log(source);
@@ -177,7 +177,7 @@ export class SubscriptionManagerProvider {
       aux_sus.plan = plan;
       aux_sus.field_plan_sus = plan.nid;
       aux_sus.field_plan_holder = this.userData.userData.uid;
-      aux_sus.field_stripe_src_sus_id = source.src_id;
+      aux_sus.field_stripe_src_sus_id = '0';
       aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
     }else{
       aux_sus.plan = plan;
@@ -185,7 +185,7 @@ export class SubscriptionManagerProvider {
       aux_sus.field_plan_holder = this.userData.userData.uid;
       aux_sus.field_doctores = new Array();
       aux_sus.field_doctores.push(this.userData.userData.uid);
-      aux_sus.field_stripe_src_sus_id = source.src_id;
+      aux_sus.field_stripe_src_sus_id = '0';
       aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
     }
     ret = this.generateNewSus(aux_sus);

@@ -45,9 +45,14 @@ export class MiplanPage {
   selectedAditionals = 0;
   selectedMethod = null;
 
+ cantcancel = false;
+
   get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
   get nextCobro(){ return this.subsData.checkForSub() ? this.subsData.subscription.field_next_cobro : 0; }
   get subAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_adicionales) : 0;  }
+  get subPlan(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_plan_sus) : 0;  }
+
+  
 
   get selectedTotal():number{
     let ret = 0;
@@ -129,13 +134,16 @@ export class MiplanPage {
     };
     this.http.post(this.bu.endpointUrl+'payment_methods',info).subscribe( (res:any) => {
       if(res!=null){
-        this.selectedMethod = res.default_payment_source_id;
+        //this.selectedMethod = res.default_payment_source_id;
+        //this.setdefaultPaymentSource(res.default_payment_source_id);
         this.parseSources(res);
       }else{
         this.selectedMethod = null;
       }
     });
   }
+
+
   errorToken(error:any){
     //Esta función se agrega al atributo (errorToken) para recibir lo errores al momento de generar un token
     console.log(error);
@@ -170,9 +178,10 @@ export class MiplanPage {
     console.log('my sub is',this.subsData.subscription)
     if(!this.permissions.checkUserSuscription([this.userData.PLAN_ANY])){
       this.activateChangePlanMode();
+      this.cantcancel = true;
     }else{
       this.onplanchange = false;
-      this.selectedPlan = this.subsData.subscription.field_plan_sus;
+      this.selectedPlan = this.subPlan;
       this.selectedPlanObject = this.planesData.getPlanById(this.selectedPlan);
     }
   }
@@ -203,7 +212,9 @@ export class MiplanPage {
   guardar_basic_validation():boolean{
     let ret = true;
     console.log('guardar_basic_validation',this.selectedPlan);
-    if(!this.selectedPlan){  ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un plan'); }
+    if(!this.selectedPlan){  ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un plan'); }else{
+      this.selectedPlanObject = this.planesData.getPlanById(this.selectedPlan);
+    }
     console.log('guardar_basic_validation ret',ret);
     if(!this.selectedMethod){ ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un Método de Pago'); }
     return ret;
@@ -250,6 +261,7 @@ export class MiplanPage {
     console.log('suscribirse this.selectedPlanObject',this.selectedPlanObject);
     //Tengo para crear una suscripcion, pero no para editar una suscripcion. vamos a hacer un codigo para editar suscripcion.
     //must set custom price.
+    
     if(this.subsManager.checkForSubscription()){ 
       console.log('checked for subs did tru');
       this.subsData.subscription.field_cantidad = this.selectedTotal;
@@ -261,13 +273,13 @@ export class MiplanPage {
       this.bu.locationReload();
 
     }else{
-      await this.subsManager.subscribe( this.selectedPlanObject,this.selectedMethod);
+      console.log('akiwe');
+      await this.subsManager.subscribe( this.selectedPlanObject);
       this.loader.dismissLoader();
       this.bu.locationReload();
     
     }
-
-    console.log('before this');
+   
     
     
   }
@@ -355,7 +367,6 @@ export class MiplanPage {
 loadSources(){
   console.log(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid);
   this.http.get(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid).subscribe( (res:any) => {
-    this.parseSources(res);
     if(res!=null){
       this.selectedMethod = res.default_payment_source_id;
       this.parseSources(res);
