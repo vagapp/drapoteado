@@ -63,6 +63,7 @@ docAlias:string = null;
   cajaAdeudo:number;
 
   get pendiente():number{
+    console.log('adeudo en citas por cobrar',this.cajacuentas);
     return Number(this.cajaAdeudo ? this.cajaAdeudo: 0 )+Number(this.cajacuentas ? this.cajacuentas: 0);
   }
 
@@ -229,7 +230,11 @@ async openReportGenerate( report:reportes = null ){
       if(cita.duracionMs) this.duracionTotalMs += cita.duracionMs;
       if(cita.costo) this.costoTotal += cita.costo;
       if(cita.cobro) this.total+= cita.cobro;
-      if(cita.costo && cita.cobro && cita.costo > cita.cobro){ this.cajaAdeudo += cita.costo - cita.cobro; }
+      if(cita.costo && cita.cobro && cita.costo > cita.cobro){ 
+        console.log('cita.costo > cita.cobro',cita);
+        this.cajaAdeudo += cita.costo - cita.cobro;
+        console.log(' this.cajaAdeudo goes up to', this.cajaAdeudo); 
+      }
       if(cita.cobroEfectivo) this.totalefectivo+=cita.cobroEfectivo;
 	    if(cita.cobroTarjeta) this.totalTarjeta+=cita.cobroTarjeta;
       if(cita.cobroCheque) this.totalCheques+=cita.cobroCheque;
@@ -244,11 +249,14 @@ async openReportGenerate( report:reportes = null ){
     let citasPorCobrar = this.actualReport.citas.filter((citas)=>{
       return citas.checkState(CitasDataProvider.STATE_COBRO);
     }); 
+    console.log('calcularCitasPorCobrar val',citasPorCobrar);
     this.cajacuentas = 0;
     for(let cita of citasPorCobrar){
+      console.log('evaluando',cita);
       if(cita.costo)
       this.cajacuentas += cita.costo;
     }
+    console.log('calcularCitasPorCobrar fin',this.cajacuentas);
   }
 
   /**
