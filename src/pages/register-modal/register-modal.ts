@@ -319,7 +319,7 @@ export class RegisterModalPage {
     this.loader.presentLoader('Subscribiendo ...');
     console.log(this.selected_source);
     console.log(this.selected_plan);
-    await this.subsManager.subscribe( this.selected_plan,this.selected_source);
+    //await this.subsManager.subscribe( this.selected_plan,this.selected_source);
     /*console.log('subscribing');
     let ns_res = await this.subsManager.getSubscribeObs( this.selected_plan,this.selected_source).toPromise();
     if(ns_res && this.subsManager.checkForSubscription()) 
@@ -530,7 +530,7 @@ export class RegisterModalPage {
         this.loadSources();
 
         if(!this.enabledButton) return false;
-        await this.subsManager.subscribe( this.selected_plan,this.selected_source);
+        //await this.subsManager.subscribe( this.selected_plan,this.selected_source);
         window.location.reload();
         
       });

@@ -135,6 +135,7 @@ export class NuevousuarioModalPage {
     this.newUser.field_codigo.und[0].value = "add"+this.userData.userData.uid;
     this.newUser.field_nombre.und[0].value = "Subusuario";
     this.newUser.field_apellidos.und[0].value = "Subusuario";
+    this.newUser.field_nombre.und[0].value = this.checkpass;
     this.newUser.status = ""+1;
     delete this.newUser.field_sub_id;
     this.userMan.generateNewUserd( this.newUser ).subscribe(

@@ -66,10 +66,10 @@ checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean
 
 
 checkUserPlanHolder(){
-  console.log('checkUserPlanHolder');
+  /*console.log('checkUserPlanHolder');
   console.log('this.subsData.subscription',this.subsData.subscription);
   console.log(this.subsData.subscription.field_plan_holder );
-  console.log(this.userData.userData.uid);
+  console.log(this.userData.userData.uid);*/
   return this.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) && (Number(this.subsData.subscription.field_plan_holder) === Number(this.userData.userData.uid));
 }
 

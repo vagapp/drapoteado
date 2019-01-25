@@ -44,6 +44,7 @@ export class DrupalUserManagerProvider {
   }
 
   generateNewUserd( userd ):Observable<any>{
+    console.log('usergenerate',userd);
     let body = JSON.stringify(userd);
     let url = `${this.bu.endpointUrl}user/`;
     return this.http.post(url,body).share();
