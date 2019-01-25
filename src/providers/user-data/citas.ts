@@ -425,8 +425,8 @@ export class Citas{
 
       getDatetimeFormat():string{
         let ret = "";
-        let datestring = `${this.date.getDate()}/${(this.date.getMonth()+1)}/${this.date.getFullYear()}`;
-        let timestring =  `${this.date.getHours()}:${this.date.getMinutes()}`;
+        let datestring = `${DateProvider.formatDateBinaryNumber(this.date.getDate())}/${(DateProvider.formatDateBinaryNumber(this.date.getMonth()+1))}/${this.date.getFullYear()}`;
+        let timestring =  `${DateProvider.formatDateBinaryNumber(this.date.getHours())}:${DateProvider.formatDateBinaryNumber(this.date.getMinutes())}`;
         ret = `${datestring}T${timestring}`;
         return ret;
       }
@@ -434,8 +434,8 @@ export class Citas{
 
       getDisplayableDates():{"date":string,"time":string}{
         let ret = {"date":'',"time":''};
-        let datestring = `${this.date.getDate()}/${(this.date.getMonth()+1)}/${this.date.getFullYear()}`;
-        let timestring =  `${this.date.getHours()}:${this.date.getMinutes()}`;
+        let datestring = `${DateProvider.formatDateBinaryNumber(this.date.getDate())}/${(DateProvider.formatDateBinaryNumber(this.date.getMonth()+1))}/${this.date.getFullYear()}`;
+        let timestring =  `${DateProvider.formatDateBinaryNumber(this.date.getHours())}:${DateProvider.formatDateBinaryNumber(this.date.getMinutes())}`;
         ret = { "date":datestring ,"time":timestring};
         return ret;
       }
@@ -470,5 +470,8 @@ export class Citas{
       }
     
 
-
+      static formatDateBinaryNumber( num ){
+        return (num < 10 ? '0' : '') + num;
+      }
+      
 }

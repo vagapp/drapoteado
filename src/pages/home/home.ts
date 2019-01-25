@@ -12,6 +12,7 @@ import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
 import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 import { TutorialProvider } from '../../providers/tutorial/tutorial';
+import { DateProvider } from '../../providers/date/date';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 @IonicPage({
@@ -35,7 +36,8 @@ export class HomePage {
     public permissions: PermissionsProvider,
     public doctoresData: DoctoresDataProvider,
     public citasData: CitasDataProvider,
-    public tutoralProvider: TutorialProvider
+    public tutoralProvider: TutorialProvider,
+    public dates:DateProvider
   ) {
     //console.log('hello',permissions.subsData.subscription);
   }
