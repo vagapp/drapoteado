@@ -30,6 +30,7 @@ export class ReportPresentatorProvider {
   static REPORT_COMPLETE = 1;
   get REPORT_TICKET(){ return ReportPresentatorProvider.REPORT_TICKET;}
   get REPORT_COMPLETE(){ return ReportPresentatorProvider.REPORT_COMPLETE;}
+  reportisloading:boolean=false;
 
   reportSubject:Subject<any> = new Subject();
 actualReport:reportes = null;
@@ -117,7 +118,6 @@ docAlias:string = null;
 
 async openReporte( report:reportes = null){
   console.log('opening reporte', this.type);
-  
   this.loader.presentLoader('Cargando Reporte ...');
   await this.setReport(report);
   await this.loadReporte();
@@ -131,20 +131,18 @@ async openReporte( report:reportes = null){
 }
 
 async loadReportNM(loadReport:boolean = true){ //este metodo lo cree a partir de querer abrir el reporte no en modal para cargar el reporte y retornar un valor que indique que esta cargado y abrir la pagina en el layout.
-  console.log('docuid loadreportnm a',JSON.stringify(this.docuid));
-
-  /*console.log('subUsers',this.subUserData.subUsers);
-    console.log('subscriptionSubUsers',this.subUserData.subscriptionSubUsers);*/
- // console.log('loadReportNM',loadReport);
+  console.log('loadReportNM',JSON.stringify(this.docuid));
   this.loader.presentLoader('Cargando Reporte ...');
   //await this.setReport(report);
   if(loadReport) await this.loadReporte();
-  console.log('docuid loadreportnm b',JSON.stringify(this.docuid));
- 
   this.loader.dismissLoader();
-  console.log('docuid loadreportnm c',JSON.stringify(this.docuid));
+  console.log('1beforenext');
+  this.reportisloading = true;
   this.reportSubject.next(1);
 }
+
+
+
 
 async openReportGenerate( report:reportes = null ){
   this.loader.presentLoader('Cargando Reporte ...');
@@ -174,7 +172,7 @@ async openReportGenerate( report:reportes = null ){
   }
 
   async loadReporte(){
-    console.log('loadReporte');
+    console.log('loadReporte unk');
     await this.loadReportCitas();
     await this.loadReportServicios();
     this.evaluateCitas();
@@ -246,6 +244,7 @@ async openReportGenerate( report:reportes = null ){
   }
 
   calcularCitasPorCobrar(){
+    console.log('calcularCitasPorCobrar');
     let citasPorCobrar = this.actualReport.citas.filter((citas)=>{
       return citas.checkState(CitasDataProvider.STATE_COBRO);
     }); 

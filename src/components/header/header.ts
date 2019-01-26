@@ -67,8 +67,19 @@ export class HeaderComponent{
 
     this.reportObservable.subscribe(
       (val)=>{
-       console.log('reportObservable');
-       this.navCtrl.setRoot('ReportePage');
+        console.log('reportObservable');
+        if(this.reportPresentator.reportisloading){
+          this.reportPresentator.reportisloading = false;
+        if(Number(this.reportPresentator.type) === Number(this.reportPresentator.REPORT_TICKET) ){ 
+          let load = "ReporteTicketPage"; let modalClass = 'verysmallModal';
+          let Modal = this.modalCtrl.create(load, undefined, { cssClass: `${modalClass} reportModal` });
+           Modal.present({});
+        }else{
+          this.navCtrl.setRoot('ReportePage');
+        }
+      }
+      
+      
         }
     );
     

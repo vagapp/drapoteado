@@ -110,7 +110,7 @@ export class HomePage {
   }
 
 
- 
+
 
   calcularRifa(){
     let random = Math.floor(Math.random() * 6) + 1;

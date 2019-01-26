@@ -105,7 +105,7 @@ export class RegisterModalPage {
     if(!this.basicValidation()){return 0;}
    console.log('basic validation ret ??? ');
     if(this.passwordNeededValidation() ){
-
+ 
     }else{
       await this.update();
   }
