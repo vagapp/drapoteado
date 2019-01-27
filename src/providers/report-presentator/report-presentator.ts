@@ -17,6 +17,7 @@ import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { SubusersDataProvider } from '../subusers-data/subusers-data';
 import { Subject } from 'rxjs/Subject';
 import { PermissionsProvider } from '../permissions/permissions';
+import { IfObservable } from 'rxjs/observable/IfObservable';
 
 /*
   Generated class for the ReportPresentatorProvider provider.
@@ -222,6 +223,7 @@ async openReportGenerate( report:reportes = null ){
     console.log('citas en evaluate citas report', this.actualReport.citas);
     this.noCitas = this.actualReport.citas.length;
     this.noCancel = this.actualReport.citas.filter((citas)=>{return citas.checkState(CitasDataProvider.STATE_CANCELADA)} ).length;
+    if(isNaN(this.noCancel)) this.noCancel = 0;
     this.calcularCitasPorCobrar();
     let filteredCitas = CitasDataProvider.sortByDate(this.getFilteredCitasShow());
     for(let cita of filteredCitas){

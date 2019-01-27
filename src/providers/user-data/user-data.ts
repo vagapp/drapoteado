@@ -704,10 +704,16 @@ export class UserDataProvider {
   
 
   requestRecover( name:string ){
+    let info = {
+      "data":{
+        "mail":name
+      }
+    };
+
     //let body = `{"mail":"${name}"}`;
-    //console.log("requesting password reset body ",body);
-    let url = this.bu.endpointUrl+'pass_request/'+name;
-    let observer = this.http.get(url);
+    console.log("requesting password reset body ",info);
+    let url = this.bu.endpointUrl+'pass_request';
+    let observer = this.http.post(url,info);
     return observer;
   }
 
