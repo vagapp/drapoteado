@@ -37,15 +37,17 @@ export class ReportesManagerProvider {
 
   //REPORTES METHODS
   async cargarListaReportes(){
-    if(!this.reportesData.isSetTodayReport) 
-    await this.getTodayReport();
+    console.log('cargarListaReportes');
+    if(!this.reportesData.isSetTodayReport){ console.log('loading today report'); await this.getTodayReport();  console.log('end loading today report'); }
     console.log('today report is',this.reportesData.todayReport);
     let reportes_data = await this.requestReportes(-1, 'all').toPromise();
     console.log('obtained reportes data ',reportes_data);
     for( let reporte_data of reportes_data){
       if(this.reportesData.checkTodayReportNid(reporte_data['nid'])){
+        console.log('Nid reporte de hoy',reporte_data);
         this.reportesData.todayReport.setData(reporte_data);
       }else{
+        console.log('else nid reporte de hoy',reporte_data);
         this.reportesData.addReporte(reporte_data);
       }
     }
@@ -69,7 +71,9 @@ export class ReportesManagerProvider {
    if(todayReport_Data.length > 0){
     this.reportesData.addReporte(todayReport_Data[0], true);
    }else{
+     console.log('generating today report');
     await this.generateTodayReport();
+    console.log('after generating today report');
    }
   }
 
@@ -80,10 +84,12 @@ export class ReportesManagerProvider {
       uax_treport.dateStartUTMS = this.dp.nowStart;
       uax_treport.dateEndUTMS = this.dp.nowEnd;
       uax_treport.dialy = true;
+      console.log('dateStartUTMS', uax_treport.dateStartUTMS);
+      console.log('dateEndUTMS',uax_treport.dateEndUTMS);
     let nid = await this.nodeMan.generateNewNode(uax_treport.getData()).toPromise();
     console.log(nid);
     uax_treport.nid = nid['nid'];
-    console.log('generated nid',nid[0]);
+    console.log('generated nid',nid['nid']);
     console.log('obtained stringified', JSON.stringify(uax_treport));
     console.log('obtained data stringified', JSON.stringify(uax_treport.getData()));
     let data = uax_treport.getData();
@@ -99,6 +105,7 @@ export class ReportesManagerProvider {
     data['field_datestartutmb'] = {'value': data['field_datestartutmb']}
     data['field_dateendutmb'] = {'value': data['field_dateendutmb']}
     console.log('data ends as',data);
+    console.log('reporte data',data);
     this.reportesData.addReporte(data,true);
   }
 

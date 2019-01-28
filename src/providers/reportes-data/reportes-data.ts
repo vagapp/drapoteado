@@ -41,8 +41,8 @@ export class ReportesDataProvider {
   addNewReporte(input_data, today = false){
     let aux_rep = new reportes();
     aux_rep.setData(input_data);
-    if(today) this.todayReport = aux_rep; 
-    else this.reportes.push(aux_rep);
+    if(today){ this.todayReport = aux_rep; console.log('setting todayreport HERE', this.todayReport ); }
+    else{this.reportes.push(aux_rep);}
   }
 
   checkForUpdate(input_data):boolean{
@@ -57,6 +57,8 @@ export class ReportesDataProvider {
 
 
   checkTodayReportNid( Nid:number ):boolean{
+    console.log('this.todayReport.nid',this.todayReport.nid);
+    console.log('Nid',Nid);
     return Number(this.todayReport.nid) === Number(Nid); 
   }
 

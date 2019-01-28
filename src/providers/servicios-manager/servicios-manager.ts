@@ -33,7 +33,17 @@ export class ServiciosManagerProvider {
     for(let servicio_data of servicios_data){this.addServicio(servicio_data);}
     this.docData.doctores.forEach(doc => {
       doc.setServicios(this.servicios);
-      doc.servicios.push(this.getCortesia());
+      //hecho por raul
+      let existe = false;
+      doc.servicios.forEach(element => {
+        if(Number(element.Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)){
+          existe = true;
+        }
+      });
+      if(!existe){
+        doc.servicios.push(this.getCortesia());
+      }
+      //fin hecho por raul
       doc.servicios = this.defaultSort(doc.servicios);
     });
   }

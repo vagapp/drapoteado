@@ -16,9 +16,9 @@
           Home
       </button>
       <!--<button *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR],[perm.PLAN_GROUP])" menuClose ion-item  (click)="openGrupoPage()">-->
-          <button *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR],[userData.PLAN_ANY])" menuClose ion-item  (click)="openGrupoPage()">
+          <!--<button *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR],[userData.PLAN_ANY])" menuClose ion-item  (click)="openGrupoPage()">
           Grupo
-      </button>
+      </button>-->
       <button *ngIf="perm.checkUserFeature([userData.TIPO_ANY],[userData.PLAN_ANY])" menuClose ion-item  (click)="openCitasPage()">
           Citas
       </button>
