@@ -24,7 +24,8 @@ export class ReportesDataProvider {
   }
 
   addReporte( input_data , today = false, call = false ){
-    console.log('adding reporte',input_data);
+    console.log('adding reporte',input_data,new Date(input_data['field_datestartutmb']['value']));
+
     if(!this.checkForUpdate(input_data)){
       this.addNewReporte(input_data, today);
     }
