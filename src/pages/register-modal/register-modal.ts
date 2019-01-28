@@ -125,12 +125,13 @@ export class RegisterModalPage {
     }
 
     if(this.currentpasswordNeeded){
-      aux_userData.pass = new Array();
-      aux_userData.pass.push({'existing': this.currentPass});
+      /*aux_userData.pass = new Array();
+      aux_userData.pass.push({'existing': this.currentPass});*/
       aux_userData['current_pass'] = this.currentPass;
       if(this.checkForPasswordChange()){
         console.log('checkforpassword change is on');
-        aux_userData.pass.push({"value": this.userData.userData.pass});
+        //aux_userData.pass.push({"value": this.userData.userData.pass});
+        aux_userData.pass = this.userData.userData.pass;
       }
     }
 
