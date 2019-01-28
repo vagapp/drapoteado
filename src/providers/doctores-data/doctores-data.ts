@@ -47,6 +47,10 @@ export class DoctoresDataProvider {
     if( call ) this.subject.next(this.doctores);
     console.log('removed doctor',doc,this.doctores);
   }
+  cleanDoctor(){
+    console.log("UNIDO Y DIFERENTE",JSON.stringify(this.doctores));
+    this.doctores = new Array();
+  }
 
   exists( doc:Doctores ):boolean{
     return this.doctores.filter((docs)=>{ return Number(docs.Uid) === Number(doc.Uid) }).length > 0;

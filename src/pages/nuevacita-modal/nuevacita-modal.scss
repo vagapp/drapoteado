@@ -119,5 +119,15 @@ page-nuevacita-modal {
         }
     }
 
+    .refresh-doctors, .refresh-doctors:hover, .refresh-doctors:active{
+      color: #6DB5DE;
+      background-color: transparent !important;
+      padding: 0;
+      margin: 0;
+      box-shadow: initial;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
 
 }

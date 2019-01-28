@@ -119,6 +119,13 @@ export class UsuariosPage {
     console.log('subs restantes',this.subsData.getSubAccountsLeft());
     if(this.subsData.getSubAccountsLeft() > 0  ){ 
     let Modal = this.modalCtrl.create("NuevousuarioModalPage", undefined, { cssClass: "smallModal nuevousuarioModal" });
+    Modal.onDidDismiss(data => {
+      if(data !== null){
+        if(data.changed === true){
+          this.cargarUsuarios();
+        }
+      }
+    });
     Modal.present({});
   }else{
     this.alert.presentAlert('Error','No puedes agregar mas usuarios')
