@@ -37,6 +37,9 @@ export class NuevousuarioModalPage {
 
   selectedUsersOptions: number = 0;
 
+  /*BANDERA, USUARIO AGREGADO*/
+  added_user:boolean = false;
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -67,7 +70,7 @@ export class NuevousuarioModalPage {
   }
 
   dismiss() {
-    this.viewCtrl.dismiss();
+    this.viewCtrl.dismiss(this.added_user);
   }
 
   resetNewUser(){
@@ -150,6 +153,7 @@ export class NuevousuarioModalPage {
       if(this.subsData.isGroup) this.wsMessenger.generateSubUserAddedMessage( val['uid'], this.newUser.field_nombre.und[0].value, this.subsData.subscription.field_doctores);
       else await this.subusersManager.cargarSubusuarios();
       this.loader.dismissLoader();
+      this.added_user = true;
       if(this.tutorial.checkTutorialState())
       {
         this.tutorial.usuarioCreated = true;
@@ -215,6 +219,7 @@ async getUserByCode(){
       this.tutorial.usuarioCreated = true;
     }else{
       this.alert.presentAlert("Hecho",`Se le ha asignado el usuario ${res[0]['name']}`);
+      this.added_user = true;
       this.close();
     }
   }else{
@@ -412,7 +417,7 @@ updateUserValidation():boolean{
 }*/
 
 close( iscreated:boolean = false){
-  this.viewCtrl.dismiss();
+  this.viewCtrl.dismiss({"changed":this.added_user});
 }
 
 
