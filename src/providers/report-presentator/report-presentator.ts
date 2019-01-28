@@ -223,7 +223,9 @@ async openReportGenerate( report:reportes = null ){
     console.log('citas en evaluate citas report', this.actualReport.citas);
     this.noCitas = this.actualReport.citas.length;
     this.noCancel = this.actualReport.citas.filter((citas)=>{return citas.checkState(CitasDataProvider.STATE_CANCELADA)} ).length;
+    console.log('noCancel',this.noCancel);
     if(isNaN(this.noCancel)) this.noCancel = 0;
+    console.log('noCancel ',this.noCancel);
     this.calcularCitasPorCobrar();
     let filteredCitas = CitasDataProvider.sortByDate(this.getFilteredCitasShow());
     for(let cita of filteredCitas){
