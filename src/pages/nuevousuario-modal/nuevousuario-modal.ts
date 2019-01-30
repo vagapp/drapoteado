@@ -99,8 +99,8 @@ export class NuevousuarioModalPage {
     this.initialpage=false;
     this.tutorial.tutorial_users_selected_option = this.selectedUsersOptions;
     if(this.tutorial.tutorial_users_selected_option === TutorialProvider.TUTORIAL_USER_BOTH){
-      this.newUser.field_tipo_de_usuario.und = [3];
-      this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_CAJA;
+      this.newUser.field_tipo_de_usuario.und = [2];
+      this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_RECEPCION; 
     }else{
       this.newUser.field_tipo_de_usuario.und = [4];
     }
@@ -110,9 +110,9 @@ export class NuevousuarioModalPage {
     this.newuser = true;
     this.initialpage=false;
     this.tutorial.usuarioCreated = false;
-    this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_RECEPCION;
+    this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_CAJA;
     this.restart();
-    this.newUser.field_tipo_de_usuario.und = [2];
+    this.newUser.field_tipo_de_usuario.und = [3];
  
   }
 
