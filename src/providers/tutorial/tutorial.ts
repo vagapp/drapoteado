@@ -29,8 +29,8 @@ export class TutorialProvider {
   static TUTORIAL_USER_CNR = 1; // opcion de caja y recepcion
   static TUTORIAL_USER_BOTH = 2; //opcion de un usuario para caja y otro para recepcion
 
- static TUTORIAL_USER_STEP_CAJA  = 1;
- static TUTORIAL_USER_STEP_RECEPCION = 2;
+ static TUTORIAL_USER_STEP_CAJA  = 2;
+ static TUTORIAL_USER_STEP_RECEPCION = 1;
 
   get TUTORIAL_ACTIVE(){ return TutorialProvider.TUTORIAL_ACTIVE; }
   get TUTORIAL_FINISHED(){ return TutorialProvider.TUTORIAL_FINISHED; }
