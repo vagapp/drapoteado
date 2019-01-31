@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
- * Generated class for the SoonPage page.
+ * Generated class for the TerminosycondicionesPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -10,20 +10,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-soon',
-  templateUrl: 'soon.html',
+  selector: 'page-terminosycondiciones',
+  templateUrl: 'terminosycondiciones.html',
 })
-export class SoonPage {
+export class TerminosycondicionesPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SoonPage');
-  }
-
-  openTerminos(){
-    this.navCtrl.setRoot('TerminosycondicionesPage');
+    console.log('ionViewDidLoad TerminosycondicionesPage');
   }
 
 }

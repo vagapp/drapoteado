@@ -19,4 +19,7 @@ export class FooterComponent {
     this.text = 'Hello World';
   }
 
+  openterminos(){
+    
+  }
 }
