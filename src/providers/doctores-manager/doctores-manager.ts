@@ -51,20 +51,28 @@ export class DoctoresManagerProvider {
   /**
    * Este metodo carga los uids de los doctores del usuario:
    * si es un doctor carga su propio uid
-   * si es una subcuenta carga los uids de todos los doctores que esta manejando.
+   * si es una subcuenta carga los uids de todos los doctores que esta manejando. 
   */
  
   async initDoctoresUids(){
     
     console.log('initDoctoresUids');
     this.docData.docIdsToLoad = new Array();
-    if(this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
+    if(this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){ //si es un doctor
       this.setDoctores([this.userData.userData.uid]);
-    }else{
+    }else{ // si es un sub usuario
       console.log('not a doctor setting docs uids');
-      this.loadGroupDoctors();
-      console.log(this.userData.userData.field_doctores);
-      if(this.userData.userData.field_doctores && this.userData.userData.field_doctores.und.length > 0){
+      this.loadGroupDoctors(); //aqui cargamos los doctores de la suscripcion
+      //despues de el metodo de aqui arriba, los ids de los doctores estarian en docdata.docIdsToLoad
+      console.log('docIdsToLoad lleno?',this.docData.docIdsToLoad.length,this.docData.docIdsToLoad);
+      console.log('field_doctores vacio?',this.userData.userData.field_doctores);
+
+      if(this.docData.docIdsToLoad.length > 0){
+        let docs_data = await this.userMan.requestUsers(null,null,this.docData.docIdsToLoad).toPromise();
+        this.setDoctoresData(docs_data);
+      }
+      /*
+      if(this.userData.userData.field_doctores && this.userData.userData.field_doctores.und.length > 0){ // aqui ya todo esta mal porque estamos buscando en la lista de doctores y ya no se debe usar.
       console.log('it has docs');
       //this.setDoctores(this.userData.userData.field_doctores.und);
       console.log('docs ids',this.userData.userData.field_doctores.und);
@@ -77,7 +85,9 @@ export class DoctoresManagerProvider {
       let docs_data = await this.userMan.requestUsers(null,null,this.docData.docIdsToLoad).toPromise();
       this.setDoctoresData(docs_data);
       //for(let doc of doc_data){
-      }
+      }*/
+
+
     }
   }
 

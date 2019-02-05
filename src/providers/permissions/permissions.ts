@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserDataProvider } from '../user-data/user-data';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
+import { subscriptions } from '../user-data/subscriptions';
 
 @Injectable()
 export class PermissionsProvider {
@@ -60,6 +61,16 @@ checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean
   // checking for ANY, automatically returns true since we checked for not 0 or null up here
   if(suscriptions.indexOf(UserDataProvider.PLAN_ANY) > -1){ return true;}
   //regular check
+  if(suscriptions.indexOf(this.subsData.subscription.field_plan_sus) > -1){ret = true;}
+  return ret;
+}
+
+checkifgroup(){
+  let ret = false;
+  let suscriptions = new Array();
+  suscriptions.push(this.PLAN_GROUP);
+  if(this.subsData.subscription === null){return false;}
+  if(Number(this.subsData.subscription.field_active) === Number(0)){return false;} 
   if(suscriptions.indexOf(this.subsData.subscription.field_plan_sus) > -1){ret = true;}
   return ret;
 }

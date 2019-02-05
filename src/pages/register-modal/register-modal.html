@@ -1,93 +1,23 @@
-<!--
-  Generated template for the RegisterModalPage page.
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-content class="register_content">
     <div class="modal_closer" *ngIf="!this.isnew" (click)="this.dismiss();">Volver</div>
-      <div *ngIf="!isnew"  class="fact_page_wrapper">
-        <!--<div *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY])" class="access_code_opt"><span (click)="showInvitation();" class="access_code_opt_link">Tengo un código de invitación</span></div>-->
-        <!--<div *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY]) && invitationshow" class="acesss_code_show"><ion-item class="acesss_code_show_input">
-            <ion-input placeholder="Código de invitación" [(ngModel)]="invitationCode"></ion-input>
-          </ion-item>
-          <button class="generalButton largeButton bgColorPrimary" (click)="invitationSub()" >Enviar</button>  
-        </div>-->
 
-      <!--<div class="fact_subs_info">
-        <div class="fact_myplan" *ngIf="permissions.checkUserSuscription([userData.PLAN_ANY])">
-          <span class="myplan_block">Plan activo: {{subsData.subscription.plan.title}}</span>
-        </div>
-      </div>-->
-      <!--<div class="fact_page_content" *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY]) && this.onGroup" >
-        <p>ingresa el codigo del grupo medico al que perteneces.</p>
-        <div class="button_section_inline">
-        <div class="registerInput">
-            <b>Codigo:</b><input [(ngModel)]="this.searchCode" type="text"/>
-          </div>
-              <button (click)="searchsub()" ion-button block large>Buscar</button>
-              </div>
-        </div>-->
-    <div class="fact_page_content" *ngIf="!permissions.checkUserSuscription([userData.PLAN_ANY]) && !this.onGroup" >
-        <div class="modal_header">
-            <span class="spanBlock header_title"><img class="modal_title_logo" src="assets/imgs/logo-rojo-gris.svg"/></span>
-            <span class="spanBlock header_subtitle">¡ Bienvenido !</span>
-            <p>Gracias por usar nuestra aplicación, para comenzar a utilizarla es necesario que elijas uno de nuestros planes</p>
-          </div>
-          <!--<div class="medicgroup_opendiv fontPrimary" (click)="this.onGroup = true"> Perteneces a un grupo medico? haz click aqui.</div>-->
-        <div class="subscribe_wrap">
-        <div class="fact_myplan noplan " >
-            <span class="fact_label left_label">Seleccione un plan</span>
-            <div *ngFor="let factplan of this.planesData.planes" [class.selectedplan]="factplan.css_fact_selected" class="fact_pna_item" (click)="selectPlan(factplan);">
-              {{factplan.title}} 
-            </div>
-        </div>
-      <div class="fact_payment_methods" *ngIf="this.checkStripeSetup()"> <!--*ngIf="!userData.checkUserSuscription([userData.PLAN_ANY])"-->
-        <!--<span class="fact_label left_label">seleccione un método de pago:</span>
-        <div class="sources_wrapper">
-        <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado metodos de pago </div>
-        <div *ngFor="let src of this.sources" (click)="selectCard(src)"   [class.selectedsrc]="src.selected" class="fact_src_unit">
-          {{src.brand}} **** **** **** {{src.last4}}
-        </div>
-        </div>
-      <span class="fact_label left_label">o agregue un método de pago:</span>-->
-      <div class="forwrapper">
-      <form action="/" method="post" id="payment-form">
-        
-        <div class="form-row">
-          <div id="card-element">
-            <!-- a Stripe Element will be inserted here. -->
-          </div>
-    
-          <!-- Used to display Element errors -->
-          <div id="card-errors" role="alert"></div>
-        </div>
-      <button [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup()" ion-button block large>Suscribirse</button>
-      </form>
-      </div>
-      </div>
-      </div>
-    </div>
-  -->
-    </div>
-    <!--<div class="checkout">
-      <div class="details"></div>
-      <div class="button_section">
-          <button (click)="suscribirse()" [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup()" ion-button block large>Suscribirse</button>
-      </div>
-    </div>-->
-
+   
   <div class="register_contet_head"  *ngIf="permissions.checkUserSuscription([userData.PLAN_ANY])">
     <div class="bigFont" *ngIf="this.isnew"> <span class="fontPrimary"><b>Registro</b></span> <span class="lightFont">de Nuevo Usuario</span></div>
     <div class="midSubFont" *ngIf="this.isnew"> Por favor proporciona los siguientes datos: </div>
     <div class="bigFont" *ngIf="!this.isnew"> <span class="fontPrimary"><b>Datos</b></span> <span class="lightFont">de Usuario</span></div>
+  </div>
+  <div class="code_wrapper"  *ngIf="!permissions.checkUserPermission([userData.TIPO_DOCTOR]) && !permissions.checkifgroup()">
+   <span class="spanBlock">Codigo de usuario: <input [(ngModel)]="this.userData.userData.field_codigo.und[0].value" type="text" readonly/></span>
+   <span class="spanBlock">Los doctores pueden usar este codigo para que tengas acceso a sus citas.</span>
   </div>
   <div class="register_contet_form"  *ngIf="permissions.checkUserSuscription([userData.PLAN_ANY])">
     <div class="register_base register_form_section rfsFlex">
         <div class="registerInput">
             <b>Email:</b><input [(ngModel)]="this.userData.userData.mail" type="text"/>
           </div>
-          <div class="registerInput">
+          <div class="registerInput" *ngIf="this.isnew" >
               <b>Username:</b><input [(ngModel)]="this.userData.userData.name" type="text" />
             </div>
             <div class="registerInput">
@@ -103,54 +33,19 @@
                 <b>Apellido:</b><input  [(ngModel)]="this.userData.userData.field_apellidos.und[0].value"  type="text" />
               </div>
               
-              <div class="registerInput">
+              <div class="registerInput" *ngIf="permissions.checkUserPermission([userData.TIPO_DOCTOR]);">
                 <b>Especialidad:</b><input [(ngModel)]="this.userData.userData.field_especialidad.und[0].value" type="text"/>
               </div>
             
-              <div class="registerInput">
+              <div class="registerInput" *ngIf="permissions.checkUserPermission([userData.TIPO_DOCTOR]);">
                 <b>Alias:</b><input [(ngModel)]="this.userData.userData.field_alias.und[0].value" type="text"/>
               </div>
              
     </div>
 
-    <!--<div class="register_group register_form_section">
-      <div class="group_sect">
-          <span class="group_sect_element radio_group_wrapper">
-            <span class="spanBlock ">
-              ¿Pertenece a un grupo mèdico?
-            </span> 
-              <span class="radio_group" >
-                <span><input [(ngModel)]="this.onGroup" type="radio" name="ongroup" value="1">Sí</span> 
-                <span><input [(ngModel)]="this.onGroup" type="radio" name="ongroup" value="0">No</span></span>
-              </span>
-          <span class="group_sect_element"><span class="registerInput" *ngIf="(this.onGroup == true)">
-            <select  class="input_select input">
-              <option selected disabled value="0">SELECT</option>
-            </select>
-          </span></span>
-          <span class="group_sect_element"><span class="registerInput"  *ngIf="(this.onGroup == true)"><input  [(ngModel)]="this.grupoOtro" class="registerInput"  placeholder="OTHER" type="text" /></span></span>
-      </div>
+    
 
-
-      <div class="group_sect">
-          <span class="group_sect_element radio_group_wrapper">
-            <span class="spanBlock ">
-                ¿Pertenece a algún Hospital ó Comunidad Médica?
-            </span> 
-              <span class="radio_group">
-                <span><input [(ngModel)]="this.onHospital" type="radio" name="onHospital" value="1">Sí</span> 
-                <span><input [(ngModel)]="this.onHospital" type="radio" name="onHospital" value="0">No</span></span>
-              </span>
-          <span class="group_sect_element"><span class="registerInput" *ngIf="(this.onHospital == true)">
-            <select  class="input_select input">
-              <option selected disabled value="0">SELECT</option>
-            </select>
-          </span></span>
-          <span class="group_sect_element"><span class="registerInput" *ngIf="(this.onHospital == true)"><input  [(ngModel)]="this.hospitalOotro" class="registerInput" placeholder="OTHER" type="text" /></span></span>
-      </div>
-    </div>-->
-
-    <div class="register_ubication register_form_section rfsFlex">
+    <div class="register_ubication register_form_section rfsFlex" *ngIf="permissions.checkUserPermission([userData.TIPO_DOCTOR]);">
         <div class="registerInput">
             <b>Calle:</b><input [(ngModel)]="this.userData.userData.field_calle.und[0].value"  type="text"/>
         </div>

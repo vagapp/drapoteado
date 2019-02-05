@@ -47,7 +47,7 @@ export class MiplanPage {
   selectedAditionals = 0;
   selectedMethod = null;
 
- cantcancel = false;
+  cantcancel = false;
 
   get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
   get nextCobro(){ return this.subsData.checkForSub() ? this.subsData.subscription.field_next_cobro : 0; }

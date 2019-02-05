@@ -452,6 +452,16 @@ page-register-modal {
      padding-right: 20px;
  }
 
+ .code_wrapper{
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     flex-flow: column;
+     padding: 10px 60px;
+     border-bottom: 1px solid #a0a0a059;
+     margin-bottom: 20px;
+ }
+
 
 
   @media screen and (max-width: 768px) {

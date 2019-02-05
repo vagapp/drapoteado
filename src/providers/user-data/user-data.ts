@@ -90,6 +90,7 @@ export class UserDataProvider {
     field_stripe_customer_id:{und:[{value: ""}]},
     field_src_json_info:{und:[{value: ""}]},
     field_reference_user:{und:[0]},
+    field_codigo:{und: [{value:""}]},
 }
 
   constructor(
@@ -142,6 +143,7 @@ export class UserDataProvider {
       field_stripe_customer_id: {und:[{value: ""}]},
       field_src_json_info: {und:[{value: ""}]},
       field_reference_user:{und:[]},
+      field_codigo:{und: [{value:""}]},
   }
   }
 
@@ -203,12 +205,13 @@ export class UserDataProvider {
     if(val['field_pais'].length !== 0)this.userData.field_pais = val['field_pais'];
     if(val['field_municipio'].length !== 0)this.userData.field_municipio = val['field_municipio'];
     if(val['field_estado_ubicacion'].length !== 0)this.userData.field_estado_ubicacion = val['field_estado_ubicacion'];
+    if(val['field_codigo'].length !== 0)this.userData.field_codigo = val['field_codigo'];
     this.userData.field_plan_date = val['field_plan_date'];
     this.userData.field_forma_pago = val['field_forma_pago'];
     this.userData.tutorial_state = val['field_tutorial_state'];
-    if(val['field_doctores'].length !== 0){
+    /*if(val['field_doctores'].length !== 0){
     this.userData.field_doctores = val['field_doctores'];
-    }else{ this.userData.field_doctores.und = new Array();}
+    }else{ this.userData.field_doctores.und = new Array();}*/
     Debugger.log(["checking this out subs id",val['field_sub_id']]);
     if(val['field_sub_id'].length != 0){
     this.userData.field_sub_id.und[0] = val['field_sub_id']['und'][0]['nid'];
@@ -219,6 +222,7 @@ export class UserDataProvider {
     }
     this.userData.field_planholder = val['field_planholder'];
     this.userData.field_stripe_customer_id = val['field_stripe_customer_id'];
+    
     if(val['field_src_json_info'].length != 0){
       this.userData.field_src_json_info = val['field_src_json_info'];
     }else{

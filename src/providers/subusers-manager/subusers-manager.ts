@@ -58,10 +58,24 @@ export class SubusersManagerProvider {
     //need to use ids filter with the subscription users ids. get ids from subsData.
     let res = await this.requestSubusuariosSubs().toPromise();
     console.log('loading subusers for subscription res',res);
+    //this.healSubscription(res,this.subsData.getSubusersIDs());
     for(let us of res){
     this.setSubusuariosResult(us,SubusersDataProvider.SUBUSERS_SUBSCRIPTION);
     }
     console.log('loaded subusers', this.subusersData.subUsers);
+  }
+
+ 
+  /**
+   * este es un metodo magico que cura la suscripcion si borras los usuarios con otros metodos macabros.
+   * @param res  el resultadod e la busqueda de sub usuarios reales que existen que se encontraron wey
+   * @param subsids  //los subids que piensa que tiene este wey
+   */
+  healSubscription(res, subsids ){
+    //vamos a ver si es cierto lo que dices wey
+    subsids.forEach(subid => { //por cada subid en tu lista vamos a ver si existe el doctor en el resm osea en lo que si encontramos en los datos wey
+     //aqui no tengo como saber que hay en el puto res asi que necesito un usuario legal men.
+    });
   }
 
   async loadGroupUsers(){

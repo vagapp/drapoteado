@@ -42,9 +42,10 @@ export class SubscriptionDataProvider {
     if( this.checkForPlan() ){
       ret += Number(this.subscription.plan.field_no_subcuentas);
       ret += Number(this.subscription.field_adicionales);
-      console.log('adicionales en la sus',this.subscription.field_adicionales,this.subscription.plan.field_no_subcuentas);
+      //console.log('adicionales en la sus',this.subscription.field_adicionales,this.subscription.plan.field_no_subcuentas);
+
     }
-    console.log('total subacounts',ret);
+    //console.log('total subacounts',ret);
     return ret;
   }
 
