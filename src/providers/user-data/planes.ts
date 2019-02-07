@@ -19,7 +19,7 @@ export class planes{
     setData(input_data){
         console.log("plan input data", input_data);
         this.title = input_data['title'];
-        this.field_costo = input_data['field_costo'];
+        this.field_costo = Number(input_data['field_costo']) / 100;
         this.nid = input_data['nid'];
         this.field_no_doctores = input_data['field_no_doctores'];
         this.field_no_subcuentas = input_data['field_no_subcuentas'];
