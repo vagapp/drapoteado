@@ -22,6 +22,9 @@ import { TutorialProvider } from '../../providers/tutorial/tutorial';
   templateUrl: 'servicios.html',
 })
 export class ServiciosPage {
+
+  showMis:boolean = true;
+  showGrupales:boolean = true;
   
   //servicios:servicios[];
 
@@ -42,10 +45,34 @@ export class ServiciosPage {
     this.cargarServicios();
   }
 
+  ToggleView(val){
+    switch(val){
+      case 1: this.showMis = !this.showMis;break;
+      case 2:  this.showGrupales = !this.showGrupales; break;
+    }
+  }
+
+  get viewMisLabel(){ return this.showMis ? 'Ocultar' : 'Mostrar'; }
+  get viewGroupLabel(){ return this.showGrupales ? 'Ocultar' : 'Mostrar'; }
+
+
+
+
   openNuevoservicio(){
+    this.servicioMan.isgroup = false;
+    this.openNuevo();
+  }
+
+  openNuevoservicioGrupal(){
+    this.servicioMan.isgroup = true;
+    this.openNuevo();
+  }
+
+  openNuevo(){
     let Modal = this.modalCtrl.create("NuevoservicioModalPage", undefined, { cssClass: "smallModal nuevoservicioModal" });
     Modal.present({});
   }
+  
 
   editServicio( edit_servicio ){
     let Modal = this.modalCtrl.create("NuevoservicioModalPage",{ servicio: edit_servicio.getData() } , { cssClass: "smallModal nuevoservicioModal" });

@@ -3,6 +3,7 @@ import { ModalController, Modal } from 'ionic-angular';
 import { PermissionsProvider } from '../permissions/permissions';
 import { UserDataProvider } from '../user-data/user-data';
 import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
+import { ServiciosManagerProvider } from '../servicios-manager/servicios-manager';
 
 /*
   Generated class for the TutorialProvider provider.
@@ -48,6 +49,7 @@ export class TutorialProvider {
     public permissions: PermissionsProvider,
     public userData: UserDataProvider,
     public userMan: DrupalUserManagerProvider,
+    public servMan: ServiciosManagerProvider
 
   ) {
   }
@@ -103,6 +105,7 @@ export class TutorialProvider {
   }
 
   showServicioModal(){
+    this.servMan.isgroup = false;
     this.serviciosModal = this.modalCtrl.create("NuevoservicioModalPage", undefined, { enableBackdropDismiss: this.canClose , cssClass: "smallModal nuevoservicioModal" });
     this.serviciosModal.present({});
   }

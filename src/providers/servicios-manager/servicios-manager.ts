@@ -16,6 +16,7 @@ import { CitasDataProvider } from '../citas-data/citas-data';
 @Injectable()
 export class ServiciosManagerProvider {
   servicios:servicios[] = new Array();
+  isgroup: boolean = false;
 
   constructor(
     public http: HttpClient,
@@ -124,4 +125,14 @@ export class ServiciosManagerProvider {
   updateService( service ){return this.nodeMan.updateNode(service);}
   deleteService( service ){return this.nodeMan.deleteNode(service);}
 
+
+
+  /*---------------------------------------------------------------------METODOS SERVICIOS GRUPALES*/
+  requestServiciosGrupales(serviciosids:Array<number>){
+    
+  }
+
+  generateServicioGrupal(){
+    
+  }
 }

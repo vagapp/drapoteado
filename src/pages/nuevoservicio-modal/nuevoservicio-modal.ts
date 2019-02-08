@@ -24,6 +24,13 @@ export class NuevoservicioModalPage {
   isTutorial:boolean = false;
   newTutService:boolean = true;
 
+
+  get grouplabel(){
+    let ret = "";
+    if(this.servMan.isgroup) ret = 'Grupal';
+    return ret;
+  }
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -112,6 +119,10 @@ export class NuevoservicioModalPage {
     this.newService.field_doctor_uid.und[0].value= this.userData.userData.uid;
     console.log("creating a service ",this.newService);
     let serv_res = await this.servMan.generateNewService( this.newService ).toPromise();
+    console.log('res del servicio',serv_res);
+    if(this.servMan.isgroup){
+      console.log('agregar al grupo we.');
+    }
     let update_res = await this.servMan.loadServicios();
     this.loader.dismissLoader();
     this.dismiss();

@@ -11,7 +11,7 @@
     <div class="modalPage_header" *ngIf="!this.tutorial.checkTutorialState()">
         <div class="modalPage_logo"><img src="assets/imgs/servicios.svg"/></div>
         <div class="modalPage_title">
-          <span class="spanBlock largeFont" *ngIf="this.isnew"><b>Nuevo Servicio</b></span>
+          <span class="spanBlock largeFont" *ngIf="this.isnew"><b>Nuevo Servicio {{grouplabel}}</b></span>
           <span class="spanBlock largeFont" *ngIf="!this.isnew">-<b>editando {{this.newService.title}}</b></span>
         </div>
     </div>

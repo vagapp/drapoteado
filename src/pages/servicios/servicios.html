@@ -15,6 +15,8 @@
     </div>
     <div class="modalPage_btn_wrapper">
       <button class="bgColorSecondary generalButton" (click)="openNuevoservicio()">Agregar Nuevo</button>
+      <button class="bgColorSecondary generalButton" (click)="ToggleView(1)">{{viewMisLabel}}</button> 
+     
     </div>
   </div>
   <div class="Citas_grid result_wrapper">
@@ -23,10 +25,10 @@
             <tr>
                 <th>Servicio</th>
                 <th>Costo</th>
-                <th></th>
+                <th>  </th>
              </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="this.showMis">
             <tr *ngFor="let servicio of this.servicioMan.servicios">
                 <td>{{servicio.title}}</td>
                 <td class="fontSecondary">${{servicio.costo}}</td>
@@ -38,5 +40,42 @@
         </tbody>
     </table>
   </div>
+
+  <div class="modalPage_header">
+    <div class="modalPage_logo"><img src="assets/imgs/servicios.svg"/></div>
+    <div class="modalPage_title">
+      <span class="spanBlock midFont"><b>Servicios Grupales</b></span>
+      <span class="spanBlock midSubFont">Te presentamos los servicios grupales que compartes con el resto del grupo actualmente activos, si tienes dudas sobre el costo o
+        nombre de estos servicios contacta al administrador del grupo.</span>
+    
+    </div>
+    <div class="modalPage_btn_wrapper">
+      <button class="bgColorSecondary generalButton" (click)="openNuevoservicioGrupal()">Agregar Nuevo</button>
+      <button class="bgColorSecondary generalButton" (click)="ToggleView(2)">{{viewGroupLabel}}</button>
+     
+    </div>
+  </div>
+  <div class="Citas_grid result_wrapper">
+    <table class="results_table">
+        <thead>
+            <tr>
+                <th>Servicio</th>
+                <th>Costo</th>
+                <th>   </th>
+             </tr>
+        </thead>
+        <tbody *ngIf="this.showGrupales">
+            <tr *ngFor="let servicio of this.servicioMan.servicios">
+                <td>{{servicio.title}}</td>
+                <td class="fontSecondary">${{servicio.costo}}</td>
+                <td class="toolCol">
+                  <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="editServicio(servicio)"/>
+                  <button class="bgColorPrimary generalButton tableButton" (click)="deleteServicio(servicio)">Eliminar</button>
+                </td>
+             </tr>
+        </tbody>
+    </table>
+  </div>
+
 <footer></footer>
 </ion-content>
