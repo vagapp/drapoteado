@@ -121,6 +121,7 @@ export class NuevoservicioModalPage {
     let serv_res = await this.servMan.generateNewService( this.newService ).toPromise();
     console.log('res del servicio',serv_res);
     if(this.servMan.isgroup){
+      //this.subsMan.serv_res['nid'];
       console.log('agregar al grupo we.');
     }
     let update_res = await this.servMan.loadServicios();
