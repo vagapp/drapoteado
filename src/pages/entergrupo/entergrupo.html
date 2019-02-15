@@ -2,7 +2,7 @@
 <ion-content padding>
 <div class="base_form">
   <div class="text_centered">
-    <div class="enter_title">Activación de grupo médico</div>
+    <div class="enter_title fontPrimary">Activación de grupo médico</div>
     <div class="enter_description">
      Drap se preocupa por hacer tu vida más fácil por eso nuestra función de grupos médicos te brinda funciones para compartir tus servicios y usuarios grupales con otros doctores, Si un doctor de tu grupo te ha compartido un código, ingrésalo aquí
     </div>
@@ -10,29 +10,31 @@
     <div class="enter_field"></div>
   </div>
   <div class="enter_subuser_selection">
-    <div class="enter_title"> Selección de Usuarios </div>
+    <div class="enter_title fontPrimary"> Selección de Usuarios </div>
     <div class="enter_description"> Este plan te permite compartir usuarios entre los doctores del grupo si hay plazas disponibles puedes llevar contigo a tus usuarios actuales, seleccionandolos en la
       lista a continuación, si no hay plazas activas habla con el administrador del grupo para activarlas. </div>
       <div> <span class="enter_plazas_text">Plazas disponibles</span> <span class="enter_plazas_value">00</span></div>
       <table class="results_table">
           <thead>
               <tr>
-                  <th>Servicio</th>
-                  <th>Costo</th>
                   <th>  </th>
+                  <th>Usuario</th>
+                  <th>Tipo de Usuario</th>
                </tr>
           </thead>
-          <tbody *ngIf="this.showMis">
-              <tr *ngFor="let servicio of this.servicioMan.servicios">
-                  <td>{{servicio.title}}</td>
-                  <td class="fontSecondary">${{servicio.costo}}</td>
-                  <td class="toolCol">
-                    <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="editServicio(servicio)"/>
-                    <button class="bgColorPrimary generalButton tableButton" (click)="deleteServicio(servicio)">Eliminar</button>
-                  </td>
+          <tbody >
+              <tr>
+                  <td>input here</td>
+                  <td class="midSubFont ">Nombre Apellido</td>
+                  <td class="midSubFont fontHigh">Recepción & Caja </td>
                </tr>
           </tbody>
         </table>
+  </div>
+  <div class="enter_toolbar">
+    <span class="fontPrimary left">¿Quieres comprar un plan médico?</span>
+    <button class="generalButton bgColorSecondary right" (click)="guardar()" >Guardar</button>
+    <button class="generalButton bgColorPrimary right" (click)="cancelar()" >Cancelar</button>
   </div>
 </div>
 </ion-content>

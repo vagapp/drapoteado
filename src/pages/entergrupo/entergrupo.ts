@@ -22,4 +22,12 @@ export class EntergrupoPage {
     console.log('ionViewDidLoad EntergrupoPage');
   }
 
+  guardar(){
+
+  }
+
+  cancelar(){
+    
+  }
+
 }
