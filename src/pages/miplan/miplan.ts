@@ -290,6 +290,11 @@ export class MiplanPage {
     
   }
 
+  gotoentergroup(){
+    console.log('entering enter group page');
+    this.navCtrl.setRoot('EntergrupoPage');
+  }
+
   /*STRIPE METHODS*/
 
   checkStripeSetup(){
