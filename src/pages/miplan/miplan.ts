@@ -201,14 +201,13 @@ export class MiplanPage {
     console.log('change to onplanchange true');
     this.activateChangePlanMode();
   }
+
   async guardar(){
     console.log('saving to  onplanchange false');
     if(!this.guardar_basic_validation()) return false;
     if(!this.guardar_subusernumber_validation()) return false;
     await this.suscribirse();
     this.onplanchange = false;
-    
-    
   }  
 
   guardar_basic_validation():boolean{
@@ -273,7 +272,6 @@ export class MiplanPage {
       this.loader.dismissLoader();
       console.log('sus udate returned',ret);
       this.bu.locationReload();
-
     }else{
       console.log('akiwe');
       let aux_sus = subscriptions.getEmptySuscription();
@@ -283,7 +281,6 @@ export class MiplanPage {
       await this.subsManager.subscribe( this.selectedPlanObject, aux_sus);
       this.loader.dismissLoader();
       this.bu.locationReload();
-    
     }
    
     

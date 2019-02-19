@@ -6,35 +6,62 @@
     <div class="enter_description">
      Drap se preocupa por hacer tu vida más fácil por eso nuestra función de grupos médicos te brinda funciones para compartir tus servicios y usuarios grupales con otros doctores, Si un doctor de tu grupo te ha compartido un código, ingrésalo aquí
     </div>
-    <div class="enter_field"></div>
-    <div class="enter_field"></div>
+    
+    <div class="enter_field">
+      <ion-list>
+        <ion-item class="loginInput">
+          <ion-input [(ngModel)]="groupCode" placeholder="Codigo de Grupo Medico"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    </div>
+    <div class="groupName_shower fontPrimary" *ngIf="groupLoaded">
+        {{groupName}}
+    </div>
   </div>
-  <div class="enter_subuser_selection">
+  <div class="enter_subuser_selection"  *ngIf="groupLoaded">
     <div class="enter_title fontPrimary"> Selección de Usuarios </div>
     <div class="enter_description"> Este plan te permite compartir usuarios entre los doctores del grupo si hay plazas disponibles puedes llevar contigo a tus usuarios actuales, seleccionandolos en la
       lista a continuación, si no hay plazas activas habla con el administrador del grupo para activarlas. </div>
-      <div> <span class="enter_plazas_text">Plazas disponibles</span> <span class="enter_plazas_value">00</span></div>
+      <div> <span class="enter_plazas_text">Plazas disponibles</span> <span class="enter_plazas_value fontPrimary">{{this.accountsleft}}</span></div>
       <table class="results_table">
           <thead>
               <tr>
-                  <th>  </th>
+                  <th>Agregar</th>
                   <th>Usuario</th>
                   <th>Tipo de Usuario</th>
                </tr>
           </thead>
           <tbody >
-              <tr>
-                  <td>input here</td>
-                  <td class="midSubFont ">Nombre Apellido</td>
-                  <td class="midSubFont fontHigh">Recepción & Caja </td>
+              <tr *ngFor="let subuser of this.subuserData.subUsers">
+                  <td>
+                      <input
+                      type="checkbox"
+                      [checked]="subuser.selectedForGroup"
+                      (change)="subuser.selectedForGroup = false"/>
+                      <!--<ion-checkbox [(ngModel)]="subuser.selectedForGroup" [checked]="subuser.selectedForGroup" (ngModelChange)="onChangeUsers($event,subuser)"></ion-checkbox>-->
+                    <!--
+                    <div class="control-group"> 
+                      <label class="control control-radio">
+                        
+                        
+                          <div class="control_indicator"></div>
+                      </label> 
+                      </div>  -->
+                  </td>
+                  <td class="midSubFont ">{{subuser.name}} </td>
+                  <td class="midSubFont fontHigh">{{this.userData.getTipoUsuarioString(subuser.field_tipo_de_usuario.und[0])}} </td>
                </tr>
           </tbody>
         </table>
   </div>
   <div class="enter_toolbar">
-    <span class="fontPrimary left">¿Quieres comprar un plan médico?</span>
-    <button class="generalButton bgColorSecondary right" (click)="guardar()" >Guardar</button>
+    <span class="fontPrimary left enter_comprar">¿Quieres comprar un plan médico?</span>
+    <div class="button_section">
+    <button class="generalButton bgColorSecondary right" (click)="buscar()" *ngIf="!this.groupLoaded" >Buscar</button>
+    <button class="generalButton bgColorSecondary right" (click)="guardar()" *ngIf="this.groupLoaded" >Guardar</button>
     <button class="generalButton bgColorPrimary right" (click)="cancelar()" >Cancelar</button>
+    </div>
   </div>
 </div>
 </ion-content>

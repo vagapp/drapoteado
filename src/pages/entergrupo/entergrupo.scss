@@ -1,3 +1,51 @@
 page-entergrupo {
 
+    ion-content{
+        margin-top: 80px;
+        padding: 0;
+    }
+
+    .enter_title{
+        margin: 20px 0px;
+        font-weight: 500;
+    }
+
+    .text-input-md{
+        text-align: center;
+    }
+
+    .base_form{
+        padding: 0px 50px;
+    }
+
+    .enter_description{
+        margin: 20px 0px;
+        line-height: 1.6
+    }
+
+    .enter_plazas_text{
+        font-weight: 500;
+    }
+    
+    .enter_comprar{
+        cursor: pointer;
+    }
+
+    .enter_toolbar {
+        /* text-align: right; */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .control_indicator{
+        position: absolute;
+    height: 30px;
+    width: 30px;
+    left: 35px;
+    top: -10px;
+    background: #e6e6e6;
+    border: 0px solid #000000;
+    }
+
 }

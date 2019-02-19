@@ -11,6 +11,7 @@ import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-ma
 import { planes } from '../user-data/planes';
 import { sources } from '../user-data/sources';
 import { PermissionsProvider } from '../permissions/permissions';
+import { ComponentsModule } from '../../components/components.module';
 
 
 /*
@@ -31,7 +32,7 @@ export class SubscriptionManagerProvider {
     public planesData: PlanesDataProvider,
     public bu: BaseUrlProvider,
     public nodeManager: DrupalNodeManagerProvider,
-    public permissions: PermissionsProvider
+    public permissions: PermissionsProvider,
   ) {
     
   }
@@ -359,6 +360,37 @@ export class SubscriptionManagerProvider {
   }
 */
 
+
+getTotalSubAccounts(subscription:subscriptions){
+  let ret:number = 0; 
+  console.log('getting users left from this subscription',subscription);
+  //obtener plan, y ver cuantos usuarios tiene gratis en el plan.
+  let plan = this.planesData.planes.find((planes)=>{
+    return planes.checkNid(subscription.field_plan_sus);
+  });
+  console.log('plan found',plan);
+  if(plan){
+    ret += Number(plan.field_no_subcuentas);
+    console.log('ret f',ret);
+    console.log('subcuentas',plan.field_no_subcuentas);
+  }
+  //obtener adicionales de la suscripcion
+  ret += Number(subscription.field_adicionales);
+  console.log('ret f',ret);
+  console.log('subscription.field_adicionales',subscription.field_adicionales);
+  return ret;
+}
+
+getSubAccountsLeft(subscription:subscriptions){
+ let ret:number = 0;
+ ret = this.getTotalSubAccounts(subscription);
+ //obtener numero de subusuarios activos actualmente en la suscripcion.
+ console.log('subusuarios en la sus',subscription.field_subusuarios.length);
+ ret -= Number(subscription.field_subusuarios.length);
+ console.log('ret f',ret);
+ console.log('subactounts left on this suscription',ret );
+ return ret;
+}
 
 
 
