@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Checkbox } from 'ionic-angular';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { subscriptions } from '../../providers/user-data/subscriptions';
@@ -8,6 +8,8 @@ import { SubusersManagerProvider } from '../../providers/subusers-manager/subuse
 import { SubusersDataProvider } from '../../providers/subusers-data/subusers-data';
 import { UserDataProvider, userd } from '../../providers/user-data/user-data';
 import { PlanesDataProvider } from '../../providers/planes-data/planes-data';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { BaseUrlProvider } from '../../providers/base-url/base-url';
 
 /**
  * Generated class for the EntergrupoPage page.
@@ -38,7 +40,8 @@ export class EntergrupoPage {
     public subuserData: SubusersDataProvider,
     public planData: PlanesDataProvider,
     public loader: LoaderProvider,
-    public alert:AlertProvider
+    public alert:AlertProvider,
+    public bu: BaseUrlProvider
     ) {
   }
 
@@ -69,40 +72,63 @@ export class EntergrupoPage {
     }
   }
 
-  guardar(){
+  async guardar(){
+  if(this.CancelarSuscripcionAtual()){
+    
+    let delsusres = await this.subsMan.deletesSus(this.subsMan.subsData.subscription).toPromise();
+    console.log('NODE DELETION',delsusres);
 
+     if(!delsusres) return false; //salir de aca si no sirve esto
+
+    this.loaded_group_sus.field_doctores.push(this.userData.userData.uid);//agregarse a si mismo a la suscripcion de grupo.
+    this.getSelectedSubusersArray().forEach((subuser)=>{ //agregar sub usuarios a la suscripcion de grupo.
+      this.loaded_group_sus.field_subusuarios.push(subuser.uid);
+    });
+    let res = await this.subsMan.updateSus( this.loaded_group_sus ).subscribe(
+      (val)=>{
+        console.log('redysave val',val);
+        //this.bu.locationReload();
+      },(error)=>{
+        console.log('redysave error',error);
+      }
+    );
+  }
+  }
+
+  CancelarSuscripcionAtual():boolean{
+    let ret = true;
+    console.log('funcionalidad cancelar suscripcion de conekta mijo');
+    return ret;
   }
 
   cancelar(){
     this.navCtrl.setRoot('MiplanPage');
   }
 
-  onChangeUsers(event, subuser:userd){
-    subuser.selectedForGroup = false;
-    event = false;
-    console.log('event',event);
-    console.log('subusers onchange',this.subuserData.subUsers);
+  onChangeUsers(element: Checkbox, subuser:userd){
+    let setTo = !subuser.selectedForGroup;
     this.setSubacountsLeftDelta();
-    if(event){
-      if(this.accountsleft < 0){
-        console.log('noweeeeeeayuda');
-        subuser.selectedForGroup = false;
-        this.setSubacountsLeftDelta();
-        event = false;
-      }
+    if(setTo && this.accountsleft > 0){ 
+     element.checked = subuser.selectedForGroup = true;
+    }else{
+      element.checked = subuser.selectedForGroup = false;
     }
+    this.setSubacountsLeftDelta();
   }
 
   setSubacountsLeftDelta(){
     if(this.groupLoaded){
-      let leftonsus = 1; //this.subsMan.getSubAccountsLeft(this.loaded_group_sus);
-      console.log('lel',leftonsus);
-      let selectedAccounts = this.subuserData.subUsers.filter((subusers)=>{ console.log( subusers.selectedForGroup ); return subusers.selectedForGroup === true }).length;
-      console.log('selectedaccoubts',selectedAccounts);
+      let leftonsus = this.subsMan.getSubAccountsLeft(this.loaded_group_sus);
+      let selectedAccounts = this.getSelectedSubusersArray().length;
       this.accountsleft = leftonsus - selectedAccounts;
-      //this.accountsleft = (this.subsMan.getSubAccountsLeft(this.loaded_group_sus) - this.subuserData.subUsers.filter((subusers)=>{ return subusers.selectedForGroup }).length )
     }
   }
+
+  getSelectedSubusersArray():Array<userd>{
+    return  this.subuserData.subUsers.filter((subusers)=>{ console.log( subusers.selectedForGroup ); return subusers.selectedForGroup === true });
+  }
+
+
 
 
 

@@ -33,13 +33,10 @@
                </tr>
           </thead>
           <tbody >
-              <tr *ngFor="let subuser of this.subuserData.subUsers">
+              <tr *ngFor="let usersub of this.subuserData.subUsers">
                   <td>
-                      <input
-                      type="checkbox"
-                      [checked]="subuser.selectedForGroup"
-                      (change)="subuser.selectedForGroup = false"/>
-                      <!--<ion-checkbox [(ngModel)]="subuser.selectedForGroup" [checked]="subuser.selectedForGroup" (ngModelChange)="onChangeUsers($event,subuser)"></ion-checkbox>-->
+                      <ion-checkbox [checked]="usersub.selectedForGroup" (ionChange)="onChangeUsers($event,usersub)"></ion-checkbox>
+                      <!--<input type="checkbox" [checked]="usersub.selectedForGroup" (change)="onChangeUsers(this,usersub)"/>-->
                     <!--
                     <div class="control-group"> 
                       <label class="control control-radio">
@@ -49,8 +46,8 @@
                       </label> 
                       </div>  -->
                   </td>
-                  <td class="midSubFont ">{{subuser.name}} </td>
-                  <td class="midSubFont fontHigh">{{this.userData.getTipoUsuarioString(subuser.field_tipo_de_usuario.und[0])}} </td>
+                  <td class="midSubFont ">{{usersub.name}} </td>
+                  <td class="midSubFont fontHigh">{{this.userData.getTipoUsuarioString(usersub.field_tipo_de_usuario.und[0])}} </td>
                </tr>
           </tbody>
         </table>

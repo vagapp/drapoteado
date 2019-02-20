@@ -130,6 +130,7 @@ export class SubusersManagerProvider {
       aux_user.status = "1";
       aux_user.field_codigo = user_data.field_codigo;
       aux_user.field_doctores['und'] = new Array();
+      aux_user.selectedForGroup = false;
       for( let doc of user_data.field_doctores){
         aux_user.field_doctores['und'].push(Number(doc.uid));
       }

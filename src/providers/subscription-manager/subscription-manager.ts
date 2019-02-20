@@ -281,7 +281,8 @@ export class SubscriptionManagerProvider {
       let res = await this.updateSus( sus ).subscribe(
         (val)=>{
           console.log('redysave val',val);
-          window.location.reload();
+          //window.location.reload();
+          this.bu.locationReload();
         },(error)=>{
           console.log('redysave error',error);
         }
