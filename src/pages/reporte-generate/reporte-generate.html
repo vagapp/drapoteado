@@ -24,7 +24,8 @@
       </table>
   </div>
   <div class="nuevoreportecontent modalContent">
-    <div class="two_cols">
+    <!--<div class="two_cols">-->
+    <div class="two_cols_yano">
       <div class="two_cols_section">
         <div class="section_row"> 
             <div class="control-group">
@@ -51,7 +52,20 @@
           </div>
           <div class="section_row">Incluye solo el total de citas, costos y adeudos generados del dia</div>
         </div>
-        
+
+        <div class="two_cols_section">
+          <div class="section_row"> 
+              <div class="control-group">
+                  <label class="control control-radio">
+                      <input type="radio" name="rtype" value="{{this.reportPresentator.REPORT_GRUPAL}}"  [(ngModel)]="this.reportPresentator.type" />
+                      <div class="control_indicator"></div>
+                      <img  src="assets/imgs/reporte.svg"  class="icon_drapo_big">
+                      Grupal
+                  </label> 
+                  </div>
+          </div>
+          <div class="section_row">Genera un reporte grupal basado en servicios.</div>
+        </div>
     </div>
     <!--<div class="ModalInput_input">
       <b>Tipo de Archivo:</b>

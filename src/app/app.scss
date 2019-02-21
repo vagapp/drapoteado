@@ -20,6 +20,8 @@ ion-content{
 }
 
 
+
+
 .text_centered{
     text-align: center;
 }
@@ -1168,6 +1170,15 @@ display:inline;
     align-items: center;
 }
 
+.two_cols_yano{
+    display: flex;
+    flex: 1 1;
+    flex-flow: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
 .two_cols_section{
     display:inline-flex;
     width: 49%;
@@ -1179,6 +1190,19 @@ display:inline;
     display: inline-flex;
     width: 100%;
     justify-content: center;
+}
+
+.two_cols_yano .two_cols_section{
+    display:inline-flex;
+    width: auto !important;
+    min-width: 200px;
+    flex-flow: row;
+}
+
+.two_cols_yano .section_row{
+    display: inline-flex;
+    width: 100%;
+    justify-content: left;
 }
 
 

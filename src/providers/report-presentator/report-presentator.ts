@@ -29,8 +29,11 @@ import { IfObservable } from 'rxjs/observable/IfObservable';
 export class ReportPresentatorProvider {
   static REPORT_TICKET = 2;
   static REPORT_COMPLETE = 1;
+  static REPORT_GRUPAL = 3;
   get REPORT_TICKET(){ return ReportPresentatorProvider.REPORT_TICKET;}
   get REPORT_COMPLETE(){ return ReportPresentatorProvider.REPORT_COMPLETE;}
+  get REPORT_GRUPAL(){ return ReportPresentatorProvider.REPORT_GRUPAL;}
+
   reportisloading:boolean=false;
 
   reportSubject:Subject<any> = new Subject();

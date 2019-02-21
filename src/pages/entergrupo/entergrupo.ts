@@ -74,12 +74,13 @@ export class EntergrupoPage {
 
   async guardar(){
   if(this.CancelarSuscripcionAtual()){
-    
+    this.loader.presentLoader('Entrando al grupo...');
+    if(this.subsMan.checkForSubscription()){
     let delsusres = await this.subsMan.deletesSus(this.subsMan.subsData.subscription).toPromise();
     console.log('NODE DELETION',delsusres);
 
      if(!delsusres) return false; //salir de aca si no sirve esto
-
+    }
     this.loaded_group_sus.field_doctores.push(this.userData.userData.uid);//agregarse a si mismo a la suscripcion de grupo.
     this.getSelectedSubusersArray().forEach((subuser)=>{ //agregar sub usuarios a la suscripcion de grupo.
       this.loaded_group_sus.field_subusuarios.push(subuser.uid);
@@ -87,9 +88,11 @@ export class EntergrupoPage {
     let res = await this.subsMan.updateSus( this.loaded_group_sus ).subscribe(
       (val)=>{
         console.log('redysave val',val);
-        //this.bu.locationReload();
+        this.bu.locationReload();
+        this.loader.dismissLoader();
       },(error)=>{
         console.log('redysave error',error);
+        this.loader.dismissLoader();
       }
     );
   }

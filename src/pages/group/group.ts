@@ -6,6 +6,7 @@ import { SubscriptionManagerProvider } from '../../providers/subscription-manage
 import { LoaderProvider } from '../../providers/loader/loader';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { BaseUrlProvider } from '../../providers/base-url/base-url';
 
 /**
  * Generated class for the GroupPage page.
@@ -29,7 +30,8 @@ export class GroupPage {
     public loader: LoaderProvider,
     public WS:WsMessengerProvider,
     public perm: PermissionsProvider,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    public bu: BaseUrlProvider
   ) {
     
    
@@ -62,7 +64,7 @@ export class GroupPage {
 
   async getOut(uid){
     await this.removerSubsUser(uid);
-    window.location.reload();
+    this.bu.locationReload();
   }
 
   isThis(uid){
