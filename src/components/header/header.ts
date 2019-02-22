@@ -70,13 +70,20 @@ export class HeaderComponent{
         console.log('reportObservable');
         if(this.reportPresentator.reportisloading){
           this.reportPresentator.reportisloading = false;
-        if(Number(this.reportPresentator.type) === Number(this.reportPresentator.REPORT_TICKET) ){ 
-          let load = "ReporteTicketPage"; let modalClass = 'verysmallModal';
-          let Modal = this.modalCtrl.create(load, undefined, { cssClass: `${modalClass} reportModal` });
-           Modal.present({});
+        switch(Number(this.reportPresentator.type)){
+          case Number(this.reportPresentator.REPORT_TICKET):
+           this.modalCtrl.create("ReporteTicketPage", undefined, { cssClass: `${'verysmallModal'} reportModal` }).present({});
+          break;
+          case Number(this.reportPresentator.REPORT_GRUPAL): 
+          this.navCtrl.setRoot('ReportegrupalPage'); 
+          break;
+          default:  this.navCtrl.setRoot('ReportePage'); 
+         }
+       /* if(Number(this.reportPresentator.type) === Number(this.reportPresentator.REPORT_TICKET) ){ 
+        
         }else{
-          this.navCtrl.setRoot('ReportePage');
-        }
+        
+        }*/
       }
       
       

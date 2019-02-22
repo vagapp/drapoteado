@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 
 /**
  * Generated class for the ReportegrupalPage page.
@@ -15,7 +16,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ReportegrupalPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+  public reportPresentator:ReportPresentatorProvider) {
   }
 
   ionViewDidLoad() {
