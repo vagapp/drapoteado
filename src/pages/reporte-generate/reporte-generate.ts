@@ -47,7 +47,7 @@ export class ReporteGeneratePage {
 
 
   openReportNoModal(){
-    console.log('this.reportPresentator.docuid',this.reportPresentator.docuid);
+    console.log('openReportNoModal',this.reportPresentator.docuid, this.reportPresentator.type);
     this.reportPresentator.loadReportNM().then(()=>{
       this.dismiss();
     });

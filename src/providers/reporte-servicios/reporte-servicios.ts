@@ -34,7 +34,8 @@ export class ReporteServiciosProvider {
             nid:Number(servicio.Nid),
             title:servicio.title,
             costo:Number(servicio.costo),
-            times:1
+            times:1,
+            doc: cita.doctor_name
           }
           ret.push(aux_servresume);
         }
@@ -43,6 +44,7 @@ export class ReporteServiciosProvider {
     console.log('returnting servresumen',ret);
     return ret;
   }
+
   
   reporteGetServiciosObservable( report:reportes ){
 

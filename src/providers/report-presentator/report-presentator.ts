@@ -18,6 +18,7 @@ import { SubusersDataProvider } from '../subusers-data/subusers-data';
 import { Subject } from 'rxjs/Subject';
 import { PermissionsProvider } from '../permissions/permissions';
 import { IfObservable } from 'rxjs/observable/IfObservable';
+import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 
 /*
   Generated class for the ReportPresentatorProvider provider.
@@ -91,7 +92,8 @@ docAlias:string = null;
     public reportesData: ReportesDataProvider,
     public reportesManager: ReportesManagerProvider,
     public modalCtrl: ModalController,
-    public permissions: PermissionsProvider
+    public permissions: PermissionsProvider,
+    public subsData: SubscriptionDataProvider
   ) {
     
   }
@@ -135,14 +137,16 @@ async openReporte( report:reportes = null){
 }
 
 async loadReportNM(loadReport:boolean = true){ //este metodo lo cree a partir de querer abrir el reporte no en modal para cargar el reporte y retornar un valor que indique que esta cargado y abrir la pagina en el layout.
-  console.log('loadReportNM',JSON.stringify(this.docuid));
+  console.log('loadReportNM',JSON.stringify(this.docuid),this.type);
   this.loader.presentLoader('Cargando Reporte ...');
   //await this.setReport(report);
   if(loadReport) await this.loadReporte();
+  console.log('loadReportNM b',JSON.stringify(this.docuid),this.type);
   this.loader.dismissLoader();
   console.log('1beforenext');
   this.reportisloading = true;
   this.reportSubject.next(1);
+  console.log('loadReportNM c',JSON.stringify(this.docuid),this.type);
 }
 
 
@@ -176,11 +180,24 @@ async openReportGenerate( report:reportes = null ){
   }
 
   async loadReporte(){
-    console.log('loadReporte unk');
-    await this.loadReportCitas();
+    console.log('loadReporte unk',this.type);
+    switch( Number(this.type) ){
+      case Number(this.REPORT_GRUPAL): 
+      console.log('cargando reporte grgupal')
+      await this.loadReportCitasGrupal();
+    await this.loadReportServiciosGrupal();
+    this.evaluateCitas();
+      break;
+      default:
+      console.log('carguando rueporte nuormalu');
+      await this.loadReportCitas();
     await this.loadReportServicios();
     this.evaluateCitas();
+    }
+    
   }
+
+  
 
   async loadReportCitas(){
     console.log('loadReportCitas');
@@ -196,7 +213,17 @@ async openReportGenerate( report:reportes = null ){
     await this.reporteCitas.reporteLoadCitas(this.actualReport, this.docuid);
   }
 
+  async loadReportCitasGrupal(){
+    console.log('loadReportCitasGrupal',this.subsData.subscription.field_doctores);
+    this.docuid = null;
+    await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.subsData.subscription.field_doctores);
+  }
+
   async loadReportServicios(){
+    this.serviciosResume = this.reporteServicios.getServiciosResume(this.actualReport);
+  }
+
+  async loadReportServiciosGrupal(){
     this.serviciosResume = this.reporteServicios.getServiciosResume(this.actualReport);
   }
  
