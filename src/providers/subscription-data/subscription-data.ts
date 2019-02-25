@@ -12,7 +12,8 @@ import { subscriptions } from '../user-data/subscriptions';
 @Injectable()
 export class SubscriptionDataProvider {
 
-  static PLAN_GROUP:number = 1205 ; 
+  static PLAN_GROUP:number = 1205 ;
+  static PLAN_ANY:number = -1;
 
   subscription: subscriptions = null;
   Groups: subscriptions[] = new Array();

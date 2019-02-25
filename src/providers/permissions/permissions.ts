@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserDataProvider } from '../user-data/user-data';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 import { subscriptions } from '../user-data/subscriptions';
+import { Debugger } from '../../providers/user-data/debugger';
 
 @Injectable()
 export class PermissionsProvider {
@@ -15,7 +16,7 @@ export class PermissionsProvider {
     public userData: UserDataProvider,
     public subsData: SubscriptionDataProvider
   ) {
-    console.log('pmp online');
+   
   }
 
   /**
@@ -24,6 +25,7 @@ export class PermissionsProvider {
   */
 
  checkUserFeature( permision:Array<number>,suscriptions:Array<number>, debug:boolean = false):boolean{
+  Debugger.log(['permision',permision,'suscriptions',suscriptions],debug);
   let ret = false;
   let permisioncheck = false;
   let suscriptionscheck = false;
@@ -61,7 +63,8 @@ checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean
   // checking for ANY, automatically returns true since we checked for not 0 or null up here
   if(suscriptions.indexOf(UserDataProvider.PLAN_ANY) > -1){ return true;}
   //regular check
-  if(suscriptions.indexOf(this.subsData.subscription.field_plan_sus) > -1){ret = true;}
+  Debugger.log(['suscriptions',suscriptions,'this.subsData.subscription.field_plan_sus',this.subsData.subscription.field_plan_sus],debug);
+  if(suscriptions.indexOf(Number(this.subsData.subscription.field_plan_sus)) > -1){ret = true;}
   return ret;
 }
 
@@ -77,11 +80,11 @@ checkifgroup(){
 
 
 checkUserPlanHolder(){
-  /*console.log('checkUserPlanHolder');
-  console.log('this.subsData.subscription',this.subsData.subscription);
-  console.log(this.subsData.subscription.field_plan_holder );
-  console.log(this.userData.userData.uid);*/
-  return this.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) && (Number(this.subsData.subscription.field_plan_holder) === Number(this.userData.userData.uid));
+  let ret = false;
+  if(this.subsData.checkForSub()){
+    ret =  this.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) && (Number(this.subsData.subscription.field_plan_holder) === Number(this.userData.userData.uid));
+  } 
+  return ret;
 }
 
 

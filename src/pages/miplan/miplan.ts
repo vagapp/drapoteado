@@ -49,6 +49,8 @@ export class MiplanPage {
 
   cantcancel = false;
 
+  isgroup:boolean = false;
+
   get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
   get nextCobro(){ return this.subsData.checkForSub() ? this.subsData.subscription.field_next_cobro : 0; }
   get subAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_adicionales) : 0;  }
@@ -72,8 +74,11 @@ export class MiplanPage {
       let plan_costo:number = 0;
       if(this.selectedPlan){
         let selected_plan = this.planesData.getPlanById(this.selectedPlan);
-        if(selected_plan)
+        if(selected_plan){
         plan_costo = Number(selected_plan.field_costo);
+        this.isgroup = ( Number(selected_plan.nid) === Number(SubscriptionDataProvider.PLAN_GROUP) ) ? true : false;
+          console.log('this.isgroup',this.isgroup);
+        }
       }
       ret = plan_costo;
       if(this.selectedAditionals += 0 ){
