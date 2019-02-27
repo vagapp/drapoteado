@@ -38,12 +38,12 @@ export class ReportPresentatorProvider {
   reportisloading:boolean=false;
 
   reportSubject:Subject<any> = new Subject();
-actualReport:reportes = null;
-type:number = 1;
-docLoaded:boolean = false;
-docuid:number = null;
-docName:string = null;
-docAlias:string = null;
+  actualReport:reportes = null;
+  type:number = 1;
+  docLoaded:boolean = false;
+  docuid:number = null;
+  docName:string = null;
+  docAlias:string = null;
 
   noCitas:number;
   noShow:number;
@@ -69,9 +69,10 @@ docAlias:string = null;
   cajaAdeudo:number;
 
   get pendiente():number{
-    console.log('adeudo en citas por cobrar',this.cajacuentas);
     return Number(this.cajaAdeudo ? this.cajaAdeudo: 0 )+Number(this.cajacuentas ? this.cajacuentas: 0);
   }
+
+  get isgroup():boolean{  return  Number(this.type) === Number(ReportPresentatorProvider.REPORT_GRUPAL); }
 
   serviciosResume:{
     nid:number,
@@ -140,6 +141,9 @@ async loadReportNM(loadReport:boolean = true){ //este metodo lo cree a partir de
   console.log('loadReportNM',JSON.stringify(this.docuid),this.type);
   this.loader.presentLoader('Cargando Reporte ...');
   //await this.setReport(report);
+  if(this.isgroup){
+    this.docuid = 0;
+  }
   if(loadReport) await this.loadReporte();
   console.log('loadReportNM b',JSON.stringify(this.docuid),this.type);
   this.loader.dismissLoader();
