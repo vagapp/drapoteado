@@ -52,7 +52,7 @@
     <div class="modalContent">
       <div class="alta_main" *ngIf="initialpage && !this.tutorial.checkTutorialState()"  >
         <span class="spanBlock midSubFont">Busca usuarios compartidos o registra uno nuevo</span>
-        <span class="spanBlock"> <button class="bgColorSecondary generalButton" (click)="codeuser=true; initialpage=false;">Buscar Usuario</button></span>
+        <span class="spanBlock" *ngIf="!this.subsData.isGroup"> <button class="bgColorSecondary generalButton" (click)="codeuser=true; initialpage=false;">Buscar Usuario</button></span>
         <span class="spanBlock" *ngIf="this.userData.checkUserPlanHolder()"> <button class="bgColorSecondary generalButton" (click)="newuser=true; initialpage=false;">Registrar Nuevo</button></span>
       </div>
     <div class="nuevoservicio_content modalContent" *ngIf="codeuser">

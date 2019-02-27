@@ -45,6 +45,7 @@ export class MiplanPage {
   selectedPlanObject:planes = null; //objeto del plan seleccionado para suscripcion.
 
   selectedAditionals = 0;
+  selectedAditionalsDocs = 0;
   selectedMethod = null;
 
   cantcancel = false;
@@ -54,7 +55,10 @@ export class MiplanPage {
   get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
   get nextCobro(){ return this.subsData.checkForSub() ? this.subsData.subscription.field_next_cobro : 0; }
   get subAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_adicionales) : 0;  }
+  get docAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_docsadicionales) : 0;  }
   get subPlan(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_plan_sus) : 0;  }
+
+
 
   
 
@@ -81,8 +85,11 @@ export class MiplanPage {
         }
       }
       ret = plan_costo;
-      if(this.selectedAditionals += 0 ){
-        ret += Number(this.selectedAditionals*40);
+      if(this.selectedAditionals > 0 ){
+        ret += Number(this.selectedAditionals*SubscriptionDataProvider.EXTRA_SUB);
+      }
+      if(this.selectedAditionalsDocs > 0 && this.isgroup){
+        ret += Number(this.selectedAditionalsDocs*SubscriptionDataProvider.EXTRA_DOC);
       }
      /* if(this.subsData.subscription){
       ret += Number(this.subsData.subscription.field_adicionales*40);
@@ -194,10 +201,10 @@ export class MiplanPage {
   }
 
   activateChangePlanMode(){
-   
     //this.setupStripe();
     console.log(' this.subsData.subscription', this.subsData.subscription);
     this.selectedAditionals =  this.subAdicionales;
+    this.selectedAditionalsDocs =  this.docAdicionales;
     this.onplanchange = true;
     this.loadSources();
   }
@@ -246,6 +253,26 @@ export class MiplanPage {
     return ret;
   }
 
+  guardar_docnumber_validation(){
+    let ret = true;
+    console.log('guardar_docnumber_validation',this.selectedAditionalsDocs,this.subsData.getDocAccountsTotal());
+    if((this.selectedAditionalsDocs + this.subsData.getplanDocAccounts()) < this.subsData.getUsedDocAccounts()){
+     console.log('no suficientes espacios mija');
+     ret = false;
+     //title, msg, inputs, inputcallback, cancelCallback
+     this.alert.setStrings('Grupo','Cancelar');
+     this.alert.chooseAlert('Error','No puedes reducir tus doctores adicionales por debajo del numero de doctores con los que cuentas actualmente.',
+    ()=>{
+      this.alert.resetStrings();
+      this.navCtrl.setRoot('GroupPage');
+    },()=>{
+      this.alert.resetStrings();
+    });
+  
+    }
+    return ret;
+  }
+
   cancelar(){
     console.log('canceling to onplanchange false');
     this.onplanchange = false;
@@ -256,6 +283,14 @@ export class MiplanPage {
     this.selectedAditionals += operand;
     if (this.selectedAditionals < 0) this.selectedAditionals = 0;
     console.log('aditionals are',this.selectedAditionals);
+  }
+
+  
+  operateExtraDoc(operand:number){
+    console.log('operateExtra',operand);
+    this.selectedAditionalsDocs += operand;
+    if (this.selectedAditionalsDocs < 0) this.selectedAditionalsDocs = 0;
+    console.log('aditionals are',this.selectedAditionalsDocs);
   }
 
 
@@ -273,6 +308,7 @@ export class MiplanPage {
       this.subsData.subscription.field_cantidad = this.selectedTotal;
       this.subsData.subscription.field_plan_sus = this.selectedPlan
       this.subsData.subscription.field_adicionales = Number(this.selectedAditionals);
+      if(this.isgroup)this.subsData.subscription.field_docsadicionales = Number(this.selectedAditionalsDocs);
       let ret = await this.subsManager.updateSus(this.subsData.subscription).toPromise();
       this.loader.dismissLoader();
       console.log('sus udate returned',ret);
@@ -283,6 +319,7 @@ export class MiplanPage {
       aux_sus.field_cantidad = this.selectedTotal;
       aux_sus.field_plan_sus = this.selectedPlan;
       aux_sus.field_adicionales = Number(this.selectedAditionals);
+      if(this.isgroup)aux_sus.field_adicionales = Number(this.selectedAditionalsDocs);
       await this.subsManager.subscribe( this.selectedPlanObject, aux_sus);
       this.loader.dismissLoader();
       this.bu.locationReload();

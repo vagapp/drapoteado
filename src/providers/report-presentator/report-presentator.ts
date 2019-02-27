@@ -225,6 +225,9 @@ async openReportGenerate( report:reportes = null ){
 
   async loadReportServiciosGrupal(){
     this.serviciosResume = this.reporteServicios.getServiciosResume(this.actualReport);
+    this.serviciosResume = this.serviciosResume.sort((a,b)=>{ 
+      return a.title.localeCompare(b.title);
+    });
   }
  
   updateCita( cita:Citas ){

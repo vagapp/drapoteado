@@ -26,7 +26,7 @@
             <tr>
                 <th>Usuario</th>
                 <th>Tipo de Usuario</th>
-                <th>Codigo</th>
+                <th *ngIf="!this.subsData.isGroup">Codigo</th>
                 <th></th>
              </tr>
         </thead>
@@ -34,7 +34,7 @@
             <tr *ngFor="let user of this.subuserData.subUsers">
                 <td>{{user.name}}</td>
                 <td class="fontHigh">{{this.userData.getTipoUsuarioString(user.field_tipo_de_usuario.und[0])}}</td>
-                <td class="fontHight"><input type="text" value="{{user.field_codigo}}" class="field left codigo" readonly></td>
+                <td class="fontHight" *ngIf="!this.subsData.isGroup"><input type="text" value="{{user.field_codigo}}" class="field left codigo" readonly></td>
                 <td class="toolCol">
                   <img     *ngIf="this.permissions.checkUserPlanHolder()"  src="assets/imgs/editar.svg" class="icon_drapo" (click)="editUsuario(user)">
                   <button  *ngIf="this.permissions.checkUserPlanHolder()"  (click)="removeUsuariopop(user)" class="bgColorPrimary generalButton tableButton">Remover</button>

@@ -29,7 +29,10 @@ export class EntergrupoPage {
   groupLoaded:boolean = false;
   loaded_group_sus:subscriptions = null;
   accountsleft: number = 0;
+  docsleft:number = 0;
   selectedUsers:number[] = new Array();
+
+  canSave:boolean = false;
 
 
 
@@ -62,7 +65,7 @@ export class EntergrupoPage {
         this.loaded_group_sus = sus;
         //this.accountsleft = this.subsMan.getSubAccountsLeft(sus);
         this.setSubacountsLeftDelta();
-        console.log('accounts left got',this.accountsleft);
+        if(this.validateDocsLeft()){ this.canSave = true; }else{ this.canSave = false;}
         this.loader.dismissLoader();
       }else{
         this.loader.dismissLoader();
@@ -98,6 +101,18 @@ export class EntergrupoPage {
   }
   }
 
+  validateDocsLeft():boolean{
+    console.log('validateDocsLeft');
+    let ret:boolean = true;
+    this.setDoctorsLeftDelta();
+    if(this.docsleft <= 0){
+      ret = false;
+      console.log('validateDocsLeft failed');
+      this.alert.presentAlertHandler('LLeno','El grupo medico al que intenta ingresar se encuentra lleno.',()=>{ this.cancelar();});
+    }
+    return ret;
+  }
+
   CancelarSuscripcionAtual():boolean{
     let ret = true;
     console.log('funcionalidad cancelar suscripcion de conekta mijo');
@@ -124,6 +139,15 @@ export class EntergrupoPage {
       let leftonsus = this.subsMan.getSubAccountsLeft(this.loaded_group_sus);
       let selectedAccounts = this.getSelectedSubusersArray().length;
       this.accountsleft = leftonsus - selectedAccounts;
+    }
+  }
+
+  setDoctorsLeftDelta(){
+    if(this.groupLoaded){
+      let leftonsus = this.subsMan.getDocAccountsLeft(this.loaded_group_sus);
+      console.log('setDoctorsLeftDelta this.loaded_group_sus.field_doctores',this.loaded_group_sus.field_doctores.length);
+      let selectedAccounts = this.loaded_group_sus.field_doctores.length;
+      this.docsleft = leftonsus - selectedAccounts;
     }
   }
 

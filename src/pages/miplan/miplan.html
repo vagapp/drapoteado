@@ -80,6 +80,8 @@
         <span class="spanBlock midSubFont"> añadir <span class="fontPrimary">{{this.selectedAditionals}} adicionales</span> por <span class="fontPrimary">${{this.selectedAditionals*40}}</span></span>
         <!--<span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">${{(this.selectedAditionals*40) + (this.subsData.subscription.field_adicionales*40)}}.00</span></span>-->
         <span class="spanBlock midFont" *ngIf="!onplanchange"> Total de subusuarios:  <span class="fontPrimary">${{(this.selectedAditionals*40)}}.00</span></span>
+
+        
       </div> <!-- fin de usuarios adicionales onplanchange-->
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
@@ -88,6 +90,34 @@
       </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
 
     </div><!-- fin de plans extras -->
+
+
+    <div class="plans_extras bisectional" *ngIf="this.isgroup" >
+      <div class="plans_extras_section bisectional_section right_align">
+        <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar mas doctores a tu plan?</span> 
+        <p class="midSubFont"> Los doctores adicionales a tu plan tienen un costo de $169.00 y se agregan al pago de tu suscripción mensual</p>
+      </div>
+
+      <div class="plans_extras_section bisectional_section center_align" *ngIf="onplanchange"> <!-- Usuarios adicionales onplanchange-->
+        <span class="spanBlock" > 
+          <span class="operator" (click)="operateExtraDoc(-1)" >-</span><input type="number" [(ngModel)]="this.selectedAditionalsDocs"/><span class="operator" (click)="operateExtraDoc(1)">+</span>
+        </span>
+       <!-- <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span></span>-->
+        <span class="spanBlock midSubFont"> añadir <span class="fontPrimary">{{this.selectedAditionalsDocs}} adicionales</span> por <span class="fontPrimary">${{this.selectedAditionalsDocs*169}}</span></span>
+        <!--<span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">${{(this.selectedAditionals*40) + (this.subsData.subscription.field_adicionales*40)}}.00</span></span>-->
+        <span class="spanBlock midFont" *ngIf="!onplanchange"> Total de doctores:  <span class="fontPrimary">${{(this.selectedAditionalsDocs*169)}}.00</span></span>
+
+        
+      </div> <!-- fin de usuarios adicionales onplanchange-->
+
+      <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
+        <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{subAdicionales}} adicionales</span> </span>
+        <span class="spanBlock midFont"> Total extra de subusuarios:  <span class="fontPrimary">${{subAdicionales*40}}.00</span></span>
+      </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
+
+    </div><!-- fin de plans extras -->
+
+
     <div class="informacion_pagos">
       <span class="spanBlock info_plan_title">Métodos de pago</span>
       <div class="bisectional pagos_block">

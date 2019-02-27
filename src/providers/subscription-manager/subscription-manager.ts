@@ -394,5 +394,29 @@ getSubAccountsLeft(subscription:subscriptions){
 }
 
 
+getTotalDocAccounts(subscription:subscriptions){
+  let ret:number = 0; 
+  //obtener plan, y ver cuantos usuarios tiene gratis en el plan.
+  let plan = this.planesData.planes.find((planes)=>{
+    return planes.checkNid(subscription.field_plan_sus);
+  });
+  console.log('plan found',plan);
+  if(plan){
+    ret += Number(plan.field_no_doctores);
+  }
+  //obtener adicionales de la suscripcion
+  ret += Number(subscription.field_docsadicionales);
+  return ret;
+}
+
+getDocAccountsLeft(subscription:subscriptions){
+ let ret:number = 0;
+ ret = this.getTotalDocAccounts(subscription);
+ //obtener numero de subusuarios activos actualmente en la suscripcion.
+ ret -= Number(subscription.field_doctores.length);
+ return ret;
+}
+
+
 
 }

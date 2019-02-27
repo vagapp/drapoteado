@@ -56,7 +56,7 @@
     <span class="fontPrimary left enter_comprar">¿Quieres comprar un plan médico?</span>
     <div class="button_section">
     <button class="generalButton bgColorSecondary right" (click)="buscar()" *ngIf="!this.groupLoaded" >Buscar</button>
-    <button class="generalButton bgColorSecondary right" (click)="guardar()" *ngIf="this.groupLoaded" >Guardar</button>
+    <button class="generalButton bgColorSecondary right" (click)="guardar()" *ngIf="this.groupLoaded && this.canSave" >Guardar</button>
     <button class="generalButton bgColorPrimary right" (click)="cancelar()" >Cancelar</button>
     </div>
   </div>

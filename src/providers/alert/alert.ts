@@ -37,6 +37,21 @@ export class AlertProvider {
     alert.present();
   }
 
+  presentAlertHandler(title:string, msg:string,handlerCallback){
+    console.log('presentAlertHandler');
+    let alert = this.alertCtrl.create({
+      title: title,
+      message: msg,
+      buttons: [
+        {
+          text: 'ok',
+          handler: handlerCallback
+        }
+      ]
+    });
+    alert.present();
+  }
+
   presentPrompt(title, msg, inputs, inputcallback, cancelCallback){
     let alert = this.alertCtrl.create({
       title: title,

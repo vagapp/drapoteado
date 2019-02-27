@@ -15,6 +15,10 @@ export class SubscriptionDataProvider {
   static PLAN_GROUP:number = 1205 ;
   static PLAN_ANY:number = -1;
 
+  static EXTRA_SUB:number = 40;
+  static EXTRA_DOC:number = 169;
+
+
   subscription: subscriptions = null;
   Groups: subscriptions[] = new Array();
   
@@ -31,12 +35,53 @@ export class SubscriptionDataProvider {
     return this.isGroupPlan();
   }
 
+  get PLAN_GROUP(){ return SubscriptionDataProvider.PLAN_GROUP; }
+  get PLAN_ANY(){ return SubscriptionDataProvider.PLAN_ANY; }
+  get EXTRA_SUB(){ return SubscriptionDataProvider.EXTRA_SUB; }
+  get EXTRA_DOC(){ return SubscriptionDataProvider.EXTRA_DOC; }
+
   constructor() {
   }
 
   setDoctores(){
     this.docs = JSON.parse(this.subscription.field_doctores_json);
   }
+
+
+  /**
+   * ESTOS METODOS SON PARA OBTENER NUMEROS DE SUB DOCTORES EN LA SUSCRIPCION Y CALCULAR CUANTOS QUEDAN DISPONIBLES ETC.
+   */
+
+  getDocAccountsTotal():number{
+    let ret = Number(0);
+    if( this.checkForPlan() ){
+      ret += Number(this.subscription.plan.field_no_doctores);
+      ret += Number(this.subscription.field_docsadicionales);
+    }
+    return ret;
+  }
+
+  getplanDocAccounts():number{
+    let ret = Number(0);
+    if( this.checkForPlan() ){
+    ret += Number(this.subscription.plan.field_no_doctores);
+  }
+  return ret;
+  }
+
+ 
+
+  getUsedDocAccounts():number{
+    let ret = Number(0);
+    if(this.checkForSub()){
+      ret = Number(this.subscription.field_doctores.length);
+    }
+    return ret;
+  }
+
+  /**
+   * ESTOS METODOS SON PARA OBTENER NUMEROS DE SUB USUARIOS EN LA SUSCRIPCION Y CALCULAR CUANTOS QUEDAN DISPONIBLES ETC.
+   */
 
   getSubAccountsTotal():number{
     let ret = Number(0);
