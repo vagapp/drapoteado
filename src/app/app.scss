@@ -117,6 +117,17 @@ ion-modal{
     border: 0px solid #000000;
 }
 
+.codigo {
+    padding: .5em 1em;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    font-size: 1.6rem;
+}
+
+.codigo.list-md .item-input:last-child{
+    padding-bottom: 5px;
+}
+
 ion-header{
     background: #C1272D;
     /*height: 80px;*/

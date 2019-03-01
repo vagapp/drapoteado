@@ -144,10 +144,12 @@ export class EntergrupoPage {
 
   setDoctorsLeftDelta(){
     if(this.groupLoaded){
-      let leftonsus = this.subsMan.getDocAccountsLeft(this.loaded_group_sus);
+      this.docsleft = this.subsMan.getDocAccountsLeft(this.loaded_group_sus);
+      console.log('this.docsleft',this.docsleft);
+      /*console.log('docs leftonsus', leftonsus);
       console.log('setDoctorsLeftDelta this.loaded_group_sus.field_doctores',this.loaded_group_sus.field_doctores.length);
       let selectedAccounts = this.loaded_group_sus.field_doctores.length;
-      this.docsleft = leftonsus - selectedAccounts;
+      this.docsleft = leftonsus - selectedAccounts;*/
     }
   }
 
