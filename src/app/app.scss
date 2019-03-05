@@ -833,7 +833,18 @@ ion-menu {
     ion-menu {
         top:67px;
     }
+
+    .two_cols_yano .section_row{
+        display: block !important;
+    }
+
+    .two_cols_yano .two_cols_section{
+        display: block !important;
+    }
+  
 }
+
+
 
 .menu-inner .header {
     display: none;

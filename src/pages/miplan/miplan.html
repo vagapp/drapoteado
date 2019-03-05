@@ -3,7 +3,7 @@
   <div class="modalPage_header">
     <div class="modalPage_title">
       <span class="spanBlock midFont"><b>Mi Plan</b></span>
-      <span class="spanBlock midSubFont">actualiza, cambia o cancela tu plan</span>
+      <span class="spanBlock midSubFont">Revisa tu plan</span>
     </div>
     <div class="modalPage_lpane" *ngIf="onplanchange">
     <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>
@@ -19,7 +19,9 @@
    
     </div>
     <!-- Seccion con informacion de planes  -->
-
+    <div>
+      Optimizar las consultas y pagos en tu consultorio. ¡Será mucho más fácil y seguro!
+    </div>
     <div class="plans_block" *ngIf="onplanchange"> <!-- Seleccion de plan cuando onplanchange  -->
       <span class="blockSpan info_plan_title" >Seleciciona un Plan </span>
 
@@ -33,6 +35,7 @@
                 </label> 
                 </div>  
         </div> <!-- Plan selection check end -->
+        
         <div class="plan_section_hr">  <span class="spanBlock bigSubFont">Plan <span class="fontPrimary bold"> {{plan.title}} </span></span> <span class="spanBlock"> <span class="midSubFont">costo base:</span> <span class="largeFont">${{plan.field_costo}}</span></span> </div>
         <div class="plan_section_hr"> <span class="spanBlock midFont">caracteristicas</span>  <span class="spanBlock midSubFont">{{plan.field_descripcion}}</span> </div>
       </div><!-- fin de plans section -->

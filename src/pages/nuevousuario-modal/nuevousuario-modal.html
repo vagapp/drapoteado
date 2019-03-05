@@ -17,26 +17,28 @@
     <div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState() && initialpage" >
             <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
             <span class=" largeFont" *ngIf="this.isnew"><b>Alta de Usuario</b></span>
+            <p>Da de alta al personal que te ayuda a administrar y cobrar tus citas.</p>
         </div>
 
     <div class="user_explain" *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.usuarioCreated === false" ><!-- Drap agregar usuarios explicacion block-->
-        <span class="spanBlock midSubFont">Drap te permite crear tres tipos de subusuarios:</span>
+        <span class="spanBlock midSubFont">DRAP te permite elegir entre dos opciones de usuarios.</span>
         <div class="trisectional">
             <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Recepción:</span><span class="spanBlock midSubFont">Crea Citas</span></div>
             <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Caja:</span><span class="spanBlock midSubFont">Crea Citas</span></div>
             <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Caja & Recepción:</span><span class="spanBlock midSubFont">Crea y Cobra Citas</span></div>
         </div>
+        <p>Adquiere los usuarios adicionales que necesites ingresando en <span class="fontPrimary">MI PLAN</span></p>
     </div>
 
     <div class="user_tutorial_selection" *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.usuarioCreated === false">
-        <span class="spanBlock midSubFont">Seleccione el que mejor describe su situacion</span>
+        <span class="spanBlock midSubFont">Por favor selecciona la opción de personal que mejor describa el proceso en tu consultorio</span>
         <div class="bisectional">
             <div class="bisectional_section" (click)="selectOption(2)"  [class.selectedOption]="checkSelectedOption(2)">
-                <span class="spanBlock"> ¿Tienes un empleado para caja y otro para recepción?</span>
+                <span class="spanBlock"> ¿Cuentas con personal independiente en la recepción y en la caja?</span>
                 <span class="spanBlock"> Crea dos usuarios para <span class="fontPrimary">Caja</span> y <span class="fontPrimary">Recepción</span> </span>
             </div>
             <div class="bisectional_section"  (click)="selectOption(1)" [class.selectedOption]="checkSelectedOption(1)">
-                <span class="spanBlock"> ¿Tienes un solo empleado que funciona como caja y recepción?</span>
+                <span class="spanBlock"> ¿Una sola persona administra y cobra tus citas?</span>
                 <span class="spanBlock"> Crea un usuario de <span class="fontPrimary">Caja & Recepción</span></span>
             </div>
 
@@ -69,9 +71,9 @@
     </div>
     <div class="nuevoservicio_content modalContent" *ngIf="this.newuser">
             <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="!this.tutorial.checkTutorialState()"> atras </span>
-            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> Crea un usuario para caja. </span>
-            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> Crea un usuario para Recepción. </span>
-            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> Crea un usuario para Caja & Recepción. </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> <span class="fontPrimary">Caja.</span> Esta persona cobra las citas </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> <span class="fontPrimary">Recepción.</span> Esta persona administra citas </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Recepción y Caja.</span> Esta persona administra y cobra las citas </span>
         <div *ngIf="this.isnew" class="ModalInput_input">
             <b>username</b>
             <input  [(ngModel)]="this.newUser.name" type="text"/>
@@ -94,11 +96,11 @@
                 </select>
               </div>
           <div class="ModalInput_input">
-            <b>Correo Electrónico</b>
+            <b>Correo electrónico</b>
             <input [(ngModel)]="this.newUser.field_useremail.und[0].email" type="text"/>
         </div>
         <div *ngIf="this.isnew" class="ModalInput_input">
-            <b>Confirmar Correo Electrónico</b>
+            <b>Confirmar correo electrónico</b>
             <input [(ngModel)]="this.newUser.mail" type="text"/>
         </div>
         <div class="ModalInput_input">
@@ -106,7 +108,7 @@
             <input [(ngModel)]="this.newUser.pass" type="password"/>
         </div>
         <div class="ModalInput_input">
-            <b>Confirmar Contraseña</b>
+            <b>Confirmar contraseña</b>
             <input [(ngModel)]="this.checkpass" type="password"/>
         </div>
         <div class="midAlign">
@@ -122,13 +124,13 @@
     </div>
 
     <div class="modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated" >
-            <span class="spanBlock bigBoldFont">!Felicidades!</span>
-            <span class="spanBlock midMainFont"> Tu Usuario ha sido creado.</span>
-            <span class="spanBlock midSubFont">Te proporcionamos sus datos para que pueda ingresar desde este momento a DRAP</span>
+            <span class="spanBlock bigBoldFont">¡Felicidades!</span>
+            <span class="spanBlock midMainFont">Tu usuario ha sido creado</span>
+            <span class="spanBlock midSubFont">Te proporcionamos sus datos para que pueda ingresar desde este momento en DRAP</span>
             <span class="spanBlock midSubFont">Nombre: <span class="fontHigh">{{this.newUser.name}}</span></span>
             <span class="spanBlock midSubFont">Correo: <span class="fontHigh">{{this.newUser.mail}}</span></span>
             <span class="spanBlock midSubFont" *ngIf="!this.codeuserNP">Contraseña: <span class="fontHigh">{{this.checkpass}}</span></span>
-            <span class="spanBlock midSubFont"> Puedes modificar este y/o agregar más usuarios siempre que lo desees en la sección de Alta de Usuarios en el menú de la Aplicación</span>
+            <span class="spanBlock midSubFont"> Puedes modificar los usuarios desde la sección de Alta de Usuarios en el Menú</span>
             </div>
             <div class="midAlign" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated">
                 <div class="register_button_section">

@@ -20,12 +20,12 @@
         <div class="modalPage_logo"><img src="assets/imgs/servicios.svg"/></div>
         <span class=" largeFont" *ngIf="this.isnew"><b>Alta de servicio y costos</b></span>
         <div class="modalPage_title">
-          <span class="spanBlock midSubFont">Drap te permite dar de alta todos tus servicios para que cobrar tus consultas
-            sea más sencillo que nunca, solo debes ingresar un nombre que identifiques
-            rápidamente y el costo unitario del mismo.</span>
+          <span class="spanBlock midSubFont">Te recomendamos dar de alta desde el inicio todos los servicios que ofreces para que cobrar
+            tu consulta sea muy rápido y sencillo. Solo debes ingresar uno a uno el nombre y costo de
+            cada servicio.</span>
         </div>
     </div>
-    <div class="centered_bold" *ngIf="this.tutorial.checkTutorialState() && newTutService">¿Genial no? para comenzar agreguemos un servicio:</div>
+    <div class="centered_bold" *ngIf="this.tutorial.checkTutorialState() && newTutService">Para comenzar agrega un servicio:</div>
     <div class="nuevoservicio_content modalContent" *ngIf="!this.tutorial.checkTutorialState()  || (this.tutorial.checkTutorialState() && !this.tutorial.serviceCreated)" >
         <div class="ModalInput_input">
             <b>Nombre</b>
@@ -39,15 +39,15 @@
 
     <div class="nuevoservicio_content modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" >
         <span class="spanBlock bigBoldFont">¡Felicidades!</span>
-        <span class="spanBlock midMainFont"> Tu servicio : {{this.newService.title}} ha sido agregado. ahora podras seleccionarlo cada que consultes.</span>
-        <span class="spanBlock midSubFont"> Puedes modificar este y/o agregar más servicios siempre que lo desees en la sección de
-        Alta de Servicios y costos en el menú de la Aplicación</span>
+        <span class="spanBlock midMainFont"> El servicio {{this.newService.title}} ha sido agregado ahora lo podrás seleccionar cada vez que mandes cobrar una consulta.</span>
+        <span class="spanBlock midSubFont"> Siempre que lo desees puedes modificar o agregar más servicios en la sección de Alta de
+            Servicios y Costos en el Menú.</span>
         </div>
         
 
     <div class="midAlign">
         <div class="register_button_section">
-                <button class="bgColorSecondary generalButton" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" (click)="resetServicio();">Crear otro</button>
+                <button class="bgColorSecondary generalButton" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" (click)="resetServicio();">Agregar servicio</button>
         <button class="bgColorSecondary generalButton" *ngIf="this.tutorial.checkTutorialState() && !this.tutorial.serviceCreated" (click)="createServiceTutorial();">Continuar</button>
         <button class="bgColorSecondary generalButton" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" (click)=" this.tutorial.showUsuarioModal(); this.dismiss();">Continuar</button>
         <button class="bgColorSecondary generalButton" *ngIf="!this.tutorial.checkTutorialState() && this.isnew" (click)="createService()">Agregar</button>

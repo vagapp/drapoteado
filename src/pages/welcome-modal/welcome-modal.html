@@ -10,16 +10,22 @@
     <span class="spanBlock header_subtitle">¡ Bienvenido !</span>
   </div>
   <div class="modal_body" *ngIf="this.tutorial.serviceCreated && this.tutorial.usuarioCreated">
-    <span class="spanBlock midMainFont">! Estas listo Para comenzar !</span>
-    <p> ! Estas listo Para comenzar ! Hemos terminado de conﬁgurar los pasos básicos para que tu y tu equipo comiences ha consultar,  si tienes dudas sobre el funcionamiento de drap te invitamos a revisar nuestros tutoriales en <span class="fontPrimary">www.drap.com.mx</span> donde te explicamos a detalle como realizar y cobrar tus citas </p>
-    <div class="modal_buttons">
+    <span class="spanBlock midMainFont">¡Estas listo para comenzar!</span>
+    <!--<p> ! Estas listo Para comenzar ! Hemos terminado de conﬁgurar los pasos básicos para que tu y tu equipo comiences ha consultar,  si tienes dudas sobre el funcionamiento de drap te invitamos a revisar nuestros tutoriales en <span class="fontPrimary">www.drap.com.mx</span> donde te explicamos a detalle como realizar y cobrar tus citas </p>
+    -->
+    <span>Has terminado, la cuenta está lista para que junto con tus usuarios comiencen a utilizar DRAP.
+      Conoce nuestro tutorial <span class="fontPrimary">www.drap.com.mx</span></p>
+    
+      <div class="modal_buttons">
    
       <button class="generalButton bgColorSecondary" (click)="this.finish()">Finalizar</button>
       </div>
     
   </div>
   <div class="modal_body" *ngIf="!this.tutorial.serviceCreated && !this.tutorial.usuarioCreated" >
-    <p>Estamos convencidos que Drap te ayudará a optimizar el control y administración de tus consultas. A continuación te explicamos lo que necesitas para comenzar.</p>
+    <p>Estamos convencidos que <span class="fontPrimary">DRAP</span> te ayudará a optimizar las consultas y pagos en tu consultorio. ¡Será mucho más fácil y seguro!
+      A continuación te explicamos paso a paso su funcionamiento para que puedas maximizar
+      el uso de la aplicación.</p>
     <div class="modal_buttons">
       <button class="generalButton bgColorSecondary" (click)="this.tutorial.showServicioModal()">Siguiente</button>
       </div>
