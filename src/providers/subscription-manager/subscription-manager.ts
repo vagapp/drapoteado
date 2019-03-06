@@ -294,9 +294,6 @@ export class SubscriptionManagerProvider {
     }
   }
 
-
-
-
   /*
   cargarSubscription( code:string = null){
     let observer = this.getCargarSubscriptionObservable(code);
@@ -352,7 +349,6 @@ export class SubscriptionManagerProvider {
       }
   }
 
-
   setcssplanselected( factplan:planes ){
     this.planes.planes.forEach(plan => {
       plan.css_fact_selected = false;
@@ -360,7 +356,6 @@ export class SubscriptionManagerProvider {
     factplan.css_fact_selected = true;
   }
 */
-
 
 getTotalSubAccounts(subscription:subscriptions){
   let ret:number = 0; 
@@ -416,7 +411,5 @@ getDocAccountsLeft(subscription:subscriptions){
  ret -= Number(subscription.field_doctores.length);
  return ret;
 }
-
-
 
 }

@@ -10,13 +10,10 @@
     <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="cancelar()" >Cancelar</button>
     </div>
     <div class="modalPage_lpane" *ngIf="!onplanchange && subsData.subscription">
-       
-       
       <span class="spanBlock midFont">Total de tu suscripción mensual: <span class="fontPrimary bold">${{cantidad}}</span> </span>
       <span class="spanBlock midSubFont"> vence al {{nextCobro}}</span>
-      <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()" >Editar</button>
+      <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()">Editar</button>
     </div>
-   
     </div>
     <!-- Seccion con informacion de planes  -->
     <div>
@@ -25,7 +22,7 @@
     <div class="plans_block" *ngIf="onplanchange"> <!-- Seleccion de plan cuando onplanchange  -->
       <span class="blockSpan info_plan_title" >Seleciciona un Plan </span>
 
-      <div class="plan_section"  *ngFor="let plan of this.planesData.planes" >
+      <div class="plan_section"  *ngFor="let plan of this.planesData.planes">
         <div class="plan_section_hr">  <!-- Plan selection check start -->
             <div class="control-group"> 
                 <label class="control control-radio">
@@ -36,12 +33,28 @@
                 </div>  
         </div> <!-- Plan selection check end -->
         
-        <div class="plan_section_hr">  <span class="spanBlock bigSubFont">Plan <span class="fontPrimary bold"> {{plan.title}} </span></span> <span class="spanBlock"> <span class="midSubFont">costo base:</span> <span class="largeFont">${{plan.field_costo}}</span></span> </div>
-        <div class="plan_section_hr"> <span class="spanBlock midFont">caracteristicas</span>  <span class="spanBlock midSubFont">{{plan.field_descripcion}}</span> </div>
+        <div class="plan_section_hr" *ngIf="this.checkIs(plan.nid,this.PLAN_GROUP)">  <span class="spanBlock bigSubFont">Plan <span class="fontPrimary bold"> {{plan.title}} </span></span> <span class="spanBlock"> <span class="midSubFont">costo base:</span> <span class="largeFont">${{plan.field_costo}}</span></span> </div>
+        <!--<div class="plan_section_hr"> <span class="spanBlock midFont">caracteristicas</span>  <span class="spanBlock midSubFont">{{plan.field_descripcion}}</span> </div>-->
+        <div class="plan_section_hr"> <span class="spanBlock midFont">caracteristicas</span>  
+          <span class="spanBlock midSubFont">Obtén reportes detallados de todas tus consultas diarias
+            Identifica fácilmente la forma de pago de tus pacientes y las cuentas por cobrar del día
+            Hasta tres usuarios para Recepción y Caja incluidos en tu plan
+            Exporta tus reportes
+            Agrega suscriptores adicionales a un costo preferencial de $169pesos mensuales
+          </span> 
+        </div>
+
+        <div class="plan_section_hr" *ngIf="this.checkIs(plan.nid,this.PLAN_GROUP)"> <span class="spanBlock midFont">caracteristicas</span>  
+          <span class="spanBlock midSubFont">Utiliza DARP en tu Grupo Médico con un costo preferencial incluyendo 4 suscriptores
+            Tu plan incluye hasta 12 usuarios para Recepción y Caja
+            Obtén reportes detallados de todas las consultas diarias del Grupo y por cada Doctor
+            Identifica fácilmente la forma de pago de los pacientes y las cuentas por cobrar del día
+            Exporta los reportes</span> 
+        </div>
       </div><!-- fin de plans section -->
 
      <div class="grupos_medicos_code" (click)="gotoentergroup()">
-      ¿Tienes un código de grupo médico?, <span class="fontPrimary">Ingrésalo Aquí.</span>
+      ¿Tienes un código para Grupo Médico?, <span class="fontPrimary">Ingrésalo Aquí.</span>
      </div>
 
     </div><!-- fin de plans block en onplanchange-->
@@ -72,7 +85,8 @@
     <div class="plans_extras bisectional">
       <div class="plans_extras_section bisectional_section right_align">
         <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar mas subusuarios a tu plan?</span> 
-        <p class="midSubFont"> Los subusuarios adicionales a tu plan tienen un costo de $40.00 y se agregan al pago de tu suscripción mensual</p>
+        <p class="midSubFont"> ¡Agrega todos los usuarios que necesites de acuerdo con el personal en tu consultorio!
+          Contrata usuarios adicionales por $40 pesos al mes.</p>
       </div>
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="onplanchange"> <!-- Usuarios adicionales onplanchange-->
@@ -114,7 +128,7 @@
       </div> <!-- fin de usuarios adicionales onplanchange-->
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
-        <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{subAdicionales}} adicionales</span> </span>
+        <span class="spanBlock midSubFont"> Actualmente cuentas con X <span class="fontPrimary">{{subAdicionales}} usuarios adicionales</span>  a los incluídos en tu plan. </span>
         <span class="spanBlock midFont"> Total extra de subusuarios:  <span class="fontPrimary">${{subAdicionales*40}}.00</span></span>
       </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
 
@@ -165,7 +179,7 @@
         <p class="midSubFont" *ngIf="this.onplanchange"> Cualquier cambio en el monto total de tu suscripcion se vera reflejado en tu proxima mensualidad al ${{nextCobro}}</p>
       </div>  
       <div class="button_section"> 
-        <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>
+        <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >GUARDAR</button>
         <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup() && cantcancel"  (click)="guardar()" >Suscribirse</button>
         <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()" >Editar</button>
         <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="cancelar()" >Cancelar</button>

@@ -52,6 +52,30 @@ export class MiplanPage {
 
   isgroup:boolean = false;
 
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public userData: UserDataProvider,
+    public permissions: PermissionsProvider,
+    public planesData: PlanesDataProvider,
+    public subsData: SubscriptionDataProvider,
+    public alert:AlertProvider,
+    public loader:LoaderProvider,
+    public subsManager: SubscriptionManagerProvider,
+    public conekta: ConektaComponent,
+    public bu: BaseUrlProvider,
+    public http: HttpClient,
+  ) {
+    conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
+      //Este success se ejecuta con el javascript se cargó correctamente
+      console.log(c);
+    }).catch((err) => {
+      //Este error se ejecuta cuando el javascript no cargó, Ej. Error de conexión
+      console.log(err);
+    });
+  }
+
+
   get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
   get nextCobro(){ return this.subsData.checkForSub() ? this.subsData.subscription.field_next_cobro : 0; }
   get subAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_adicionales) : 0;  }
@@ -60,7 +84,13 @@ export class MiplanPage {
 
 
 
+  get PLAN_GROUP():number{ return this.subsData.PLAN_GROUP; }
+  get PLAN_ANY():number{ return this.subsData.PLAN_ANY; }
   
+
+  checkIs( nid, plan ){
+    return Number(nid) === Number(plan);
+  }
 
   get selectedTotal():number{
     let ret = 0;
@@ -108,28 +138,7 @@ export class MiplanPage {
   
   
 
-  constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams,
-    public userData: UserDataProvider,
-    public permissions: PermissionsProvider,
-    public planesData: PlanesDataProvider,
-    public subsData: SubscriptionDataProvider,
-    public alert:AlertProvider,
-    public loader:LoaderProvider,
-    public subsManager: SubscriptionManagerProvider,
-    public conekta: ConektaComponent,
-    public bu: BaseUrlProvider,
-    public http: HttpClient,
-  ) {
-    conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
-      //Este success se ejecuta con el javascript se cargó correctamente
-      console.log(c);
-    }).catch((err) => {
-      //Este error se ejecuta cuando el javascript no cargó, Ej. Error de conexión
-      console.log(err);
-    });
-  }
+  
 
   /*ERROR Y SUCCESS CONEKTA*/
   async successToken(token:any){
