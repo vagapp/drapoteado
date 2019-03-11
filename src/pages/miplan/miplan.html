@@ -15,12 +15,12 @@
       <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()">Editar</button>
     </div>
     </div>
-    <!-- Seccion con informacion de planes  -->
+    <!-- Seccion con Información de planes  -->
     <div>
       Optimizar las consultas y pagos en tu consultorio. ¡Será mucho más fácil y seguro!
     </div>
     <div class="plans_block" *ngIf="onplanchange"> <!-- Seleccion de plan cuando onplanchange  -->
-      <span class="blockSpan info_plan_title" >Seleciciona un Plan </span>
+      <span class="blockSpan info_plan_title" >Selecciona un Plan </span>
 
       <div class="plan_section"  *ngFor="let plan of this.planesData.planes">
         <div class="plan_section_hr">  <!-- Plan selection check start -->
@@ -50,8 +50,8 @@
 
     </div><!-- fin de plans block en onplanchange-->
 
-    <div class="plans_block" *ngIf="!onplanchange && subsData.subscription"> <!-- Informacion de plan cuando no en onplanchange  -->
-      <span class="blockSpan info_plan_title" >Informacion de tu Plan</span>
+    <div class="plans_block" *ngIf="!onplanchange && subsData.subscription"> <!-- Información  de plan cuando no en onplanchange  -->
+      <span class="blockSpan info_plan_title" >Información  de tu Plan</span>
 
       <div class="plan_section">
         <div class="plan_section_hr">  <!-- Plan selection check start -->
@@ -76,12 +76,12 @@
      
 
     </div><!-- fin de plans block cuando no onplanchange-->
-  <!-- fin de Seccion con informacion de planes  -->
+  <!-- fin de Seccion con Información  de planes  -->
 
 
     <div class="plans_extras bisectional">
       <div class="plans_extras_section bisectional_section right_align">
-        <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar mas subusuarios a tu plan?</span> 
+        <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar más subusuarios a tu plan?</span> 
         <p class="midSubFont"> ¡Agrega todos los usuarios que necesites de acuerdo con el personal en tu consultorio!
           Contrata usuarios adicionales por $40 pesos al mes.</p>
       </div>
@@ -108,7 +108,7 @@
 
     <div class="plans_extras bisectional" *ngIf="this.isgroup" >
       <div class="plans_extras_section bisectional_section right_align">
-        <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar mas doctores a tu plan?</span> 
+        <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar más doctores a tu plan?</span> 
         <p class="midSubFont"> Los doctores adicionales a tu plan tienen un costo de $169.00 y se agregan al pago de tu suscripción mensual</p>
       </div>
 
@@ -125,7 +125,7 @@
       </div> <!-- fin de usuarios adicionales onplanchange-->
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
-        <span class="spanBlock midSubFont"> Actualmente cuentas con X <span class="fontPrimary">{{subAdicionales}} usuarios adicionales</span>  a los incluídos en tu plan. </span>
+        <span class="spanBlock midSubFont"> Actualmente cuentas con  <span class="fontPrimary">{{subAdicionales}} usuarios adicionales</span>  a los incluídos en tu plan. </span>
         <span class="spanBlock midFont"> Total extra de subusuarios:  <span class="fontPrimary">${{subAdicionales*40}}.00</span></span>
       </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
 
@@ -141,7 +141,7 @@
          <div class="bisectional_section neuvo_metodo_pago"> 
             <div class="sources_wrapper"> <!-- INICIO STRIPE LISTED SOURCES-->
               <h3>Tarjetas activas</h3>
-              <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado metodos de pago </div>
+              <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado métodos de pago </div>
               <ion-row *ngFor="let src of this.sources; let indice = index">
                 <ion-col col-10 [class.selectedsrc]="src.default" class="fact_src_unit">
                   <ion-row>
@@ -173,12 +173,13 @@
       <div class="subtotal_pago">
         <span class="spanBlock midFont" *ngIf="this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{selectedTotal}}.00</span></span>
         <span class="spanBlock midFont" *ngIf="!this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{cantidad}}.00</span></span>
-        <p class="midSubFont" *ngIf="this.onplanchange"> Cualquier cambio en el monto total de tu suscripcion se vera reflejado en tu proxima mensualidad al ${{nextCobro}}</p>
+        <p class="midSubFont" *ngIf="this.onplanchange"> Cualquier cambio en el monto total de tu suscripción se verá reflejado en tu próxima mensualidad al {{nextCobro}}</p>
       </div>  
       <div class="button_section"> 
-        <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >GUARDAR</button>
+        <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>
         <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup() && cantcancel"  (click)="guardar()" >Suscribirse</button>
         <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()" >Editar</button>
+        <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="baja()" >Cancelar suscripción</button>
         <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="cancelar()" >Cancelar</button>
       </div>
     </div>

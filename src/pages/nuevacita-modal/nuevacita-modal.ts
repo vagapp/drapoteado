@@ -440,7 +440,7 @@ async updateDoctores(){
 }
 
 /**
- * Esto de aqui es para que el date me de el toisostring en la hora de aqui
+ * Esto de aquí es para que el date me de el toisostring en la hora de aquí
  *  **/
 /*
 Date.prototype.toISOString = function() {

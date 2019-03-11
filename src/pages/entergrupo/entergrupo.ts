@@ -55,7 +55,7 @@ export class EntergrupoPage {
 
   async buscar(){
     if(this.groupCode !== null){
-      this.loader.presentLoader('Buscando grupos medicos');
+      this.loader.presentLoader('Buscando grupos médicos');
       console.log('sstart');
       let sus = await this.subsMan.searchSus(this.groupCode+'');
       console.log(sus);
@@ -69,7 +69,7 @@ export class EntergrupoPage {
         this.loader.dismissLoader();
       }else{
         this.loader.dismissLoader();
-        this.alert.presentAlert('Nada','No se encontro ningun grupo medico con este codigo');
+        this.alert.presentAlert('Nada','No se encontro ningun grupo médico con este codigo');
       }
       console.log('send');
     }
@@ -108,7 +108,7 @@ export class EntergrupoPage {
     if(this.docsleft <= 0){
       ret = false;
       console.log('validateDocsLeft failed');
-      this.alert.presentAlertHandler('LLeno','El grupo medico al que intenta ingresar se encuentra lleno.',()=>{ this.cancelar();});
+      this.alert.presentAlertHandler('LLeno','El grupo médico al que intenta ingresar se encuentra lleno.',()=>{ this.cancelar();});
     }
     return ret;
   }

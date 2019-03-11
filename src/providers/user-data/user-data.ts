@@ -386,7 +386,7 @@ export class UserDataProvider {
   }
 
   setCitasFO( val ){
-  //aqui creamos el pool de citas, este pool sirve para que los doctores tomen y administren las citas que tienen.
+  //aquí creamos el pool de citas, este pool sirve para que los doctores tomen y administren las citas que tienen.
   Debugger.log(['citas Cargadas',val]);
   for( let cita of val ){
     let citaIndex = this.getCitaIndexByNid(cita.Nid);

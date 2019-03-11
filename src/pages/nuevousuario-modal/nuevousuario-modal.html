@@ -58,7 +58,7 @@
         <span class="spanBlock" *ngIf="this.userData.checkUserPlanHolder()"> <button class="bgColorSecondary generalButton" (click)="newuser=true; initialpage=false;">Registrar Nuevo</button></span>
       </div>
     <div class="nuevoservicio_content modalContent" *ngIf="codeuser">
-        <span class="spanBlock optionspan" (click)="gobackuser()" > atras </span>
+        <span class="spanBlock optionspan" (click)="gobackuser()" > atrás </span>
         <div class="ModalInput_input">
             <b>Introducir Código</b>
             <input  [(ngModel)]="this.newUserCode" type="text"/>
@@ -70,7 +70,7 @@
           </div>
     </div>
     <div class="nuevoservicio_content modalContent" *ngIf="this.newuser">
-            <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="!this.tutorial.checkTutorialState()"> atras </span>
+            <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="!this.tutorial.checkTutorialState()"> atrás </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> <span class="fontPrimary">Caja.</span> Esta persona cobra las citas </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> <span class="fontPrimary">Recepción.</span> Esta persona administra citas </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Recepción y Caja.</span> Esta persona administra y cobra las citas </span>

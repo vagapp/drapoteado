@@ -274,7 +274,7 @@ export class RegisterModalPage {
       if(sus){
         await this.subsManager.susAssign(sus);
       }else{
-        this.alert.presentAlert('Nada','No se encontro ningun grupo medico');
+        this.alert.presentAlert('Nada','No se encontro ningun grupo médico');
       }
       this.loader.dismissLoader();
     }

@@ -234,7 +234,7 @@ export class SubscriptionManagerProvider {
   }
 
   /**
-   * Este metodo busca en drupal una suscripcion en base a un codigo. es una forma de entrar a grupos medicos.
+   * Este metodo busca en drupal una suscripcion en base a un codigo. es una forma de entrar a grupos médicos.
    * @param code 
    */
   async searchSus( code:string ){

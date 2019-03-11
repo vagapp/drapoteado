@@ -62,8 +62,8 @@ export class DoctoresManagerProvider {
       this.setDoctores([this.userData.userData.uid]);
     }else{ // si es un sub usuario
       console.log('not a doctor setting docs uids');
-      this.loadGroupDoctors(); //aqui cargamos los doctores de la suscripcion
-      //despues de el metodo de aqui arriba, los ids de los doctores estarian en docdata.docIdsToLoad
+      this.loadGroupDoctors(); //aquí cargamos los doctores de la suscripcion
+      //despues de el metodo de aquí arriba, los ids de los doctores estarian en docdata.docIdsToLoad
       console.log('docIdsToLoad lleno?',this.docData.docIdsToLoad.length,this.docData.docIdsToLoad);
       console.log('field_doctores vacio?',this.userData.userData.field_doctores);
 
@@ -72,7 +72,7 @@ export class DoctoresManagerProvider {
         this.setDoctoresData(docs_data);
       }
       /*
-      if(this.userData.userData.field_doctores && this.userData.userData.field_doctores.und.length > 0){ // aqui ya todo esta mal porque estamos buscando en la lista de doctores y ya no se debe usar.
+      if(this.userData.userData.field_doctores && this.userData.userData.field_doctores.und.length > 0){ // aquí ya todo esta mal porque estamos buscando en la lista de doctores y ya no se debe usar.
       console.log('it has docs');
       //this.setDoctores(this.userData.userData.field_doctores.und);
       console.log('docs ids',this.userData.userData.field_doctores.und);

@@ -92,7 +92,7 @@ export class CitasPresentatorProvider {
     Modal.present({});*/
     console.log('opening progreso men');
     if(cita.checkState(CitasDataProvider.STATE_FINALIZADA)){
-      console.log('tengo cositas aqui = ) ');
+      console.log('tengo cositas aquí = ) ');
     this.progresSController.cobroEfectivo = cita.cobroEfectivo;
     this.progresSController.cobroCheque = cita.cobroCheque;
     this.progresSController.cobroTarjeta = cita.cobroTarjeta;

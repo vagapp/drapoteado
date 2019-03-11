@@ -74,7 +74,7 @@ export class SubusersManagerProvider {
   healSubscription(res, subsids ){
     //vamos a ver si es cierto lo que dices wey
     subsids.forEach(subid => { //por cada subid en tu lista vamos a ver si existe el doctor en el resm osea en lo que si encontramos en los datos wey
-     //aqui no tengo como saber que hay en el puto res asi que necesito un usuario legal men.
+     //aquí no tengo como saber que hay en el puto res asi que necesito un usuario legal men.
     });
   }
 
