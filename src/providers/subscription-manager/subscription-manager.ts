@@ -38,6 +38,7 @@ export class SubscriptionManagerProvider {
   }
 
 
+
   /** Obtiene la subscripcion del usuario actual */
   async loadSubscription(){
     console.log('loadSubscription');
