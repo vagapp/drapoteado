@@ -7,7 +7,7 @@
      Drap se preocupa por hacer tu vida más fácil por eso nuestra función de grupos médicos te brinda funciones para compartir tus servicios y usuarios grupales con otros doctores, Si un doctor de tu grupo te ha compartido un código, ingrésalo aquí
     </div>
     
-    <div class="enter_field">
+    <div class="enter_field" *ngIf="!groupLoaded">
       <ion-list>
         <ion-item class="loginInput">
           <ion-input [(ngModel)]="groupCode" placeholder="Codigo de Grupo Médico"></ion-input>
@@ -15,11 +15,11 @@
     </ion-list>
 
     </div>
-    <div class="groupName_shower fontPrimary" *ngIf="groupLoaded">
-        {{groupName}}
+    <div class="groupName_shower" *ngIf="groupLoaded">
+        se encontro el grupo: <span class="fontPrimary">{{groupName}}</span>  con <span class="fontPrimary">{{this.docsleft}}</span> lugares disponibles
     </div>
   </div>
-  <div class="enter_subuser_selection"  *ngIf="groupLoaded">
+  <div class="enter_subuser_selection"  *ngIf="groupLoaded && AnyPlan">
     <div class="enter_title fontPrimary"> Selección de Usuarios </div>
     <div class="enter_description"> Este plan te permite compartir usuarios entre los doctores del grupo si hay plazas disponibles puedes llevar contigo a tus usuarios actuales, seleccionandolos en la
       lista a continuación, si no hay plazas activas habla con el administrador del grupo para activarlas. </div>
@@ -56,7 +56,7 @@
     <span class="fontPrimary left enter_comprar">¿Quieres comprar un plan médico?</span>
     <div class="button_section">
     <button class="generalButton bgColorSecondary right" (click)="buscar()" *ngIf="!this.groupLoaded" >Buscar</button>
-    <button class="generalButton bgColorSecondary right" (click)="guardar()" *ngIf="this.groupLoaded && this.canSave" >Guardar</button>
+    <button class="generalButton bgColorSecondary right" (click)="guardar()" *ngIf="this.groupLoaded && this.canSave" >Entrar al grupo</button>
     <button class="generalButton bgColorPrimary right" (click)="cancelar()" >Cancelar</button>
     </div>
   </div>

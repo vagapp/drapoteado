@@ -5,6 +5,7 @@ import { UserDataProvider, userd } from '../user-data/user-data';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { subscriptions } from '../user-data/subscriptions';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 /*
 This class is a message generator for  the websocketService
@@ -101,31 +102,50 @@ export class WsMessengerProvider {
   }
 
   generateSubUserAddedMessage( uid:number, name:string, docs:Array<any> ){
-  //generar un mensaje por medio del que se agrega un subusuario a una suscripcion.
-  //agregar este subusuario a las listas de las suscripciones de los doctores.
-  /*DEACTIVADO PORQAUE NO ESTORBE ESTO EN PRUEBAS 27/11/2018
-    this.generateMessage(
-      docs.map( (docs)=>{return docs.uid }),
-      'groupAddSubSubs',
-      `${this.userData.userData.uid}`,
-      {"uid":uid,"name":name },
-      true
-    );
-  //agregar los doctores de la suscripcion a las del usuario.
-  let arruid = new Array();
-  arruid.push(uid);
-  this.generateMessage(
-    arruid,
-    'groupAddSubDocs',
-    `${this.userData.userData.uid}`,
-    JSON.stringify(docs),
-    true
-  );*/
-
+ 
   }
 
   generateSubUserRemovedMessage(uid){
 
+  }
+
+  /**
+   * Cuando un doctor entra a un grupo.
+   * 
+   * este mensaje se tiene que enviar a los doctores que pertenecen a la suscripcion a la que esta entrando para que se actualice su lista de doctores.
+   */
+  generateDoctogroupMessage(docs:Array<any>){
+    this.generateMessage(
+      docs,
+      WebsocketServiceProvider.ACTION_DOC_TO_GROUP,
+      `${this.userData.userData.uid}`,
+      '',
+      true
+      );
+  }
+
+
+   /**
+   * Cuando un Subusuario entra a un grupo.
+   * 
+   * Este mensaje se envia a los sub usuarios que entran a un grupo para que se refresque su app.
+   * ademas se envia a los doctores de la suscripcion para que refresque su lista de sub usuarios.
+   */
+  generateSubtogroupMessage(subusers:Array<any>,docs:Array<any>){
+    this.generateMessage(
+      docs,
+      WebsocketServiceProvider.ACTION_SUB_TO_GROUP_DOCS,
+      `${this.userData.userData.uid}`,
+      '',
+      true
+      );
+      this.generateMessage(
+        subusers,
+        WebsocketServiceProvider.ACTION_SUB_TO_GROUP_SUBS,
+        `${this.userData.userData.uid}`,
+        '',
+        true
+        );
   }
 
  

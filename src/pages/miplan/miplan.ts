@@ -140,7 +140,6 @@ export class MiplanPage {
 
     /***/
     baja(){
-      console.log('dar de baja esta mierda');
       this.alert.chooseAlert(
         'Cancelar suscripción',
         '¿Estás seguro que deseas cancelar tu suscripción?, Si cancelas tu suscripción no podras acceder a tus citas, servicios y reportes.',

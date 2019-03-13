@@ -10,6 +10,9 @@ import { UserDataProvider, userd } from '../../providers/user-data/user-data';
 import { PlanesDataProvider } from '../../providers/planes-data/planes-data';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { BaseUrlProvider } from '../../providers/base-url/base-url';
+import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
+import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
 
 /**
  * Generated class for the EntergrupoPage page.
@@ -44,9 +47,13 @@ export class EntergrupoPage {
     public planData: PlanesDataProvider,
     public loader: LoaderProvider,
     public alert:AlertProvider,
-    public bu: BaseUrlProvider
+    public bu: BaseUrlProvider,
+    public wsMessenger: WsMessengerProvider,
+    public perm: PermissionsProvider
     ) {
   }
+
+  get AnyPlan(){ return this.perm.checkUserSuscription([UserDataProvider.PLAN_ANY]) }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EntergrupoPage');
@@ -85,11 +92,14 @@ export class EntergrupoPage {
      if(!delsusres) return false; //salir de aca si no sirve esto
     }
     this.loaded_group_sus.field_doctores.push(this.userData.userData.uid);//agregarse a si mismo a la suscripcion de grupo.
-    this.getSelectedSubusersArray().forEach((subuser)=>{ //agregar sub usuarios a la suscripcion de grupo.
+    const selected_subusers = this.getSelectedSubusersArray();
+    selected_subusers.forEach((subuser)=>{ //agregar sub usuarios a la suscripcion de grupo.
       this.loaded_group_sus.field_subusuarios.push(subuser.uid);
     });
     let res = await this.subsMan.updateSus( this.loaded_group_sus ).subscribe(
       (val)=>{
+        this.wsMessenger.generateDoctogroupMessage(this.loaded_group_sus.field_doctores);
+        this.wsMessenger.generateSubtogroupMessage(selected_subusers.map((user)=>{ return user.uid }),this.loaded_group_sus.field_doctores);
         console.log('redysave val',val);
         this.bu.locationReload();
         this.loader.dismissLoader();
