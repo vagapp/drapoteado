@@ -57,6 +57,8 @@ import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
 import { TutorialProvider } from '../providers/tutorial/tutorial';
 import { JsonUtilProvider } from '../providers/json-util/json-util';
 
+import { UpdaterProvider } from '../providers/updater/updater';
+
 
 
 //import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
@@ -144,7 +146,8 @@ import { JsonUtilProvider } from '../providers/json-util/json-util';
     PermissionsProvider,
     TutorialProvider,
     JsonUtilProvider,
-    ConektaComponent
+    ConektaComponent,
+    UpdaterProvider
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

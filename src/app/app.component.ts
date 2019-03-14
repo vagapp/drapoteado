@@ -15,6 +15,7 @@ import { SubscriptionManagerProvider } from '../providers/subscription-manager/s
 import { PermissionsProvider } from '../providers/permissions/permissions';
 import { TutorialProvider } from '../providers/tutorial/tutorial';
 import { SubusersManagerProvider } from '../providers/subusers-manager/subusers-manager';
+import { UpdaterProvider } from '../providers/updater/updater';
 
 
 
@@ -56,6 +57,7 @@ export class MyApp {
     public subUserMan: SubusersManagerProvider,
     public perm: PermissionsProvider,
     public tutorial: TutorialProvider,
+    public updater: UpdaterProvider
   ) {
     this.rootPage = 'LoginPage';
     this.startdate = new Date().getTime();
@@ -114,39 +116,11 @@ export class MyApp {
       //if logged in set session and userdata
       this.userData.setSessionData(connec_Data); //setear data de connect
       await this.userData.loginSetData(connec_Data['user']['uid']); //esto no recuerdo bien que hacia
-      if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){ //si es doctor se carga la suscripcion
-        /**
-         * ACLARACION DE LOS SUBUSUARIOS:
-         *  los subusuarios no se "cargan" hasta que se abre la pagina de usuarios, sin embargo estos subusuarios estan listados en la suscripcion, asi que se tiene el numero de agregados en ese lugar para administrar el plan sin tener que cargar los subusuarios.
-         */
-      /*let sus = await this.subscriptionManager.searchSus('kCsR0Z1ZrSCidi7s4m2jeV064');
-      this.subscriptionManager.susAssign(sus);*/
-      await this.subscriptionManager.loadSubscription();
-      //await this.subUserMan.requestGroupUsers();
-      //this.subscriptionManager.subsData.subscription.removeUserFromSubs(189);
-      }else{ 
-        //si son subusuarios buscar suscripciones a las que esten agregados
-        console.log('looking for subscriptions where this sub user is added');
-        await this.subscriptionManager.loadGroupSubuserSubs(); //se cargan subscripciones a las que estan agregados.
-        this.docMan.loadGroupDoctors(); //se cargan los doctores de las suscripciones a las que estan agregados.
-      }
-      
-        /*let subusuerArray = new Array();
-        subusuerArray.push(119);*/
-
-        /*let docsArray = new Array();
-        docsArray.push({uid:76,name:'do1'});
-        docsArray.push({uid:189,name:'do2do'});
-        //docsArray.push({uid:1202,name:'do3dx'});
-        */
-        
-      await this.docMan.initDoctoresUids();
-      await this.subscriptionManager.loadDoctorsSubscriptions();
-      console.log('subscription initload is', this.subscriptionManager.subsData.subscription);
-      console.log('kewe');
-      console.log('docs before filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
-      this.docMan.filterActiveDoctors();
-      console.log('docs after filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
+      console.log('into 0');
+      await this.updater.updateSuscription();
+      console.log('into a');
+      await this.updater.updateDocList();
+      console.log('into b');
       await this.citasManager.requestCitas().toPromise();
       this.docMan.evaluateCitas();
       this.serviciosManager.loadServicios();
@@ -188,3 +162,39 @@ export class MyApp {
 
 
 }
+
+
+
+//if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){ //si es doctor se carga la suscripcion
+  /**
+   * ACLARACION DE LOS SUBUSUARIOS:
+   *  los subusuarios no se "cargan" hasta que se abre la pagina de usuarios, sin embargo estos subusuarios estan listados en la suscripcion, asi que se tiene el numero de agregados en ese lugar para administrar el plan sin tener que cargar los subusuarios.
+   */
+/*let sus = await this.subscriptionManager.searchSus('kCsR0Z1ZrSCidi7s4m2jeV064');
+this.subscriptionManager.susAssign(sus);*/
+//await this.subscriptionManager.loadSubscription();
+//await this.subUserMan.requestGroupUsers();
+//this.subscriptionManager.subsData.subscription.removeUserFromSubs(189);
+/*}else{ 
+  //si son subusuarios buscar suscripciones a las que esten agregados
+  console.log('looking for subscriptions where this sub user is added');
+  await this.subscriptionManager.loadGroupSubuserSubs(); //se cargan subscripciones a las que estan agregados.
+  this.docMan.loadGroupDoctors(); //se cargan los doctores de las suscripciones a las que estan agregados.
+}*/
+
+  /*let subusuerArray = new Array();
+  subusuerArray.push(119);*/
+
+  /*let docsArray = new Array();
+  docsArray.push({uid:76,name:'do1'});
+  docsArray.push({uid:189,name:'do2do'});
+  //docsArray.push({uid:1202,name:'do3dx'});
+  */
+  /*
+await this.docMan.initDoctoresUids();
+await this.subscriptionManager.loadDoctorsSubscriptions();
+console.log('subscription initload is', this.subscriptionManager.subsData.subscription);
+console.log('kewe');
+console.log('docs before filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
+this.docMan.filterActiveDoctors();
+console.log('docs after filter active',JSON.stringify(this.docMan.docData.doctoresIDs));*/

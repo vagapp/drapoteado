@@ -98,11 +98,11 @@ export class EntergrupoPage {
     });
     let res = await this.subsMan.updateSus( this.loaded_group_sus ).subscribe(
       (val)=>{
+        console.log('redysave val',val);
         this.wsMessenger.generateDoctogroupMessage(this.loaded_group_sus.field_doctores);
         this.wsMessenger.generateSubtogroupMessage(selected_subusers.map((user)=>{ return user.uid }),this.loaded_group_sus.field_doctores);
-        console.log('redysave val',val);
-        this.bu.locationReload();
-        this.loader.dismissLoader();
+        //this.bu.locationReload();
+        //this.loader.dismissLoader();
       },(error)=>{
         console.log('redysave error',error);
         this.loader.dismissLoader();

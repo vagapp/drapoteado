@@ -15,6 +15,7 @@ import { Doctores } from '../user-data/doctores';
 import { SubusersDataProvider } from '../subusers-data/subusers-data';
 import { SubusersManagerProvider } from '../subusers-manager/subusers-manager';
 import { SubscriptionManagerProvider } from '../subscription-manager/subscription-manager';
+import { UpdaterProvider } from '../updater/updater';
 
 
 @Injectable()
@@ -30,7 +31,8 @@ export class WebsocketServiceProvider {
     public subsData: SubscriptionDataProvider,
     public subusersManager: SubusersManagerProvider,
     public subuserData: SubusersDataProvider,
-    public subscriptionManager:SubscriptionManagerProvider
+    public subscriptionManager:SubscriptionManagerProvider,
+    public updater: UpdaterProvider
   ) {
     this.init();
   }
@@ -75,8 +77,9 @@ export class WebsocketServiceProvider {
 
   
   groupAddSubSubs(message){
-    if(this.filterMessageById(message)){
     console.log('groupAddSubSubs',message);
+    if(this.filterMessageById(message)){
+   
     console.log(this.subuserData.subUsers);
     this.subusersManager.cargarSubusuarios();
     //add the subuser to your subscription.
@@ -84,8 +87,9 @@ export class WebsocketServiceProvider {
   }
   
   groupAddSubDocs(message){
+    console.log('groupAddSubDocs',message);
     if(this.filterMessageById(message)){
-      console.log('groupAddSubDocs',message);
+      
       console.log(this.docData.doctores);
       let gropdocs = JSON.parse( message.content );
       for(let gdoc of gropdocs){
@@ -166,16 +170,21 @@ export class WebsocketServiceProvider {
 
    /**----------------------------------------------------------------------MENSAJES DE GRUPOS MEDICOS */
    /** este mensaje lo reciven todos los doctores de un grupo cuando un doctor entra a su grupo medico. debe refrescar los datos de los doctores en el grupo.*/
-   RESPONSE_DOC_TO_GROUP(message){
-    if(this.filterMessageById(message)){  
-      this.subscriptionManager.loadSubscription();
+   async RESPONSE_DOC_TO_GROUP(message){
+     console.log('RESPONSE_DOC_TO_GROUP');
+    if(this.filterMessageById(message)){ 
+      console.log('RESPONSE_DOC_TO_GROUP infilter'); 
+      await this.updater.updateSuscription();
+      await this.updater.updateDocList();
     }
   }
  /**
   * Este mensaje lo reciven todos los doctores de un grupo medico cunado un sub usuario entra a su grupo. debe refrescar la lista de sub usuarios.
   */
   RESPONSE_SUB_TO_GROUP_DOCS(message){
+    console.log('RESPONSE_SUB_TO_GROUP_DOCS');
     if(this.filterMessageById(message)){
+      console.log('RESPONSE_SUB_TO_GROUP_DOCS infilter'); 
       this.subscriptionManager.loadSubscription();
       }
   }
@@ -184,7 +193,9 @@ export class WebsocketServiceProvider {
   * Este mensaje lo reciven todos los sub usuarios que entran a un grupo medico. debe refrescar toda el app.
   */
   RESPONSE_SUB_TO_GROUP_SUBS(message){
+    console.log('RESPONSE_SUB_TO_GROUP_SUBS');
     if(this.filterMessageById(message)){ 
+      console.log('RESPONSE_SUB_TO_GROUP_SUBS infilter'); 
       this.bu.locationReload();
      }
   }

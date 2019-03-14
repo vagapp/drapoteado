@@ -18,6 +18,8 @@ import { Calendar } from '@ionic-native/calendar';
 import { DoctoresManagerProvider } from '../../providers/doctores-manager/doctores-manager';
 import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { UpdaterProvider } from '../../providers/updater/updater';
 
 /**
  * Generated class for the NuevacitaModalPage page.
@@ -79,7 +81,8 @@ hourIntervalMS:number = 30*60*1000;
     public dateP: DateProvider,
     private calendar: Calendar,
     public citasData: CitasDataProvider,
-    public subscriptionManager:SubscriptionManagerProvider
+    public subscriptionManager:SubscriptionManagerProvider,
+    public updater: UpdaterProvider
   ) {
     
     /** 
@@ -412,6 +415,10 @@ goToNextMonth() {
 
 async updateDoctores(){
   this.loader.presentLoader('Cargando Doctores...');
+  await this.updater.updateSuscription();
+  await this.updater.updateDocList();
+  this.loader.dismissLoader();
+  /*this.loader.presentLoader('Cargando Doctores...');
   var uid = this.userData.userData.uid;
   this.userData.loginSetData(uid);
   this.docData.cleanDoctor();
@@ -424,7 +431,7 @@ async updateDoctores(){
   await this.subscriptionManager.loadDoctorsSubscriptions();
   //console.log("UNIDO Y DIFERENTE",JSON.stringify(this.docData.doctores));
   this.docMan.filterActiveDoctors();
-  this.loader.dismissLoader();
+  this.loader.dismissLoader();*/
 }
 
 

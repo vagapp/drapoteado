@@ -39,7 +39,7 @@ export class WsMessengerProvider {
     content: any,
     isBroadcast = false,
   ){
-    
+    console.log('generateMessage',receivers,action,sender,content,isBroadcast);
     let message2send = {
       receivers,
       action,
@@ -48,9 +48,11 @@ export class WsMessengerProvider {
       isBroadcast,
     };
     let jsonsend = JSON.stringify(message2send);
-    console.log(jsonsend);
+    
+    //console.log(jsonsend);
     const message = JSON.parse(jsonsend) as Message;
-    console.log(message);
+    //console.log(message);
+    console.log('sending this msg', message);
     this.ws.send(message);
   }
 
@@ -115,6 +117,7 @@ export class WsMessengerProvider {
    * este mensaje se tiene que enviar a los doctores que pertenecen a la suscripcion a la que esta entrando para que se actualice su lista de doctores.
    */
   generateDoctogroupMessage(docs:Array<any>){
+    console.log('generateDoctogroupMessage',docs);
     this.generateMessage(
       docs,
       WebsocketServiceProvider.ACTION_DOC_TO_GROUP,
@@ -132,6 +135,7 @@ export class WsMessengerProvider {
    * ademas se envia a los doctores de la suscripcion para que refresque su lista de sub usuarios.
    */
   generateSubtogroupMessage(subusers:Array<any>,docs:Array<any>){
+    console.log('generateSubtogroupMessage',subusers,docs);
     this.generateMessage(
       docs,
       WebsocketServiceProvider.ACTION_SUB_TO_GROUP_DOCS,
