@@ -5,8 +5,8 @@ import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { SubscriptionManagerProvider } from '../subscription-manager/subscription-manager';
 import { DoctoresManagerProvider } from '../doctores-manager/doctores-manager';
 import { PermissionsProvider } from '../permissions/permissions';
-import { SubusersDataProvider } from '../subusers-data/subusers-data';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
+import { SubusersManagerProvider } from '../subusers-manager/subusers-manager';
 
 /*
   Generated class for the UpdaterProvider provider.
@@ -23,7 +23,8 @@ export class UpdaterProvider {
     public docMan: DoctoresManagerProvider,
     public subscriptionManager: SubscriptionManagerProvider,
     public perm: PermissionsProvider,
-    public subsData: SubscriptionDataProvider
+    public subsData: SubscriptionDataProvider,
+    public subusersManager: SubusersManagerProvider
    
     ) {
    
@@ -47,6 +48,12 @@ export class UpdaterProvider {
     //this.docs = JSON.parse(this.subsData.subscription.field_doctores_json);
     this.subsData.setDoctores();
     }
+  }
+
+
+  async updateSubusers(){
+    console.log();
+    await this.subusersManager.cargarSubusuarios();
   }
 
 }

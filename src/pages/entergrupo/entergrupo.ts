@@ -101,8 +101,8 @@ export class EntergrupoPage {
         console.log('redysave val',val);
         this.wsMessenger.generateDoctogroupMessage(this.loaded_group_sus.field_doctores);
         this.wsMessenger.generateSubtogroupMessage(selected_subusers.map((user)=>{ return user.uid }),this.loaded_group_sus.field_doctores);
-        //this.bu.locationReload();
-        //this.loader.dismissLoader();
+        this.bu.locationReload();
+        this.loader.dismissLoader();
       },(error)=>{
         console.log('redysave error',error);
         this.loader.dismissLoader();

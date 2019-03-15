@@ -176,17 +176,20 @@ export class WebsocketServiceProvider {
       console.log('RESPONSE_DOC_TO_GROUP infilter'); 
       await this.updater.updateSuscription();
       await this.updater.updateDocList();
+      await this.updater.updateSubusers();
     }
   }
  /**
   * Este mensaje lo reciven todos los doctores de un grupo medico cunado un sub usuario entra a su grupo. debe refrescar la lista de sub usuarios.
+  * pero ya no lo voy a manejar porque basta con avisar que un doctor entra para que actualicen todos sus datos.
   */
-  RESPONSE_SUB_TO_GROUP_DOCS(message){
+  async RESPONSE_SUB_TO_GROUP_DOCS(message){
     console.log('RESPONSE_SUB_TO_GROUP_DOCS');
-    if(this.filterMessageById(message)){
+    /*if(this.filterMessageById(message)){
       console.log('RESPONSE_SUB_TO_GROUP_DOCS infilter'); 
-      this.subscriptionManager.loadSubscription();
-      }
+      await this.updater.updateSuscription();
+      await this.updater.updateDocList();
+      }*/
   }
 
   /**
