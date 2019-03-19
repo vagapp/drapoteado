@@ -4,6 +4,7 @@ import { PermissionsProvider } from '../permissions/permissions';
 import { UserDataProvider } from '../user-data/user-data';
 import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
 import { ServiciosManagerProvider } from '../servicios-manager/servicios-manager';
+import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 
 /*
   Generated class for the TutorialProvider provider.
@@ -20,6 +21,12 @@ export class TutorialProvider {
   serviciosModal: Modal = null;
   usuariosModal: Modal = null;
   canClose:boolean =false;
+
+  usergroupexplain = true;
+  get isGroup(){ return this.subsData.isGroup };
+  subaccountsleft = 0
+  isplanholder = false;
+;
 
   tutorial_users_selected_option:number = 0;
   tutorial_user_created_step:number = 0;
@@ -49,7 +56,8 @@ export class TutorialProvider {
     public permissions: PermissionsProvider,
     public userData: UserDataProvider,
     public userMan: DrupalUserManagerProvider,
-    public servMan: ServiciosManagerProvider
+    public servMan: ServiciosManagerProvider,
+    public subsData: SubscriptionDataProvider
 
   ) {
   }
@@ -75,6 +83,7 @@ export class TutorialProvider {
   }
 
   checkTutorialState(){
+   
     if(
       this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY])
       && this.permissions.checkUserPermission([UserDataProvider.TIPO_DOCTOR])
@@ -89,6 +98,10 @@ export class TutorialProvider {
 
   openTutorial(){
       //this.tutorialMainModal = this.modalCtrl.create("WelcomeModalPage");
+      this.subaccountsleft = this.subsData.getSubAccountsLeft();
+    
+      this.isplanholder = this.permissions.checkUserPlanHolder();
+      console.log('openTutorial', this.subaccountsleft,this.isGroup,this.isplanholder  );
       this.tutorialMainModal = this.modalCtrl.create("WelcomeModalPage", undefined, {enableBackdropDismiss: this.canClose});
       this.tutorialMainModal.present({});
   }

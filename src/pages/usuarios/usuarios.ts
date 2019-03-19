@@ -54,7 +54,6 @@ export class UsuariosPage {
     console.log('ionViewDidLoad UsuariosPage');
     console.log('getting subusers limit',this.subsData.getSubAccountsLeft());
     this.cargarUsuarios();
-    
   }
 
   /*

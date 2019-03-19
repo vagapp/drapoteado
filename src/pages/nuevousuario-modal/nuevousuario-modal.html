@@ -19,23 +19,33 @@
             <span class=" largeFont" *ngIf="this.isnew"><b>Alta de Usuario</b></span>
             <p>Da de alta al personal que te ayuda a administrar y cobrar tus citas.</p>
         </div>
+        <!-- cuando es un usuario de grupo entrando a tutorial a la pagina inicial y si requiere explicacion y es el que crea el grupo-->
+        <div class="user_explain"  *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.isGroup && this.tutorial.usergroupexplain && this.tutorial.isplanholder">
+            <span class="spanBlock midSubFont">Dentro de un grupo medico los usuarios creados serán compartidos por todos los doctores del grupo. A continuación te explicamos como funcionan y como crearlos. </span>
+            <span *ngIf="this.tutorial.subaccountsleft < 2" > * no hay suficientes espacios en el grupo para seguir el tutorial.</span>
+            <div class="user_explain_buttonsection">
+               <span class="spanBlock midSubFont"> puedes omitir el tutorial haciendo click <button class="generalButton bgColorSecondary" (click)="endUsers()">aquí</button></span>
+            </div>
+        </div>
 
+         <!-- cuando es un usuario de grupo entrando a tutorial a la pagina inicial y si requiere explicacion y NO es el que crea el grupo, es un doctor mas-->
+    
     <div class="user_explain" *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.usuarioCreated === false" ><!-- Drap agregar usuarios explicacion block-->
-        <span class="spanBlock midSubFont">DRAP te permite elegir entre dos opciones de usuarios.</span>
+        <span class="spanBlock midSubFont">DRAP te permite elegir entre tres opciones de usuarios.</span>
         <div class="trisectional">
             <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Recepción:</span><span class="spanBlock midSubFont">Crea Citas</span></div>
-            <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Caja:</span><span class="spanBlock midSubFont">Crea Citas</span></div>
+            <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Caja:</span><span class="spanBlock midSubFont">Cobra Citas</span></div>
             <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Caja & Recepción:</span><span class="spanBlock midSubFont">Crea y Cobra Citas</span></div>
         </div>
-        <p>Adquiere los usuarios adicionales que necesites ingresando en <span class="fontPrimary">MI PLAN</span></p>
+        <p *ngIf="this.tutorial.isplanholder" class="midSubFont" >Adquiere los usuarios adicionales que necesites ingresando en <span class="fontPrimary">MI PLAN</span></p>
     </div>
 
-    <div class="user_tutorial_selection" *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.usuarioCreated === false">
+    <div class="user_tutorial_selection" *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.usuarioCreated === false && this.tutorial.isplanholder && this.tutorial.subaccountsleft >= 2">
         <span class="spanBlock midSubFont">Por favor selecciona la opción de personal que mejor describa el proceso en tu consultorio</span>
         <div class="bisectional">
             <div class="bisectional_section" (click)="selectOption(2)"  [class.selectedOption]="checkSelectedOption(2)">
                 <span class="spanBlock"> ¿Cuentas con personal independiente en la recepción y en la caja?</span>
-                <span class="spanBlock"> Crea dos usuarios para <span class="fontPrimary">Caja</span> y <span class="fontPrimary">Recepción</span> </span>
+                <span class="spanBlock"> Crea tres usuarios para <span class="fontPrimary">Caja</span> y <span class="fontPrimary">Recepción</span> </span>
             </div>
             <div class="bisectional_section"  (click)="selectOption(1)" [class.selectedOption]="checkSelectedOption(1)">
                 <span class="spanBlock"> ¿Una sola persona administra y cobra tus citas?</span>
@@ -46,6 +56,13 @@
         <div class="buttonsection">
             <button class="generalButton bgColorSecondary"[class.disabledsubbtn]="!isSelectedOption" [disabled]="!isSelectedOption()" (click)="userTutorialStart()">Continuar</button>
         </div>
+    </div>
+
+    <div class="user_explain"  *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.isGroup && this.tutorial.usergroupexplain  && !this.tutorial.isplanholder">
+        <p class="spanBlock midSubFont">Dentro de un grupo medico los usuarios creados serán compartidos por todos los doctores del grupo. Puedes acceder a la pagina de usuarios desde el menu donde podras crear usuarios si lo necesitas, pero probablemente ya existan usuarios en tu grupo.  </p>
+        <div class="user_explain_buttonsection">
+            <span class="spanBlock midSubFont"><button class="generalButton bgColorSecondary" (click)="endUsers()">Continuar</button></span>
+         </div>
     </div>
 
     

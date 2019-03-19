@@ -12,6 +12,7 @@ import { TutorialProvider } from '../../providers/tutorial/tutorial';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
 
 /**
  * Generated class for the NuevousuarioModalPage page.
@@ -35,6 +36,8 @@ export class NuevousuarioModalPage {
   codeuser=false;
   codeuserNP=false; //if tutorial user is gotten by code this disables password show
 
+
+
   selectedUsersOptions: number = 0;
 
   /*BANDERA, USUARIO AGREGADO*/
@@ -52,7 +55,8 @@ export class NuevousuarioModalPage {
     public loader: LoaderProvider,
     public alert: AlertProvider,
     public tutorial: TutorialProvider,
-    public wsMessenger: WsMessengerProvider
+    public wsMessenger: WsMessengerProvider,
+    public perm: PermissionsProvider
 
   ) {
     console.log('GETTING userd', navParams.get('userd'));
@@ -79,6 +83,7 @@ export class NuevousuarioModalPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NuevousuarioModalPage');
+    console.log('tutorialstates', this.tutorial.subaccountsleft,this.tutorial.isGroup,this.tutorial.isplanholder  );
   }
 
   selectOption( selected:number ){
