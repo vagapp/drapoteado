@@ -96,13 +96,19 @@ export class EntergrupoPage {
     selected_subusers.forEach((subuser)=>{ //agregar sub usuarios a la suscripcion de grupo.
       this.loaded_group_sus.field_subusuarios.push(subuser.uid);
     });
+    
+    this.loader.dismissLoader();
     let res = await this.subsMan.updateSus( this.loaded_group_sus ).subscribe(
       (val)=>{
         console.log('redysave val',val);
+        console.log('sending msg',selected_subusers.map((user)=>{ return user.uid }));
         this.wsMessenger.generateDoctogroupMessage(this.loaded_group_sus.field_doctores);
         this.wsMessenger.generateSubtogroupMessage(selected_subusers.map((user)=>{ return user.uid }),this.loaded_group_sus.field_doctores);
-        this.bu.locationReload();
-        this.loader.dismissLoader();
+        let view = this;
+        setTimeout(function () {
+          view.bu.locationReload();
+          view.loader.dismissLoader();
+      }, 1000);
       },(error)=>{
         console.log('redysave error',error);
         this.loader.dismissLoader();
