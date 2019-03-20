@@ -114,6 +114,9 @@ hourIntervalMS:number = 30*60*1000;
       //this.selectedDate = Citas.getLocalDateIso(new Date());//new Date().toISOString();
       this.selectedHourISO = Citas.getLocalDateIso(this.getDateOnNextTreshold());//new Date().toISOString();
     }
+    if(Number(this.cita.data.field_telefono.und[0].value) === 0){
+      this.cita.data.field_telefono.und[0].value = null;
+    }
   }
 
   setHours(){
@@ -209,6 +212,10 @@ hourIntervalMS:number = 30*60*1000;
 
 basicNewCitaValidation(){
   let ret = true;
+  if(this.cita.data.field_telefono.und[0].value === null){
+    this.cita.data.field_telefono.und[0].value = 0;
+  }
+
   if(this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])){
   }
   else{
@@ -250,6 +257,9 @@ getDateOnNextTreshold():Date{
 async updateCita(){
   //poner que el websocket envie la informacion al updatear cita morro >=0
   if(!this.citaDateValidation()){ return false; }
+  if(this.cita.data.field_telefono.und[0].value === null){
+    this.cita.data.field_telefono.und[0].value = 0;
+  }
   this.setCitaDateFromiNPUT();
   this.loader.presentLoader('actualizando ...');
   await this.citasMan.updateCita( this.cita.data ).subscribe(

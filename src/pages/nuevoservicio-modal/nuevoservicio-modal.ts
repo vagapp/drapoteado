@@ -63,6 +63,9 @@ export class NuevoservicioModalPage {
       this.resetNewService();
       this.newService.costo = null;
     }
+    if(Number(this.newService.field_costo_servicio.und[0].value) === 0){
+      this.newService.field_costo_servicio.und[0].value = null;
+    }
   }
 
  
@@ -73,7 +76,7 @@ export class NuevoservicioModalPage {
       Uid:null,
       type:"servicios",
       title:"",
-      costo:0,
+      costo:null,
       body:{und:[{value:""}]},
       field_costo_servicio:{und:[{value:0}]},
       field_doctor_uid:{und:[{value:0}]}
@@ -100,6 +103,7 @@ export class NuevoservicioModalPage {
   }
 
   async createServiceTutorial(){
+    this.fixCostoOutput();
     this.newTutService = false;
     if(!this.basicValidation()){return false;}
     this.loader.presentLoader('Creando Servicio ...');
@@ -113,6 +117,7 @@ export class NuevoservicioModalPage {
   }
 
   async createService(){
+    this.fixCostoOutput();
     if(!this.basicValidation()){return false;}
     this.loader.presentLoader('Creando Servicio ...');
     this.newService.body.und[0].value="automatic description";
@@ -146,6 +151,7 @@ export class NuevoservicioModalPage {
 }
 
 async updateService(){
+  this.fixCostoOutput();
   this.loader.presentLoader('Guardando Servicio ...');
   let serv_res = await this.servMan.updateService( this.newService ).toPromise();
   let update_res = await this.servMan.loadServicios();
@@ -164,6 +170,12 @@ async updateService(){
         loader.dismiss();
       }
   );*/
+}
+
+fixCostoOutput(){
+  if(this.newService.field_costo_servicio.und[0].value === null){
+    this.newService.field_costo_servicio.und[0].value = 0;
+  }
 }
 
 presentToast(msg) {

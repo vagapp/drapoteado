@@ -69,13 +69,7 @@ checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean
 }
 
 checkifgroup(){
-  let ret = false;
-  let suscriptions = new Array();
-  suscriptions.push(this.PLAN_GROUP);
-  if(this.subsData.subscription === null){return false;}
-  if(Number(this.subsData.subscription.field_active) === Number(0)){return false;} 
-  if(suscriptions.indexOf(this.subsData.subscription.field_plan_sus) > -1){ret = true;}
-  return ret;
+ return this.subsData.isGroup;
 }
 
 

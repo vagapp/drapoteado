@@ -53,7 +53,7 @@
           <div class="section_row">Incluye solo el total de citas, costos y adeudos generados del dia</div>
         </div>
 
-        <div class="two_cols_section">
+        <div class="two_cols_section" *ngIf="this.permissions.checkifgroup();">
           <div class="section_row"> 
               <div class="control-group">
                   <label class="control control-radio">
