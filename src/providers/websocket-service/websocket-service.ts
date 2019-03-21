@@ -41,6 +41,8 @@ export class WebsocketServiceProvider {
   static ACTION_DOC_TO_GROUP = 'ACTION_DOC_TO_GROUP'; // mensaje cuando un doctor entra a un grupo
   static ACTION_SUB_TO_GROUP_DOCS = 'ACTION_SUB_TO_GROUP_DOCS';// mensaje cuando un sub entra a un grupo que se envia a los doctores del grupo
   static ACTION_SUB_TO_GROUP_SUBS = 'ACTION_SUB_TO_GROUP_SUBS';// mensaje cuando un sub entra a un grupo que se envia a los subs que estan entrando para refrescar datos.
+  static ACTION_DOC_OUT_GROUP = 'ACTION_DOC_OUT_GROUP'; // mensaje cuando un sub entra a un grupo que se envia a los subs que estan entrando para refrescar datos.
+  static ACTION_SUB_OUT_GROUP = 'ACTION_SUB_OUT_GROUP'; // mensaje cuando un sub y a los doctores cuando un sub usuario abandona una suscripcion.
 
   async init(){
    this.websocketConnect();
@@ -70,16 +72,14 @@ export class WebsocketServiceProvider {
       case WebsocketServiceProvider.ACTION_DOC_TO_GROUP: this.RESPONSE_DOC_TO_GROUP(message); break;
       case WebsocketServiceProvider.ACTION_SUB_TO_GROUP_DOCS: this.RESPONSE_SUB_TO_GROUP_DOCS(message); break;
       case WebsocketServiceProvider.ACTION_SUB_TO_GROUP_SUBS: this.RESPONSE_SUB_TO_GROUP_SUBS(message); break;
+      case WebsocketServiceProvider.ACTION_DOC_OUT_GROUP: this.ACTION_DOC_OUT_GROUP(message); break;
+      case WebsocketServiceProvider.ACTION_SUB_OUT_GROUP: this.ACTION_SUB_OUT_GROUP(message); break;
     }
   }
-
- 
-
   
   groupAddSubSubs(message){
     console.log('groupAddSubSubs',message);
     if(this.filterMessageById(message)){
-   
     console.log(this.subuserData.subUsers);
     this.subusersManager.cargarSubusuarios();
     //add the subuser to your subscription.
@@ -202,6 +202,43 @@ export class WebsocketServiceProvider {
       this.bu.locationReload();
      }
   }
+
+   /**
+  * Este mensaje lo reciven todos los miembros de un grupo cuando un doctor sale del grupo. el cuerpo del mensaje contiene el id del doctor que sale.
+  * si el doctor que sale es este usuario recarga la pagina. si no, recarga la suscripcion y las citas. hace falta mecanismo para validar solo ver citas dentro de tu suscripcion.
+  * (si es grupo.)
+  */
+ async ACTION_DOC_OUT_GROUP(message){
+  console.log('ACTION_DOC_OUT_GROUP');
+  if(this.filterMessageById(message)){ 
+    console.log('ACTION_DOC_OUT_GROUP infilter'); 
+    await this.updater.updateSuscription();
+    await this.updater.updateDocList();
+    await this.updater.updateSubusers();
+    //this.bu.locationReload();
+    /*if( Number(this.userData.userData.uid) === Number(message.content)){
+      this.bu.locationReload();
+    }else{
+      await this.updater.updateSuscription();
+      await this.updater.updateDocList();
+      await this.updater.updateSubusers();
+    }*/
+   }
+}
+
+async ACTION_SUB_OUT_GROUP(message){
+  console.log('ACTION_SUB_OUT_GROUP');
+  if(this.filterMessageById(message)){ 
+    console.log('ACTION_SUB_OUT_GROUP infilter'); 
+    await this.updater.updateSuscription();
+    await this.updater.updateDocList();
+    await this.updater.updateSubusers();
+    if( Number(this.userData.userData.uid) === Number(message.content) ){ console.log('wegot to updatecitas'); await this.updater.updateCitas(); }
+   }
+}
+
+
+
 
 }
 

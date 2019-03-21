@@ -12,6 +12,7 @@ import { subscriptions } from '../user-data/subscriptions';
 @Injectable()
 export class SubscriptionDataProvider {
 
+  static PLAN_BASIC:number = 33;
   static PLAN_GROUP:number = 1205 ;
   static PLAN_ANY:number = -1;
 
@@ -39,6 +40,9 @@ export class SubscriptionDataProvider {
   get PLAN_ANY(){ return SubscriptionDataProvider.PLAN_ANY; }
   get EXTRA_SUB(){ return SubscriptionDataProvider.EXTRA_SUB; }
   get EXTRA_DOC(){ return SubscriptionDataProvider.EXTRA_DOC; }
+
+  get isactive(){ let ret = 0; if(this.checkForPlan() ){ ret = this.subscription.field_active  } return ret;}
+  get invcode(){ let ret = ''; if(this.checkForSub() ){ ret =  this.subscription.field_invitation_code  } return ret;}
 
   constructor() {
   }

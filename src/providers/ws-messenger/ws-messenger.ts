@@ -152,5 +152,45 @@ export class WsMessengerProvider {
         );
   }
 
+
+   /**
+   * Cuando un doctor sale de un grupo.
+   * 
+   *  receivers son todos los integrantes del grupo antes de removerlo.
+   *  out es el usuario que esta saliendo, por si se necesita.
+   *  hace que los usuarios recarguen su suscripcion, refrescando quienes estan en el grupo ( y quien no )
+   */
+  generateDocoutgroup(receivers:Array<any>,out:number){
+    console.log('generateDoctogroupMessage',receivers);
+    this.generateMessage(
+      receivers,
+      WebsocketServiceProvider.ACTION_DOC_OUT_GROUP,
+      `${this.userData.userData.uid}`,
+      `${out}`,
+      true
+      );
+  }
+
+
+  /**
+   * Cuando un subusuario sale de un grupo (o suscripcion meh).
+   * 
+   * este mensaje se tiene que enviar a los doctores que pertenecen a la suscripcion a la que esta entrando para que se actualice su lista.
+   * receivers son los doctores del grupo
+   */
+
+  generateSuboutofgroup(docs:Array<any>,out:number){
+    docs.push(out);
+    console.log('generateDoctogroupMessage',docs);
+    this.generateMessage(
+      docs,
+      WebsocketServiceProvider.ACTION_SUB_OUT_GROUP,
+      `${this.userData.userData.uid}`,
+      `${out}`,
+      true
+      );
+
+  }
+
  
 }

@@ -11,6 +11,8 @@ import { SubusersDataProvider } from '../../providers/subusers-data/subusers-dat
 import { SubusersManagerProvider } from '../../providers/subusers-manager/subusers-manager';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
+import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 /**
  * Generated class for the UsuariosPage page.
@@ -45,7 +47,8 @@ export class UsuariosPage {
     public subsData: SubscriptionDataProvider,
     public subuserData: SubusersDataProvider,
     public subusersManager: SubusersManagerProvider,
-    public permissions: PermissionsProvider
+    public permissions: PermissionsProvider,
+    public WS:WsMessengerProvider
   ) {
     //this.usersd = new Array();
   }
@@ -262,6 +265,7 @@ export class UsuariosPage {
     console.log('CHEKAME WEY b');
     await this.subusersManager.cargarSubusuarios();
     console.log('CHEKAME WEY c');
+    this.WS.generateSuboutofgroup(this.subsData.subscription.field_doctores,userd.uid);
     //console.log('is removed yet?');
     this.loader.dismissLoader();
   }

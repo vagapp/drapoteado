@@ -19,7 +19,7 @@
         se encontro el grupo: <span class="fontPrimary">{{groupName}}</span>  con <span class="fontPrimary">{{this.docsleft}}</span> lugares disponibles
     </div>
   </div>
-  <div class="enter_subuser_selection"  *ngIf="groupLoaded && AnyPlan">
+  <div class="enter_subuser_selection"  *ngIf="groupLoaded && isbasico">
     <div class="enter_title fontPrimary"> Selección de Usuarios </div>
     <div class="enter_description"> Este plan te permite compartir usuarios entre los doctores del grupo si hay plazas disponibles puedes llevar contigo a tus usuarios actuales, seleccionandolos en la
       lista a continuación, si no hay plazas activas habla con el administrador del grupo para activarlas. </div>

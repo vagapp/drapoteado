@@ -13,6 +13,7 @@ import { BaseUrlProvider } from '../../providers/base-url/base-url';
 import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
 
 /**
  * Generated class for the EntergrupoPage page.
@@ -50,10 +51,12 @@ export class EntergrupoPage {
     public bu: BaseUrlProvider,
     public wsMessenger: WsMessengerProvider,
     public perm: PermissionsProvider
+
     ) {
   }
 
-  get AnyPlan(){ return this.perm.checkUserSuscription([UserDataProvider.PLAN_ANY]) }
+  get AnyPlan(){ return this.perm.checkUserSuscription([UserDataProvider.PLAN_ANY]); }
+  get isbasico(){ return this.perm.checkUserSuscription([SubscriptionDataProvider.PLAN_BASIC]); }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EntergrupoPage');
@@ -105,10 +108,14 @@ export class EntergrupoPage {
         this.wsMessenger.generateDoctogroupMessage(this.loaded_group_sus.field_doctores);
         this.wsMessenger.generateSubtogroupMessage(selected_subusers.map((user)=>{ return user.uid }),this.loaded_group_sus.field_doctores);
         let view = this;
-        setTimeout(function () {
-          view.bu.locationReload();
+        this.navCtrl.setRoot('HomePage');
+        this.loader.dismissLoader();
+        //view.loader.dismissLoader();
+        /*setTimeout(function () {
+          //view.bu.locationReload();
+          this.navCtrl.setRoot('MiplanPage');
           view.loader.dismissLoader();
-      }, 1000);
+      }, 1000);*/
       },(error)=>{
         console.log('redysave error',error);
         this.loader.dismissLoader();

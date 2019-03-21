@@ -43,8 +43,7 @@ export class GroupPage {
     }*/
     console.log('ionViewDidLoad GroupPage');
     console.log('susdata is',this.subsData.subscription);
-    console.log('code is', this.subsData.subscription.field_invitation_code);
-    console.log();
+    console.log('code is', this.subsData.invcode);
     if(this.subsData.subscription.field_doctores_json){
     //this.docs = JSON.parse(this.subsData.subscription.field_doctores_json);
     this.subsData.setDoctores();
@@ -57,6 +56,8 @@ export class GroupPage {
   async removerSubsUser(uid){
     console.log('toremove',uid);
     this.loader.presentLoader("Removiendo...");
+    let recievers = this.subsData.subscription.field_doctores.concat(this.subsData.subscription.field_subusuarios);
+    this.WS.generateDocoutgroup(recievers,uid);
     await this.subsMan.removeUser(uid);
     this.WS.generateSubsRemoveMessage(uid);
     this.loader.dismissLoader();
@@ -64,7 +65,7 @@ export class GroupPage {
 
   async getOut(uid){
     await this.removerSubsUser(uid);
-    this.bu.locationReload();
+    //this.bu.locationReload();
   }
 
   isThis(uid){
@@ -72,7 +73,6 @@ export class GroupPage {
   }
 
   isplanHolder(){
-    console.log('isplanHolder',this.perm.checkUserPlanHolder());
    return this.perm.checkUserPlanHolder();
   }
 

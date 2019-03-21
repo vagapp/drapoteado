@@ -86,11 +86,9 @@ export class MyApp {
       this.initLoad().then(()=>{
         if(this.userData.userData.uid !== 0){
           this.rootPage = 'HomePage';
-          if(!this.perm.checkUserSuscription([UserDataProvider.PLAN_ANY])){
+          if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) && !this.perm.checkUserSuscription([UserDataProvider.PLAN_ANY])){
             this.rootPage = 'MiplanPage';
-            /*let Modal = this.modalCtrl.create("Miplanpage", undefined, { cssClass: "bigModal" });
-            Modal.present({});*/
-          }
+            }
         }
         loading.dismiss();
         this.loaddate = new Date().getTime();

@@ -7,6 +7,9 @@ import { DoctoresManagerProvider } from '../doctores-manager/doctores-manager';
 import { PermissionsProvider } from '../permissions/permissions';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 import { SubusersManagerProvider } from '../subusers-manager/subusers-manager';
+import { CitasDataProvider } from '../citas-data/citas-data';
+import { CitasManagerProvider } from '../citas-manager/citas-manager';
+import { LoaderProvider } from '../loader/loader';
 
 /*
   Generated class for the UpdaterProvider provider.
@@ -24,7 +27,10 @@ export class UpdaterProvider {
     public subscriptionManager: SubscriptionManagerProvider,
     public perm: PermissionsProvider,
     public subsData: SubscriptionDataProvider,
-    public subusersManager: SubusersManagerProvider
+    public subusersManager: SubusersManagerProvider,
+    public citasData: CitasDataProvider,
+    public citasManager: CitasManagerProvider,
+    public loader:LoaderProvider
    
     ) {
    
@@ -32,11 +38,16 @@ export class UpdaterProvider {
   async updateSuscription(){
     console.log('updater updateSuscription');
     if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){ //si es doctor se carga la suscripcion
+      console.log('updater updateSuscription doc');
       await this.subscriptionManager.loadSubscription();
+      console.log('loadedsus on updater is',this.subsData.subscription);
     }else{ 
+      console.log('updater updateSuscription notdoc');
       await this.subscriptionManager.loadGroupSubuserSubs(); //se cargan subscripciones a las que estan agregados.
       this.docMan.loadGroupDoctors(); //se cargan los doctores de las suscripciones a las que estan agregados.
     }
+    console.log('isactive',this.subsData.isactive);
+    this.userData.susSubject.next(this.subsData.isactive);
   }
 
  async updateDocList(){
@@ -54,6 +65,13 @@ export class UpdaterProvider {
   async updateSubusers(){
     console.log();
     await this.subusersManager.cargarSubusuarios();
+  }
+
+  async updateCitas(){
+    this.citasData.daysCitas = new Array();
+    this.loader.presentLoader('Cargando Citas ...');
+    await this.citasManager.requestCitas().toPromise();
+    this.loader.dismissLoader();
   }
 
 }

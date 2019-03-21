@@ -43,6 +43,7 @@ export class SubscriptionManagerProvider {
   async loadSubscription(){
     console.log('loadSubscription');
     let sus_data = await this.requestSubscription().toPromise();
+    console.log('loadSubscription loaded_data is ',sus_data);
     if(sus_data && sus_data[0]){
     console.log('sus_data', sus_data);
     this.subsData.subscription = new subscriptions();
@@ -50,6 +51,9 @@ export class SubscriptionManagerProvider {
     this.subsData.subscription.setPlanFromList(this.planesData.planes);
     console.log('subscription is ',this.subsData.subscription);
     console.log('isgroup',this.subsData.isGroup);
+   }else{
+    console.log('sus not loaded = ( ');
+    this.subsData.subscription = null;
    }
   }
  /** Obtiene las suscripciones de la lista de doctores, la lista de doctores se maneja mas cuando se trata de un subusuario y este metodo valida que el usuario actual no sea un doctor */

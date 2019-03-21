@@ -10,6 +10,7 @@ export class PermissionsProvider {
  
 
   get PLAN_GROUP(){ return SubscriptionDataProvider.PLAN_GROUP }
+  get PLAN_BASIC(){ return SubscriptionDataProvider.PLAN_BASIC }
   checkPlan = false;
 
   constructor(

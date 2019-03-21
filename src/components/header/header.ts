@@ -47,13 +47,22 @@ export class HeaderComponent{
    
     this.susObservable.subscribe(
       (val)=>{
+        console.log('susobservable inheader',val);
+       
         this.pagename = this.navCtrl.getActive().name;
         //Debugger.log(['sus val is',val]);
         if(Number(val) === 0){
         //Debugger.log(['page is ax',this.pagename]);
-        if(this.pagename.localeCompare('HomePage') !== 0){
+        if(this.perm.checkUserPermission([userData.TIPO_DOCTOR])){
+        if(this.pagename.localeCompare('MiplanPage') !== 0){
           //Debugger.log(['implying this is not facturation page']);
-          this.navCtrl.setRoot("HomePage");
+          this.navCtrl.setRoot("MiplanPage");
+        }
+        }else{
+          if(this.pagename.localeCompare('HomePage') !== 0){
+            //Debugger.log(['implying this is not facturation page']);
+            this.navCtrl.setRoot("HomePage");
+          }
         }
         //this.userData.resetLists();
         }
