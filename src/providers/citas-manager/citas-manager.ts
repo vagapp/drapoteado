@@ -125,6 +125,9 @@ export class CitasManagerProvider {
     let docsuids = this.doctores.doctores.map((docs)=>{ return Number(docs.Uid); });
     let docuid = Number(citaData.doctor_uid);
     let found = docsuids.find((docs)=>{ return docs === docuid});
+    if(!found){
+      ret = false;
+    }
     console.log('found is',found);
     console.log('docsuids',docsuids);
     console.log('docuid',docuid);

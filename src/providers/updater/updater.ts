@@ -52,6 +52,7 @@ export class UpdaterProvider {
 
  async updateDocList(){
   console.log('updater updateDocList');
+ 
   await this.docMan.initDoctoresUids();
   await this.subscriptionManager.loadDoctorsSubscriptions();
   this.docMan.filterActiveDoctors();
