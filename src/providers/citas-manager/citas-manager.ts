@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, ɵConsole } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/share';
 import { DateProvider } from '../date/date';
@@ -13,6 +13,7 @@ import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-ma
 import { Message } from '../websocket-service/websocket-service';
 import { Doctores } from '../user-data/doctores';
 import { ReportesDataProvider } from '../reportes-data/reportes-data';
+import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 
 
 @Injectable()
@@ -28,6 +29,7 @@ export class CitasManagerProvider {
     public userMan: DrupalUserManagerProvider,
     public userData:UserDataProvider,
     public reportesData: ReportesDataProvider,
+    public subsData: SubscriptionDataProvider
   ) {
     console.log('Hello CitasManagerProvider Provider');
   }
@@ -99,7 +101,7 @@ export class CitasManagerProvider {
   setCitas( val ){
     console.log('citas response raw value',val);
     for(let cita of val){
-      if(this.checkUserCitaDataFilter(cita)){
+      if(this.checkUserCitaDataFilter(cita) && this.checkDoctorListDataFilter(cita)){
         this.generateCita(cita);
       }
     }
@@ -113,6 +115,23 @@ export class CitasManagerProvider {
       ret = false;
       console.log('cita blocked from caja couase doesnt need cobro', citaData);
     }
+    return ret;
+  }
+
+  //este metodo revisa que el doctor este activo y en la suscripcion cargada para este usuario.
+  checkDoctorListDataFilter(citaData):boolean{
+    console.log('checkDoctorListDataFilter');
+    let ret = true;
+    let docsuids = this.doctores.doctores.map((docs)=>{ return Number(docs.Uid); });
+    let docuid = Number(citaData.doctor_uid);
+    let found = docsuids.find((docs)=>{ return docs === docuid});
+    console.log('found is',found);
+    console.log('docsuids',docsuids);
+    console.log('docuid',docuid);
+    console.log('citaData',citaData);
+    console.log('checkDoctorListDataFilter docs', this.doctores.doctores);
+    console.log('subsData docs',this.subsData.docs);
+    console.log();
     return ret;
   }
 

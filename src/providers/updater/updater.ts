@@ -68,6 +68,7 @@ export class UpdaterProvider {
   }
 
   async updateCitas(){
+    this.citasData.citas = new Array();
     this.citasData.daysCitas = new Array();
     this.loader.presentLoader('Cargando Citas ...');
     await this.citasManager.requestCitas().toPromise();
