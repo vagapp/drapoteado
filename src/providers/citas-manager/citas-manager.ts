@@ -99,14 +99,15 @@ export class CitasManagerProvider {
   }
 
   setCitas( val ){
-    console.log('citas response raw value',val);
-    for(let cita of val){
-      if(this.checkUserCitaDataFilter(cita) && this.checkDoctorListDataFilter(cita)){
-        this.generateCita(cita);
+    console.log('citas response raw value', val);
+    for(let cita of val ){
+      if(this.checkUserCitaDataFilter( cita ) && this.checkDoctorListDataFilter(cita)){
+        this.generateCita( cita );
       }
     }
     this.citasData.triggerSubject();
   }
+
 
   checkUserCitaDataFilter(citaData):boolean{
     let ret = true;

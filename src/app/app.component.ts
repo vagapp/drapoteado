@@ -119,9 +119,10 @@ export class MyApp {
       console.log('into a');
       await this.updater.updateDocList();
       console.log('into b');
-      await this.citasManager.requestCitas().toPromise();
-      this.docMan.evaluateCitas();
-      this.serviciosManager.loadServicios();
+      //await this.citasManager.requestCitas().toPromise();
+      await this.updater.updateCitas();
+      //this.docMan.evaluateCitas();
+      //this.serviciosManager.loadServicios();
       console.log(this.citasManager.citasData.citas);
       console.log('docs end initload',JSON.stringify(this.docMan.docData.doctoresIDs));
       //this.wsMessenger.testCitaSend();

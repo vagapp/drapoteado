@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, ɵConsole } from '@angular/core';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { Doctores } from '../user-data/doctores';
 import { UserDataProvider } from '../user-data/user-data';
@@ -69,6 +69,7 @@ export class DoctoresManagerProvider {
 
       if(this.docData.docIdsToLoad.length > 0){
         let docs_data = await this.userMan.requestUsers(null,null,this.docData.docIdsToLoad).toPromise();
+        console.log('docs_data is', docs_data);
         this.setDoctoresData(docs_data);
       }
       /*
@@ -92,9 +93,11 @@ export class DoctoresManagerProvider {
   }
 
   loadGroupDoctors(){
+    console.log('loadGroupDoctors');
     if(this.subsMan.subsData.Groups.length > 0){
+      console.log('loadGroupDoctors this.subsMan.subsData.Groups',this.subsMan.subsData.Groups);
       for(let group of this.subsMan.subsData.Groups){
-        console.log('groups group',group);
+        console.log('groups group',group); //DESDE AQUI?
         for(let doc of group.field_doctores){
           this.docData.addDoctorToIdList(doc);
         }

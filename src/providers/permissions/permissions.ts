@@ -54,7 +54,7 @@ checkUserPermission( permision:Array<number> , debug:boolean = false):boolean{
    * el usuario no tiene guardado un id de suscripcion en su data, o esta es 0
    * la suscripcion que carga el usuario esta inactiva.
   */
-checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean{
+checkUserSuscription2( suscriptions:Array<number>, debug:boolean = false):boolean{
   let ret = false;
   //si la subscripcion no esta activa (expiro, no ha sido pagada etc) retorna false
   //if(Number(this.userData.field_sub_id.und[0]) === Number(0) || this.subscription === null){return false;}
@@ -66,6 +66,31 @@ checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean
   //regular check
   Debugger.log(['suscriptions',suscriptions,'this.subsData.subscription.field_plan_sus',this.subsData.subscription.field_plan_sus],debug);
   if(suscriptions.indexOf(Number(this.subsData.subscription.field_plan_sus)) > -1){ret = true;}
+  return ret;
+}
+
+checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean{
+  let ret = false;
+  let plan_sus = new Array();
+  //si la subscripcion no esta activa (expiro, no ha sido pagada etc) retorna false
+  //if(Number(this.userData.field_sub_id.und[0]) === Number(0) || this.subscription === null){return false;}
+  if(!this.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
+    
+    this.subsData.Groups.forEach(sub => {
+      plan_sus.push(sub.field_plan_sus);
+    });
+  }else{  //chequeos para doctores mijo
+  if(this.subsData.subscription === null){return false;}
+  if(Number(this.subsData.subscription.field_active) === Number(0)){return false;} //if not active returns false also
+  // checking for ANY, automatically returns true since we checked for not 0 or null up here
+  plan_sus.push(this.subsData.subscription.field_plan_sus);
+  }
+  if(suscriptions.indexOf(UserDataProvider.PLAN_ANY) > -1 && plan_sus.length > 0){ return true;}
+  //regular check
+  //Debugger.log(['suscriptions',suscriptions,'this.subsData.subscription.field_plan_sus',this.subsData.subscription.field_plan_sus],debug);
+  let result = plan_sus.filter((having)=>{ return suscriptions.some((wanting)=>{ return Number(wanting) === Number(having) });  });
+  //console.log('checkUserSuscription result',result);
+  if(result.length > 0){ret = true;}
   return ret;
 }
 

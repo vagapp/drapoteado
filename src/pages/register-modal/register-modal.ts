@@ -85,13 +85,17 @@ export class RegisterModalPage {
   }
 
   ionViewDidLoad() {
+    console.log('registro view load');
     console.log(this.subsData.subscription);
+    console.log('this.userData.checkIsLoggedin()',this.userData.checkIsLoggedin());
     this.isnew = !this.userData.checkIsLoggedin();
+    console.log('isnew',this.isnew);
     console.log('openingregister modal isnew? ',this.isnew);
     console.log('pass',this.userData.userData.pass);
     if(!this.isnew){
       this.currentpasswordNeeded = false;
-      this.currentMail = this.userData.userData.mail
+      this.currentMail = this.userData.userData.mail;
+      console.log('this is new baby');
     }
   }
 

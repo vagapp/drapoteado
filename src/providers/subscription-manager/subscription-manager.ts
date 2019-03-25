@@ -78,8 +78,10 @@ export class SubscriptionManagerProvider {
    * **/
   async loadGroupSubuserSubs(){
     console.log('loadGroupSubuserSubs');
+    this.subsData.Groups = new Array();
     if(!this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){
       let groups_subs_data = await this.requestGroupSubscriptions().toPromise();
+      console.log('loadGroupSubuserSubs groups_subs_data',groups_subs_data);
       if(groups_subs_data) 
        for(let group_sus of groups_subs_data){
          console.log('loadGroupSubuserSubs sus found is',group_sus);
@@ -88,6 +90,7 @@ export class SubscriptionManagerProvider {
         this.subsData.Groups.push(aux_sus);
        }
     }
+    console.log('loaded final groups are',  this.subsData.Groups);
   }
 
   /** 

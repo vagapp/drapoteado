@@ -38,21 +38,17 @@ export class UpdaterProvider {
   async updateSuscription(){
     console.log('updater updateSuscription');
     if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){ //si es doctor se carga la suscripcion
-      console.log('updater updateSuscription doc');
       await this.subscriptionManager.loadSubscription();
-      console.log('loadedsus on updater is',this.subsData.subscription);
     }else{ 
-      console.log('updater updateSuscription notdoc');
       await this.subscriptionManager.loadGroupSubuserSubs(); //se cargan subscripciones a las que estan agregados.
       this.docMan.loadGroupDoctors(); //se cargan los doctores de las suscripciones a las que estan agregados.
     }
-    console.log('isactive',this.subsData.isactive);
     this.userData.susSubject.next(this.subsData.isactive);
   }
 
  async updateDocList(){
   console.log('updater updateDocList');
- 
+  this.docData.doctores = new Array();
   await this.docMan.initDoctoresUids();
   await this.subscriptionManager.loadDoctorsSubscriptions();
   this.docMan.filterActiveDoctors();
@@ -68,12 +64,13 @@ export class UpdaterProvider {
     await this.subusersManager.cargarSubusuarios();
   }
 
+  //las citas no se actualizan bien. no se filtran doctores que ya no se tienen agregados.
+  //tengo dos listas de doctores, una en docdata y otra en subsdata. no se cual se usa para que. porque hay dos? que me pasa?
   async updateCitas(){
     this.citasData.citas = new Array();
     this.citasData.daysCitas = new Array();
-    this.loader.presentLoader('Cargando Citas ...');
     await this.citasManager.requestCitas().toPromise();
-    this.loader.dismissLoader();
+    this.docMan.evaluateCitas();
   }
 
 }
