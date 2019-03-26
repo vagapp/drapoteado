@@ -121,8 +121,9 @@ export class MyApp {
       console.log('into b');
       //await this.citasManager.requestCitas().toPromise();
       await this.updater.updateCitas();
-      await this.updater.updateServicios();
+     
       //this.docMan.evaluateCitas();
+      await this.updater.updateServicios();
       //this.serviciosManager.loadServicios();
       console.log(this.citasManager.citasData.citas);
       console.log('docs end initload',JSON.stringify(this.docMan.docData.doctoresIDs));

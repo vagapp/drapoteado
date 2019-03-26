@@ -95,7 +95,6 @@ export class RegisterModalPage {
     if(!this.isnew){
       this.currentpasswordNeeded = false;
       this.currentMail = this.userData.userData.mail;
-      console.log('this is new baby');
     }
   }
 

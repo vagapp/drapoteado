@@ -105,7 +105,7 @@ export class EntergrupoPage {
       (val)=>{
         console.log('redysave val',val);
         console.log('sending msg',selected_subusers.map((user)=>{ return user.uid }));
-        this.wsMessenger.generateDoctogroupMessage(this.loaded_group_sus.field_doctores);
+        this.wsMessenger.generateDoctogroupMessage(this.loaded_group_sus.field_doctores.concat(this.loaded_group_sus.field_subusuarios));
         this.wsMessenger.generateSubtogroupMessage(selected_subusers.map((user)=>{ return user.uid }),this.loaded_group_sus.field_doctores);
         let view = this;
         this.navCtrl.setRoot('HomePage');

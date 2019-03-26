@@ -55,7 +55,6 @@ export class DoctoresManagerProvider {
   */
  
   async initDoctoresUids(){
-    
     console.log('initDoctoresUids');
     this.docData.docIdsToLoad = new Array();
     if(this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){ //si es un doctor
