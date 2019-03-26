@@ -42,6 +42,8 @@ export class ServiciosPage {
   }
 
   ionViewDidLoad() {
+    console.log('ionViewDidLoad');
+    console.log('lista de servicios es',this.servicioMan.servicios);
     this.cargarServicios();
   }
 

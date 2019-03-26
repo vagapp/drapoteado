@@ -10,6 +10,7 @@ import { SubusersManagerProvider } from '../subusers-manager/subusers-manager';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { CitasManagerProvider } from '../citas-manager/citas-manager';
 import { LoaderProvider } from '../loader/loader';
+import { ServiciosManagerProvider } from '../servicios-manager/servicios-manager';
 
 /*
   Generated class for the UpdaterProvider provider.
@@ -30,7 +31,8 @@ export class UpdaterProvider {
     public subusersManager: SubusersManagerProvider,
     public citasData: CitasDataProvider,
     public citasManager: CitasManagerProvider,
-    public loader:LoaderProvider
+    public loader:LoaderProvider,
+    public serviciosManager: ServiciosManagerProvider
    
     ) {
    
@@ -58,6 +60,9 @@ export class UpdaterProvider {
     }
   }
 
+  async updateServicios(){
+    this.serviciosManager.loadServicios();
+  }
 
   async updateSubusers(){
     console.log();
