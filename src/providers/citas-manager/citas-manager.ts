@@ -183,7 +183,12 @@ export class CitasManagerProvider {
     let fechacobroset = false;
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  this.setCitaFechaReporte(cita,saveDate); reportedateset=true;  }
-    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){ fechacobroset = this.setCitaFechaCobro(cita,saveDate); this.setCaja(cita); this.setCitaFechaReporte(cita,saveDate); reportedateset = true; }
+    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){ 
+      fechacobroset = this.setCitaFechaCobro(cita,saveDate); 
+      this.setCaja(cita); 
+      this.setCitaFechaReporte(cita,saveDate); 
+      reportedateset = true; 
+    }
     if(Number(state) === Number(CitasDataProvider.STATE_CANCELADA)){
       console.log('cancelando cita'); 
       

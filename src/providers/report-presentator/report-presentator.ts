@@ -266,8 +266,22 @@ async openReportGenerate( report:reportes = null ){
     this.calcularCitasPorCobrar();
     let filteredCitas = CitasDataProvider.sortByDate(this.getFilteredCitasShow());
     for(let cita of filteredCitas){
-      if(cita.duracionMs) this.duracionTotalMs += cita.duracionMs;
-      if(cita.costo) this.costoTotal += cita.costo;
+      let aux_costo = Number(cita.costo ? cita.costo : 0 );
+      let aux_cobro = Number(cita.cobro ? cita.cobro : 0 );
+      let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
+      let aux_cobroEfectivo = Number(cita.cobroEfectivo ? cita.cobroEfectivo : 0 );
+      let aux_cobroTarjeta = Number(cita.cobroTarjeta ? cita.cobroTarjeta : 0 );
+      let aux_cobroCheque = Number(cita.cobroCheque ? cita.cobroCheque : 0 );
+      
+      this.duracionTotalMs += aux_duracion;
+      this.costoTotal += aux_costo;
+      this.total += aux_cobro;
+      this.totalefectivo+=aux_cobroEfectivo;
+      this.totalTarjeta+=aux_cobroTarjeta;
+      this.totalCheques+=aux_cobroCheque;
+
+      if(aux_costo > aux_cobro){ this.cajaAdeudo += aux_costo - aux_cobro;  }
+      /*if(cita.costo) this.costoTotal += cita.costo;
       if(cita.cobro) this.total+= cita.cobro;
       if(cita.costo && cita.cobro && cita.costo > cita.cobro){ 
         console.log('cita.costo > cita.cobro',cita);
@@ -276,7 +290,7 @@ async openReportGenerate( report:reportes = null ){
       }
       if(cita.cobroEfectivo) this.totalefectivo+=cita.cobroEfectivo;
 	    if(cita.cobroTarjeta) this.totalTarjeta+=cita.cobroTarjeta;
-      if(cita.cobroCheque) this.totalCheques+=cita.cobroCheque;
+      if(cita.cobroCheque) this.totalCheques+=cita.cobroCheque;*/
       console.log('cita evaluada',cita);
       if(cita.data.field_facturar.und && cita.data.field_facturar.und[0].value) this.facturadoTotal += Number(cita.data.field_facturar_cantidad.und[0].value);
     }

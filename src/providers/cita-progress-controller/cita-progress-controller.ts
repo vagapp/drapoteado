@@ -89,11 +89,17 @@ export class CitaProgressControllerProvider {
   }
 
   pagarCitaActiva(){
-  this.activeCita.cobroEfectivo = this.cobroEfectivo;
-  this.activeCita.cobroCheque = this.cobroCheque;
-  this.activeCita.cobroTarjeta = this.cobroTarjeta;
+  this.activeCita.cobroEfectivo = this.cobroEfectivo == null ? 0 : this.cobroEfectivo;
+  this.activeCita.cobroCheque = this.cobroEfectivo == null ? 0 :this.cobroCheque;
+  this.activeCita.cobroTarjeta = this.cobroEfectivo == null ? 0 : this.cobroTarjeta;
   this.activeCita.data.field_facturar.und[0].value = this.factura;
-  this.activeCita.data.field_facturar_cantidad.und[0].value = this.factura_cantidad;
+  this.activeCita.data.field_facturar_cantidad.und[0].value = this.cobroEfectivo == null ? 0 : this.factura_cantidad;
+  console.log('pagarCitaActiva');
+  console.log('this.cobroEfectivo',this.activeCita.cobroEfectivo); 
+  console.log('this.cobroCheque',this.activeCita.cobroCheque); 
+  console.log('this.cobroTarjeta',this.activeCita.cobroTarjeta); 
+  console.log('this.factura',this.activeCita.data.field_facturar.und[0].value); 
+  console.log('this.factura_cantidad',this.activeCita.data.field_facturar_cantidad.und[0].value); 
   }
 
   updateCitaActiva(){

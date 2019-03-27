@@ -82,6 +82,7 @@ export class ProgresocitaModalPage {
           this.alert.presentAlert('Error','Introducir monto a pagar');
           return false;
         }*/
+      
         console.log('cantidad restante es',this.progressController.CantidadRestante);
         if( Number(this.progressController.CantidadRestante) < 0 ){
           this.alert.presentAlert('Error','Esta introduciendo un monto mayor al costo de la cita.');
@@ -93,6 +94,7 @@ export class ProgresocitaModalPage {
           this.alert.presentAlert('Error','El monto facturado no puede exceder el total de la consulta');
           return false;
         }
+      
        /* let title = 'Pagada';
         let msg = '¿Está seguro de que desea marcar esta cita como pagada?';
         
