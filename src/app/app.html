@@ -31,7 +31,7 @@
       <button *ngIf="perm.checkUserFeature([userData.TIPO_ANY],[userData.PLAN_ANY])" menuClose ion-item  (click)="openReportesPage()">
           Reportes
       </button>
-      <button *ngIf="perm.checkUserFeature([userData.TIPO_ANY],[userData.PLAN_ANY])" menuClose ion-item  (click)="openRegister()">
+      <button menuClose ion-item  (click)="openRegister()">
           Mis Datos
       </button>
       <button *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR]) && perm.checkUserPlanHolder()" menuClose ion-item  (click)="openMiplan()">

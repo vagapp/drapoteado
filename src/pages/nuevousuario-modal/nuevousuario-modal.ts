@@ -216,6 +216,8 @@ async getUserByCode(){
     console.log('user found',res[0]);
     await this.addUserFromCode(res[0]);
     await this.subusersManager.cargarSubusuarios();
+    // aqui el usuario ya ha sido agregado a la suscripcion y requiere enviarse un mensaje que relleno los datos del subusuario.
+    this.wsMessenger.generateUserByCode( this.subsData.subscription.field_doctores.concat( [res[0].uid] ) ) ;
     this.loader.dismissLoader();
     if(this.tutorial.checkTutorialState())
     {
@@ -321,6 +323,7 @@ async addUserFromCode( user_data ){
   let aux_user = SubusersManagerProvider.getEmptyUserd();
         aux_user.uid = user_data.uid;
         aux_user.name = user_data.name;
+        aux_user.field_codigo = user_data.field_codigo;
         aux_user.field_alias.und[0].value = user_data.field_alias;
         aux_user.field_nombre.und[0].value = user_data.field_nombre;
         aux_user.field_apellidos.und[0].value = user_data.field_apellidos;

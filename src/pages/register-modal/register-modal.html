@@ -3,16 +3,16 @@
     <div class="modal_closer" *ngIf="!this.isnew" (click)="this.dismiss();">Volver</div>
 
    
-  <div class="register_contet_head"  *ngIf="this.isnew || permissions.checkUserSuscription([userData.PLAN_ANY])">
+  <div class="register_contet_head">
     <div class="bigFont" *ngIf="this.isnew"> <span class="fontPrimary"><b>Registro</b></span> <span class="lightFont">de Nuevo Usuario</span></div>
     <div class="midSubFont" *ngIf="this.isnew"> Por favor proporciona los siguientes datos: </div>
     <div class="bigFont" *ngIf="!this.isnew"> <span class="fontPrimary"><b>Datos</b></span> <span class="lightFont">de Usuario</span></div>
   </div>
-  <div class="code_wrapper"  *ngIf="!permissions.checkUserPermission([userData.TIPO_DOCTOR]) && permissions.checkUserPermission([userData.TIPO_ANY]) && !permissions.checkifgroup()">
+  <div class="code_wrapper"  *ngIf="!permissions.checkUserPermission([userData.TIPO_DOCTOR]) && !permissions.checkifgroup() && !this.isnew">
    <span class="spanBlock">Codigo de usuario: <input [(ngModel)]="this.userData.userData.field_codigo.und[0].value" type="text" readonly/></span>
    <span class="spanBlock">Los doctores pueden usar este codigo para que tengas acceso a sus citas.</span>
   </div>
-  <div class="register_contet_form"  *ngIf="this.isnew || permissions.checkUserSuscription([userData.PLAN_ANY])">
+  <div class="register_contet_form"  >
     <div class="register_base register_form_section rfsFlex">
         <div class="registerInput">
             <b>Email:</b><input [(ngModel)]="this.userData.userData.mail" type="text"/>

@@ -43,6 +43,7 @@ export class WebsocketServiceProvider {
   static ACTION_SUB_TO_GROUP_SUBS = 'ACTION_SUB_TO_GROUP_SUBS';// mensaje cuando un sub entra a un grupo que se envia a los subs que estan entrando para refrescar datos.
   static ACTION_DOC_OUT_GROUP = 'ACTION_DOC_OUT_GROUP'; // mensaje cuando un sub entra a un grupo que se envia a los subs que estan entrando para refrescar datos.
   static ACTION_SUB_OUT_GROUP = 'ACTION_SUB_OUT_GROUP'; // mensaje cuando un sub y a los doctores cuando un sub usuario abandona una suscripcion.
+  static ACTION_SUB_BYCODE = 'ACTION_SUB_BYCODE'; //mensaje cuando un sub entra a una susciripcion por codigo de usuario.
 
   async init(){
    this.websocketConnect();
@@ -72,8 +73,9 @@ export class WebsocketServiceProvider {
       case WebsocketServiceProvider.ACTION_DOC_TO_GROUP: this.RESPONSE_DOC_TO_GROUP(message); break;
       case WebsocketServiceProvider.ACTION_SUB_TO_GROUP_DOCS: this.RESPONSE_SUB_TO_GROUP_DOCS(message); break;
       case WebsocketServiceProvider.ACTION_SUB_TO_GROUP_SUBS: this.RESPONSE_SUB_TO_GROUP_SUBS(message); break;
-      case WebsocketServiceProvider.ACTION_DOC_OUT_GROUP: this.ACTION_DOC_OUT_GROUP(message); break;
-      case WebsocketServiceProvider.ACTION_SUB_OUT_GROUP: this.ACTION_SUB_OUT_GROUP(message); break;
+      case WebsocketServiceProvider.ACTION_DOC_OUT_GROUP: this.RESPONSE_DOC_OUT_GROUP(message); break;
+      case WebsocketServiceProvider.ACTION_SUB_OUT_GROUP: this.RESPONSE_SUB_OUT_GROUP(message); break;
+      case WebsocketServiceProvider.ACTION_SUB_BYCODE: this.RESPONSE_SUB_BYCODE(message); break;
     }
   }
   
@@ -168,6 +170,22 @@ export class WebsocketServiceProvider {
     this.websocket.next(<any>JSON.stringify(message));
   }
 
+/**
+ * Respuescta cuando un sub usuario es agregado por codigo. este lo reciven los doctores y el usuario agregado para actualizar sus datos
+ * @param message 
+ */
+  async RESPONSE_SUB_BYCODE(message){
+    console.log('RESPONSE_SUB_BYCODE'); 
+    if(this.filterMessageById(message)){ 
+      console.log('RESPONSE_SUB_BYCODE infilter'); 
+      await this.updater.updateSuscription();
+      await this.updater.updateDocList();
+      await this.updater.updateSubusers();
+      await this.updater.updateServicios();
+      await this.updater.updateCitas();
+    }
+  }
+
    /**----------------------------------------------------------------------MENSAJES DE GRUPOS MEDICOS */
    /** este mensaje lo reciven todos los doctores de un grupo cuando un doctor entra a su grupo medico. debe refrescar los datos de los doctores en el grupo.*/
    async RESPONSE_DOC_TO_GROUP(message){
@@ -210,7 +228,7 @@ export class WebsocketServiceProvider {
   * si el doctor que sale es este usuario recarga la pagina. si no, recarga la suscripcion y las citas. hace falta mecanismo para validar solo ver citas dentro de tu suscripcion.
   * (si es grupo.)
   */
- async ACTION_DOC_OUT_GROUP(message){
+ async RESPONSE_DOC_OUT_GROUP(message){
   console.log('ACTION_DOC_OUT_GROUP');
   if(this.filterMessageById(message)){ 
     console.log('ACTION_DOC_OUT_GROUP infilter'); 
@@ -230,7 +248,7 @@ export class WebsocketServiceProvider {
    }
 }
 
-async ACTION_SUB_OUT_GROUP(message){
+async RESPONSE_SUB_OUT_GROUP(message){
   console.log('ACTION_SUB_OUT_GROUP');
   if(this.filterMessageById(message)){ 
     console.log('ACTION_SUB_OUT_GROUP infilter'); 

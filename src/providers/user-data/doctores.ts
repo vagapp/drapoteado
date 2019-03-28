@@ -59,7 +59,6 @@ export class Doctores{
       if(this.citaActiva && Number(this.citaActiva.Nid) === Number(cita.Nid)){ 
         this.citaActiva = null;
       }
-    
     }
 
     setDisponibilidad(field_disp){

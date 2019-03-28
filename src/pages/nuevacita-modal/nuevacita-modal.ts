@@ -183,6 +183,7 @@ hourIntervalMS:number = 30*60*1000;
     this.cita.data.field_estado.und["0"].value = 0;
     if(this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])){
       this.cita.data.field_cita_doctor.und[0]=this.userData.userData.uid;
+      //this.cita.data.doctor_name = this.userData.userData.name;
     }
       this.cita.data.field_cita_recepcion.und[0]=this.userData.userData.uid; //esto es quien creo la cita
       this.cita.data.field_cita_caja.und[0]="_none"; //quien cobro la cita

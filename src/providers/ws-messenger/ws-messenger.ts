@@ -60,6 +60,7 @@ export class WsMessengerProvider {
     console.log('generating update message',cita);
     let uid = cita.data.field_cita_doctor.und[0];
     let doctor = this.docData.getDoctorByUid(uid); //los sub usuarios "atrapan" las citas que tienen el uid de los doctores que administran.
+    console.log('obtained doctor',doctor,uid);
     cita.data.doctor_name = doctor.name;
     cita.data.doctor_alias = doctor.field_alias;
     this.generateMessage(
@@ -109,6 +110,21 @@ export class WsMessengerProvider {
 
   generateSubUserRemovedMessage(uid){
 
+  }
+
+
+  /* 
+    Cuando se agrega un sub usuario por codigo. este mensaje se envia a todos los doctores de la suscripcion y al sub usuario que esta entrando.
+  */
+  generateUserByCode( recievers ){
+    console.log('generateUserByCode',recievers);
+    this.generateMessage(
+      recievers,
+      WebsocketServiceProvider.ACTION_SUB_BYCODE,
+      `${this.userData.userData.uid}`,
+      '',
+      true
+      );
   }
 
   /**

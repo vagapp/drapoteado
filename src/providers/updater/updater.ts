@@ -52,8 +52,11 @@ export class UpdaterProvider {
   console.log('updater updateDocList');
   this.docData.doctores = new Array();
   await this.docMan.initDoctoresUids();
+  console.log('doc1',JSON.stringify(this.docData.doctores));
   await this.subscriptionManager.loadDoctorsSubscriptions();
+  console.log('doc2',JSON.stringify(this.docData.doctores));
   this.docMan.filterActiveDoctors();
+  console.log('doc3',JSON.stringify(this.docData.doctores));
   if(this.subsData.subscription && this.subsData.subscription.field_doctores_json){
     //this.docs = JSON.parse(this.subsData.subscription.field_doctores_json);
     this.subsData.setDoctores();

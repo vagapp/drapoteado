@@ -37,6 +37,12 @@ export class PlanesDataProvider {
         this.planes.push(aux_plan);
       }
     }
+    this.planes =  this.planes.sort((a,b)=>{  
+      let ret = 0;
+      if(a.field_orden > b.field_orden){ ret = 1; }
+      if(b.field_orden > a.field_orden){ ret = -1; }
+      return ret;
+    });
   }
 
   requestPlanes():Observable<any>{
