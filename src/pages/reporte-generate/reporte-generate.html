@@ -33,11 +33,11 @@
                     <input type="radio" name="rtype" value="{{this.reportPresentator.REPORT_COMPLETE}}"  [(ngModel)]="this.reportPresentator.type" checked="true"/>
                     <div class="control_indicator"></div>
                     <img  src="assets/imgs/reporte.svg"  class="icon_drapo_big">
-                    Completo
+                    Reporte
                 </label> 
                 </div>
         </div>
-        <div class="section_row">Incluye toda la información desglosada de las citas del dia</div>
+        <div class="section_row">Incluye toda la información desglosada de las citas del día, su importe, formas de pago, pendiente de cobro y/o citas totales.</div>
       </div>
       <div class="two_cols_section">
           <div class="section_row"> 
@@ -50,7 +50,7 @@
                   </label> 
                   </div>
           </div>
-          <div class="section_row">Incluye solo el total de citas, costos y adeudos generados del dia</div>
+          <div class="section_row">Incluye el total de servicios, total de citas, detalles de los servicios y la duración de las citas del día.</div>
         </div>
 
         <div class="two_cols_section" *ngIf="this.permissions.checkifgroup();">
@@ -60,11 +60,11 @@
                       <input type="radio" name="rtype" value="{{this.reportPresentator.REPORT_GRUPAL}}"  [(ngModel)]="this.reportPresentator.type" />
                       <div class="control_indicator"></div>
                       <img  src="assets/imgs/reporte.svg"  class="icon_drapo_big">
-                      Grupal
+                      Reporte Grupal
                   </label> 
                   </div>
           </div>
-          <div class="section_row">Genera un reporte grupal basado en servicios.</div>
+          <div class="section_row">Genera un reporte grupal basado en servicios del Grupo Médico.</div>
         </div>
     </div>
     <!--<div class="ModalInput_input">
