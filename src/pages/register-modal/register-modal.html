@@ -1,8 +1,6 @@
 
 <ion-content class="register_content">
     <div class="modal_closer" *ngIf="!this.isnew" (click)="this.dismiss();">Volver</div>
-
-   
   <div class="register_contet_head">
     <div class="bigFont" *ngIf="this.isnew"> <span class="fontPrimary"><b>Registro</b></span> <span class="lightFont">de Nuevo Suscriptor</span></div>
     <div class="midSubFont" *ngIf="this.isnew"> Por favor proporciona los siguientes datos: </div>
@@ -15,32 +13,35 @@
   <div class="register_contet_form"  >
     <div class="register_base register_form_section rfsFlex">
         <div class="registerInput">
-            <b>Correo electrónico:</b><input [(ngModel)]="this.userData.userData.mail" type="text"/>
+            <b>Correo electrónico:</b><input [(ngModel)]="this.userData.userData.mail" [class.registerInputerror]="!this.userData.userData.mail && showerrors" type="text"/>
           </div>
+          <div class="registerInput" *ngIf="this.isnew">
+            <b>Confirmar Correo electrónico:</b><input [(ngModel)]="emailconfirm" [class.registerInputerror]="!this.emailconfirm && showerrors" type="text"/>
+          </div>
+
           <div class="registerInput" *ngIf="this.isnew" >
-              <b>Username:</b><input [(ngModel)]="this.userData.userData.name" type="text" />
+              <b>Username:</b><input [(ngModel)]="this.userData.userData.name" [class.registerInputerror]="!this.userData.userData.name && showerrors" type="text" />
             </div>
             <div class="registerInput">
-                <b>Contraseña:</b><input [(ngModel)]="this.userData.userData.pass" type="password"/>
+                <b>Contraseña:</b><input [(ngModel)]="this.userData.userData.pass"  [class.registerInputerror]="!this.userData.userData.pass && showerrors" type="password"/>
               </div>
               <div class="registerInput">
-                <b>Confirmar contraseña:</b><input [(ngModel)]="passconfirm" type="password"/>
+                <b>Confirmar contraseña:</b><input [(ngModel)]="passconfirm"  [class.registerInputerror]="!this.passconfirm && showerrors" type="password"/>
               </div>
               <div class="registerInput">
-                <b>Nombre:</b><input [(ngModel)]="this.userData.userData.field_nombre.und[0].value" type="text"/>
+                <b>Nombre:</b><input [(ngModel)]="this.userData.userData.field_nombre.und[0].value" [class.registerInputerror]="!this.userData.userData.field_nombre.und[0].value && showerrors"  type="text"/>
               </div>
               <div class="registerInput">
-                <b>Apellido:</b><input  [(ngModel)]="this.userData.userData.field_apellidos.und[0].value"  type="text" />
+                <b>Apellido:</b><input  [(ngModel)]="this.userData.userData.field_apellidos.und[0].value" [class.registerInputerror]="!this.userData.userData.field_apellidos.und[0].value && showerrors"  type="text" />
               </div>
               
               <div class="registerInput" *ngIf="permissions.checkUserPermission([userData.TIPO_DOCTOR]);">
-                <b>Especialidad:</b><input [(ngModel)]="this.userData.userData.field_especialidad.und[0].value" type="text"/>
+                <b>Especialidad:</b><input [(ngModel)]="this.userData.userData.field_especialidad.und[0].value" [class.registerInputerror]="!this.userData.userData.field_especialidad.und[0].value && showerrors" type="text"/>
               </div>
             
               <div class="registerInput" *ngIf="permissions.checkUserPermission([userData.TIPO_DOCTOR]);">
-                <b>Alias:</b><input [(ngModel)]="this.userData.userData.field_alias.und[0].value" type="text"/>
+                <b>Alias:</b><input [(ngModel)]="this.userData.userData.field_alias.und[0].value" [class.registerInputerror]="!this.userData.userData.field_alias.und[0].value && showerrors" type="text"/>
               </div>
-             
     </div>
 
     
@@ -50,18 +51,18 @@
             <b>Calle:</b><input [(ngModel)]="this.userData.userData.field_calle.und[0].value"  type="text"/>
         </div>
         <div class="ubication_det">
-            <span class="ubdet_input"> <b>No. Ext.</b> <input [(ngModel)]="this.userData.userData.field_no_ext.und[0].value"  type="text"/></span>
+            <span class="ubdet_input"> <b>No. Ext.</b> <input [(ngModel)]="this.userData.userData.field_no_ext.und[0].value"  [class.registerInputerrorOn]="!this.userData.userData.field_no_ext.und[0].value && showerrors"  type="text"/></span>
             <span class="ubdet_input"> <b>No. Int.</b><input [(ngModel)]="this.userData.userData.field_no_int.und[0].value"  type="text"/></span>
-            <span class="ubdet_input"> <b>C.P</b> <input [(ngModel)]="this.userData.userData.field_codigo_postal.und[0].value"  type="text"/></span>
+            <span class="ubdet_input"> <b>C.P</b> <input [(ngModel)]="this.userData.userData.field_codigo_postal.und[0].value" [class.registerInputerrorOn]="!this.userData.userData.field_codigo_postal.und[0].value && showerrors" type="text"/></span>
         </div>
         <div class="registerInput">
-            <b>Ciudad:</b><input [(ngModel)]="this.userData.userData.field_ciudad.und[0].value"  type="text"/>
+            <b>Ciudad:</b><input [(ngModel)]="this.userData.userData.field_ciudad.und[0].value" [class.registerInputerror]="!this.userData.userData.field_ciudad.und[0].value && showerrors" type="text"/>
         </div>
         <div class="registerInput">
-            <b>Colonia:</b><input [(ngModel)]="this.userData.userData.field_colonia.und[0].value"  type="text"/>
+            <b>Colonia:</b><input [(ngModel)]="this.userData.userData.field_colonia.und[0].value"   type="text"/>
         </div>
         <div class="registerInput">
-            <b>País:</b><input [(ngModel)]="this.userData.userData.field_pais.und[0].value"  type="text"/>
+            <b>País:</b><input [(ngModel)]="this.userData.userData.field_pais.und[0].value"  [class.registerInputerror]="!this.userData.userData.field_pais.und[0].value && showerrors"  type="text"/>
         </div>
         <div class="registerInput">
             <b>Municipio o Del.:</b><input [(ngModel)]="this.userData.userData.field_municipio.und[0].value"  type="text"/>

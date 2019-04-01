@@ -31,6 +31,8 @@ declare var Stripe;
   templateUrl: 'register-modal.html',
 })
 export class RegisterModalPage {
+  showerrors:boolean = false;
+  emailconfirm:string = null;
   passconfirm:string = null;
   onGroup:boolean = null;
   grupoOtro:string = null;
@@ -174,6 +176,17 @@ export class RegisterModalPage {
     }
   }
 
+
+
+  checkemailSame(){
+    let ret = false;
+    if(this.userData.userData.mail !== null && this.emailconfirm !== null && this.emailconfirm.localeCompare(this.userData.userData.mail) ){
+      ret = true;
+    }
+    return ret;
+  }
+  
+
   checkforEmailChange(){
     if(this.userData.userData.mail !== this.currentMail){
       this.currentpasswordNeeded = true;
@@ -191,6 +204,7 @@ export class RegisterModalPage {
     }
     return ret;
   }
+
 
   async actionBuscarRef(){
     console.log('reference to search is', this.mailsrefer);
@@ -291,6 +305,22 @@ export class RegisterModalPage {
 
   basicValidation():boolean{
     let ret = true;
+    if(this.isnew){
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.mail,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.emailconfirm,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.name,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.pass,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.passconfirm,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_nombre.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_apellidos.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_especialidad.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_alias.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_no_ext.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_codigo_postal.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_ciudad.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_pais.und[0].value,ret)) ret = false;
+      //MAKE A CLASS and a method to check if filled.
+    }
     if(this.userData.userData.pass && !this.passconfirm || !this.userData.userData.pass && this.passconfirm){
       ret = false;
       this.alert.presentAlert('Error','Confirmar contraseña.');
@@ -298,6 +328,21 @@ export class RegisterModalPage {
     if(this.userData.userData.pass && this.passconfirm && this.passconfirm.localeCompare(this.userData.userData.pass) !== 0){
       ret = false;
       this.alert.presentAlert('Error','Las contraseñas no coinciden.');
+    }
+    if(this.isnew){ // si es nuevo valida todo lo que se valida en registro.
+      if(!this.checkemailSame()) ret = false;
+    }
+    return ret;
+  }
+
+  checkIfInputfilledNPromtp( input , actualret){
+    let ret = true;
+    console.log('this.userData.userData.field_no_ext.und[0].value',this.userData.userData.field_no_ext.und[0]);
+    if(!actualret){ return false;} ;
+    if(input === null ){
+      ret = false;
+      this.alert.presentAlert('Error','Revisar los campos marcados en rojo.');
+      this.showerrors = true;
     }
     return ret;
   }

@@ -6,11 +6,11 @@
       <span class="spanBlock midSubFont">Revisa tu plan</span>
     </div>
     <div class="modalPage_lpane" *ngIf="onplanchange">
-    <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>
+    <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>
     <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="cancelar()" >Cancelar</button>
     </div>
     <div class="modalPage_lpane" *ngIf="!onplanchange && subsData.subscription">
-      <span class="spanBlock midFont">Total de tu suscripción mensual: <span class="fontPrimary bold">${{cantidad}}</span> </span>
+      <span class="spanBlock midFont">Total de tu suscripción mensual: <span class="fontPrimary bold">${{cantidad}}</span></span>
       <span class="spanBlock midSubFont"> vence al {{nextCobro}}</span>
       <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()">Editar</button>
     </div>
@@ -177,8 +177,8 @@
         <p class="midSubFont" *ngIf="this.onplanchange"> Cualquier cambio en el monto total de tu suscripción se verá reflejado en tu próxima mensualidad al {{nextCobro}}</p>
       </div>  
       <div class="button_section"> 
-        <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>
-        <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selectPlan === null" *ngIf="this.checkStripeSetup() && cantcancel"  (click)="guardar()" >Suscribirse</button>
+        <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>
+        <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && cantcancel"  (click)="guardar()" >Suscribirse</button>
         <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()" >Editar</button>
         <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="baja()" >Cancelar suscripción</button>
         <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="cancelar()" >Cancelar</button>

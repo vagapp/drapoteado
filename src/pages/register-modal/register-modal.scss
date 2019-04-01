@@ -49,6 +49,14 @@ page-register-modal {
         text-align: left;
     }
 
+    .registerInputerror{
+        background: #f1d5d5 !important;
+    }
+
+    .registerInputerrorOn{
+        background: #f1d5d5 !important;
+    }
+
     
     .rfsFlex .registerInput .input_select{
         width: 55% !important;

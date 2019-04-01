@@ -22,9 +22,9 @@
           <!--<div class="ModalInput_input" *ngIf="!(this.userData.userData.field_tipo_de_usuario.und[0].value == 1)">-->
             <div class="ModalInput_input" *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" >
                 <b>Doctor:
-                  <button (click)="updateDoctores()" ion-button icon-only no-padding class="refresh-doctors">
+                  <!--<button (click)="updateDoctores()" ion-button icon-only no-padding class="refresh-doctors">
                     <ion-icon name="refresh"></ion-icon>
-                  </button>
+                  </button>-->
                 </b>
               <select [(ngModel)]="this.cita.data.field_cita_doctor.und[0]"  name="field_cita_doctor" class="input_select input">
                   <option *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="0" >SELECT</option>
