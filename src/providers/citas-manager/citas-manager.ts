@@ -14,10 +14,14 @@ import { Message } from '../websocket-service/websocket-service';
 import { Doctores } from '../user-data/doctores';
 import { ReportesDataProvider } from '../reportes-data/reportes-data';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 @Injectable()
 export class CitasManagerProvider {
+
+  waitingupdates:number[] = new Array();
+  timesout = 20;
 
   constructor(
     public http: HttpClient, 
@@ -33,6 +37,30 @@ export class CitasManagerProvider {
   ) {
     console.log('Hello CitasManagerProvider Provider');
   }
+  
+  /**
+   * Este metodo retorna cuando la cita con el uid especificado se actualiza por medio de un mensaje.
+   */
+ 
+  blockOnWaiting(citanid, callback , failcallback){
+    this.waitingupdates.push(citanid);
+    let timeson = 0;
+    let cic = setInterval(
+      () => {
+        timeson ++;
+        if(!this.waitingupdates.find((nids)=>{ return Number(nids) === Number(citanid); })){
+          callback();
+          clearInterval(cic);
+        }
+        if(Number(timeson) === Number(this.timesout)){
+          failcallback();
+          clearInterval(cic);
+        }
+      },
+      250
+    );
+  }
+
 
   requestCitas( from:number = this.datep.nowStart, to:number = this.datep.nowEnd+(1000*60*60*24*365*5) ):Observable<any>{
     let observable = this.getCitasObservable(from,to).share();

@@ -37,6 +37,10 @@ export class UpdaterProvider {
     ) {
    
   }
+
+
+
+
   async updateSuscription(){
     console.log('updater updateSuscription');
     if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){ //si es doctor se carga la suscripcion

@@ -25,7 +25,7 @@
             cada servicio.</span>
         </div>
     </div>
-    <div class="centered_bold" *ngIf="this.tutorial.checkTutorialState() && newTutService">Para comenzar agrega un servicio:</div>
+    <!--<div class="centered_bold" *ngIf="this.tutorial.checkTutorialState() && newTutService">Para comenzar agrega un servicio:</div>-->
     <div class="nuevoservicio_content modalContent" *ngIf="!this.tutorial.checkTutorialState()  || (this.tutorial.checkTutorialState() && !this.tutorial.serviceCreated)" >
         <div class="ModalInput_input">
             <b>Nombre</b>

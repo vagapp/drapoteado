@@ -129,6 +129,7 @@ export class WebsocketServiceProvider {
       console.log("cita2addfiltered");
       let aux_cita = this.cmanager.generateCitaFullData(message.content);
       this.reportPresentator.updateCita(aux_cita);
+      this.updateGot(aux_cita.Nid);
     }
   }
 
@@ -136,7 +137,19 @@ export class WebsocketServiceProvider {
     if(this.FilterMessageCita(message)){
       let aux_cita = this.cmanager.deleteCitaFullData(message.content);
       this.reportPresentator.deleteCita(aux_cita);
+      this.updateGot(aux_cita.Nid);
     }
+  }
+
+  /**
+   * Este metodo se dispara cuando se actualizan las citas, removiendo la cita del pool de citas que esperan actualziacion, de esta manera se puede identificar y bloquear citas que esten esperando actualizacion.
+   * @param citanid 
+   */
+  updateGot( citanid ){
+    console.log('reciviendo actualizacion de ',citanid);
+    console.log('waitingupdates', JSON.stringify(this.cmanager.waitingupdates ));
+    this.cmanager.waitingupdates = this.cmanager.waitingupdates.filter((citasnids)=>{ return Number(citasnids) !== Number(citanid) });
+    console.log('after removal', JSON.stringify(this.cmanager.waitingupdates ));
   }
 
   // returns true if one of the doctors this user is listening is contained on the receivers of this message

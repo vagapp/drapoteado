@@ -73,7 +73,8 @@ export class CitasPresentatorProvider {
       this.notiMan.generateNotification([cita.data.field_cita_caja.und[0]],`La cita de de ${cita.paciente} esta en espera de cobro`,`cita-${cita.Nid}`);
     }
     this.wsMessenger.generateWSupdateMessage(cita);
-    this.loader.dismissLoader();
+    this.setBlockNdismiss(cita.Nid);
+    //this.loader.dismissLoader();
   } 
 
   editCita( cita ){
@@ -117,6 +118,16 @@ export class CitasPresentatorProvider {
           DoctoresDataProvider.setDoctorBusy(aux_doc,cita);
           await this.citasManager.updateCitaState( cita , CitasDataProvider.STATE_ACTIVA ).toPromise(); 
           this.wsMessenger.generateWSupdateMessage(cita);
+          this.citasManager.blockOnWaiting(cita.Nid,
+            ()=>{
+              this.openProgreso(cita);
+              this.loader.dismissLoader(); 
+          },
+          ()=>{
+            this.loader.dismissLoader(); 
+          }
+          );
+          //this.openProgreso(cita);
           this.loader.dismissLoader(); 
         /*
       this.alert.chooseAlert(
@@ -144,7 +155,8 @@ export class CitasPresentatorProvider {
           DoctoresDataProvider.setDoctorUnbusy(aux_doc);
           await this.citasManager.updateCitaState( cita , CitasDataProvider.STATE_CONFIRMADA).toPromise(); 
           this.wsMessenger.generateWSupdateMessage(cita);
-          this.loader.dismissLoader(); 
+          this.setBlockNdismiss(cita.Nid);
+          //this.loader.dismissLoader(); 
     }
   }
 
@@ -153,7 +165,8 @@ export class CitasPresentatorProvider {
         this.loader.presentLoader('actualziando...');
           await this.citasManager.updateCitaState( cita , CitasDataProvider.STATE_PENDIENTE).toPromise(); 
           this.wsMessenger.generateWSupdateMessage(cita);
-          this.loader.dismissLoader(); 
+          //this.loader.dismissLoader(); 
+          this.setBlockNdismiss(cita.Nid);
     }
   }
 
@@ -164,9 +177,19 @@ export class CitasPresentatorProvider {
     if(res){
       this.notiMan.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
       this.wsMessenger.generateWSupdateMessage(cita);
-    }
+      this.setBlockNdismiss(cita.Nid);
+    }else{
       this.loader.dismissLoader();
+    }
+  }
 
+
+  setBlockNdismiss(citaNid){
+    this.citasManager.blockOnWaiting(
+      citaNid,
+      ()=>{ this.loader.dismissLoader();},
+      ()=>{ this.loader.dismissLoader();}
+      );
   }
 
   delecitaCitaPop(cita:Citas){
