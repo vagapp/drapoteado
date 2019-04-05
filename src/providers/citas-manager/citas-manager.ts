@@ -103,9 +103,9 @@ export class CitasManagerProvider {
     cajas:number[] = null,  
     recepciones:number[] = null,
   ):Observable<any>{
-    console.log('from',new Date(from));
-    console.log('to',new Date(to));
-    console.log('is',new Date(1534605765000));
+    console.log('from',from,new Date(from));
+    console.log('to',to,new Date(to));
+    console.log('is','1554421919995',new Date(1554421919995));
     console.log('1534605765000');
     console.log('from',from);
     console.log('to',to)
@@ -219,10 +219,11 @@ export class CitasManagerProvider {
     }
     if(Number(state) === Number(CitasDataProvider.STATE_CANCELADA)){
       console.log('cancelando cita'); 
-      
+      this.setCitaFechaReporte(cita,saveDate); 
+      reportedateset = true; 
       console.log(' this.reportesData.todayReport', this.reportesData.todayReport);
-      this.reportesData.todayReport.nocancel++;
-      this.nodeMan.updateNode(this.reportesData.todayReport.getData()).subscribe((val)=>{console.log('updated report',val);},(error)=>{console.log('updated report error',error);});
+      //this.reportesData.todayReport.nocancel++;
+      //this.nodeMan.updateNode(this.reportesData.todayReport.getData()).subscribe((val)=>{console.log('updated report',val);},(error)=>{console.log('updated report error',error);});
     }
     if(!reportedateset){ delete cita.data.field_fecha_reporte; }
     if(!fechacobroset){ delete cita.data.field_hora_cobromsb; }

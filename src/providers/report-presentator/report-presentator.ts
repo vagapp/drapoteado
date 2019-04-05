@@ -198,7 +198,9 @@ async openReportGenerate( report:reportes = null ){
     await this.loadReportServicios();
     this.evaluateCitas();
     }
-    
+    console.log('loadReporte end');
+    console.log('cajaAdeudo',this.cajaAdeudo);
+    console.log('cajacuentas',this.cajacuentas);
   }
 
   
@@ -260,12 +262,14 @@ async openReportGenerate( report:reportes = null ){
     console.log('citas en evaluate citas report', this.actualReport.citas);
     this.noCitas = this.actualReport.citas.length;
     this.noCancel = this.actualReport.citas.filter((citas)=>{return citas.checkState(CitasDataProvider.STATE_CANCELADA)} ).length;
+    
     console.log('noCancel',this.noCancel);
     if(isNaN(this.noCancel)) this.noCancel = 0;
     console.log('noCancel ',this.noCancel);
     this.calcularCitasPorCobrar();
     let filteredCitas = CitasDataProvider.sortByDate(this.getFilteredCitasShow());
     for(let cita of filteredCitas){
+      if(!cita.checkState(CitasDataProvider.STATE_CANCELADA)){
       let aux_costo = Number(cita.costo ? cita.costo : 0 );
       let aux_cobro = Number(cita.cobro ? cita.cobro : 0 );
       let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
@@ -280,7 +284,7 @@ async openReportGenerate( report:reportes = null ){
       this.totalTarjeta+=aux_cobroTarjeta;
       this.totalCheques+=aux_cobroCheque;
 
-      if(aux_costo > aux_cobro){ this.cajaAdeudo += aux_costo - aux_cobro;  }
+      if(aux_costo > aux_cobro && !cita.checkState(CitasDataProvider.STATE_COBRO) ){ this.cajaAdeudo += aux_costo - aux_cobro;  }
       /*if(cita.costo) this.costoTotal += cita.costo;
       if(cita.cobro) this.total+= cita.cobro;
       if(cita.costo && cita.cobro && cita.costo > cita.cobro){ 
@@ -294,6 +298,7 @@ async openReportGenerate( report:reportes = null ){
       console.log('cita evaluada',cita);
       if(cita.data.field_facturar.und && cita.data.field_facturar.und[0].value) this.facturadoTotal += Number(cita.data.field_facturar_cantidad.und[0].value);
     }
+  }
     console.log('tota facturar es ',this.facturadoTotal);
     this.duracionTotalStr = DateProvider.getDateDifText(this.duracionTotalMs);
   }
@@ -359,87 +364,102 @@ async openReportGenerate( report:reportes = null ){
     doc.text(50, 100, `Generado por Usuario ${this.userData.userData.name}`);
     let columns = new Array();
     let rows = new Array();
+    let first_margin = 120;
     this.actualReport.citas.forEach(cita => {
       columns = new Array();
       rows = new Array();
       /**IMPRIMIENDO CITA**/
-      columns.push({title: "ID", dataKey: "id"});
+      
       columns.push({title: "Paciente", dataKey: "Paciente"});
       columns.push({title: "Doctor", dataKey: "Doctor"});
       columns.push({title: "Servicio", dataKey: "Servicio"});
       columns.push({title: "Costo", dataKey: "Costo"});
       rows.push( {
-        "id": `${cita.Nid}`, 
         "Paciente": `${cita.paciente}`, 
         "Doctor": `${cita.doctor_name}/ ${cita.doctor_alias}`, 
         "Servicio": ``,
         "Costo": ``} );
         cita.reporteServicios.forEach(servicio => {
           rows.push( {
-            "id": ``, 
             "Paciente": ``, 
             "Doctor": ``, 
             "Servicio": `${servicio.title}`,
             "Costo": `${servicio.costo}`} );
           });
-
         rows.push( {
-          "id": ``, 
           "Paciente": ``, 
           "Doctor": ``, 
           "Servicio": `Total`,
           "Costo": `${cita.costo}`} );
-          this.printtable(doc,columns,rows,60+60);
+          let margin = 2 + first_margin;
+          this.printtable(doc,columns,rows,margin);
+          first_margin = 0;
           /**IMPRIMIENDO  TOTALES DE CITA**/
           columns = new Array();
           rows = new Array();
-          columns.push({title: "Totales", dataKey: "Totales"});
-          columns.push({title: "Caja", dataKey: "Caja"});
+         
+          columns.push({title: "Total Servicios", dataKey: "TotalS"});
           columns.push({title: "Efectivo", dataKey: "Efectivo"});
           columns.push({title: "Tarjeta", dataKey: "Tarjeta"});
-          columns.push({title: "Total", dataKey: "Total"});
+          columns.push({title: "Cheque", dataKey: "Cheque"});
+          columns.push({title: "Facturado", dataKey: "Facturado"});
+          columns.push({title: "Adeudo", dataKey: "Adeudo"});
+          
           rows.push( {
-            "Totales": `iD ${cita.Nid}`, 
-            "Caja": `${cita.cobroEfectivo}`, 
+            "TotalS": `${cita.costo}` ,
             "Efectivo": `${cita.cobroTarjeta}`, 
-            "Tarjeta": `${cita.cobroCheque}`,
-            "Total": `${cita.cobro}`} );
+            "Tarjeta": `${cita.cobroEfectivo}`, 
+            "Cheque": `${cita.cobroCheque}`,
+            "Facturado": `${cita.facturado}`,
+            "Adeudo": `${(cita.costo - cita.cobro)}`
+          });
             this.printtable(doc,columns,rows,2);
       });
       /**IMPRIMIENDO  ESTADISTICAS**/
       columns = new Array();
       rows = new Array();
-      columns.push({title: "noCitas", dataKey: "noCitas"});
-      columns.push({title: "noCancel", dataKey: "noCancel"});
-      columns.push({title: "noShow", dataKey: "noShow"});
-      columns.push({title: "Duracion", dataKey: "Duracion"});
+      columns.push({title: "Citas Totales", dataKey: "noCitas"});
+      columns.push({title: "Citas Canceladas", dataKey: "noCancel"});
+      columns.push({title: "Duracion Total", dataKey: "Duracion"});
       rows.push( {
         "noCitas": `${this.noCitas}`, 
         "noCancel": `${this.noCancel}`, 
-        "noShow": `${this.noShow  }`, 
-        "Duracion": `${this.duracionTotalStr}`});
-      this.printtable(doc,columns,rows,20);
+        "Duracion": `${this.duracionTotalStr}`
+      });
+      this.printtable(doc,columns,rows,2);
       /**IMPRIMIENDO  GRANDTOTALES**/
       columns = new Array();
       rows = new Array();
       columns.push({title: "", dataKey: "titulo"});
+      columns.push({title: "Facturado", dataKey: "Facturado"});
+      columns.push({title: "Pendiente", dataKey: "Pendiente"});
       columns.push({title: "Efectivo", dataKey: "Efectivo"});
       columns.push({title: "Tarjeta", dataKey: "Tarjeta"});
       columns.push({title: "Cheques", dataKey: "Cheques"});
       columns.push({title: "Total", dataKey: "Total"});
+
       rows.push( {
         "titulo": `Cuentas`, 
         "Efectivo": ``, 
         "Tarjeta": ``, 
-        "Cheques": ``,
-        "Total": `${this.costoTotal}`});
+        "Cheques": ``, 
+        "Total": `${this.costoTotal}`,
+        "Facturado": ``, 
+        "Pendiente": ``
+        });
+
         rows.push( {
           "titulo": `Caja`, 
           "Efectivo": `${this.totalefectivo}`, 
           "Tarjeta": `${this.totalTarjeta}`, 
           "Cheques": `${this.totalCheques}`,
-          "Total": `${this.total}`});
+          "Total": `${this.total}`,
+          "Facturado": `${this.facturadoTotal}`, 
+          "Pendiente": `${this.pendiente}`
+          });
+
       this.printtable(doc,columns,rows,20);
+      
     doc.save(`Reporte${this.actualReport.dateString}.pdf`);
     doc.autoTable.previous = 0;
   }

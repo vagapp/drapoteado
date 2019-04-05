@@ -22,7 +22,7 @@ export class ReporteCitasProvider {
     let aux_citas = new Array<Citas>();
     const obs = this.reporteGetCitasObservable(report, doctorUid);
     let citas_data = await obs.toPromise();
-    console.log('obtained data',citas_data);
+    console.log('reporteLoadCitas obtained data',citas_data);
     report.citas = this.generateCitasFromdata(citas_data);
     //now we gotta sort everything.
   }

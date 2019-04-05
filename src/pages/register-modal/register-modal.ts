@@ -179,9 +179,16 @@ export class RegisterModalPage {
 
 
   checkemailSame(){
+    console.log('checkemailSame ');
     let ret = false;
-    if(this.userData.userData.mail !== null && this.emailconfirm !== null && this.emailconfirm.localeCompare(this.userData.userData.mail) ){
+    console.log(this.userData.userData.mail !== null);
+    console.log(this.emailconfirm !== null);
+    console.log(this.emailconfirm.localeCompare(this.userData.userData.mail));
+    if(this.userData.userData.mail !== null && this.emailconfirm !== null && Number(this.emailconfirm.localeCompare(this.userData.userData.mail)) === Number(0) ){
+      console.log('entro a que si son igualesa ');
       ret = true;
+    }else{
+      this.alert.presentAlert('Error','El correo electrónico no coincide con la confirmación.');
     }
     return ret;
   }
@@ -321,25 +328,29 @@ export class RegisterModalPage {
       if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_pais.und[0].value,ret)) ret = false;
       //MAKE A CLASS and a method to check if filled.
     }
+    console.log('ret a1 ', ret);
     if(this.userData.userData.pass && !this.passconfirm || !this.userData.userData.pass && this.passconfirm){
       ret = false;
       this.alert.presentAlert('Error','Confirmar contraseña.');
     }
+    console.log('ret a2 ', ret);
     if(this.userData.userData.pass && this.passconfirm && this.passconfirm.localeCompare(this.userData.userData.pass) !== 0){
       ret = false;
       this.alert.presentAlert('Error','Las contraseñas no coinciden.');
     }
+    console.log('ret a3 ', ret);
     if(this.isnew){ // si es nuevo valida todo lo que se valida en registro.
       if(!this.checkemailSame()) ret = false;
     }
+    console.log('ret a4 ', ret);
     return ret;
   }
 
   checkIfInputfilledNPromtp( input , actualret){
     let ret = true;
-    console.log('this.userData.userData.field_no_ext.und[0].value',this.userData.userData.field_no_ext.und[0]);
     if(!actualret){ return false;} ;
     if(input === null ){
+      console.log('this input is not filled mf',input);
       ret = false;
       this.alert.presentAlert('Error','Revisar los campos marcados en rojo.');
       this.showerrors = true;
