@@ -168,6 +168,11 @@ export class ReportePage {
         this.reportPresentator.generatePDF();
       }
 
+      exportars(){
+        console.log('exportars');
+        this.reportPresentator.exportExcel();
+      }
+
       
       dismiss() {
         this.viewCtrl.dismiss();

@@ -18,7 +18,7 @@
             <span class="spanBlock midFont"><b>Fecha</b></span>
             <span class="spanBlock fontSecondary midFont">{{this.reportPresentator.actualReport.dateString}}</span>
           </div>
-  <button class="bgColorSecondary generalButton export-big" (click)="generatePDF()" >Exportar</button>
+  <button class="bgColorSecondary generalButton export-big" (click)="exportars()" >Exportar</button>
 </div>
 </div>
 
@@ -124,7 +124,7 @@
           <button ion-button (click)="verTotales()" full> Ver Totales </button>
       </ion-col>
       <ion-col>
-          <button class="bgColorSecondary" ion-button (click)="generatePDF()"  full> Exportar </button>
+          <button class="bgColorSecondary" ion-button (click)="exportars()"  full> Exportar </button>
       </ion-col>
     </ion-row>
   </ion-toolbar>

@@ -19,6 +19,8 @@ import { Subject } from 'rxjs/Subject';
 import { PermissionsProvider } from '../permissions/permissions';
 import { IfObservable } from 'rxjs/observable/IfObservable';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { BaseUrlProvider } from '../base-url/base-url';
 
 /*
   Generated class for the ReportPresentatorProvider provider.
@@ -94,7 +96,8 @@ export class ReportPresentatorProvider {
     public reportesManager: ReportesManagerProvider,
     public modalCtrl: ModalController,
     public permissions: PermissionsProvider,
-    public subsData: SubscriptionDataProvider
+    public subsData: SubscriptionDataProvider,
+    public bu: BaseUrlProvider
   ) {
     
   }
@@ -154,7 +157,14 @@ async loadReportNM(loadReport:boolean = true){ //este metodo lo cree a partir de
 }
 
 
-
+exportExcel(){
+  //this.actualReport.nid
+  //this.docLoaded
+  //console.log('exportExcel docloaded is ',this.docLoaded,this.docuid);
+  let report_excel = this.bu.backendUrl+`endpoint_Reporteexcel.php?r=${this.actualReport.nid}${this.docLoaded ? '&doc='+this.docuid : ''}`;
+  window.location.href = report_excel;
+  //console.log('report_excel',report_excel);
+}
 
 async openReportGenerate( report:reportes = null ){
   this.loader.presentLoader('Cargando Reporte ...');

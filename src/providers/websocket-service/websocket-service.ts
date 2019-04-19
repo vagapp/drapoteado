@@ -124,12 +124,14 @@ export class WebsocketServiceProvider {
    * @param message  a message received from websocket about a new or updated cita
    * este metodo recive un mensaje y filtra segun si debe recivir la cita, y la procesa.
    */
-  addCita(message:Message){
+  async addCita(message:Message){
     if(this.FilterMessageCita(message)){
       console.log("cita2addfiltered");
       let aux_cita = this.cmanager.generateCitaFullData(message.content);
       this.reportPresentator.updateCita(aux_cita);
       this.updateGot(aux_cita.Nid);
+      await this.updater.updateServicios();
+      await this.updater.updateCitas();
     }
   }
 

@@ -79,8 +79,8 @@ export class UpdaterProvider {
   //las citas no se actualizan bien. no se filtran doctores que ya no se tienen agregados.
   //tengo dos listas de doctores, una en docdata y otra en subsdata. no se cual se usa para que. porque hay dos? que me pasa?
   async updateCitas(){
-    this.citasData.citas = new Array();
-    this.citasData.daysCitas = new Array();
+    //this.citasData.citas = new Array();
+    //this.citasData.daysCitas = new Array();
     await this.citasManager.requestCitas().toPromise();
     this.docMan.evaluateCitas();
   }
