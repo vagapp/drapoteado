@@ -82,6 +82,15 @@ export class ProgresocitaModalPage {
           this.alert.presentAlert('Error','Introducir monto a pagar');
           return false;
         }*/
+        if(!this.validarPagarNOEMPTY()){
+          this.alert.presentAlert('Error','Introducir monto a pagar.');
+          return false;
+        }
+
+        if( !this.validarPagarNONEG() || !this.validarNotNaN() ){
+          this.alert.presentAlert('Error','No se aceptan valores negativos');
+          return false;
+        }
       
         console.log('cantidad restante es',this.progressController.CantidadRestante);
         if( Number(this.progressController.CantidadRestante) < 0 ){
@@ -118,6 +127,49 @@ export class ProgresocitaModalPage {
         await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
         this.close();
       }
+
+      //esta validacion revisa que si se meta algo en los campos de cobro caundo se paga la cita. si no se pone nada de nada te avisa que no le metiste nada woe que malo eres
+      validarPagarNOEMPTY():boolean{
+        let ret = true;
+        console.log('validarPagar ---------');
+        console.log(this.progressController.cobroEfectivo, this.progressController.cobroEfectivo  === null );
+        console.log(this.progressController.cobroTarjeta, this.progressController.cobroTarjeta === null );
+        console.log(this.progressController.cobroCheque, this.progressController.cobroCheque === null );
+        if( this.progressController.cobroEfectivo  === null &&  this.progressController.cobroTarjeta === null && this.progressController.cobroCheque === null ){
+          console.log('nopusonada'  );
+          ret = false;
+        }
+        return ret;
+      }
+
+      //esta validacion revisa que no se puedan meter numeros negativos en el cobro.
+      validarPagarNONEG():boolean{
+        let ret = true;
+        console.log('validarPagarNONEG ---------');
+        console.log(this.progressController.cobroEfectivo, Number(this.progressController.cobroEfectivo) );
+        console.log(this.progressController.cobroTarjeta,Number(this.progressController.cobroTarjeta) );
+        console.log(this.progressController.cobroCheque,Number(this.progressController.cobroCheque));
+        if( Number(this.progressController.cobroEfectivo) < 0 ||  Number(this.progressController.cobroTarjeta) < 0 ||  Number(this.progressController.cobroCheque) < 0){
+          ret = false;
+        }
+        return ret;
+      }
+
+      validarNotNaN(){
+        let ret = true;
+        console.log('validarNotNaN ---------');
+        console.log(this.progressController.cobroEfectivo, Number(this.progressController.cobroEfectivo) );
+        console.log(this.progressController.cobroTarjeta,Number(this.progressController.cobroTarjeta) );
+        console.log(this.progressController.cobroCheque,Number(this.progressController.cobroCheque));
+        if( isNaN(this.progressController.cobroEfectivo)  ||  isNaN(this.progressController.cobroTarjeta)  ||  isNaN(this.progressController.cobroCheque) ){
+          ret = false;
+        }
+        return ret;
+      }
+
+     
+
+  
 
       async allsaveActualCita(){
         console.log('allsaveActualCita');

@@ -72,6 +72,7 @@ export class CitasPresentatorProvider {
     if(Number(state) === CitasDataProvider.STATE_COBRO && cita.caja_playerid){ //cambiando a cita por cobrar
       this.notiMan.generateNotification([cita.data.field_cita_caja.und[0]],`La cita de de ${cita.paciente} esta en espera de cobro`,`cita-${cita.Nid}`);
     }
+    await this.reportesMan.checkUpdateTodayDocs(cita.data.field_cita_doctor.und[0]);
     this.wsMessenger.generateWSupdateMessage(cita);
     this.setBlockNdismiss(cita.Nid);
     //this.loader.dismissLoader();

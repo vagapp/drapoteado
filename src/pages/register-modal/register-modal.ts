@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ɵConsole } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, LoadingController, AlertController } from 'ionic-angular';
 import { UserDataProvider  } from '../../providers/user-data/user-data';
 //import { Debugger } from '../../providers/user-data/debugger';
@@ -181,11 +181,7 @@ export class RegisterModalPage {
   checkemailSame(){
     console.log('checkemailSame ');
     let ret = false;
-    console.log(this.userData.userData.mail !== null);
-    console.log(this.emailconfirm !== null);
-    console.log(this.emailconfirm.localeCompare(this.userData.userData.mail));
     if(this.userData.userData.mail !== null && this.emailconfirm !== null && Number(this.emailconfirm.localeCompare(this.userData.userData.mail)) === Number(0) ){
-      console.log('entro a que si son igualesa ');
       ret = true;
     }else{
       this.alert.presentAlert('Error','El correo electrónico no coincide con la confirmación.');
@@ -313,6 +309,7 @@ export class RegisterModalPage {
   basicValidation():boolean{
     let ret = true;
     if(this.isnew){
+      console.log('checking obligatorios----------------------------');
       if(!this.checkIfInputfilledNPromtp(this.userData.userData.mail,ret)) ret = false;
       if(!this.checkIfInputfilledNPromtp(this.emailconfirm,ret)) ret = false;
       if(!this.checkIfInputfilledNPromtp(this.userData.userData.name,ret)) ret = false;
@@ -320,13 +317,13 @@ export class RegisterModalPage {
       if(!this.checkIfInputfilledNPromtp(this.passconfirm,ret)) ret = false;
       if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_nombre.und[0].value,ret)) ret = false;
       if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_apellidos.und[0].value,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_especialidad.und[0].value,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_alias.und[0].value,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_no_ext.und[0].value,ret)) ret = false;
+     // if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_especialidad.und[0].value,ret)) ret = false;
+      //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_alias.und[0].value,ret)) ret = false;
+      //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_no_ext.und[0].value,ret)) ret = false;
       if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_codigo_postal.und[0].value,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_ciudad.und[0].value,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_pais.und[0].value,ret)) ret = false;
-      //MAKE A CLASS and a method to check if filled.
+      //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_ciudad.und[0].value,ret)) ret = false;
+      //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_pais.und[0].value,ret)) ret = false;
+      console.log('end checking obligatorios----------------------------');
     }
     console.log('ret a1 ', ret);
     if(this.userData.userData.pass && !this.passconfirm || !this.userData.userData.pass && this.passconfirm){
@@ -348,8 +345,10 @@ export class RegisterModalPage {
 
   checkIfInputfilledNPromtp( input , actualret){
     let ret = true;
+    console.log('enter');
     if(!actualret){ return false;} ;
-    if(input === null ){
+    console.log('checkIfInputfilledNPromtp',input,input === null , input ? false : true );
+    if( input ? false : true ){
       console.log('this input is not filled mf',input);
       ret = false;
       this.alert.presentAlert('Error','Revisar los campos marcados en rojo.');

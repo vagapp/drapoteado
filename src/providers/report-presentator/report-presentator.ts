@@ -148,12 +148,12 @@ async loadReportNM(loadReport:boolean = true){ //este metodo lo cree a partir de
     this.docuid = 0;
   }
   if(loadReport) await this.loadReporte();
-  console.log('loadReportNM b',JSON.stringify(this.docuid),this.type);
+  console.log('loadReportNM b',JSON.stringify(this.docuid),this.type); //docuid = null
   this.loader.dismissLoader();
   console.log('1beforenext');
   this.reportisloading = true;
   this.reportSubject.next(1);
-  console.log('loadReportNM c',JSON.stringify(this.docuid),this.type);
+  console.log('loadReportNM c',JSON.stringify(this.docuid),this.type); //docuid = null
 }
 
 
@@ -161,8 +161,10 @@ exportExcel(){
   //this.actualReport.nid
   //this.docLoaded
   //console.log('exportExcel docloaded is ',this.docLoaded,this.docuid);
-  let report_excel = this.bu.backendUrl+`endpoint_Reporteexcel.php?r=${this.actualReport.nid}${this.docLoaded ? '&doc='+this.docuid : ''}`;
-  window.location.href = report_excel;
+  console.log(this.userData.userData.field_tipo_de_usuario['und'][0]['value']);
+  let report_excel = this.bu.backendUrl+`endpoint_Reporteexcel.php?r=${this.actualReport.nid}${this.docLoaded && this.docuid!==null ? '&doc='+this.docuid : ''}${'&ur='+this.userData.userData.field_tipo_de_usuario['und'][0]['value']}`;
+  console.log(report_excel);
+  //window.location.href = report_excel;
   //console.log('report_excel',report_excel);
 }
 

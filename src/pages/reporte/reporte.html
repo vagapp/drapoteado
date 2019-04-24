@@ -29,7 +29,7 @@
       <span class="rbh_span midFont" *ngIf="!cita.opendetail" (click)="setOpendetail(cita,true);"> <img src="assets/imgs/chrevron-rojo.svg"  class="icon_drapo_sm"> </span>
       <span class="rbh_span midFont"> <span class="bold">Paciente</span><span class="">{{ cita.paciente }}</span> </span>
       <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"> <span class="bold">Doctor</span><span class="">{{ cita.doctor_name }}</span> </span>
-      <span class="rbh_span midFont"> <span class="bold">Caja</span><span class="">{{cita.caja_name}} </span> </span>
+      <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_CAJA])"> <span class="bold">Caja</span><span class="">{{cita.caja_name}} </span> </span>
       <span class="rbh_span midFont"> <span class="bold">Duración</span><span class="fontHigh">{{ cita.duracionText }}</span> </span>
       <span class="rbh_span midFont estado-cita-reporte"> <span class="fontHigh"  [ngStyle]="{'color':cita.stateColor}">{{ cita.getStateString() }}</span> </span>
   </div>

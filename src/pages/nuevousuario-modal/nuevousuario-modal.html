@@ -152,8 +152,8 @@
             </div>
             <div class="midAlign" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated">
                 <div class="register_button_section">
-                <button (click)="this.nextUser()"  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION" class="bgColorSecondary generalButton">Continuar</button>
-                <button (click)="this.endUsers()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR || this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA" class="bgColorSecondary generalButton">Continuar</button>
+                <button (click)="this.nextUser()"  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION" class="bgColorSecondary generalButton tutorialButton">Continuar</button>
+                <button (click)="this.endUsers()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR || this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA" class="bgColorSecondary generalButton tutorialButton">Continuar</button>
                 <!--<button (click)="this.restart()" class="bgColorSecondary generalButton">Crear Otro</button>-->
                 <!--<button (click)="this.dismiss()" class="bgColorSecondary generalButton">Continuar</button>-->
                 </div>

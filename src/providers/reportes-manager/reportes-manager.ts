@@ -11,6 +11,7 @@ import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-ma
 import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
 import { Citas } from '../user-data/citas';
 import { DrupalNodeEditorProvider } from '../drupal-node-editor/drupal-node-editor';
+import { PermissionsProvider } from '../permissions/permissions';
 
 /*
   Generated class for the ReportesManagerProvider provider.
@@ -29,7 +30,8 @@ export class ReportesManagerProvider {
     public dp: DateProvider,
     public bu: BaseUrlProvider,
     public nodeMan: DrupalNodeManagerProvider,
-    public nodeEditor: DrupalNodeEditorProvider
+    public nodeEditor: DrupalNodeEditorProvider,
+    public perm: PermissionsProvider
   ) {
     console.log('Hello ReportesManagerProvider Provider');
   }
@@ -65,18 +67,33 @@ export class ReportesManagerProvider {
       return this.http.get(url).share();
     }
 
+    //METE AL DOCTOR A LA LISTA DE DOCTORES DE HOY SI ES QUE NO ESTA AHI
+     async checkUpdateTodayDocs( docuid:number){
+       console.log('checking for doc on report ',docuid);
+      //this.reportesData.todayReport.doctores = this.doctoresData.doctoresIDs;
+      let exists = this.reportesData.todayReport.doctores.find((docs)=>{ return Number(docs) === Number(docuid)});
+      console.log('updateTodayDocs exists',exists);
+      if(!exists){
+        console.log('HAY QUE AGREGAR EL DOC AL REPORTE MAMA');
+        this.reportesData.todayReport.doctores.push(Number(docuid));
+        await this.nodeMan.updateNode(this.reportesData.todayReport.getData()).toPromise();
+      }
+    }
+
+    //este metodo te da el reporte de hoy, si no lo existe lo genera.
   async getTodayReport(){
-   let todayReport_Data = await this.requestReportes(1).toPromise();
+   let todayReport_Data = await this.requestReportes(1).toPromise(); //buscando reporte de hoy
    console.log('getting todayreport',todayReport_Data);
-   if(todayReport_Data.length > 0){
+   if(todayReport_Data.length > 0){  //generando objeto de reporte con la info del reporte de hoy
     this.reportesData.addReporte(todayReport_Data[0], true);
-   }else{
+   }else{ //creando reporte de hoy si no existe
      console.log('generating today report');
     await this.generateTodayReport();
     console.log('after generating today report');
    }
   }
 
+  //este metodo genera el reporte de hoy! y lo guarda en drupalito
   async generateTodayReport(){
     const uax_treport = new reportes();
       uax_treport.author_uid = this.userData.userData.uid;
@@ -84,6 +101,9 @@ export class ReportesManagerProvider {
       uax_treport.dateStartUTMS = this.dp.nowStart;
       uax_treport.dateEndUTMS = this.dp.nowEnd;
       uax_treport.dialy = true;
+      if(this.perm.checkUserPermission([UserDataProvider.TIPO_CAJA])){
+        uax_treport.cajas = [this.userData.userData.uid];
+      }
       console.log('dateStartUTMS', uax_treport.dateStartUTMS);
       console.log('dateEndUTMS',uax_treport.dateEndUTMS);
     let nid = await this.nodeMan.generateNewNode(uax_treport.getData()).toPromise();

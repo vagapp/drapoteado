@@ -27,12 +27,13 @@ export class ReporteCitasProvider {
     //now we gotta sort everything.
   }
 
+
   reporteGetCitasObservable(report:reportes,  doctorUid:number = null){
     console.log('reporteGetCitasObservable',report,doctorUid);
     console.log(report.dateStartUTMS);
       console.log(report.dateEndUTMS);
         console.log(report.doctoresFilter);
-          console.log(report.cajaFilter);
+          console.log('reportcajafilter',report.cajaFilter);
             console.log( report.recepcionFilter);
     if(doctorUid)
     return this.citasManager.getCitasObservableReport(

@@ -79,15 +79,15 @@
                 <b>Formas de Pago</b>
                 <div class="pagos-modal ModalInput_input">
                     Efectivo
-                    <input [(ngModel)]="progressController.cobroEfectivo" type="text"/>
+                    <input [(ngModel)]="progressController.cobroEfectivo" type="number"/>
                 </div>
                 <div class="ModalInput_input">
                     Tarjeta
-                    <input [(ngModel)]="progressController.cobroTarjeta" type="text"/>
+                    <input [(ngModel)]="progressController.cobroTarjeta" type="number" />
                 </div>
                 <div class="ModalInput_input"> 
                     Cheque
-                    <input [(ngModel)]="progressController.cobroCheque" type="text"/>
+                    <input [(ngModel)]="progressController.cobroCheque"  type="number"/>
                 </div>
                 <span *ngIf="progressController.CantidadRestante > 0" class="spanBlock midAlign fontPrimary">
                     Faltan ${{progressController.CantidadRestante}}

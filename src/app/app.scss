@@ -451,6 +451,10 @@ border: 0px solid #000000;
     border: 0px solid #000000;
 }
 
+.tutorialButton{
+    margin-top: 0px !important;
+}
+
 .register_button_section{
     margin-top: 5px;
     text-align: center;
@@ -803,7 +807,7 @@ flex-flow: column;
 }
 
 .registerInput{
-    font-size: 2rem !important;
+    font-size: 1.3rem !important;
     text-align: right;
 }
 .registerInput input{
