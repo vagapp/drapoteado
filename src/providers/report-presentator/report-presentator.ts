@@ -161,10 +161,10 @@ exportExcel(){
   //this.actualReport.nid
   //this.docLoaded
   //console.log('exportExcel docloaded is ',this.docLoaded,this.docuid);
-  console.log(this.userData.userData.field_tipo_de_usuario['und'][0]['value']);
+  //console.log(this.userData.userData.field_tipo_de_usuario['und'][0]['value']);
   let report_excel = this.bu.backendUrl+`endpoint_Reporteexcel.php?r=${this.actualReport.nid}${this.docLoaded && this.docuid!==null ? '&doc='+this.docuid : ''}${'&ur='+this.userData.userData.field_tipo_de_usuario['und'][0]['value']}`;
-  console.log(report_excel);
-  //window.location.href = report_excel;
+  //console.log(report_excel);
+   window.location.href = report_excel;
   //console.log('report_excel',report_excel);
 }
 

@@ -17,7 +17,7 @@
       <form>
           <div class="ModalInput_input">
               <b>Nombre del paciente</b>
-              <input [(ngModel)]="this.cita.data.field_paciente.und[0].value" name="field_paciente" type="text"/>
+              <input [(ngModel)]="this.cita.data.field_paciente.und[0].value" [class.registerInputerror]="!this.cita.data.field_paciente.und[0].value && showerrors"name="field_paciente" type="text"/>
           </div>
           <!--<div class="ModalInput_input" *ngIf="!(this.userData.userData.field_tipo_de_usuario.und[0].value == 1)">-->
             <div class="ModalInput_input" *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" >
@@ -26,7 +26,7 @@
                     <ion-icon name="refresh"></ion-icon>
                   </button>-->
                 </b>
-              <select [(ngModel)]="this.cita.data.field_cita_doctor.und[0]"  name="field_cita_doctor" class="input_select input">
+              <select [(ngModel)]="this.cita.data.field_cita_doctor.und[0]" [class.registerInputerror]="!this.cita.data.field_cita_doctor.und[0] && showerrors"  name="field_cita_doctor" class="input_select input">
                   <option *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="0" >SELECT</option>
                   <option *ngFor="let doc of this.docData.doctores"  value="{{doc.Uid}}" >{{doc.name}} </option>
                   <option *ngIf="this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="{{this.userData.userData.uid}}">{{this.userData.userData.name}}</option>

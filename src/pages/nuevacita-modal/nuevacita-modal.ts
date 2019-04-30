@@ -20,6 +20,7 @@ import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { UpdaterProvider } from '../../providers/updater/updater';
+import { IfObservable } from 'rxjs/observable/IfObservable';
 
 /**
  * Generated class for the NuevacitaModalPage page.
@@ -48,6 +49,7 @@ export class NuevacitaModalPage {
   selectedHourISO:string = '';
   type: 'string';
 
+
 date: Date;
 daysInThisMonth: any;
 daysInLastMonth: any;
@@ -64,6 +66,8 @@ isSelected: any;
 
 hours:any[] = new Array();
 hourIntervalMS:number = 30*60*1000;
+
+showerrors:boolean = false;
   
   constructor(
     public navCtrl: NavController, 
@@ -176,6 +180,7 @@ hourIntervalMS:number = 30*60*1000;
 
   async createCita(){
     if(!this.basicNewCitaValidation()){ return false; }
+    if(!this.notEmptyNewCitaValidation()){ return false; } 
     this.setCitaDateFromiNPUT();
     if(!this.citaDateValidation()){ return false; }
     
@@ -211,17 +216,42 @@ hourIntervalMS:number = 30*60*1000;
   this.close();
 }
 
+notEmptyNewCitaValidation(){
+  let ret = true;
+  console.log('notEmptyNewCitaValidation');
+  if(!this.checkIfInputfilledNPromtp(this.cita.data.field_paciente.und[0].value,ret)) ret = false;
+  //no hace falta revisar el doctor, porque ese ya esta validado.
+  return ret;
+}
+
+checkIfInputfilledNPromtp( input , actualret){
+  let ret = true;
+  console.log('enter');
+  if(!actualret){ return false;} ;
+  console.log('checkIfInputfilledNPromtp',input,input === null , input ? false : true );
+  if( input ? false : true ){
+    console.log('this input is not filled mf',input);
+    ret = false;
+    this.alert.presentAlert('Error','Revisar los campos marcados en rojo.');
+    this.showerrors = true;
+  }
+  return ret;
+}
+
 basicNewCitaValidation(){
   let ret = true;
   if(this.cita.data.field_telefono.und[0].value === null){
     this.cita.data.field_telefono.und[0].value = 0;
   }
+  
 
   if(this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])){
   }
   else{
     if( Number(this.cita.data.field_cita_doctor.und[0]) === 0 ){
       this.alert.presentAlert('Error','Debe elegir un doctor para esta cita');
+      this.showerrors = true;
+      console.log('showerrors',this.showerrors);
       ret = false;
     }
   }

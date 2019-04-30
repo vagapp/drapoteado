@@ -82,28 +82,33 @@ export class ProgresocitaModalPage {
           this.alert.presentAlert('Error','Introducir monto a pagar');
           return false;
         }*/
+       
+        //this.progressController.checkCobroStates('pp1');
         if(!this.validarPagarNOEMPTY()){
           this.alert.presentAlert('Error','Introducir monto a pagar.');
           return false;
         }
+        //this.progressController.checkCobroStates('pp2');
 
         if( !this.validarPagarNONEG() || !this.validarNotNaN() ){
           this.alert.presentAlert('Error','No se aceptan valores negativos');
           return false;
         }
+        //this.progressController.checkCobroStates('pp3');
       
         console.log('cantidad restante es',this.progressController.CantidadRestante);
         if( Number(this.progressController.CantidadRestante) < 0 ){
           this.alert.presentAlert('Error','Esta introduciendo un monto mayor al costo de la cita.');
           return false;
         }
+        //this.progressController.checkCobroStates('pp4');
         if(
           this.progressController.factura_cantidad > this.progressController.activeCita.costo
         ){
           this.alert.presentAlert('Error','El monto facturado no puede exceder el total de la consulta');
           return false;
         }
-      
+       // this.progressController.checkCobroStates('pp5');
        /* let title = 'Pagada';
         let msg = '¿Está seguro de que desea marcar esta cita como pagada?';
         

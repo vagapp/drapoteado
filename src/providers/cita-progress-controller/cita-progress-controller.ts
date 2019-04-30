@@ -89,17 +89,27 @@ export class CitaProgressControllerProvider {
   }
 
   pagarCitaActiva(){
+  this.checkCobroStates('end pca');
   this.activeCita.cobroEfectivo = this.cobroEfectivo == null ? 0 : this.cobroEfectivo;
-  this.activeCita.cobroCheque = this.cobroEfectivo == null ? 0 :this.cobroCheque;
-  this.activeCita.cobroTarjeta = this.cobroEfectivo == null ? 0 : this.cobroTarjeta;
+  this.activeCita.cobroCheque = this.cobroCheque == null ? 0 :this.cobroCheque;
+  this.activeCita.cobroTarjeta = this.cobroTarjeta == null ? 0 : this.cobroTarjeta;
   this.activeCita.data.field_facturar.und[0].value = this.factura;
-  this.activeCita.data.field_facturar_cantidad.und[0].value = this.cobroEfectivo == null ? 0 : this.factura_cantidad;
-  console.log('pagarCitaActiva');
-  console.log('this.cobroEfectivo',this.activeCita.cobroEfectivo); 
-  console.log('this.cobroCheque',this.activeCita.cobroCheque); 
-  console.log('this.cobroTarjeta',this.activeCita.cobroTarjeta); 
-  console.log('this.factura',this.activeCita.data.field_facturar.und[0].value); 
-  console.log('this.factura_cantidad',this.activeCita.data.field_facturar_cantidad.und[0].value); 
+  this.activeCita.data.field_facturar_cantidad.und[0].value = this.factura_cantidad == null ? 0 : this.factura_cantidad;
+  console.log('this.cobroEfectivo',JSON.stringify(this.activeCita.cobroEfectivo)); 
+  console.log('this.cobroCheque',JSON.stringify(this.activeCita.cobroCheque)); 
+  console.log('this.cobroTarjeta',JSON.stringify(this.activeCita.cobroTarjeta)); 
+  console.log('this.factura',JSON.stringify(this.activeCita.data.field_facturar.und[0].value)); 
+  console.log('this.factura_cantidad',JSON.stringify(this.activeCita.data.field_facturar_cantidad.und[0].value)); 
+  
+  }
+
+  checkCobroStates(msg){
+    console.log('checkCobroStates',msg);
+    console.log('this.cobroEfectivo',JSON.stringify(this.cobroEfectivo)); 
+    console.log('this.cobroCheque',JSON.stringify(this.cobroCheque)); 
+    console.log('this.cobroTarjeta',JSON.stringify(this.cobroTarjeta)); 
+    console.log('this.factura',JSON.stringify(this.factura)); 
+    console.log('this.factura_cantidad',JSON.stringify(this.factura_cantidad)); 
   }
 
   updateCitaActiva(){
