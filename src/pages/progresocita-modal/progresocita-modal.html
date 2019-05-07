@@ -73,9 +73,9 @@
             <div class="CitaDetailSection midFont">
                 <div class="costo-de-la-cita"><b>Costo de la Cita</b>
                     <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_ACTIVA) || progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA)" class="floatRight"><span class="fontSecondary">${{this.progressController.costoCita}}</span> <ion-icon name="menu"></ion-icon> </span>
-                    <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO)" class="floatRight"><span class="fontSecondary">${{progressController.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
+                    <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)" class="floatRight"><span class="fontSecondary">${{progressController.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
                 </div>
-                <div class="formas-de-pago" *ngIf="(progressController.activeCita.checkState(citasData.STATE_COBRO) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA,  userData.TIPO_CAJAYRECEPCION])) || (progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA) && permissions.checkUserPermission([userData.TIPO_DOCTOR]))">
+                <div class="formas-de-pago" *ngIf="((progressController.activeCita.checkState(citasData.STATE_COBRO)|| progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA,  userData.TIPO_CAJAYRECEPCION])) || (progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA) && permissions.checkUserPermission([userData.TIPO_DOCTOR]))">
                 <b>Formas de Pago</b>
                 <div class="pagos-modal ModalInput_input">
                     Efectivo

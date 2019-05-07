@@ -31,14 +31,18 @@ export class CitasDataProvider{
   public static STATE_FINALIZADA = 4;
   public static STATE_CANCELADA = 5;
   public static STATE_ELIMINADA = 6;
+  public static STATE_ADEUDO = 7;
 
+  
   public static STATE_ORDER_ACTIVA = 1;
   public static STATE_ORDER_CONFIRMADA = 2;
   public static STATE_ORDER_COBRO = 3;
-  public static STATE_ORDER_PENDIENTE = 4;
-  public static STATE_ORDER_FINALIZADA = 5;
-  public static STATE_ORDER_CANCELADA = 6;
-  public static STATE_ORDER_ELIMINADA = 7;
+  public static STATE_ORDER_ADEUDO = 4;
+  public static STATE_ORDER_PENDIENTE = 5;
+  public static STATE_ORDER_FINALIZADA = 6;
+  public static STATE_ORDER_CANCELADA = 7;
+  public static STATE_ORDER_ELIMINADA = 8;
+  
 
   public static STATE_PENDIENTE_COLOR = '#6ddeba';
   public static STATE_CONFIRMADA_COLOR = '#50A3C7';
@@ -47,6 +51,7 @@ export class CitasDataProvider{
   public static STATE_FINALIZADA_COLOR = '#909090';
   public static STATE_CANCELADA_COLOR = '#800005';
   public static STATE_ELIMINADA_COLOR = '#800005';
+  public static STATE_ADEUDO_COLOR = '#C1272D';
 
   public static SERVICIO_CORTESIA_NID = "1647";
 
@@ -58,6 +63,7 @@ export class CitasDataProvider{
   get STATE_FINALIZADA(){return CitasDataProvider.STATE_FINALIZADA;}
   get STATE_CANCELADA(){return CitasDataProvider.STATE_CANCELADA;}
   get STATE_ELIMINADA(){return CitasDataProvider.STATE_CANCELADA;}
+  get STATE_ADEUDO(){return CitasDataProvider.STATE_ADEUDO;}
 
   get STATE_ORDER_PENDIENTE(){return CitasDataProvider.STATE_ORDER_PENDIENTE;}
   get STATE_ORDER_CONFIRMADA(){return CitasDataProvider.STATE_ORDER_CONFIRMADA;}
@@ -66,6 +72,7 @@ export class CitasDataProvider{
   get STATE_ORDER_FINALIZADA(){return CitasDataProvider.STATE_ORDER_FINALIZADA;}
   get STATE_ORDER_CANCELADA(){return CitasDataProvider.STATE_ORDER_CANCELADA;}
   get STATE_ORDER_ELIMINADA(){return CitasDataProvider.STATE_ORDER_CANCELADA;}
+  get STATE_ORDER_ADEUDO(){return CitasDataProvider.STATE_ORDER_ADEUDO;}
 
   get STATE_PENDIENTE_COLOR(){return CitasDataProvider.STATE_PENDIENTE_COLOR;}
   get STATE_CONFIRMADA_COLOR(){return CitasDataProvider.STATE_CONFIRMADA_COLOR;}
@@ -74,6 +81,7 @@ export class CitasDataProvider{
   get STATE_FINALIZADA_COLOR(){return CitasDataProvider.STATE_FINALIZADA_COLOR;}
   get STATE_CANCELADA_COLOR(){return CitasDataProvider.STATE_CANCELADA_COLOR;}
   get STATE_ELIMINADA_COLOR(){return CitasDataProvider.STATE_ELIMINADA_COLOR;}
+  get STATE_ELIMINADA_ADEUDO(){return CitasDataProvider.STATE_ADEUDO_COLOR;}
 
 
 
@@ -212,6 +220,7 @@ export class CitasDataProvider{
       case CitasDataProvider.STATE_FINALIZADA: ret = CitasDataProvider.STATE_FINALIZADA_COLOR; break;
       case CitasDataProvider.STATE_CANCELADA: ret = CitasDataProvider.STATE_CANCELADA_COLOR; break;
       case CitasDataProvider.STATE_ELIMINADA: ret = CitasDataProvider.STATE_ELIMINADA_COLOR; break;
+      case CitasDataProvider.STATE_ADEUDO: ret = CitasDataProvider.STATE_ADEUDO_COLOR; break;
       default: ret = CitasDataProvider.STATE_FINALIZADA_COLOR;
     }
     return ret;
@@ -227,6 +236,7 @@ export class CitasDataProvider{
       case CitasDataProvider.STATE_FINALIZADA: ret = 'Finalizada'; break;
       case CitasDataProvider.STATE_CANCELADA: ret = 'Cancelada'; break;
       case CitasDataProvider.STATE_ELIMINADA: ret = 'Eliminada'; break;
+      case CitasDataProvider.STATE_ADEUDO: ret = 'Adeudo'; break;
       default: ret = 'Error';
     }
     return ret;
