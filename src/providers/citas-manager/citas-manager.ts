@@ -62,8 +62,8 @@ export class CitasManagerProvider {
   }
 
 
-  requestCitas( from:number = this.datep.nowStart, to:number = this.datep.nowEnd+(1000*60*60*24*365*5) ):Observable<any>{
-    let observable = this.getCitasObservable(from,to).share();
+  requestCitas( from:number = this.datep.nowStart, to:number = this.datep.nowEnd+(1000*60*60*24*365*5), paciente:string=null ):Observable<any>{
+    let observable = this.getCitasObservable(from,to,this.doctores.doctoresIDs,null,null,paciente).share();
     observable.subscribe(
       (val)=>{ console.log('obtained citas',val);
       this.setCitas(val);
@@ -79,6 +79,7 @@ export class CitasManagerProvider {
     doctores:number[] = this.doctores.doctoresIDs,  
     cajas:number[] = null,  
     recepciones:number[] = null,
+    paciente:string = null
   ):Observable<any>{
     console.log('from',new Date(from));
     console.log('to',new Date(to));
@@ -89,7 +90,8 @@ export class CitasManagerProvider {
     console.log('doctores',doctores);
     console.log('cajas',cajas);
     console.log('recepciones',recepciones);
-    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=${from}--${to}`;
+    let pacientefilter= `${paciente !== null ? '&args[4]=all&args[5]=all&args[6]=all&args[7]='+paciente : ''}`;
+    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=${(from !== null && to !== null) ?  from+'--'+to: 'all'}${pacientefilter}`;
     //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
     let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
     console.log('url getting citas',url);

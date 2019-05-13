@@ -11,6 +11,7 @@ import { CitasDataProvider } from '../citas-data/citas-data';
 import { CitasManagerProvider } from '../citas-manager/citas-manager';
 import { LoaderProvider } from '../loader/loader';
 import { ServiciosManagerProvider } from '../servicios-manager/servicios-manager';
+import { DateProvider } from '../date/date';
 
 /*
   Generated class for the UpdaterProvider provider.
@@ -32,7 +33,8 @@ export class UpdaterProvider {
     public citasData: CitasDataProvider,
     public citasManager: CitasManagerProvider,
     public loader:LoaderProvider,
-    public serviciosManager: ServiciosManagerProvider
+    public serviciosManager: ServiciosManagerProvider,
+    public datep: DateProvider
    
     ) {
    
@@ -78,10 +80,41 @@ export class UpdaterProvider {
 
   //las citas no se actualizan bien. no se filtran doctores que ya no se tienen agregados.
   //tengo dos listas de doctores, una en docdata y otra en subsdata. no se cual se usa para que. porque hay dos? que me pasa?
-  async updateCitas(){
+  async updateCitas(clear:boolean = false){
     //this.citasData.citas = new Array();
     //this.citasData.daysCitas = new Array();
-    await this.citasManager.requestCitas().toPromise();
+    //this.citasManager.citasData.startDateFilter; 
+    //this.citasManager.citasData.endDateFilter;
+
+    console.log('updateCitas',clear,'from',this.citasData.startDateFilter,'to',this.citasManager.citasData.endDateFilter);
+    //setting defaults.
+    let def_from = this.datep.nowStart;
+    let def_to = this.datep.nowEnd+(1000*60*60*24*365*5);
+    let def_paciente = null;
+   //Checking filters
+    if(this.citasData.pacienteFilter != null){
+      clear = true;
+      def_paciente = this.citasData.pacienteFilter;
+    }
+    
+    if(this.citasData.startDateFilter !== null && Number(this.citasData.startDateFilter) !== Number(0) ){
+      clear = true;
+      def_from = this.citasData.startDateFilter;
+      def_to = this.citasData.endDateFilter;
+    }else{
+      if(this.citasData.pacienteFilter != null){
+        def_from = null;
+        def_to = null;
+      }
+    }
+    //clearing if needed or filtered.
+    if(clear){
+      console.log('entering clear');
+      this.citasData.citas = new Array();
+      this.citasData.daysCitas = new Array();
+    }
+    //reloading.
+    await this.citasManager.requestCitas(def_from,def_to,def_paciente).toPromise();
     this.docMan.evaluateCitas();
   }
 

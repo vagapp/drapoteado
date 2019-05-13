@@ -13,6 +13,8 @@ import { WsMessengerProvider } from '../ws-messenger/ws-messenger';
 import { CitaProgressControllerProvider } from '../cita-progress-controller/cita-progress-controller';
 import { DateProvider } from '../date/date';
 import { ReportesManagerProvider } from '../reportes-manager/reportes-manager';
+import { UpdaterProvider } from '../updater/updater';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 /*
@@ -26,6 +28,8 @@ export class CitasPresentatorProvider {
   dateFilterStart:number = 0;
   pacienteFilter:string = null;
   filteredCitas:boolean = false;
+  filteredtimestamp:Date = null;
+  filterchangeBusy:boolean = false;
   editfinish:boolean = false;
 
   constructor(
@@ -37,7 +41,8 @@ export class CitasPresentatorProvider {
     public modalCtrl: ModalController,
     public wsMessenger: WsMessengerProvider,
     public progresSController: CitaProgressControllerProvider,
-    public reportesMan: ReportesManagerProvider
+    public reportesMan: ReportesManagerProvider,
+    public updater: UpdaterProvider
   ) {
 
   }
@@ -217,8 +222,31 @@ export class CitasPresentatorProvider {
   
 
 filterChange(){
+  this.filteredtimestamp = new Date();
+  console.log('filterChange',this.filteredtimestamp,this.filteredtimestamp.getTime());
+  if(!this.filterchangeBusy){
+    this.filterchangeBusy = true;
+    const view = this;
+    let Filterinterval = setInterval(function(){ 
+      let aux_now = new Date();
+      console.log('filter checking times',(aux_now.getTime() - view.filteredtimestamp.getTime()));
+      if((aux_now.getTime() - view.filteredtimestamp.getTime()) > 500){
+        view.filterChangeExecute();
+        view.filterchangeBusy = false;
+      clearInterval(Filterinterval);
+      }
+     }, 100);
+  }
+
+  
+  
+}
+
+filterChangeExecute(){
+  //si el timestamp es null, guardar, y esperar.
   console.log('this.dateFilterStart',this.dateFilterStart);
   //2019-01-08
+  //esta fecha k prk la puse aki o _ o 2019-05-13
   if(Number(this.dateFilterStart) != null && Number(this.dateFilterStart) !== 0){
   let date_Filter = DateProvider.dateWOffset(new Date(this.dateFilterStart));
   this.citasManager.citasData.customFilters = true;
@@ -234,6 +262,15 @@ filterChange(){
     this.filteredCitas = true;
   }
   console.log('this.dateFilterStart END',this.dateFilterStart);
+  this.loader.presentLoader('cargando...');
+  this.updater.updateCitas().then(()=>{
+    this.loader.dismissLoader();
+  });
+  //tomar en cuenta el filter en la busqueda de citas. pero que no afecte el reporte de hoy? segun esto no lo afecta. veamos entonces.
+
+  console.log('changing filter');
+
+  
   /*this.loader.presentLoader('cargando...');
   console.log("changing filter",this.dateFilterStart);
   let aux_fdate = DateProvider.dateWOffset(new Date(this.dateFilterStart));
@@ -249,11 +286,17 @@ filterChange(){
   );*/
 }
 
+
+
 removeFilter(){
 this.citasManager.citasData.resetDateFilters();
 this.dateFilterStart = null;
 this.filteredCitas = false;
-this.citasManager.citasData.defaultSort();
+this.loader.presentLoader('cargando...');
+  this.updater.updateCitas(true).then(()=>{
+    this.loader.dismissLoader();
+  });
+//this.citasManager.citasData.defaultSort();
 }
 
 }
