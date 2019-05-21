@@ -3,6 +3,7 @@ import { Debugger } from './debugger';
 import { servicios } from './servicios';
 import { DateProvider } from '../date/date';
 import { CitasDataProvider } from '../citas-data/citas-data';
+import { IfObservable } from 'rxjs/observable/IfObservable';
 
 
 export class Citas{
@@ -24,6 +25,7 @@ export class Citas{
     serviceDataSet:boolean = false; //describe si los servicios de la cita han sido seteados cuando esta activa, evitando que se actualicen externamente.
     cobroDataSet:boolean = false; //describe si los cobros de la cita han sido seteados cuando esta en cobro, evitando que se actualicen externamente.
     reporteServicios:any[] = new Array();
+    pagos:any[] = new Array();
     doctor_playerid:string = null;
     caja_playerid:string = null;
     recepcion_playerid:string = null;
@@ -57,12 +59,27 @@ export class Citas{
   
     calcularCobroTotal(){ this.data.field_cobro.und[0].value = this.cobroTarjeta + this.cobroCheque + this.cobroEfectivo }
 
+    get cantidadPagada():number{
+        let cantidad_pagada = 0;
+        this.pagos.forEach(pago => {
+            console.log(pago);
+            console.log(pago['efe']);
+            cantidad_pagada += (Number(pago['efe']) + Number(pago['tar']) +Number(pago['che'])); 
+        });
+        return cantidad_pagada;
+        console.log('okeiwe al final esta pagado esto',cantidad_pagada);
+    }
+
+    get restantePagos():number{
+        return this.costo - this.cantidadPagada;
+    }
     
     /**
      * Sets Data from a result of the citas view on drupal.
      **/
     setData( data_input ){
         console.log("setData on cita",data_input);
+        console.log('field_fechas_reporte',data_input.field_fechas_reporte);
           this.data = UserDataProvider.getEmptyCita();
           this.data.Nid = data_input.Nid;
           this.data.doctor_name = data_input.doctor_name;
@@ -85,12 +102,16 @@ export class Citas{
           this.data.field_retrasda.und[0].value = data_input.field_retrasda;
           this.data.field_hora_cobromsb.und[0].value = 0;
           this.data.field_fecha_reporte.und[0].value = 0;
+          this.data.field_pagos_json = null;
+          this.data.field_fechas_reporte = {und:[]};
           this.data.field_caja_nombre.und[0].value = data_input.field_caja_nombre ? data_input.field_caja_nombre : "sin nombre";
           if(data_input.field_fecha_reporte)  this.data.field_fecha_reporte.und[0].value = data_input.field_fecha_reporte;
           if(data_input.field_hora_cobromsb)  this.data.field_hora_cobromsb.und[0].value = data_input.field_hora_cobromsb;
           if(data_input.field_hora_iniciomsb) this.data.field_hora_iniciomsb.und[0].value = Number(data_input.field_hora_iniciomsb.value);
           if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);
           if(data_input['field_servicios_json'] && data_input['field_servicios_json']['value']) this.data.aux_servicios_json = data_input['field_servicios_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
+          if(data_input['field_pagos_json'] && data_input['field_pagos_json']['value']) this.data.field_pagos_json = data_input['field_pagos_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
+          if(data_input.field_fechas_reporte) this.data.field_fechas_reporte.und = data_input.field_fechas_reporte;
           if(data_input.doctor_playerid) this.doctor_playerid = data_input.doctor_playerid;
           if(data_input.recepcion_playerid)  this.recepcion_playerid = data_input.recepcion_playerid;
           if(data_input.caja_playerid)  this.caja_playerid = data_input.caja_playerid;
@@ -102,6 +123,7 @@ export class Citas{
           //this.setDate(data_input.field_date.value);
           this.processData();
           console.log("savedData",this.data);
+          console.log('cita ended laik',this);
         }
 
     
@@ -112,11 +134,11 @@ export class Citas{
         this.dateMs =  this.data.field_datemsb.und[0].value;
         console.log('setting processData dateMs',this.dateMs);
         if(this.data.aux_servicios_json) this.setServiciosReport(this.data.aux_servicios_json);
+        if(this.data.field_pagos_json) this.setPagosJson(this.data.field_pagos_json);
         this.facturado = Number( this.data.field_facturar_cantidad.und[0].value);
         this.setDateUT(this.data.field_datemsb.und[0].value);
         console.log('processdata hora cobro check',this.data.field_hora_cobromsb);
         this.setDurationDates(this.data.field_hora_iniciomsb.und[0].value,this.data.field_hora_finalmsb.und[0].value);
-       
     }
 
             /**
@@ -145,6 +167,17 @@ export class Citas{
     setServiciosReport( input_data ){
         this.reporteServicios =  JSON.parse(input_data);
         Debugger.log(['added reportservicios', this.reporteServicios]);
+    }
+
+    setPagosJson( input_data ){
+        console.log('input_data is',input_data);
+        if(input_data['und']){
+            console.log('isarray');
+        this.pagos =  JSON.parse(input_data['und'][0]['value']);
+        }else{
+            console.log('is not array');
+            this.pagos =  JSON.parse(input_data);
+        }
     }
 
   

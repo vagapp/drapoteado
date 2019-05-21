@@ -1,5 +1,5 @@
 
-import { Injectable } from '@angular/core';
+import { Injectable, ɵConsole } from '@angular/core';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { AlertProvider } from '../alert/alert';
 import { LoaderProvider } from '../loader/loader';
@@ -64,7 +64,7 @@ export class CitasPresentatorProvider {
     );
     }
  
-  async updateStateRequest ( cita, state ) {
+  async updateStateRequest( cita, state ) {
     this.loader.presentLoader("Actualizando...");
     if(!this.reportesMan.reportesData.isSetTodayReport) await this.reportesMan.getTodayReport();
     let saveDate = !this.progresSController.editfinish;
@@ -73,7 +73,8 @@ export class CitasPresentatorProvider {
         state = CitasDataProvider.STATE_ADEUDO;
       }
     }
-    console.log('antes de guardar el state quedo ',state);
+    //console.log('antes de guardar el state quedo ',state);
+    console.log('antes de guardar el state quedo',cita);
     let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise();
     //let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).subscribe((val)=>{console.log('wele a pedo',val),(error)=>{console.log('wele a pedo',error)}});
     if(Number(state) === CitasDataProvider.STATE_CONFIRMADA && cita.doctor_playerid){  //crear notificacion para doctor a quien le confirmaron la cita
@@ -85,7 +86,6 @@ export class CitasPresentatorProvider {
     await this.reportesMan.checkUpdateTodayDocs(cita.data.field_cita_doctor.und[0]);
     this.wsMessenger.generateWSupdateMessage(cita);
     this.setBlockNdismiss(cita.Nid);
-    
   } 
 
   editCita( cita ){
@@ -237,9 +237,6 @@ filterChange(){
       }
      }, 100);
   }
-
-  
-  
 }
 
 filterChangeExecute(){

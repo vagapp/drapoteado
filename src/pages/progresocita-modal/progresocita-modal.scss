@@ -14,4 +14,18 @@ page-progresocita-modal {
    .removeServicebtn{
        float: right;
    }
+
+   .pagos_anteriores {
+    font-size: 0.7em;
+    display: flex;
+    flex-flow: column;
+    margin-top: 15px;
+    }
+
+    .pagos_anteriores .pagodetail{
+        margin: 1px;
+        display: flex;
+        flex-flow: row;
+        justify-content: space-evenly;
+    }
 }

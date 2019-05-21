@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { reportes } from '../user-data/reportes';
 import { Citas } from '../user-data/citas';
 import { CitasManagerProvider } from '../citas-manager/citas-manager';
+import { ConditionalExpr } from '@angular/compiler';
 
 /*
   Generated class for the ReporteCitasProvider provider.
@@ -58,7 +59,13 @@ export class ReporteCitasProvider {
       for(let cita of citas_data){
         let aux_cita = new Citas();
         aux_cita.setData(cita);
-        aux_citalit.push(aux_cita);
+        let exists = aux_citalit.find((citax)=>{ return Number(citax.Nid) === Number(cita.Nid)});
+        if(!exists){
+         
+         aux_citalit.push(aux_cita);
+        }else{
+          console.log('blocked report cita',cita);
+        }
       }
       return aux_citalit;
   }

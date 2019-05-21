@@ -125,6 +125,7 @@ export class WebsocketServiceProvider {
    * este metodo recive un mensaje y filtra segun si debe recivir la cita, y la procesa.
    */
   async addCita(message:Message){
+    console.log('addCita recieved',message);
     if(this.FilterMessageCita(message)){
       console.log("cita2addfiltered");
       let aux_cita = this.cmanager.generateCitaFullData(message.content);

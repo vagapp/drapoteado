@@ -35,7 +35,7 @@ export class CitaProgressControllerProvider {
   checkboxMode:boolean = true;//checkbox mode porque quisieron checkbox pero no es tan viable a ver que pasa.
   checkboxServicesList
 
-  get CantidadRestante(){ return 0+ ( (Number(this.activeCita.costo)) - (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) ) ); }
+  get CantidadRestante(){ return 0+ ( (Number(this.activeCita.restantePagos)) - (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) ) ); }
 
 
   constructor(
@@ -95,13 +95,38 @@ export class CitaProgressControllerProvider {
   this.activeCita.cobroTarjeta = this.cobroTarjeta == null ? 0 : this.cobroTarjeta;
   this.activeCita.data.field_facturar.und[0].value = this.factura;
   this.activeCita.data.field_facturar_cantidad.und[0].value = this.factura_cantidad == null ? 0 : this.factura_cantidad;
+  this.citasManager.setCitaFechaReporte( this.activeCita, true );
+  /*let aux_pago = new Array();
+  aux_pago['efe'] = this.cobroEfectivo == null ? ''+0 : ''+this.cobroEfectivo;
+  aux_pago['tar'] = this.cobroTarjeta == null ? ''+0 : ''+this.cobroTarjeta;
+  aux_pago['che'] = this.cobroCheque == null ? ''+0 :''+this.cobroCheque;
+  aux_pago['fac'] = this.factura_cantidad == null ? ''+0 : ''+this.factura_cantidad;
+  aux_pago['fec'] = ''+new Date().getTime();
+  this.activeCita.pagos.push(aux_pago);*/
+
+  let aux_pago = {
+    efe:this.cobroEfectivo == null ? ''+0 : ''+this.cobroEfectivo,
+    tar:this.cobroTarjeta == null ? ''+0 : ''+this.cobroTarjeta,
+    che:this.cobroCheque == null ? ''+0 :''+this.cobroCheque,
+    fac: this.factura_cantidad == null ? ''+0 : ''+this.factura_cantidad,
+    fec:''+new Date().getTime()
+  }
+  this.activeCita.pagos.push(aux_pago);
+
+
+  console.log('pagos struct',this.activeCita.pagos);
+  console.log('stringify',JSON.stringify(this.activeCita.pagos) );
+  this.activeCita.data.field_pagos_json =  {und:[{value:''}]};
+  this.activeCita.data.field_pagos_json.und[0].value= JSON.stringify(this.activeCita.pagos);
+  console.log('pagos field',this.activeCita.data.field_pagos_json);
   console.log('this.cobroEfectivo',JSON.stringify(this.activeCita.cobroEfectivo)); 
   console.log('this.cobroCheque',JSON.stringify(this.activeCita.cobroCheque)); 
   console.log('this.cobroTarjeta',JSON.stringify(this.activeCita.cobroTarjeta)); 
   console.log('this.factura',JSON.stringify(this.activeCita.data.field_facturar.und[0].value)); 
   console.log('this.factura_cantidad',JSON.stringify(this.activeCita.data.field_facturar_cantidad.und[0].value)); 
-  
   }
+
+  
 
   checkCobroStates(msg){
     console.log('checkCobroStates',msg);

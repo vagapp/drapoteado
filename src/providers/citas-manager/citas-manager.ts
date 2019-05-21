@@ -114,7 +114,7 @@ export class CitasManagerProvider {
     console.log('doctores',doctores);
     console.log('cajas',cajas);
     console.log('recepciones',recepciones);
-    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=all&args[4]=all&args[5]=all&args[6]=${from}--${to}`;
+    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=all&args[4]=all&args[5]=all&args[6]=all&args[7]=all&args[8]=${from}--${to}`;
     //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
     let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
     console.log('url getting citas',url);
@@ -216,7 +216,7 @@ export class CitasManagerProvider {
     if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){ 
       fechacobroset = this.setCitaFechaCobro(cita,saveDate); 
       this.setCaja(cita); 
-      this.setCitaFechaReporte(cita,saveDate); 
+      //this.setCitaFechaReporte(cita,saveDate); 
       reportedateset = true; 
     }
     if(Number(state) === Number(CitasDataProvider.STATE_CANCELADA)){
@@ -254,15 +254,25 @@ export class CitasManagerProvider {
   }
 
   setCitaFechaReporte(cita:Citas,saveDate:boolean = true, date:Date = new Date()){
+    console.log('setCitaFechaReporte',cita,saveDate,date); 
     if(!saveDate) return false;
     console.log('saving date'); 
     console.log('citas data',cita.data);
-    if(!cita.data.field_fecha_reporte){
+    if(!cita.data.field_fechas_reporte){
+      console.log('no hay field_fechas_reporte data poniendolo');
+      cita.data.field_fechas_reporte = { und:[] };
+    }
+    console.log('saving date',cita.data.field_fechas_reporte); 
+    cita.data.field_fechas_reporte['und'].push( {'value': date.getTime()} );
+    console.log('saving date',cita.data.field_fechas_reporte); 
+    return true;
+    /*if(!cita.data.field_fecha_reporte){
       cita.data.field_fecha_reporte = {'und':[{'value': 0}]} ;
     }
     cita.data.field_fecha_reporte['und'][0]['value'] = date.getTime();
-    return true;
+*/
   }
+
 
 
   getDoctorOFCita( Cita:Citas ):Doctores{

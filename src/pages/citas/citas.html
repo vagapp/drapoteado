@@ -67,7 +67,7 @@
                     <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="citasPresentator.editCita(cita)" *ngIf=" cita.checkState(citasData.STATE_COBRO) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]) "/>
                     <button  *ngIf="cita.checkState(citasData.STATE_PENDIENTE) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION, this.userData.TIPO_CAJAYRECEPCION])" (click)="citasPresentator.confirmarCita(cita)"  class="bgColorSecondary generalButton tableButton">Confirmar</button>
                     <button  *ngIf="cita.checkState(citasData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Activar</button>
-                   <!--<button  *ngIf="cita.checkState(citasData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.desConfirmarCita(cita);" class="bgColorSecondary generalButton tableButton">No confirmada</button>-->
+                    <!--<button  *ngIf="cita.checkState(citasData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.desConfirmarCita(cita);" class="bgColorSecondary generalButton tableButton">No confirmada</button>-->
     
                     <button  *ngIf="cita.checkState(citasData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Ver Progreso</button>
                     <!--<button  *ngIf="cita.checkState(citasData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.desactivarCita(cita);" class="bgColorSecondary generalButton tableButton">Desactivar</button>-->
@@ -78,8 +78,6 @@
                </tr>
           </tbody>
         </table>
-     
     </div>
-    
 <footer></footer>
 </ion-content>

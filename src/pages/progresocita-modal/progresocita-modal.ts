@@ -14,6 +14,7 @@ import { CitaProgressControllerProvider } from '../../providers/cita-progress-co
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { IfObservable } from 'rxjs/observable/IfObservable';
 import { BaseUrlProvider } from '../../providers/base-url/base-url';
+import { DateProvider } from '../../providers/date/date';
 
 
 @IonicPage()
@@ -36,7 +37,8 @@ export class ProgresocitaModalPage {
     public notiMan: NotificationsManagerProvider,
     public citasPresentator: CitasPresentatorProvider,
     public progressController: CitaProgressControllerProvider,
-    public permissions: PermissionsProvider
+    public permissions: PermissionsProvider,
+    public datep: DateProvider
    
   ) {
   }
@@ -103,7 +105,7 @@ export class ProgresocitaModalPage {
         }
         //this.progressController.checkCobroStates('pp4');
         if(
-          this.progressController.factura_cantidad > this.progressController.activeCita.costo
+          this.progressController.factura_cantidad > this.progressController.activeCita.restantePagos
         ){
           this.alert.presentAlert('Error','El monto facturado no puede exceder el total de la consulta');
           return false;
@@ -129,8 +131,15 @@ export class ProgresocitaModalPage {
 
       async pagarActualCita(){
         this.progressController.pagarCitaActiva();
+        console.log('pagarActualCita',this.progressController.activeCita);
         await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
         this.close();
+      }
+
+      getDateString(datenumber: number):String{
+       let aux_dates = DateProvider.getDisplayableDates(new Date(Number(datenumber)));
+       console.log(aux_dates);
+       return aux_dates.date +' '+aux_dates.time;
       }
 
       //esta validacion revisa que si se meta algo en los campos de cobro caundo se paga la cita. si no se pone nada de nada te avisa que no le metiste nada woe que malo eres
