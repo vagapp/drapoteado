@@ -30,7 +30,16 @@ export class Citas{
     caja_playerid:string = null;
     recepcion_playerid:string = null;
     opendetail=false;
-    
+
+    //variables para reportes con pagos incluidos
+    pagosfrom:number = 0;
+    pagosto:number = 0;    
+    pagosEfectivo:number = 0;
+    pagosCheque:number = 0;
+    pagosTarjeta:number = 0;
+    pagosFacturado: number = 0;
+    pagosTotal:number = 0;
+    originactivereport:boolean = false;
     
     constructor(){
         this.init();
@@ -40,6 +49,7 @@ export class Citas{
         this.addedServices = new Array();
         this.data = UserDataProvider.getEmptyCita();
     }
+    
 
     get doctor_name(){return this.data.doctor_name;}
     get doctor_alias(){return this.data.doctor_alias;}
@@ -47,16 +57,16 @@ export class Citas{
     get paciente(){ return this.data.field_paciente.und[0].value;}
     get costo(){return Number(this.data.field_costo_sobrescribir.und[0].value);}
     get cobro(){return Number(this.data.field_cobro.und[0].value)}
-    get cobroCheque(){return Number(this.data.field_cobro_cheque.und[0].value);}
-    get cobroEfectivo(){return Number(this.data.field_cobro_efectivo.und[0].value);}
-    get cobroTarjeta(){return Number(this.data.field_cobro_tarjeta.und[0].value);}
+    //get cobroCheque(){return Number(this.data.field_cobro_cheque.und[0].value);}
+    //get cobroEfectivo(){return Number(this.data.field_cobro_efectivo.und[0].value);}
+    //get cobroTarjeta(){return Number(this.data.field_cobro_tarjeta.und[0].value);}
     get CantidadRestante(){ return (Number(this.costo) - Number(this.cobro) ); }
     get stateLabel(){ return CitasDataProvider.getStateLabel(Number(this.data.field_estado.und[0].value)); }
     get stateColor(){ return CitasDataProvider.getStateColor(Number(this.data.field_estado.und[0].value));}
     set cobroCheque(val){ this.data.field_cobro_cheque.und[0].value = Number(val); this.calcularCobroTotal();} 
     set cobroEfectivo(val){ this.data.field_cobro_efectivo.und[0].value = Number(val); this.calcularCobroTotal();}
     set cobroTarjeta(val){ this.data.field_cobro_tarjeta.und[0].value = Number(val); this.calcularCobroTotal();}
-  
+    
     calcularCobroTotal(){ this.data.field_cobro.und[0].value = this.cobroTarjeta + this.cobroCheque + this.cobroEfectivo }
 
     get cantidadPagada():number{
@@ -67,12 +77,61 @@ export class Citas{
             cantidad_pagada += (Number(pago['efe']) + Number(pago['tar']) +Number(pago['che'])); 
         });
         return cantidad_pagada;
-        console.log('okeiwe al final esta pagado esto',cantidad_pagada);
     }
 
     get restantePagos():number{
         return this.costo - this.cantidadPagada;
     }
+
+    get PagosonFecha(){
+        if(this.pagosfrom === 0){
+            return this.pagos;
+        } else
+        return this.pagos.filter((pago)=>{
+            return (Number(pago.fec) >= Number( this.pagosfrom) && Number(pago.fec) < Number(this.pagosto));
+        });
+    }
+
+ 
+
+    
+    //obtiene los pagos que se hicieron a esta cita de fecha from a fecha to.
+    setPagosFecha(from:number, to:number){
+        console.log('setPagosFecha');
+        this.pagosfrom = from;
+        this.pagosto = to;
+
+        this.pagosEfectivo = 0;
+        this.pagosCheque = 0;
+        this.pagosTarjeta = 0;
+        this.pagosFacturado = 0;
+
+        console.log(this.PagosonFecha);
+
+        this.PagosonFecha.forEach(pago => {
+            console.log(pago);
+            this.pagosEfectivo += Number(pago.efe);
+            this.pagosCheque += Number(pago.che);
+            this.pagosTarjeta += Number(pago.tar);
+            this.pagosFacturado += Number(pago.fac);
+        });
+
+        console.log('setPagosFecha cita is',this);
+        //originactivereport
+        //field_datemsb  
+        if( Number(this.dateMs) >= this.pagosfrom && Number(this.dateMs) < this.pagosto){
+            this.originactivereport = true;
+        }else{
+            this.originactivereport = false;
+        }
+
+        console.log( this.pagosEfectivo);
+        this.pagosTotal =  this.pagosEfectivo + this.pagosCheque + this.pagosTarjeta;
+    }
+
+    
+ 
+    
     
     /**
      * Sets Data from a result of the citas view on drupal.

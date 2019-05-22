@@ -281,7 +281,19 @@ async openReportGenerate( report:reportes = null ){
     this.calcularCitasPorCobrar();
     let filteredCitas = CitasDataProvider.sortByDate(this.getFilteredCitasShow());
     for(let cita of filteredCitas){
-      if(!cita.checkState(CitasDataProvider.STATE_CANCELADA)){
+      console.log('evaluateCitas citra',cita);
+      if(!cita.checkState(CitasDataProvider.STATE_CANCELADA)){ // si no esta cancelada se interpretan los totales.
+      cita.setPagosFecha(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS); //este metodo pone algunas cosas del reporte en la cita. porque si we
+      let aux_costo = Number(cita.costo ? cita.costo : 0 );
+      let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
+     
+      this.duracionTotalMs += aux_duracion;
+      this.costoTotal += aux_costo;
+      this.total += cita.pagosTotal;
+      this.totalefectivo += cita.pagosEfectivo;
+      this.totalTarjeta += cita.pagosTarjeta;
+      this.totalCheques += cita.pagosCheque;
+      /*
       let aux_costo = Number(cita.costo ? cita.costo : 0 );
       let aux_cobro = Number(cita.cobro ? cita.cobro : 0 );
       let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
@@ -294,9 +306,9 @@ async openReportGenerate( report:reportes = null ){
       this.total += aux_cobro;
       this.totalefectivo+=aux_cobroEfectivo;
       this.totalTarjeta+=aux_cobroTarjeta;
-      this.totalCheques+=aux_cobroCheque;
+      this.totalCheques+=aux_cobroCheque;*/
 
-      if(aux_costo > aux_cobro && !cita.checkState(CitasDataProvider.STATE_COBRO) ){ this.cajaAdeudo += aux_costo - aux_cobro;  }
+      if(aux_costo > cita.pagosTotal && !cita.checkState(CitasDataProvider.STATE_COBRO) ){ this.cajaAdeudo += aux_costo - cita.pagosTotal;  }
       /*if(cita.costo) this.costoTotal += cita.costo;
       if(cita.cobro) this.total+= cita.cobro;
       if(cita.costo && cita.cobro && cita.costo > cita.cobro){ 
