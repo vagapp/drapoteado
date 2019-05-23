@@ -60,6 +60,7 @@ export class ReportPresentatorProvider {
 	totalcuentas:number;
   totalAdeudo:number;
   costoTotal:number;
+  AdeudosCobrados:number; //total de adeudos del estado adeudo cobrados en este dia. (reporte)
 
   facturadoTotal:number = 0;
 
@@ -286,13 +287,31 @@ async openReportGenerate( report:reportes = null ){
       cita.setPagosFecha(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS); //este metodo pone algunas cosas del reporte en la cita. porque si we
       let aux_costo = Number(cita.costo ? cita.costo : 0 );
       let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
+      if(cita.originactivereport){ //esta cita fue originada el dia de este reporte y sus totales se manejan normalmente.
+        this.duracionTotalMs += aux_duracion;
+        this.costoTotal += aux_costo;
+        this.total += cita.pagosTotal;
+        this.totalefectivo += cita.pagosEfectivo;
+        this.totalTarjeta += cita.pagosTarjeta;
+        this.totalCheques += cita.pagosCheque;
+        if(aux_costo > cita.pagosTotal && !cita.checkState(CitasDataProvider.STATE_COBRO) ){ this.cajaAdeudo += aux_costo - cita.pagosTotal;  }
+        this.facturadoTotal += cita.pagosFacturado;
+        //if(cita.data.field_facturar.und && cita.data.field_facturar.und[0].value) this.facturadoTotal += Number(cita.data.field_facturar_cantidad.und[0].value);
+      }else{ //esta cita aparece en este reporte porque se abono este dia, los totales se toman en cuenta diferente.
+        this.costoTotal += cita.pagosTotal;
+        this.total += cita.pagosTotal;
+        this.totalefectivo += cita.pagosEfectivo;
+        this.totalTarjeta += cita.pagosTarjeta;
+        this.totalCheques += cita.pagosCheque;
+        this.facturadoTotal += cita.pagosFacturado;
+        this.totalAdeudo += cita.pagosTotal;
+      }
+
+
      
-      this.duracionTotalMs += aux_duracion;
-      this.costoTotal += aux_costo;
-      this.total += cita.pagosTotal;
-      this.totalefectivo += cita.pagosEfectivo;
-      this.totalTarjeta += cita.pagosTarjeta;
-      this.totalCheques += cita.pagosCheque;
+      
+     
+     
       /*
       let aux_costo = Number(cita.costo ? cita.costo : 0 );
       let aux_cobro = Number(cita.cobro ? cita.cobro : 0 );
@@ -308,7 +327,7 @@ async openReportGenerate( report:reportes = null ){
       this.totalTarjeta+=aux_cobroTarjeta;
       this.totalCheques+=aux_cobroCheque;*/
 
-      if(aux_costo > cita.pagosTotal && !cita.checkState(CitasDataProvider.STATE_COBRO) ){ this.cajaAdeudo += aux_costo - cita.pagosTotal;  }
+     
       /*if(cita.costo) this.costoTotal += cita.costo;
       if(cita.cobro) this.total+= cita.cobro;
       if(cita.costo && cita.cobro && cita.costo > cita.cobro){ 
@@ -320,7 +339,7 @@ async openReportGenerate( report:reportes = null ){
 	    if(cita.cobroTarjeta) this.totalTarjeta+=cita.cobroTarjeta;
       if(cita.cobroCheque) this.totalCheques+=cita.cobroCheque;*/
       console.log('cita evaluada',cita);
-      if(cita.data.field_facturar.und && cita.data.field_facturar.und[0].value) this.facturadoTotal += Number(cita.data.field_facturar_cantidad.und[0].value);
+      
     }
   }
     console.log('tota facturar es ',this.facturadoTotal);
@@ -374,6 +393,7 @@ async openReportGenerate( report:reportes = null ){
     this.cajacuentas = 0;
     this.cajaAdeudo = 0;
     this.facturadoTotal = 0;
+    this.AdeudosCobrados = 0;
   }
 
 

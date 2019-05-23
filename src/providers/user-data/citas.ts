@@ -120,8 +120,10 @@ export class Citas{
         //originactivereport
         //field_datemsb  
         if( Number(this.dateMs) >= this.pagosfrom && Number(this.dateMs) < this.pagosto){
+            console.log('es del reporte');
             this.originactivereport = true;
         }else{
+            console.log('no es del reporte');
             this.originactivereport = false;
         }
 
