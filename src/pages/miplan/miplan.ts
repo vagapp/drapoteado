@@ -66,7 +66,9 @@ export class MiplanPage {
     public bu: BaseUrlProvider,
     public http: HttpClient,
   ) {
-    conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
+    //conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
+      conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_GtbbRJpEKq8zTrtq3EPCTqQ').then((c) => {
+      
       //Este success se ejecuta con el javascript se cargó correctamente
       console.log(c);
     }).catch((err) => {
