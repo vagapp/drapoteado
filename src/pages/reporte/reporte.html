@@ -77,11 +77,11 @@
               <span class="rbh_span midFont"> <span class="bold">Caja</span><span class="">{{cita.caja_name}} </span> </span>
               <span class="rbh_span midFont"> <span class="bold">Duracion</span><span class="fontHigh">{{ cita.duracionText }}</span> </span>
               <div class="ReporteRow_TotalServicios">
-                  <span class="rrt_span midFont"> <span class="bold">Efectivo</span><span class="midFont fontSecondary">${{cita.pEfectivo}}</span> </span>
-                  <span class="rrt_span midFont"> <span class="bold">Tarjeta</span><span class="midFont fontSecondary">${{cita.pCheque}}</span> </span>
-                  <span class="rrt_span midFont"> <span class="bold">Cheque</span><span class="midFont fontSecondary">${{cita.pTarjeta}}</span> </span>
-                  <span class="rrt_span midFont"> <span class="bold">Facturado</span><span class="midFont  fontHigh">${{cita.pFacturado}}</span> </span>
-                  <span class="rrt_span midFont" *ngIf="cita.costo > cita.cobro"> <span class="bold">Adeudo</span><span class="fontPrimary">${{cita.costo - cita.pTotal}}</span> </span>
+                  <span class="rrt_span midFont"> <span class="bold">Efectivo</span><span class="midFont fontSecondary">${{cita.pagosEfectivo}}</span> </span>
+                  <span class="rrt_span midFont"> <span class="bold">Tarjeta</span><span class="midFont fontSecondary">${{cita.pagosCheque}}</span> </span>
+                  <span class="rrt_span midFont"> <span class="bold">Cheque</span><span class="midFont fontSecondary">${{cita.pagosTarjeta}}</span> </span>
+                  <span class="rrt_span midFont"> <span class="bold">Facturado</span><span class="midFont  fontHigh">${{cita.pagosFacturado}}</span> </span>
+                  <span class="rrt_span midFont" *ngIf="cita.costo > cita.cobro"> <span class="bold">Adeudo</span><span class="fontPrimary">${{cita.costo - cita.pagosTotal}}</span> </span>
               </div>
           </div>
        
