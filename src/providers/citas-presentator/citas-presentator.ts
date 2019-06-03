@@ -69,9 +69,12 @@ export class CitasPresentatorProvider {
     if(!this.reportesMan.reportesData.isSetTodayReport) await this.reportesMan.getTodayReport();
     let saveDate = !this.progresSController.editfinish;
     if(Number(state) === CitasDataProvider.STATE_FINALIZADA){
-      if(this.progresSController.CantidadRestante > 0){
+      console.log('cambiando a finalizada, checando cantidad restante',this.progresSController.activeCita.restantePagos);
+      if(this.progresSController.activeCita.restantePagos > 0){
+        console.log('cambiando a adeudo');
         state = CitasDataProvider.STATE_ADEUDO;
       }
+      
     }
     //console.log('antes de guardar el state quedo ',state);
     console.log('antes de guardar el state quedo',cita);
@@ -289,6 +292,7 @@ removeFilter(){
 this.citasManager.citasData.resetDateFilters();
 this.dateFilterStart = null;
 this.filteredCitas = false;
+this.pacienteFilter = null;
 this.loader.presentLoader('cargando...');
   this.updater.updateCitas(true).then(()=>{
     this.loader.dismissLoader();

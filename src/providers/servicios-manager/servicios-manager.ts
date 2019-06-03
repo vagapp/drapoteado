@@ -6,6 +6,7 @@ import { servicios } from '../user-data/servicios';
 import { BaseUrlProvider } from '../base-url/base-url';
 import { Observable } from 'rxjs/Observable';
 import { CitasDataProvider } from '../citas-data/citas-data';
+import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
 
 /*
   Generated class for the ServiciosManagerProvider provider.
@@ -47,9 +48,15 @@ export class ServiciosManagerProvider {
       //fin hecho por raul
       doc.servicios = this.defaultSort(doc.servicios);
     });
+    this.servicios = this.defaultSort(this.servicios);
   }
 
   defaultSort(servicios:servicios[]){
+    return ServiciosManagerProvider.staticDefaultSort(servicios);
+  }
+
+  static staticDefaultSort(servicios){
+    console.log('ordenando servicios',servicios);
     return servicios.sort((a,b)=>{
       if(a.order < b.order){return 1;}
       if(a.order > b.order){return -1;}

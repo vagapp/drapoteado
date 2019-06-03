@@ -35,7 +35,14 @@ export class CitaProgressControllerProvider {
   checkboxMode:boolean = true;//checkbox mode porque quisieron checkbox pero no es tan viable a ver que pasa.
   checkboxServicesList
 
-  get CantidadRestante(){ return 0+ ( (Number(this.activeCita.restantePagos)) - (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) ) ); }
+  get CantidadRestante(){ 
+    console.log('this.activeCita.restantePagos',this.activeCita.restantePagos);
+    console.log('cobroEfectivo',this.cobroEfectivo);
+    console.log('cobroCheque',this.cobroCheque);
+    console.log('cobroTarjeta',this.cobroTarjeta);
+    return 0+ 
+    ( (Number(this.activeCita.restantePagos)) - 
+    (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) ) ); }
 
 
   constructor(

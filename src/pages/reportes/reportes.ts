@@ -121,4 +121,13 @@ export class ReportesPage {
    */
   }
 
+  openReporteAdeudos(){
+    console.log('openReportNoModal',this.reportPresentator.docuid, this.reportPresentator.type);
+    this.reportPresentator.setReport();
+    this.reportPresentator.type = ReportPresentatorProvider.REPORT_ADEUDO;
+    this.reportPresentator.loadReportNM().then(()=>{
+  
+    });
+  }
+
 }

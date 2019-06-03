@@ -96,6 +96,19 @@ export class ReporteCitasProvider {
      report.citas = this.generateCitasFromdata(res);
     //now we gotta sort everything.
   }
+  async reporteLoadCitasAdeudo(report:reportes , doctorUids:number[] = null){
+    let aux_citas = new Array<Citas>();
+    console.log('docuids',doctorUids);
+    let res = await this.citasManager.getCitasObservableAdeudos(
+      doctorUids,
+      report.cajaFilter,
+      report.recepcionFilter
+     ).toPromise();
+     console.log('resgot is',res);
+     report.citas = this.generateCitasFromdata(res);
+    //now we gotta sort everything.
+  }
+
 
  
 

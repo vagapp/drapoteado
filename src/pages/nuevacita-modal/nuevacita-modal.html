@@ -70,9 +70,13 @@
       </ion-row>
     </ion-grid>
   </div>
-  <ion-item>
+  <!--<ion-item>
     <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="selectedHourISO" name="selectedHourISO" minuteValues="00,15,30,45"></ion-datetime>
-  </ion-item>
+  </ion-item>-->
+  <div class="ModalInput_input">
+    <b>Hora</b>
+    <input [(ngModel)]="this.hourstring" name="time" type="text" placeholder="00:00"/>
+</div>
   </div>
   <!--<ion-grid>
         <ion-row class="calendar-hour">
@@ -124,6 +128,7 @@
                   <input [(ngModel)]="this.newCita.field_date.und[0].value.time" name="time" type="text" placeholder="00:00"/>
               </div>-->
           <!--</div>-->
+          
           <div class="ncf_buttonsection">
           <button class="generalButton bgColorSecondary" (click)="createCita();" *ngIf="this.isnew">Agregar</button>
           <button class="generalButton bgColorSecondary" (click)="updateCita();" *ngIf="!this.isnew">Actualizar</button>

@@ -33,9 +33,11 @@ export class ReportPresentatorProvider {
   static REPORT_TICKET = 2;
   static REPORT_COMPLETE = 1;
   static REPORT_GRUPAL = 3;
+  static REPORT_ADEUDO = 4;
   get REPORT_TICKET(){ return ReportPresentatorProvider.REPORT_TICKET;}
   get REPORT_COMPLETE(){ return ReportPresentatorProvider.REPORT_COMPLETE;}
   get REPORT_GRUPAL(){ return ReportPresentatorProvider.REPORT_GRUPAL;}
+  get REPORT_ADEUDO(){ return ReportPresentatorProvider.REPORT_ADEUDO;}
 
   reportisloading:boolean=false;
 
@@ -50,6 +52,7 @@ export class ReportPresentatorProvider {
   noCitas:number;
   noShow:number;
   noCancel:number;
+  noAdeudosR:number;
   duracionTotalMs:number;
   duracionTotalStr:string;
   
@@ -76,7 +79,7 @@ export class ReportPresentatorProvider {
   }
 
   get isgroup():boolean{  return  Number(this.type) === Number(ReportPresentatorProvider.REPORT_GRUPAL); }
-
+  get isAdeudo():boolean{ console.log('isAdeudo',this.type,ReportPresentatorProvider.REPORT_ADEUDO); return  Number(this.type) === Number(ReportPresentatorProvider.REPORT_ADEUDO); }
   serviciosResume:{
     nid:number,
     title:string,
@@ -169,6 +172,11 @@ exportExcel(){
   //console.log('report_excel',report_excel);
 }
 
+/*openReporteAdeudo(){
+  this.type = ReportPresentatorProvider.REPORT_ADEUDO;
+  this.openReporte();
+}*/
+
 async openReportGenerate( report:reportes = null ){
   this.loader.presentLoader('Cargando Reporte ...');
   await this.setReport(report);
@@ -205,6 +213,12 @@ async openReportGenerate( report:reportes = null ){
     await this.loadReportServiciosGrupal();
     this.evaluateCitas();
       break;
+      case Number(this.REPORT_ADEUDO): 
+      console.log('cargando reporte adeudo')
+      await this.loadReportCitasAdeudo();
+      await this.loadReportServiciosAdeudo();
+    this.evaluateCitas();
+      break;
       default:
       console.log('carguando rueporte nuormalu');
       await this.loadReportCitas();
@@ -238,6 +252,14 @@ async openReportGenerate( report:reportes = null ){
     await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.subsData.subscription.field_doctores);
   }
 
+  async loadReportCitasAdeudo(){
+    console.log('loadReporteAdeudos.',this.subsData.subscription.field_doctores);
+    this.docuid = null;
+    await this.reporteCitas.reporteLoadCitasAdeudo(this.actualReport, this.subsData.subscription.field_doctores);
+  }
+
+  
+
   async loadReportServicios(){
     this.serviciosResume = this.reporteServicios.getServiciosResume(this.actualReport);
   }
@@ -248,7 +270,15 @@ async openReportGenerate( report:reportes = null ){
       return a.title.localeCompare(b.title);
     });
   }
- 
+
+  async loadReportServiciosAdeudo(){
+    this.serviciosResume = this.reporteServicios.getServiciosResume(this.actualReport);
+    this.serviciosResume = this.serviciosResume.sort((a,b)=>{ 
+      return a.title.localeCompare(b.title);
+    });
+  }
+
+
   updateCita( cita:Citas ){
     console.log('here we update a cita when it is updated w a socket call');
     if(this.actualReport){
@@ -273,7 +303,9 @@ async openReportGenerate( report:reportes = null ){
     console.log('evaluating citas of actual report');
     this.resetVars();
     console.log('citas en evaluate citas report', this.actualReport.citas);
-    this.noCitas = this.actualReport.citas.length;
+    this.noCitas= 0;
+    this.noAdeudosR = 0;
+    //this.noCitas = this.actualReport.citas.length;
     this.noCancel = this.actualReport.citas.filter((citas)=>{return citas.checkState(CitasDataProvider.STATE_CANCELADA)} ).length;
     
     console.log('noCancel',this.noCancel);
@@ -284,10 +316,15 @@ async openReportGenerate( report:reportes = null ){
     for(let cita of filteredCitas){
       console.log('evaluateCitas citra',cita);
       if(!cita.checkState(CitasDataProvider.STATE_CANCELADA)){ // si no esta cancelada se interpretan los totales.
-      cita.setPagosFecha(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS); //este metodo pone algunas cosas del reporte en la cita. porque si we
+      
       let aux_costo = Number(cita.costo ? cita.costo : 0 );
       let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
+      if(this.isAdeudo){
+        cita.setPagosFecha(0,0);
+      }else{
+      cita.setPagosFecha(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS); //este metodo pone algunas cosas del reporte en la cita. porque si we
       if(cita.originactivereport){ //esta cita fue originada el dia de este reporte y sus totales se manejan normalmente.
+        this.noCitas++;
         this.duracionTotalMs += aux_duracion;
         this.costoTotal += aux_costo;
         this.total += cita.pagosTotal;
@@ -298,7 +335,8 @@ async openReportGenerate( report:reportes = null ){
         this.facturadoTotal += cita.pagosFacturado;
         //if(cita.data.field_facturar.und && cita.data.field_facturar.und[0].value) this.facturadoTotal += Number(cita.data.field_facturar_cantidad.und[0].value);
       }else{ //esta cita aparece en este reporte porque se abono este dia, los totales se toman en cuenta diferente.
-        this.costoTotal += cita.pagosTotal;
+        //this.costoTotal += cita.pagosTotal;
+        this.noAdeudosR++;
         this.total += cita.pagosTotal;
         this.totalefectivo += cita.pagosEfectivo;
         this.totalTarjeta += cita.pagosTarjeta;
@@ -306,6 +344,7 @@ async openReportGenerate( report:reportes = null ){
         this.facturadoTotal += cita.pagosFacturado;
         this.totalAdeudo += cita.pagosTotal;
       }
+    }
 
 
      

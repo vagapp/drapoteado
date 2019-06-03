@@ -114,5 +114,21 @@ export class DateProvider {
         console.log(offset);
         return new Date(date.getTime()+(offset * 60 * 1000 * 2));
     }
+
+
+    static validateHhMm(input) {
+        console.log('validateHhMm',input);
+        var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(input);
+        if(isValid){
+            let aux_str = input.split(':');
+            if(Number(aux_str[0]) == 24 ){
+                if(Number(aux_str[1])>0){
+                    isValid = false;
+                    console.log('mas minutos que 24 horas we? tas loco');
+                }
+            }
+        }
+        return isValid;
+    }
   
 }

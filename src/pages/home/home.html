@@ -47,7 +47,7 @@
                             </div>
                             </div>-->
                             <div class="filters_wrapper">
-                                        <div class="filtro-nombre"><span class="midFont"> <img src="assets/imgs/buscar.svg"  class="icon_drapo"> </span><input [(ngModel)]="citasPresentator.pacienteFilter" (ngModelChange)="citasPresentator.filterChange();"  type="text" placeholder="Nombre del Paciente"> </div>
+                                        <div class="filtro-nombre"><input [(ngModel)]="citasPresentator.pacienteFilter" (ngModelChange)="citasPresentator.filterChange();"  type="text" placeholder="Nombre del Paciente"> </div>
                                          <div  class="filtro-fecha">
                                            <span class="midFont"> <img src="assets/imgs/fecha.svg"  class="icon_drapo"></span> 
                                          <ion-datetime  placeholder="Filtrar por Fecha" [(ngModel)]="citasPresentator.dateFilterStart" (ngModelChange)="citasPresentator.filterChange();" ></ion-datetime>

@@ -49,6 +49,8 @@ export class NuevacitaModalPage {
   selectedHourISO:string = '';
   type: 'string';
 
+  hourstring:string = null;
+
 
 date: Date;
 daysInThisMonth: any;
@@ -180,6 +182,7 @@ showerrors:boolean = false;
 
   async createCita(){
     if(!this.basicNewCitaValidation()){ return false; }
+    
     if(!this.notEmptyNewCitaValidation()){ return false; } 
     this.setCitaDateFromiNPUT();
     if(!this.citaDateValidation()){ return false; }
@@ -260,9 +263,17 @@ basicNewCitaValidation(){
 
 citaDateValidation():boolean{
   let ret = true;
+  console.log('citaDateValidation',this.cita.data.field_datemsb);
+  console.log('citaDateValidation',new Date(this.cita.data.field_datemsb['und'][0]['value']));
+  console.log('this.hourstring',this.hourstring);
   if(this.cita.data.field_datemsb['und'][0]['value'] < new Date().getTime()){
     console.log('elegir fecha a futuro.');
     this.alert.presentAlert('Error','Debe elegir una fecha a futuro');
+    ret = false;
+  }
+  if(!DateProvider.validateHhMm(this.hourstring)){
+    console.log('la hora esta mal',this.hourstring);
+    this.alert.presentAlert('Error','Formato de hora incorrecto');
     ret = false;
   }
   return ret;
@@ -375,13 +386,20 @@ setCitaDateFromiNPUT(){
   console.log('dia sin horas',aux_date);
 
   //obtenemos las horas em ms
+  /*
   console.log('selectedisohour',this.selectedHourISO);
   let aux_hour_date = new Date(this.selectedHourISO);
   aux_hour_date = new Date(aux_hour_date.getTime()  + (new Date().getTimezoneOffset() * 60 * 1000 * 2));
   console.log(aux_hour_date);
   let ms =  (aux_hour_date.getHours()*60*60*1000)+(aux_hour_date.getMinutes()*60*1000);
-  console.log('HOUR MS',ms,ms/(1000*60*60));
+  console.log('HOUR MS',ms,ms/(1000*60*60));*/
+  //NO USAMOS ESTE CODIGO YA PORQUE YA NO QUIEREN EL IONIC HOUR INPUT HERMOSO QUE HICE. putos.
 
+  console.log('hour string',this.hourstring);
+  let ms = Number(this.hourstring.split(':')[0])*60*60*1000;
+  ms += Number(this.hourstring.split(':')[1])*60*1000;
+  console.log('MSAdded',ms);
+  
   let final_date_UT = aux_date.getTime() + ms;
   console.log('final date is', new Date(final_date_UT));
   this.cita.setDateUT(final_date_UT);

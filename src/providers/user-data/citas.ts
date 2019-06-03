@@ -31,6 +31,8 @@ export class Citas{
     recepcion_playerid:string = null;
     opendetail=false;
 
+    ediciones:any[] = new Array();
+
     //variables para reportes con pagos incluidos
     pagosfrom:number = 0;
     pagosto:number = 0;    
@@ -71,15 +73,18 @@ export class Citas{
 
     get cantidadPagada():number{
         let cantidad_pagada = 0;
+        console.log(this.pagos);
         this.pagos.forEach(pago => {
             console.log(pago);
             console.log(pago['efe']);
             cantidad_pagada += (Number(pago['efe']) + Number(pago['tar']) +Number(pago['che'])); 
         });
+        console.log('calculando cantidad pagada',cantidad_pagada);
         return cantidad_pagada;
     }
 
     get restantePagos():number{
+        console.log('restantePagos',this.costo,this.cantidadPagada);
         return this.costo - this.cantidadPagada;
     }
 
@@ -119,13 +124,7 @@ export class Citas{
         console.log('setPagosFecha cita is',this);
         //originactivereport
         //field_datemsb  
-        if( Number(this.dateMs) >= this.pagosfrom && Number(this.dateMs) < this.pagosto){
-            console.log('es del reporte');
-            this.originactivereport = true;
-        }else{
-            console.log('no es del reporte');
-            this.originactivereport = false;
-        }
+        this.testOriginactivereport(this.pagosfrom, this.pagosto);
 
         console.log( this.pagosEfectivo);
         this.pagosTotal =  this.pagosEfectivo + this.pagosCheque + this.pagosTarjeta;
@@ -133,7 +132,18 @@ export class Citas{
 
     
  
-    
+    testOriginactivereport(from:Number,to:Number){
+        console.log('testOriginactivereport');
+        if( Number(this.dateMs) >= from && Number(this.dateMs) < to){
+            console.log('es del reporte');
+            this.originactivereport = true;
+            console.log('isorigin');
+        }else{
+            console.log('no es del reporte');
+            this.originactivereport = false;
+            console.log('notorigin');
+        }
+    }
     
     /**
      * Sets Data from a result of the citas view on drupal.
@@ -164,6 +174,7 @@ export class Citas{
           this.data.field_hora_cobromsb.und[0].value = 0;
           this.data.field_fecha_reporte.und[0].value = 0;
           this.data.field_pagos_json = null;
+          this.data.field_edicion_json = null;
           this.data.field_fechas_reporte = {und:[]};
           this.data.field_caja_nombre.und[0].value = data_input.field_caja_nombre ? data_input.field_caja_nombre : "sin nombre";
           if(data_input.field_fecha_reporte)  this.data.field_fecha_reporte.und[0].value = data_input.field_fecha_reporte;
@@ -172,6 +183,7 @@ export class Citas{
           if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);
           if(data_input['field_servicios_json'] && data_input['field_servicios_json']['value']) this.data.aux_servicios_json = data_input['field_servicios_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
           if(data_input['field_pagos_json'] && data_input['field_pagos_json']['value']) this.data.field_pagos_json = data_input['field_pagos_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
+          if(data_input['field_edicion_json'] && data_input['field_edicion_json']['value']) this.data.field_pagos_json = data_input['field_edicion_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
           if(data_input.field_fechas_reporte) this.data.field_fechas_reporte.und = data_input.field_fechas_reporte;
           if(data_input.doctor_playerid) this.doctor_playerid = data_input.doctor_playerid;
           if(data_input.recepcion_playerid)  this.recepcion_playerid = data_input.recepcion_playerid;
@@ -196,6 +208,7 @@ export class Citas{
         console.log('setting processData dateMs',this.dateMs);
         if(this.data.aux_servicios_json) this.setServiciosReport(this.data.aux_servicios_json);
         if(this.data.field_pagos_json) this.setPagosJson(this.data.field_pagos_json);
+        if(this.data.field_edicion_json) this.setEdicionesJson(this.data.field_edicion_json);
         this.facturado = Number( this.data.field_facturar_cantidad.und[0].value);
         this.setDateUT(this.data.field_datemsb.und[0].value);
         console.log('processdata hora cobro check',this.data.field_hora_cobromsb);
@@ -227,6 +240,12 @@ export class Citas{
 
     setServiciosReport( input_data ){
         this.reporteServicios =  JSON.parse(input_data);
+        this.reporteServicios = this.reporteServicios.sort((a,b)=>{ 
+            if(a.title > b.title) return 1;
+            if(a.title < b.title) return -1;
+            return 0;
+        });
+        console.log('reporteServicios',this.reporteServicios);
         Debugger.log(['added reportservicios', this.reporteServicios]);
     }
 
@@ -239,6 +258,18 @@ export class Citas{
             console.log('is not array');
             this.pagos =  JSON.parse(input_data);
         }
+    }
+
+    setEdicionesJson( input_data ){
+        console.log('input_data is',input_data);
+        if(input_data['und']){
+            console.log('isarray');
+        this.ediciones =  JSON.parse(input_data['und'][0]['value']);
+        }else{
+            console.log('is not array');
+            this.ediciones =  JSON.parse(input_data);
+        }
+        console.log(this.ediciones);
     }
 
   

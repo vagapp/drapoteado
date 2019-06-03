@@ -79,7 +79,8 @@ export class CitasManagerProvider {
     doctores:number[] = this.doctores.doctoresIDs,  
     cajas:number[] = null,  
     recepciones:number[] = null,
-    paciente:string = null
+    paciente:string = null,
+    state:number = null
   ):Observable<any>{
     console.log('from',new Date(from));
     console.log('to',new Date(to));
@@ -90,8 +91,15 @@ export class CitasManagerProvider {
     console.log('doctores',doctores);
     console.log('cajas',cajas);
     console.log('recepciones',recepciones);
-    let pacientefilter= `${paciente !== null ? '&args[4]=all&args[5]=all&args[6]=all&args[7]='+paciente : ''}`;
-    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=${(from !== null && to !== null) ?  from+'--'+to: 'all'}${pacientefilter}`;
+    let fillstring = "&args[4]=all&args[5]=all&args[6]=all";
+    let stateFilter =  `${state !== null ? '&args[8]=all&args[9]='+state : ''}`; 
+    let pacientefilter = `${paciente !== null ? '&args[7]='+paciente : ''}`;
+    let endfilter = '';
+    
+   if(pacientefilter !== '' || stateFilter !== ''){
+    endfilter = `${pacientefilter !== null ? fillstring+'&args[7]='+paciente : fillstring+'&args[7]=all'}`+stateFilter;
+   }
+    let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=${(from !== null && to !== null) ?  from+'--'+to: 'all'}${/*pacientefilter*/endfilter}`;
     //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
     let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
     console.log('url getting citas',url);
@@ -119,6 +127,21 @@ export class CitasManagerProvider {
     let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
     console.log('url getting citas',url);
     return this.http.get(url);
+  }
+
+  getCitasObservableAdeudos(
+    doctores:number[] = this.doctores.doctoresIDs,  
+    cajas:number[] = null,  
+    recepciones:number[] = null,
+    ):Observable<any>{
+      console.log('doctores',doctores);
+      console.log('cajas',cajas);
+      console.log('recepciones',recepciones);
+      let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=all&args[4]=all&args[5]=all&args[6]=all&args[7]=all&args[8]=all&args[9]=7`;
+      //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
+      let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
+      console.log('url getting citas',url);
+      return this.http.get(url);
   }
 
   
