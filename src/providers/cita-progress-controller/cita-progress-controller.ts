@@ -1,5 +1,5 @@
 
-import { Injectable } from '@angular/core';
+import { Injectable, ɵConsole } from '@angular/core';
 import { Citas } from '../user-data/citas';
 import { servicios } from '../user-data/servicios';
 import { Doctores } from '../user-data/doctores';
@@ -32,14 +32,16 @@ export class CitaProgressControllerProvider {
     costooverride:number
   };
 
+  servicesCompare: servicios[];
+
   checkboxMode:boolean = true;//checkbox mode porque quisieron checkbox pero no es tan viable a ver que pasa.
   checkboxServicesList
 
   get CantidadRestante(){ 
-    console.log('this.activeCita.restantePagos',this.activeCita.restantePagos);
-    console.log('cobroEfectivo',this.cobroEfectivo);
-    console.log('cobroCheque',this.cobroCheque);
-    console.log('cobroTarjeta',this.cobroTarjeta);
+    //console.log('this.activeCita.restantePagos',this.activeCita.restantePagos);
+    //console.log('cobroEfectivo',this.cobroEfectivo);
+    //console.log('cobroCheque',this.cobroCheque);
+    //console.log('cobroTarjeta',this.cobroTarjeta);
     return 0+ 
     ( (Number(this.activeCita.restantePagos)) - 
     (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) ) ); }
@@ -59,20 +61,27 @@ export class CitaProgressControllerProvider {
   
     this.factura = 0;
     this.factura_cantidad = null;
+    this.servicesCompare = null;
   }
   
 
   openProgress(cita:Citas){ //open progress is called from the buttons using citas presentator
+    
     if(!cita.checkState(CitasDataProvider.STATE_FINALIZADA)){
       this.setInputs();
     }
     if(!cita.checkState(CitasDataProvider.STATE_FINALIZADA) || !cita.checkState(CitasDataProvider.STATE_COBRO)){
       this.editfinish = false;
     }
+    console.log('opening progress');
     this.setActiveCita(cita);
     //this.evalServicios();
     //this.calcularCosto();
     this.evalServicios();
+
+    this.servicesCompare = JSON.parse(JSON.stringify(this.activeCita.addedServices));
+    console.log('evalServicios this.servicesCompare',JSON.stringify(this.servicesCompare));
+   
     //this.setCortesia();
     this.calcularCosto();
     this.startInterval();
@@ -117,7 +126,9 @@ export class CitaProgressControllerProvider {
     che:this.cobroCheque == null ? ''+0 :''+this.cobroCheque,
     fac: this.factura_cantidad == null ? ''+0 : ''+this.factura_cantidad,
     fec:''+new Date().getTime()
-  }
+  };
+
+  this.activeCita.compareServicios(this.servicesCompare);
   this.activeCita.pagos.push(aux_pago);
 
 
@@ -156,6 +167,7 @@ export class CitaProgressControllerProvider {
   }
 
   addService(){
+    console.log('addService start servicesCompare',JSON.stringify(this.servicesCompare));
     let aux_servicio = null;
     console.log(this.selectedService);
     if(Number(this.selectedService) !== Number(0)){
@@ -168,6 +180,7 @@ export class CitaProgressControllerProvider {
         this.selectedService = 0;
        }
     }
+    console.log('addService end servicesCompare',JSON.stringify(this.servicesCompare));
   }
 
   /*setCortesia(){
@@ -215,6 +228,7 @@ export class CitaProgressControllerProvider {
   evalServicios(){
     this.activeCita.setAddedServices(this.activeCitaDoc.servicios);
     this.available_services = this.activeCita.getServiciosAvailable(this.activeCitaDoc.servicios);
+    
     }
 
     startInterval(){
@@ -232,6 +246,7 @@ export class CitaProgressControllerProvider {
 
     updateCheckedOption(Nid,State){
       console.log('progresscontroller updateCheckedOption',Nid,State);
+      console.log('updateCheckedOption start servicesCompare',JSON.stringify(this.servicesCompare));
       if(State){
         this.selectedService = Nid;
         this.addService();
@@ -239,6 +254,7 @@ export class CitaProgressControllerProvider {
         this.removeServiceWnid(Nid);
       }
       console.log('added',this.activeCita.addedServices);
+      console.log('updateCheckedOption end servicesCompare',JSON.stringify(this.servicesCompare));
     }
 
     checkChecked(Nid:number):boolean{

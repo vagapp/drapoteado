@@ -48,7 +48,7 @@ export class ProgresocitaModalPage {
   }
 
   ionViewDidLoad() {
-    
+    console.log('Cita activa ionViewDidLoad',this.progressController.activeCita);
   }
 
   ionViewWillLeave(){
@@ -84,7 +84,9 @@ export class ProgresocitaModalPage {
           this.alert.presentAlert('Error','Introducir monto a pagar');
           return false;
         }*/
-       
+
+        
+        console.log('pagadaPop start servicesCompare',JSON.stringify(this.progressController.servicesCompare));
         //this.progressController.checkCobroStates('pp1');
         if(!this.validarPagarNOEMPTY()){
           this.alert.presentAlert('Error','Introducir monto a pagar.');
@@ -110,6 +112,8 @@ export class ProgresocitaModalPage {
           this.alert.presentAlert('Error','El monto facturado no puede exceder el total de la consulta');
           return false;
         }
+
+        
        // this.progressController.checkCobroStates('pp5');
        /* let title = 'Pagada';
         let msg = '¿Está seguro de que desea marcar esta cita como pagada?';
@@ -126,19 +130,22 @@ export class ProgresocitaModalPage {
         }else{
           this.pagarActualCita();
         }*/
-        this.pagarActualCita();
+        console.log('pagadaPop end servicesCompare',JSON.stringify(this.progressController.servicesCompare));
+       this.pagarActualCita();
       }
 
       async pagarActualCita(){
+        console.log('pagarActualCita start servicesCompare',JSON.stringify(this.progressController.servicesCompare));
         this.progressController.pagarCitaActiva();
         console.log('pagarActualCita',this.progressController.activeCita);
-        await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
+        //await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
+        console.log('pagarActualCita end servicesCompare',JSON.stringify(this.progressController.servicesCompare));
         this.close();
       }
 
       getDateString(datenumber: number):String{
        let aux_dates = DateProvider.getDisplayableDates(new Date(Number(datenumber)));
-       console.log(aux_dates);
+       //console.log(aux_dates);
        return aux_dates.date +' '+aux_dates.time;
       }
 
@@ -190,6 +197,15 @@ export class ProgresocitaModalPage {
         this.progressController.updateCitaActiva();
         await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
         this.close();
+      }
+
+      async guardarEdiciones(){
+        this.loader.presentLoader('Guardando');
+        if(this.progressController.activeCita.todayEdiciones){
+          this.progressController.activeCita.data.field_edicion_json['und'][0]['value'] =  JSON.stringify(this.progressController.activeCita.todayEdiciones);
+        }
+        await this.citasPresentator.saveCita( this.progressController.activeCita);
+        this.loader.dismissLoader();
       }
 
   

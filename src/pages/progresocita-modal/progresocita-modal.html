@@ -134,6 +134,7 @@
             <div class="register_button_section">
             <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA)"  (click)="finalizarPop()" class="bgColorPrimary generalButton">Finalizar Cita</button>
             <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO) || progressController.activeCita.checkState(citasData.STATE_ADEUDO)" (click)="pagadaPop()" class="bgColorPrimary generalButton">Pagar</button>
+            <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO) || progressController.activeCita.checkState(citasData.STATE_ADEUDO)" (click)="guardarEdiciones()" class="bgColorPrimary generalButton">Guardar Cambios</button>
             <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_FINALIZADA)" (click)="allsaveActualCita()" class="bgColorPrimary generalButton">Guardar</button>
             </div>
           </div>

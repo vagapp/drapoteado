@@ -76,6 +76,8 @@ export class CitasPresentatorProvider {
       }
       
     }
+
+    cita.compareServicios(this.progresSController.servicesCompare);
     //console.log('antes de guardar el state quedo ',state);
     console.log('antes de guardar el state quedo',cita);
     let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise();
@@ -90,6 +92,12 @@ export class CitasPresentatorProvider {
     this.wsMessenger.generateWSupdateMessage(cita);
     this.setBlockNdismiss(cita.Nid);
   } 
+
+  async saveCita( cita ){
+    let res = await this.citasManager.updateCita( cita ).toPromise();
+    console.log('updating cita',res);
+    return res;
+  }
 
   editCita( cita ){
     console.log('state of cita',cita.checkState(CitasDataProvider.STATE_COBRO));

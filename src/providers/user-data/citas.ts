@@ -32,6 +32,7 @@ export class Citas{
     opendetail=false;
 
     ediciones:any[] = new Array();
+    todayEdiciones:any[] = new Array();
 
     //variables para reportes con pagos incluidos
     pagosfrom:number = 0;
@@ -73,18 +74,18 @@ export class Citas{
 
     get cantidadPagada():number{
         let cantidad_pagada = 0;
-        console.log(this.pagos);
+        //console.log(this.pagos);
         this.pagos.forEach(pago => {
-            console.log(pago);
-            console.log(pago['efe']);
+            //console.log(pago);
+            //console.log(pago['efe']);
             cantidad_pagada += (Number(pago['efe']) + Number(pago['tar']) +Number(pago['che'])); 
         });
-        console.log('calculando cantidad pagada',cantidad_pagada);
+        //console.log('calculando cantidad pagada',cantidad_pagada);
         return cantidad_pagada;
     }
 
     get restantePagos():number{
-        console.log('restantePagos',this.costo,this.cantidadPagada);
+        //console.log('restantePagos',this.costo,this.cantidadPagada);
         return this.costo - this.cantidadPagada;
     }
 
@@ -97,8 +98,60 @@ export class Citas{
         });
     }
 
- 
+ /**
+  * Este metodo compara los addedServices de esta cita con una lista de servicios introducida serviciosArray, retorna los servicios que se agregaron o se quitaron.
+  * **/
+    compareServicios(serviciosArray:servicios[]){
+        console.log('compareServicios',JSON.stringify(serviciosArray));
+        console.log('addedServices',JSON.stringify(this.addedServices));
+        this.todayEdiciones = new Array();
+        
+        let newRemovedServices = serviciosArray.filter(
+            (aux_serv_original)=>{
+                let found = this.addedServices.find((aux_serv_actual)=>{
+                    return ( Number(aux_serv_actual.Nid) === Number(aux_serv_original.Nid) );
+                });
+                return !found;
+            }
+        );
 
+       let newAddedServices = this.addedServices.filter(
+           (aux_serv_original)=>{
+               console.log('aux_serv_original',aux_serv_original);
+               let found = serviciosArray.find((aux_serv_actual)=>{
+                return ( Number(aux_serv_actual.Nid) === Number(aux_serv_original.Nid) );
+            });
+            console.log('found',found);
+                return !found;
+           }
+       );
+        console.log('added Services',newAddedServices);
+        console.log('removed Services',newRemovedServices);
+
+        newAddedServices.forEach((servicio)=>{
+            let aux_edicion = {
+                act: true, 
+                cos: Number(servicio.costo),
+                title: servicio.title,
+                Nid:servicio.Nid, 
+                fec:''+new Date().getTime()
+              };
+              this.todayEdiciones.push(aux_edicion);
+        });
+
+        newRemovedServices.forEach((servicio)=>{
+            let aux_edicion = {
+                act: false, 
+                cos: -servicio.costo,
+                title: servicio.title,
+                Nid:servicio.Nid, 
+                fec:''+new Date().getTime()
+              };
+              this.todayEdiciones.push(aux_edicion);
+        });
+
+        console.log('ediciones encontradas',this.todayEdiciones);
+    }
     
     //obtiene los pagos que se hicieron a esta cita de fecha from a fecha to.
     setPagosFecha(from:number, to:number){
@@ -477,6 +530,8 @@ export class Citas{
         }
         return ret;
    }
+
+
 
    removeServicio( servicio:servicios ):boolean {
      return this.removeServicioNid(Number(servicio.Nid));
