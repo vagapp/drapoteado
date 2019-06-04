@@ -152,6 +152,14 @@ export class Citas{
 
         console.log('ediciones encontradas',this.todayEdiciones);
     }
+
+    setEdiciones(){
+        this.data.field_edicion_json =  {und:[{value:''}]};
+        console.log(this.ediciones);
+        console.log(this.todayEdiciones);
+        let aux_full_ediciones = this.ediciones.concat(this.todayEdiciones);
+        this.data.field_edicion_json.und[0]['value'] = JSON.stringify(aux_full_ediciones);
+    }
     
     //obtiene los pagos que se hicieron a esta cita de fecha from a fecha to.
     setPagosFecha(from:number, to:number){

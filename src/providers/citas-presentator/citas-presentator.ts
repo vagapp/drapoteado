@@ -93,11 +93,7 @@ export class CitasPresentatorProvider {
     this.setBlockNdismiss(cita.Nid);
   } 
 
-  async saveCita( cita ){
-    let res = await this.citasManager.updateCita( cita ).toPromise();
-    console.log('updating cita',res);
-    return res;
-  }
+
 
   editCita( cita ){
     console.log('state of cita',cita.checkState(CitasDataProvider.STATE_COBRO));
@@ -124,7 +120,6 @@ export class CitasPresentatorProvider {
     }
     this.progresSController.openProgress(cita);
   }
-
 
   async iniciarCita( cita:Citas ){
     console.log('iniciando cita',cita)

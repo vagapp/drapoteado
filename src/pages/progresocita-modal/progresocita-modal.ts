@@ -201,10 +201,7 @@ export class ProgresocitaModalPage {
 
       async guardarEdiciones(){
         this.loader.presentLoader('Guardando');
-        if(this.progressController.activeCita.todayEdiciones){
-          this.progressController.activeCita.data.field_edicion_json['und'][0]['value'] =  JSON.stringify(this.progressController.activeCita.todayEdiciones);
-        }
-        await this.citasPresentator.saveCita( this.progressController.activeCita);
+        await this.citasMan.guardarEdiciones(this.progressController.activeCita);
         this.loader.dismissLoader();
       }
 

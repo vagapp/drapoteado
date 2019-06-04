@@ -161,6 +161,16 @@ export class CitasManagerProvider {
     this.citasData.triggerSubject();
   }
 
+  async guardarEdiciones(cita){
+    delete cita.data.field_fecha_reporte; 
+    delete cita.data.field_hora_cobromsb;
+    delete cita.data.field_date;
+    delete cita.data.field_datemsb;
+    cita.setEdiciones();
+    let ret =  await this.updateCita(cita.data).toPromise();
+    console.log(ret);
+  }
+
 
   checkUserCitaDataFilter(citaData):boolean{
     let ret = true;
@@ -255,6 +265,9 @@ export class CitasManagerProvider {
     console.log('updating cita',cita.data);
     return this.updateCita( cita.data ).share();
   }
+
+  
+  
 
   setCaja(cita){
     console.log('setting caja',this.userData.userData.uid,this.userData.userData.name);
