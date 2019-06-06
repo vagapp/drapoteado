@@ -71,6 +71,7 @@ export class Citas{
     get CantidadRestante(){ return (Number(this.costo) - Number(this.cobro) ); }
     get stateNumber() { return Number(this.data.field_estado.und[0].value); }
     get stateLabel(){ return CitasDataProvider.getStateLabel(Number(this.data.field_estado.und[0].value)); }
+    get fstateLabel(){ return CitasDataProvider.getStateLabel(Number(this.festado)); }
     get stateColor(){ return CitasDataProvider.getStateColor(Number(this.data.field_estado.und[0].value));}
     set cobroCheque(val){ this.data.field_cobro_cheque.und[0].value = Number(val); this.calcularCobroTotal();} 
     set cobroEfectivo(val){ this.data.field_cobro_efectivo.und[0].value = Number(val); this.calcularCobroTotal();}
