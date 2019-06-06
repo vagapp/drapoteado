@@ -74,12 +74,13 @@ export class CitasPresentatorProvider {
         console.log('cambiando a adeudo');
         state = CitasDataProvider.STATE_ADEUDO;
       }
-      
     }
 
-    cita.compareServicios(this.progresSController.servicesCompare);
+
+    //cita.compareServicios(this.progresSController.servicesCompare);
     //console.log('antes de guardar el state quedo ',state);
     console.log('antes de guardar el state quedo',cita);
+    console.log('check cita before sending',JSON.stringify(cita.data.field_ediciones_json));
     let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise();
     //let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).subscribe((val)=>{console.log('wele a pedo',val),(error)=>{console.log('wele a pedo',error)}});
     if(Number(state) === CitasDataProvider.STATE_CONFIRMADA && cita.doctor_playerid){  //crear notificacion para doctor a quien le confirmaron la cita
@@ -93,7 +94,12 @@ export class CitasPresentatorProvider {
     this.setBlockNdismiss(cita.Nid);
   } 
 
-
+  async saveCita( cita ){
+    
+    let res = await this.citasManager.updateCita( cita ).toPromise();
+    console.log('updating cita',res);
+    return res;
+  }
 
   editCita( cita ){
     console.log('state of cita',cita.checkState(CitasDataProvider.STATE_COBRO));
@@ -120,6 +126,7 @@ export class CitasPresentatorProvider {
     }
     this.progresSController.openProgress(cita);
   }
+
 
   async iniciarCita( cita:Citas ){
     console.log('iniciando cita',cita)

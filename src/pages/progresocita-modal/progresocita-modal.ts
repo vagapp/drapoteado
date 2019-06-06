@@ -138,7 +138,7 @@ export class ProgresocitaModalPage {
         console.log('pagarActualCita start servicesCompare',JSON.stringify(this.progressController.servicesCompare));
         this.progressController.pagarCitaActiva();
         console.log('pagarActualCita',this.progressController.activeCita);
-        //await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
+        await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
         console.log('pagarActualCita end servicesCompare',JSON.stringify(this.progressController.servicesCompare));
         this.close();
       }
@@ -195,14 +195,17 @@ export class ProgresocitaModalPage {
       async allsaveActualCita(){
         console.log('allsaveActualCita');
         this.progressController.updateCitaActiva();
+        //this.progressController.guardarEdiciones();
         await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
         this.close();
       }
 
       async guardarEdiciones(){
-        this.loader.presentLoader('Guardando');
-        await this.citasMan.guardarEdiciones(this.progressController.activeCita);
-        this.loader.dismissLoader();
+        console.log('guardarEdiciones');
+        this.progressController.updateCitaActiva();
+        console.log('check cita before sending',JSON.stringify(this.progressController.activeCita.data.field_ediciones_json));
+        await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,this.progressController.activeCita.stateNumber );
+        //this.close();
       }
 
   

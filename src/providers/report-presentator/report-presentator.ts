@@ -79,7 +79,11 @@ export class ReportPresentatorProvider {
   }
 
   get isgroup():boolean{  return  Number(this.type) === Number(ReportPresentatorProvider.REPORT_GRUPAL); }
-  get isAdeudo():boolean{ console.log('isAdeudo',this.type,ReportPresentatorProvider.REPORT_ADEUDO); return  Number(this.type) === Number(ReportPresentatorProvider.REPORT_ADEUDO); }
+  get isAdeudo():boolean{ 
+    //console.log('isAdeudo',this.type,ReportPresentatorProvider.REPORT_ADEUDO); 
+    return  Number(this.type) === Number(ReportPresentatorProvider.REPORT_ADEUDO); 
+  }
+
   serviciosResume:{
     nid:number,
     title:string,
@@ -321,8 +325,11 @@ async openReportGenerate( report:reportes = null ){
       let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
       if(this.isAdeudo){
         cita.setPagosFecha(0,0);
+        cita.setEdicionesFechas(0,0);
       }else{
+      
       cita.setPagosFecha(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS); //este metodo pone algunas cosas del reporte en la cita. porque si we
+      cita.setEdicionesFechas(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS);
       if(cita.originactivereport){ //esta cita fue originada el dia de este reporte y sus totales se manejan normalmente.
         this.noCitas++;
         this.duracionTotalMs += aux_duracion;

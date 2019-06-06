@@ -897,7 +897,7 @@ export interface citasData{
     field_facturar_cantidad:{und:[{value:number}]},
     field_caja_nombre:{und:[{value:string}]},
     field_pagos_json:{und:[{value:string}]},
-    field_edicion_json:{und:[{value:string}]},
+    field_ediciones_json:{und:[{value:string}]},
     
 }
 

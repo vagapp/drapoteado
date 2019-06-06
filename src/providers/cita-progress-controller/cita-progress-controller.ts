@@ -164,6 +164,12 @@ export class CitaProgressControllerProvider {
   this.activeCita.cobroTarjeta = this.cobroTarjeta;
   this.activeCita.data.field_facturar.und[0].value = this.factura;
   this.activeCita.data.field_facturar_cantidad.und[0].value = this.factura_cantidad;
+  
+  //actualizando informacion de ediciones
+  console.log('actualizando datos de ediciones');
+  this.activeCita.compareServicios(this.servicesCompare);
+  this.activeCita.setEdicionesField();
+  console.log('active cita data ediciones ended',JSON.stringify(this.activeCita.data.field_ediciones_json));
   }
 
   addService(){
@@ -260,5 +266,12 @@ export class CitaProgressControllerProvider {
     checkChecked(Nid:number):boolean{
       return this.activeCita.addedServices.find((aux_serves)=>{ return Number(aux_serves.Nid) === Number(Nid) }) !== undefined;
     }
+
+   /* async guardarEdiciones(){
+      console.log('guardarEdiciones');
+      this.activeCita.compareServicios(this.servicesCompare);
+      console.log('pcon guardarEdiciones',this.activeCita.todayEdiciones);
+      await this.citasManager.guardarEdiciones(this.activeCita);
+    }*/
 
 }

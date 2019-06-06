@@ -161,15 +161,15 @@ export class CitasManagerProvider {
     this.citasData.triggerSubject();
   }
 
-  async guardarEdiciones(cita){
-    delete cita.data.field_fecha_reporte; 
-    delete cita.data.field_hora_cobromsb;
-    delete cita.data.field_date;
-    delete cita.data.field_datemsb;
-    cita.setEdiciones();
+  /*setEdicionesData(cita:Citas){
+    cita.setEdicionesField();
+    this.setCitaFechaReporte(cita,true); 
+  }*/
+
+  /*async guardarEdiciones(cita:Citas){
+    this.setEdicionesData(cita);
     let ret =  await this.updateCita(cita.data).toPromise();
-    console.log(ret);
-  }
+  }*/
 
 
   checkUserCitaDataFilter(citaData):boolean{
@@ -244,6 +244,9 @@ export class CitasManagerProvider {
     cita.data.field_estado.und[0].value = state;
     let reportedateset = false;
     let fechacobroset = false;
+    cita.setStateChangeEdition(state);
+    
+    if(cita.todayEdiciones.length > 0){  this.setCitaFechaReporte(cita,saveDate);  saveDate = false; }
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  this.setCitaFechaReporte(cita,saveDate); reportedateset=true;  }
     if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){ 
@@ -263,6 +266,7 @@ export class CitasManagerProvider {
     if(!reportedateset){ delete cita.data.field_fecha_reporte; }
     if(!fechacobroset){ delete cita.data.field_hora_cobromsb; }
     console.log('updating cita',cita.data);
+    //return null;
     return this.updateCita( cita.data ).share();
   }
 

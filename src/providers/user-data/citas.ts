@@ -43,6 +43,11 @@ export class Citas{
     pagosFacturado: number = 0;
     pagosTotal:number = 0;
     originactivereport:boolean = false;
+
+    //variables para reportes con ediciones incluidas.
+    festado:number = 0;
+    addedServicesFechas: servicios[];
+    edicionesFechas: any[];
     
     constructor(){
         this.init();
@@ -64,6 +69,7 @@ export class Citas{
     //get cobroEfectivo(){return Number(this.data.field_cobro_efectivo.und[0].value);}
     //get cobroTarjeta(){return Number(this.data.field_cobro_tarjeta.und[0].value);}
     get CantidadRestante(){ return (Number(this.costo) - Number(this.cobro) ); }
+    get stateNumber() { return Number(this.data.field_estado.und[0].value); }
     get stateLabel(){ return CitasDataProvider.getStateLabel(Number(this.data.field_estado.und[0].value)); }
     get stateColor(){ return CitasDataProvider.getStateColor(Number(this.data.field_estado.und[0].value));}
     set cobroCheque(val){ this.data.field_cobro_cheque.und[0].value = Number(val); this.calcularCobroTotal();} 
@@ -149,16 +155,7 @@ export class Citas{
               };
               this.todayEdiciones.push(aux_edicion);
         });
-
         console.log('ediciones encontradas',this.todayEdiciones);
-    }
-
-    setEdiciones(){
-        this.data.field_edicion_json =  {und:[{value:''}]};
-        console.log(this.ediciones);
-        console.log(this.todayEdiciones);
-        let aux_full_ediciones = this.ediciones.concat(this.todayEdiciones);
-        this.data.field_edicion_json.und[0]['value'] = JSON.stringify(aux_full_ediciones);
     }
     
     //obtiene los pagos que se hicieron a esta cita de fecha from a fecha to.
@@ -191,7 +188,72 @@ export class Citas{
         this.pagosTotal =  this.pagosEfectivo + this.pagosCheque + this.pagosTarjeta;
     }
 
-    
+    setEdicionesFechas(from:number, to:number){
+        console.log('setEdicionesFechas',this.ediciones);
+        this.festado = 0;
+        this.addedServicesFechas = new Array();
+        this.edicionesFechas = new Array();
+        console.log('ediciones',this.ediciones);
+        //filtrar ediciones hasta este dia y ordenarlas por fecha
+        this.edicionesFechas = this.ediciones.filter((edicion)=>{
+            console.log(edicion);
+            let ret = false;
+            if(Number(edicion.fec) <= Number(to)){
+                ret = true;
+            }
+            return ret;
+        }).sort((a,b)=>{
+            let ret = 0;
+            if(a.fec > b.fec) ret = 1;
+            if(a.fec < b.fec) ret = -1;
+            return ret;
+        });
+
+        //filtrar ediciones que sean estado y ordenarlos por fecha
+        let states = this.edicionesFechas.filter((edicion)=>{
+            let ret = false;
+            if(edicion.state) ret = true;
+            return ret;
+        }).sort((a,b)=>{
+            let ret = 0;
+            if(a.fec > b.fec) ret = 1;
+            if(a.fec < b.fec) ret = -1;
+            return ret;
+        });
+        console.log('states sorted',states);
+        //obtener el ultimo estado (el mas actual)
+        let latestState = {state:0};
+        if(states.length > 0)
+        latestState = states[states.length-1];
+        console.log('latestState',latestState);
+        this.festado = latestState.state;
+    }
+
+    setEdicionesField(){
+        console.log('setEdicionesField');
+        console.log('todayEdiciones',this.todayEdiciones);
+        console.log('ediciones',this.ediciones);
+        let aux_edicion = this.ediciones;
+        if(this.todayEdiciones){
+            aux_edicion = this.ediciones.concat(this.todayEdiciones);
+        }
+        this.data.field_ediciones_json =  {und:[{value:''}]};
+        this.data.field_ediciones_json.und[0].value= JSON.stringify(aux_edicion);
+        console.log('ediciones field final ', this.data.field_ediciones_json);
+    }
+
+    setStateChangeEdition(state){
+        let aux_edicion = {
+            act: true, 
+            cos: 0,
+            title: 0,
+            Nid:0,
+            state: state, 
+            fec:''+new Date().getTime()
+          };
+          this.todayEdiciones.push(aux_edicion);
+          this.setEdicionesField();
+    }
  
     testOriginactivereport(from:Number,to:Number){
         console.log('testOriginactivereport');
@@ -212,6 +274,8 @@ export class Citas{
     setData( data_input ){
         console.log("setData on cita",data_input);
         console.log('field_fechas_reporte',data_input.field_fechas_reporte);
+        console.log('field_ediciones_json',data_input['field_ediciones_json']);
+        console.log('field_ediciones_json', data_input['field_ediciones_json'][0]['value'] );
           this.data = UserDataProvider.getEmptyCita();
           this.data.Nid = data_input.Nid;
           this.data.doctor_name = data_input.doctor_name;
@@ -235,7 +299,7 @@ export class Citas{
           this.data.field_hora_cobromsb.und[0].value = 0;
           this.data.field_fecha_reporte.und[0].value = 0;
           this.data.field_pagos_json = null;
-          this.data.field_edicion_json = null;
+          this.data.field_ediciones_json = null;
           this.data.field_fechas_reporte = {und:[]};
           this.data.field_caja_nombre.und[0].value = data_input.field_caja_nombre ? data_input.field_caja_nombre : "sin nombre";
           if(data_input.field_fecha_reporte)  this.data.field_fecha_reporte.und[0].value = data_input.field_fecha_reporte;
@@ -244,7 +308,7 @@ export class Citas{
           if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);
           if(data_input['field_servicios_json'] && data_input['field_servicios_json']['value']) this.data.aux_servicios_json = data_input['field_servicios_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
           if(data_input['field_pagos_json'] && data_input['field_pagos_json']['value']) this.data.field_pagos_json = data_input['field_pagos_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
-          if(data_input['field_edicion_json'] && data_input['field_edicion_json']['value']) this.data.field_pagos_json = data_input['field_edicion_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
+          if(data_input['field_ediciones_json'] && data_input['field_ediciones_json'][0]['value'])this.data.field_ediciones_json = data_input['field_ediciones_json'][0]['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
           if(data_input.field_fechas_reporte) this.data.field_fechas_reporte.und = data_input.field_fechas_reporte;
           if(data_input.doctor_playerid) this.doctor_playerid = data_input.doctor_playerid;
           if(data_input.recepcion_playerid)  this.recepcion_playerid = data_input.recepcion_playerid;
@@ -267,9 +331,10 @@ export class Citas{
         this.Nid = this.data.Nid
         this.dateMs =  this.data.field_datemsb.und[0].value;
         console.log('setting processData dateMs',this.dateMs);
+        console.log('processData ediciones json ',this.data.field_ediciones_json);
         if(this.data.aux_servicios_json) this.setServiciosReport(this.data.aux_servicios_json);
         if(this.data.field_pagos_json) this.setPagosJson(this.data.field_pagos_json);
-        if(this.data.field_edicion_json) this.setEdicionesJson(this.data.field_edicion_json);
+        if(this.data.field_ediciones_json) this.setEdicionesJson(this.data.field_ediciones_json);
         this.facturado = Number( this.data.field_facturar_cantidad.und[0].value);
         this.setDateUT(this.data.field_datemsb.und[0].value);
         console.log('processdata hora cobro check',this.data.field_hora_cobromsb);
@@ -277,7 +342,7 @@ export class Citas{
     }
 
             /**
-             * estos dos metodos se encargan de guardar la hora de inicio y fin de la cita cuando cambia de estados pendiente a activa o activa a cobro.
+             * estos dos metodos se encargan de guardar la hora de inicio y fin def la cita cuando cambia de estados pendiente a activa o activa a cobro.
             */
     setHoraInicio(){
         let now = new Date();
@@ -300,6 +365,7 @@ export class Citas{
 
 
     setServiciosReport( input_data ){
+        console.log('setServiciosReport',input_data);
         this.reporteServicios =  JSON.parse(input_data);
         this.reporteServicios = this.reporteServicios.sort((a,b)=>{ 
             if(a.title > b.title) return 1;
@@ -322,7 +388,7 @@ export class Citas{
     }
 
     setEdicionesJson( input_data ){
-        console.log('input_data is',input_data);
+        console.log('setEdicionesJson input_data is',input_data);
         if(input_data['und']){
             console.log('isarray');
         this.ediciones =  JSON.parse(input_data['und'][0]['value']);
@@ -333,6 +399,7 @@ export class Citas{
         console.log(this.ediciones);
     }
 
+  
   
     
     /**
