@@ -29,7 +29,11 @@ page-reporte {
 
 
     .ReportGrid .midFont {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
+    }
+
+    .ReportGrid .row_detail{
+        padding: 3px 7em;
     }
 
     .ReportGrid .bold {
@@ -79,8 +83,22 @@ page-reporte {
 
     .ReporteRow_Desglose{
         border-top: 1px solid lightgray;
-        padding: .8em 6em;
+        /*padding: .8em 6em;*/
     }
+
+ .reportRow_desglose_label {
+    background: #dedede;
+    font-weight: 900;
+    padding: 9px 6em;
+    font-size: 1.5rem;
+}
+
+.reportRow_desglose_label_sm{
+    background: #dedede;
+    font-weight: 900;
+    padding: 9px 1em;
+    font-size: 1.5rem;
+}
 
     .ReporteRow_Desglose_row {
         padding: .5em;
@@ -259,7 +277,7 @@ page-reporte {
     padding: .5em;
     }
 
-    .reporte-movil .totalycitas span, {
+    .reporte-movil .totalycitas span {
         display: block;
         width: 100%;
         text-align: center;

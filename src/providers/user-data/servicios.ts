@@ -1,4 +1,5 @@
 import { UserDataProvider } from "./user-data";
+import { CitasDataProvider } from '../citas-data/citas-data';
 import { Debugger } from "./debugger";
 
 export class servicios{
@@ -10,6 +11,10 @@ export class servicios{
 
     constructor(){
       
+    }
+
+    get isCortesia(){
+        return Number(this.Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID);
     }
     
     setData( data_input ){

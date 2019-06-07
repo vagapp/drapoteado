@@ -95,7 +95,6 @@ export class CitasPresentatorProvider {
   } 
 
   async saveCita( cita ){
-    
     let res = await this.citasManager.updateCita( cita ).toPromise();
     console.log('updating cita',res);
     return res;

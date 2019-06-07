@@ -18,6 +18,7 @@ import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter
 export class ServiciosManagerProvider {
   servicios:servicios[] = new Array();
   isgroup: boolean = false;
+  cortesiaNid:number = 0;
 
   constructor(
     public http: HttpClient,
@@ -28,6 +29,7 @@ export class ServiciosManagerProvider {
     console.log('Hello ServiciosManagerProvider Provider');
   }
 
+  
 
   async loadServicios(){
     console.log(this.docData.doctoresIDs);
@@ -105,6 +107,8 @@ export class ServiciosManagerProvider {
 
 
   addServicio(servicio_data:any){
+    console.log('adding servicio',servicio_data);
+    console.log('order is',servicio_data.order);
     if(!this.checkForUpdate(servicio_data)){
       const aux_serv = new servicios();
       aux_serv.setData(servicio_data);

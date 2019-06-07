@@ -73,6 +73,7 @@ export class Citas{
     get stateLabel(){ return CitasDataProvider.getStateLabel(Number(this.data.field_estado.und[0].value)); }
     get fstateLabel(){ return CitasDataProvider.getStateLabel(Number(this.festado)); }
     get stateColor(){ return CitasDataProvider.getStateColor(Number(this.data.field_estado.und[0].value));}
+    get fstateColor(){ return CitasDataProvider.getStateColor(Number(this.festado));}
     set cobroCheque(val){ this.data.field_cobro_cheque.und[0].value = Number(val); this.calcularCobroTotal();} 
     set cobroEfectivo(val){ this.data.field_cobro_efectivo.und[0].value = Number(val); this.calcularCobroTotal();}
     set cobroTarjeta(val){ this.data.field_cobro_tarjeta.und[0].value = Number(val); this.calcularCobroTotal();}
@@ -139,7 +140,7 @@ export class Citas{
             let aux_edicion = {
                 act: true, 
                 cos: Number(servicio.costo),
-                title: servicio.title,
+                title: 'se agrego servicio: '+servicio.title,
                 Nid:servicio.Nid, 
                 fec:''+new Date().getTime()
               };
@@ -149,8 +150,8 @@ export class Citas{
         newRemovedServices.forEach((servicio)=>{
             let aux_edicion = {
                 act: false, 
-                cos: -servicio.costo,
-                title: servicio.title,
+                cos: 0-servicio.costo,
+                title: 'se removio servicio: '+servicio.title,
                 Nid:servicio.Nid, 
                 fec:''+new Date().getTime()
               };
@@ -197,7 +198,10 @@ export class Citas{
         console.log('ediciones',this.ediciones);
         //filtrar ediciones hasta este dia y ordenarlas por fecha
         this.edicionesFechas = this.ediciones.filter((edicion)=>{
-            console.log(edicion);
+            console.log('filtrando ediciones fechas edicion',edicion);
+            console.log('edicion fecha',edicion.fec);
+            console.log('filtro to',to);
+            console.log('fec < to',Number(edicion.fec) <= Number(to));
             let ret = false;
             if(Number(edicion.fec) <= Number(to)){
                 ret = true;
@@ -247,7 +251,7 @@ export class Citas{
         let aux_edicion = {
             act: true, 
             cos: 0,
-            title: 0,
+            title: 'Cambio de estado a '+CitasDataProvider.getStateLabel(state),
             Nid:0,
             state: state, 
             fec:''+new Date().getTime()
@@ -728,6 +732,22 @@ export class Citas{
 
       static formatDateBinaryNumber( num ){
         return (num < 10 ? '0' : '') + num;
+      }
+
+
+      cortesiaAvailable(){
+          console.log('cortesiaAvailable');
+          console.log(this.addedServices);
+          let addedWithoutCortesia = this.addedServices.filter(
+              (added)=>{
+                  return Number(added.order) !== 5
+              }
+          );
+          let ret =true;
+          if(addedWithoutCortesia.length > 0){
+              ret = false;
+          }
+          return ret;
       }
       
 }
