@@ -18,7 +18,6 @@ import { setRootDomAdapter } from '@angular/platform-browser/src/dom/dom_adapter
 export class ServiciosManagerProvider {
   servicios:servicios[] = new Array();
   isgroup: boolean = false;
-  cortesiaNid:number = 0;
 
   constructor(
     public http: HttpClient,

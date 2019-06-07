@@ -278,9 +278,10 @@ export class Citas{
      **/
     setData( data_input ){
         console.log("setData on cita",data_input);
-        console.log('field_fechas_reporte',data_input.field_fechas_reporte);
+       /* console.log('field_fechas_reporte',data_input.field_fechas_reporte);
         console.log('field_ediciones_json',data_input['field_ediciones_json']);
-        console.log('field_ediciones_json', data_input['field_ediciones_json'][0]['value'] );
+        console.log('field_ediciones_json', data_input['field_ediciones_json'][0]['value'] );*/
+        console.log('field_ediciones_json',data_input['field_ediciones_json']);
           this.data = UserDataProvider.getEmptyCita();
           this.data.Nid = data_input.Nid;
           this.data.doctor_name = data_input.doctor_name;
@@ -313,7 +314,7 @@ export class Citas{
           if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);
           if(data_input['field_servicios_json'] && data_input['field_servicios_json']['value']) this.data.aux_servicios_json = data_input['field_servicios_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
           if(data_input['field_pagos_json'] && data_input['field_pagos_json']['value']) this.data.field_pagos_json = data_input['field_pagos_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
-          if(data_input['field_ediciones_json'] && data_input['field_ediciones_json'][0]['value'])this.data.field_ediciones_json = data_input['field_ediciones_json'][0]['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
+          if(data_input['field_ediciones_json'] && data_input['field_ediciones_json'][0])this.data.field_ediciones_json = data_input['field_ediciones_json'][0]['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
           if(data_input.field_fechas_reporte) this.data.field_fechas_reporte.und = data_input.field_fechas_reporte;
           if(data_input.doctor_playerid) this.doctor_playerid = data_input.doctor_playerid;
           if(data_input.recepcion_playerid)  this.recepcion_playerid = data_input.recepcion_playerid;

@@ -95,6 +95,7 @@ export class CitaProgressControllerProvider {
     this.activeCita = cita//navParams.get('cita');
     this.activeCitaDoc = this.citasManager.getDoctorOFCita(this.activeCita);
     console.log(this.activeCita.addedServices);
+   
   }
 
   finalizarCitaActiva(){
@@ -234,7 +235,7 @@ export class CitaProgressControllerProvider {
   evalServicios(){
     this.activeCita.setAddedServices(this.activeCitaDoc.servicios);
     this.available_services = this.activeCita.getServiciosAvailable(this.activeCitaDoc.servicios);
-    
+    this.cortesiaCheck();
     }
 
     startInterval(){
@@ -253,11 +254,24 @@ export class CitaProgressControllerProvider {
     updateCheckedOption(Nid,State){
       console.log('progresscontroller updateCheckedOption',Nid,State);
       console.log('updateCheckedOption start servicesCompare',JSON.stringify(this.servicesCompare));
-      if(State){
-        this.selectedService = Nid;
-        this.addService();
+      console.log('activecita addedservices',this.activeCita.addedServices);
+      if(State){ //si se va a agregar
+        if(Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)) //si es cortesia se revisa que se pueda agregar , osea si no hay mas servicios agregados
+        {
+          console.log('es cortesia');
+          if(this.activeCita.addedServices.length === 0){
+             console.log('es 0 ');
+             this.selectedService = Nid;
+            this.addService();
+          }
+        }else{
+          this.selectedService = Nid;
+          this.addService();
+          this.removeServiceWnid(Number(CitasDataProvider.SERVICIO_CORTESIA_NID));
+        }
       }else{
         this.removeServiceWnid(Nid);
+        this.cortesiaCheck();
       }
       console.log('added',this.activeCita.addedServices);
       console.log('updateCheckedOption end servicesCompare',JSON.stringify(this.servicesCompare));
@@ -272,6 +286,28 @@ export class CitaProgressControllerProvider {
       this.activeCita.compareServicios(this.servicesCompare);
       console.log('pcon guardarEdiciones',this.activeCita.todayEdiciones);
       await this.citasManager.guardarEdiciones(this.activeCita);
+    }*/
+
+    cortesiaCheck(){
+      console.log('cortesiaCheck', this.activeCita.addedServices);
+      if(this.activeCita.addedServices.length <= 0){
+        this.selectedService = Number(CitasDataProvider.SERVICIO_CORTESIA_NID);
+        this.addService();
+        this.selectedService = null;
+      }
+    }
+
+    /*cortesiaRemoveIfin(){
+      if(this.activeCita && this.activeCita.addedServices){
+      let found = this.activeCita.addedServices.find(
+        (servicio)=>{
+          return Number(servicio.Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID);
+        }
+      );
+      if(found){
+        this.removeServiceWnid(Number(CitasDataProvider.SERVICIO_CORTESIA_NID));
+      }
+    }
     }*/
 
 }
