@@ -102,7 +102,7 @@ export class CitasPresentatorProvider {
 
   editCita( cita ){
     console.log('state of cita',cita.checkState(CitasDataProvider.STATE_COBRO));
-    if(cita.checkState(CitasDataProvider.STATE_FINALIZADA) || cita.checkState(CitasDataProvider.STATE_COBRO)){
+    if(cita.checkState(CitasDataProvider.STATE_FINALIZADA) || cita.checkState(CitasDataProvider.STATE_COBRO) || cita.checkState(CitasDataProvider.STATE_ADEUDO)){
       this.progresSController.editfinish = true;
       this.openProgreso(cita);
     }else{

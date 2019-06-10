@@ -54,10 +54,10 @@
     <div class="reportRow_desglose_label">Ediciones</div>
     <div class="reportRow_edicion row_detail midFont" *ngFor="let edicion of cita.edicionesFechas">
       <span class="servicio-item" *ngIf="edicion.cos > 0">
-        {{edicion.title}} <span  class="midFont fontSecondary">${{edicion.cos}}</span>
+        {{edicion.title}} <span  class="midFont fontSecondary">${{edicion.cos}}</span> <span  class="midFont fontSecondary">{{edicion.dst}}</span>
        </span> 
        <span class="servicio-item" *ngIf="edicion.state">
-        {{edicion.title}}
+        {{edicion.title}} <span  class="midFont fontSecondary">{{edicion.dst}}</span>
        </span> 
      </div>
   </div>
@@ -113,9 +113,13 @@
       </div>
     </div>
     </div>
-    <div class="ReportesTotales" *ngIf="reportPresentator.isAdeudo">
-      
+
+    <div class="ReportesTotales totalesAdeudo" *ngIf="reportPresentator.isAdeudo">
+        <span class="totalespan midFont"><b>Total de Adeudos:</b> <span class="fontPrimary">{{reportPresentator.cajaAdeudo}}</span></span>
+      <div class="resumen_totales">
+        </div>
     </div>
+
 <div class="ReportesTotales" *ngIf="!smallMode && !reportPresentator.isAdeudo">
   <div class="servicios_totales">
       <span class="bold">No. de Servicios</span>

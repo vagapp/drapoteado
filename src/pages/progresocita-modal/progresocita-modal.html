@@ -83,7 +83,7 @@
                 <div class="costo-de-la-cita"><b>Costo de la Cita</b>
                     <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_ACTIVA) || progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA)" class="floatRight"><span class="fontSecondary">${{this.progressController.costoCita}}</span> <ion-icon name="menu"></ion-icon> </span>
                     <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)" class="floatRight"><span class="fontSecondary">${{progressController.activeCita.costo}}</span> <ion-icon name="menu"></ion-icon> </span>
-                    <div class="pagos_anteriores" *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)">
+                    <div class="pagos_anteriores" *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO) || progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA)">
                         <div class="pagodetail" *ngFor="let pago of progressController.activeCita.pagos">
                             <b>Efectivo</b><span class="res fontSecondary">${{pago.efe}}</span>
                             <b>Tarjeta</b><span class="res fontSecondary">${{pago.tar}}</span>
@@ -94,8 +94,9 @@
                         <div class="pago_restante" *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)"> <b>Restante</b><span class="res fontSecondary floatRight">${{progressController.activeCita.restantePagos}}</span></div>
                     </div>
                 </div>
-                <div class="formas-de-pago" *ngIf="((progressController.activeCita.checkState(citasData.STATE_COBRO)|| progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA,  userData.TIPO_CAJAYRECEPCION])) || (progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA) && permissions.checkUserPermission([userData.TIPO_DOCTOR]))">
-                <b>Formas de Pago</b>
+                <!--<div class="formas-de-pago" *ngIf="((progressController.activeCita.checkState(citasData.STATE_COBRO)|| progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA,  userData.TIPO_CAJAYRECEPCION])) || (progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA) && permissions.checkUserPermission([userData.TIPO_DOCTOR]))">-->
+                <div class="formas-de-pago" *ngIf="((progressController.activeCita.checkState(citasData.STATE_COBRO)|| progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA,  userData.TIPO_CAJAYRECEPCION])) ">
+                    <b>Formas de Pago</b>
                 <div class="pagos-modal ModalInput_input">
                     Efectivo
                     <input [(ngModel)]="progressController.cobroEfectivo" type="number"/>
@@ -134,7 +135,7 @@
             <div class="register_button_section">
             <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_ACTIVA)"  (click)="finalizarPop()" class="bgColorPrimary generalButton">Finalizar Cita</button>
             <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO) || progressController.activeCita.checkState(citasData.STATE_ADEUDO)" (click)="pagadaPop()" class="bgColorPrimary generalButton">Pagar</button>
-            <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_COBRO) || progressController.activeCita.checkState(citasData.STATE_ADEUDO)" (click)="guardarEdiciones()" class="bgColorPrimary generalButton">Guardar Cambios</button>
+            <button  *ngIf="(progressController.activeCita.checkState(citasData.STATE_COBRO) || progressController.activeCita.checkState(citasData.STATE_ADEUDO)) && this.permissions.checkUserPermission([userData.TIPO_DOCTOR])" (click)="guardarEdiciones()" class="bgColorPrimary generalButton">Guardar Cambios</button>
             <button  *ngIf="progressController.activeCita.checkState(citasData.STATE_FINALIZADA)" (click)="allsaveActualCita()" class="bgColorPrimary generalButton">Guardar</button>
             </div>
           </div>

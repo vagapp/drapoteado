@@ -796,6 +796,7 @@ export class UserDataProvider {
       field_facturar:{und:[{value:0}]},
       field_facturar_cantidad:{und:[{value:0}]},
       field_caja_nombre:{und:[{value:""}]},
+      field_cajas_filter:{und:[{value:0}]},
     }
   }
 
@@ -898,6 +899,7 @@ export interface citasData{
     field_caja_nombre:{und:[{value:string}]},
     field_pagos_json:{und:[{value:string}]},
     field_ediciones_json:{und:[{value:string}]},
+    field_cajas_filter:{und:[{value:number}]},
     
 }
 

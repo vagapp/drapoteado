@@ -175,7 +175,7 @@ export class CitasManagerProvider {
   checkUserCitaDataFilter(citaData):boolean{
     let ret = true;
     //console.log('data to check()',citaData);
-    if(this.userData.checkUserPermission([UserDataProvider.TIPO_CAJA]) && ! (Number(citaData.field_estado) === Number(CitasDataProvider.STATE_COBRO)) ){
+    if(this.userData.checkUserPermission([UserDataProvider.TIPO_CAJA]) && ! (Number(citaData.field_estado) === Number(CitasDataProvider.STATE_COBRO) || Number(citaData.field_estado) === Number(CitasDataProvider.STATE_ADEUDO)) ){
       ret = false;
       console.log('cita blocked from caja couase doesnt need cobro', citaData);
     }
@@ -241,6 +241,7 @@ export class CitasManagerProvider {
   updateCita( cita ){return this.nodeMan.updateNode(cita);}
   deleteCita( cita ){return this.nodeMan.deleteNode(cita);}
   updateCitaState( cita:Citas , state, saveDate:boolean = true){
+    console.log('updateCitaState',cita,state);
     cita.data.field_estado.und[0].value = state;
     let reportedateset = false;
     let fechacobroset = false;
@@ -249,10 +250,17 @@ export class CitasManagerProvider {
     if(cita.todayEdiciones.length > 0){  this.setCitaFechaReporte(cita,saveDate);  saveDate = false; }
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  this.setCitaFechaReporte(cita,saveDate); reportedateset=true;  }
-    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){ 
+    if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){
+      console.log('settofinalziada woe se esta tratando de pagar');
       fechacobroset = this.setCitaFechaCobro(cita,saveDate); 
       this.setCaja(cita); 
       //this.setCitaFechaReporte(cita,saveDate); 
+      reportedateset = true; 
+    }
+    if(cita.checkState(CitasDataProvider.STATE_ADEUDO)){ // el estado de adeudo siempre se pone cuando mandas a finalizar y no se paga el monto completo.
+      console.log('esta en adeudo');
+      fechacobroset = this.setCitaFechaCobro(cita,saveDate); 
+      this.setCaja(cita); 
       reportedateset = true; 
     }
     if(Number(state) === Number(CitasDataProvider.STATE_CANCELADA)){
@@ -273,10 +281,23 @@ export class CitasManagerProvider {
   
   
 
-  setCaja(cita){
+  setCaja(cita:Citas){
     console.log('setting caja',this.userData.userData.uid,this.userData.userData.name);
+    console.log('caja is like dis',cita.data.field_cita_caja);
+    //cita.data.field_cita_caja.und.push(this.userData.userData.uid);
+    
+    let found =  cita.data.field_cajas_filter.und.find((cajauid)=>{
+      return Number(this.userData.userData.uid) === Number(cajauid.value);
+    });
+    if(!found){
+      cita.data.field_cajas_filter.und.push({'value':this.userData.userData.uid});
+    }
+    if(cita.checkState(CitasDataProvider.STATE_COBRO)){
+    cita.data.field_caja_nombre = {'und':[{'value': this.userData.userData.name}]};
     cita.data.field_cita_caja.und[0] = this.userData.userData.uid;
-    cita.data.field_caja_nombre = {'und':[{'value': this.userData.userData.name}]}; 
+    }
+    console.log('cajas filter ended laik ',cita.data.field_cajas_filter);
+    //si el estado de la cita es adeudo no se guarda el nombre
   }
 /*
   {"receivers":["76"],

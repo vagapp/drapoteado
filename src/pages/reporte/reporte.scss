@@ -19,6 +19,14 @@ page-reporte {
         flex-flow: row;
         width: 100%;
     }
+
+    .totalesAdeudo {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
     
     .ReportGrid{
         display: -webkit-flex;

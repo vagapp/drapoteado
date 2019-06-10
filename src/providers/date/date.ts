@@ -16,6 +16,7 @@ export class DateProvider {
   }
 
   static formatDateBinaryNumber( num ){
+      //console.log('formatDateBinaryNumber',num);
     return (num < 10 ? '0' : '') + num;
   }
 
@@ -50,6 +51,7 @@ export class DateProvider {
     }
 
     static getStringDate(date:Date):string{
+        console.log('getStringDate',date);
         let ret = ""
         let datestring = `${DateProvider.formatDateBinaryNumber(date.getDate())}/${(DateProvider.formatDateBinaryNumber(date.getMonth()+1))}/${date.getFullYear()}`;
         ret = DateProvider.getDayOWeekLabel( date.getDay() ) + ', ' + datestring;

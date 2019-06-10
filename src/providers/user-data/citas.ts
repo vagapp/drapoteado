@@ -4,6 +4,7 @@ import { servicios } from './servicios';
 import { DateProvider } from '../date/date';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { IfObservable } from 'rxjs/observable/IfObservable';
+import { ɵConsole } from '@angular/core';
 
 
 export class Citas{
@@ -192,6 +193,11 @@ export class Citas{
 
     setEdicionesFechas(from:number, to:number){
         console.log('setEdicionesFechas',this.ediciones);
+        if(Number(to) === 0){
+            console.log('to is 0');
+            to = new Date().getTime();
+            console.log('to is now',to);
+        }
         this.festado = 0;
         this.addedServicesFechas = new Array();
         this.edicionesFechas = new Array();
@@ -206,6 +212,7 @@ export class Citas{
             if(Number(edicion.fec) <= Number(to)){
                 ret = true;
             }
+            if(ret){ edicion.dst = DateProvider.getStringDate(new Date(Number(edicion.fec))); console.log('edicion.dst',edicion.dst); }
             return ret;
         }).sort((a,b)=>{
             let ret = 0;
@@ -290,6 +297,18 @@ export class Citas{
           this.data.field_email.und[0].email = data_input.field_email;
           this.data.field_telefono.und[0].value = data_input.field_telefono;
           this.data.field_cita_doctor.und[0] = data_input.doctor_uid;
+            //let aux_caja_array = new Array();
+          /*  this.data.field_cita_caja.und= new Array();
+            if(data_input.caja_uid){
+                console.log('datainput si tiene cajai',data_input.caja_uid);
+                if((data_input.caja_uid+"").localeCompare("_none") !== 0){
+                    this.data.field_cita_caja.und.push(data_input.caja_uid);
+                }
+            }
+         
+          console.log((data_input.caja_uid+"").localeCompare("_none"));
+          console.log(data_input.caja_uid);
+          console.log('setting caja ',this.data.field_cita_caja );*/
           this.data.field_cita_caja.und[0] = data_input.caja_uid;
           this.data.field_cita_recepcion.und[0] = data_input.recepcion_uid;
           this.data.field_estado.und[0].value = data_input.field_estado;
@@ -324,6 +343,15 @@ export class Citas{
               this.data.field_facturar_cantidad.und[0] = data_input.field_facturar_cantidad;
                 this.facturado = Number(data_input.field_facturar_cantidad.value);
             }
+
+            console.log('cajas filter is ',data_input.field_cajas_filter);
+        if(data_input.field_cajas_filter){
+            this.data.field_cajas_filter.und = data_input.field_cajas_filter.map(
+                (cajauid)=>{ return {value:cajauid}; }
+            );
+           
+        }
+        console.log('cajas filter data set as  ',this.data.field_cajas_filter);
           //this.setDate(data_input.field_date.value);
           this.processData();
           console.log("savedData",this.data);

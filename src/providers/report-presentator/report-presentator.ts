@@ -251,15 +251,17 @@ async openReportGenerate( report:reportes = null ){
   }
 
   async loadReportCitasGrupal(){
-    console.log('loadReportCitasGrupal',this.subsData.subscription.field_doctores);
+    console.log('loadReporteAdeudos.',this.docData.doctoresIDs);
     this.docuid = null;
-    await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.subsData.subscription.field_doctores);
+    await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.docData.doctoresIDs);
+    //await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.subsData.subscription.field_doctores);
   }
 
   async loadReportCitasAdeudo(){
-    console.log('loadReporteAdeudos.',this.subsData.subscription.field_doctores);
+    console.log('loadReporteAdeudos.',this.docData.doctoresIDs);
     this.docuid = null;
-    await this.reporteCitas.reporteLoadCitasAdeudo(this.actualReport, this.subsData.subscription.field_doctores);
+    await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.docData.doctoresIDs);
+    //await this.reporteCitas.reporteLoadCitasAdeudo(this.actualReport, this.subsData.subscription.field_doctores);
   }
 
   
@@ -326,8 +328,8 @@ async openReportGenerate( report:reportes = null ){
       if(this.isAdeudo){
         cita.setPagosFecha(0,0);
         cita.setEdicionesFechas(0,0);
+        this.cajaAdeudo += aux_costo - cita.pagosTotal;
       }else{
-      
       cita.setPagosFecha(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS); //este metodo pone algunas cosas del reporte en la cita. porque si we
       cita.setEdicionesFechas(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS);
       if(cita.originactivereport){ //esta cita fue originada el dia de este reporte y sus totales se manejan normalmente.
@@ -352,10 +354,6 @@ async openReportGenerate( report:reportes = null ){
         this.totalAdeudo += cita.pagosTotal;
       }
     }
-
-
-     
-      
      
      
       /*
