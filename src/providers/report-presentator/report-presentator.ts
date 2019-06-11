@@ -260,7 +260,7 @@ async openReportGenerate( report:reportes = null ){
   async loadReportCitasAdeudo(){
     console.log('loadReporteAdeudos.',this.docData.doctoresIDs);
     this.docuid = null;
-    await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.docData.doctoresIDs);
+    await this.reporteCitas.reporteLoadCitasAdeudo(this.actualReport, this.docData.doctoresIDs);
     //await this.reporteCitas.reporteLoadCitasAdeudo(this.actualReport, this.subsData.subscription.field_doctores);
   }
 

@@ -140,7 +140,7 @@ export class CitasManagerProvider {
       let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=all&args[4]=all&args[5]=all&args[6]=all&args[7]=all&args[8]=all&args[9]=7`;
       //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
       let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
-      console.log('url getting citas',url);
+      console.log('url getting citas adeudos',url);
       return this.http.get(url);
   }
 

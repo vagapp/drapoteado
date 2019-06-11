@@ -13,6 +13,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { IfObservable } from 'rxjs/observable/IfObservable';
 
 /**
  * Generated class for the NuevousuarioModalPage page.
@@ -88,6 +89,7 @@ export class NuevousuarioModalPage {
 
   selectOption( selected:number ){
     this.selectedUsersOptions = Number(selected);
+    console.log('selected user option is',this.selectedUsersOptions);
   }
 
   checkSelectedOption(selected:number ){
@@ -103,6 +105,7 @@ export class NuevousuarioModalPage {
     this.newuser=true; 
     this.initialpage=false;
     this.tutorial.tutorial_users_selected_option = this.selectedUsersOptions;
+    console.log('selected option at tutorial start ', this.tutorial.tutorial_users_selected_option);
     if(this.tutorial.tutorial_users_selected_option === TutorialProvider.TUTORIAL_USER_BOTH){
       this.newUser.field_tipo_de_usuario.und = [2];
       this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_RECEPCION; 
@@ -119,6 +122,11 @@ export class NuevousuarioModalPage {
     this.restart();
     this.newUser.field_tipo_de_usuario.und = [3];
  
+  }
+
+  checkIfgoback(){
+    console.log('checkIfgoback',this.tutorial.tutorial_user_created_step,TutorialProvider.TUTORIAL_USER_STEP_CAJA);
+    return !(Number(this.tutorial.tutorial_user_created_step) === Number(TutorialProvider.TUTORIAL_USER_STEP_CAJA));
   }
 
   endUsers(){
@@ -303,8 +311,13 @@ async getUserByCode(){
 
 gobackuser(){
   console.log('gobackuser',this.isnew);
+  console.log('tutorial state is',this.tutorial.checkTutorialState());
   if(this.isnew){
     this.newuser=false; this.codeuser=false; this.initialpage=true;
+    if(this.tutorial.checkTutorialState()){
+      console.log('setting created step to 0');
+      this.tutorial.tutorial_user_created_step = 0;
+    }
   }else{
     console.log('okei no es new');
     this.dismiss();

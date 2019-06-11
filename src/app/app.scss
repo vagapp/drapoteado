@@ -19,7 +19,12 @@ ion-content{
     color:#4D4D4D !important;
 }
 
-
+.basicpadding{
+    padding: 3em;
+}
+.nopadtop{
+    padding-top: 0 !important; 
+}
 
 .registerInputerror{
     background: #f1d5d5 !important;
