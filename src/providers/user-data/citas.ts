@@ -31,6 +31,7 @@ export class Citas{
     caja_playerid:string = null;
     recepcion_playerid:string = null;
     opendetail=false;
+    
 
     ediciones:any[] = new Array();
     todayEdiciones:any[] = new Array();
@@ -49,6 +50,7 @@ export class Citas{
     festado:number = 0;
     addedServicesFechas: servicios[];
     edicionesFechas: any[];
+    estado_anterior: number = null;
     
     constructor(){
         this.init();

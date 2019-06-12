@@ -107,15 +107,16 @@ export class EntergrupoPage {
         console.log('sending msg',selected_subusers.map((user)=>{ return user.uid }));
         this.wsMessenger.generateDoctogroupMessage(this.loaded_group_sus.field_doctores.concat(this.loaded_group_sus.field_subusuarios));
         this.wsMessenger.generateSubtogroupMessage(selected_subusers.map((user)=>{ return user.uid }),this.loaded_group_sus.field_doctores);
+        
         let view = this;
-        this.navCtrl.setRoot('HomePage');
-        this.loader.dismissLoader();
+        //this.navCtrl.setRoot('HomePage');
+        //this.loader.dismissLoader();
         //view.loader.dismissLoader();
-        /*setTimeout(function () {
-          //view.bu.locationReload();
-          this.navCtrl.setRoot('MiplanPage');
-          view.loader.dismissLoader();
-      }, 1000);*/
+        setTimeout(function () {
+          view.bu.locationReload();
+          //this.navCtrl.setRoot('MiplanPage');
+          //view.loader.dismissLoader();
+      }, 1000);
       },(error)=>{
         console.log('redysave error',error);
         this.loader.dismissLoader();

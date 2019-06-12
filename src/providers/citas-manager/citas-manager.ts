@@ -242,6 +242,7 @@ export class CitasManagerProvider {
   deleteCita( cita ){return this.nodeMan.deleteNode(cita);}
   updateCitaState( cita:Citas , state, saveDate:boolean = true){
     console.log('updateCitaState',cita,state);
+    cita.estado_anterior = cita.data.field_estado.und[0].value;
     cita.data.field_estado.und[0].value = state;
     let reportedateset = false;
     let fechacobroset = false;
@@ -292,7 +293,9 @@ export class CitasManagerProvider {
     if(!found){
       cita.data.field_cajas_filter.und.push({'value':this.userData.userData.uid});
     }
-    if(cita.checkState(CitasDataProvider.STATE_COBRO)){
+    console.log('cita state is', cita.stateLabel);
+    if(Number(cita.estado_anterior) === Number(CitasDataProvider.STATE_COBRO)){
+      console.log('guardando nombre de caja');
     cita.data.field_caja_nombre = {'und':[{'value': this.userData.userData.name}]};
     cita.data.field_cita_caja.und[0] = this.userData.userData.uid;
     }

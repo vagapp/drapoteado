@@ -59,11 +59,24 @@ export class DoctoresManagerProvider {
     this.docData.docIdsToLoad = new Array();
     if(this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){ //si es un doctor
       //this.setDoctores([this.userData.userData.uid]);
-      const auxDoc = new Doctores();
-      auxDoc.Uid = Number(this.userData.userData.uid);
-      auxDoc.name = this.userData.userData.name;
-      auxDoc.field_alias = this.userData.userData.field_alias['und'][0]['value'];
-      this.docData.addDoctor(auxDoc);
+
+      if(this.subsMan.subsData.isGroup){
+        console.log('es grupo');
+        console.log('this.subsMan.subsData.docs', this.subsMan.subsData.subscription.field_doctores);
+        this.docData.docIdsToLoad =  this.subsMan.subsData.subscription.field_doctores;
+        if(this.docData.docIdsToLoad.length > 0){
+          let docs_data = await this.userMan.requestUsers(null,null,this.docData.docIdsToLoad).toPromise();
+          console.log('docs_data is', docs_data);
+          this.setDoctoresData(docs_data);
+        }
+      }else{
+        const auxDoc = new Doctores();
+        auxDoc.Uid = Number(this.userData.userData.uid);
+        auxDoc.name = this.userData.userData.name;
+        auxDoc.field_alias = this.userData.userData.field_alias['und'][0]['value'];
+        this.docData.addDoctor(auxDoc);
+      }
+      
     }else{ // si es un sub usuario
       console.log('not a doctor setting docs uids');
       this.loadGroupDoctors(); //aquí cargamos los doctores de la suscripcion
@@ -126,7 +139,7 @@ export class DoctoresManagerProvider {
       auxDoc.field_alias = doc.field_alias;
       auxDoc.setDisponibilidad(doc.field_disponibilidad);
       this.docData.addDoctor(auxDoc);
-      console.log(this.docData.doctores);
+      console.log('setDoctoresData',this.docData.doctores);
     }
   }
 

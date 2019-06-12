@@ -6,7 +6,7 @@
 -->
 <ion-content padding>
 
-    <div class="modal_closer" (click)="this.dismiss();">Volver</div>
+    <div class="modal_closer" *ngIf="!this.tutorial.checkTutorialState()" (click)="this.dismiss();">Volver</div>
     
     <div class="modalPage_header" *ngIf="!this.tutorial.checkTutorialState()">
         <div class="modalPage_logo"><img src="assets/imgs/servicios.svg"/></div>
