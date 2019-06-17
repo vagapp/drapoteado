@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController, ViewController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { userd, UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
@@ -9,11 +9,9 @@ import { AlertProvider } from '../../providers/alert/alert';
 import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { TutorialProvider } from '../../providers/tutorial/tutorial';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
-import { IfObservable } from 'rxjs/observable/IfObservable';
+
 
 /**
  * Generated class for the NuevousuarioModalPage page.
@@ -177,7 +175,7 @@ export class NuevousuarioModalPage {
     },
     response => {
         for (var key in response.error.form_errors) {
-          this.alert.presentAlert(key, response.error.form_errors[key]);
+          this.alert.presentAlert('Error','Se ha detectado un error inesperado en el campo '+key);
         }
         this.loader.dismissLoader();
       }
@@ -404,7 +402,7 @@ updateUserd(){
     },
     response => {
       for (var key in response.error.form_errors) {
-        this.alert.presentAlert(key, response.error.form_errors[key]);
+        this.alert.presentAlert('Error', 'Se ha detectado un error inesperado en el campo '+key);
       }
       this.loader.dismissLoader();
     }

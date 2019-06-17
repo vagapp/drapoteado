@@ -80,6 +80,8 @@ export class Citas{
     set cobroCheque(val){ this.data.field_cobro_cheque.und[0].value = Number(val); this.calcularCobroTotal();} 
     set cobroEfectivo(val){ this.data.field_cobro_efectivo.und[0].value = Number(val); this.calcularCobroTotal();}
     set cobroTarjeta(val){ this.data.field_cobro_tarjeta.und[0].value = Number(val); this.calcularCobroTotal();}
+
+    get isAdeudoAnterior():boolean{ return this.originactivereport && this.checkState(CitasDataProvider.STATE_ADEUDO)}
     
     calcularCobroTotal(){ this.data.field_cobro.und[0].value = this.cobroTarjeta + this.cobroCheque + this.cobroEfectivo }
 
@@ -257,6 +259,7 @@ export class Citas{
     }
 
     setStateChangeEdition(state){
+        if(Number(state) !== Number(this.estado_anterior)){
         let aux_edicion = {
             act: true, 
             cos: 0,
@@ -267,6 +270,8 @@ export class Citas{
           };
           this.todayEdiciones.push(aux_edicion);
           this.setEdicionesField();
+          this.estado_anterior = state;
+        }
     }
  
     testOriginactivereport(from:Number,to:Number){

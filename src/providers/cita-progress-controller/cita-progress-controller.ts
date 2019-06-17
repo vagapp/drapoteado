@@ -33,6 +33,8 @@ export class CitaProgressControllerProvider {
   };
 
   servicesCompare: servicios[];
+  activeCitaAnterior:number = 0;
+  
 
   checkboxMode:boolean = true;//checkbox mode porque quisieron checkbox pero no es tan viable a ver que pasa.
   checkboxServicesList
@@ -93,6 +95,7 @@ export class CitaProgressControllerProvider {
 
   setActiveCita(cita:Citas){
     this.activeCita = cita//navParams.get('cita');
+    this.activeCita.estado_anterior = cita.data.field_estado.und[0].value;
     this.activeCitaDoc = this.citasManager.getDoctorOFCita(this.activeCita);
     console.log(this.activeCita.addedServices);
    

@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ViewController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
-import { Citas } from '../../providers/user-data/citas';
-import { servicios } from '../../providers/user-data/servicios';
-import { Doctores } from '../../providers/user-data/doctores';
 import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
 import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 import { LoaderProvider } from '../../providers/loader/loader';
@@ -12,8 +9,6 @@ import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
 import { CitaProgressControllerProvider } from '../../providers/cita-progress-controller/cita-progress-controller';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
-import { IfObservable } from 'rxjs/observable/IfObservable';
-import { BaseUrlProvider } from '../../providers/base-url/base-url';
 import { DateProvider } from '../../providers/date/date';
 
 

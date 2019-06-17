@@ -75,8 +75,6 @@ export class CitasPresentatorProvider {
         state = CitasDataProvider.STATE_ADEUDO;
       }
     }
-
-
     //cita.compareServicios(this.progresSController.servicesCompare);
     //console.log('antes de guardar el state quedo ',state);
     console.log('antes de guardar el state quedo',cita);

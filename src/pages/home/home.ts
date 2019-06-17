@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, LoadingController, ModalController, IonicPage } from 'ionic-angular';
+import { NavController, ModalController, IonicPage } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
-import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
-import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 import { ReportesDataProvider } from '../../providers/reportes-data/reportes-data';

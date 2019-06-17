@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { UserDataProvider  } from '../../providers/user-data/user-data';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
@@ -73,7 +73,7 @@ export class LoginPage {
       location.reload();
       },
       response => {
-          this.alert.presentAlert('Error',response.error);
+          this.alert.presentAlert('Error','Usuario o contraseña incorrectos');
           this.loader.dismissLoader();
       });
     }

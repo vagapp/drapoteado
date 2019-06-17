@@ -1,10 +1,9 @@
 import { Component, ɵConsole } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, LoadingController } from 'ionic-angular';
 import { UserDataProvider  } from '../../providers/user-data/user-data';
 //import { Debugger } from '../../providers/user-data/debugger';
 import { sources } from '../../providers/user-data/sources';
 import { planes } from '../../providers/user-data/planes';
-import { subscriptions } from '../../providers/user-data/subscriptions';
 import { Clipboard } from '@ionic-native/clipboard';
 import { CordovaAvailableProvider } from '../../providers/cordova-available/cordova-available';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
@@ -73,7 +72,6 @@ export class RegisterModalPage {
     public navParams: NavParams, 
     public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController,
     public clipboard: Clipboard,
     public ica: CordovaAvailableProvider,
     public userMan: DrupalUserManagerProvider,
@@ -272,12 +270,13 @@ export class RegisterModalPage {
       response => {
         //Debugger.log(["POST call in error", response]);
         if(response && response.error && response.error.form_errors){
-          let error_msg = `Se encontraron los siguientes errores:`;
+          //let error_msg = `Se encontraron los siguientes errores:`;
           for (var key in response.error.form_errors) {
-            error_msg += `
-            ${response.error.form_errors[key]}`;
+            /*error_msg += `
+            ${response.error.form_errors[key]}`;*/
+            this.alert.presentAlert('Error', 'Se ha detectado un error inesperado en '+key);
           }
-          this.alert.presentAlert('Error', error_msg);
+          //this.alert.presentAlert('Error', error_msg);
         }
        this.loader.dismissLoader();
       },

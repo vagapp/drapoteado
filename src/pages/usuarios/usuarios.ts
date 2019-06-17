@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ToastController, LoadingController, ViewController } from 'ionic-angular';
-
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
-import { userd, UserDataProvider } from '../../providers/user-data/user-data';
-import { Debugger } from '../../providers/user-data/debugger';
+import {  UserDataProvider } from '../../providers/user-data/user-data';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { AlertProvider } from '../../providers/alert/alert';
@@ -12,7 +10,7 @@ import { SubusersManagerProvider } from '../../providers/subusers-manager/subuse
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 
 /**
  * Generated class for the UsuariosPage page.

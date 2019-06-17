@@ -242,12 +242,14 @@ export class CitasManagerProvider {
   deleteCita( cita ){return this.nodeMan.deleteNode(cita);}
   updateCitaState( cita:Citas , state, saveDate:boolean = true){
     console.log('updateCitaState',cita,state);
+    //cita.estado_anterior();
     cita.estado_anterior = cita.data.field_estado.und[0].value;
     cita.data.field_estado.und[0].value = state;
     let reportedateset = false;
     let fechacobroset = false;
+    if(Number(cita.estado_anterior) !== Number(state)){
     cita.setStateChangeEdition(state);
-    
+    }
     if(cita.todayEdiciones.length > 0){  this.setCitaFechaReporte(cita,saveDate);  saveDate = false; }
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  this.setCitaFechaReporte(cita,saveDate); reportedateset=true;  }
@@ -278,6 +280,8 @@ export class CitasManagerProvider {
     //return null;
     return this.updateCita( cita.data ).share();
   }
+
+
 
   
   

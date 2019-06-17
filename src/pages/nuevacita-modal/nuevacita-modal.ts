@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController, ViewController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { Debugger } from '../../providers/user-data/debugger';
 import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
 import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 import { LoaderProvider } from '../../providers/loader/loader';
-import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { AlertProvider } from '../../providers/alert/alert';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
@@ -18,9 +17,8 @@ import { Calendar } from '@ionic-native/calendar';
 import { DoctoresManagerProvider } from '../../providers/doctores-manager/doctores-manager';
 import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { UpdaterProvider } from '../../providers/updater/updater';
-import { IfObservable } from 'rxjs/observable/IfObservable';
+
 
 /**
  * Generated class for the NuevacitaModalPage page.
@@ -209,7 +207,7 @@ showerrors:boolean = false;
         console.log("POST call in error", response);
         console.log("show error");
         for (var key in response.error.form_errors) {
-          this.alert.presentAlert(key, response.error.form_errors[key]);
+          this.alert.presentAlert('Error', 'Se ha detectado un error inesperado en '+key);
         }
       }
   );
@@ -224,6 +222,7 @@ notEmptyNewCitaValidation(){
   console.log('notEmptyNewCitaValidation');
   if(!this.checkIfInputfilledNPromtp(this.cita.data.field_paciente.und[0].value,ret)) ret = false;
   //no hace falta revisar el doctor, porque ese ya esta validado.
+  if(!this.checkIfInputfilledNPromtp(this.hourstring,ret)) ret = false;
   return ret;
 }
 
@@ -312,7 +311,7 @@ async updateCita(){
       console.log("POST call in error", response);
       console.log("show error");
       for (var key in response.error.form_errors) {
-        this.alert.presentAlert(key, response.error.form_errors[key]);
+        this.alert.presentAlert('Error', 'Se ha detectado un error inesperado en '+key);
       }
     }
   );

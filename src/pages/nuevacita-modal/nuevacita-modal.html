@@ -75,7 +75,7 @@
   </ion-item>-->
   <div class="ModalInput_input">
     <b>Hora</b>
-    <input [(ngModel)]="this.hourstring" name="time" type="text" placeholder="00:00"/>
+    <input [(ngModel)]="this.hourstring" [class.registerInputerror]="!this.cita.data.field_paciente.und[0].value && showerrors" name="time" type="text" placeholder="00:00"/>
 </div>
   </div>
   <!--<ion-grid>
