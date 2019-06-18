@@ -74,6 +74,7 @@ export class ReporteCitasProvider {
     let exists = report.citas.filter((citas)=>{return Number(citas.Nid) === Number(cita.Nid)});
     if(exists.length > 0){
       exists[0].data = cita.data;
+      console.log('processDatay checkForCitaUpdate');
       exists[0].processData();
     }
   }

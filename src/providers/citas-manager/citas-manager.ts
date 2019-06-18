@@ -213,12 +213,15 @@ export class CitasManagerProvider {
   }
 
   generateCitaFullData( data ){
+    console.log('trail1 generateCitaFullData st');
     console.log('generate fullcita data',data);
     let aux_cita = new Citas();
     aux_cita.data = data;
+    console.log('processDatay generateCitaFullData');
     aux_cita.processData();
     console.log('fulldata generated ',aux_cita);
     this.citasData.addCita(aux_cita);
+    console.log('trail1 generateCitaFullData end');
     return aux_cita;
   }
 

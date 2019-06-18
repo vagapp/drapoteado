@@ -112,6 +112,7 @@ export class CitasDataProvider{
     for( let cita of this.citas ){
       if(cita.Nid === data.Nid){
         cita.data = data;
+        console.log('processDatay updateCita');
         cita.processData();
         /*cita.setData(data);*/
          if( call ) this.subject.next(this.citas);

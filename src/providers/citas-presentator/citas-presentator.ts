@@ -55,6 +55,7 @@ export class CitasPresentatorProvider {
 
   
   updateStatePop( cita ,state ){
+    console.log('updateStatePop',cita,state);
     let aux_title = CitasDataProvider.getStateLabel(state);
     this.alert.chooseAlert(
       aux_title,
@@ -65,6 +66,7 @@ export class CitasPresentatorProvider {
     }
  
   async updateStateRequest( cita, state ) {
+    console.log('updateStateRequest',cita,state);
     this.loader.presentLoader("Actualizando...");
     if(!this.reportesMan.reportesData.isSetTodayReport) await this.reportesMan.getTodayReport();
     let saveDate = !this.progresSController.editfinish;

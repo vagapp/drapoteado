@@ -81,11 +81,13 @@ export class UpdaterProvider {
   //las citas no se actualizan bien. no se filtran doctores que ya no se tienen agregados.
   //tengo dos listas de doctores, una en docdata y otra en subsdata. no se cual se usa para que. porque hay dos? que me pasa?
   async updateCitas(clear:boolean = false){
+    console.log('trail1 updateCitas start');
+
     //this.citasData.citas = new Array();
     //this.citasData.daysCitas = new Array();
     //this.citasManager.citasData.startDateFilter; 
     //this.citasManager.citasData.endDateFilter;
-
+   
     console.log('updateCitas',clear,'from',this.citasData.startDateFilter,'to',this.citasManager.citasData.endDateFilter);
     //setting defaults.
     let def_from = this.datep.nowStart;
@@ -116,6 +118,7 @@ export class UpdaterProvider {
     //reloading.
     await this.citasManager.requestCitas(def_from,def_to,def_paciente).toPromise();
     this.docMan.evaluateCitas();
+    console.log('trail1 updateCitas end');
   }
 
 }

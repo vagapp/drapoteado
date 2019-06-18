@@ -60,6 +60,7 @@ export class WebsocketServiceProvider {
   }
 
   serverMessages(message:Message){
+    console.log('trail1 serverMessages st');
     console.log('message received', message);
     switch(message.action){
       case 'addCita': this.addCita(message); break;
@@ -77,6 +78,7 @@ export class WebsocketServiceProvider {
       case WebsocketServiceProvider.ACTION_SUB_OUT_GROUP: this.RESPONSE_SUB_OUT_GROUP(message); break;
       case WebsocketServiceProvider.ACTION_SUB_BYCODE: this.RESPONSE_SUB_BYCODE(message); break;
     }
+    console.log('trail1 serverMessages end');
   }
   
   groupAddSubSubs(message){
@@ -126,14 +128,16 @@ export class WebsocketServiceProvider {
    */
   async addCita(message:Message){
     console.log('addCita recieved',message);
+    console.log('trail1 addCita st');
     if(this.FilterMessageCita(message)){
       console.log("cita2addfiltered");
       let aux_cita = this.cmanager.generateCitaFullData(message.content);
       this.reportPresentator.updateCita(aux_cita);
       this.updateGot(aux_cita.Nid);
       await this.updater.updateServicios();
-      await this.updater.updateCitas();
+      //await this.updater.updateCitas();
     }
+    console.log('trail1 addCita end');
   }
 
   removeCita(message:Message){

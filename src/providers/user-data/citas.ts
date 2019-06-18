@@ -236,7 +236,7 @@ export class Citas{
             if(a.fec < b.fec) ret = -1;
             return ret;
         });
-        console.log('states sorted',states);
+        console.log('STATE_FINALIZADA',states);
         //obtener el ultimo estado (el mas actual)
         let latestState = {state:0};
         if(states.length > 0)
@@ -259,6 +259,7 @@ export class Citas{
     }
 
     setStateChangeEdition(state){
+        console.log('setStateChangeEdition',state);
         if(Number(state) !== Number(this.estado_anterior)){
         let aux_edicion = {
             act: true, 
@@ -360,6 +361,7 @@ export class Citas{
         }
         console.log('cajas filter data set as  ',this.data.field_cajas_filter);
           //this.setDate(data_input.field_date.value);
+          console.log('processDatay setData');
           this.processData();
           console.log("savedData",this.data);
           console.log('cita ended laik',this);
@@ -368,11 +370,13 @@ export class Citas{
     
 
     processData(){
+        console.log('trail1 processdata ',this.data.Nid);
         console.log('cita processing data')
         this.Nid = this.data.Nid
         this.dateMs =  this.data.field_datemsb.und[0].value;
         console.log('setting processData dateMs',this.dateMs);
         console.log('processData ediciones json ',this.data.field_ediciones_json);
+        console.log('aux servicios json ',this.data.aux_servicios_json);
         if(this.data.aux_servicios_json) this.setServiciosReport(this.data.aux_servicios_json);
         if(this.data.field_pagos_json) this.setPagosJson(this.data.field_pagos_json);
         if(this.data.field_ediciones_json) this.setEdicionesJson(this.data.field_ediciones_json);
@@ -632,6 +636,8 @@ export class Citas{
             console.log("added service",element);
             this.data.field_servicios_cita.und.push(element.Nid);
         });
+        this.data.aux_servicios_json = JSON.stringify( this.addedServices);
+        console.log('populated services json', this.data.aux_servicios_json);
         console.log("populated services_cita data",this.data.field_servicios_cita);
     }
 
