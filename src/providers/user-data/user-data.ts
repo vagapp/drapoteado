@@ -18,6 +18,7 @@ import { PlanesDataProvider } from '../planes-data/planes-data';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 import { BaseUrlProvider } from '../base-url/base-url';
 import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 @Injectable()
@@ -191,6 +192,7 @@ export class UserDataProvider {
     this.userData.status = val['status'];
     this.userData.roles = val['roles'];
     this.userData.field_tipo_de_usuario = val['field_tipo_de_usuario'];
+    this.setCitasRoleFilter(Number(this.userData.field_tipo_de_usuario.und[0]['value']));
     this.userData.field_useremail = val['field_useremail'];
     if(val['field_nombre'].length !== 0)this.userData.field_nombre = val['field_nombre'];
     if(val['field_apellidos'].length !== 0)this.userData.field_apellidos = val['field_apellidos'];
@@ -232,7 +234,14 @@ export class UserDataProvider {
   }
 
 
-
+  setCitasRoleFilter(tipo_usuario:number){
+    switch(tipo_usuario){
+      case UserDataProvider.TIPO_CAJA: this.citas.userStateFilter = [CitasDataProvider.STATE_COBRO, CitasDataProvider.STATE_ADEUDO, CitasDataProvider.STATE_FINALIZADA]; break;
+      case UserDataProvider.TIPO_CAJAYRECEPCION: break;
+      case UserDataProvider.TIPO_DOCTOR: break;
+      case UserDataProvider.TIPO_RECEPCION: break;
+    }
+  }
 
   login(username:string, password:string):Observable<any>{
     const body = JSON.stringify({"username":username,"password":password});

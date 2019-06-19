@@ -21,6 +21,16 @@ export class CitasDataProvider{
   customDateFilters:boolean = false;
   customFilters:boolean = false;
 
+  userStateFilter:Array<number> = [
+    CitasDataProvider.STATE_PENDIENTE,
+    CitasDataProvider.STATE_CONFIRMADA,
+    CitasDataProvider.STATE_ACTIVA,
+    CitasDataProvider.STATE_COBRO,
+    CitasDataProvider.STATE_FINALIZADA,
+    CitasDataProvider.STATE_CANCELADA,
+    CitasDataProvider.STATE_ADEUDO
+  ];
+
   daysCitas:DaysCitas[] = new Array();
 
   //estados de cita:
@@ -200,14 +210,23 @@ export class CitasDataProvider{
   applyFilters(){
     console.log('yaweyakiwe',this.startDateFilter,this.endDateFilter);
     this.citasShowPool = CitasDataProvider.filterByDates(this.citas, this.startDateFilter, this.endDateFilter);
+    this.citasShowPool = this.applyUserTypeFilters(this.citasShowPool);
     //console.log('oyeme wey',JSON.stringify(this.citasShowPool));
     this.printShowPoolDatesRn();
     if(this.pacienteFilter !== null){
       console.log('this.pacienteFilter',this.pacienteFilter);
       this.citasShowPool = CitasDataProvider.filterByPaciente(this.citasShowPool, this.pacienteFilter);
     }
+    
     console.log('endfiltered citas',this.citas);
     console.log('endfilter showpool',this.citasShowPool);
+  }
+
+  applyUserTypeFilters(citas):any[]{
+    console.log('applyUserTypeFilters filters is ',this.userStateFilter);
+    return citas.filter(
+      (cita)=>{ console.log('applyUserTypeFilters state is',cita.data.field_estado.und[0]['value']); let ret = this.userStateFilter.indexOf(Number(cita.data.field_estado.und[0]['value'])) !== -1; console.log('applyUserTypeFilters ret',ret) ; return ret; }
+      );
   }
 
 

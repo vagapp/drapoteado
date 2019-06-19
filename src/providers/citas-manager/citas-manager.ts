@@ -173,13 +173,14 @@ export class CitasManagerProvider {
 
 
   checkUserCitaDataFilter(citaData):boolean{
-    let ret = true;
+    /*let ret = true;
     //console.log('data to check()',citaData);
     if(this.userData.checkUserPermission([UserDataProvider.TIPO_CAJA]) && ! (Number(citaData.field_estado) === Number(CitasDataProvider.STATE_COBRO) || Number(citaData.field_estado) === Number(CitasDataProvider.STATE_ADEUDO)) ){
       ret = false;
       console.log('cita blocked from caja couase doesnt need cobro', citaData);
     }
-    return ret;
+    return ret;*/
+    return true;
   }
 
   //este metodo revisa que el doctor este activo y en la suscripcion cargada para este usuario.

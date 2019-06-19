@@ -306,7 +306,7 @@ async openReportGenerate( report:reportes = null ){
    * this method evaluates all of the citas of the report and generates the presented data.
   */
   evaluateCitas(){
-    console.log('evaluating citas of actual report');
+    console.log('evaluateCitas evaluating citas of actual report');
     this.resetVars();
     console.log('citas en evaluate citas report', this.actualReport.citas);
     this.noCitas= 0;
@@ -319,10 +319,10 @@ async openReportGenerate( report:reportes = null ){
     console.log('noCancel ',this.noCancel);
     this.calcularCitasPorCobrar();
     let filteredCitas = CitasDataProvider.sortByDate(this.getFilteredCitasShow());
+    console.log('filteredCitas',filteredCitas);
     for(let cita of filteredCitas){
       console.log('evaluateCitas citra',cita);
       if(!cita.checkState(CitasDataProvider.STATE_CANCELADA)){ // si no esta cancelada se interpretan los totales.
-      
       let aux_costo = Number(cita.costo ? cita.costo : 0 );
       let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
       if(this.isAdeudo){
@@ -354,36 +354,10 @@ async openReportGenerate( report:reportes = null ){
         this.totalAdeudo += cita.pagosTotal;
       }
     }
-     
-     
-      /*
-      let aux_costo = Number(cita.costo ? cita.costo : 0 );
-      let aux_cobro = Number(cita.cobro ? cita.cobro : 0 );
-      let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
-      let aux_cobroEfectivo = Number(cita.cobroEfectivo ? cita.cobroEfectivo : 0 );
-      let aux_cobroTarjeta = Number(cita.cobroTarjeta ? cita.cobroTarjeta : 0 );
-      let aux_cobroCheque = Number(cita.cobroCheque ? cita.cobroCheque : 0 );
-      
-      this.duracionTotalMs += aux_duracion;
-      this.costoTotal += aux_costo;
-      this.total += aux_cobro;
-      this.totalefectivo+=aux_cobroEfectivo;
-      this.totalTarjeta+=aux_cobroTarjeta;
-      this.totalCheques+=aux_cobroCheque;*/
-
-     
-      /*if(cita.costo) this.costoTotal += cita.costo;
-      if(cita.cobro) this.total+= cita.cobro;
-      if(cita.costo && cita.cobro && cita.costo > cita.cobro){ 
-        console.log('cita.costo > cita.cobro',cita);
-        this.cajaAdeudo += cita.costo - cita.cobro;
-        console.log(' this.cajaAdeudo goes up to', this.cajaAdeudo); 
-      }
-      if(cita.cobroEfectivo) this.totalefectivo+=cita.cobroEfectivo;
-	    if(cita.cobroTarjeta) this.totalTarjeta+=cita.cobroTarjeta;
-      if(cita.cobroCheque) this.totalCheques+=cita.cobroCheque;*/
       console.log('cita evaluada',cita);
       
+    }else{
+      cita.setEdicionesFechas(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS);
     }
   }
     console.log('tota facturar es ',this.facturadoTotal);
@@ -412,7 +386,8 @@ async openReportGenerate( report:reportes = null ){
     return this.actualReport.citas.filter(
       (citas)=>{
         return (
-          !citas.checkState(CitasDataProvider.STATE_CANCELADA) 
+          true
+          //!citas.checkState(CitasDataProvider.STATE_CANCELADA) 
         )
       });
   }
