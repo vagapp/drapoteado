@@ -132,10 +132,12 @@ export class SubscriptionDataProvider {
 
 
   isGroupPlan(){
-    console.log('SubscriptionDataProvider isGroupPlan');
+  //console.log('SubscriptionDataProvider isGroupPlan');
+  /*console.log('check ig is fucking group plan so dis not a doctor so he no subscription damn?');
+   console.log(this.subscription);
+   console.log(this.subscription.field_plan_sus);*/
     if(this.subscription && this.subscription.field_plan_sus) return Number(this.subscription.field_plan_sus) === Number(SubscriptionDataProvider.PLAN_GROUP)
     return false;
-    
   }
 
   getSubusersIDs():Array<number>{

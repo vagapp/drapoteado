@@ -36,6 +36,7 @@ export class TutorialProvider {
 
   static TUTORIAL_USER_CNR = 1; // opcion de caja y recepcion
   static TUTORIAL_USER_BOTH = 2; //opcion de un usuario para caja y otro para recepcion
+  static TUTORIAL_USER_CODE = 3; //opcion de agregar usuarios por codigo
 
  static TUTORIAL_USER_STEP_CAJA  = 2;
  static TUTORIAL_USER_STEP_RECEPCION = 1;
@@ -44,6 +45,7 @@ export class TutorialProvider {
   get TUTORIAL_FINISHED(){ return TutorialProvider.TUTORIAL_FINISHED; }
   get TUTORIAL_USER_CNR(){ return TutorialProvider.TUTORIAL_USER_CNR; }
   get TUTORIAL_USER_BOTH(){ return TutorialProvider.TUTORIAL_USER_BOTH; }
+  get TUTORIAL_USER_CODE(){ return TutorialProvider.TUTORIAL_USER_CODE; }
 
   get TUTORIAL_USER_STEP_CAJA(){ return TutorialProvider.TUTORIAL_USER_STEP_CAJA; }
   get TUTORIAL_USER_STEP_RECEPCION(){ return TutorialProvider.TUTORIAL_USER_STEP_RECEPCION; }

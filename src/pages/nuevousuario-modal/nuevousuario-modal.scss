@@ -24,6 +24,18 @@ page-nuevousuario-modal {
         padding-top: 20px;
     }
 
+    .codetext .label {
+        padding-left: 20px;
+    }
+
+    
+    .addbycode {
+    width: 80%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
     .trisectional{
         display: grid;
     grid-template-columns: 1fr 1fr 1fr;

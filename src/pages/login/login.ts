@@ -73,10 +73,13 @@ export class LoginPage {
       location.reload();
       },
       response => {
+        console.log('login error response',response);
           this.alert.presentAlert('Error','Usuario o contraseña incorrectos');
           this.loader.dismissLoader();
       });
     }
+
+    
 
 
   actionOpenRecover(){

@@ -51,7 +51,12 @@
                 <span class="spanBlock"> ¿Una sola persona administra y cobra tus citas?</span>
                 <span class="spanBlock"> Crea un usuario de <span class="fontPrimary">Caja & Recepción</span></span>
             </div>
-
+        </div>
+        <div class="addbycode" *ngIf="!this.tutorial.isGroup">
+            <div class="bisectional_section"  (click)="selectOption(3)" [class.selectedOption]="checkSelectedOption(3)">
+                <span class="spanBlock"> ¿Compartes personal con otro usuario de DRAP?</span>
+                <span class="spanBlock"> Si los usuarios ya han sido creados puedes agregarlos usando sus <span class="fontPrimary">codigos</span> aqui.</span>
+            </div>
         </div>
         <p *ngIf="this.tutorial.isplanholder" class="midSubFont" >Adquiere los usuarios adicionales que necesites ingresando en <span class="fontPrimary">MI PLAN</span></p>
         <div class="buttonsection">
@@ -76,14 +81,14 @@
         <span class="spanBlock" *ngIf="this.userData.checkUserPlanHolder()"> <button class="bgColorSecondary generalButton" (click)="newuser=true; initialpage=false;">Registrar Nuevo</button></span>
       </div>
     <div class="nuevoservicio_content modalContent" *ngIf="codeuser">
-        <span class="spanBlock optionspan" (click)="gobackuser()" > atrás </span>
+        <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="this.checkIfgoback()"> atrás </span>
         <div class="ModalInput_input">
-            <b>Introducir Código</b>
+            <span class="codetext"><b>Introducir Código</b> <span class="label">usuarios disponibles: {{subsLeft}}</span></span>
             <input  [(ngModel)]="this.newUserCode" type="text"/>
         </div>
         <div class="midAlign">
             <div class="register_button_section">
-            <button (click)="getUserByCode()" class="bgColorSecondary generalButton">Buscar</button>
+            <button (click)="getUserByCode()"  *ngIf="subsLeft > 0" class="bgColorSecondary generalButton">Buscar</button>
             </div>
           </div>
     </div>
@@ -92,6 +97,13 @@
             <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> <span class="fontPrimary">Caja.</span> Esta persona cobra las citas </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> <span class="fontPrimary">Recepción.</span> Esta persona administra citas </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Recepción y Caja.</span> Esta persona administra y cobra las citas </span>
+            
+            <!--<div class="tutorial_usercode">
+                    <span class="tutorial_explain_text_sm" *ngIf="this.tutorial.checkTutorialState()"> Puedes buscar un usuario existente introduciendo el codigo de usuario aqui. </span>
+                <span class="span"><input [(ngModel)]="this.newUserCode" type="text" class="codigo"/><button (click)="getUserByCode()" class="bgColorSecondary generalButton">Buscar</button></span>
+                <span class="tutorial_explain_text_sm" *ngIf="this.tutorial.checkTutorialState()"> O puedes rellenar el siguiente formulario para crear un nuevo usuario </span>
+            </div>-->
+           
         <div *ngIf="this.isnew" class="ModalInput_input">
             <b>Usuario</b>
             <input  [(ngModel)]="this.newUser.name" type="text"/>
@@ -154,6 +166,9 @@
                 <div class="register_button_section">
                 <button (click)="this.nextUser()"  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION" class="bgColorSecondary generalButton tutorialButton">Continuar</button>
                 <button (click)="this.endUsers()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR || this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA" class="bgColorSecondary generalButton tutorialButton">Continuar</button>
+                <button (click)="this.nextUser()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CODE && subsLeft > 0" class="bgColorSecondary generalButton tutorialButton">Introducir otro</button>
+                <button (click)="this.endUsers()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CODE" class="bgColorSecondary generalButton tutorialButton">Continuar</button>
+               
                 <!--<button (click)="this.restart()" class="bgColorSecondary generalButton">Crear Otro</button>-->
                 <!--<button (click)="this.dismiss()" class="bgColorSecondary generalButton">Continuar</button>-->
                 </div>

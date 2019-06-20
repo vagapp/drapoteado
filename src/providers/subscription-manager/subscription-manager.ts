@@ -128,6 +128,20 @@ export class SubscriptionManagerProvider {
     return observer;
   }
 
+  /*
+  Este metodo obtiene la subscripcion en las que el sub usuario uid est aagregado
+  */
+
+  requestGroupSubscriptionsFor(uid:number):Observable<any>{
+    const filter = `?args[0]=all&args[1]=all&args[2]=${uid}`;
+    const url = `${this.bu.endpointUrl}rest_suscripciones.json${filter}`;
+    console.log('requesting subuser subs url',url);
+    const observer = this.http.get(url).share();
+    return observer;
+  }
+
+
+
   /**
    * Revisa que el doctor especificado se encuentre en alguna de las suscripciones que se maneja, no recuerdo para que se usa = ( 
    */

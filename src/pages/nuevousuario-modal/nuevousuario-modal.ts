@@ -32,10 +32,13 @@ export class NuevousuarioModalPage {
   isnew:boolean;
   checkpass:string;
   newUserCode:string;
+  nextCode = false;
   codeuser=false;
   codeuserNP=false; //if tutorial user is gotten by code this disables password show
 
-
+  get subsLeft(){
+    return this.subsData.getSubAccountsLeft();
+  }
 
   selectedUsersOptions: number = 0;
 
@@ -100,31 +103,49 @@ export class NuevousuarioModalPage {
 
   userTutorialStart(){
     console.log('start tutorial');
-    this.newuser=true; 
+    this.newuser= true; 
     this.initialpage=false;
     this.tutorial.tutorial_users_selected_option = this.selectedUsersOptions;
     console.log('selected option at tutorial start ', this.tutorial.tutorial_users_selected_option);
     if(this.tutorial.tutorial_users_selected_option === TutorialProvider.TUTORIAL_USER_BOTH){
+      console.log();
       this.newUser.field_tipo_de_usuario.und = [2];
       this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_RECEPCION; 
+    }else if(this.tutorial.tutorial_users_selected_option === TutorialProvider.TUTORIAL_USER_CODE){
+      console.log('agregando usuarios por codigo');
+      this.codeuser = true;
+      this.newuser= false; 
+      //this.nextCode = true;
     }else{
       this.newUser.field_tipo_de_usuario.und = [4];
     }
   }
 
   nextUser(){ //despues de crear caja se crea recepcion, se reinician las variables para manipular el template.
-    this.newuser = true;
-    this.initialpage=false;
-    this.tutorial.usuarioCreated = false;
-    this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_CAJA;
-    this.restart();
-    this.newUser.field_tipo_de_usuario.und = [3];
- 
+    if(this.tutorial.tutorial_users_selected_option === TutorialProvider.TUTORIAL_USER_CODE){
+      this.newuser = false;
+      this.codeuser = true;
+      this.nextCode = true;
+      this.initialpage=false;
+      this.tutorial.usuarioCreated = false;
+      this.restart();
+      this.newUser.field_tipo_de_usuario.und = [3];
+    }else{
+      this.newuser = true;
+      this.initialpage=false;
+      this.tutorial.usuarioCreated = false;
+      this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_CAJA;
+      this.restart();
+      this.newUser.field_tipo_de_usuario.und = [3];
+    }
   }
 
   checkIfgoback(){
-    console.log('checkIfgoback',this.tutorial.tutorial_user_created_step,TutorialProvider.TUTORIAL_USER_STEP_CAJA);
-    return !(Number(this.tutorial.tutorial_user_created_step) === Number(TutorialProvider.TUTORIAL_USER_STEP_CAJA));
+    let ret = true;
+    if( Number(this.tutorial.tutorial_user_created_step) === Number(TutorialProvider.TUTORIAL_USER_STEP_CAJA) ) ret = false;
+    if( this.nextCode  ) ret = false;
+    //console.log('checkIfgoback',ret, 'nextcode',this.nextCode);
+    return ret;
   }
 
   endUsers(){
@@ -186,6 +207,7 @@ export class NuevousuarioModalPage {
 restart(){
   this.resetNewUser();
   this.checkpass = "";
+  this.newUserCode = "";
   this.tutorial.usuarioCreated = false;
 }
 
@@ -220,6 +242,19 @@ async getUserByCode(){
   let res = await this.userMan.requestUsers(new Array(),this.newUserCode).toPromise();
   if(res && res.length > 0){
     console.log('user found',res[0]);
+    //revisar si este usuario esta en una suscripcion de grupo
+    let subsdata = await this.subsManager.requestGroupSubscriptionsFor(res[0].uid).toPromise();
+    if(subsdata){
+      subsdata = subsdata.filter((subs)=>{
+        return (Number(subs.field_plan_sus) === Number(SubscriptionDataProvider.PLAN_GROUP) )
+      });
+      console.log('subsdata got',subsdata.length);
+      if(subsdata && subsdata.length > 0){
+        this.alert.presentAlert("Nada", "No se encontró ningún usuario usando este código");
+        this.loader.dismissLoader();
+        return false;
+      }
+    }
     await this.addUserFromCode(res[0]);
     await this.subusersManager.cargarSubusuarios();
     // aqui el usuario ya ha sido agregado a la suscripcion y requiere enviarse un mensaje que relleno los datos del subusuario.
@@ -229,10 +264,11 @@ async getUserByCode(){
     {
       this.newUser = res[0];
       this.codeuserNP=true;
+      this.codeuser=false;
       this.tutorial.usuarioCreated = true;
     }else{
       this.alert.presentAlert("Hecho",`Se le ha asignado el usuario ${res[0]['name']}`);
-      this.added_user = true;
+      this.added_user = true;    
       this.close();
     }
   }else{
