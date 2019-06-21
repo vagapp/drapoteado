@@ -34,7 +34,7 @@
         </div> <!-- Plan selection check end -->
         
         <div class="plan_section_hr">  <span class="spanBlock bigSubFont">Plan <span class="fontPrimary bold"> {{plan.title}} </span></span> <span class="spanBlock"> <span class="midSubFont"></span> <span class="largeFont">${{plan.field_costo}}</span></span> </div>
-        <div class="plan_section_hr"> <span class="spanBlock midFont">caracteristicas</span>  
+        <div class="plan_section_hr"> <span class="spanBlock midFont">Características</span>  
           <span class="plan_description_bullets midSubFont">
             <span class="spanBlock plan_bullet" *ngFor="let bullet of plan.field_description_points">
              <span class="bulleting">-</span> {{bullet}}
@@ -45,7 +45,7 @@
       </div><!-- fin de plans section -->
 
      <div class="grupos_medicos_code" (click)="gotoentergroup()">
-      ¿Tienes un código para Grupo Médico?, <span class="fontPrimary">Ingrésalo aquí.</span>
+      ¿Tienes un código para Grupo Médico?, <span class="fontPrimary">ingrésalo aquí.</span>
      </div>
 
     </div><!-- fin de plans block en onplanchange-->

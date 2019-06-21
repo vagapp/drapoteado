@@ -135,7 +135,7 @@ export class WebsocketServiceProvider {
       this.reportPresentator.updateCita(aux_cita);
       this.updateGot(aux_cita.Nid);
       await this.updater.updateServicios();
-      await this.updater.updateCitas();
+      //await this.updater.updateCitas();
     }
     console.log('trail1 addCita end');
   }
