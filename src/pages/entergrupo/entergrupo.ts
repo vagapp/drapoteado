@@ -96,9 +96,25 @@ export class EntergrupoPage {
     }
     this.loaded_group_sus.field_doctores.push(this.userData.userData.uid);//agregarse a si mismo a la suscripcion de grupo.
     const selected_subusers = this.getSelectedSubusersArray();
-    selected_subusers.forEach((subuser)=>{ //agregar sub usuarios a la suscripcion de grupo.
-      this.loaded_group_sus.field_subusuarios.push(subuser.uid);
+    await selected_subusers.forEach(async (subuser)=>{  //por cada sub usuario
+      console.log('checking user',subuser);
+      this.loaded_group_sus.field_subusuarios.push(subuser.uid);//agregar sub usuarios a la suscripcion de grupo.
+      //eliminar sub usuario de otras suscripciones.
+      let aux_user_subs = await this.subsMan.requestGroupSubscriptionsFor(Number(subuser.uid)).toPromise();
+      console.log('LOADED SUBS',aux_user_subs);
+      await aux_user_subs.forEach(async (sub) => {
+        console.log('Cleaning subscriptions of this user ',sub);
+        sub.field_subusuarios = sub.field_subusuarios.filter((data)=>{ return Number(data.uid) !== Number(subuser.uid)});
+        let aux_sus = subscriptions.getEmptySuscription();
+        aux_sus.setData(sub);
+        aux_sus.field_active = sub.field_active.value;
+        aux_sus.plan = sub.field_plan_sus;
+        let res = await this.subsMan.updateSus( aux_sus ).toPromise();
+        console.log('CLEANED SUBSCRIPTION RES IS',res);
+        this.wsMessenger.generateSuboutofgroup(res.subscription.field_doctores,subuser.uid);
+      });
     });
+    
     
     this.loader.dismissLoader();
     let res = await this.subsMan.updateSus( this.loaded_group_sus ).subscribe(
@@ -113,7 +129,7 @@ export class EntergrupoPage {
         //this.loader.dismissLoader();
         //view.loader.dismissLoader();
         setTimeout(function () {
-          view.bu.locationReload();
+          //view.bu.locationReload();
           //this.navCtrl.setRoot('MiplanPage');
           //view.loader.dismissLoader();
       }, 1000);
