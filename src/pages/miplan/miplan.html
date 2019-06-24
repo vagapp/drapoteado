@@ -130,7 +130,44 @@
         <span class="spanBlock midFont"> Total extra de subusuarios:  <span class="fontPrimary">${{subAdicionales*39}}.00</span></span>
       </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
 
+     
+
     </div><!-- fin de plans extras -->
+    <div class="enter_subuser_selection_wrap" *ngIf="this.isgroup && !this.subsData.isGroup">
+    <div class="enter_subuser_selection"  >
+      
+      <div class="enter_title fontPrimary"> Selección de Usuarios </div>
+      <div class="enter_description"> Este plan te permite compartir usuarios entre los doctores del grupo si hay plazas disponibles puedes llevar contigo a tus usuarios actuales </div>
+        <div> <span class="enter_plazas_text">Plazas disponibles</span> <span class="enter_plazas_value fontPrimary">{{this.accountsLeft}}</span></div>
+        <table class="results_table">
+            <thead>
+                <tr>
+                    <th>Agregar</th>
+                    <th>Usuario</th>
+                    <th>Tipo de Usuario</th>
+                 </tr>
+            </thead>
+            <tbody >
+                <tr *ngFor="let usersub of this.subuserData.mySubUsers">
+                    <td>
+                        <ion-checkbox [checked]="usersub.selectedForGroup" (ionChange)="onChangeUsers($event,usersub)"></ion-checkbox>
+                        <!--<input type="checkbox" [checked]="usersub.selectedForGroup" (change)="onChangeUsers(this,usersub)"/>-->
+                      <!--
+                      <div class="control-group"> 
+                        <label class="control control-radio">
+                          
+                          
+                            <div class="control_indicator"></div>
+                        </label> 
+                        </div>  -->
+                    </td>
+                    <td class="midSubFont ">{{usersub.name}} </td>
+                    <td class="midSubFont fontHigh">{{this.userData.getTipoUsuarioString(usersub.field_tipo_de_usuario.und[0])}} </td>
+                 </tr>
+            </tbody>
+          </table>
+    </div>
+    </div>
 
 
     <div class="informacion_pagos">

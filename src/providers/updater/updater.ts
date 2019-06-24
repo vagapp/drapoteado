@@ -74,7 +74,7 @@ export class UpdaterProvider {
   }
 
   async updateSubusers(){
-    console.log();
+    console.log('updateSubusers');
     await this.subusersManager.cargarSubusuarios();
   }
 

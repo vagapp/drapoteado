@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { UserDataProvider } from '../../providers/user-data/user-data';
+import { IonicPage, NavController, NavParams, Checkbox } from 'ionic-angular';
+import { UserDataProvider, userd } from '../../providers/user-data/user-data';
 import { PlanesDataProvider } from '../../providers/planes-data/planes-data';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
@@ -16,6 +16,9 @@ import { BaseUrlProvider } from '../../providers/base-url/base-url';
 
 import { HttpClient } from '@angular/common/http';
 import { subscriptions } from '../../providers/user-data/subscriptions';
+import { SubusersDataProvider } from '../../providers/subusers-data/subusers-data';
+import { SubusersManagerProvider } from '../../providers/subusers-manager/subusers-manager';
+import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 
 declare var Stripe;
 
@@ -52,6 +55,7 @@ export class MiplanPage {
 
   isgroup:boolean = false;
 
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -65,6 +69,9 @@ export class MiplanPage {
     public conekta: ConektaComponent,
     public bu: BaseUrlProvider,
     public http: HttpClient,
+    public subuserData: SubusersDataProvider,
+    public subuserMan: SubusersManagerProvider,
+    public wsMessenger: WsMessengerProvider
   ) {
     //conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
       conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_GtbbRJpEKq8zTrtq3EPCTqQ').then((c) => {
@@ -85,6 +92,9 @@ export class MiplanPage {
   get subPlan(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_plan_sus) : 0;  }
 
 
+  get accountsLeft(){
+    return (12 + this.selectedAditionals) - this.subuserData.selectedForGroupNum;
+  }
 
   get PLAN_GROUP():number{ return this.subsData.PLAN_GROUP; }
   get PLAN_ANY():number{ return this.subsData.PLAN_ANY; }
@@ -139,6 +149,16 @@ export class MiplanPage {
     }
   
   
+    onChangeUsers(element: Checkbox, subuser:userd){
+      let setTo = !subuser.selectedForGroup;
+     
+      if(setTo && this.accountsLeft > 0){ 
+       element.checked = subuser.selectedForGroup = true;
+      }else{
+        element.checked = subuser.selectedForGroup = false;
+      }
+    }
+
 
     /***/
     baja(){
@@ -208,7 +228,8 @@ export class MiplanPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad MiplanPage');
     console.log('planesdata is',this.planesData.planes);
-    console.log('my sub is',this.subsData.subscription)
+    console.log('my sub is',this.subsData.subscription);
+    this.subuserMan.cargarSubusuarios();
     if(!this.permissions.checkUserSuscription([this.userData.PLAN_ANY])){
       this.activateChangePlanMode();
       this.cantcancel = true;
@@ -234,9 +255,17 @@ export class MiplanPage {
   }
 
   async guardar(){
-    console.log('saving to  onplanchange false');
+    console.log('trail2 saving to  onplanchange false',this.selectedPlan,this.subsData.isGroup);
     if(!this.guardar_basic_validation()) return false;
     if(!this.guardar_subusernumber_validation()) return false;
+    if( !this.subsData.isGroup  && Number(this.selectedPlan) === Number(SubscriptionDataProvider.PLAN_GROUP)){
+      console.log('trail2 entrando a grrupo y no es grupo');
+      await this.subsManager.group_enter_selectedSubusersClean(this.subuserData.selectedForGroup,this.subsData.subscription);
+      console.log('trail2 docs to reload',this.subsManager.aux_docstoReload);
+      let view = this;
+      view.wsMessenger.generateSuboutofgroup(view.subsManager.aux_docstoReload,1);
+    }
+    
     await this.suscribirse();
     this.onplanchange = false;
   }  

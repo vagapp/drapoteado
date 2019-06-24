@@ -198,7 +198,7 @@ export class WsMessengerProvider {
 
   generateSuboutofgroup(docs:Array<any>,out:number){
     docs.push(out);
-    console.log('generateDoctogroupMessage',docs);
+    console.log('generateSuboutofgroup',docs);
     this.generateMessage(
       docs,
       WebsocketServiceProvider.ACTION_SUB_OUT_GROUP,

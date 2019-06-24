@@ -59,9 +59,13 @@ export class SubusersManagerProvider {
     let res = await this.requestSubusuariosSubs().toPromise();
     console.log('loading subusers for subscription res',res);
     //this.healSubscription(res,this.subsData.getSubusersIDs());
+    this.subusersData.subUsers = new Array();
     for(let us of res){
     this.setSubusuariosResult(us,SubusersDataProvider.SUBUSERS_SUBSCRIPTION);
     }
+    this.subusersData.mySubUsers = this.subusersData.subUsers.filter((userd)=>{
+      return Number(userd.field_owner.und[0]) === Number(this.userData.userData.uid);
+    });
     console.log('loaded subusers', this.subusersData.subUsers);
   }
 
@@ -122,6 +126,7 @@ export class SubusersManagerProvider {
       let aux_user = SubusersManagerProvider.getEmptyUserd();
       aux_user.uid = user_data.uid;
       aux_user.name = user_data.name;
+      aux_user.field_owner.und[0] = user_data.field_owner.uid;
       aux_user.field_alias.und[0].value = user_data.field_alias;
       aux_user.field_nombre.und[0].value = user_data.field_nombre;
       aux_user.field_apellidos.und[0].value = user_data.field_apellidos;
@@ -231,9 +236,9 @@ export class SubusersManagerProvider {
           field_planholder:{und:[{value: true}]},
           field_stripe_customer_id:{und:[{value: ""}]},
           field_src_json_info:{und:[{value: ""}]},
-          selectedForGroup:false
+          selectedForGroup:false,
+          field_owner:{und:[0]}
       }
     }
-  
-
-  }
+    
+    }

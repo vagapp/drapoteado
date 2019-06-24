@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserDataProvider, userd } from '../user-data/user-data';
+import { UserDataProvider } from '../user-data/user-data';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 import { Observable } from 'rxjs/Observable';
 import { BaseUrlProvider } from '../base-url/base-url';
@@ -9,9 +9,9 @@ import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { PlanesDataProvider } from '../planes-data/planes-data';
 import { DrupalNodeManagerProvider } from '../drupal-node-manager/drupal-node-manager';
 import { planes } from '../user-data/planes';
-import { sources } from '../user-data/sources';
 import { PermissionsProvider } from '../permissions/permissions';
-import { ComponentsModule } from '../../components/components.module';
+import { WsMessengerProvider } from '../ws-messenger/ws-messenger';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 /*
@@ -23,6 +23,7 @@ import { ComponentsModule } from '../../components/components.module';
 @Injectable()
 export class SubscriptionManagerProvider {
   doc_subscriptions: subscriptions[] = new Array();
+  aux_docstoReload:number[] = new Array();
 
   constructor(
     public http: HttpClient,
@@ -33,6 +34,7 @@ export class SubscriptionManagerProvider {
     public bu: BaseUrlProvider,
     public nodeManager: DrupalNodeManagerProvider,
     public permissions: PermissionsProvider,
+    //public wsMessenger: WsMessengerProvider
   ) {
     
   }
@@ -434,4 +436,46 @@ getDocAccountsLeft(subscription:subscriptions){
  return ret;
 }
 
+
+    /**
+     * Este metodo le quita a este sub usuariod de todas las suscripciones que no sean el gripo al que va a etrar.
+    */
+   async group_enter_selectedSubusersClean(selected_subusers,loaded_group_sus,filterThis:boolean = false){
+    this.aux_docstoReload = new Array();
+    async function asyncForEach(array, callback) {
+      for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+      }
+    }
+    await asyncForEach(selected_subusers, async (subuser)=>{  //por cada sub usuario
+      console.log('trail2 checking user',subuser);
+      loaded_group_sus.field_subusuarios.push(subuser.uid);//agregar sub usuarios a la suscripcion de grupo.
+      //eliminar sub usuario de otras suscripciones.
+      let aux_user_subs = await this.requestGroupSubscriptionsFor(Number(subuser.uid)).toPromise();
+      console.log('trail2 LOADED SUBS',aux_user_subs);
+      await asyncForEach(aux_user_subs, async (sub) => {
+        console.log('trail2 Cleaning subscriptions of this user ',sub);
+        if(filterThis || Number(sub.nid) !== Number(loaded_group_sus.nid)){
+        console.log('trail2 cleaning sub of dis user');
+        sub.field_subusuarios = sub.field_subusuarios.filter((data)=>{ return Number(data.uid) !== Number(subuser.uid)});
+        let aux_sus = subscriptions.getEmptySuscription();
+        aux_sus.setData(sub);
+        aux_sus.field_active = sub.field_active.value;
+        aux_sus.plan = sub.field_plan_sus;
+        let res = await this.updateSus( aux_sus ).toPromise();
+        console.log('trail2 CLEANED SUBSCRIPTION RES IS',res);
+        this.aux_docstoReload = this.aux_docstoReload.concat(sub.field_doctores.map((doc)=>{ return Number(doc.uid)}));
+      }else{
+        console.log('trail2 NOT cleaning sub of dis user');
+      }
+        //this.wsMessenger.generateSuboutofgroup(res.subscription.field_doctores,subuser.uid);
+      });
+    });
+    
+  }
+
+  
+
 }
+
+

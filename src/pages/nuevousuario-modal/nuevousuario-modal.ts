@@ -165,8 +165,9 @@ export class NuevousuarioModalPage {
     this.loader.presentLoader('Generando Usuario ... ');
     //agregar este doctor.
     this.newUser.field_doctores.und = new Array(); 
+    this.newUser.field_owner.und = new Array();
     this.newUser.field_doctores.und[this.userData.userData.uid] = this.userData.userData.uid;
-    //crear codigo, verificar que sea unique = S
+    this.newUser.field_owner.und[0] = this.userData.userData.uid;   //crear codigo, verificar que sea unique = S
     this.newUser.field_codigo.und[0].value = "add"+this.userData.userData.uid;
     this.newUser.field_nombre.und[0].value = "Subusuario";
     this.newUser.field_apellidos.und[0].value = "Subusuario";
@@ -376,12 +377,14 @@ async addUserFromCode( user_data ){
         aux_user.field_apellidos.und[0].value = user_data.field_apellidos;
         aux_user.field_useremail.und[0].email = user_data.field_useremail.email;
         aux_user.mail = user_data.mail;
+        aux_user.field_owner.und[0] = user_data.field_owner.uid;
         aux_user.status = "1";
         aux_user.field_doctores.und = new Array();
         aux_user.field_tipo_de_usuario.und = new Array();
         for(let element of user_data.field_doctores){ aux_user.field_doctores.und.push(element.uid); }
         delete aux_user.field_tipo_de_usuario;
         delete aux_user.field_sub_id;
+        //elete aux_user.field_owner;
         //for(let element of user_data.field_tipo_de_usuario){ aux_user.field_tipo_de_usuario.und.push(element.uid); }for(let element of user_data.field_tipo_de_usuario){ aux_user.field_tipo_de_usuario.und.push(element.uid); }
         aux_user.field_doctores.und.push(Number(this.userData.userData.uid));
         console.log('user2save',aux_user);

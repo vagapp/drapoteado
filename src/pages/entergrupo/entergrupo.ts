@@ -96,7 +96,9 @@ export class EntergrupoPage {
     }
     this.loaded_group_sus.field_doctores.push(this.userData.userData.uid);//agregarse a si mismo a la suscripcion de grupo.
     const selected_subusers = this.getSelectedSubusersArray();
-    await selected_subusers.forEach(async (subuser)=>{  //por cada sub usuario
+    await this.subsMan.group_enter_selectedSubusersClean(selected_subusers,this.loaded_group_sus,true);
+    this.wsMessenger.generateSuboutofgroup(this.subsMan.aux_docstoReload,1);
+    /*await selected_subusers.forEach(async (subuser)=>{  //por cada sub usuario
       console.log('checking user',subuser);
       this.loaded_group_sus.field_subusuarios.push(subuser.uid);//agregar sub usuarios a la suscripcion de grupo.
       //eliminar sub usuario de otras suscripciones.
@@ -113,7 +115,7 @@ export class EntergrupoPage {
         console.log('CLEANED SUBSCRIPTION RES IS',res);
         this.wsMessenger.generateSuboutofgroup(res.subscription.field_doctores,subuser.uid);
       });
-    });
+    });*/
     
     
     this.loader.dismissLoader();
@@ -129,7 +131,7 @@ export class EntergrupoPage {
         //this.loader.dismissLoader();
         //view.loader.dismissLoader();
         setTimeout(function () {
-          //view.bu.locationReload();
+          view.bu.locationReload();
           //this.navCtrl.setRoot('MiplanPage');
           //view.loader.dismissLoader();
       }, 1000);

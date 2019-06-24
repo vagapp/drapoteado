@@ -855,7 +855,8 @@ export class UserDataProvider {
         field_stripe_customer_id:{und:[{value: ""}]},
         field_src_json_info:{und:[{value: ""}]},
         field_reference_user:{und:[0]},
-        selectedForGroup:false
+        selectedForGroup:false,
+        field_owner:{und:[0]}
         
     }
   }
@@ -945,7 +946,8 @@ export interface userd{
     field_stripe_customer_id:{und:[{ value:string}]},
     field_src_json_info:{und:[{ value:string}]},
     field_reference_user:{und:number[]},
-    selectedForGroup:boolean;
+    selectedForGroup:boolean,
+    field_owner:{und:number[]};
 
 }
 

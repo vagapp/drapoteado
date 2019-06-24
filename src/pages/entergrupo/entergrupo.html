@@ -33,7 +33,7 @@
                </tr>
           </thead>
           <tbody >
-              <tr *ngFor="let usersub of this.subuserData.subUsers">
+              <tr *ngFor="let usersub of this.subuserData.mySubUsers">
                   <td>
                       <ion-checkbox [checked]="usersub.selectedForGroup" (ionChange)="onChangeUsers($event,usersub)"></ion-checkbox>
                       <!--<input type="checkbox" [checked]="usersub.selectedForGroup" (change)="onChangeUsers(this,usersub)"/>-->
