@@ -43,6 +43,7 @@
       <span class="rrt_span midFont"> <span class="bold">Cheque</span><span class="midFont fontSecondary">${{cita.pagosCheque}}</span> </span>
       <span class="rrt_span midFont"> <span class="bold">Facturado</span><span class="midFont  fontHigh">${{cita.pagosFacturado}}</span> </span>
       <span class="rrt_span midFont" *ngIf="cita.costo > cita.cobro"> <span class="bold">Adeudo</span><span class="fontPrimary">${{cita.restantePagos}}</span> </span>
+      <span class="rrt_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_RECEPCION]) && cita.pagosTotalOut>0"> <span class="bold">Cobros por otros</span><span class="fontPrimary">${{cita.pagosTotalOut}}</span> </span>
   </div>
   <div class="ReporteRow_Desglose" *ngIf="cita.opendetail">
       <div class="reportRow_desglose_label">Servicios</div>
@@ -107,7 +108,8 @@
                   <span class="rrt_span midFont"> <span class="bold">Facturado</span><span class="midFont  fontHigh">${{cita.pagosFacturado}}</span> </span>
                   <span class="rbh_span midFont" *ngIf="!cita.originactivereport"> <span class="fontPrimary">Adeudo anterior</span> </span>
                   <span class="rrt_span midFont" *ngIf="cita.costo > cita.cobro"> <span class="bold">Adeudo</span><span class="fontPrimary">${{cita.restantePagos}}</span> </span>
-              </div>
+                  <span class="rrt_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_RECEPCION]) && cita.pagosTotalOut>0"> <span class="bold">Cobros externos</span><span class="fontPrimary">${{cita.pagosTotalOut}}</span> </span>
+                </div>
           </div>
        
       </div>
@@ -131,6 +133,7 @@
   <!--<span class="totalespan midFont"><b>No Show:</b> <span class="fontPrimary">{{reportPresentator.noShow}}</span></span>-->
   <span class="totalespan midFont"><b>Duración Total:</b> <span class="fontHigh">{{reportPresentator.duracionTotalStr}}</span></span>
   <span class="totalespan midFont"><b>Adeudos cobrados:</b> <span class="fontHigh">{{reportPresentator.noAdeudosR}}</span></span>
+  <span class="totalespan midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_RECEPCION]) && reportPresentator.totalOut>0"><b>Cobrado por otros usuarios:</b> <span class="fontPrimary">${{reportPresentator.totalOut}}</span></span>
 </div>
 
 
@@ -147,7 +150,6 @@
     <span class="toin_span midSubFont">Cheques:<span class="fontSecondary">${{reportPresentator.totalCheques}}</span></span>
     <span class="toin_span midSubFont">Facturado:<span class="fontSecondary">${{reportPresentator.facturadoTotal}}</span></span>
     <span class="toin_span midSubFont">Adeudos Cobrados:<span class="fontSecondary">${{reportPresentator.totalAdeudo}}</span></span>
-    
     <!--<span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontPrimary">${{this.reportPresentator.cajacuentas}}</span></span>-->
     <span class="toin_span midSubFont">Pendiente:<span class="fontPrimary">${{this.reportPresentator.pendiente}}</span></span>  
 </div>

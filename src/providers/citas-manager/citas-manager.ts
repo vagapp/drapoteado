@@ -248,13 +248,11 @@ export class CitasManagerProvider {
   updateCitaState( cita:Citas , state, saveDate:boolean = true){
     console.log('updateCitaState',cita,state);
     //cita.estado_anterior();
-    cita.estado_anterior = cita.data.field_estado.und[0].value;
+    
     cita.data.field_estado.und[0].value = state;
     let reportedateset = false;
     let fechacobroset = false;
-    if(Number(cita.estado_anterior) !== Number(state)){
-    cita.setStateChangeEdition(state);
-    }
+ 
     if(cita.todayEdiciones.length > 0){  this.setCitaFechaReporte(cita,saveDate);  saveDate = false; }
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
     if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin();  this.setCitaFechaReporte(cita,saveDate); reportedateset=true;  }
@@ -283,6 +281,9 @@ export class CitasManagerProvider {
     if(!fechacobroset){ delete cita.data.field_hora_cobromsb; }
     console.log('updating cita',cita.data);
     //return null;
+    if(Number(cita.estado_anterior) !== Number(state)){
+      cita.setStateChangeEdition(state);
+      }
     return this.updateCita( cita.data ).share();
   }
 
@@ -292,7 +293,7 @@ export class CitasManagerProvider {
   
 
   setCaja(cita:Citas){
-    console.log('setting caja',this.userData.userData.uid,this.userData.userData.name);
+    console.log('trail3 setting caja',this.userData.userData.uid,this.userData.userData.name);
     console.log('caja is like dis',cita.data.field_cita_caja);
     //cita.data.field_cita_caja.und.push(this.userData.userData.uid);
     
@@ -302,12 +303,14 @@ export class CitasManagerProvider {
     if(!found){
       cita.data.field_cajas_filter.und.push({'value':this.userData.userData.uid});
     }
-    console.log('cita state is', cita.stateLabel);
+    console.log('trail3 cita state is', cita.stateLabel);
+    console.log('trail3 cita estado anterior is ', cita.estado_anterior);
     if(Number(cita.estado_anterior) === Number(CitasDataProvider.STATE_COBRO)){
-      console.log('guardando nombre de caja');
+      console.log('trail3 guardando nombre de caja');
     cita.data.field_caja_nombre = {'und':[{'value': this.userData.userData.name}]};
     cita.data.field_cita_caja.und[0] = this.userData.userData.uid;
     }
+    //si el estado anterior no es cobro. y el estado actual es cobro o adeudo, se guarda la
     console.log('cajas filter ended laik ',cita.data.field_cajas_filter);
     //si el estado de la cita es adeudo no se guarda el nombre
   }

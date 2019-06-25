@@ -46,6 +46,13 @@ export class Citas{
     pagosTotal:number = 0;
     originactivereport:boolean = false;
 
+    //variables con pagos de terceros
+    pagosEfectivoOut:number = 0;
+    pagosChequeOut:number = 0;
+    pagosTarjetaOut:number = 0;
+    pagosFacturadoOut: number = 0;
+    pagosTotalOut:number = 0;
+
     //variables para reportes con ediciones incluidas.
     festado:number = 0;
     addedServicesFechas: servicios[];
@@ -166,7 +173,8 @@ export class Citas{
     }
     
     //obtiene los pagos que se hicieron a esta cita de fecha from a fecha to.
-    setPagosFecha(from:number, to:number){
+    //uid es el uid del usuario que esta consultado. para saber que pagos realizo el. y cuales no 
+    setPagosFecha(from:number, to:number, uid:number){
         console.log('setPagosFecha');
         this.pagosfrom = from;
         this.pagosto = to;
@@ -176,6 +184,11 @@ export class Citas{
         this.pagosTarjeta = 0;
         this.pagosFacturado = 0;
 
+        this.pagosEfectivoOut = 0;
+        this.pagosChequeOut = 0;
+        this.pagosTarjetaOut = 0;
+        this.pagosFacturadoOut = 0;
+
         console.log(this.PagosonFecha);
 
         this.PagosonFecha.forEach(pago => {
@@ -184,6 +197,13 @@ export class Citas{
             this.pagosCheque += Number(pago.che);
             this.pagosTarjeta += Number(pago.tar);
             this.pagosFacturado += Number(pago.fac);
+            if(pago.uid && Number(pago.uid) !== Number(uid)){
+                console.log('este pago no fue realizado por este usuario',pago);
+                this.pagosEfectivoOut += Number(pago.efe);
+                this.pagosChequeOut += Number(pago.che);
+                this.pagosTarjetaOut += Number(pago.tar);
+                this.pagosFacturadoOut += Number(pago.fac);
+            }
         });
 
         console.log('setPagosFecha cita is',this);
@@ -193,6 +213,7 @@ export class Citas{
 
         console.log( this.pagosEfectivo);
         this.pagosTotal =  this.pagosEfectivo + this.pagosCheque + this.pagosTarjeta;
+        this.pagosTotalOut =  this.pagosEfectivoOut + this.pagosChequeOut + this.pagosTarjetaOut;
     }
 
     setEdicionesFechas(from:number, to:number){
@@ -259,7 +280,7 @@ export class Citas{
     }
 
     setStateChangeEdition(state){
-        console.log('setStateChangeEdition',state);
+        console.log('trail3 setStateChangeEdition',state);
         if(Number(state) !== Number(this.estado_anterior)){
         let aux_edicion = {
             act: true, 

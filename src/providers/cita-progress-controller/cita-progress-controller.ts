@@ -6,6 +6,7 @@ import { Doctores } from '../user-data/doctores';
 import { CitasManagerProvider } from '../citas-manager/citas-manager';
 import { ModalController } from 'ionic-angular';
 import { CitasDataProvider } from '../citas-data/citas-data';
+import { UserDataProvider } from '../user-data/user-data';
 
 /*
   Generated class for the CitaProgressControllerProvider provider.
@@ -51,6 +52,7 @@ export class CitaProgressControllerProvider {
 
   constructor(
     public citasManager: CitasManagerProvider,
+    public userData: UserDataProvider,
     public modalCtrl:ModalController,
   ) {
   
@@ -94,8 +96,11 @@ export class CitaProgressControllerProvider {
 
 
   setActiveCita(cita:Citas){
+    console.log('setActiveCita');
     this.activeCita = cita//navParams.get('cita');
+    console.log('trail3 estado data',cita.data.field_estado);
     this.activeCita.estado_anterior = cita.data.field_estado.und[0].value;
+    console.log('trail3 setting estado anterior al setearcita', this.activeCita.estado_anterior);
     this.activeCitaDoc = this.citasManager.getDoctorOFCita(this.activeCita);
     console.log(this.activeCita.addedServices);
    
@@ -129,7 +134,9 @@ export class CitaProgressControllerProvider {
     tar:this.cobroTarjeta == null ? ''+0 : ''+this.cobroTarjeta,
     che:this.cobroCheque == null ? ''+0 :''+this.cobroCheque,
     fac: this.factura_cantidad == null ? ''+0 : ''+this.factura_cantidad,
-    fec:''+new Date().getTime()
+    fec:''+new Date().getTime(),
+    uid: Number(this.userData.userData.uid),
+    name:this.userData.userData.name
   };
 
   this.activeCita.compareServicios(this.servicesCompare);

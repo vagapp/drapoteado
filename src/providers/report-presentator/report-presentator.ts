@@ -56,6 +56,7 @@ export class ReportPresentatorProvider {
   duracionTotalMs:number;
   duracionTotalStr:string;
   
+  //totales normales
   total:number;
   totalefectivo:number;
 	totalTarjeta:number;
@@ -63,9 +64,22 @@ export class ReportPresentatorProvider {
 	totalcuentas:number;
   totalAdeudo:number;
   costoTotal:number;
+  facturadoTotal:number = 0;
+
+  //totales de otros
+  totalOut:number;
+  totalefectivoOut:number;
+	totalTarjetaOut:number;
+	totalChequesOut:number;
+	totalcuentasOut:number;
+  totalAdeudoOut:number;
+  costoTotalOut:number;
+  facturadoTotalOut:number = 0;
+
+
   AdeudosCobrados:number; //total de adeudos del estado adeudo cobrados en este dia. (reporte)
 
-  facturadoTotal:number = 0;
+  
 
   caja:number;
 	cajaefectivo:number;
@@ -73,6 +87,9 @@ export class ReportPresentatorProvider {
 	cajaCheques:number;
 	cajacuentas:number;
   cajaAdeudo:number;
+
+  onconsulta:number = 0;
+
 
   get pendiente():number{
     return Number(this.cajaAdeudo ? this.cajaAdeudo: 0 )+Number(this.cajacuentas ? this.cajacuentas: 0);
@@ -326,11 +343,11 @@ async openReportGenerate( report:reportes = null ){
       let aux_costo = Number(cita.costo ? cita.costo : 0 );
       let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
       if(this.isAdeudo){
-        cita.setPagosFecha(0,0);
+        cita.setPagosFecha(0,0,this.userData.userData.uid);
         cita.setEdicionesFechas(0,0);
         this.cajaAdeudo += aux_costo - cita.pagosTotal;
       }else{
-      cita.setPagosFecha(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS); //este metodo pone algunas cosas del reporte en la cita. porque si we
+      cita.setPagosFecha(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS,this.userData.userData.uid); //este metodo pone algunas cosas del reporte en la cita. porque si we
       cita.setEdicionesFechas(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS);
       if(cita.originactivereport){ //esta cita fue originada el dia de este reporte y sus totales se manejan normalmente.
         this.noCitas++;
@@ -340,8 +357,14 @@ async openReportGenerate( report:reportes = null ){
         this.totalefectivo += cita.pagosEfectivo;
         this.totalTarjeta += cita.pagosTarjeta;
         this.totalCheques += cita.pagosCheque;
-        if(aux_costo > cita.pagosTotal && !cita.checkState(CitasDataProvider.STATE_COBRO) ){ this.cajaAdeudo += aux_costo - cita.pagosTotal;  }
-        this.facturadoTotal += cita.pagosFacturado;
+
+        this.totalOut += cita.pagosTotalOut;
+        this.totalefectivoOut += cita.pagosEfectivoOut;
+        this.totalTarjetaOut += cita.pagosTarjetaOut;
+        this.totalChequesOut += cita.pagosChequeOut;
+        this.facturadoTotalOut += cita.pagosFacturadoOut;
+        if(aux_costo > cita.pagosTotal && !cita.checkState(CitasDataProvider.STATE_COBRO) ){ this.cajaAdeudo += aux_costo - cita.pagosTotal;   }
+        
         //if(cita.data.field_facturar.und && cita.data.field_facturar.und[0].value) this.facturadoTotal += Number(cita.data.field_facturar_cantidad.und[0].value);
       }else{ //esta cita aparece en este reporte porque se abono este dia, los totales se toman en cuenta diferente.
         //this.costoTotal += cita.pagosTotal;
@@ -352,6 +375,12 @@ async openReportGenerate( report:reportes = null ){
         this.totalCheques += cita.pagosCheque;
         this.facturadoTotal += cita.pagosFacturado;
         this.totalAdeudo += cita.pagosTotal;
+
+        this.totalOut += cita.pagosTotalOut;
+        this.totalefectivoOut += cita.pagosEfectivoOut;
+        this.totalTarjetaOut += cita.pagosTarjetaOut;
+        this.totalChequesOut += cita.pagosChequeOut;
+        this.facturadoTotalOut += cita.pagosFacturadoOut;
       }
     }
       console.log('cita evaluada',cita);
@@ -413,6 +442,16 @@ async openReportGenerate( report:reportes = null ){
     this.cajaAdeudo = 0;
     this.facturadoTotal = 0;
     this.AdeudosCobrados = 0;
+
+
+    this.totalOut = 0;
+    this.totalefectivoOut = 0;
+    this.totalTarjetaOut = 0;
+    this.totalChequesOut = 0;
+    this.totalcuentasOut = 0;
+    this.totalAdeudoOut = 0;
+    this.costoTotalOut = 0;
+    this.facturadoTotalOut = 0;
   }
 
 
