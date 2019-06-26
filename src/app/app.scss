@@ -703,19 +703,23 @@ flex-flow: column;
     padding: 0px;
 }
 .results_table th{
-    text-align: left;
+    width: 200px;
 }
 
 .results_table thead{
     background-color: #F6F6F6;
+}
+
+.tdmaxedwid{
+    max-width: 200px;
 }
 .results_table tr{
     border-bottom: 1px solid #eee;
  }
 
 .results_table th, .results_table td{
-    padding-left: 20px;
-    height: auto;
+    /*padding-left: 20px;*/
+    /*height: auto;*/
     text-align: center;
 }
 
@@ -725,6 +729,7 @@ flex-flow: column;
     align-items: center;
     justify-content: end;
     padding: 0 !important;
+    width: 300px;
 }
 
 .modalPage_header{
@@ -1251,7 +1256,8 @@ display:inline;
 
 .two_cols_yano .two_cols_section{
     display:inline-flex;
-    width: auto !important;
+    /*width: auto !important;*/
+    width: 80%;
     min-width: 200px;
     flex-flow: row;
 }

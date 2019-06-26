@@ -175,7 +175,7 @@ export class Citas{
     //obtiene los pagos que se hicieron a esta cita de fecha from a fecha to.
     //uid es el uid del usuario que esta consultado. para saber que pagos realizo el. y cuales no 
     setPagosFecha(from:number, to:number, uid:number){
-        console.log('setPagosFecha');
+        console.log('setPagosFecha',from,to,uid);
         this.pagosfrom = from;
         this.pagosto = to;
 
@@ -197,6 +197,7 @@ export class Citas{
             this.pagosCheque += Number(pago.che);
             this.pagosTarjeta += Number(pago.tar);
             this.pagosFacturado += Number(pago.fac);
+            console.log('checking pago',pago.uid,uid);
             if(pago.uid && Number(pago.uid) !== Number(uid)){
                 console.log('este pago no fue realizado por este usuario',pago);
                 this.pagosEfectivoOut += Number(pago.efe);
@@ -297,7 +298,7 @@ export class Citas{
     }
  
     testOriginactivereport(from:Number,to:Number){
-        console.log('testOriginactivereport');
+        console.log('testOriginactivereport',this.dateMs,from,to);
         if( Number(this.dateMs) >= from && Number(this.dateMs) < to){
             console.log('es del reporte');
             this.originactivereport = true;

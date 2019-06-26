@@ -342,6 +342,7 @@ async openReportGenerate( report:reportes = null ){
       if(!cita.checkState(CitasDataProvider.STATE_CANCELADA)){ // si no esta cancelada se interpretan los totales.
       let aux_costo = Number(cita.costo ? cita.costo : 0 );
       let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
+      console.log('this.userData.userData.uid',this.userData.userData.uid);
       if(this.isAdeudo){
         cita.setPagosFecha(0,0,this.userData.userData.uid);
         cita.setEdicionesFechas(0,0);

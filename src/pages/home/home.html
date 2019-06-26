@@ -81,11 +81,11 @@
                                             <tbody>
                                                 <tr *ngFor="let cita of day.citasShowPool">
                                                     <!--<td>{{cita.data.Nid}}</td>-->
-                                                    <td  >{{cita.data.field_paciente.und[0].value}}</td>
-                                                    <td *ngIf=" !this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}}</td>
-                                                    <td *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">General</td>
-                                                    <td ><span class="fontSecondary">{{cita.readableDate}}</span> - <span class="fontHigh">{{cita.readableTime}}</span></td>
-                                                    <td  [ngStyle]="{'color':cita.stateColor}" >{{cita.getStateString()}}</td>
+                                                    <td class="tdmaxedwid">{{cita.data.field_paciente.und[0].value}}</td>
+                                                    <td class="tdmaxedwid" *ngIf=" !this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.data.doctor_name}}</td>
+                                                    <td class="tdmaxedwid" *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">General</td>
+                                                    <td class="tdmaxedwid" ><span class="fontSecondary">{{cita.readableDate}}</span> - <span class="fontHigh">{{cita.readableTime}}</span></td>
+                                                    <td class="tdmaxedwid"  [ngStyle]="{'color':cita.stateColor}" >{{cita.getStateString()}}</td>
                                                     <td  class="toolCol">
                                                       <!--<img src="assets/imgs/editar.svg" class="icon_drapo" (click)="citasPresentator.editCita(cita)" 
                                                       *ngIf="( 
