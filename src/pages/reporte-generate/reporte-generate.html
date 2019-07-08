@@ -82,7 +82,7 @@
             <select [(ngModel)]="this.reportPresentator.docuid"  name="field_cita_doctor" class="input_select input">
                 <option *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);"  value="0" >General</option>
                 <option *ngFor="let doc of this.docData.doctores"  value="{{doc.Uid}}" >{{doc.name}}</option>
-                <option *ngIf="this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="{{this.userData.userData.uid}}">{{this.userData.userData.name}}</option>
+                <option *ngIf="this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="{{this.userData.userData.uid}}">{{this.userData.showname}}</option>
               </select>
           </div>
         

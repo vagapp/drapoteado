@@ -259,7 +259,7 @@ async openReportGenerate( report:reportes = null ){
     if(this.docuid !== null ){
       const aux_doc = this.docData.getDoctorByUid(this.docuid);
       this.docLoaded = true;
-      this.docName = aux_doc.name;
+      this.docName = aux_doc.field_alias;//aux_doc.name;
       this.docAlias = aux_doc.field_alias;
       console.log('docfound in report is',aux_doc,this.docName,this.docAlias);
     }
@@ -464,7 +464,7 @@ async openReportGenerate( report:reportes = null ){
     doc.addImage(logodataurl, 'JPEG', 50, 20,80, 30);
     doc.setFontSize(12);
     doc.text(50, 80, `Reporte a la fecha de ${this.actualReport.dateString}`);
-    doc.text(50, 100, `Generado por Usuario ${this.userData.userData.name}`);
+    doc.text(50, 100, `Generado por Usuario ${this.userData.showname}`);
     let columns = new Array();
     let rows = new Array();
     let first_margin = 120;

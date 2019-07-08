@@ -293,7 +293,7 @@ export class CitasManagerProvider {
   
 
   setCaja(cita:Citas){
-    console.log('trail3 setting caja',this.userData.userData.uid,this.userData.userData.name);
+    console.log('trail3 setting caja',this.userData.userData.uid,this.userData.showname);
     console.log('caja is like dis',cita.data.field_cita_caja);
     //cita.data.field_cita_caja.und.push(this.userData.userData.uid);
     
@@ -307,7 +307,7 @@ export class CitasManagerProvider {
     console.log('trail3 cita estado anterior is ', cita.estado_anterior);
     if(Number(cita.estado_anterior) === Number(CitasDataProvider.STATE_COBRO)){
       console.log('trail3 guardando nombre de caja');
-    cita.data.field_caja_nombre = {'und':[{'value': this.userData.userData.name}]};
+    cita.data.field_caja_nombre = {'und':[{'value': this.userData.showname}]};
     cita.data.field_cita_caja.und[0] = this.userData.userData.uid;
     }
     //si el estado anterior no es cobro. y el estado actual es cobro o adeudo, se guarda la

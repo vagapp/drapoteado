@@ -11,6 +11,26 @@
    <span class="spanBlock">Los doctores pueden usar este codigo para que tengas acceso a sus citas.</span>
   </div>
   <div class="register_contet_form"  >
+
+
+      <div *ngIf="this.isnew" class="register_aliasfield_wrapper">
+          <div class="registerInput" >
+              <b>Username:</b><input [(ngModel)]="this.userData.userData.name" [class.registerInputerror]="!this.userData.userData.name && showerrors" type="text" />
+          </div>
+          <div class="register_aliasfield_description midSubFont "> </div>
+          </div>
+
+      
+
+      <div *ngIf="this.isnew" class="register_aliasfield_wrapper">
+          <div class="registerInput" >
+            <b>Alias:</b><input [(ngModel)]="this.userData.userData.field_alias.und[0].value" [class.registerInputerror]="!this.userData.userData.field_alias.und[0].value && showerrors" type="text"/>
+          </div>
+          <div class="register_aliasfield_description midSubFont "> Crea un Alias para que otros usuarios puedan identificarte dentro de DRAP ej "Dr Perez" </div>
+          </div>
+
+          
+
     <div class="register_base register_form_section rfsFlex">
         <div class="registerInput">
             <b>Correo electrónico:</b><input [(ngModel)]="this.userData.userData.mail" [class.registerInputerror]="!this.userData.userData.mail && showerrors" type="text"/>
@@ -19,9 +39,7 @@
             <b>Confirmar Correo electrónico:</b><input [(ngModel)]="emailconfirm" [class.registerInputerror]="!this.emailconfirm && showerrors" type="text"/>
           </div>
 
-          <div class="registerInput" *ngIf="this.isnew" >
-              <b>Username:</b><input [(ngModel)]="this.userData.userData.name" [class.registerInputerror]="!this.userData.userData.name && showerrors" type="text" />
-            </div>
+         
             <div class="registerInput">
                 <b>Contraseña:</b><input [(ngModel)]="this.userData.userData.pass"  [class.registerInputerror]="!this.userData.userData.pass && showerrors" type="password"/>
               </div>
@@ -35,14 +53,17 @@
                 <b>Apellido:</b><input  [(ngModel)]="this.userData.userData.field_apellidos.und[0].value" [class.registerInputerror]="!this.userData.userData.field_apellidos.und[0].value && showerrors"  type="text" />
               </div>
               
-              <div class="registerInput" *ngIf="permissions.checkUserPermission([userData.TIPO_DOCTOR]);">
+              <div class="registerInput" *ngIf="permissions.checkUserPermission([userData.TIPO_DOCTOR]) || this.isnew">
                 <b>Especialidad:</b><input [(ngModel)]="this.userData.userData.field_especialidad.und[0].value" [class.registerInputerror]="!this.userData.userData.field_especialidad.und[0].value && showerrors" type="text"/>
               </div>
             
-              <div class="registerInput" *ngIf="permissions.checkUserPermission([userData.TIPO_DOCTOR]);">
+              <div class="registerInput" *ngIf="permissions.checkUserPermission([userData.TIPO_DOCTOR])">
                 <b>Alias:</b><input [(ngModel)]="this.userData.userData.field_alias.und[0].value" [class.registerInputerror]="!this.userData.userData.field_alias.und[0].value && showerrors" type="text"/>
               </div>
+
+             
     </div>
+    
 
     
 
@@ -108,8 +129,8 @@
     </div>
 
     <div class="register_ubication register_form_section rfsFlex" *ngIf="this.isnew">
-      <p>Referencia: ¿Alguien te invito a drap?</p> 
-      <p>Ingresa su correo electrónico </p>
+      <p class="midSubFont">Referencia: ¿Alguien te invito a drap?</p> 
+      <p class="midSubFont">Ingresa su correo electrónico </p>
       <div class="registerInput">
         <b>Email:</b><input [(ngModel)]="this.mailsrefer" type="text"/>
     </div>

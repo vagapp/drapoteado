@@ -57,6 +57,22 @@ page-register-modal {
     }
 
     
+
+    .register_aliasfield_wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .register_aliasfield_wrapper div{
+        width: 50%;
+    }
+
+    .register_aliasfield_wrapper .registerInput input{
+        width: 45%;
+    }
+
+    
     .ubdet_input{
         text-align:  right;
     }

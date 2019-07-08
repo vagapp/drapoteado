@@ -63,7 +63,7 @@ export class DoctoresManagerProvider {
      
         const auxDoc = new Doctores();
         auxDoc.Uid = Number(this.userData.userData.uid);
-        auxDoc.name = this.userData.userData.name;
+        auxDoc.name = this.userData.showname;
         auxDoc.field_alias = this.userData.userData.field_alias['und'][0]['value'];
         this.docData.addDoctor(auxDoc);
       
@@ -126,7 +126,7 @@ export class DoctoresManagerProvider {
     for(let doc of docs_data){
       const auxDoc = new Doctores();
       auxDoc.Uid = doc.uid;
-      auxDoc.name = doc.name;
+      auxDoc.name = doc.field_alias;//doc.name;
       auxDoc.field_alias = doc.field_alias;
       auxDoc.setDisponibilidad(doc.field_disponibilidad);
       this.docData.addDoctor(auxDoc);

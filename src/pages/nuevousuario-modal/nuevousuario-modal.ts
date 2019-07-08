@@ -11,6 +11,7 @@ import { SubscriptionManagerProvider } from '../../providers/subscription-manage
 import { TutorialProvider } from '../../providers/tutorial/tutorial';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 /**
@@ -34,6 +35,7 @@ export class NuevousuarioModalPage {
   newUserCode:string;
   nextCode = false;
   codeuser=false;
+  showerrors:boolean = false;
   codeuserNP=false; //if tutorial user is gotten by code this disables password show
 
   get subsLeft(){
@@ -161,7 +163,8 @@ export class NuevousuarioModalPage {
 
 
   createUserd(){
-   if(this.createUserValidation()){
+    this.showerrors = false;
+   if(this.createrNotEmptyValidation() && this.createUserValidation()){
     this.loader.presentLoader('Generando Usuario ... ');
     //agregar este doctor.
     this.newUser.field_doctores.und = new Array(); 
@@ -236,6 +239,23 @@ createUserValidation():boolean{
   }
   return ret;
 }
+
+
+createrNotEmptyValidation():boolean{
+  let ret = true;
+  if(!this.newUser.name){
+    ret = false;
+  }
+  if(!this.newUser.field_alias.und[0].value){
+    ret = false;
+  }
+  if(!ret){
+    this.alert.presentAlert("Error", "Los campos marcados en rojo son obligatorios");
+    this.showerrors = true;
+  }
+  return ret;
+}
+
 
 async getUserByCode(){
   if(this.getUserCodeValidation()){

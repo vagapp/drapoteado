@@ -136,7 +136,7 @@ export class CitaProgressControllerProvider {
     fac: this.factura_cantidad == null ? ''+0 : ''+this.factura_cantidad,
     fec:''+new Date().getTime(),
     uid: Number(this.userData.userData.uid),
-    name:this.userData.userData.name
+    name:this.userData.showname
   };
 
   this.activeCita.compareServicios(this.servicesCompare);

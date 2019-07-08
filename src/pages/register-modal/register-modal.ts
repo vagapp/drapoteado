@@ -316,8 +316,8 @@ export class RegisterModalPage {
       if(!this.checkIfInputfilledNPromtp(this.passconfirm,ret)) ret = false;
       if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_nombre.und[0].value,ret)) ret = false;
       if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_apellidos.und[0].value,ret)) ret = false;
-     // if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_especialidad.und[0].value,ret)) ret = false;
-      //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_alias.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_especialidad.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_alias.und[0].value,ret)) ret = false;
       //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_no_ext.und[0].value,ret)) ret = false;
       if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_codigo_postal.und[0].value,ret)) ret = false;
       //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_ciudad.und[0].value,ret)) ret = false;

@@ -39,6 +39,10 @@ export class UserDataProvider {
   get TIPO_CAJA(){return UserDataProvider.TIPO_CAJA;}
   get TIPO_CAJAYRECEPCION(){return UserDataProvider.TIPO_CAJAYRECEPCION;}
   get TIPO_ANY(){return UserDataProvider.TIPO_ANY;}
+
+  get showname(){
+    return this.userData.field_alias.und[0].value;
+  }
   
   //suscripciones planes cons
   public static PLAN_ANY = -1;
