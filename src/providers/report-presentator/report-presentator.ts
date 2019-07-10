@@ -76,6 +76,17 @@ export class ReportPresentatorProvider {
   costoTotalOut:number;
   facturadoTotalOut:number = 0;
 
+  
+  //totales de Doctor
+  totalDoc:number = 0;
+  totalefectivoDoc:number;
+	totalTarjetaDoc:number;
+	totalChequesDoc:number;
+	totalcuentasDoc:number;
+  totalAdeudoDoc:number;
+  costoTotalDoc:number;
+  facturadoTotalDoc:number = 0;
+
 
   AdeudosCobrados:number; //total de adeudos del estado adeudo cobrados en este dia. (reporte)
 
@@ -358,12 +369,19 @@ async openReportGenerate( report:reportes = null ){
         this.totalefectivo += cita.pagosEfectivo;
         this.totalTarjeta += cita.pagosTarjeta;
         this.totalCheques += cita.pagosCheque;
+        this.facturadoTotal += cita.pagosFacturado;
 
         this.totalOut += cita.pagosTotalOut;
         this.totalefectivoOut += cita.pagosEfectivoOut;
         this.totalTarjetaOut += cita.pagosTarjetaOut;
         this.totalChequesOut += cita.pagosChequeOut;
         this.facturadoTotalOut += cita.pagosFacturadoOut;
+
+        this.totalDoc   += cita.pagosTotalDoc;
+        this.totalefectivoDoc += cita.pagosEfectivoDoc;
+        this.totalTarjetaDoc += cita.pagosTarjetaDoc;
+        this.totalChequesDoc += cita.pagosChequeDoc;
+        this.facturadoTotalDoc += cita.pagosFacturadoDoc;
         if(aux_costo > cita.pagosTotal && !cita.checkState(CitasDataProvider.STATE_COBRO) ){ this.cajaAdeudo += aux_costo - cita.pagosTotal;   }
         
         //if(cita.data.field_facturar.und && cita.data.field_facturar.und[0].value) this.facturadoTotal += Number(cita.data.field_facturar_cantidad.und[0].value);
@@ -382,8 +400,15 @@ async openReportGenerate( report:reportes = null ){
         this.totalTarjetaOut += cita.pagosTarjetaOut;
         this.totalChequesOut += cita.pagosChequeOut;
         this.facturadoTotalOut += cita.pagosFacturadoOut;
+
+         this.totalDoc   += cita.pagosTotalDoc;
+        this.totalefectivoDoc += cita.pagosEfectivoDoc;
+        this.totalTarjetaDoc += cita.pagosTarjetaDoc;
+        this.totalChequesDoc += cita.pagosChequeDoc;
+        this.facturadoTotalDoc += cita.pagosFacturadoDoc;
       }
     }
+    console.log('totaldoccc', this.totalDoc );
       console.log('cita evaluada',cita);
       
     }else{

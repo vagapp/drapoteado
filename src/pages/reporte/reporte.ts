@@ -10,6 +10,7 @@ import { ReportPresentatorProvider } from '../../providers/report-presentator/re
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { Citas } from '../../providers/user-data/citas';
 import {Platform} from 'ionic-angular';
+import { DateProvider } from '../../providers/date/date';
 /**
  * Generated class for the ReportePage page.
  *
@@ -183,5 +184,10 @@ export class ReportePage {
         cita.opendetail = as;
       }
 
+      getDateString(datenumber: number):String{
+        let aux_dates = DateProvider.getDisplayableDates(new Date(Number(datenumber)));
+        //console.log(aux_dates);
+        return aux_dates.date +' - '+aux_dates.time;
+       }
 
 }

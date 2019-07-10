@@ -42,12 +42,40 @@ page-reporte {
 
     .ReportGrid .row_detail{
         padding: 3px 7em;
+        margin: 10px 0px;
     }
 
     .ReportGrid .bold {
         margin-right: .5em;
         margin-left: 1em;
     }
+
+    .rlabel{
+        margin-right: 1em;
+    }
+
+    .ReporteRow_Desglose .rrt_span{
+        margin-right: 1.2em;
+    }
+
+    .servicios_totales_service_wraps{
+        display: flex;
+        flex-flow: column;
+    }
+
+    .Totales_Caja_NGRID {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0px;
+        margin-bottom: 200px;
+    }
+
+    .Totales_Caja_row{
+        margin: 5px 0px;
+    }
+    
 
     .reporte_header{
         display: -webkit-flex;
@@ -351,10 +379,12 @@ page-reporte {
             text-align: left;
         }
         .ReporteRow_TotalServicios {
-            margin: 1em 0;
-            padding: 1em 0;
-            border-top: 1px solid lightgray;
-            border-bottom: 1px solid lightgray;
+            margin:0;
+            padding:0;
+            /*margin: 10px 0;*/
+            /*padding: 10 0;*/
+            /*border-top: 1px solid lightgray;*/
+            /*border-bottom: 1px solid lightgray;*/
         }
         .ReporteRow_Desglose_row {
             width: 100%;

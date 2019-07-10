@@ -12,13 +12,17 @@
 </div>
 </div>
 <div class="modalPage_toolbar">
+    <div class="info_tool">
+    <span class="spanBlock midFont"><b>Usuario</b></span>
+        <span class="spanBlock fontHigh midFont">{{this.userData.showname}}</span>
+      </div>
     <div class="info_tool" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]) && this.reportPresentator.docLoaded">
         <span class="spanBlock midFont"><b>Doctor</b></span>
-        <span class="spanBlock fontHigh midFont">{{this.reportPresentator.docName}} / {{this.reportPresentator.docAlias}}</span>
+        <span class="spanBlock fontHigh midFont">{{this.reportPresentator.docAlias}}</span>
       </div>
         <div class="info_tool">
             <span class="spanBlock midFont"><b>Fecha</b></span>
-            <span class="spanBlock fontSecondary midFont">{{this.reportPresentator.actualReport.dateString}}</span>
+            <span class="spanBlock fontHigh midFont">{{this.reportPresentator.actualReport.dateString}}</span>
           </div>
   <button *ngIf="!this.reportPresentator.isAdeudo" class="bgColorSecondary generalButton export-big" (click)="exportars()" >Exportar</button>
 </div>
@@ -29,30 +33,43 @@
   <div class="ReporteRow_head">
       <span class="rbh_span midFont" *ngIf="cita.opendetail" (click)="setOpendetail(cita,false);"> <img src="assets/imgs/chevron-verde.svg"  class="icon_drapo_sm"> </span>
       <span class="rbh_span midFont" *ngIf="!cita.opendetail" (click)="setOpendetail(cita,true);"> <img src="assets/imgs/chrevron-rojo.svg"  class="icon_drapo_sm"> </span>
+      <span class="rbh_span midFont fontHigh">{{cita.readableDate}} - {{cita.readableTime}}</span>
       <span class="rbh_span midFont"> <span class="bold">Paciente</span><span class="">{{ cita.paciente }}</span> </span>
-      <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"> <span class="bold">Doctor</span><span class="">{{ cita.doctor_name }}</span> </span>
-      <span class="rbh_span midFont"> <span class="bold">Cobro</span><span class="">{{cita.caja_name}} </span> </span>
-      <span class="rbh_span midFont"> <span class="bold">Duración</span><span class="fontHigh">{{ cita.duracionText }}</span> </span>
-      <span class="rbh_span midFont" *ngIf="!cita.originactivereport"> <span class="fontPrimary">Adeudo anterior</span> </span>
+      <span class="rbh_span midFont" > <span class="bold">Doctor</span><span class="">{{ cita.doctor_name }}</span> </span>
+      <span class="rbh_span midFont" *ngIf="cita.cajaSaved"> <span class="bold">Cobrado por</span><span class="">{{cita.caja_name}} </span> <span *ngIf="cita.pagosTotalDoc > 0 && cita.bydoc" class="fontPrimary">${{cita.pagosTotalDoc}}</span></span>
+    
+      <span class="rbh_span midFont" *ngIf="!cita.originactivereport && !reportPresentator.isAdeudo"> <span class="fontPrimary">Anterior</span> </span>
       <span class="rbh_span midFont estado-cita-reporte"> <span class="fontHigh"  [ngStyle]="{'color':cita.fstateColor}">{{ cita.fstateLabel }}</span> </span>
   </div>
   <div class="ReporteRow_TotalServicios">
       <span class="rrt_span midFont"> <span class="bold">Total de Servicios</span><span class="midFont fontSecondary">${{cita.costo}}</span></span>
-      <span class="rrt_span midFont"> <span class="bold">Efectivo</span><span class="midFont fontSecondary">${{cita.pagosEfectivo}}</span> </span>
-      <span class="rrt_span midFont"> <span class="bold">Tarjeta</span><span class="midFont fontSecondary">${{cita.pagosTarjeta}}</span> </span>
-      <span class="rrt_span midFont"> <span class="bold">Cheque</span><span class="midFont fontSecondary">${{cita.pagosCheque}}</span> </span>
-      <span class="rrt_span midFont"> <span class="bold">Facturado</span><span class="midFont  fontHigh">${{cita.pagosFacturado}}</span> </span>
+      <span class="rrt_span midFont"  *ngIf="!reportPresentator.isAdeudo"> <span class="bold">Importe Total </span><span class="midFont fontSecondary">${{cita.pagosTotal}}</span></span>
       <span class="rrt_span midFont" *ngIf="cita.costo > cita.cobro"> <span class="bold">Adeudo</span><span class="fontPrimary">${{cita.restantePagos}}</span> </span>
-      <span class="rrt_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_RECEPCION]) && cita.pagosTotalOut>0"> <span class="bold">Cobros por otros</span><span class="fontPrimary">${{cita.pagosTotalOut}}</span> </span>
+      
+      <!--<span class="rrt_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_RECEPCION]) && cita.pagosTotalOut>0"> <span class="bold">Cobros por otros</span><span class="fontPrimary">${{cita.pagosTotalOut}}</span> </span>-->
   </div>
   <div class="ReporteRow_Desglose" *ngIf="cita.opendetail">
-      <div class="reportRow_desglose_label">Servicios</div>
+      <div class="reportRow_desglose_label" *ngIf="!reportPresentator.isAdeudo">Desglose</div>
+      <div class="ReporteRow_TotalServicios" *ngIf="!reportPresentator.isAdeudo">
+      <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo"> <span class="rlabel">Efectivo</span><span class="midFont fontSecondary">${{cita.pagosEfectivo}}</span> </span>
+      <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo"> <span class="rlabel">Tarjeta</span><span class="midFont fontSecondary">${{cita.pagosTarjeta}}</span> </span>
+      <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo"> <span class="rlabel">Cheque</span><span class="midFont fontSecondary">${{cita.pagosCheque}}</span> </span>
+      <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo"> <span class="rlabel">Facturado</span><span class="midFont  fontHigh">${{cita.pagosFacturado}}</span> </span>
+      <span class="rrt_span midFont"> <span class="rlabel">Duración</span><span class="fontHigh">{{ cita.duracionText }}</span> </span>
+    </div>
+      <div class="reportRow_desglose_label" *ngIf="!reportPresentator.isAdeudo">Servicios</div>
     <div class="ReporteRow_Servicio row_detail midFont" *ngFor="let servicio of cita.reporteServicios">
-     <span class="servicio-item">
-       {{servicio.title}}: <span class="midFont fontSecondary">${{servicio.costo}}</span>
+     <span class="servicio-item" *ngIf="!reportPresentator.isAdeudo">
+       {{servicio.title}} <span class="midFont fontSecondary">${{servicio.costo}}</span>
       </span> 
     </div>
-    <div class="reportRow_desglose_label">Ediciones</div>
+    <div class="reportRow_desglose_label" *ngIf="cita.PagosonFecha.length > 0" >Historial de cobros</div>
+    <div class="reportRow_edicion row_detail midFont" *ngFor="let pago of cita.PagosonFecha">
+        <span class="servicio-item" >
+          <span class="fontSecondary">${{pago.total}}</span><span class="midSubFont"> cobrado por</span><span class="midFont bold">{{pago.name}}</span> <span  class="midFont fontHigh">{{this.getDateString(pago.fec)}}</span>
+         </span> 
+       </div>
+    <!--<div class="reportRow_desglose_label">Ediciones</div>
     <div class="reportRow_edicion row_detail midFont" *ngFor="let edicion of cita.edicionesFechas">
       <span class="servicio-item" *ngIf="edicion.cos > 0">
         {{edicion.title}} <span  class="midFont fontSecondary">${{edicion.cos}}</span> <span  class="midFont fontSecondary">{{edicion.dst}}</span>
@@ -60,7 +77,7 @@
        <span class="servicio-item" *ngIf="edicion.state">
         {{edicion.title}} <span  class="midFont fontSecondary">{{edicion.dst}}</span>
        </span> 
-     </div>
+     </div>-->
   </div>
 </div>
 </div>
@@ -73,15 +90,31 @@
         </div>
         <div class="nombres-reporte">
           <span class="rbh_span midFont"> <span class="bold">Paciente</span><span class="">{{ cita.paciente }}</span> </span>
-          <span class="rbh_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR])"> <span class="bold">Doctor</span><span class="">{{ cita.doctor_name }}</span> </span>
+          <span class="rbh_span midFont" > <span class="bold">Doctor</span><span class="">{{ cita.doctor_name }}</span> </span>
         </div>
         <div class="totalycitas">
           <span class="rrt_span midFont"> <span class="bold">Total de Servicios</span><span class="midFont fontSecondary">${{cita.costo}}</span></span>
+          <span class="rrt_span midFont"  *ngIf="!reportPresentator.isAdeudo"> <span class="bold">Importe Total </span><span class="midFont fontSecondary">${{cita.pagosTotal}}</span></span>
           <span class="rbh_span midFont estado-cita-reporte"> <span class="fontHigh"  [ngStyle]="{'color':cita.fstateColor}">{{ cita.fstateLabel }}</span> </span>
         </div>
       </div>
       
       <div class="ReporteRow_Desglose" *ngIf="cita.opendetail">
+          <div class="reportRow_desglose_label_sm" >Desglose</div>
+          <div class="ReporteRow_Desglose_row midFont" >
+              <span class="rbh_span midFont" *ngIf="cita.cajaSaved"> <span class="bold">Cobrado por</span><span class="">{{cita.caja_name}} </span> </span>
+              <span class="rbh_span midFont"> <span class="bold" *ngIf="!reportPresentator.isAdeudo">Duracion</span><span class="fontHigh">{{ cita.duracionText }}</span> </span>
+              <div class="ReporteRow_TotalServicios">
+                  <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo"> <span class="bold">Efectivo</span><span class="midFont fontSecondary">${{cita.pagosEfectivo}}</span> </span>
+                  <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo"> <span class="bold">Tarjeta</span><span class="midFont fontSecondary">${{cita.pagosCheque}}</span> </span>
+                  <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo"> <span class="bold">Cheque</span><span class="midFont fontSecondary">${{cita.pagosTarjeta}}</span> </span>
+                  <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo"> <span class="bold">Facturado</span><span class="midFont  fontHigh">${{cita.pagosFacturado}}</span> </span>
+                  <span class="rbh_span midFont" *ngIf="!cita.originactivereport && !reportPresentator.isAdeudo"> <span class="fontPrimary">Anterior</span> </span>
+                  <span class="rrt_span midFont" *ngIf="cita.costo > cita.cobro"> <span class="bold">Adeudo</span><span class="fontPrimary">${{cita.restantePagos}}</span> </span>
+                  <!--<span class="totalespan midFont" *ngIf="reportPresentator.totalDoc>0 && !reportPresentator.isAdeudo"><b>Cobros por doctor:</b> <span class="fontPrimary">${{reportPresentator.totalDoc}}</span></span>-->
+                  <!--<span class="rrt_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_RECEPCION]) && cita.pagosTotalOut>0"> <span class="bold">Cobros externos</span><span class="fontPrimary">${{cita.pagosTotalOut}}</span> </span>-->
+                </div>
+          </div>
           <div class="reportRow_desglose_label_sm">Servicios</div>
           <div class="ReporteRow_Desglose_row midFont" *ngFor="let servicio of cita.reporteServicios">
               
@@ -89,7 +122,13 @@
                 {{servicio.title}}: <span class="midFont fontSecondary">${{servicio.costo}}</span>
                </span> 
              </div>
-             <div class="reportRow_desglose_label_sm">Ediciones</div>
+             <div class="reportRow_desglose_label_sm" *ngIf="cita.PagosonFecha.length > 0" >Historial de cobros</div>
+             <div class="ReporteRow_Desglose_row midFont" *ngFor="let pago of cita.PagosonFecha">
+                 <span class="servicio-item" >
+                   <span class="fontSecondary">${{pago.total}}</span><span class="midSubFont"> cobrado por</span><span  class="midFont bold">{{pago.name}}</span> <span  class="midFont fontHigh">{{this.getDateString(pago.fec)}}</span>
+                  </span> 
+                </div>
+             <!--<div class="reportRow_desglose_label_sm">Ediciones</div>
     <div class="ReporteRow_Desglose_row midFont" *ngFor="let edicion of cita.edicionesFechas">
       <span class="servicio-item" *ngIf="edicion.cos > 0">
         {{edicion.title}} <span  class="midFont fontSecondary">${{edicion.cos}}</span>
@@ -97,20 +136,8 @@
        <span class="servicio-item" *ngIf="edicion.state">
         {{edicion.title}}
        </span> 
-     </div>
-          <div class="ReporteRow_Desglose_row midFont" >
-              <span class="rbh_span midFont"> <span class="bold">Cobro</span><span class="">{{cita.caja_name}} </span> </span>
-              <span class="rbh_span midFont"> <span class="bold">Duracion</span><span class="fontHigh">{{ cita.duracionText }}</span> </span>
-              <div class="ReporteRow_TotalServicios">
-                  <span class="rrt_span midFont"> <span class="bold">Efectivo</span><span class="midFont fontSecondary">${{cita.pagosEfectivo}}</span> </span>
-                  <span class="rrt_span midFont"> <span class="bold">Tarjeta</span><span class="midFont fontSecondary">${{cita.pagosCheque}}</span> </span>
-                  <span class="rrt_span midFont"> <span class="bold">Cheque</span><span class="midFont fontSecondary">${{cita.pagosTarjeta}}</span> </span>
-                  <span class="rrt_span midFont"> <span class="bold">Facturado</span><span class="midFont  fontHigh">${{cita.pagosFacturado}}</span> </span>
-                  <span class="rbh_span midFont" *ngIf="!cita.originactivereport"> <span class="fontPrimary">Adeudo anterior</span> </span>
-                  <span class="rrt_span midFont" *ngIf="cita.costo > cita.cobro"> <span class="bold">Adeudo</span><span class="fontPrimary">${{cita.restantePagos}}</span> </span>
-                  <span class="rrt_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_RECEPCION]) && cita.pagosTotalOut>0"> <span class="bold">Cobros externos</span><span class="fontPrimary">${{cita.pagosTotalOut}}</span> </span>
-                </div>
-          </div>
+     </div>-->
+       
        
       </div>
     </div>
@@ -124,16 +151,19 @@
 
 <div class="ReportesTotales" *ngIf="!smallMode && !reportPresentator.isAdeudo">
   <div class="servicios_totales">
-      <span class="bold">No. de Servicios</span>
-      <div class="ticket_row midMainFont" *ngFor="let servres of reportPresentator.serviciosResume">{{servres.title}}<span class="midFont fontSecondary">{{servres.times}}</span></div>
+      <span class="bold">Servicios:</span>
+      <div class="servicios_totales_service_wraps">
+      <div class="ticket_row midSubFont" *ngFor="let servres of reportPresentator.serviciosResume">{{servres.title}}<span class="midFont fontSecondary">{{servres.times}}</span></div>
+      </div>
     </div>
 <div class="resumen_totales">
   <span class="totalespan midFont"><b>Citas Totales:</b> <span class="fontSecondary">{{reportPresentator.noCitas}}</span></span>
+  <span class="totalespan midFont"><b>Adeudos cobrados:</b> <span class="fontSecondary">{{reportPresentator.noAdeudosR}}</span></span>
   <span class="totalespan midFont"><b>Citas Canceladas:</b> <span class="fontPrimary">{{reportPresentator.noCancel}}</span></span>
   <!--<span class="totalespan midFont"><b>No Show:</b> <span class="fontPrimary">{{reportPresentator.noShow}}</span></span>-->
   <span class="totalespan midFont"><b>Duración Total:</b> <span class="fontHigh">{{reportPresentator.duracionTotalStr}}</span></span>
-  <span class="totalespan midFont"><b>Adeudos cobrados:</b> <span class="fontHigh">{{reportPresentator.noAdeudosR}}</span></span>
-  <span class="totalespan midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_RECEPCION]) && reportPresentator.totalOut>0"><b>Cobrado por otros usuarios:</b> <span class="fontPrimary">${{reportPresentator.totalOut}}</span></span>
+  <span class="totalespan midFont" *ngIf="reportPresentator.totalDoc>0"><b>Cobros por doctor:</b> <span class="fontPrimary">${{reportPresentator.totalDoc}}</span></span>
+  <!--<span class="totalespan midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_RECEPCION]) && reportPresentator.totalOut>0"><b>Cobrado por otros usuarios:</b> <span class="fontPrimary">${{reportPresentator.totalOut}}</span></span>-->
 </div>
 
 
@@ -142,16 +172,22 @@
     
 </div-->
 
-<div class="Totales_Caja">
-    <span class="toin_span midFont"><b>Total de Servicios<span class="fontPrimary">${{reportPresentator.costoTotal}}</span></b></span>
-    <span class="toin_span midFont"><b>Importe Total<span class="fontSecondary">${{reportPresentator.total}}</span></b></span>
-    <span class="toin_span midSubFont">Efectivo:<span class="fontSecondary">${{reportPresentator.totalefectivo}}</span></span>
-    <span class="toin_span midSubFont">Tarjeta:<span class="fontSecondary">${{reportPresentator.totalTarjeta}}</span></span>
-    <span class="toin_span midSubFont">Cheques:<span class="fontSecondary">${{reportPresentator.totalCheques}}</span></span>
-    <span class="toin_span midSubFont">Facturado:<span class="fontSecondary">${{reportPresentator.facturadoTotal}}</span></span>
-    <span class="toin_span midSubFont">Adeudos Cobrados:<span class="fontSecondary">${{reportPresentator.totalAdeudo}}</span></span>
+<div class="Totales_Caja_NGRID">
+  <div class="Totales_Caja_row">
+    <span class="toin_span midFont bold"><b>Total de Servicios: <span class="fontPrimary">${{reportPresentator.costoTotal}}</span></b></span>
+    <span class="toin_span midFont bold"><b>Importe Total: <span class="fontSecondary">${{reportPresentator.total}}</span></b></span>
+    <span class="toin_span midFont bold">Adeudo: <span class="fontPrimary">${{this.reportPresentator.pendiente}}</span></span>  
+  </div>
+  <div class="Totales_Caja_row">
+    <span class="toin_span midSubFont">Efectivo: <span class="fontSecondary">${{reportPresentator.totalefectivo}}</span></span>
+    <span class="toin_span midSubFont">Tarjeta: <span class="fontSecondary">${{reportPresentator.totalTarjeta}}</span></span>
+    <span class="toin_span midSubFont">Cheques: <span class="fontSecondary">${{reportPresentator.totalCheques}}</span></span>
+    <span class="toin_span midSubFont">Adeudos Cobrados: <span class="fontSecondary">${{reportPresentator.totalAdeudo}}</span></span>
+    <span class="toin_span midSubFont">Facturado: <span class="fontHigh">${{reportPresentator.facturadoTotal}}</span></span>
+   
     <!--<span class="toin_span midSubFont">Cuentas por cobrar:<span class="fontPrimary">${{this.reportPresentator.cajacuentas}}</span></span>-->
-    <span class="toin_span midSubFont">Pendiente:<span class="fontPrimary">${{this.reportPresentator.pendiente}}</span></span>  
+
+  </div>
 </div>
 </div>
 

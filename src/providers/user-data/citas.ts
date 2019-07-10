@@ -31,6 +31,8 @@ export class Citas{
     caja_playerid:string = null;
     recepcion_playerid:string = null;
     opendetail=false;
+    docuid = 0;
+    bydoc:boolean = false;
     
 
     ediciones:any[] = new Array();
@@ -53,11 +55,22 @@ export class Citas{
     pagosFacturadoOut: number = 0;
     pagosTotalOut:number = 0;
 
+     //variables con pagos de doctor
+     pagosEfectivoDoc:number = 0;
+     pagosChequeDoc:number = 0;
+     pagosTarjetaDoc:number = 0;
+     pagosFacturadoDoc: number = 0;
+     pagosTotalDoc:number = 0;
+
+
     //variables para reportes con ediciones incluidas.
     festado:number = 0;
     addedServicesFechas: servicios[];
     edicionesFechas: any[];
     estado_anterior: number = null;
+
+    
+    get cajaSaved(){ console.log('cajasaved',this.data.field_cita_caja); return this.data.field_cita_caja.und[0].localeCompare('_none') !== 0 ? true : false};
     
     constructor(){
         this.init();
@@ -69,7 +82,7 @@ export class Citas{
     }
     
 
-    get doctor_name(){return this.data.doctor_name;}
+    get doctor_name(){/*return this.data.doctor_name;*/ return this.data.doctor_alias;}
     get doctor_alias(){return this.data.doctor_alias;}
     get caja_name(){ return this.data.field_caja_nombre.und[0].value;}
     get paciente(){ return this.data.field_paciente.und[0].value;}
@@ -111,9 +124,10 @@ export class Citas{
 
     get PagosonFecha(){
         if(this.pagosfrom === 0){
-            return this.pagos;
+            return this.pagos.map((pago)=>{  pago.total = Number(pago.efe)+Number(pago.tar)+Number(pago.che); return pago;});
         } else
         return this.pagos.filter((pago)=>{
+            pago.total = Number(pago.efe)+Number(pago.tar)+Number(pago.che);
             return (Number(pago.fec) >= Number( this.pagosfrom) && Number(pago.fec) < Number(this.pagosto));
         });
     }
@@ -189,8 +203,14 @@ export class Citas{
         this.pagosTarjetaOut = 0;
         this.pagosFacturadoOut = 0;
 
-        console.log(this.PagosonFecha);
+        this.pagosEfectivoDoc = 0;
+        this.pagosChequeDoc = 0;
+        this.pagosTarjetaDoc = 0;
+        this.pagosFacturadoDoc = 0;
 
+        console.log(this.PagosonFecha);
+        console.log('citadoctor es',this.data.field_cita_doctor);
+        this.docuid = Number(this.data.field_cita_doctor.und[0]);
         this.PagosonFecha.forEach(pago => {
             console.log(pago);
             this.pagosEfectivo += Number(pago.efe);
@@ -198,6 +218,15 @@ export class Citas{
             this.pagosTarjeta += Number(pago.tar);
             this.pagosFacturado += Number(pago.fac);
             console.log('checking pago',pago.uid,uid);
+
+            if(pago.uid && Number(pago.uid)=== this.docuid){
+                console.log('este pago  fue realizado por el doctor',pago);
+                this.pagosEfectivoDoc += Number(pago.efe);
+                this.pagosChequeDoc += Number(pago.che);
+                this.pagosTarjetaDoc += Number(pago.tar);
+                this.pagosFacturadoDoc += Number(pago.fac);
+            }
+           
             if(pago.uid && Number(pago.uid) !== Number(uid)){
                 console.log('este pago no fue realizado por este usuario',pago);
                 this.pagosEfectivoOut += Number(pago.efe);
@@ -215,6 +244,7 @@ export class Citas{
         console.log( this.pagosEfectivo);
         this.pagosTotal =  this.pagosEfectivo + this.pagosCheque + this.pagosTarjeta;
         this.pagosTotalOut =  this.pagosEfectivoOut + this.pagosChequeOut + this.pagosTarjetaOut;
+        this.pagosTotalDoc =  this.pagosEfectivoDoc + this.pagosChequeDoc + this.pagosTarjetaDoc;
     }
 
     setEdicionesFechas(from:number, to:number){
@@ -339,7 +369,10 @@ export class Citas{
           console.log((data_input.caja_uid+"").localeCompare("_none"));
           console.log(data_input.caja_uid);
           console.log('setting caja ',this.data.field_cita_caja );*/
+         
+          
           this.data.field_cita_caja.und[0] = data_input.caja_uid;
+          if( Number(this.data.field_cita_caja.und[0]) === Number(this.data.field_cita_doctor.und[0]) ){ this.bydoc = true; console.log('espordoctor woe'); }
           this.data.field_cita_recepcion.und[0] = data_input.recepcion_uid;
           this.data.field_estado.und[0].value = data_input.field_estado;
           this.data.field_servicios_cita.und = data_input.field_servicios_cita;
@@ -428,6 +461,31 @@ export class Citas{
         this.data.field_hora_final.und[0].value.time = now.getUTCHours()+":"+now.getUTCMinutes();
         console.log("hora final on data",this.data.field_hora_final);
         //and this is saved later
+      
+    }
+
+    /**
+     * Este metodo revisa si esta cita esta siendo cobrada en dias anteriores a la fecha en que se planifico.
+     * en otras palabras revisa si la cita es del futuro. y si es del futuro y esta siendo cobrada hoy, se transforma en una cita de hoy.
+     * cambiando la "fecha" de la cita al momento en que se cobra.
+     */
+    checkFromFuture(){
+        let now = new Date();
+        //let nowstart = new Date().setHours(0,0,0,0);
+        let nowend = new Date().setHours(23,59,59,999);     
+        let datestart = new Date(this.dateMs).setHours(0,0,0,0);
+        //let dateend = new Date(this.dateMs).setHours(23,59,59,999);  
+        if(now.getTime() < datestart){ //si ahorita no pasa el inicio del dia de la cita. entonces es una fecha del futuro. asi que cambiamos la fecha a este momento. que seria el momento en que se atendio.
+            console.log('el dia de la cita aun no ha empezado.');
+            this.data.field_datemsb.und[0].value = now.getTime();
+            this.dateMs = now.getTime();
+            //borrar las fechas del reporte que sobrepasan esta fecha porque ya no tendran valides.
+            this.data.field_fechas_reporte.und = this.data.field_fechas_reporte.und.filter((fecha)=>{
+                //console.log('fecha es',fecha, new Date(fecha.value));
+                return fecha.value <= nowend;
+            });
+        }
+
     }
 
 
