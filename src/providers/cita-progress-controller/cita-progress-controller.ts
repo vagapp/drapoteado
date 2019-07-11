@@ -136,9 +136,11 @@ export class CitaProgressControllerProvider {
     fac: this.factura_cantidad == null ? ''+0 : ''+this.factura_cantidad,
     fec:''+new Date().getTime(),
     uid: Number(this.userData.userData.uid),
-    name:this.userData.showname
+    name:this.userData.showname,
+    isdoc:this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])? 1 : 0
   };
 
+  console.log('guardando pago',aux_pago);
   this.activeCita.compareServicios(this.servicesCompare);
   this.activeCita.pagos.push(aux_pago);
 

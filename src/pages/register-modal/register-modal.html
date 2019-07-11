@@ -5,6 +5,7 @@
     <div class="bigFont" *ngIf="this.isnew"> <span class="fontPrimary"><b>Registro</b></span> <span class="lightFont">de Nuevo Suscriptor</span></div>
     <div class="midSubFont" *ngIf="this.isnew"> Por favor proporciona los siguientes datos: </div>
     <div class="bigFont" *ngIf="!this.isnew"> <span class="fontPrimary"><b>Datos</b></span> <span class="lightFont">de Usuario</span></div>
+    <div class="bigFont" *ngIf="!this.isnew"> <span class="midSubFont">username: {{this.userData.userData.name}}</span> </div>
   </div>
   <div class="code_wrapper"  *ngIf="!permissions.checkUserPermission([userData.TIPO_DOCTOR]) && !permissions.checkifgroup() && !this.isnew">
    <span class="spanBlock"><b>Codigo de usuario:</b> <span class="ModalInput_input"><input [(ngModel)]="this.userData.userData.field_codigo.und[0].value" type="text" readonly/></span></span>
