@@ -255,7 +255,7 @@ export class CitasManagerProvider {
  
     if(cita.todayEdiciones.length > 0){  this.setCitaFechaReporte(cita,saveDate);  saveDate = false; }
     if(Number(state) === Number(CitasDataProvider.STATE_ACTIVA)){ cita.setHoraInicio();}
-    if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin(); cita.checkFromFuture();  this.setCitaFechaReporte(cita,saveDate); reportedateset=true;  }
+    if(Number(state) === Number(CitasDataProvider.STATE_COBRO)){ cita.setHoraFin(); cita.saveDate(); cita.checkFromFuture();  this.setCitaFechaReporte(cita,saveDate); reportedateset=true;  }
     if(Number(state) === Number(CitasDataProvider.STATE_FINALIZADA)){
       console.log('settofinalziada woe se esta tratando de pagar');
       fechacobroset = this.setCitaFechaCobro(cita,saveDate); 

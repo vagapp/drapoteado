@@ -358,6 +358,8 @@ async openReportGenerate( report:reportes = null ){
         cita.setPagosFecha(0,0,this.userData.userData.uid);
         cita.setEdicionesFechas(0,0);
         this.cajaAdeudo += aux_costo - cita.pagosTotal;
+        this.costoTotal += aux_costo;
+        this.total += cita.pagosTotal;
       }else{
       cita.setPagosFecha(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS,this.userData.userData.uid); //este metodo pone algunas cosas del reporte en la cita. porque si we
       cita.setEdicionesFechas(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS);
@@ -478,6 +480,16 @@ async openReportGenerate( report:reportes = null ){
     this.totalAdeudoOut = 0;
     this.costoTotalOut = 0;
     this.facturadoTotalOut = 0;
+
+    this.totalDoc = 0;
+    this.totalefectivoDoc = 0;
+    this.totalTarjetaDoc = 0;
+    this.totalChequesDoc = 0;
+    this.totalcuentasDoc = 0;
+    this.totalAdeudoDoc = 0;
+    this.costoTotalDoc = 0;
+    this.facturadoTotalDoc = 0;
+
   }
 
 

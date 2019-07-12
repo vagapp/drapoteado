@@ -124,7 +124,7 @@ export class Citas{
 
     get PagosonFecha(){
         if(this.pagosfrom === 0){
-            return this.pagos.map((pago)=>{  pago.total = Number(pago.efe)+Number(pago.tar)+Number(pago.che); return pago;});
+            return this.pagos.map((pago)=>{  pago.total = Number(pago.efe)+Number(pago.tar)+Number(pago.che); return pago; });
         } else
         return this.pagos.filter((pago)=>{
             pago.total = Number(pago.efe)+Number(pago.tar)+Number(pago.che);
@@ -477,8 +477,9 @@ export class Citas{
         //let dateend = new Date(this.dateMs).setHours(23,59,59,999);  
         if(now.getTime() < datestart){ //si ahorita no pasa el inicio del dia de la cita. entonces es una fecha del futuro. asi que cambiamos la fecha a este momento. que seria el momento en que se atendio.
             console.log('el dia de la cita aun no ha empezado.');
-            this.data.field_datemsb.und[0].value = now.getTime();
-            this.dateMs = now.getTime();
+            /*this.data.field_datemsb.und[0].value = now.getTime();
+            this.dateMs = now.getTime();*/
+       
             //borrar las fechas del reporte que sobrepasan esta fecha porque ya no tendran valides.
             this.data.field_fechas_reporte.und = this.data.field_fechas_reporte.und.filter((fecha)=>{
                 //console.log('fecha es',fecha, new Date(fecha.value));
@@ -486,6 +487,12 @@ export class Citas{
             });
         }
 
+    }
+
+    saveDate(){
+        let now = new Date();
+        this.data.field_datemsb.und[0].value = now.getTime();
+        this.dateMs = now.getTime();
     }
 
 

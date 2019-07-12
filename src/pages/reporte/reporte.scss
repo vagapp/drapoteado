@@ -19,6 +19,10 @@ page-reporte {
         flex-flow: row;
         width: 100%;
     }
+    
+    .ReportesTotales .totalespan {
+        margin: 0px 10px;
+    }
 
     .totalesAdeudo {
         display: flex;
