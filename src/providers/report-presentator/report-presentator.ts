@@ -355,15 +355,18 @@ async openReportGenerate( report:reportes = null ){
       let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
       console.log('this.userData.userData.uid',this.userData.userData.uid);
       if(this.isAdeudo){
+        console.log('trailr1 isadeudo');
         cita.setPagosFecha(0,0,this.userData.userData.uid);
         cita.setEdicionesFechas(0,0);
         this.cajaAdeudo += aux_costo - cita.pagosTotal;
         this.costoTotal += aux_costo;
         this.total += cita.pagosTotal;
       }else{
+        console.log('trailr1 not adeudo');
       cita.setPagosFecha(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS,this.userData.userData.uid); //este metodo pone algunas cosas del reporte en la cita. porque si we
       cita.setEdicionesFechas(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS);
       if(cita.originactivereport){ //esta cita fue originada el dia de este reporte y sus totales se manejan normalmente.
+        console.log('trailr1 originactivereport');
         this.noCitas++;
         this.duracionTotalMs += aux_duracion;
         this.costoTotal += aux_costo;
@@ -411,7 +414,7 @@ async openReportGenerate( report:reportes = null ){
       }
     }
     console.log('totaldoccc', this.totalDoc );
-      console.log('cita evaluada',cita);
+    console.log('cita evaluada',cita);
       
     }else{
       cita.setEdicionesFechas(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS);

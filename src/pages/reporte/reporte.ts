@@ -11,6 +11,7 @@ import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { Citas } from '../../providers/user-data/citas';
 import {Platform} from 'ionic-angular';
 import { DateProvider } from '../../providers/date/date';
+import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 /**
  * Generated class for the ReportePage page.
  *
@@ -188,6 +189,10 @@ export class ReportePage {
         let aux_dates = DateProvider.getDisplayableDates(new Date(Number(datenumber)));
         //console.log(aux_dates);
         return aux_dates.date +' - '+aux_dates.time;
+       }
+
+       moneyFormat( money:number ): string {
+        return CitasDataProvider.moneyFormat(money);
        }
 
 }

@@ -30,7 +30,7 @@
         <tbody *ngIf="this.showMis">
             <tr *ngFor="let servicio of this.servicioMan.servicios">
                 <td>{{servicio.title}}</td>
-                <td class="fontSecondary">${{servicio.costo}}</td>
+                <td class="fontSecondary">{{moneyFormat(servicio.costo)}}</td>
                 <td class="toolCol">
                   <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="editServicio(servicio)"/>
                   <button class="bgColorPrimary generalButton tableButton" (click)="deleteServicio(servicio)">Eliminar</button>

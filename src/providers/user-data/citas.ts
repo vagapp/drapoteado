@@ -82,7 +82,7 @@ export class Citas{
     }
     
 
-    get doctor_name(){/*return this.data.doctor_name;*/ return this.data.doctor_alias;}
+    get doctor_name(){/*return this.data.doctor_name;*/ console.log('doctor alias is', this.data.doctor_alias); return this.data.doctor_alias;}
     get doctor_alias(){return this.data.doctor_alias;}
     get caja_name(){ return this.data.field_caja_nombre.und[0].value;}
     get paciente(){ return this.data.field_paciente.und[0].value;}
@@ -109,26 +109,32 @@ export class Citas{
         let cantidad_pagada = 0;
         //console.log(this.pagos);
         this.pagos.forEach(pago => {
-            //console.log(pago);
+            console.log('trailadeudocp cantidadPagada',pago);
             //console.log(pago['efe']);
+            pago['efe'] = Number(pago['efe']).toFixed(2);
+            pago['che'] = Number(pago['che']).toFixed(2);
+            pago['tar'] = Number(pago['tar']).toFixed(2);
             cantidad_pagada += (Number(pago['efe']) + Number(pago['tar']) +Number(pago['che'])); 
+            console.log('trailadeudocp acum',cantidad_pagada);
         });
         //console.log('calculando cantidad pagada',cantidad_pagada);
         return cantidad_pagada;
     }
 
     get restantePagos():number{
-        //console.log('restantePagos',this.costo,this.cantidadPagada);
+        console.log('trailadeudocp restantePagos',this.costo,this.cantidadPagada);
         return this.costo - this.cantidadPagada;
     }
 
     get PagosonFecha(){
-        if(this.pagosfrom === 0){
-            return this.pagos.map((pago)=>{  pago.total = Number(pago.efe)+Number(pago.tar)+Number(pago.che); return pago; });
-        } else
+        let ret;
         return this.pagos.filter((pago)=>{
+            pago.efe = Number(Number(pago.efe).toFixed(2));
+            pago.tar = Number(Number(pago.tar).toFixed(2));
+            pago.che = Number(Number(pago.che).toFixed(2));
             pago.total = Number(pago.efe)+Number(pago.tar)+Number(pago.che);
-            return (Number(pago.fec) >= Number( this.pagosfrom) && Number(pago.fec) < Number(this.pagosto));
+            pago.total = Number(Number(pago.total).toFixed(2));
+            return (this.pagosfrom === 0 || (Number(pago.fec) >= Number( this.pagosfrom) && Number(pago.fec) < Number(this.pagosto)));
         });
     }
 
@@ -212,12 +218,13 @@ export class Citas{
         console.log('citadoctor es',this.data.field_cita_doctor);
         this.docuid = Number(this.data.field_cita_doctor.und[0]);
         this.PagosonFecha.forEach(pago => {
-            console.log(pago);
+            console.log('trailpago',pago);
             this.pagosEfectivo += Number(pago.efe);
             this.pagosCheque += Number(pago.che);
             this.pagosTarjeta += Number(pago.tar);
             this.pagosFacturado += Number(pago.fac);
             console.log('checking pago',pago.uid,uid);
+            console.log('trailpago efectivo',this.pagosEfectivo);
 
             if(pago.uid && Number(pago.uid)=== this.docuid){
                 console.log('este pago  fue realizado por el doctor',pago);

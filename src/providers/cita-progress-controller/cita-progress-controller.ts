@@ -45,9 +45,12 @@ export class CitaProgressControllerProvider {
     //console.log('cobroEfectivo',this.cobroEfectivo);
     //console.log('cobroCheque',this.cobroCheque);
     //console.log('cobroTarjeta',this.cobroTarjeta);
-    return 0+ 
+    let ret = 0 + 
     ( (Number(this.activeCita.restantePagos)) - 
-    (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) ) ); }
+    (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) ) ); 
+    ret = Number(ret.toFixed(2));
+    return ret;
+  }
 
 
   constructor(

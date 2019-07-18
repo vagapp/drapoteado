@@ -8,6 +8,7 @@ import { ReportesManagerProvider } from '../../providers/reportes-manager/report
 import { ReporteCitasProvider } from '../../providers/reporte-citas/reporte-citas';
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 
 /**
  * Generated class for the ReporteTicketPage page.
@@ -42,6 +43,9 @@ export class ReporteTicketPage {
     this.viewCtrl.dismiss();
   }
 
+  moneyFormat( money:number ): string {
+    return CitasDataProvider.moneyFormat(money);
+   }
 
 
 }

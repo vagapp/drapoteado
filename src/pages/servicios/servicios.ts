@@ -4,6 +4,7 @@ import { ModalController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
 import { LoaderProvider } from '../../providers/loader/loader';
+import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 //import { servicios } from '../../providers/user-data/servicios';
 
 
@@ -126,5 +127,9 @@ presentToast(msg) {
   });
   toast.present();
 }
+
+moneyFormat( money:number ): string {
+  return CitasDataProvider.moneyFormat(money);
+ }
   
 }

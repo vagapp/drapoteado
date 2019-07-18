@@ -17,19 +17,19 @@
   </div>
   <div class="ticket_content">
     <div class="ticket_row_block">
-    <div class="ticket_row midMainFont">Total de Servicios <span class="fontPrimary">${{this.reportPresentator.costoTotal}}</span></div>
-    <div class="ticket_row midMainFont">Importe Total <span class="fontSecondary">${{this.reportPresentator.total}}</span></div>
-    <div class="ticket_row midSubFont">Efectivo <span class="fontSecondary">${{this.reportPresentator.totalefectivo}}</span></div>
-    <div class="ticket_row midSubFont">Tarjeta <span class="fontSecondary">${{this.reportPresentator.totalTarjeta}}</span></div>
-    <div class="ticket_row midSubFont">Cheque  <span class="fontSecondary">${{this.reportPresentator.totalCheques}}</span></div>
-    <div class="ticket_row midSubFont">Facturado <span class="fontHigh">${{this.reportPresentator.facturadoTotal}}</span></div>
-    <div class="ticket_row midSubFont">Adeudos Cobrados <span class="fontHigh">${{reportPresentator.totalAdeudo}}</span></div>
-    <div class="ticket_row midSubFont">Pendiente <span class="fontPrimary">${{this.reportPresentator.pendiente}}</span></div>
+    <div class="ticket_row midMainFont">Total de Servicios <span class="fontPrimary">{{moneyFormat(this.reportPresentator.costoTotal)}}</span></div>
+    <div class="ticket_row midMainFont">Importe Total <span class="fontSecondary">{{moneyFormat(this.reportPresentator.total)}}</span></div>
+    <div class="ticket_row midSubFont">Efectivo <span class="fontSecondary">{{moneyFormat(this.reportPresentator.totalefectivo)}}</span></div>
+    <div class="ticket_row midSubFont">Tarjeta <span class="fontSecondary">{{moneyFormat(this.reportPresentator.totalTarjeta)}}</span></div>
+    <div class="ticket_row midSubFont">Cheque  <span class="fontSecondary">{{moneyFormat(this.reportPresentator.totalCheques)}}</span></div>
+    <div class="ticket_row midSubFont">Facturado <span class="fontHigh">{{moneyFormat(this.reportPresentator.facturadoTotal)}}</span></div>
+    <div class="ticket_row midSubFont">Adeudos Cobrados <span class="fontHigh">{{moneyFormat(reportPresentator.totalAdeudo)}}</span></div>
+    <div class="ticket_row midSubFont">Pendiente <span class="fontPrimary">{{moneyFormat(this.reportPresentator.pendiente)}}</span></div>
    
   </div>
   <div class="ticket_row_block">
     <div class="ticket_row midMainFont">Detalle de Servicios</div>
-    <div class="ticket_row midSubFont" *ngFor="let servicio of this.reportPresentator.serviciosResume">{{servicio.title}} <span class="fontPrimary">${{servicio.costo}}({{servicio.times}})</span></div>
+    <div class="ticket_row midSubFont" *ngFor="let servicio of this.reportPresentator.serviciosResume">{{servicio.title}} <span class="fontPrimary">{{moneyFormat(servicio.costo)}}({{servicio.times}})</span></div>
   </div>
   <div class="ticket_row_block">
       <div class="ticket_row midMainFont">Citas Totales: <span class="fontSecondary">{{reportPresentator.noCitas}}</span></div>

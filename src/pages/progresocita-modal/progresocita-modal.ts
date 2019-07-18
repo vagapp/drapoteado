@@ -205,6 +205,10 @@ export class ProgresocitaModalPage {
         //this.close();
       }
 
+      moneyFormat( money:number ): string {
+        return CitasDataProvider.moneyFormat(money);
+       }
+
   
       close(){
         this.viewCtrl.dismiss();

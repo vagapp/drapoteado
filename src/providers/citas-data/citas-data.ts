@@ -382,7 +382,43 @@ export class CitasDataProvider{
   }
 
 
- 
+  static moneyFormat( money:number ): string {
+    money = Number(money);
+    //console.log('stringnumber money is',money);
+    let ret = '';
+    let stringnumber = money.toFixed(2).split("");
+    //console.log('stringnumber a',stringnumber);
+    stringnumber = stringnumber.reverse();
+    //console.log('stringnumber b',stringnumber);
+    let pointfound = 0;
+    let counter = 0;
+   for(let i = 0 ; i < stringnumber.length; i++){
+     if(stringnumber[i] === '.'){
+       counter = 0;
+       ret+=stringnumber[i];
+       pointfound = 1;
+     }else{
+       counter++;
+       if(counter === 4){
+         ret += ',';
+         counter = 0;
+       }
+       ret+=stringnumber[i];
+     }
+   }
+   //console.log('stringnumber ret',ret);
+   stringnumber = ret.split("").reverse();
+   //console.log('stringnumber c',stringnumber);
+   ret = '$'+stringnumber.join('');
+   //console.log('stringnumber ret b',ret);
+   if(pointfound === 0){
+     ret+='.00';
+   }
+   
+   //console.log('stringnumber end---------------');
+   return ret;
+
+  }
 
  
 
