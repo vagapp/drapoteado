@@ -33,7 +33,7 @@
   <div class="ReporteRow_head">
       <span class="rbh_span midFont" *ngIf="cita.opendetail" (click)="setOpendetail(cita,false);"> <img src="assets/imgs/chevron-verde.svg"  class="icon_drapo_sm"> </span>
       <span class="rbh_span midFont" *ngIf="!cita.opendetail" (click)="setOpendetail(cita,true);"> <img src="assets/imgs/chrevron-rojo.svg"  class="icon_drapo_sm"> </span>
-      <span class="rbh_span midFont fontHigh">{{cita.readableDate}} - {{cita.readableTime}}</span>
+      <span class="rbh_span midFont fontHigh">{{cita.ultimaFechaText}}<!--{{cita.readableDate}} - {{cita.readableTime}}--></span>
       <span class="rbh_span midFont"> <span class="bold">Paciente</span><span class="">{{ cita.paciente }}</span> </span>
       <span class="rbh_span midFont" > <span class="bold">Doctor</span><span class="">{{ cita.doctor_name }}</span> </span>
       <span class="rbh_span midFont" *ngIf="cita.cajaSaved"> <span class="bold">Cobrado por</span><span class="">{{cita.caja_name}} </span> <span *ngIf="!reportPresentator.isAdeudo && cita.pagosTotalDoc > 0 && cita.bydoc" class="fontPrimary">{{moneyFormat(cita.pagosTotalDoc)}}</span></span>

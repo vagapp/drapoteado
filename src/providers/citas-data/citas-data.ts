@@ -392,6 +392,7 @@ export class CitasDataProvider{
     //console.log('stringnumber b',stringnumber);
     let pointfound = 0;
     let counter = 0;
+    let addition = '';
    for(let i = 0 ; i < stringnumber.length; i++){
      if(stringnumber[i] === '.'){
        counter = 0;
@@ -399,11 +400,14 @@ export class CitasDataProvider{
        pointfound = 1;
      }else{
        counter++;
-       if(counter === 4){
-         ret += ',';
-         counter = 0;
-       }
-       ret+=stringnumber[i];
+       ret+=addition+stringnumber[i];
+       addition = '';
+       if(counter === 3){
+        //ret += ',';
+        addition = ',';
+        counter = 0;
+      }
+      
      }
    }
    //console.log('stringnumber ret',ret);

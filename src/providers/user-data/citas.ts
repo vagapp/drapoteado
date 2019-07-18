@@ -47,6 +47,8 @@ export class Citas{
     pagosFacturado: number = 0;
     pagosTotal:number = 0;
     originactivereport:boolean = false;
+    ultimaFechaPago: number = 0;
+    ultimaFechaText:string = '';
 
     //variables con pagos de terceros
     pagosEfectivoOut:number = 0;
@@ -128,13 +130,18 @@ export class Citas{
 
     get PagosonFecha(){
         let ret;
-        return this.pagos.filter((pago)=>{
+        ret = this.pagos.filter((pago)=>{
             pago.efe = Number(Number(pago.efe).toFixed(2));
             pago.tar = Number(Number(pago.tar).toFixed(2));
             pago.che = Number(Number(pago.che).toFixed(2));
             pago.total = Number(pago.efe)+Number(pago.tar)+Number(pago.che);
             pago.total = Number(Number(pago.total).toFixed(2));
             return (this.pagosfrom === 0 || (Number(pago.fec) >= Number( this.pagosfrom) && Number(pago.fec) < Number(this.pagosto)));
+        });
+        return ret.sort((a,b)=>{
+            if(a.fec > b.fec) return 1
+            if(a.fec < b.fec) return -1
+            return 0;
         });
     }
 
@@ -195,9 +202,11 @@ export class Citas{
     //obtiene los pagos que se hicieron a esta cita de fecha from a fecha to.
     //uid es el uid del usuario que esta consultado. para saber que pagos realizo el. y cuales no 
     setPagosFecha(from:number, to:number, uid:number){
-        console.log('setPagosFecha',from,to,uid);
+        console.log('traildater  setPagosFecha',from,to,uid);
         this.pagosfrom = from;
         this.pagosto = to;
+        this.ultimaFechaPago = to;
+        this.ultimaFechaText = '';
 
         this.pagosEfectivo = 0;
         this.pagosCheque = 0;
@@ -213,11 +222,20 @@ export class Citas{
         this.pagosChequeDoc = 0;
         this.pagosTarjetaDoc = 0;
         this.pagosFacturadoDoc = 0;
-
-        console.log(this.PagosonFecha);
+      
+        console.log('traildater newcita ');
+        
         console.log('citadoctor es',this.data.field_cita_doctor);
         this.docuid = Number(this.data.field_cita_doctor.und[0]);
+        if(!this.originactivereport){
+        this.ultimaFechaPago = Number(this.PagosonFecha.pop().fec);
+        this.ultimaFechaText = DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).date + ' - '+ DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).time;
+        }else{ //this.ultimaFechaPago = this.dateMs;
+            this.ultimaFechaText = this.getDisplayableDates().date + ' - '+this.getDisplayableDates().time
+        }
         this.PagosonFecha.forEach(pago => {
+            console.log('traildater comparing date ',this.ultimaFechaPago,pago.fec);
+            
             console.log('trailpago',pago);
             this.pagosEfectivo += Number(pago.efe);
             this.pagosCheque += Number(pago.che);
@@ -252,6 +270,8 @@ export class Citas{
         this.pagosTotal =  this.pagosEfectivo + this.pagosCheque + this.pagosTarjeta;
         this.pagosTotalOut =  this.pagosEfectivoOut + this.pagosChequeOut + this.pagosTarjetaOut;
         this.pagosTotalDoc =  this.pagosEfectivoDoc + this.pagosChequeDoc + this.pagosTarjetaDoc;
+        //this.ultimaFechaText = DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).date + DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).time;
+        
     }
 
     setEdicionesFechas(from:number, to:number){
