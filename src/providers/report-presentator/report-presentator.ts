@@ -164,7 +164,7 @@ export class ReportPresentatorProvider {
 
 async openReporte( report:reportes = null){
   console.log('opening reporte', this.type);
-  this.loader.presentLoader('Cargando Reporte ...');
+  this.loader.presentLoader('Cargando ...');
   await this.setReport(report);
   await this.loadReporte();
   let  load = "ReporteModalPage";
@@ -422,6 +422,9 @@ async openReportGenerate( report:reportes = null ){
   }
     console.log('tota facturar es ',this.facturadoTotal);
     this.duracionTotalStr = DateProvider.getDateDifText(this.duracionTotalMs);
+    this.actualReport.citas.sort((a,b)=>{
+      return b.ultimaFechaPago - a.ultimaFechaPago; 
+    });
   }
 
   calcularCitasPorCobrar(){

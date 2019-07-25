@@ -109,14 +109,17 @@ showerrors:boolean = false;
       this.selectedHour = this.dateobj.getTime() - dateobj_start.getTime();
       console.log('selected hour is:', this.selectedHour);
       console.log(this.selectedDate);
+      this.setHourstring();
     }else{
       this.isnew = true;
       this.resetNewCita();
       this.cita.date = new Date();
       this.dateobj = new Date();
       this.selectedHour = 0;
+   
       //this.selectedDate = Citas.getLocalDateIso(new Date());//new Date().toISOString();
       this.selectedHourISO = Citas.getLocalDateIso(this.getDateOnNextTreshold());//new Date().toISOString();
+     
     }
     if(Number(this.cita.data.field_telefono.und[0].value) === 0){
       this.cita.data.field_telefono.und[0].value = null;
@@ -124,12 +127,20 @@ showerrors:boolean = false;
   }
 
   setHours(){
-    let minutes = 24*60*60*1000;
-    let time = 0;
-    this.hours = new Array();
-    for(let i = 0; i < minutes/this.hourIntervalMS; i++){
-      //console.log(new Date(i*this.hourInterval*60*1000));
-      this.hours.push(i*this.hourIntervalMS);
+  
+ 
+    
+  }
+
+  setHourstring(){
+    console.log('trailsh setHourstring start');
+    
+    if(!this.isnew){
+      console.log('trailsh setting hours');
+      let aux_date = new Date(this.cita.dateMs);
+      this.hourstring = `${DateProvider.formatDateBinaryNumber(aux_date.getHours())}:${DateProvider.formatDateBinaryNumber(aux_date.getMinutes())}`;
+      //this.hourstring = aux_date.getHours()+':'+aux_date.getMinutes();
+      //console.log('trailsh setting hours' , this.hourstring,aux_date);
     }
   }
 
@@ -148,7 +159,6 @@ showerrors:boolean = false;
 
 
   ionViewWillEnter() {
-    this.setHours();
     this.calendarLoad();
   }
 
@@ -166,7 +176,10 @@ showerrors:boolean = false;
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NuevacitaModalPage');
+    console.log('trailsh ionViewDidLoad NuevacitaModalPage');
+    //console.log('ionViewWillEnter');
+ 
+    //this.calendarLoad();
   }
 
   getDisplayableDates(){

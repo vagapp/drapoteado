@@ -63,7 +63,7 @@
                 </label> 
                 </div>  
         </div> <!-- Plan selection check end -->
-        <div class="plan_section_hr">  <span class="spanBlock bigSubFont">Plan <span class="fontPrimary bold"> {{subsData.subscription.plan.title}} </span></span> <span class="spanBlock"> <span class="midSubFont">costo base:</span> <span class="largeFont">${{subsData.subscription.plan.field_costo}}</span></span> </div>
+        <div class="plan_section_hr">  <span class="spanBlock bigSubFont">Plan <span class="fontPrimary bold"> {{subsData.subscription.plan.title}} </span></span> <!--<span class="spanBlock"> <span class="midSubFont">costo base:</span> <span class="largeFont">${{subsData.subscription.plan.field_costo}}</span></span>--> </div>
         <div class="plan_section_hr"> <span class="spanBlock midFont">Características</span>  
           <span class="plan_description_bullets midSubFont">
             <span class="spanBlock plan_bullet" *ngFor="let bullet of subsData.subscription.plan.field_description_points">
@@ -171,7 +171,7 @@
 
 
     <div class="informacion_pagos">
-      <span class="spanBlock info_plan_title">Métodos de pago</span>
+      <span class="spanBlock info_plan_title">Método de pago</span>
       <div class="bisectional pagos_block">
         <div class="bisectional_section metodos_pago"> 
           <conekta *ngIf="onplanchange == true" (successToken)='successToken($event)' (errorToken)='errorToken($event)'></conekta>
@@ -179,7 +179,7 @@
          <div class="bisectional_section neuvo_metodo_pago"> 
             <div class="sources_wrapper"> <!-- INICIO STRIPE LISTED SOURCES-->
               <h3>Tarjetas activas</h3>
-              <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado métodos de pago </div>
+              <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado método de pago </div>
               <ion-row *ngFor="let src of this.sources; let indice = index">
                 <ion-col col-10 [class.selectedsrc]="src.default" class="fact_src_unit">
                   <ion-row>

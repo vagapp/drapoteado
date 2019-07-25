@@ -17,9 +17,10 @@
     </div>
 
     <div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState()" >
-        <div class="modalPage_logo"><img src="assets/imgs/servicios.svg"/></div>
-        <span class=" largeFont" *ngIf="this.isnew"><b>Alta de servicio y costos</b></span>
+        <div class="modal_justifytitle"><div class="modalPage_logo"><img src="assets/imgs/servicios.svg"/></div>
+        <span class=" largeFont" *ngIf="this.isnew"><b>Alta de servicio y costos</b></span></div>
         <div class="modalPage_title">
+          <span class="spanBlock midSubFont">Para comenzar agrega un servicio.</span>
           <span class="spanBlock midSubFont">Te recomendamos dar de alta desde el inicio todos los servicios que ofreces para que cobrar
             tu consulta sea muy rápido y sencillo. Solo debes ingresar uno a uno el nombre y costo de
             cada servicio.</span>
@@ -29,11 +30,11 @@
     <div class="nuevoservicio_content modalContent" *ngIf="!this.tutorial.checkTutorialState()  || (this.tutorial.checkTutorialState() && !this.tutorial.serviceCreated)" >
         <div class="ModalInput_input">
             <b>Nombre</b>
-            <input [(ngModel)]="this.newService.title" type="text"/>
+            <input [(ngModel)]="this.newService.title" placeholder="Consulta básica" type="text"/>
         </div>
         <div class="ModalInput_input">
             <b>Costo</b>
-            <input [(ngModel)]="this.newService.field_costo_servicio.und[0].value" type="number"/>
+            <input [(ngModel)]="this.newService.field_costo_servicio.und[0].value" placeholder="$0000.00" type="number"/>
         </div>
     </div>
 

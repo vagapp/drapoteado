@@ -111,15 +111,15 @@ export class NuevousuarioModalPage {
     console.log('selected option at tutorial start ', this.tutorial.tutorial_users_selected_option);
     if(this.tutorial.tutorial_users_selected_option === TutorialProvider.TUTORIAL_USER_BOTH){
       console.log();
-      this.newUser.field_tipo_de_usuario.und = [2];
-      this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_RECEPCION; 
+      this.newUser.field_tipo_de_usuario.und = [this.userData.TIPO_CAJA];
+      this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_CAJA ; 
     }else if(this.tutorial.tutorial_users_selected_option === TutorialProvider.TUTORIAL_USER_CODE){
       console.log('agregando usuarios por codigo');
       this.codeuser = true;
       this.newuser= false; 
       //this.nextCode = true;
     }else{
-      this.newUser.field_tipo_de_usuario.und = [4];
+      this.newUser.field_tipo_de_usuario.und = [this.userData.TIPO_CAJAYRECEPCION];
     }
   }
 
@@ -131,20 +131,20 @@ export class NuevousuarioModalPage {
       this.initialpage=false;
       this.tutorial.usuarioCreated = false;
       this.restart();
-      this.newUser.field_tipo_de_usuario.und = [3];
+      this.newUser.field_tipo_de_usuario.und = [this.userData.TIPO_RECEPCION];
     }else{
       this.newuser = true;
       this.initialpage=false;
       this.tutorial.usuarioCreated = false;
-      this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_CAJA;
+      this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_RECEPCION;
       this.restart();
-      this.newUser.field_tipo_de_usuario.und = [3];
+      this.newUser.field_tipo_de_usuario.und = [this.userData.TIPO_RECEPCION];
     }
   }
 
   checkIfgoback(){
     let ret = true;
-    if( Number(this.tutorial.tutorial_user_created_step) === Number(TutorialProvider.TUTORIAL_USER_STEP_CAJA) ) ret = false;
+    if( Number(this.tutorial.tutorial_user_created_step) === Number(TutorialProvider.TUTORIAL_USER_STEP_RECEPCION) ) ret = false;
     if( this.nextCode  ) ret = false;
     //console.log('checkIfgoback',ret, 'nextcode',this.nextCode);
     return ret;

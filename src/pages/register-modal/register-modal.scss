@@ -19,6 +19,7 @@ page-register-modal {
         flex-flow: row;
         flex-wrap: wrap;
         padding: 20px 10% 20px 10%;
+        align-items: center;
     }
 
     .radio_group_wrapper{
@@ -372,9 +373,7 @@ page-register-modal {
     margin-right: 50px;
   }
 
-  .copyCodeBtn{
-      
-  }
+
 
   
 @media screen and (max-width: 1000px) {

@@ -41,6 +41,10 @@ ion-content{
     background: #f1d5d5 !important;
 }
 
+.calendar-body{
+    margin-bottom: 15px;
+}
+
 .registerInputerrorOn{
     background: #f1d5d5 !important;
 }
@@ -511,11 +515,18 @@ border: 0px solid #000000;
 .modalPage_header{
     display: -webkit-flex;
     display: flex;
-    flex: row;
+    flex-flow: row;
     flex-wrap: wrap;
     padding:3em;
     align-items: center;
     justify-content: center;
+}
+
+.modal_justifytitle{
+    display: flex;
+    flex-flow:row;
+    justify-content: center;
+    align-items: center;
 }
 
 .header_dayname{
@@ -1122,9 +1133,13 @@ ion-menu {
     .results_table tr{
        border-bottom: 1px solid #eee;
        margin-top: 5px;
-       width: 100%;
+       /*width: 100%;*/
        margin-bottom: 1em;
        position: relative;
+       display: flex;
+       flex-flow: column;
+       justify-content: center;
+       align-items: center;
     }
 
     .toolCol {

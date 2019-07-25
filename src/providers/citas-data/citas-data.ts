@@ -267,13 +267,17 @@ export class CitasDataProvider{
   }
 
   static sortByDate(citas:Citas[]){
-    return citas.sort((a,b)=>{ 
-      if (a.dateMs < b.dateMs)
+    console.log('sortingtrail', citas);
+    let sorted = citas.sort((a,b)=>{ 
+      console.log('sortingtrail', a.dateMs, b.dateMs);
+      if (a.dateMs > b.dateMs)
       return -1;
-    if (a.dateMs > b.dateMs)
+    if (a.dateMs < b.dateMs)
       return 1;
    return 0;
     });
+    console.log('sortingtrail end', citas);
+    return sorted;
   }
 
   printShowPoolDatesRn(){

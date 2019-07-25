@@ -14,11 +14,18 @@
         </div>
     </div>
 
-    <div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState() && initialpage" >
+    <!--<div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState() && initialpage" >
             <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
             <span class=" largeFont" *ngIf="this.isnew"><b>Alta de Usuario</b></span>
             <p>Da de alta al personal que te ayuda a administrar y cobrar tus citas.</p>
-        </div>
+        </div>-->
+        <div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState()" >
+                <div class="modal_justifytitle"><div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
+                <span class=" largeFont" *ngIf="this.isnew"><b>Alta de Usuario</b></span></div>
+                <div class="modalPage_title">
+                  <span class="spanBlock midSubFont">Da de alta al personal que te ayuda a administrar y cobrar tus citas.</span>
+                </div>
+            </div>
         <!-- cuando es un usuario de grupo entrando a tutorial a la pagina inicial y si requiere explicacion y es el que crea el grupo-->
         <div class="user_explain"  *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.isGroup && this.tutorial.usergroupexplain && this.tutorial.isplanholder">
             <span class="spanBlock midSubFont">Dentro de un grupo medico los usuarios creados serán compartidos por todos los doctores del grupo. A continuación te explicamos como funcionan y como crearlos. </span>
@@ -45,7 +52,7 @@
         <div class="bisectional">
             <div class="bisectional_section" (click)="selectOption(2)"  [class.selectedOption]="checkSelectedOption(2)">
                 <span class="spanBlock"> ¿Cuentas con personal independiente en la recepción y en la caja?</span>
-                <span class="spanBlock"> Crea tres usuarios para <span class="fontPrimary">Caja</span> y <span class="fontPrimary">Recepción</span> </span>
+                <span class="spanBlock"> Crea usuarios para <span class="fontPrimary">Caja</span> y <span class="fontPrimary">Recepción</span> </span>
             </div>
             <div class="bisectional_section"  (click)="selectOption(1)" [class.selectedOption]="checkSelectedOption(1)">
                 <span class="spanBlock"> ¿Una sola persona administra y cobra tus citas?</span>
@@ -94,9 +101,9 @@
     </div>
     <div class="nuevoservicio_content modalContent" *ngIf="this.newuser">
             <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="this.checkIfgoback()"> atrás </span>
-            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> <span class="fontPrimary">Caja.</span> Esta persona cobra las citas </span>
-            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> <span class="fontPrimary">Recepción.</span> Esta persona administra citas </span>
-            <span class="tutorial_explain_text" *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Recepción y Caja.</span> Esta persona administra y cobra las citas </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> <span class="fontPrimary">Caja.</span> Esta persona cobra las citas </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> <span class="fontPrimary">Recepción.</span> Esta persona administra citas </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Recepción y Caja.</span> Esta persona administra y cobra las citas </span>
             
             <!--<div class="tutorial_usercode">
                     <span class="tutorial_explain_text_sm" *ngIf="this.tutorial.checkTutorialState()"> Puedes buscar un usuario existente introduciendo el codigo de usuario aqui. </span>
@@ -168,8 +175,8 @@
             </div>
             <div class="midAlign" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated">
                 <div class="register_button_section">
-                <button (click)="this.nextUser()"  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION" class="bgColorSecondary generalButton tutorialButton">Continuar</button>
-                <button (click)="this.endUsers()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR || this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA" class="bgColorSecondary generalButton tutorialButton">Continuar</button>
+                <button (click)="this.nextUser()"  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA" class="bgColorSecondary generalButton tutorialButton">Continuar</button>
+                <button (click)="this.endUsers()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR || this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION " class="bgColorSecondary generalButton tutorialButton">Continuar</button>
                 <button (click)="this.nextUser()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CODE && subsLeft > 0" class="bgColorSecondary generalButton tutorialButton">Introducir otro</button>
                 <button (click)="this.endUsers()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CODE" class="bgColorSecondary generalButton tutorialButton">Continuar</button>
                
