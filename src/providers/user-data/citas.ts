@@ -228,7 +228,8 @@ export class Citas{
         console.log('citadoctor es',this.data.field_cita_doctor);
         this.docuid = Number(this.data.field_cita_doctor.und[0]);
         if(!this.originactivereport){
-        this.ultimaFechaPago = Number(this.PagosonFecha.pop().fec);
+        let aux_lastcita = this.PagosonFecha.pop();
+        if( aux_lastcita ){this.ultimaFechaPago = Number(aux_lastcita.fec);}
         this.ultimaFechaText = DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).date + ' - '+ DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).time;
         }else{ //this.ultimaFechaPago = this.dateMs;
             this.ultimaFechaText = this.getDisplayableDates().date + ' - '+this.getDisplayableDates().time

@@ -100,6 +100,7 @@ export class ReporteCitasProvider {
   
   async reporteLoadCitasAdeudo(report:reportes , doctorUids:number[] = null){
     let aux_citas = new Array<Citas>();
+    console.log('reportadeudotrail reporteLoadCitasAdeudo',report);
     console.log('docuids',doctorUids);
     let res = await this.citasManager.getCitasObservableAdeudos(
       doctorUids,

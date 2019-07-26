@@ -16,6 +16,8 @@ import { PermissionsProvider } from '../providers/permissions/permissions';
 import { TutorialProvider } from '../providers/tutorial/tutorial';
 import { SubusersManagerProvider } from '../providers/subusers-manager/subusers-manager';
 import { UpdaterProvider } from '../providers/updater/updater';
+import { ReportPresentatorProvider } from '../providers/report-presentator/report-presentator';
+import { LoaderProvider } from '../providers/loader/loader';
 
 
 
@@ -57,7 +59,9 @@ export class MyApp {
     public subUserMan: SubusersManagerProvider,
     public perm: PermissionsProvider,
     public tutorial: TutorialProvider,
-    public updater: UpdaterProvider
+    public updater: UpdaterProvider,
+    public reportPresentator: ReportPresentatorProvider,
+    public loader: LoaderProvider
   ) {
     this.rootPage = 'LoginPage';
     this.startdate = new Date().getTime();
@@ -150,6 +154,19 @@ export class MyApp {
   openMiplan(){
     this.nav.setRoot("MiplanPage");
   }
+
+  openReporteAdeudos(){
+    console.log('openReportNoModal',this.reportPresentator.docuid, this.reportPresentator.type);
+    this.loader.presentLoader('Cargando ...');
+    this.reportPresentator.setReport().then(()=>{
+      this.loader.dismissLoader();
+      this.reportPresentator.type = ReportPresentatorProvider.REPORT_ADEUDO;
+      this.reportPresentator.loadReportNM().then(()=>{
+      });
+    });
+  
+  }
+
   openRegister(){
     //console.log("open Register");
     let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });

@@ -1,5 +1,5 @@
 
-import { Injectable } from '@angular/core';
+import { Injectable, ɵConsole } from '@angular/core';
 import { reportes } from '../user-data/reportes';
 import { ReporteCitasProvider } from '../reporte-citas/reporte-citas';
 import { Citas } from '../user-data/citas';
@@ -178,7 +178,7 @@ async openReporte( report:reportes = null){
 
 async loadReportNM(loadReport:boolean = true){ //este metodo lo cree a partir de querer abrir el reporte no en modal para cargar el reporte y retornar un valor que indique que esta cargado y abrir la pagina en el layout.
   console.log('loadReportNM',JSON.stringify(this.docuid),this.type);
-  this.loader.presentLoader('Cargando Reporte ...');
+  this.loader.presentLoader('Cargando ...');
   //await this.setReport(report);
   if(this.isgroup){
     this.docuid = 0;
@@ -198,8 +198,9 @@ exportExcel(){
   //this.docLoaded
   //console.log('exportExcel docloaded is ',this.docLoaded,this.docuid);
   //console.log(this.userData.userData.field_tipo_de_usuario['und'][0]['value']);
-  let report_excel = this.bu.backendUrl+`endpoint_Reporteexcel.php?r=${this.actualReport.nid}${this.docLoaded && this.docuid!==null ? '&doc='+this.docuid : ''}${'&ur='+this.userData.userData.field_tipo_de_usuario['und'][0]['value']}`;
+  let report_excel = this.bu.backendUrl+`endpoint_Reporteexcel.php?r=${this.actualReport.nid}${this.docLoaded && this.docuid!==null ? '&doc='+this.docuid : ''}${'&ur='+this.userData.userData.field_tipo_de_usuario['und'][0]['value']}${this.isAdeudo ? '&adeudo=1' : '&adeudo=0'}`;
   //console.log(report_excel);
+  console.log('report_excel url is',report_excel);
    window.location.href = report_excel;
   //console.log('report_excel',report_excel);
 }
@@ -210,7 +211,7 @@ exportExcel(){
 }*/
 
 async openReportGenerate( report:reportes = null ){
-  this.loader.presentLoader('Cargando Reporte ...');
+  this.loader.presentLoader('Cargando ...');
   await this.setReport(report);
   if(this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR])){
     this.docuid = this.userData.userData.uid;
@@ -229,11 +230,16 @@ async openReportGenerate( report:reportes = null ){
     console.log('setReport');
     if(report){this.actualReport = report;
     }else{
+      console.log('setReporttrail a');
       if(!this.reportesData.todayReport){
+        console.log('setReporttrail b');
         await this.reportesManager.cargarListaReportes();
+        console.log('setReporttrail c');
       }
       this.actualReport = this.reportesData.todayReport;
+      console.log('setReporttrail d',this.actualReport);
     }
+    
   }
 
   async loadReporte(){
@@ -246,7 +252,7 @@ async openReportGenerate( report:reportes = null ){
     this.evaluateCitas();
       break;
       case Number(this.REPORT_ADEUDO): 
-      console.log('cargando reporte adeudo')
+      console.log('setReporttrail cargando reporte adeudo', this.actualReport)
       await this.loadReportCitasAdeudo();
       await this.loadReportServiciosAdeudo();
     this.evaluateCitas();

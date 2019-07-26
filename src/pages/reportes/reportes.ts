@@ -40,7 +40,7 @@ export class ReportesPage {
 
   async ionViewDidLoad() {
     //console.log('ionViewDidLoad ReportesPage');
-    this.loader.presentLoader('cargando reportes ...');
+    this.loader.presentLoader('cargando ...');
     await this.reportesMan.cargarListaReportes();
     this.loader.dismissLoader();
     //Debugger.log(["reportes carfados",this.userData.reportes]);
@@ -126,7 +126,6 @@ export class ReportesPage {
     this.reportPresentator.setReport();
     this.reportPresentator.type = ReportPresentatorProvider.REPORT_ADEUDO;
     this.reportPresentator.loadReportNM().then(()=>{
-  
     });
   }
 

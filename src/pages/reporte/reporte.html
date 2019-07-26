@@ -8,7 +8,7 @@
   <span class="spanBlock midFont" *ngIf="!this.reportPresentator.isAdeudo"><b>Resumen Diario</b></span>
   <span class="spanBlock midSubFont" *ngIf="!this.reportPresentator.isAdeudo">Resumen de tu actividad  durante el día de hoy</span>
   <span class="spanBlock midFont" *ngIf="this.reportPresentator.isAdeudo"><b>Resumen Adeudos</b></span>
-  <span class="spanBlock midSubFont" *ngIf="this.reportPresentator.isAdeudo">Resumen todos los adeudos.</span>
+  <span class="spanBlock midSubFont" *ngIf="this.reportPresentator.isAdeudo">resumen de todos los adeudos</span>
 </div>
 </div>
 <div class="modalPage_toolbar">
@@ -24,7 +24,7 @@
             <span class="spanBlock midFont"><b>Fecha</b></span>
             <span class="spanBlock fontHigh midFont">{{this.reportPresentator.actualReport.dateString}}</span>
           </div>
-  <button *ngIf="!this.reportPresentator.isAdeudo" class="bgColorSecondary generalButton export-big" (click)="exportars()" >Exportar</button>
+  <button class="bgColorSecondary generalButton export-big" (click)="exportars()" >Exportar</button>
 </div>
 </div>
 
