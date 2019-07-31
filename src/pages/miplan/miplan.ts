@@ -161,11 +161,20 @@ export class MiplanPage {
 
 
     /***/
-    baja(){
+    async baja(){
       this.alert.chooseAlert(
         'Cancelar suscripción',
         '¿Estás seguro que deseas cancelar tu suscripción?, Si cancelas tu suscripción no podras acceder a tus citas, servicios y reportes.',
-        ()=>{ console.log('AQUI HAY QUE CANCELAR LA SUSCRIPCION') },
+        async ()=>{ /*console.log('AQUI HAY QUE CANCELAR LA SUSCRIPCION')*/
+        if(this.subsManager.checkForSubscription()){
+          let ret = await this.subsManager.deletesSus(this.subsData.subscription).toPromise();
+          console.log('cancel ret is',ret);
+          if(ret){
+            console.log('location reload here');
+            this.bu.locationReload();
+          }
+        }
+      },
         ()=>{ console.log('se cancelo'); }
       );
     }
@@ -340,6 +349,7 @@ export class MiplanPage {
     if (this.selectedAditionalsDocs < 0) this.selectedAditionalsDocs = 0;
     console.log('aditionals are',this.selectedAditionalsDocs);
   }
+
 
 
   async suscribirse(){
