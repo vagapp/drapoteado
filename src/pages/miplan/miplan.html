@@ -197,11 +197,13 @@
                   </ion-row>
                 </ion-col>
                 <ion-col *ngIf="onplanchange == true " class="cont-buttons-srcs" col-2 no-padding>
-                  <button ion-button icon-only full small clear (click)="selectCard(src)">
-                    <ion-icon name="star"></ion-icon>
+                    <button ion-button icon-only full small clear (click)="selectCard(src)" tooltip="Predeterminar Tarjeta" positionV="bottom">
+                        <ion-icon name="star"></ion-icon>
+                            
                   </button>
-                  <button ion-button icon-only full small clear (click)="removeCard(indice,src)">
+                  <button ion-button icon-only full small clear (click)="removeCard(indice,src)" tooltip="Eliminar Tarjeta" positionV="bottom">
                     <ion-icon name="close"></ion-icon>
+                   
                   </button>
                 </ion-col>
               </ion-row>

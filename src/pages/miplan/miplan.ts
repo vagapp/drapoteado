@@ -86,7 +86,7 @@ export class MiplanPage {
 
 
   get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
-  get nextCobro(){ return this.subsData.checkForSub() ? this.subsData.subscription.field_next_cobro : 0; }
+  get nextCobro(){ console.log('nextcobro',this.subsData.subscription.field_next_cobro); return this.subsData.checkForSub() ? this.subsData.subscription.field_next_cobro : 0; }
   get subAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_adicionales) : 0;  }
   get docAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_docsadicionales) : 0;  }
   get subPlan(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_plan_sus) : 0;  }

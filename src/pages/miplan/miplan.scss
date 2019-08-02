@@ -70,6 +70,38 @@ page-miplan {
 
 
 
+
+
+
+    .tooltip {
+        position: relative !important;
+        //display: inline-block;
+        //border-bottom: 1px dotted black;
+      }
+      
+      .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: #C1272D;
+        color: #fff;
+        text-align: center;
+        border-radius: 10px;
+        padding: 5px 0;
+      
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+      }
+      
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+        border-radius: 10px;
+      }
+
+
+
+
+
     .grupos_medicos_code {
         display: block;
         border-bottom: 2px solid #B8B8B8;

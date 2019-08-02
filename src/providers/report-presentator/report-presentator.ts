@@ -112,6 +112,16 @@ export class ReportPresentatorProvider {
     return  Number(this.type) === Number(ReportPresentatorProvider.REPORT_ADEUDO); 
   }
 
+get isdialy(){
+  let ret = false;
+  console.log('checking if dialy', this.reportesData.todayReport, this.actualReport);
+  if(this.reportesData.todayReport && Number(this.reportesData.todayReport.nid) === Number(this.actualReport.nid) ){
+    ret = true;
+    console.log('checking if dialy isdialy');
+  }
+  return ret;
+}
+
   serviciosResume:{
     nid:number,
     title:string,

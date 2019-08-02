@@ -6,6 +6,11 @@ page-progresocita-modal {
        margin-top: 20px;
    }
 
+   .progress_input {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+}
 
    .progreso_service b{
        margin-right: 20px;
@@ -31,5 +36,23 @@ page-progresocita-modal {
 
     .cortesia_checkbox{
        font-weight:500;
+    }
+
+    .input_left_emulate{
+        text-align: left;
+        font-weight: 900;
+    }
+
+    .progress_input input{
+        border: 1px solid lightgray;
+        display: inline;
+        font-family: inherit;
+        font-size: inherit;
+        width: auto;
+        color: #6DB5DE;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 1rem;
+        background-color: #f6f6f6;
     }
 }

@@ -56,6 +56,8 @@ import { Calendar } from '@ionic-native/calendar';
 import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
 import { TutorialProvider } from '../providers/tutorial/tutorial';
 import { JsonUtilProvider } from '../providers/json-util/json-util';
+import { TooltipsModule } from 'ionic-tooltips';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { UpdaterProvider } from '../providers/updater/updater';
 
@@ -82,6 +84,8 @@ import { UpdaterProvider } from '../providers/updater/updater';
       dayNames:['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'],
       dayShortNames: ['Dom', 'Lun', 'Mar', 'Mie','Jue','Vie','Sab' ],
      }),
+     TooltipsModule.forRoot(),
+     BrowserAnimationsModule,
     HttpClientModule,
     //NativeHttpModule, 
     HttpModule,

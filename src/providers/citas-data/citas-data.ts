@@ -252,7 +252,7 @@ export class CitasDataProvider{
       case CitasDataProvider.STATE_PENDIENTE: ret = 'Pendiente'; break;
       case CitasDataProvider.STATE_CONFIRMADA: ret = 'Confirmada'; break;
       case CitasDataProvider.STATE_ACTIVA: ret = 'Activa'; break;
-      case CitasDataProvider.STATE_COBRO: ret = 'Cobro'; break;
+      case CitasDataProvider.STATE_COBRO: ret = 'Sin Cobro'; break;
       case CitasDataProvider.STATE_FINALIZADA: ret = 'Finalizada'; break;
       case CitasDataProvider.STATE_CANCELADA: ret = 'Cancelada'; break;
       case CitasDataProvider.STATE_ELIMINADA: ret = 'Eliminada'; break;

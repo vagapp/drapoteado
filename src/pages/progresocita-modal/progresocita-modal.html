@@ -29,7 +29,20 @@
                 <tbody>
                     <tr>
                         <!--<td>01</td>-->
-                        <td>{{progressController.activeCita.data.field_paciente.und[0].value}}</td>
+                        <td> <!--<div class="progress_input"> <b>Nombre</b><span class="input_left_emulate">{{progressController.activeCita.data.field_paciente.und[0].value}}</span></div>-->
+                            <div class="progress_input">
+                                    <b>Nombre</b>
+                                    <input [(ngModel)]="progressController.activeCita.data.field_paciente.und[0].value" name="field_paciente" type="text"/>
+                                </div>
+                            <div class="progress_input">
+                                <b>Email</b>
+                                <input [(ngModel)]="progressController.activeCita.data.field_email.und[0].email"  name="field_email"  type="text"/>
+                            </div>
+                            <div class="progress_input">
+                                <b>Télefono</b>
+                                <input [(ngModel)]="progressController.activeCita.data.field_telefono.und[0].value" name="field_telefono" type="number"/>
+                            </div>
+                        </td>
                         <td *ngIf="!(permissions.checkUserPermission([userData.TIPO_DOCTOR]))">{{progressController.activeCita.data.doctor_name}}</td>
                         <td> </td>
                     </tr>

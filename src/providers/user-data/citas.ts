@@ -5,6 +5,7 @@ import { DateProvider } from '../date/date';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { IfObservable } from 'rxjs/observable/IfObservable';
 import { ɵConsole } from '@angular/core';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 export class Citas{
@@ -49,6 +50,7 @@ export class Citas{
     originactivereport:boolean = false;
     ultimaFechaPago: number = 0;
     ultimaFechaText:string = '';
+    ultimaFechaDisplayable = null;
 
     //variables con pagos de terceros
     pagosEfectivoOut:number = 0;
@@ -102,6 +104,11 @@ export class Citas{
     set cobroCheque(val){ this.data.field_cobro_cheque.und[0].value = Number(val); this.calcularCobroTotal();} 
     set cobroEfectivo(val){ this.data.field_cobro_efectivo.und[0].value = Number(val); this.calcularCobroTotal();}
     set cobroTarjeta(val){ this.data.field_cobro_tarjeta.und[0].value = Number(val); this.calcularCobroTotal();}
+
+    get ShowCorreo() { return this.data.field_email.und[0].email ? this.data.field_email.und[0].email: 'Sin Correo' }
+    get Showtelefono() { return  this.data.field_telefono.und[0].value && Number(this.data.field_telefono.und[0].value) !== 0 ? this.data.field_telefono.und[0].value : 'Sin Tel.' }
+
+
 
     get isAdeudoAnterior():boolean{ return this.originactivereport && this.checkState(CitasDataProvider.STATE_ADEUDO)}
     
@@ -231,8 +238,10 @@ export class Citas{
         let aux_lastcita = this.PagosonFecha.pop();
         if( aux_lastcita ){this.ultimaFechaPago = Number(aux_lastcita.fec);}
         this.ultimaFechaText = DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).date + ' - '+ DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).time;
+        this.ultimaFechaDisplayable = DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago));
         }else{ //this.ultimaFechaPago = this.dateMs;
             this.ultimaFechaText = this.getDisplayableDates().date + ' - '+this.getDisplayableDates().time
+            this.ultimaFechaDisplayable = this.getDisplayableDates();
         }
         this.PagosonFecha.forEach(pago => {
             console.log('traildater comparing date ',this.ultimaFechaPago,pago.fec);
