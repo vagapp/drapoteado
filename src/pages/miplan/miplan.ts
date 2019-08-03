@@ -19,6 +19,7 @@ import { subscriptions } from '../../providers/user-data/subscriptions';
 import { SubusersDataProvider } from '../../providers/subusers-data/subusers-data';
 import { SubusersManagerProvider } from '../../providers/subusers-manager/subusers-manager';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
+import { DateProvider } from '../../providers/date/date';
 
 declare var Stripe;
 
@@ -86,7 +87,18 @@ export class MiplanPage {
 
 
   get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
-  get nextCobro(){ console.log('nextcobro',this.subsData.subscription.field_next_cobro); return this.subsData.checkForSub() ? this.subsData.subscription.field_next_cobro : 0; }
+  get nextCobro(){ /*console.log('nextcobro',this.subsData.subscription.field_next_cobro);*/
+  let ret = '';
+  if(this.subsData.checkForSub() && this.subsData.subscription.field_next_cobro){
+    //console.log('trailnextcobro field ',this.subsData.subscription.field_next_cobro);
+    //console.log('trailnextcobro date',new Date(Number(this.subsData.subscription.field_next_cobro)*1000));
+    let auxdate = new Date(Number(this.subsData.subscription.field_next_cobro)*1000);
+    let aux_dispdates = DateProvider.getDisplayableDates(auxdate);
+    ret = aux_dispdates.date;
+  }
+  return ret;
+  
+   }
   get subAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_adicionales) : 0;  }
   get docAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_docsadicionales) : 0;  }
   get subPlan(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_plan_sus) : 0;  }
