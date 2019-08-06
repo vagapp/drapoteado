@@ -7,6 +7,7 @@ import { CitasManagerProvider } from '../citas-manager/citas-manager';
 import { ModalController } from 'ionic-angular';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { UserDataProvider } from '../user-data/user-data';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 /*
   Generated class for the CitaProgressControllerProvider provider.
@@ -45,6 +46,7 @@ export class CitaProgressControllerProvider {
     //console.log('cobroEfectivo',this.cobroEfectivo);
     //console.log('cobroCheque',this.cobroCheque);
     //console.log('cobroTarjeta',this.cobroTarjeta);
+    
     let ret = 0 + 
     ( (Number(this.activeCita.restantePagos)) - 
     (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) ) ); 
@@ -82,6 +84,7 @@ export class CitaProgressControllerProvider {
     }
     console.log('opening progress');
     this.setActiveCita(cita);
+  
     //this.evalServicios();
     //this.calcularCosto();
     this.evalServicios();
@@ -106,6 +109,7 @@ export class CitaProgressControllerProvider {
     console.log('trail3 setting estado anterior al setearcita', this.activeCita.estado_anterior);
     this.activeCitaDoc = this.citasManager.getDoctorOFCita(this.activeCita);
     console.log(this.activeCita.addedServices);
+    this.activeCita.PagosonShow = this.activeCita.PagosonFecha;
    
   }
 

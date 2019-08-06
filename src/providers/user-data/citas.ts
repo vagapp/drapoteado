@@ -28,12 +28,14 @@ export class Citas{
     cobroDataSet:boolean = false; //describe si los cobros de la cita han sido seteados cuando esta en cobro, evitando que se actualicen externamente.
     reporteServicios:any[] = new Array();
     pagos:any[] = new Array();
+    PagosonShow:any[] = new Array();
     doctor_playerid:string = null;
     caja_playerid:string = null;
     recepcion_playerid:string = null;
     opendetail=false;
     docuid = 0;
     bydoc:boolean = false;
+    
     
 
     ediciones:any[] = new Array();

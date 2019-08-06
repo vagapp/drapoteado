@@ -118,12 +118,12 @@ export class subscriptions{
         }
         if(this.field_doctores){
             this.field_doctores.forEach(element => {
-            ret.field_doctores.und.push(element);
+            ret.field_doctores.und.push(Number(element));
         });
         }
         if(this.field_subusuarios){
         this.field_subusuarios.forEach(element => {
-            ret.field_subusuarios.und.push(element);
+            ret.field_subusuarios.und.push(Number(element));
         });
         }
     }else{
@@ -147,12 +147,12 @@ export class subscriptions{
         }
         if(this.field_doctores !== null){
             this.field_doctores.forEach(element => {
-            ret.field_doctores.und.push(element);
+            ret.field_doctores.und.push(Number(element));
         });
         }
         if(this.field_subusuarios !== null){
         this.field_subusuarios.forEach(element => {
-            ret.field_subusuarios.und.push(element);
+            ret.field_subusuarios.und.push(Number(element));
         });
         }
     }

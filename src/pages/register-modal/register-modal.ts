@@ -99,7 +99,7 @@ export class RegisterModalPage {
   }
 
   ionViewDidEnter(){
-    this.setupStripe();
+   // this.setupStripe();
     this.loadSources();
   }
 
@@ -520,81 +520,9 @@ export class RegisterModalPage {
   }
   }
 
-  checkStripeSetup(){
-    let ret = (
-      !this.isnew && 
-      this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) 
-      && ( this.subsData.subscription === null || this.subsData.subscription.plan === null) );
-      return ret;
-  }
 
-  setupStripe(){
-    console.log('setting stripe');
-    if(this.checkStripeSetup()){
-      console.log(' stripe checked and needed');
-    let elements = this.stripe.elements();
-    var style = {
-      base: {
-        color: '#32325d',
-        lineHeight: '24px',
-        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        fontSmoothing: 'antialiased',
-        fontSize: '16px',
-        '::placeholder': {
-          color: '#aab7c4'
-        }
-      },
-      invalid: {
-        color: '#fa755a',
-        iconColor: '#fa755a'
-      }
-    };
-    console.log('LF card elements');
-    this.card = elements.create('card', { style: style });
-    //let crd = document.getElementById("card-element");
-    //Debugger.log([crd]);
-    this.card.mount('#card-element');
-    this.card.addEventListener('change', event => {
-      var displayError = document.getElementById('card-errors');
-      if (event.error) {
-        displayError.textContent = event.error.message;
-      } else {
-        displayError.textContent = '';
-      }
-    });
 
-    var form = document.getElementById('payment-form');
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      if(!this.enabledButton) return false;
-      this.loader.presentLoader('Agregando tarjeta...');
-      this.stripe.createSource(this.card).then( async result => {
-        if (result.error) {
-          var errorElement = document.getElementById('card-errors');
-          errorElement.textContent = result.error.message;
-          this.loader.dismissLoader();
-          return false;
-        } else {
-          let cu_src_data = {
-                            id:result.source.id,
-                            last4:result.source.card.last4,
-                            client_secret:result.source.client_secret,
-                            brand:result.source.card.brand
-                            };
-          this.userData.userData.field_src_json_info['und'].push({value: JSON.stringify(cu_src_data)});
-        }
-        /*let updateUser_res = */ /*await this.userData.updateUser().subscribe((val)=>{ console.log(val);},(error)=>{ console.log(error) });*/
-        let updateUser_res = await this.userData.updateUser().toPromise();
-        this.loadSources();
 
-        if(!this.enabledButton) return false;
-        //await this.subsManager.subscribe( this.selected_plan,this.selected_source);
-        window.location.reload();
-        
-      });
-    });
-  }
-}
 
 
 copyCode(){

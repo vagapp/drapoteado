@@ -34,6 +34,11 @@ ion-content{
     margin-right: 15px;
 }
 
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #bdbdbd;
+    opacity: 1; /* Firefox */
+  }
+
 .basicpadding{
     padding: 3em;
 }
@@ -186,8 +191,19 @@ ion-app.ios [padding] .scroll-content{
     margin-top: 65px;
 }
 
+.smlabel{
+    font-size: 0.7em;
+}
+
 .lightFont{
     font-weight: 200;   
+}
+
+
+.endmargin {
+    margin-bottom: 100px;
+display: block;
+height: 5px;
 }
 
 .bigFont{

@@ -104,12 +104,13 @@ page-miplan {
 
     .grupos_medicos_code {
         display: block;
-        border-bottom: 2px solid #B8B8B8;
-        padding: 61px;
+        /* border-bottom: 2px solid #B8B8B8; */
+        /* padding: 61px; */
         width: 100%;
         text-align: center;
         cursor: pointer;
-        font-size: 1.5em;
+        font-size: 1em;
+        margin-top: 15px;
     }
 
   
@@ -176,15 +177,26 @@ page-miplan {
         margin: 5px;
     }
 
+    a.PrimaryLink {
+        text-decoration: underline;
+        font-size: 1.3em;
+    }
+
     .button_section {
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        margin-bottom: 100px;
+       
         justify-content: flex-end;
         padding: 10px 85px;
     }
+    
+    .endmargin {
+        margin-bottom: 100px;
+    display: block;
+    height: 5px;
+}
 
     .plans_extras_section input {
         background: #d3d3d34d;

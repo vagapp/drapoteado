@@ -33,13 +33,13 @@
       <button  *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR],[userData.PLAN_ANY])" menuClose ion-item  (click)="openUsuariosPage()">
           Usuarios
       </button>
-      
+      <button *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR],[perm.PLAN_GROUP],false)" menuClose ion-item  (click)="openGrupoPage()">
+          Grupo médico
+    </button>
       <button menuClose ion-item  (click)="openRegister()">
           Mis Datos
       </button>
-      <button *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR],[perm.PLAN_GROUP],false)" menuClose ion-item  (click)="openGrupoPage()">
-        GrupoF
-    </button>
+   
       <button *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR]) && perm.checkUserPlanHolder()" menuClose ion-item  (click)="openMiplan()">
         Mi Plan
     </button>

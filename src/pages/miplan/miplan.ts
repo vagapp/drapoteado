@@ -10,7 +10,6 @@ import { LoaderProvider } from '../../providers/loader/loader';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { sources } from '../../providers/user-data/sources';
 import { ConektaComponent } from '../../components/conekta/conekta'
-import { HomePage } from '../home/home';
 import { BaseUrlProvider } from '../../providers/base-url/base-url';
 
 
@@ -169,6 +168,10 @@ export class MiplanPage {
       }else{
         element.checked = subuser.selectedForGroup = false;
       }
+    }
+
+    checkIfisgroupPlan(plan:planes){
+     return Number(plan.nid) === Number(SubscriptionDataProvider.PLAN_GROUP);;
     }
 
 

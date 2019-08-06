@@ -29,7 +29,7 @@
   </div>
   <div class="ticket_row_block">
     <div class="ticket_row midMainFont">Detalle de Servicios</div>
-    <div class="ticket_row midSubFont" *ngFor="let servicio of this.reportPresentator.serviciosResume">{{servicio.title}} <span class="fontPrimary">{{moneyFormat(servicio.costo)}}({{servicio.times}})</span></div>
+    <div class="ticket_row midSubFont" *ngFor="let servicio of this.reportPresentator.serviciosResume">{{servicio.title}} <span class="fontHigh">{{servicio.times}}</span> <span class="fontPrimary">{{moneyFormat(servicio.costo)}}</span></div>
   </div>
   <div class="ticket_row_block">
       <div class="ticket_row midMainFont">Citas Totales: <span class="fontSecondary">{{reportPresentator.noCitas}}</span></div>

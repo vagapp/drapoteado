@@ -27,11 +27,16 @@ page-progresocita-modal {
     margin-top: 15px;
     }
 
+    .pagodetail span {
+        margin-left: 20px;
+    }
+
     .pagos_anteriores .pagodetail{
         margin: 1px;
         display: flex;
         flex-flow: row;
-        justify-content: space-evenly;
+        justify-content: flex-end;
+        padding-right: 19px;
     }
 
     .cortesia_checkbox{

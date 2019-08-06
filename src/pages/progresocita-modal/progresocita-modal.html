@@ -12,7 +12,7 @@
           <span class="spanBlock midFont"><b>Progreso de la Cita</b></span>
         </div>
         <div class="dateright floatRight">
-           <span class="spanBlock"><span class=" fontSecondary midFont">{{progressController.activeCita.getDisplayableDates().date}}</span> - <span class="fontHigh midFont">{{progressController.activeCita.getDisplayableDates().time}}</span></span>
+           <span class="spanBlock"></span>
           </div>
       </div>
       <div class="CitaDetail_Content">
@@ -24,6 +24,7 @@
                         <th>Paciente</th>
                         <th *ngIf="!(permissions.checkUserPermission([userData.TIPO_DOCTOR]))">Doctor</th>
                         <th> Tiempo Transcurrido:  <span class="fontHigh midFont">{{progressController.activeCita.duracionText }} </span></th>
+                        <th> <span class=" fontSecondary midFont">{{progressController.activeCita.getDisplayableDates().date}}</span> - <span class="fontHigh midFont">{{progressController.activeCita.getDisplayableDates().time}}</span> </th>
                      </tr>
                 </thead>
                 <tbody>
@@ -94,17 +95,16 @@
             </div>
             <div class="CitaDetailSection midFont">
                 <div class="costo-de-la-cita"><b>Costo de la Cita</b>
-                    <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_ACTIVA) || progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA)" class="floatRight"><span class="fontSecondary">{{moneyFormat(this.progressController.costoCita)}}</span> <ion-icon name="menu"></ion-icon> </span>
-                    <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)" class="floatRight"><span class="fontSecondary">{{moneyFormat(progressController.activeCita.costo)}}</span> <ion-icon name="menu"></ion-icon> </span>
+                    <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_ACTIVA) || progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA)" class="floatRight"><span class="fontPrimary">{{moneyFormat(this.progressController.costoCita)}}</span> </span>
+                    <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)" class="floatRight"><span class="fontPrimary">{{moneyFormat(progressController.activeCita.costo)}}</span>  </span>
+                    <div class="smlabel">Pagos anteriores</div>
                     <div class="pagos_anteriores" *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO) || progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA)">
-                        <div class="pagodetail" *ngFor="let pago of progressController.activeCita.pagos">
-                            <b>Efectivo</b><span class="res fontSecondary">{{moneyFormat(pago.efe)}}</span>
-                            <b>Tarjeta</b><span class="res fontSecondary">{{moneyFormat(pago.tar)}}</span>
-                            <b>Cheque</b><span class="res fontSecondary">{{moneyFormat(pago.che)}}</span>
-                            <b>facturado</b><span class="res fontSecondary">{{moneyFormat(pago.fac)}}</span>
-                            <b>Fecha</b><span class="res fontHigh">{{this.getDateString(pago.fec)}}</span>
+                        <div class="pagodetail" *ngFor="let pago of progressController.activeCita.PagosonShow">
+                                <span class="res fontHigh">{{this.getDateString(pago.fec)}}</span>
+                            <span class="res fontSecondary">{{moneyFormat(pago.total)}}</span>
+                           
                         </div>
-                        <div class="pago_restante" *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)"> <b>Restante</b><span class="res fontSecondary floatRight">{{moneyFormat(progressController.activeCita.restantePagos)}}</span></div>
+                        <div class="pago_restante" *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)"> <b>Restante</b><span class="res fontPrimary floatRight">{{moneyFormat(progressController.activeCita.restantePagos)}}</span></div>
                     </div>
                 </div>
                 <!--<div class="formas-de-pago" *ngIf="((progressController.activeCita.checkState(citasData.STATE_COBRO)|| progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)) && permissions.checkUserPermission([userData.TIPO_DOCTOR, userData.TIPO_CAJA,  userData.TIPO_CAJAYRECEPCION])) || (progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA) && permissions.checkUserPermission([userData.TIPO_DOCTOR]))">-->

@@ -155,11 +155,15 @@ export class HeaderComponent{
   }
  
   goHome(){
+    console.log('in ailmao');
+    if(this.perm.checkUserSuscription([UserDataProvider.PLAN_ANY])){
+      console.log('ailmao');
     this.pagename = this.navCtrl.getActive().name;
     if(this.pagename.localeCompare('HomePage') !== 0){
       //Debugger.log(['implying this is not Home page']);
       this.navCtrl.setRoot("HomePage");
     }
+  }
   }
 
 
