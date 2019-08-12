@@ -202,7 +202,7 @@ export class WebsocketServiceProvider {
       await this.updater.updateDocList();
       await this.updater.updateSubusers();
       await this.updater.updateServicios();
-      await this.updater.updateCitas();
+      await this.updater.updateCitas(true);
     }
   }
 
@@ -216,7 +216,7 @@ export class WebsocketServiceProvider {
       await this.updater.updateDocList();
       await this.updater.updateSubusers();
       await this.updater.updateServicios();
-      await this.updater.updateCitas();
+      await this.updater.updateCitas(true);
     }
   }
  /**
@@ -256,7 +256,7 @@ export class WebsocketServiceProvider {
     await this.updater.updateDocList();
     await this.updater.updateSubusers();
     await this.updater.updateServicios();
-    await this.updater.updateCitas();
+    await this.updater.updateCitas(true);
     //this.bu.locationReload();
     /*if( Number(this.userData.userData.uid) === Number(message.content)){
       this.bu.locationReload();
@@ -276,7 +276,7 @@ async RESPONSE_SUB_OUT_GROUP(message){
     await this.updater.updateDocList();
     await this.updater.updateSubusers();
     await this.updater.updateServicios();
-    await this.updater.updateCitas();
+    await this.updater.updateCitas(true);
     //if( Number(this.userData.userData.uid) === Number(message.content) ){ console.log('wegot to updatecitas'); await this.updater.updateCitas(); }
    }
 }

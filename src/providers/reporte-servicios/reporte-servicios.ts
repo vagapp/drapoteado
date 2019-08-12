@@ -16,6 +16,7 @@ export class ReporteServiciosProvider {
   }
 
   getServiciosResume(report:reportes):Array<any>{
+    console.log('trailtime getServiciosResume');
     let ret = new Array();
   
     console.log('loading report');

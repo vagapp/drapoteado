@@ -55,6 +55,7 @@ export class ReporteCitasProvider {
   }
 
   generateCitasFromdata( citas_data ){
+    console.log('trailstartnull generating cita from data', citas_data);
     let aux_citalit = new Array<Citas>()
       for(let cita of citas_data){
         let aux_cita = new Citas();

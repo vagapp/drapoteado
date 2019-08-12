@@ -249,6 +249,25 @@ async openReportGenerate( report:reportes = null ){
       this.actualReport = this.reportesData.todayReport;
       console.log('setReporttrail d',this.actualReport);
     }
+    if(Number(this.actualReport.nid) === Number(this.reportesData.todayReport.nid)){
+      this.actualReport.doctores = new Array();
+      this.docData.doctores.forEach((doc)=>{
+        this.actualReport.doctores.push(Number(doc.Uid));
+      });
+      await this.reportesManager.updateReporte(this.actualReport);
+      console.log('trailupdatetodaydocs update');
+      /*let aux_docs = this.docData.doctores.filter((doc)=>{
+        this.actualReport.doctores.indexOf(doc.Uid) === -1
+      });
+      //console.log('trailupdatetodaydocs setting todatreport, checking doctores',this.docData.doctores, this.actualReport.doctores,aux_docs);
+      /*if(aux_docs && aux_docs.length>0){
+      aux_docs.forEach((doc)=>{
+        this.actualReport.doctores.push(Number(doc.Uid));
+      });
+      await this.reportesManager.updateReporte(this.actualReport);
+      console.log('trailupdatetodaydocs update');
+      }*/
+    }
     
   }
 
@@ -433,14 +452,20 @@ async openReportGenerate( report:reportes = null ){
     console.log('cita evaluada',cita);
       
     }else{
+      console.log('trailstartnull2 checking canceñed cita',cita);
+      //cita.setPagosFecha(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS,this.userData.userData.uid);
       cita.setEdicionesFechas(this.actualReport.dateStartUTMS,this.actualReport.dateEndUTMS);
     }
   }
     console.log('tota facturar es ',this.facturadoTotal);
     this.duracionTotalStr = DateProvider.getDateDifText(this.duracionTotalMs);
-    this.actualReport.citas.sort((a,b)=>{
+
+    console.log('trailsortingcitas',JSON.stringify(this.actualReport.citas.map((citas)=>{return new Date(citas.ultimaFechaPago)})));
+    this.actualReport.citas = this.actualReport.citas.sort((a,b)=>{
+      console.log('trailsortingcitas sorting returns',b.ultimaFechaPago - a.ultimaFechaPago);
       return b.ultimaFechaPago - a.ultimaFechaPago; 
     });
+    console.log('trailsortingcitas',JSON.stringify(this.actualReport.citas.map((citas)=>{return new Date(citas.ultimaFechaPago)})));
   }
 
   calcularCitasPorCobrar(){

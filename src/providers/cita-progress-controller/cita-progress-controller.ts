@@ -122,6 +122,7 @@ export class CitaProgressControllerProvider {
 
   pagarCitaActiva(){
   this.checkCobroStates('end pca');
+  this.activeCita.setServicesData();
   this.activeCita.cobroEfectivo = this.cobroEfectivo == null ? 0 : this.cobroEfectivo;
   this.activeCita.cobroCheque = this.cobroCheque == null ? 0 :this.cobroCheque;
   this.activeCita.cobroTarjeta = this.cobroTarjeta == null ? 0 : this.cobroTarjeta;

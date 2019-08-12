@@ -241,7 +241,8 @@ export class Citas{
         if( aux_lastcita ){this.ultimaFechaPago = Number(aux_lastcita.fec);}
         this.ultimaFechaText = DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).date + ' - '+ DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).time;
         this.ultimaFechaDisplayable = DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago));
-        }else{ //this.ultimaFechaPago = this.dateMs;
+        }else{ 
+            this.ultimaFechaPago = this.dateMs;
             this.ultimaFechaText = this.getDisplayableDates().date + ' - '+this.getDisplayableDates().time
             this.ultimaFechaDisplayable = this.getDisplayableDates();
         }
@@ -327,13 +328,18 @@ export class Citas{
             if(a.fec < b.fec) ret = -1;
             return ret;
         });
-        console.log('STATE_FINALIZADA',states);
+     
         //obtener el ultimo estado (el mas actual)
-        let latestState = {state:0};
+        let latestState = {state:0,fec:0};
         if(states.length > 0)
         latestState = states[states.length-1];
-        console.log('latestState',latestState);
+      
         this.festado = latestState.state;
+        if( this.festado === CitasDataProvider.STATE_CANCELADA){
+          
+          
+            this.ultimaFechaDisplayable = DateProvider.getDisplayableDates(new Date(Number(latestState.fec)));
+        }
     }
 
     setEdicionesField(){
@@ -384,6 +390,7 @@ export class Citas{
      **/
     setData( data_input ){
         console.log("setData on cita",data_input);
+        console.log("trailstartnul setData on cita",data_input);
        /* console.log('field_fechas_reporte',data_input.field_fechas_reporte);
         console.log('field_ediciones_json',data_input['field_ediciones_json']);
         console.log('field_ediciones_json', data_input['field_ediciones_json'][0]['value'] );*/

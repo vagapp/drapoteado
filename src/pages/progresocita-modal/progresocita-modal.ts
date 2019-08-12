@@ -200,7 +200,8 @@ export class ProgresocitaModalPage {
       async guardarEdiciones(){
         console.log('guardarEdiciones');
         this.progressController.updateCitaActiva();
-        console.log('check cita before sending',JSON.stringify(this.progressController.activeCita.data.field_ediciones_json));
+        console.log('check cita before sending',JSON.stringify(this.progressController.activeCita.data.field_ediciones_json), this.progressController.activeCita.data.aux_servicios_json);
+        
         await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,this.progressController.activeCita.stateNumber );
         //this.close();
       }
