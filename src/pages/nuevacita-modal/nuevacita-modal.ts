@@ -69,6 +69,18 @@ hourIntervalMS:number = 30*60*1000;
 
 showerrors:boolean = false;
   
+horantr: string = '';
+  formatear(evento){
+    var hora = this.horantr.replace(':','');
+    var arregloHora = hora.match(/.{1,2}/g) ? hora.match(/.{1,2}/g) : [];
+    if(arregloHora.length == 2){
+      this.horantr = arregloHora.join(':');
+    }
+    if(this.horantr.length > 5){
+      this.horantr = this.horantr.substring(0,5);
+    }
+  }
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -138,7 +150,7 @@ showerrors:boolean = false;
     if(!this.isnew){
       console.log('trailsh setting hours');
       let aux_date = new Date(this.cita.dateMs);
-      this.hourstring = `${DateProvider.formatDateBinaryNumber(aux_date.getHours())}:${DateProvider.formatDateBinaryNumber(aux_date.getMinutes())}`;
+      this.horantr = `${DateProvider.formatDateBinaryNumber(aux_date.getHours())}:${DateProvider.formatDateBinaryNumber(aux_date.getMinutes())}`;
       //this.hourstring = aux_date.getHours()+':'+aux_date.getMinutes();
       //console.log('trailsh setting hours' , this.hourstring,aux_date);
     }
@@ -235,7 +247,7 @@ notEmptyNewCitaValidation(){
   console.log('notEmptyNewCitaValidation');
   if(!this.checkIfInputfilledNPromtp(this.cita.data.field_paciente.und[0].value,ret)) ret = false;
   //no hace falta revisar el doctor, porque ese ya esta validado.
-  if(!this.checkIfInputfilledNPromtp(this.hourstring,ret)) ret = false;
+  if(!this.checkIfInputfilledNPromtp(this.horantr,ret)) ret = false;
   return ret;
 }
 
@@ -277,14 +289,14 @@ citaDateValidation():boolean{
   let ret = true;
   console.log('citaDateValidation',this.cita.data.field_datemsb);
   console.log('citaDateValidation',new Date(this.cita.data.field_datemsb['und'][0]['value']));
-  console.log('this.hourstring',this.hourstring);
+  console.log('this.hourstring',this.horantr);
   if(this.cita.data.field_datemsb['und'][0]['value'] < new Date().getTime()){
     console.log('elegir fecha a futuro.');
     this.alert.presentAlert('Error','Debe elegir una fecha a futuro');
     ret = false;
   }
-  if(!DateProvider.validateHhMm(this.hourstring)){
-    console.log('la hora esta mal',this.hourstring);
+  if(!DateProvider.validateHhMm(this.horantr)){
+    console.log('la hora esta mal',this.horantr);
     this.alert.presentAlert('Error','Formato de hora incorrecto');
     ret = false;
   }
@@ -407,9 +419,9 @@ setCitaDateFromiNPUT(){
   console.log('HOUR MS',ms,ms/(1000*60*60));*/
   //NO USAMOS ESTE CODIGO YA PORQUE YA NO QUIEREN EL IONIC HOUR INPUT HERMOSO QUE HICE. putos.
 
-  console.log('hour string',this.hourstring);
-  let ms = Number(this.hourstring.split(':')[0])*60*60*1000;
-  ms += Number(this.hourstring.split(':')[1])*60*1000;
+  console.log('hour string',this.horantr);
+  let ms = Number(this.horantr.split(':')[0])*60*60*1000;
+  ms += Number(this.horantr.split(':')[1])*60*1000;
   console.log('MSAdded',ms);
   
   let final_date_UT = aux_date.getTime() + ms;
