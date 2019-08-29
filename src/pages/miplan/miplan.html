@@ -215,7 +215,7 @@
       <div class="subtotal_pago">
         <span class="spanBlock midFont" *ngIf="this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{selectedTotal}}.00</span></span>
         <span class="spanBlock midFont" *ngIf="!this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{cantidad}}.00</span></span>
-        <p class="midSubFont" *ngIf="this.onplanchange"> Cualquier cambio en el monto total de tu suscripción se verá reflejado en tu próxima mensualidad al {{nextCobro}}</p>
+        <p class="midSubFont" *ngIf="this.onplanchange && subsData.subscription"> Cualquier cambio en el monto total de tu suscripción se verá reflejado en tu próxima mensualidad al {{nextCobro}}</p>
       </div>  
       <div class="button_section"> 
         <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>

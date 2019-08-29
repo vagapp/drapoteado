@@ -24,7 +24,7 @@
                         <th>Paciente</th>
                         <th *ngIf="!(permissions.checkUserPermission([userData.TIPO_DOCTOR]))">Doctor</th>
                         <th> Tiempo Transcurrido:  <span class="fontHigh midFont">{{progressController.activeCita.duracionText }} </span></th>
-                        <th> <span class=" fontSecondary midFont">{{progressController.activeCita.getDisplayableDates().date}}</span> - <span class="fontHigh midFont">{{progressController.activeCita.getDisplayableDates().time}}</span> </th>
+                        <th> <span class=" fontHigh midFont">{{progressController.activeCita.getDisplayableDates().date}}</span> - <span class="fontHigh midFont">{{progressController.activeCita.getDisplayableDates().time}}</span> </th>
                      </tr>
                 </thead>
                 <tbody>

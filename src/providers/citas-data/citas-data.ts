@@ -21,6 +21,10 @@ export class CitasDataProvider{
   customDateFilters:boolean = false;
   customFilters:boolean = false;
 
+
+  ayer: any = 0;
+  amon: any = 0;
+
   userStateFilter:Array<number> = [
     CitasDataProvider.STATE_PENDIENTE,
     CitasDataProvider.STATE_CONFIRMADA,
@@ -32,6 +36,7 @@ export class CitasDataProvider{
   ];
 
   daysCitas:DaysCitas[] = new Array();
+  yearCitas:YearCitas[] = new Array();
 
   //estados de cita:
   public static STATE_PENDIENTE = 0;
@@ -149,6 +154,7 @@ export class CitasDataProvider{
     this.getCitasDays();
     this.sortCitasDays();
     this.sortDays();
+    this.setdaysLabels();
     console.log('citas days loadded',this.daysCitas);
   }
 
@@ -166,8 +172,24 @@ export class CitasDataProvider{
     });
   }
 
+  setdaysLabels(){
+    this.ayer = 0;
+    this.amon = 0;
+    for(let day of this.daysCitas){
+    if(this.checkyear(day.DayMs)){
+      day.yearlabel = this.ayer;
+      this.amon = 0;
+    }
+    if(this.checkMonth(day.DayMs)){
+      day.monthlabel = DateProvider.getMonthLabel(this.amon);
+    }
+    }
+  }
+
   getCitasDays(){
+   
     for(let cita of this.citasShowPool){
+      
       let dayMS = DateProvider.getStartEndOFDate(new Date(cita.dateMs)).start.getTime();
       let exist = this.daysCitas.find((daycitas)=>{ 
         return daycitas.DayMs === dayMS;
@@ -179,6 +201,8 @@ export class CitasDataProvider{
         console.log('creating day',dayMS,DateProvider.getStringDate(new Date(dayMS)));
         let auxday = {
           DayMs:dayMS,
+          monthlabel:0,
+          yearlabel:0,
           DayName:DateProvider.getStringDate(new Date(dayMS)),
           citasShowPool: new Array()
         }
@@ -188,6 +212,29 @@ export class CitasDataProvider{
     }
   }
 
+
+  checkyear (DayMs:number):boolean{
+    let ret = false;
+    let year = new Date(DayMs).getFullYear();
+      if(this.ayer <  year) {ret = true; this.ayer = year; console.log(' checkytrailcheckyear tru');} 
+      return ret;
+    }
+  
+    checkMonth(DayMs:number):boolean{
+      let ret = false;
+      let month = new Date(DayMs).getMonth()+1;
+      let year = new Date(DayMs).getFullYear();
+      console.log('checkytrail',month,year);
+      if(this.amon <= month){ 
+        if( this.amon === month){
+          if(this.ayer < year) {ret = true; this.amon = month; console.log(' checkytrailcheckmon tru');}
+        }else{
+          ret = true;
+          this.amon = month; console.log(' checkytrailcheckmon tru');
+        } 
+       }
+      return ret;
+    }
 
   getCitasByStatus( status:string ){
     return this.citas.filter( (citas) => {citas.checkState(status)});
@@ -295,7 +342,7 @@ export class CitasDataProvider{
     return citas.filter((citas)=>{
       console.log('filtering by paciente',pacienteName);
       console.log('paciente es',citas.paciente);
-      return (citas.paciente.includes(pacienteName));
+      return (citas.paciente.toLowerCase().includes(pacienteName.toLowerCase()));
     });
   }
 
@@ -435,6 +482,18 @@ export class CitasDataProvider{
 
 export interface DaysCitas{
   DayMs:number;
+  monthlabel: any ;
+  yearlabel: any ;
   DayName:string;
   citasShowPool:Citas[];
+}
+
+export interface YearCitas{
+  year:number;
+  monthCitas:MonthCitas[];
+}
+
+export interface MonthCitas{
+  Month:number;
+  dayCitas:DaysCitas[];
 }

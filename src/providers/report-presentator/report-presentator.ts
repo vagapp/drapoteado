@@ -314,7 +314,7 @@ async openReportGenerate( report:reportes = null ){
   }
 
   async loadReportCitasGrupal(){
-    console.log('loadReporteAdeudos.',this.docData.doctoresIDs);
+    console.log('loadReportCitasGrupal.',this.docData.doctoresIDs);
     this.docuid = null;
     //await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.docData.doctoresIDs);
     await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.subsData.subscription.field_doctores);

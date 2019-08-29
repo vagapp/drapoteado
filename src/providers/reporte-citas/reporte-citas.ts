@@ -108,7 +108,7 @@ export class ReporteCitasProvider {
       report.cajaFilter,
       report.recepcionFilter
      ).toPromise();
-     console.log('resgot is',res);
+     console.log('resgot adeudo is',res);
      report.citas = this.generateCitasFromdata(res);
     //now we gotta sort everything.
   }

@@ -125,7 +125,7 @@
               <option selected disabled value="0">SELECT</option>
               <option value="2">recepción</option>
               <option value="3">caja</option>
-              <option value="4">recepción&caja</option>
+              <option value="4">recepción & caja</option>
             </select>
           </div>
           <div class="ModalInput_input" *ngIf="this.tutorial.checkTutorialState()">
@@ -133,7 +133,7 @@
               <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und" class="input_select input" disabled>
                   <option value="2" selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION">recepción</option>
                   <option value="3"  selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA">caja</option>
-                  <option value="4"  selected  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR">recepción&caja</option>
+                  <option value="4"  selected  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR">recepción & caja</option>
                 </select>
               </div>
           <div class="ModalInput_input">

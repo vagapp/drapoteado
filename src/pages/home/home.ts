@@ -23,6 +23,7 @@ import { DateProvider } from '../../providers/date/date';
 })
 export class HomePage {
   rifa:string = 'nadien';
+  todayDay:string = DateProvider.getStringDate(new Date());
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController, 
@@ -41,6 +42,7 @@ export class HomePage {
   }
 
   async ionViewDidLoad(){
+    this.todayDay
     if(this.userData.userData.uid !== 0){
       this.tutoralProvider.checkNStart();
       /*if(this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY]) && this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){

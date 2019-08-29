@@ -28,6 +28,13 @@ page-nuevousuario-modal {
         padding-left: 20px;
     }
 
+
+    .input_select[disabled] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        text-indent: 0.01px;
+        text-overflow: '';
+    }
     
     .addbycode {
     width: 80%;

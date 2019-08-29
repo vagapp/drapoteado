@@ -268,18 +268,46 @@ export class RegisterModalPage {
         window.location.reload();
       },
       response => {
-        //Debugger.log(["POST call in error", response]);
-        if(response && response.error && response.error.form_errors){
-          //let error_msg = `Se encontraron los siguientes errores:`;
+        console.log('responsetrail',response);
           for (var key in response.error.form_errors) {
-            /*error_msg += `
-            ${response.error.form_errors[key]}`;*/
-            this.alert.presentAlert('Error', 'Se ha detectado un error inesperado en '+key);
+            console.log('responsetrail', key);
+            switch (key){
+              case 'name': 
+              if(response.error.form_errors[key].includes('ya se encuentra en uso')){
+                this.alert.presentAlert('¡Upss, tenemos un problema!','El nombre que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
+              }
+              break;
+              case 'mail':
+                console.log('responsetrail entered case mail', response.error.form_errors[key]);
+                if(response.error.form_errors[key].includes('ya está registrada')){
+                  this.alert.presentAlert('¡Upss, tenemos un problema!','El correo que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
+                }else 
+                  if(response.error.form_errors[key].includes('ya se encuentra en uso')){
+                    this.alert.presentAlert('¡Upss, tenemos un problema!','El correo que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
+                  }else 
+                  if(response.error.form_errors[key].includes('no es válida')){
+                    this.alert.presentAlert('¡Upss, tenemos un problema!','El formato de tu correo electrónico no es correcto.');
+                  }else{
+                    this.alert.presentAlert('Error','Se ha detectado un error inesperado en el campo '+key);
+                  }
+               break;
+               default: 
+               if(!(key === 'field_useremail][und][0')){
+                this.alert.presentAlert('Error','Se ha detectado un error inesperado en el campo '+key);
+              }
+            }
+            /*
+            if(key === 'name'){
+            
+            }
+             else if(key === 'mail'){
+           
+            }else{
+            
+          }*/
           }
-          //this.alert.presentAlert('Error', error_msg);
-        }
-       this.loader.dismissLoader();
-      },
+          this.loader.dismissLoader();
+        },
       () => {
        
       });

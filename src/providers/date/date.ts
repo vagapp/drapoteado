@@ -112,6 +112,8 @@ export class DateProvider {
       return { start: startDate, end: endDate};
     }
 
+   
+
     static dateWOffset(date:Date):Date{
         console.log(new Date());
         console.log(date);
@@ -134,6 +136,27 @@ export class DateProvider {
             }
         }
         return isValid;
+    }
+
+    static getMonthLabel(m:number){
+        console.log('getMonthLabel',m);
+        let ret = '';
+        switch(m){
+            case 1: ret = 'Enero'; break;
+            case 2: ret = 'Febrero'; break;
+            case 3: ret = 'Marzo'; break;
+            case 4: ret = 'Abril'; break;
+            case 5: ret = 'Mayo'; break;
+            case 6: ret = 'Junio'; break;
+            case 7: ret = 'Julio'; break;
+            case 8: ret = 'Agosto'; break;
+            case 9: ret = 'Septiembre'; break;
+            case 0: ret = 'Octubre'; break;
+            case 1: ret = 'Noviembre'; break;
+            case 2: ret = 'Diciembre'; break;
+          
+        }
+        return ret;
     }
   
 }

@@ -12,6 +12,7 @@ import { Citas } from '../../providers/user-data/citas';
 import {Platform} from 'ionic-angular';
 import { DateProvider } from '../../providers/date/date';
 import { CitasDataProvider } from '../../providers/citas-data/citas-data';
+import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
 /**
  * Generated class for the ReportePage page.
  *
@@ -38,7 +39,9 @@ export class ReportePage {
     public loader: LoaderProvider,
     public reportPresentator: ReportPresentatorProvider,
     public permissions:PermissionsProvider,
-    public plat: Platform
+    public plat: Platform,
+    public citasData: CitasDataProvider,
+    public citasPresentator: CitasPresentatorProvider
   ) {
    
   }

@@ -26,19 +26,10 @@
       </div>
 </div>
     <div class="Citas_grid result_wrapper">
-      <!--<table class="results_table">
-          <thead>
-              <tr>
-                  <th>Paciente</th>
-                  <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Doctor</th>
-                  <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Tipo de Servicio</th>
-                  <th>Fecha</th>
-                  <th>Estado</th>
-                  <th></th>
-               </tr>
-          </thead>
-        </table>-->
-        <table class="results_table"  *ngFor="let day of this.citasData.daysCitas">
+        <ng-container *ngFor="let day of this.citasData.daysCitas">
+            <div class="anio" *ngIf="day.yearlabel !== 0"> {{day.yearlabel}}</div>
+          <div class="mes"  *ngIf="day.monthlabel !== 0"> {{day.monthlabel}}</div>
+        <table class="results_table"  >
             <thead  class="header_dayname">
                 <tr> 
                     <th>Paciente</th>
@@ -78,7 +69,9 @@
                </tr>
           </tbody>
         </table>
+        </ng-container>
+      
      
     </div>
-<footer></footer>
+
 </ion-content>

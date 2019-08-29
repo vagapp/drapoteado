@@ -120,20 +120,19 @@ export class Citas{
         let cantidad_pagada = 0;
         //console.log(this.pagos);
         this.pagos.forEach(pago => {
-            console.log('trailadeudocp cantidadPagada',pago);
             //console.log(pago['efe']);
             pago['efe'] = Number(pago['efe']).toFixed(2);
             pago['che'] = Number(pago['che']).toFixed(2);
             pago['tar'] = Number(pago['tar']).toFixed(2);
             cantidad_pagada += (Number(pago['efe']) + Number(pago['tar']) +Number(pago['che'])); 
-            console.log('trailadeudocp acum',cantidad_pagada);
+           
         });
         //console.log('calculando cantidad pagada',cantidad_pagada);
         return cantidad_pagada;
     }
 
     get restantePagos():number{
-        console.log('trailadeudocp restantePagos',this.costo,this.cantidadPagada);
+      
         return this.costo - this.cantidadPagada;
     }
 
@@ -330,14 +329,13 @@ export class Citas{
         });
      
         //obtener el ultimo estado (el mas actual)
+        console.log('trailadeudo obtaining state');
         let latestState = {state:0,fec:0};
         if(states.length > 0)
         latestState = states[states.length-1];
-      
+        console.log('trailadeudo obtaining statelatestState',latestState);
         this.festado = latestState.state;
         if( this.festado === CitasDataProvider.STATE_CANCELADA){
-          
-          
             this.ultimaFechaDisplayable = DateProvider.getDisplayableDates(new Date(Number(latestState.fec)));
         }
     }

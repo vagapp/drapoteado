@@ -24,7 +24,8 @@ import { DateProvider } from '../../providers/date/date';
   templateUrl: 'citas.html',
 })
 export class CitasPage {
-  
+  actualyear:number=0;
+  actualMonth:number=0;
 
   //permisos
   canConfirm:boolean;
@@ -40,7 +41,15 @@ export class CitasPage {
 
   ionViewDidLoad() {
     this.citasData.defaultSort();
+    this.actualyear=0;
+    this.actualMonth=0;
   }
+
+
+
+
+
+
 
  
 
