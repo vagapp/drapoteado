@@ -38,7 +38,7 @@
          <!-- cuando es un usuario de grupo entrando a tutorial a la pagina inicial y si requiere explicacion y NO es el que crea el grupo, es un doctor mas-->
     
     <div class="user_explain" *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.usuarioCreated === false" ><!-- Drap agregar usuarios explicacion block-->
-        <span class="spanBlock midSubFont">DRAP te permite elegir entre tres opciones de usuarios.</span>
+        <span class="spanBlock midSubFont">TUAL te permite elegir entre tres opciones de usuarios.</span>
         <!--<div class="trisectional">
             <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Recepción:</span><span class="spanBlock midSubFont">Crea Citas</span></div>
             <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Caja:</span><span class="spanBlock midSubFont">Cobra Citas</span></div>
@@ -61,7 +61,7 @@
         </div>
         <div class="addbycode" *ngIf="!this.tutorial.isGroup">
             <div class="bisectional_section"  (click)="selectOption(3)" [class.selectedOption]="checkSelectedOption(3)">
-                <span class="spanBlock"> ¿Compartes personal con otro usuario de DRAP?</span>
+                <span class="spanBlock"> ¿Compartes personal con otro usuario de TUAL?</span>
                 <span class="spanBlock"> Si los usuarios ya han sido creados puedes agregarlos usando sus <span class="fontPrimary">codigos</span> aqui.</span>
             </div>
         </div>
@@ -167,7 +167,7 @@
     <div class="modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated" >
             <span class="spanBlock bigBoldFont">¡Felicidades!</span>
             <span class="spanBlock midMainFont">Tu usuario ha sido creado</span>
-            <span class="spanBlock midSubFont">Te proporcionamos sus datos para que pueda ingresar desde este momento en DRAP</span>
+            <span class="spanBlock midSubFont">Te proporcionamos sus datos para que pueda ingresar desde este momento en TUAL</span>
             <span class="spanBlock midSubFont">Nombre: <span class="fontHigh">{{this.newUser.name}}</span></span>
             <span class="spanBlock midSubFont">Correo: <span class="fontHigh">{{this.newUser.mail}}</span></span>
             <span class="spanBlock midSubFont" *ngIf="!this.codeuserNP">Contraseña: <span class="fontHigh">{{this.checkpass}}</span></span>

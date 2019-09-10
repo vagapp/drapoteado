@@ -43,7 +43,7 @@ export class DateProvider {
     }
 
     static getDisplayableDates(date:Date){
-        console.log('traildater gettindisplayable ',date);
+        //console.log('traildater gettindisplayable ',date);
         let ret = {"date":'',"time":''};
         let datestring = `${DateProvider.formatDateBinaryNumber(date.getDate())}/${(DateProvider.formatDateBinaryNumber(date.getMonth()+1))}/${date.getFullYear()}`;
         let timestring =  `${DateProvider.formatDateBinaryNumber(date.getHours())}:${DateProvider.formatDateBinaryNumber(date.getMinutes())}`;

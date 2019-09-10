@@ -19,6 +19,7 @@ import { SubusersDataProvider } from '../../providers/subusers-data/subusers-dat
 import { SubusersManagerProvider } from '../../providers/subusers-manager/subusers-manager';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { DateProvider } from '../../providers/date/date';
+import { UpdaterProvider } from '../../providers/updater/updater';
 
 declare var Stripe;
 
@@ -71,10 +72,13 @@ export class MiplanPage {
     public http: HttpClient,
     public subuserData: SubusersDataProvider,
     public subuserMan: SubusersManagerProvider,
-    public wsMessenger: WsMessengerProvider
+    public wsMessenger: WsMessengerProvider,
+    public updater: UpdaterProvider
   ) {
     //conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
-      conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_GtbbRJpEKq8zTrtq3EPCTqQ').then((c) => {
+      let public_test ='key_GtbbRJpEKq8zTrtq3EPCTqQ';
+      let public_prod='key_Wwir4csBhZwvzCny3TkeNUA';
+      conekta.init('https://cdn.conekta.io/js/latest/conekta.js',public_prod).then((c) => {
       
       //Este success se ejecuta con el javascript se cargó correctamente
       console.log(c);
@@ -393,9 +397,23 @@ export class MiplanPage {
       aux_sus.field_plan_sus = this.selectedPlan;
       aux_sus.field_adicionales = Number(this.selectedAditionals);
       if(this.isgroup)aux_sus.field_adicionales = Number(this.selectedAditionalsDocs);
-      await this.subsManager.subscribe( this.selectedPlanObject, aux_sus);
+      let res = await this.subsManager.subscribe( this.selectedPlanObject, aux_sus);
       this.loader.dismissLoader();
-      this.bu.locationReload();
+      this.loader.presentLoader('Comprobando pago ...');
+      let interval = 5000;
+      setInterval(()=>{
+        this.updater.updateSuscription().then(
+       ()=>{
+        interval=3000;
+         console.log(this.subsData.subscription);
+        if(Number(this.subsData.subscription.field_active) === 1){
+          this.loader.dismissLoader();
+          this.bu.locationReload();
+        }
+       }
+        );
+      }, interval );
+     
     }
    
     

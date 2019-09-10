@@ -33,13 +33,15 @@ export class CitaProgressControllerProvider {
     servicio:servicios
     costooverride:number
   };
-
+ onreport:boolean=false;
   servicesCompare: servicios[];
   activeCitaAnterior:number = 0;
   
+  onAdeudo:boolean=false;
 
   checkboxMode:boolean = true;//checkbox mode porque quisieron checkbox pero no es tan viable a ver que pasa.
-  checkboxServicesList
+  checkboxServicesList;
+
 
   get CantidadRestante(){ 
     //console.log('this.activeCita.restantePagos',this.activeCita.restantePagos);
@@ -74,8 +76,8 @@ export class CitaProgressControllerProvider {
   }
   
 
-  openProgress(cita:Citas){ //open progress is called from the buttons using citas presentator
-    
+  openProgress(cita:Citas, onAdeudo:boolean = false){ //open progress is called from the buttons using citas presentator
+    this.onAdeudo = onAdeudo;
     if(!cita.checkState(CitasDataProvider.STATE_FINALIZADA)){
       this.setInputs();
     }
@@ -83,21 +85,18 @@ export class CitaProgressControllerProvider {
       this.editfinish = false;
     }
     console.log('opening progress');
-    this.setActiveCita(cita);
-  
-    //this.evalServicios();
-    //this.calcularCosto();
-    this.evalServicios();
-
-    this.servicesCompare = JSON.parse(JSON.stringify(this.activeCita.addedServices));
-    console.log('evalServicios this.servicesCompare',JSON.stringify(this.servicesCompare));
-   
-    //this.setCortesia();
-    this.calcularCosto();
-    this.startInterval();
-    
+    this.loadcita(cita);
     let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
     Modal.present({});
+  }
+
+  loadcita(cita){
+    this.setActiveCita(cita);
+    this.evalServicios();
+    this.servicesCompare = JSON.parse(JSON.stringify(this.activeCita.addedServices));
+    console.log('evalServicios this.servicesCompare',JSON.stringify(this.servicesCompare));
+    this.calcularCosto();
+    this.startInterval();
   }
 
 

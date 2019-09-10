@@ -10,6 +10,8 @@ import { CitasPresentatorProvider } from '../../providers/citas-presentator/cita
 import { CitaProgressControllerProvider } from '../../providers/cita-progress-controller/cita-progress-controller';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { DateProvider } from '../../providers/date/date';
+import { UpdaterProvider } from '../../providers/updater/updater';
+import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 
 
 @IonicPage()
@@ -18,6 +20,7 @@ import { DateProvider } from '../../providers/date/date';
   templateUrl: 'progresocita-modal.html',
 })
 export class ProgresocitaModalPage {
+ 
  
 
   constructor(
@@ -33,7 +36,9 @@ export class ProgresocitaModalPage {
     public citasPresentator: CitasPresentatorProvider,
     public progressController: CitaProgressControllerProvider,
     public permissions: PermissionsProvider,
-    public datep: DateProvider
+    public datep: DateProvider,
+    public updater: UpdaterProvider,
+    public reportp:ReportPresentatorProvider
    
   ) {
   }
@@ -46,8 +51,13 @@ export class ProgresocitaModalPage {
     console.log('Cita activa ionViewDidLoad',this.progressController.activeCita);
   }
 
-  ionViewWillLeave(){
+  async ionViewWillLeave(){
       this.progressController.stopInterval();
+      if(this.progressController.onAdeudo){
+      this.loader.presentLoader('Cargando Reporte...');
+      this.reportp.loadReporte().then(()=>{this.loader.dismissLoader();});
+    }
+      console.log('wileave');
   }
 
       finalizarPop(){
@@ -198,11 +208,21 @@ export class ProgresocitaModalPage {
       }
 
       async guardarEdiciones(){
+        if( !this.validarPagarNONEG() ){
+          this.alert.presentAlert('Error','No se aceptan valores negativos');
+          return false;
+        }
+        if( Number(this.progressController.CantidadRestante) < 0 ){
+          this.alert.presentAlert('Error','El monto total de los servicios no puede ser menor a lo que ya se ha cobrado.');
+          return false;
+        }
         console.log('guardarEdiciones');
+        //this.progressController.loadcita(this.progressController.activeCita);
         this.progressController.updateCitaActiva();
         console.log('check cita before sending',JSON.stringify(this.progressController.activeCita.data.field_ediciones_json), this.progressController.activeCita.data.aux_servicios_json);
         
         await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,this.progressController.activeCita.stateNumber );
+        this.progressController.loadcita(this.progressController.activeCita);
         //this.close();
       }
 

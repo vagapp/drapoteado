@@ -35,6 +35,8 @@ export class Citas{
     opendetail=false;
     docuid = 0;
     bydoc:boolean = false;
+
+    reporteCosto:number = 0;
     
     
 
@@ -88,7 +90,7 @@ export class Citas{
     }
     
 
-    get doctor_name(){/*return this.data.doctor_name;*/ console.log('doctor alias is', this.data.doctor_alias); return this.data.doctor_alias;}
+    get doctor_name(){/*return this.data.doctor_name;*/ /*console.log('doctor alias is', this.data.doctor_alias);*/ return this.data.doctor_alias;}
     get doctor_alias(){return this.data.doctor_alias;}
     get caja_name(){ return this.data.field_caja_nombre.und[0].value;}
     get paciente(){ return this.data.field_paciente.und[0].value;}
@@ -134,6 +136,10 @@ export class Citas{
     get restantePagos():number{
       
         return this.costo - this.cantidadPagada;
+    }
+
+    get reporteRestantePagos():number{
+        return this.reporteCosto - this.cantidadPagada;
     }
 
     get PagosonFecha(){

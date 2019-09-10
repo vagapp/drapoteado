@@ -45,15 +45,15 @@
       <span class="rbh_span midFont" *ngIf="!cita.originactivereport && !reportPresentator.isAdeudo">  <span class="rbh_span midFont fontPrimary" >{{cita.getDisplayableDates().date}} - {{cita.getDisplayableDates().time}}</span> </span>
     
       <span class="rrt_span midFont estado-cita-reporte"  *ngIf="reportPresentator.isAdeudo">
-        <button  *ngIf="(cita.checkState(citasData.STATE_COBRO) || cita.checkState(citasData.STATE_ADEUDO)) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR, this.userData.TIPO_CAJA, this.userData.TIPO_CAJAYRECEPCION])" (click)="citasPresentator.openProgreso(cita);" class="bgColorSecondary generalButton reportButton">Cobrar</button>
+        <button  *ngIf="(cita.checkState(citasData.STATE_COBRO) || cita.checkState(citasData.STATE_ADEUDO)) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR, this.userData.TIPO_CAJA, this.userData.TIPO_CAJAYRECEPCION])" (click)="citasPresentator.openProgreso(cita,true);" class="bgColorSecondary generalButton reportButton">Cobrar</button>
         <button  *ngIf="!cita.checkState(citasData.STATE_CANCELADA) && !cita.checkState(citasData.STATE_ADEUDO) && !cita.checkState(citasData.STATE_FINALIZADA) && !cita.checkState(citasData.STATE_COBRO) && !this.userData.checkUserPermission([this.userData.TIPO_CAJA])" (click)="citasPresentator.updateStatePop(cita, this.citasData.STATE_CANCELADA)" class="bgColorPrimary generalButton reportButton">Cancelar</button>
       </span>
       <span class="rbh_span midFont estado-cita-reporte"> <span class="fontHigh"  [ngStyle]="{'color':cita.fstateColor}">{{ cita.fstateLabel }}</span> </span>
   </div>
   <div class="ReporteRow_TotalServicios">
-      <span class="rrt_span midFont" *ngIf="cita.originactivereport || reportPresentator.isAdeudo"> <span class="bold">Total de Servicios</span><span class="midFont fontSecondary">{{moneyFormat(cita.costo)}}</span></span>
+      <span class="rrt_span midFont" *ngIf="cita.originactivereport || reportPresentator.isAdeudo"> <span class="bold">Total de Servicios</span><span class="midFont fontSecondary">{{moneyFormat(cita.reporteCosto)}}</span></span>
       <span class="rrt_span midFont"  *ngIf="!reportPresentator.isAdeudo"> <span class="bold">Importe Total </span><span class="midFont fontSecondary">{{moneyFormat(cita.pagosTotal)}}</span></span>
-      <span class="rrt_span midFont" *ngIf="cita.costo > cita.cobro && (cita.originactivereport || reportPresentator.isAdeudo)"> <span class="bold">Adeudo</span><span class="fontPrimary">{{moneyFormat(cita.restantePagos)}}</span> </span>
+      <span class="rrt_span midFont" *ngIf="cita.costo > cita.cobro && (cita.originactivereport || reportPresentator.isAdeudo)"> <span class="bold">Adeudo</span><span class="fontPrimary">{{moneyFormat(cita.reporteRestantePagos)}}</span> </span>
       
       <!--<span class="rrt_span midFont" *ngIf="!userData.checkUserPermission([userData.TIPO_RECEPCION]) && cita.pagosTotalOut>0"> <span class="bold">Cobros por otros</span><span class="fontPrimary">${{cita.pagosTotalOut}}</span> </span>-->
   </div>
@@ -113,12 +113,12 @@
           <span class="rbh_span midFont" > <span class="bold">Doctor</span><span class="">{{ cita.doctor_name }}</span> </span>
         </div>
         <div class="totalycitas">
-          <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo && cita.originactivereport"> <span class="bold">Total de Servicios</span><span class="midFont fontSecondary">{{moneyFormat(cita.costo)}}</span></span>
-          <span class="rrt_span midFont" *ngIf="reportPresentator.isAdeudo" > <span class="bold">Adeudo</span><span class="midFont fontPrimary">{{moneyFormat(cita.restantePagos)}}</span></span>
+          <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo && cita.originactivereport"> <span class="bold">Total de Servicios</span><span class="midFont fontSecondary">{{moneyFormat(cita.reporteCosto)}}</span></span>
+          <span class="rrt_span midFont" *ngIf="reportPresentator.isAdeudo" > <span class="bold">Adeudo</span><span class="midFont fontPrimary">{{moneyFormat(cita.reporteRestantePagos)}}</span></span>
           <span class="rrt_span midFont"  *ngIf="!reportPresentator.isAdeudo"> <span class="bold">Importe Total </span><span class="midFont fontSecondary">{{moneyFormat(cita.pagosTotal)}}</span></span>
           <span class="rbh_span midFont estado-cita-reporte" *ngIf="!reportPresentator.isAdeudo" > <span class="fontHigh"  [ngStyle]="{'color':cita.fstateColor}">{{ cita.fstateLabel }}</span> </span>
           <span class="rrt_span midFont"  *ngIf="reportPresentator.isAdeudo">
-            <button  *ngIf="(cita.checkState(citasData.STATE_COBRO) || cita.checkState(citasData.STATE_ADEUDO)) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR, this.userData.TIPO_CAJA, this.userData.TIPO_CAJAYRECEPCION])" (click)="citasPresentator.openProgreso(cita);" class="bgColorSecondary generalButton reportButton">Cobrar</button>
+            <button  *ngIf="(cita.checkState(citasData.STATE_COBRO) || cita.checkState(citasData.STATE_ADEUDO)) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR, this.userData.TIPO_CAJA, this.userData.TIPO_CAJAYRECEPCION])" (click)="citasPresentator.openProgreso(cita, true);" class="bgColorSecondary generalButton reportButton">Cobrar</button>
             <button  *ngIf="!cita.checkState(citasData.STATE_CANCELADA) && !cita.checkState(citasData.STATE_ADEUDO) && !cita.checkState(citasData.STATE_FINALIZADA) && !cita.checkState(citasData.STATE_COBRO) && !this.userData.checkUserPermission([this.userData.TIPO_CAJA])" (click)="citasPresentator.updateStatePop(cita, this.citasData.STATE_CANCELADA)" class="bgColorPrimary generalButton reportButton">Cancelar</button>
           </span>
         </div>
@@ -135,8 +135,8 @@
                   <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo"> <span class="bold">Cheque</span><span class="midFont fontSecondary">{{moneyFormat(cita.pagosCheque)}}</span> </span>
                   <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo"> <span class="bold">Facturado</span><span class="midFont  fontHigh">{{moneyFormat(cita.pagosFacturado)}}</span> </span>
                   <span class="rbh_span midFont" *ngIf="!cita.originactivereport && !reportPresentator.isAdeudo"> <span class="fontPrimary">Anterior</span> </span>
-                  <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo && cita.costo > cita.cobro"> <span class="bold">Adeudo</span><span class="fontPrimary">{{moneyFormat(cita.restantePagos)}}</span> </span>
-                  <span class="rrt_span midFont" *ngIf="reportPresentator.isAdeudo"> <span class="bold">Total de Servicios</span><span class="fontSecondary">{{moneyFormat(cita.costo)}}</span> </span>
+                  <span class="rrt_span midFont" *ngIf="!reportPresentator.isAdeudo && cita.costo > cita.cobro"> <span class="bold">Adeudo</span><span class="fontPrimary">{{moneyFormat(cita.reporteRestantePagos)}}</span> </span>
+                  <span class="rrt_span midFont" *ngIf="reportPresentator.isAdeudo"> <span class="bold">Total de Servicios</span><span class="fontSecondary">{{moneyFormat(cita.reporteCosto)}}</span> </span>
                   <span class="rrt_span midFont" *ngIf="reportPresentator.isAdeudo"> <span class="bold">Importe Total</span><span class="fontSecondary">{{moneyFormat(cita.pagosTotal)}}</span> </span>
                  
                   <!--<span class="totalespan midFont" *ngIf="reportPresentator.totalDoc>0 && !reportPresentator.isAdeudo"><b>Cobros por doctor:</b> <span class="fontPrimary">${{reportPresentator.totalDoc}}</span></span>-->

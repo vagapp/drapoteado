@@ -22,7 +22,8 @@ export class BaseUrlProvider {
   }
 
   get baseUrl():string{  return `${this.protocol}${this.hostname}`; }
-  get backendUrl():string{  return `${this.baseUrl}backenddev/`; }
+  get backendUrl():string{  return `${this.baseUrl}backendcp/`; }
+  _//get backendUrl():string{  return `${this.baseUrl}backenddcp/`; }
   get endpointUrl():string{  return `${this.backendUrl}appoint/`; }
   get HomeUrl():string{ return window.location.href.replace( /[\?#].*|$/, "#/home" ); }
   

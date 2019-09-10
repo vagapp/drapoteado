@@ -386,7 +386,13 @@ async openReportGenerate( report:reportes = null ){
     for(let cita of filteredCitas){
       console.log('evaluateCitas citra',cita);
       if(!cita.checkState(CitasDataProvider.STATE_CANCELADA)){ // si no esta cancelada se interpretan los totales.
-      let aux_costo = Number(cita.costo ? cita.costo : 0 );
+      //let aux_costo = Number(cita.costo ? cita.costo : 0 );
+      let aux_costo = 0;
+      console.log('trailrs ',cita.reporteServicios);
+      cita.reporteServicios.forEach((rs)=>{
+        aux_costo += Number(rs.costo);
+      });
+      cita.reporteCosto = Number(aux_costo);
       let aux_duracion = Number(cita.duracionMs ? cita.duracionMs : 0 );
       console.log('this.userData.userData.uid',this.userData.userData.uid);
       if(this.isAdeudo){

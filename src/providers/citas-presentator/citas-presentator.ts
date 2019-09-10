@@ -42,7 +42,7 @@ export class CitasPresentatorProvider {
     public wsMessenger: WsMessengerProvider,
     public progresSController: CitaProgressControllerProvider,
     public reportesMan: ReportesManagerProvider,
-    public updater: UpdaterProvider
+    public updater: UpdaterProvider,
   ) {
 
   }
@@ -81,7 +81,22 @@ export class CitasPresentatorProvider {
     //console.log('antes de guardar el state quedo ',state);
     console.log('antes de guardar el state quedo',cita);
     console.log('check cita before sending',JSON.stringify(cita.data.field_ediciones_json));
-    let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise();
+    let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise().catch(e => {
+      console.log(e);
+      for (var key in e.error.form_errors) {
+        switch (key){
+          case 'changed':
+              this.updater.updateCitas().then(()=>{
+                this.wsMessenger.generateWSupdateMessage(cita);
+                this.loader.dismissLoader();
+              });
+              this.alert.presentAlert('¡Upss, tenemos un problema!','La información de esta cita cambio mientras estabas trabajando, inténtalo de nuevo.')
+              return false;
+        }
+      }
+
+    });
+    
     //let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).subscribe((val)=>{console.log('wele a pedo',val),(error)=>{console.log('wele a pedo',error)}});
     if(Number(state) === CitasDataProvider.STATE_CONFIRMADA && cita.doctor_playerid){  //crear notificacion para doctor a quien le confirmaron la cita
       this.notiMan.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
@@ -90,7 +105,9 @@ export class CitasPresentatorProvider {
       this.notiMan.generateNotification([cita.data.field_cita_caja.und[0]],`La cita de de ${cita.paciente} esta en espera de cobro`,`cita-${cita.Nid}`);
     }
     await this.reportesMan.checkUpdateTodayDocs(cita.data.field_cita_doctor.und[0]);
+    this.updater.updateCitas().then(()=>{
     this.wsMessenger.generateWSupdateMessage(cita);
+    });
     this.setBlockNdismiss(cita.Nid);
   } 
 
@@ -100,7 +117,7 @@ export class CitasPresentatorProvider {
     return res;
   }
 
-  editCita( cita ){
+  editCita( cita){
     console.log('state of cita',cita.checkState(CitasDataProvider.STATE_COBRO));
     if(cita.checkState(CitasDataProvider.STATE_FINALIZADA) || cita.checkState(CitasDataProvider.STATE_COBRO) || cita.checkState(CitasDataProvider.STATE_ADEUDO)){
       this.progresSController.editfinish = true;
@@ -111,7 +128,7 @@ export class CitasPresentatorProvider {
     }
   }
 
-  openProgreso( cita: Citas){
+  openProgreso( cita: Citas, onAdeudo:boolean = false){
     /*let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
     Modal.present({});*/
     console.log('opening progreso men');
@@ -123,7 +140,7 @@ export class CitasPresentatorProvider {
     this.progresSController.factura = cita.data.field_facturar.und[0].value;
     this.progresSController.factura_cantidad = cita.data.field_facturar_cantidad.und[0].value;
     }
-    this.progresSController.openProgress(cita);
+    this.progresSController.openProgress(cita,onAdeudo);
   }
 
 

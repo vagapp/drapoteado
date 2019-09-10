@@ -99,7 +99,7 @@
                     <span *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO)" class="floatRight"><span class="fontPrimary">{{moneyFormat(progressController.activeCita.costo)}}</span>  </span>
                     <div class="smlabel">Pagos anteriores</div>
                     <div class="pagos_anteriores" *ngIf="progressController.activeCita.checkState(this.citasData.STATE_COBRO) || progressController.activeCita.checkState(this.citasData.STATE_ADEUDO) || progressController.activeCita.checkState(this.citasData.STATE_FINALIZADA)">
-                        <div class="pagodetail" *ngFor="let pago of progressController.activeCita.PagosonShow">
+                        <div class="pagodetail" *ngFor="let pago of progressController.activeCita.PagosonFecha">
                                 <span class="res fontHigh">{{this.getDateString(pago.fec)}}</span>
                             <span class="res fontSecondary">{{moneyFormat(pago.total)}}</span>
                            

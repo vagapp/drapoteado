@@ -35,7 +35,7 @@ export class subscriptions{
     }
 
     setData(input_data):boolean{
-        console.log('setting this data men', input_data);
+        console.log('setting subs data', input_data);
         let ret = false;
         if(!input_data) return ret;
         ret = true;
@@ -107,7 +107,7 @@ export class subscriptions{
             field_subusuarios:{und:[]}, 
             field_invitation_code:{und:[{value:this.field_invitation_code}]}, 
             field_group_name:{und:[{value:this.field_group_name}]}, 
-            field_active:{und:[{value:this.field_active}]}, 
+            field_active:{und:this.field_active}, 
             //field_next_cobro:this.field_next_cobro,
             field_stripe_sus_id:{und:[{value:this.field_stripe_sus_id}]}, 
             field_stripe_src_sus_id:{und:[{value:this.field_stripe_src_sus_id}]}, 
@@ -137,7 +137,7 @@ export class subscriptions{
             field_subusuarios:{und:[]}, 
             field_invitation_code:{und:[{value:this.field_invitation_code}]}, 
             field_group_name:{und:[{value:this.field_group_name}]}, 
-            field_active:{und:[{value:this.field_active}]}, 
+            field_active:{und:this.field_active}, 
             field_stripe_sus_id:{und:[{value:this.field_stripe_sus_id}]}, 
             field_stripe_src_sus_id:{und:[{value:this.field_stripe_src_sus_id}]}, 
             field_stripe_cus_sub_id:{und:[{value:this.field_stripe_cus_sub_id}]}, 
@@ -192,7 +192,7 @@ export class subscriptions{
 
     static getEmptySuscription(){
         let aux_sus = new subscriptions();
-        aux_sus.field_active = 0;
+        aux_sus.field_active = null;
         aux_sus.is_plan_set = false;
         aux_sus.plan = null;
         return aux_sus;

@@ -169,6 +169,10 @@ export class ReportePage {
        */
       //}
 
+
+      gohome(){
+        //this.navCtrl.setRoot('HomePage');
+      }
       generatePDF(){
         this.reportPresentator.generatePDF();
       }

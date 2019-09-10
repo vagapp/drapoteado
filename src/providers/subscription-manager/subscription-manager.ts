@@ -179,6 +179,7 @@ export class SubscriptionManagerProvider {
   async subscribe(plan:planes, suscription:subscriptions){
     console.log('subscribing');
     let ns_res = await this.getSubscribeObs(plan,suscription).toPromise();
+    return ns_res;
     /*if(ns_res && this.checkForSubscription()) 
     await this.deletesSus(this.subsData.subscription).toPromise();*/
   }
@@ -205,6 +206,7 @@ export class SubscriptionManagerProvider {
       aux_sus.field_plan_holder = this.userData.userData.uid;
       aux_sus.field_stripe_src_sus_id = '0';
       aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
+      console.log('wekohehee',aux_sus);
     }else{
       aux_sus.plan = plan;
       aux_sus.field_plan_sus = plan.nid;
@@ -213,6 +215,7 @@ export class SubscriptionManagerProvider {
       aux_sus.field_doctores.push(this.userData.userData.uid);
       aux_sus.field_stripe_src_sus_id = '0';
       aux_sus.field_stripe_cus_sub_id = this.userData.userData.field_stripe_customer_id.und[0].value;
+      //delete aux_sus.field_active;
       console.log('wakaheheee',aux_sus);
     }
     ret = this.generateNewSus(aux_sus);
