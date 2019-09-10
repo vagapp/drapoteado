@@ -78,7 +78,7 @@ export class MiplanPage {
     //conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
       let public_test ='key_GtbbRJpEKq8zTrtq3EPCTqQ';
       let public_prod='key_Wwir4csBhZwvzCny3TkeNUA';
-      conekta.init('https://cdn.conekta.io/js/latest/conekta.js',public_prod).then((c) => {
+      conekta.init('https://cdn.conekta.io/js/latest/conekta.js',public_test).then((c) => {
       
       //Este success se ejecuta con el javascript se cargó correctamente
       console.log(c);
@@ -385,11 +385,53 @@ export class MiplanPage {
       this.subsData.subscription.field_cantidad = this.selectedTotal;
       this.subsData.subscription.field_plan_sus = this.selectedPlan
       this.subsData.subscription.field_adicionales = Number(this.selectedAditionals);
+      //console.log('trailactivation field',this.subsData.subscription.field_active);
+      //return false;
       if(this.isgroup)this.subsData.subscription.field_docsadicionales = Number(this.selectedAditionalsDocs);
+      this.subsData.subscription.pay_state = 'wait';
       let ret = await this.subsManager.updateSus(this.subsData.subscription).toPromise();
-      this.loader.dismissLoader();
+      if(this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY])){
       console.log('sus udate returned',ret);
       this.bu.locationReload();
+      this.loader.dismissLoader();
+    }else{
+     
+      this.loader.dismissLoader();
+      this.loader.presentLoader('Comprobando pago ...');
+      let interval = 5000;
+      let intervalobj = setInterval(()=>{
+        this.updater.updateSuscription().then(
+       async ()=>{
+        interval=3000;
+         console.log(this.subsData.subscription);
+        if(this.subsData.subscription.pay_state !== null){
+         switch(this.subsData.subscription.pay_state){
+          case 'done':
+          if(Number(this.subsData.subscription.field_active) === 1){
+          this.loader.dismissLoader();
+          this.bu.locationReload();
+        }
+        break;
+        case 'fail':
+         /*   clearInterval(intervalobj);
+          let delres = await this.subsManager.deletesSus(this.subsData.subscription).toPromise();
+          console.log('delres',delres);
+          this.subsData.subscription = null;
+          this.loader.dismissLoader();
+          this.alert.presentAlert('Cobro Fallido','No se ha podido completar la transacción. Por favor revise su método de pago');
+          this.activateChangePlanMode();
+        */
+       this.alert.presentAlert('Cobro Fallido','No se ha podido completar la transacción. Por favor revise su método de pago');
+       this.activateChangePlanMode();
+       this.loader.dismissLoader();
+       clearInterval(intervalobj);
+        break;
+      }
+       }
+      }
+        );
+      }, interval );
+    }
     }else{
       console.log('akiwe');
       let aux_sus = subscriptions.getEmptySuscription();
@@ -401,16 +443,36 @@ export class MiplanPage {
       this.loader.dismissLoader();
       this.loader.presentLoader('Comprobando pago ...');
       let interval = 5000;
-      setInterval(()=>{
+      let intervalobj = setInterval(()=>{
         this.updater.updateSuscription().then(
-       ()=>{
+       async ()=>{
         interval=3000;
          console.log(this.subsData.subscription);
-        if(Number(this.subsData.subscription.field_active) === 1){
+        if(this.subsData.subscription.pay_state !== null){
+         switch(this.subsData.subscription.pay_state){
+          case 'done':
+          if(Number(this.subsData.subscription.field_active) === 1){
           this.loader.dismissLoader();
           this.bu.locationReload();
         }
+        break;
+        case 'fail':
+         /*   clearInterval(intervalobj);
+          let delres = await this.subsManager.deletesSus(this.subsData.subscription).toPromise();
+          console.log('delres',delres);
+          this.subsData.subscription = null;
+          this.loader.dismissLoader();
+          this.alert.presentAlert('Cobro Fallido','No se ha podido completar la transacción. Por favor revise su método de pago');
+          this.activateChangePlanMode();
+        */
+       this.alert.presentAlert('Cobro Fallido','No se ha podido completar la transacción. Por favor revise su método de pago');
+       this.activateChangePlanMode();
+       this.loader.dismissLoader();
+       clearInterval(intervalobj);
+        break;
+      }
        }
+      }
         );
       }, interval );
      

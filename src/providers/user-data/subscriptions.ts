@@ -1,4 +1,5 @@
 import { planes } from './planes';
+import { timingSafeEqual } from 'crypto';
 //import { Debugger } from './debugger';
 
 
@@ -29,6 +30,7 @@ export class subscriptions{
     field_cantidad:number = 0;
     field_adicionales:number = 0;
     field_docsadicionales:number = 0;
+    pay_state:string = null;
 
 
     constructor(){
@@ -58,6 +60,9 @@ export class subscriptions{
         this.field_cantidad = input_data['field_cantidad'];
         this.field_adicionales = input_data['field_adicionales'];
         this.field_docsadicionales = input_data['field_docsadicionales'];
+        this.pay_state = input_data['field_pay_state']; 
+        console.log('trailpaystate pay_state',this.pay_state);
+        console.log('trailpaystate pay_state',this.field_active);
         if(!input_data['field_cantidad']){this.field_cantidad = 0;}
         if(!input_data['field_adicionales']){this.field_adicionales = 0;}
         if(!input_data['field_docsadicionales']){this.field_docsadicionales = 0;}
@@ -107,7 +112,7 @@ export class subscriptions{
             field_subusuarios:{und:[]}, 
             field_invitation_code:{und:[{value:this.field_invitation_code}]}, 
             field_group_name:{und:[{value:this.field_group_name}]}, 
-            field_active:{und:this.field_active}, 
+            field_active:{und:Number(this.field_active) !== 0 ? this.field_active: null}, 
             //field_next_cobro:this.field_next_cobro,
             field_stripe_sus_id:{und:[{value:this.field_stripe_sus_id}]}, 
             field_stripe_src_sus_id:{und:[{value:this.field_stripe_src_sus_id}]}, 
@@ -115,6 +120,7 @@ export class subscriptions{
             field_cantidad:{und:[{value:this.field_cantidad}]},
             field_adicionales:{und:[{value:this.field_adicionales}]},
             field_docsadicionales:{und:[{value:this.field_docsadicionales}]},
+            field_pay_state:{und:[{value:this.pay_state}]}
         }
         if(this.field_doctores){
             this.field_doctores.forEach(element => {
@@ -137,13 +143,14 @@ export class subscriptions{
             field_subusuarios:{und:[]}, 
             field_invitation_code:{und:[{value:this.field_invitation_code}]}, 
             field_group_name:{und:[{value:this.field_group_name}]}, 
-            field_active:{und:this.field_active}, 
+            field_active:{und:Number(this.field_active) !== 0 ? this.field_active: null}, 
             field_stripe_sus_id:{und:[{value:this.field_stripe_sus_id}]}, 
             field_stripe_src_sus_id:{und:[{value:this.field_stripe_src_sus_id}]}, 
             field_stripe_cus_sub_id:{und:[{value:this.field_stripe_cus_sub_id}]}, 
             field_cantidad:{und:[{value:this.field_cantidad}]},
             field_adicionales:{und:[{value:this.field_adicionales}]},
             field_docsadicionales:{und:[{value:this.field_docsadicionales}]},
+            field_pay_state:{und:[{value:this.pay_state}]}
         }
         if(this.field_doctores !== null){
             this.field_doctores.forEach(element => {

@@ -73,7 +73,6 @@ export class SubscriptionDataProvider {
   return ret;
   }
 
- 
 
   getUsedDocAccounts():number{
     let ret = Number(0);
@@ -107,7 +106,7 @@ export class SubscriptionDataProvider {
   return ret;
   }
 
- 
+
 
   getUsedSubAccounts():number{
     let ret = Number(0);

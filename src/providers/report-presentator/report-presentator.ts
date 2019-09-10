@@ -314,10 +314,13 @@ async openReportGenerate( report:reportes = null ){
   }
 
   async loadReportCitasGrupal(){
-    console.log('loadReportCitasGrupal.',this.docData.doctoresIDs);
+    
     this.docuid = null;
     //await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.docData.doctoresIDs);
-    await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.subsData.subscription.field_doctores);
+    //console.log('loadReportCitasGrupal.',this.docData.doctoresIDs);
+    //console.log('trailreportTest subscription',this.subsData.subscription);
+    //console.log('trailreportRest groups',this.subsData.Groups[0]);
+    await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.docData.doctoresIDs);
   }
 
   async loadReportCitasAdeudo(){
