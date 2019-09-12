@@ -192,7 +192,8 @@
   <div class="servicios_totales">
       <span class="bold">Servicios:</span>
       <div class="servicios_totales_service_wraps">
-      <div class="ticket_row midSubFont" *ngFor="let servres of reportPresentator.serviciosResume">{{servres.title}}<span class="midFont fontSecondary">{{servres.times}}</span></div>
+  
+      <div class="ticket_row midSubFont" *ngFor="let servres of reportPresentator.serviciosResume">{{servres.title}}<span class="midFont fontSecondary">{{servres.times}}</span>   <span class="fontPrimary">{{moneyFormat(servres.costo)}}</span> </div>
       </div>
     </div>
 <div class="resumen_totales">

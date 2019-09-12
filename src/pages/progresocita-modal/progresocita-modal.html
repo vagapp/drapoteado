@@ -60,19 +60,38 @@
               </div>
               </div>-->
             
-              <div class="CitaDetail_services" *ngIf="! (progressController.activeCita.checkState(citasData.STATE_ACTIVA) || progressController.activeCita.checkState(citasData.STATE_FINALIZADA) || ( (progressController.activeCita.checkState(citasData.STATE_COBRO) || progressController.activeCita.checkState(citasData.STATE_ADEUDO)) && this.permissions.checkUserPermission([userData.TIPO_DOCTOR]))) ">
+              <!--<div class="CitaDetail_services" *ngIf="! (progressController.activeCita.checkState(citasData.STATE_ACTIVA) || progressController.activeCita.checkState(citasData.STATE_FINALIZADA) || ( (progressController.activeCita.checkState(citasData.STATE_COBRO) || progressController.activeCita.checkState(citasData.STATE_ADEUDO)) && this.permissions.checkUserPermission([userData.TIPO_DOCTOR]))) ">-->
+                    <div class="CitaDetail_services"  *ngIf="!(
+                    progressController.activeCita.checkState(citasData.STATE_ACTIVA) 
+                    || 
+                    ( 
+                        ( 
+                        progressController.activeCita.checkState(citasData.STATE_COBRO) 
+                        ) 
+                        && permissions.checkUserPermission([userData.TIPO_DOCTOR]) 
+                        )) ">
                     <div class="progreso_service" *ngFor="let added of progressController.activeCita.reporteServicios">
                     <!--<b>{{added.Nid}}</b>-->
                     {{added.title}} - <span class="fontSecondary">{{moneyFormat(added.costo)}}</span> 
                   </div>
                   </div>
-                  <div class="CitaDetail_services" *ngIf="
+                 <!-- <div class="CitaDetail_services" *ngIf="
                   progressController.activeCita.checkState(citasData.STATE_ACTIVA) 
                   || 
                   ( 
                       ( 
                           progressController.activeCita.checkState(citasData.STATE_FINALIZADA) 
                       || (progressController.activeCita.checkState(citasData.STATE_COBRO) || progressController.activeCita.checkState(citasData.STATE_ADEUDO) )
+                      ) 
+                      && permissions.checkUserPermission([userData.TIPO_DOCTOR]) 
+                      ) ">
+                      -->
+                         <div class="CitaDetail_services" *ngIf="
+                  progressController.activeCita.checkState(citasData.STATE_ACTIVA) 
+                  || 
+                  ( 
+                      ( 
+                      progressController.activeCita.checkState(citasData.STATE_COBRO) 
                       ) 
                       && permissions.checkUserPermission([userData.TIPO_DOCTOR]) 
                       ) ">

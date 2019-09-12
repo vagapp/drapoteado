@@ -16,13 +16,15 @@ export class BaseUrlProvider {
   //websocketUrl:string = 'ws://vagapp.mx:8081/';
   //websocketUrl:string = 'ws://www.drap.com.mx:8081/';
   websocketUrl:string = 'wss://www.drap.com.mx:8443/';
-  
+  backend_internas_name = 'backendint/';
+  backend_pruebas_name = 'backenddev/';
+  backend_pruebas_cp_name = 'backendcp/';
 
   constructor() {
   }
 
   get baseUrl():string{  return `${this.protocol}${this.hostname}`; }
-  get backendUrl():string{  return `${this.baseUrl}backendcp/`; }
+  get backendUrl():string{  return `${this.baseUrl}${this.backend_internas_name}`; }
   _//get backendUrl():string{  return `${this.baseUrl}backenddcp/`; }
   get endpointUrl():string{  return `${this.backendUrl}appoint/`; }
   get HomeUrl():string{ return window.location.href.replace( /[\?#].*|$/, "#/home" ); }

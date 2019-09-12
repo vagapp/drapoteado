@@ -60,9 +60,22 @@ export class ProgresocitaModalPage {
       console.log('wileave');
   }
 
+  
+
       finalizarPop(){
+          console.log('trailcortesia',this.progressController.hasCortesia());
+          if(this.progressController.hasCortesia()){
+            this.alert.chooseAlert(
+              '¿Finalizar?',
+              `Si finaliza la cita como cortesía, se marcara automáticamente como pagada.`,
+              ()=>{ this.finalizarActualCita().then( ()=>{
+                this.pagarActualCita();
+              }); },
+              ()=>{}
+            );
+          }else{
         this.finalizarActualCita().then( ()=>{this.close();});
-       
+      }
         /*let exmsg = '';
         if(Number(this.progressController.activeCita.addedServices.length) === 0){ exmsg = 'Aun no se ha agregado ningún servicio a esta cita';}
         this.alert.chooseAlert(
@@ -71,6 +84,7 @@ export class ProgresocitaModalPage {
           ()=>{ this.finalizarActualCita(); },
           ()=>{}
         );*/
+    
       }
 
 
@@ -81,9 +95,9 @@ export class ProgresocitaModalPage {
         console.log('finish');
       }
 
-      async finalizarActualCita(){
+      async finalizarActualCita(state = CitasDataProvider.STATE_COBRO){
         this.progressController.finalizarCitaActiva();
-        await this.citasPresentator.updateStateRequest( this.progressController.activeCita ,CitasDataProvider.STATE_COBRO );
+        await this.citasPresentator.updateStateRequest( this.progressController.activeCita ,state );
       }
 
       pagadaPop(){

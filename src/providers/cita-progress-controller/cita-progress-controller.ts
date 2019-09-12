@@ -250,6 +250,18 @@ export class CitaProgressControllerProvider {
     console.log(this.costoCita);
   }
 
+  hasCortesia(){
+    let ret = false;
+    let hasCortesia = this.activeCita.addedServices.find((servicio)=>{
+      return ( Number( servicio.Nid ) === Number( CitasDataProvider.SERVICIO_CORTESIA_NID ) );
+    });
+    //console.log('trailcortesia hasCortesia',hasCortesia);
+    if(hasCortesia){
+      ret = true;
+    }
+    return ret;
+  }
+
 
   evalServicios(){
     this.activeCita.setAddedServices(this.activeCitaDoc.servicios);

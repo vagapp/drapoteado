@@ -97,7 +97,9 @@ export class EntergrupoPage {
     this.loaded_group_sus.field_doctores.push(this.userData.userData.uid);//agregarse a si mismo a la suscripcion de grupo.
     const selected_subusers = this.getSelectedSubusersArray();
     await this.subsMan.group_enter_selectedSubusersClean(selected_subusers,this.loaded_group_sus,true);
-    this.wsMessenger.generateSuboutofgroup(this.subsMan.aux_docstoReload,1);
+    let reload_users = this.subsMan.aux_docstoReload.concat(selected_subusers.map((e)=>{ return Number(e.uid)}));
+    this.wsMessenger.generateSuboutofgroup(reload_users,1);
+    //this.wsMessenger.generateSuboutofgroup(this.subsMan.aux_docstoReload,1);
     /*await selected_subusers.forEach(async (subuser)=>{  //por cada sub usuario
       console.log('checking user',subuser);
       this.loaded_group_sus.field_subusuarios.push(subuser.uid);//agregar sub usuarios a la suscripcion de grupo.

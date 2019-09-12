@@ -263,7 +263,7 @@ export class UsuariosPage {
     console.log('CHEKAME WEY b');
     await this.subusersManager.cargarSubusuarios();
     console.log('CHEKAME WEY c');
-    this.WS.generateSuboutofgroup(this.subsData.subscription.field_doctores,userd.uid);
+    this.WS.generateSuboutofgroup(this.subsData.subscription.field_doctores.concat(userd.uid),userd.uid);
     //console.log('is removed yet?');
     this.loader.dismissLoader();
   }

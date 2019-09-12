@@ -1,5 +1,4 @@
 import { planes } from './planes';
-import { timingSafeEqual } from 'crypto';
 //import { Debugger } from './debugger';
 
 
@@ -61,8 +60,8 @@ export class subscriptions{
         this.field_adicionales = input_data['field_adicionales'];
         this.field_docsadicionales = input_data['field_docsadicionales'];
         this.pay_state = input_data['field_pay_state']; 
-        console.log('trailpaystate pay_state',this.pay_state);
-        console.log('trailpaystate pay_state',this.field_active);
+       // console.log('trailpaystate pay_state',this.pay_state);
+        //console.log('trailpaystate pay_state',this.field_active);
         if(!input_data['field_cantidad']){this.field_cantidad = 0;}
         if(!input_data['field_adicionales']){this.field_adicionales = 0;}
         if(!input_data['field_docsadicionales']){this.field_docsadicionales = 0;}

@@ -441,35 +441,36 @@ getDocAccountsLeft(subscription:subscriptions){
 
 
     /**
-     * Este metodo le quita a este sub usuariod de todas las suscripciones que no sean el gripo al que va a etrar.
+     * Removes sub-users on selected_subuser from every subscription that is not loaded_group_sus. 
     */
    async group_enter_selectedSubusersClean(selected_subusers,loaded_group_sus,filterThis:boolean = false){
+     
     this.aux_docstoReload = new Array();
     async function asyncForEach(array, callback) {
       for (let index = 0; index < array.length; index++) {
         await callback(array[index], index, array);
       }
     }
-    await asyncForEach(selected_subusers, async (subuser)=>{  //por cada sub usuario
-      console.log('trail2 checking user',subuser);
+    await asyncForEach(selected_subusers, async (subuser)=>{  //por cada sub-usuario en selected_subusers
+      console.log('BTG1 checking user',subuser);
       loaded_group_sus.field_subusuarios.push(subuser.uid);//agregar sub usuarios a la suscripcion de grupo.
       //eliminar sub usuario de otras suscripciones.
       let aux_user_subs = await this.requestGroupSubscriptionsFor(Number(subuser.uid)).toPromise();
-      console.log('trail2 LOADED SUBS',aux_user_subs);
+      console.log('BTG1 LOADED SUBS',aux_user_subs);
       await asyncForEach(aux_user_subs, async (sub) => {
-        console.log('trail2 Cleaning subscriptions of this user ',sub);
+        console.log('BTG1 Cleaning subscriptions of this user ',sub);
         if(filterThis || Number(sub.nid) !== Number(loaded_group_sus.nid)){
-        console.log('trail2 cleaning sub of dis user');
+        console.log('BTG1 cleaning sub of dis user');
         sub.field_subusuarios = sub.field_subusuarios.filter((data)=>{ return Number(data.uid) !== Number(subuser.uid)});
         let aux_sus = subscriptions.getEmptySuscription();
         aux_sus.setData(sub);
         aux_sus.field_active = sub.field_active.value;
         aux_sus.plan = sub.field_plan_sus;
         let res = await this.updateSus( aux_sus ).toPromise();
-        console.log('trail2 CLEANED SUBSCRIPTION RES IS',res);
+        console.log('BTG1 CLEANED SUBSCRIPTION RES IS',res);
         this.aux_docstoReload = this.aux_docstoReload.concat(sub.field_doctores.map((doc)=>{ return Number(doc.uid)}));
       }else{
-        console.log('trail2 NOT cleaning sub of dis user');
+        console.log('BTG1 NOT cleaning sub of dis user');
       }
         //this.wsMessenger.generateSuboutofgroup(res.subscription.field_doctores,subuser.uid);
       });

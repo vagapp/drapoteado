@@ -186,6 +186,7 @@ export class MiplanPage {
         '¿Estás seguro que deseas cancelar tu suscripción?, Si cancelas tu suscripción no podras acceder a tus citas, servicios y reportes.',
         async ()=>{ /*console.log('AQUI HAY QUE CANCELAR LA SUSCRIPCION')*/
         if(this.subsManager.checkForSubscription()){
+          console.log('pre delete');
           let ret = await this.subsManager.deletesSus(this.subsData.subscription).toPromise();
           console.log('cancel ret is',ret);
           if(ret){
@@ -286,17 +287,24 @@ export class MiplanPage {
     console.log('trail2 saving to  onplanchange false',this.selectedPlan,this.subsData.isGroup);
     if(!this.guardar_basic_validation()) return false;
     if(!this.guardar_subusernumber_validation()) return false;
-    if( !this.subsData.isGroup  && Number(this.selectedPlan) === Number(SubscriptionDataProvider.PLAN_GROUP)){
-      console.log('trail2 entrando a grrupo y no es grupo');
-      await this.subsManager.group_enter_selectedSubusersClean(this.subuserData.selectedForGroup,this.subsData.subscription);
-      console.log('trail2 docs to reload',this.subsManager.aux_docstoReload);
-      let view = this;
-      view.wsMessenger.generateSuboutofgroup(view.subsManager.aux_docstoReload,1);
-    }
+    await this.checkBasicToGroup();
     
     await this.suscribirse();
     this.onplanchange = false;
   }  
+
+  /**
+   * Revisa si se esta cambiando de plan basico a plan grupo medico.
+   */
+  async checkBasicToGroup(){
+    if( !this.subsData.isGroup  && Number(this.selectedPlan) === Number(SubscriptionDataProvider.PLAN_GROUP)){
+      console.log('BTG1 this.subuserData.selectedForGroup',this.subuserData.selectedForGroup);
+      console.log('BTG1 this.subsData.subscription',this.subsData.subscription);
+      await this.subsManager.group_enter_selectedSubusersClean(this.subuserData.selectedForGroup,this.subsData.subscription);
+      let reload_users = this.subsManager.aux_docstoReload.concat(this.subuserData.selectedForGroup.map((e)=>{ return Number(e.uid)}));
+      this.wsMessenger.generateSuboutofgroup(reload_users,1);
+      }
+  }
 
   guardar_basic_validation():boolean{
     let ret = true;
