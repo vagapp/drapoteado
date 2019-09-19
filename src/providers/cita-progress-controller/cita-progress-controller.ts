@@ -239,6 +239,13 @@ export class CitaProgressControllerProvider {
     this.calcularCosto();
   }
 
+  removeAllServices(){
+    this.activeCita.removeAllServices();
+    this.available_services = this.activeCita.getServiciosAvailable(this.activeCitaDoc.servicios);
+    this.cortesiaCheck();
+    this.calcularCosto();
+  }
+
   calcularCosto(){
     console.log('calculando costo');
     this.costoCita = 0;
@@ -290,26 +297,36 @@ export class CitaProgressControllerProvider {
         if(Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)) //si es cortesia se revisa que se pueda agregar , osea si no hay mas servicios agregados
         {
           console.log('es cortesia');
-          if(this.activeCita.addedServices.length === 0){
+          this.removeAllServices();
+          /*if(this.activeCita.addedServices.length === 0){
              console.log('es 0 ');
              this.selectedService = Nid;
             this.addService();
-          }
+          }else{
+            //Eliminar todos los servicios y agregar cortesia.
+          }*/
         }else{
           this.selectedService = Nid;
           this.addService();
           this.removeServiceWnid(Number(CitasDataProvider.SERVICIO_CORTESIA_NID));
         }
       }else{
+        if(! (Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID) ) ) {
         this.removeServiceWnid(Nid);
         this.cortesiaCheck();
       }
+      
+    }
       console.log('added',this.activeCita.addedServices);
       console.log('updateCheckedOption end servicesCompare',JSON.stringify(this.servicesCompare));
     }
 
     checkChecked(Nid:number):boolean{
       return this.activeCita.addedServices.find((aux_serves)=>{ return Number(aux_serves.Nid) === Number(Nid) }) !== undefined;
+    }
+
+    isCortesiaOn(Nid){
+      return (Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)) && this.checkChecked(Nid);
     }
 
    /* async guardarEdiciones(){

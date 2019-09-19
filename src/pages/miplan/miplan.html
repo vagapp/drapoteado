@@ -12,9 +12,17 @@
     <div class="modalPage_lpane" *ngIf="!onplanchange && subsData.subscription">
       <span class="spanBlock midFont">Total de tu suscripción mensual: <span class="fontPrimary bold">${{cantidad}}</span></span>
       <span class="spanBlock midSubFont"> vence al {{nextCobro}}</span>
-      <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()">Editar</button>
+      <button class="generalButton bgColorPrimary " *ngIf="this.permissions.checkUserPlanHolder() && !onplanchange" (click)="editar()">Editar</button>
     </div>
     </div>
+    <ng-container *ngIf="this.subsData.isGroup && !this.permissions.checkUserPlanHolder()">
+    <div class="abandondiv"> 
+      <p>Al abandonar el grupo esta cuenta no tendrá acceso a las funciones de TUAL hasta comprar un plan o unirse a un grupo.</p>
+      <button  (click)="getOut()"  class="bgColorPrimary generalButton tableButton">Salir</button>
+    </div>
+  </ng-container>
+  
+    <ng-container *ngIf="!this.subsData.checkForSub() || !(this.subsData.isGroup && !this.permissions.checkUserPlanHolder())">
     <!-- Seccion con Información de planes  -->
     <div class="basicpadding nopadtop">
       Estamos convencidos que TUAL te ayudará a optimizar las consultas y pagos en tu consultorio. ¡Será mucho más fácil y seguro!
@@ -230,6 +238,8 @@
  
 
   </div>
+</ng-container>
   <div class="endmargin">
   </div>
+
 </ion-content>

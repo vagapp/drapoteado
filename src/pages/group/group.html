@@ -26,7 +26,7 @@
           <td> {{doc['name']}} </td>
           <td  class="toolCol">
               <button *ngIf="!isThis(doc['uid']) && isplanHolder()" (click)="removerSubsUser(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Remover</button>
-              <button *ngIf="isThis(doc['uid']) && !isplanHolder()" (click)="getOut(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Salir</button>
+             <!-- <button *ngIf="isThis(doc['uid']) && !isplanHolder()" (click)="getOut(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Salir</button>-->
             </td>
         </tr>
       </tbody>

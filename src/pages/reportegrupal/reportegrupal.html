@@ -15,6 +15,7 @@
                 <span class="spanBlock midFont"><b>Fecha</b></span>
                 <span class="spanBlock fontSecondary midFont">{{this.reportPresentator.actualReport.dateString}}</span>
               </div>
+              <button class="bgColorSecondary generalButton export-big" (click)="exportars()" >Exportar</button>
     </div>
     </div>
     
@@ -24,6 +25,7 @@
               <th>Servicio</th>
               <th>Médico</th>
               <th>No</th>
+              <th>Total</th>
               <!--<th>Cantidad</th>-->
            </tr>
       </thead>
@@ -32,6 +34,7 @@
               <td>{{servicio.title}}</td>
               <td>{{servicio.doc}}</td>
               <td>{{servicio.times}}</td>
+              <td>{{this.moneyFormat(servicio.costo)}}</td>
               <!--<td>{{servicio.costo}}</td>-->
              
            </tr>

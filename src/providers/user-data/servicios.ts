@@ -16,6 +16,7 @@ export class servicios{
     get isCortesia(){
         return Number(this.Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID);
     }
+
     
     setData( data_input ){
         Debugger.log([`setting data for a service`,data_input]);

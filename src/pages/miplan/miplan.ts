@@ -681,6 +681,27 @@ selectCard( input_src:any ){
     return this.selectedPlan !== null;
   }
 
+
+
+  
+  async removerSubsUser(uid){
+    console.log('toremove',uid);
+    this.loader.presentLoader("Saliendo...");
+    let recievers = this.subsData.subscription.field_doctores.concat(this.subsData.subscription.field_subusuarios);
+    this.wsMessenger.generateDocoutgroup(recievers,uid);
+    await this.subsManager.removeUser(uid);
+    this.wsMessenger.generateSubsRemoveMessage(uid);
+    this.loader.dismissLoader();
+  }
+
+  getOut(){
+    this.alert.chooseAlert(
+      '¿Salir del grupo?',
+      '¿Esta seguro que desea salir del grupo?',
+      ()=>{this.removerSubsUser(Number(this.userData.userData.uid))},
+      ()=>{}
+    );
+  }
   
 
 }

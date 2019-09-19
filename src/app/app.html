@@ -40,7 +40,7 @@
           Mis Datos
       </button>
    
-      <button *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR]) && perm.checkUserPlanHolder()" menuClose ion-item  (click)="openMiplan()">
+      <button *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR])" menuClose ion-item  (click)="openMiplan()">
         Mi Plan
     </button>
       <!--<button *ngIf="tutorial.tutorialReplayAvailability()"  (click)="tutorial.openTutorialCanClose()" menuClose ion-item>

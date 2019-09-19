@@ -102,7 +102,10 @@
                           <option *ngFor="let service of progressController.available_services" value="{{service.Nid}}">{{service.title}}</option>
                         </select>-->
                         <!--<span class="checkbox_wrapper_progreso spanBlock"><ion-checkbox (ionChange)="updateCheckedOptions(SERVICIO_CORTESIA_NID,$event)" [checked]="this.progressController.checkChecked(SERVICIO_CORTESIA_NID)"></ion-checkbox> Cortesía- <span class="fontSecondary">$0</span> </span>-->
-                        <span class="checkbox_wrapper_progreso spanBlock" *ngFor="let service of progressController.activeCitaDoc.servicios" [class.cortesia_checkbox]="service.isCortesia" ><ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)"  [disabled]="service.isCortesia" [checked]="this.progressController.checkChecked(service.Nid)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">{{moneyFormat(service.costo)}}</span> </span>
+                        <span class="checkbox_wrapper_progreso spanBlock" *ngFor="let service of progressController.activeCitaDoc.servicios" [class.cortesia_checkbox]="service.isCortesia" >
+                            <!--<ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)"  [disabled]="service.isCortesia" [checked]="this.progressController.checkChecked(service.Nid)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">{{moneyFormat(service.costo)}}</span> -->
+                            <ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)" [disabled]="this.progressController.isCortesiaOn(service.Nid)" [checked]="this.progressController.checkChecked(service.Nid)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">{{moneyFormat(service.costo)}}</span> 
+                        </span>
                       </div>
                       <!--<div class="midAlign">
                             <div class="register_button_section">

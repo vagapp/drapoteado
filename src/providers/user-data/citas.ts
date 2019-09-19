@@ -802,6 +802,12 @@ export class Citas{
     return ret = true;
    }
 
+   removeAllServices(){
+    let ret = false;
+    this.addedServices = new Array();
+    return ret = true;
+   }
+
    /**
     * returns a list of services that havent been added to this cita from a list of available services
     **/

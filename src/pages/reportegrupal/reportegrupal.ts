@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
+import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 
 /**
  * Generated class for the ReportegrupalPage page.
@@ -22,6 +23,16 @@ export class ReportegrupalPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ReportegrupalPage');
+  }
+
+  moneyFormat( money:number ): string {
+    return CitasDataProvider.moneyFormat(money);
+   }
+
+   
+   exportars(){
+    console.log('exportars');
+    this.reportPresentator.exportExcel();
   }
 
 }

@@ -111,6 +111,9 @@ export class ReportPresentatorProvider {
     //console.log('isAdeudo',this.type,ReportPresentatorProvider.REPORT_ADEUDO); 
     return  Number(this.type) === Number(ReportPresentatorProvider.REPORT_ADEUDO); 
   }
+  get isGroup(){
+    return  Number(this.type) === Number(ReportPresentatorProvider.REPORT_GRUPAL); 
+  }
 
 get isdialy(){
   let ret = false;
@@ -208,7 +211,7 @@ exportExcel(){
   //this.docLoaded
   //console.log('exportExcel docloaded is ',this.docLoaded,this.docuid);
   //console.log(this.userData.userData.field_tipo_de_usuario['und'][0]['value']);
-  let report_excel = this.bu.backendUrl+`endpoint_Reporteexcel.php?r=${this.actualReport.nid}${this.docLoaded && this.docuid!==null ? '&doc='+this.docuid : ''}${'&ur='+this.userData.userData.field_tipo_de_usuario['und'][0]['value']}${this.isAdeudo ? '&adeudo=1' : '&adeudo=0'}`;
+  let report_excel = this.bu.backendUrl+`endpoint_Reporteexcel.php?r=${this.actualReport.nid}${this.docLoaded && this.docuid!==null ? '&doc='+this.docuid : ''}${'&ur='+this.userData.userData.field_tipo_de_usuario['und'][0]['value']}${this.isAdeudo ? '&adeudo=1' : '&adeudo=0'}${this.isGroup ? '&group=1&gdocs='+this.subsData.subscription.field_doctores.join(',') : '&group=0'}`;
   //console.log(report_excel);
   console.log('report_excel url is',report_excel);
    window.location.href = report_excel;
@@ -275,7 +278,9 @@ async openReportGenerate( report:reportes = null ){
     console.log('loadReporte unk',this.type);
     switch( Number(this.type) ){
       case Number(this.REPORT_GRUPAL): 
-      console.log('cargando reporte grgupal')
+      /*console.log('cargando reporte grgupal');
+      console.log('trailReporte', this.subsData.Groups, this.subsData.subscription);
+      this.subsData.subscription.field_doctores*/
       await this.loadReportCitasGrupal();
     await this.loadReportServiciosGrupal();
     this.evaluateCitas();
@@ -317,10 +322,10 @@ async openReportGenerate( report:reportes = null ){
     
     this.docuid = null;
     //await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.docData.doctoresIDs);
-    //console.log('loadReportCitasGrupal.',this.docData.doctoresIDs);
-    //console.log('trailreportTest subscription',this.subsData.subscription);
-    //console.log('trailreportRest groups',this.subsData.Groups[0]);
-    await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.docData.doctoresIDs);
+    /*console.log('trailRPG docdata ids',this.docData.doctoresIDs);
+    console.log('trailRPG subscription',this.subsData.subscription.field_doctores);
+    console.log('trailRPG groups',this.subsData.Groups[0]);*/
+    await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.subsData.subscription.field_doctores);
   }
 
   async loadReportCitasAdeudo(){
@@ -341,6 +346,7 @@ async openReportGenerate( report:reportes = null ){
     this.serviciosResume = this.serviciosResume.sort((a,b)=>{ 
       return a.title.localeCompare(b.title);
     });
+    console.log('trailRPG servresume',this.serviciosResume);
   }
 
   async loadReportServiciosAdeudo(){

@@ -32,10 +32,11 @@
         <table class="results_table"  >
             <thead  class="header_dayname">
                 <tr> 
+                    <th>{{day.DayName}}</th>
                     <th>Paciente</th>
                     <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Doctor</th>
                     <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Tipo de Servicio</th>
-                    <th>{{day.DayName}}</th>
+                  
                     <th>Estado</th>
                     <th></th>
                 </tr>
@@ -43,10 +44,11 @@
           <tbody>
               <tr *ngFor="let cita of day.citasShowPool">
                   <!--<td>{{cita.data.Nid}}</td>-->
+                  <td class="tdmaxedwid" ><span class="fontSecondary">{{cita.readableDate}}</span> - <span class="fontHigh">{{cita.readableTime}}</span></td>
                   <td class="tdmaxedwid">{{cita.data.field_paciente.und[0].value}}</td>
                   <td class="tdmaxedwid" *ngIf=" !this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.doctor_name}}</td>
                   <td class="tdmaxedwid" *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">General</td>
-                  <td class="tdmaxedwid" ><span class="fontSecondary">{{cita.readableDate}}</span> - <span class="fontHigh">{{cita.readableTime}}</span></td>
+
                   <td class="tdmaxedwid"  [ngStyle]="{'color':cita.stateColor}" >{{cita.getStateString()}}</td>
                   <td  class="toolCol">
                     <!--<img src="assets/imgs/editar.svg" class="icon_drapo" (click)="citasPresentator.editCita(cita)" 

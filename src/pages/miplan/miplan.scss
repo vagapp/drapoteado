@@ -4,6 +4,15 @@ page-miplan {
         padding: 0;
     }
 
+    .abandondiv{
+        display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    margin-top: 50px;
+    }
+
 
 
     .enter_title{
