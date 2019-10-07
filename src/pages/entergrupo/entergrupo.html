@@ -4,7 +4,7 @@
   <div class="text_centered">
     <div class="enter_title fontPrimary">Activación de grupo médico</div>
     <div class="enter_description">
-      TUAL se preocupa por hacer tu vida más fácil por eso nuestra función de grupos médicos te brinda funciones para compartir tus servicios y usuarios grupales con otros doctores, Si un doctor de tu grupo te ha compartido un código, ingrésalo aquí
+      TUAL se preocupa por hacer tu vida más fácil. Por eso nuestro plan de grupos médicos te brinda funciones para compartir usuarios grupales con otros doctores. Si un doctor de tu grupo te ha compartido un código, ingrésalo aquí.
     </div>
     
     <div class="enter_field" *ngIf="!groupLoaded">
@@ -16,20 +16,19 @@
 
     </div>
     <div class="groupName_shower" *ngIf="groupLoaded">
-        se encontro el grupo: <span class="fontPrimary">{{groupName}}</span>  con <span class="fontPrimary">{{this.docsleft}}</span> lugares disponibles
+        Se encontró el grupo de <span class="fontPrimary">{{groupName}}</span>  con <span class="fontPrimary">{{this.docsleft}}</span> lugares disponibles.
     </div>
   </div>
   <div class="enter_subuser_selection"  *ngIf="groupLoaded && isbasico">
     <div class="enter_title fontPrimary"> Selección de Usuarios </div>
-    <div class="enter_description"> Este plan te permite compartir usuarios entre los doctores del grupo si hay plazas disponibles puedes llevar contigo a tus usuarios actuales, seleccionandolos en la
-      lista a continuación, si no hay plazas activas habla con el administrador del grupo para activarlas. </div>
+    <div class="enter_description">El plan de grupos médicos te permite compartir usuarios entre los doctores del grupo. Si hay plazas disponibles puedes llevar contigo a tus usuarios actuales seleccionandolos en la lista de abajo. Si no hay plazas activas habla con el administrador del grupo para activarlas.</div>
       <div> <span class="enter_plazas_text">Plazas disponibles</span> <span class="enter_plazas_value fontPrimary">{{this.accountsleft}}</span></div>
       <table class="results_table">
           <thead>
               <tr>
                   <th>Agregar</th>
                   <th>Usuario</th>
-                  <th>Tipo de Usuario</th>
+                  <th>Tipo de usuario</th>
                </tr>
           </thead>
           <tbody >

@@ -8,6 +8,7 @@ import { DoctoresManagerProvider } from '../../providers/doctores-manager/doctor
 import { AlertProvider } from '../../providers/alert/alert';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
+import { BaseUrlProvider } from '../../providers/base-url/base-url';
 //import { ToastController } from 'ionic-angular';
 //import { Debugger } from '../../providers/user-data/debugger';
 
@@ -39,7 +40,8 @@ export class LoginPage {
     public citasManager:CitasManagerProvider,
     public docMan: DoctoresManagerProvider,
     public subscriptionManager: SubscriptionManagerProvider,
-    public serviciosManager: ServiciosManagerProvider
+    public serviciosManager: ServiciosManagerProvider,
+    public bu: BaseUrlProvider
   ) {
   }
 
@@ -56,25 +58,12 @@ export class LoginPage {
           //if logged in set session and userdata
       this.userData.setSessionData(val);
       await this.userData.loginSetData(val['user']['uid']);
-      /*await this.subscriptionManager.loadSubscription();
-      await this.docMan.initDoctoresUids();
-      await this.subscriptionManager.loadDoctorsSubscriptions();
-      console.log('subscription initload is', this.subscriptionManager.subsData.subscription);
-      console.log('docs before filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
-      this.docMan.filterActiveDoctors();
-      console.log('docs after filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
-      await this.citasManager.requestCitas().toPromise();
-      this.serviciosManager.loadServicios();
-      console.log(this.citasManager.citasData.citas);
-      console.log('docs end initload',JSON.stringify(this.docMan.docData.doctoresIDs));
-      /*this.rootPage = 'HomePage';
-      loading.dismiss();
-      this.loaddate = new Date().getTime();*/
+    
       location.reload();
       },
       response => {
         console.log('login error response',response);
-          this.alert.presentAlert('Error','Usuario o contraseña incorrectos');
+          this.alert.presentAlert('','Usuario o contraseña incorrectos');
           this.loader.dismissLoader();
       });
     }
@@ -84,9 +73,7 @@ export class LoginPage {
 
   actionOpenRecover(){
     let Modal = this.modalCtrl.create("RecoverModalPage", undefined, { cssClass: "smallModal recoverModal" });
-    //let Modal = this.modalCtrl.create(RecoverModalPage);
     Modal.present({});
-    //console.log("open Recover");
   }
 
   openRegister(){

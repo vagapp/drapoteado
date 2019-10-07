@@ -617,7 +617,7 @@ export class UserDataProvider {
       case UserDataProvider.TIPO_DOCTOR: ret = "doctor"; break;
       case UserDataProvider.TIPO_RECEPCION: ret = "recepción"; break;
       case UserDataProvider.TIPO_CAJA: ret = "caja"; break;
-      case UserDataProvider.TIPO_CAJAYRECEPCION: ret = "recepción & caja"; break;
+      case UserDataProvider.TIPO_CAJAYRECEPCION: ret = "caja & recepción"; break;
     }
     return ret;
   }

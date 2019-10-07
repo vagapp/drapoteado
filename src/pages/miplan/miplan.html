@@ -17,7 +17,7 @@
     </div>
     <ng-container *ngIf="this.subsData.isGroup && !this.permissions.checkUserPlanHolder()">
     <div class="abandondiv"> 
-      <p>Al abandonar el grupo esta cuenta no tendrá acceso a las funciones de TUAL hasta comprar un plan o unirse a un grupo.</p>
+      <p>Al abandonar el grupo médico esta cuenta ya no tendrá acceso a las funciones de TUAL hasta comprar un plan o unirse a un grupo.</p>
       <button  (click)="getOut()"  class="bgColorPrimary generalButton tableButton">Salir</button>
     </div>
   </ng-container>
@@ -28,7 +28,7 @@
       Estamos convencidos que TUAL te ayudará a optimizar las consultas y pagos en tu consultorio. ¡Será mucho más fácil y seguro!
     </div>
     <div class="plans_block" *ngIf="onplanchange"> <!-- Seleccion de plan cuando onplanchange  -->
-      <span class="blockSpan info_plan_title" >Selecciona un Plan </span>
+      <span class="blockSpan info_plan_title" >Selecciona un plan </span>
 
       <div class="plan_section"  *ngFor="let plan of this.planesData.planes">
         <div class="plan_section_hr">  <!-- Plan selection check start -->
@@ -49,7 +49,7 @@
             </span>
       
             <span *ngIf=" this.checkIfisgroupPlan(plan)"  class="grupos_medicos_code" (click)="gotoentergroup()">
-              ¿Tienes un código para Grupo Médico?, <span class="fontPrimary">ingrésalo aquí.</span>
+              ¿Tienes un código para grupo médico?  <span class="fontPrimary">ingrésalo aquí.</span>
             </span>
         </span> 
       </div>
@@ -101,7 +101,7 @@
           <span class="operator" (click)="operateExtra(-1)" >-</span><input type="number" [(ngModel)]="this.selectedAditionals"/><span class="operator" (click)="operateExtra(1)">+</span>
         </span>
        <!-- <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span></span>-->
-        <span class="spanBlock midSubFont"> añadir <span class="fontPrimary">{{this.selectedAditionals}} usuarios adicionales</span> por <span class="fontPrimary">${{this.selectedAditionals*39}}</span></span>
+        <span class="spanBlock midSubFont"> añadir <span class="fontPrimary">{{this.selectedAditionals}} usuarios adicionales</span> por <span class="fontPrimary">${{this.selectedAditionals*39}}.00</span></span>
         <!--<span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">${{(this.selectedAditionals*39) + (this.subsData.subscription.field_adicionales*39)}}.00</span></span>-->
         <span class="spanBlock midFont" *ngIf="!onplanchange"> Total de usuarios:  <span class="fontPrimary">${{(this.selectedAditionals*39)}}.00</span></span>
 
@@ -109,7 +109,7 @@
       </div> <!-- fin de usuarios adicionales onplanchange-->
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
-        <span class="spanBlock midSubFont"> Actualmente cuentas con <span class="fontPrimary">{{subAdicionales}} usuarios adicionales</span> </span>
+        <span class="spanBlock midSubFont"> Actualmente cuentas con <span class="fontPrimary">{{subAdicionales}} usuarios adicionales.</span> </span>
         <span class="spanBlock midFont"> Costo total de usuarios adicionales:  <span class="fontPrimary">${{subAdicionales*39}}.00</span></span>
       </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
 
@@ -119,8 +119,7 @@
     <div class="plans_extras bisectional" *ngIf="this.isgroup" >
       <div class="plans_extras_section bisectional_section right_align">
         <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar más suscriptores a tu plan?</span> 
-        <p class="midSubFont"> Agregar suscriptores adicionales a los incluídos en tu Grupo Médico, tienen un costo preferencial de $169.00 y se agregan al pago de tu
-          suscripción mensual. </p>
+        <p class="midSubFont"> Agregar suscriptores adicionales a los incluídos en tu grupo médico, tienen un costo preferencial de $169.00 y se agregan al pago de tu suscripción mensual. </p>
       </div>
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="onplanchange"> <!-- Usuarios adicionales onplanchange-->
@@ -146,15 +145,15 @@
     <div class="enter_subuser_selection_wrap" *ngIf="this.isgroup && !this.subsData.isGroup && this.permissions.checkUserSuscription([this.PLAN_ANY]) &&  this.subuserData.mySubUsers.length > 0">
     <div class="enter_subuser_selection"  >
       
-      <div class="enter_title fontPrimary"> Selección de Usuarios </div>
-      <div class="enter_description"> Este plan te permite compartir usuarios entre los doctores del grupo si hay plazas disponibles puedes llevar contigo a tus usuarios actuales </div>
+      <div class="enter_title fontPrimary"> Selección de usuarios </div>
+      <div class="enter_description"> Este plan te permite compartir usuarios entre los doctores del grupo. Si hay plazas disponibles puedes llevar contigo a tus usuarios actuales </div>
         <div> <span class="enter_plazas_text">Plazas disponibles</span> <span class="enter_plazas_value fontPrimary">{{this.accountsLeft}}</span></div>
         <table class="results_table">
             <thead>
                 <tr>
                     <th>Agregar</th>
                     <th>Usuario</th>
-                    <th>Tipo de Usuario</th>
+                    <th>Tipo de usuario</th>
                  </tr>
             </thead>
             <tbody >
@@ -189,7 +188,7 @@
          <div class="bisectional_section neuvo_metodo_pago"> 
             <div class="sources_wrapper"> <!-- INICIO STRIPE LISTED SOURCES-->
               <h3>Tarjetas activas</h3>
-              <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado método de pago </div>
+              <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado método de pago. </div>
               <ion-row *ngFor="let src of this.sources; let indice = index">
                 <ion-col col-10 [class.selectedsrc]="src.default" class="fact_src_unit">
                   <ion-row>

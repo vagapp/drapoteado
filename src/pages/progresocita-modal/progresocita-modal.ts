@@ -66,8 +66,8 @@ export class ProgresocitaModalPage {
           console.log('trailcortesia',this.progressController.hasCortesia());
           if(this.progressController.hasCortesia()){
             this.alert.chooseAlert(
-              '¿Finalizar?',
-              `Si finaliza la cita como cortesía, se marcara automáticamente como pagada.`,
+              '',
+              `Si finaliza la cita como cortesía, se marcará automáticamente como pagada.`,
               ()=>{ this.finalizarActualCita().then( ()=>{
                 this.pagarActualCita();
               }); },
@@ -76,14 +76,7 @@ export class ProgresocitaModalPage {
           }else{
         this.finalizarActualCita().then( ()=>{this.close();});
       }
-        /*let exmsg = '';
-        if(Number(this.progressController.activeCita.addedServices.length) === 0){ exmsg = 'Aun no se ha agregado ningún servicio a esta cita';}
-        this.alert.chooseAlert(
-          'Finalizar',
-          `Está seguro de que desea Finalizar la consulta? ${exmsg}`,
-          ()=>{ this.finalizarActualCita(); },
-          ()=>{}
-        );*/
+        
     
       }
 
@@ -101,57 +94,32 @@ export class ProgresocitaModalPage {
       }
 
       pagadaPop(){
-        /*if( Number(this.progressController.CantidadRestante) === (Number(this.progressController.activeCita.costo))){
-          this.alert.presentAlert('Error','Introducir monto a pagar');
-          return false;
-        }*/
-
         
-        console.log('pagadaPop start servicesCompare',JSON.stringify(this.progressController.servicesCompare));
-        //this.progressController.checkCobroStates('pp1');
+       
         if(!this.validarPagarNOEMPTY()){
-          this.alert.presentAlert('Error','Introducir monto a pagar.');
+          this.alert.presentAlert('','Introducir monto a pagar.');
           return false;
         }
-        //this.progressController.checkCobroStates('pp2');
+       
 
         if( !this.validarPagarNONEG() || !this.validarNotNaN() ){
-          this.alert.presentAlert('Error','No se aceptan valores negativos');
+          this.alert.presentAlert('','No se aceptan valores negativos.');
           return false;
         }
-        //this.progressController.checkCobroStates('pp3');
+       
       
-        console.log('cantidad restante es',this.progressController.CantidadRestante);
+       
         if( Number(this.progressController.CantidadRestante) < 0 ){
-          this.alert.presentAlert('Error','Esta introduciendo un monto mayor al costo de la cita.');
+          this.alert.presentAlert('','Está introduciendo un monto mayor al costo de la cita.');
           return false;
         }
-        //this.progressController.checkCobroStates('pp4');
+        
         if(
           this.progressController.factura_cantidad > this.progressController.activeCita.restantePagos
         ){
-          this.alert.presentAlert('Error','El monto facturado no puede exceder el total de la consulta');
+          this.alert.presentAlert('','El monto facturado no puede exceder el total de la consulta.');
           return false;
         }
-
-        
-       // this.progressController.checkCobroStates('pp5');
-       /* let title = 'Pagada';
-        let msg = '¿Está seguro de que desea marcar esta cita como pagada?';
-        
-        if(this.progressController.CantidadRestante > 0){
-          title = 'Cuidado';
-          msg = '¿Está seguro de que desea marcar esta cita como pagada con la cantidad insuficiente?';
-          this.alert.chooseAlert(
-            title,
-            msg,
-            ()=>{ this.pagarActualCita() },
-            ()=>{}
-          );
-        }else{
-          this.pagarActualCita();
-        }*/
-        console.log('pagadaPop end servicesCompare',JSON.stringify(this.progressController.servicesCompare));
        this.pagarActualCita();
       }
 
@@ -223,11 +191,11 @@ export class ProgresocitaModalPage {
 
       async guardarEdiciones(){
         if( !this.validarPagarNONEG() ){
-          this.alert.presentAlert('Error','No se aceptan valores negativos');
+          this.alert.presentAlert('','No se aceptan valores negativos.');
           return false;
         }
         if( Number(this.progressController.CantidadRestante) < 0 ){
-          this.alert.presentAlert('Error','El monto total de los servicios no puede ser menor a lo que ya se ha cobrado.');
+          this.alert.presentAlert('','El monto total de los servicios no puede ser menor a lo que ya se ha cobrado.');
           return false;
         }
         console.log('guardarEdiciones');

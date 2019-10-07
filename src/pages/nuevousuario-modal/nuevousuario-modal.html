@@ -21,14 +21,14 @@
         </div>-->
         <div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState()" >
                 <div class="modal_justifytitle"><div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
-                <span class=" largeFont" *ngIf="this.isnew"><b>Alta de Usuario</b></span></div>
+                <span class=" largeFont" *ngIf="this.isnew"><b>Alta de usuario</b></span></div>
                 <div class="modalPage_title">
                   <span class="spanBlock midSubFont">Da de alta al personal que te ayuda a administrar y cobrar tus citas.</span>
                 </div>
             </div>
         <!-- cuando es un usuario de grupo entrando a tutorial a la pagina inicial y si requiere explicacion y es el que crea el grupo-->
         <div class="user_explain"  *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.isGroup && this.tutorial.usergroupexplain && this.tutorial.isplanholder">
-            <span class="spanBlock midSubFont">Dentro de un grupo medico los usuarios creados serán compartidos por todos los doctores del grupo. A continuación te explicamos como funcionan y como crearlos. </span>
+            <span class="spanBlock midSubFont">Dentro de un grupo médico los usuarios creados serán compartidos por todos los doctores del grupo. A continuación te explicamos cómo funcionan y cómo crearlos. </span>
             <span *ngIf="this.tutorial.subaccountsleft < 2" > * no hay suficientes espacios en el grupo para seguir el tutorial.</span>
             <div class="user_explain_buttonsection">
                <span class="spanBlock midSubFont"> puedes omitir el tutorial haciendo click <button class="generalButton bgColorSecondary" (click)="endUsers()">aquí</button></span>
@@ -52,27 +52,27 @@
         <div class="bisectional">
             <div class="bisectional_section" (click)="selectOption(2)"  [class.selectedOption]="checkSelectedOption(2)">
                 <span class="spanBlock"> ¿Cuentas con personal independiente en la recepción y en la caja?</span>
-                <span class="spanBlock"> Crea usuarios para <span class="fontPrimary">Caja</span> y <span class="fontPrimary">Recepción</span> </span>
+                <span class="spanBlock"> Crea usuarios para <span class="fontPrimary">caja</span> y <span class="fontPrimary">recepción</span> </span>
             </div>
             <div class="bisectional_section"  (click)="selectOption(1)" [class.selectedOption]="checkSelectedOption(1)">
                 <span class="spanBlock"> ¿Una sola persona administra y cobra tus citas?</span>
-                <span class="spanBlock"> Crea un usuario de <span class="fontPrimary">Caja & Recepción</span></span>
+                <span class="spanBlock"> Crea un usuario de <span class="fontPrimary">caja & recepción</span></span>
             </div>
         </div>
         <div class="addbycode" *ngIf="!this.tutorial.isGroup">
             <div class="bisectional_section"  (click)="selectOption(3)" [class.selectedOption]="checkSelectedOption(3)">
                 <span class="spanBlock"> ¿Compartes personal con otro usuario de TUAL?</span>
-                <span class="spanBlock"> Si los usuarios ya han sido creados puedes agregarlos usando sus <span class="fontPrimary">codigos</span> aqui.</span>
+                <span class="spanBlock"> Si los usuarios ya han sido creados puedes agregarlos usando sus <span class="fontPrimary">códigos</span> aquí.</span>
             </div>
         </div>
-        <p *ngIf="this.tutorial.isplanholder" class="midSubFont" >Adquiere los usuarios adicionales que necesites ingresando en <span class="fontPrimary">MI PLAN</span></p>
+        <p *ngIf="this.tutorial.isplanholder" class="midSubFont" >Adquiere los usuarios adicionales que necesites ingresando en <span class="fontPrimary">mi plan</span></p>
         <div class="buttonsection">
             <button class="generalButton bgColorSecondary"[class.disabledsubbtn]="!isSelectedOption" [disabled]="!isSelectedOption()" (click)="userTutorialStart()">Continuar</button>
         </div>
     </div>
     
     <div class="user_explain"  *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.isGroup && this.tutorial.usergroupexplain  && !this.tutorial.isplanholder">
-        <p class="spanBlock midSubFont">Dentro de un grupo medico los usuarios creados serán compartidos por todos los doctores del grupo. Puedes acceder a la pagina de usuarios desde el menu donde podras crear usuarios si lo necesitas, pero probablemente ya existan usuarios en tu grupo.  </p>
+        <p class="spanBlock midSubFont">Dentro de un grupo médico los usuarios creados serán compartidos por todos los doctores del grupo. Puedes acceder a la pagina de usuarios desde el menu donde podras crear usuarios si lo necesitas pero probablemente ya existan usuarios en tu grupo.  </p>
         <div class="user_explain_buttonsection">
             <span class="spanBlock midSubFont"><button class="generalButton bgColorSecondary" (click)="endUsers()">Continuar</button></span>
          </div>
@@ -84,13 +84,13 @@
     <div class="modalContent">
       <div class="alta_main" *ngIf="initialpage && !this.tutorial.checkTutorialState()"  >
         <span class="spanBlock midSubFont">Busca usuarios compartidos o registra uno nuevo</span>
-        <span class="spanBlock" *ngIf="!this.subsData.isGroup"> <button class="bgColorSecondary generalButton" (click)="codeuser=true; initialpage=false;">Buscar Usuario</button></span>
-        <span class="spanBlock" *ngIf="this.userData.checkUserPlanHolder()"> <button class="bgColorSecondary generalButton" (click)="newuser=true; initialpage=false;">Registrar Nuevo</button></span>
+        <span class="spanBlock" *ngIf="!this.subsData.isGroup"> <button class="bgColorSecondary generalButton" (click)="codeuser=true; initialpage=false;">Buscar usuario</button></span>
+        <span class="spanBlock" *ngIf="this.userData.checkUserPlanHolder()"> <button class="bgColorSecondary generalButton" (click)="newuser=true; initialpage=false;">Registrar nuevo</button></span>
       </div>
     <div class="nuevoservicio_content modalContent" *ngIf="codeuser">
         <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="this.checkIfgoback()"> atrás </span>
         <div class="ModalInput_input">
-            <span class="codetext"><b>Introducir Código</b> <span class="label">usuarios disponibles: {{subsLeft}}</span></span>
+            <span class="codetext"><b>Introducir código</b> <span class="label">usuarios disponibles: {{subsLeft}}</span></span>
             <input  [(ngModel)]="this.newUserCode" type="text"/>
         </div>
         <div class="midAlign">
@@ -103,13 +103,9 @@
             <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="this.checkIfgoback()"> atrás </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> <span class="fontPrimary">Caja.</span> Esta persona cobra las citas </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> <span class="fontPrimary">Recepción.</span> Esta persona administra citas </span>
-            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Recepción y Caja.</span> Esta persona administra y cobra las citas </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Caja & recepción.</span> Esta persona administra y cobra las citas </span>
             
-            <!--<div class="tutorial_usercode">
-                    <span class="tutorial_explain_text_sm" *ngIf="this.tutorial.checkTutorialState()"> Puedes buscar un usuario existente introduciendo el codigo de usuario aqui. </span>
-                <span class="span"><input [(ngModel)]="this.newUserCode" type="text" class="codigo"/><button (click)="getUserByCode()" class="bgColorSecondary generalButton">Buscar</button></span>
-                <span class="tutorial_explain_text_sm" *ngIf="this.tutorial.checkTutorialState()"> O puedes rellenar el siguiente formulario para crear un nuevo usuario </span>
-            </div>-->
+
            
         <div *ngIf="this.isnew" class="ModalInput_input">
             <b>Usuario</b>
@@ -120,20 +116,20 @@
             <input  [(ngModel)]="this.newUser.field_alias.und[0].value" [class.registerInputerror]="!this.newUser.field_alias.und[0].value && showerrors"  type="text"/>
         </div>
         <div class="ModalInput_input" *ngIf="!this.tutorial.checkTutorialState()">
-            <b>Tipo de Usuario:</b>
+            <b>Tipo de usuario:</b>
           <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und"  class="input_select input" >
-              <option selected disabled value="0">SELECT</option>
+              <option selected disabled value="0">Seleccione un tipo de usuario</option>
               <option value="2">recepción</option>
               <option value="3">caja</option>
-              <option value="4">recepción & caja</option>
+              <option value="4">caja & recepción</option>
             </select>
           </div>
           <div class="ModalInput_input" *ngIf="this.tutorial.checkTutorialState()">
-                <b>Tipo de Usuario:</b>
+                <b>Tipo de usuario:</b>
               <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und" class="input_select input" disabled>
                   <option value="2" selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION">recepción</option>
                   <option value="3"  selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA">caja</option>
-                  <option value="4"  selected  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR">recepción & caja</option>
+                  <option value="4"  selected  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR">caja & recepción</option>
                 </select>
               </div>
           <div class="ModalInput_input">
@@ -167,11 +163,11 @@
     <div class="modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated" >
             <span class="spanBlock bigBoldFont">¡Felicidades!</span>
             <span class="spanBlock midMainFont">Tu usuario ha sido creado</span>
-            <span class="spanBlock midSubFont">Te proporcionamos sus datos para que pueda ingresar desde este momento en TUAL</span>
+            <span class="spanBlock midSubFont">Te proporcionamos sus datos para que pueda ingresar desde este momento en TUAL.</span>
             <span class="spanBlock midSubFont">Nombre: <span class="fontHigh">{{this.newUser.name}}</span></span>
             <span class="spanBlock midSubFont">Correo: <span class="fontHigh">{{this.newUser.mail}}</span></span>
             <span class="spanBlock midSubFont" *ngIf="!this.codeuserNP">Contraseña: <span class="fontHigh">{{this.checkpass}}</span></span>
-            <span class="spanBlock midSubFont"> Puedes modificar los usuarios desde la sección de Alta de Usuarios en el Menú</span>
+            <span class="spanBlock midSubFont"> Puedes modificar los usuarios desde la sección de Alta de Usuarios en el Menú<Puedes modificar los usuarios desde la sección de alta de usuarios en el Menú.</span>
             </div>
             <div class="midAlign" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated">
                 <div class="register_button_section">

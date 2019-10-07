@@ -59,29 +59,31 @@ export class EntergrupoPage {
   get isbasico(){ return this.perm.checkUserSuscription([SubscriptionDataProvider.PLAN_BASIC]); }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad EntergrupoPage');
     this.subuserMan.cargarSubusuarios();
   }
 
   async buscar(){
     if(this.groupCode !== null){
       this.loader.presentLoader('Buscando grupos médicos');
-      console.log('sstart');
       let sus = await this.subsMan.searchSus(this.groupCode+'');
-      console.log(sus);
-      if(sus){
+      if(sus){ 
+        let aux_sus = sus as subscriptions;
         this.groupLoaded = true;
-        this.groupName = sus.field_group_name;
+        console.log('sus',sus);
+        //this.groupName = sus.field_group_name;
+        let aux_docs = JSON.parse(aux_sus.field_doctores_json);
+        let planholder = aux_docs.find((doc)=>
+        {return Number(doc.uid) === Number(aux_sus.field_plan_holder)});
+        this.groupName = planholder.name;
         this.loaded_group_sus = sus;
-        //this.accountsleft = this.subsMan.getSubAccountsLeft(sus);
         this.setSubacountsLeftDelta();
         if(this.validateDocsLeft()){ this.canSave = true; }else{ this.canSave = false;}
         this.loader.dismissLoader();
       }else{
         this.loader.dismissLoader();
-        this.alert.presentAlert('Nada','No se encontro ningun grupo médico con este codigo');
+        this.alert.presentAlert('','No se encontró ningún grupo médico con este código.');
       }
-      console.log('send');
+     
     }
   }
 
@@ -90,8 +92,6 @@ export class EntergrupoPage {
     this.loader.presentLoader('Entrando al grupo...');
     if(this.subsMan.checkForSubscription()){
     let delsusres = await this.subsMan.deletesSus(this.subsMan.subsData.subscription).toPromise();
-    console.log('NODE DELETION',delsusres);
-
      if(!delsusres) return false; //salir de aca si no sirve esto
     }
     this.loaded_group_sus.field_doctores.push(this.userData.userData.uid);//agregarse a si mismo a la suscripcion de grupo.
@@ -99,46 +99,22 @@ export class EntergrupoPage {
     await this.subsMan.group_enter_selectedSubusersClean(selected_subusers,this.loaded_group_sus,true);
     let reload_users = this.subsMan.aux_docstoReload.concat(selected_subusers.map((e)=>{ return Number(e.uid)}));
     this.wsMessenger.generateSuboutofgroup(reload_users,1);
-    //this.wsMessenger.generateSuboutofgroup(this.subsMan.aux_docstoReload,1);
-    /*await selected_subusers.forEach(async (subuser)=>{  //por cada sub usuario
-      console.log('checking user',subuser);
-      this.loaded_group_sus.field_subusuarios.push(subuser.uid);//agregar sub usuarios a la suscripcion de grupo.
-      //eliminar sub usuario de otras suscripciones.
-      let aux_user_subs = await this.subsMan.requestGroupSubscriptionsFor(Number(subuser.uid)).toPromise();
-      console.log('LOADED SUBS',aux_user_subs);
-      await aux_user_subs.forEach(async (sub) => {
-        console.log('Cleaning subscriptions of this user ',sub);
-        sub.field_subusuarios = sub.field_subusuarios.filter((data)=>{ return Number(data.uid) !== Number(subuser.uid)});
-        let aux_sus = subscriptions.getEmptySuscription();
-        aux_sus.setData(sub);
-        aux_sus.field_active = sub.field_active.value;
-        aux_sus.plan = sub.field_plan_sus;
-        let res = await this.subsMan.updateSus( aux_sus ).toPromise();
-        console.log('CLEANED SUBSCRIPTION RES IS',res);
-        this.wsMessenger.generateSuboutofgroup(res.subscription.field_doctores,subuser.uid);
-      });
-    });*/
-    
     
     this.loader.dismissLoader();
     let res = await this.subsMan.updateSus( this.loaded_group_sus ).subscribe(
       (val)=>{
-        console.log('redysave val',val);
-        console.log('sending msg',selected_subusers.map((user)=>{ return user.uid }));
+       
         this.wsMessenger.generateDoctogroupMessage(this.loaded_group_sus.field_doctores.concat(this.loaded_group_sus.field_subusuarios));
         this.wsMessenger.generateSubtogroupMessage(selected_subusers.map((user)=>{ return user.uid }),this.loaded_group_sus.field_doctores);
         
         let view = this;
-        //this.navCtrl.setRoot('HomePage');
-        //this.loader.dismissLoader();
-        //view.loader.dismissLoader();
+       
         setTimeout(function () {
           view.bu.locationReload();
-          //this.navCtrl.setRoot('MiplanPage');
-          //view.loader.dismissLoader();
+          
       }, 1000);
       },(error)=>{
-        console.log('redysave error',error);
+       
         this.loader.dismissLoader();
       }
     );
@@ -146,20 +122,20 @@ export class EntergrupoPage {
   }
 
   validateDocsLeft():boolean{
-    console.log('validateDocsLeft');
+    
     let ret:boolean = true;
     this.setDoctorsLeftDelta();
     if(this.docsleft <= 0){
       ret = false;
-      console.log('validateDocsLeft failed');
-      this.alert.presentAlertHandler('LLeno','El grupo médico al que intenta ingresar se encuentra lleno.',()=>{ this.cancelar();});
+    
+      this.alert.presentAlertHandler('','El grupo médico al que intenta ingresar se encuentra lleno.',()=>{ this.cancelar();});
     }
     return ret;
   }
 
   CancelarSuscripcionAtual():boolean{
     let ret = true;
-    console.log('funcionalidad cancelar suscripcion de conekta mijo');
+   
     return ret;
   }
 
@@ -189,11 +165,7 @@ export class EntergrupoPage {
   setDoctorsLeftDelta(){
     if(this.groupLoaded){
       this.docsleft = this.subsMan.getDocAccountsLeft(this.loaded_group_sus);
-      console.log('this.docsleft',this.docsleft);
-      /*console.log('docs leftonsus', leftonsus);
-      console.log('setDoctorsLeftDelta this.loaded_group_sus.field_doctores',this.loaded_group_sus.field_doctores.length);
-      let selectedAccounts = this.loaded_group_sus.field_doctores.length;
-      this.docsleft = leftonsus - selectedAccounts;*/
+
     }
   }
 

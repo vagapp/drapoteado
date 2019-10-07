@@ -5,6 +5,7 @@ import { Debugger } from '../../providers/user-data/debugger';
 import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { TutorialProvider } from '../../providers/tutorial/tutorial';
+import { AlertProvider } from '../../providers/alert/alert';
 
 /**
  * Generated class for the NuevoservicioModalPage page.
@@ -23,6 +24,7 @@ export class NuevoservicioModalPage {
   isnew:boolean;
   isTutorial:boolean = false;
   newTutService:boolean = true;
+  showerrors:boolean = false;
 
 
   get grouplabel(){
@@ -40,7 +42,8 @@ export class NuevoservicioModalPage {
     public viewCtrl: ViewController,
     public servMan: ServiciosManagerProvider,
     public loader: LoaderProvider,
-    public tutorial: TutorialProvider
+    public tutorial: TutorialProvider,
+    public alert: AlertProvider
   ) {
     console.log('loadingservice', navParams.get('servicio'));
     let aux_service = navParams.get('servicio');
@@ -95,10 +98,21 @@ export class NuevoservicioModalPage {
   }
 
   basicValidation():boolean{
+    this.showerrors = false;
     let ret = true;
     console.log('title is',this.newService.title, this.newService.title.length === 0);
-    if(this.newService.title.length === 0) ret = false;
-    if(this.newService.field_costo_servicio.und[0].value === null) ret = false;
+    console.log('value is',this.newService.field_costo_servicio.und[0].value);
+    if(this.newService.title.length === 0){ 
+      this.showerrors = true; 
+      ret = false;
+    }
+    if(this.newService.field_costo_servicio.und[0].value === null){this.showerrors = true;  ret = false;}
+    if(this.showerrors){
+      this.alert.presentAlert('','Los campos en rojo son obligatorios');
+    }
+    if(!this.showerrors && Number(this.newService.field_costo_servicio.und[0].value) <= 0){
+      this.alert.presentAlert('','El costo del servicio debe ser mayor a cero'); this.showerrors = true;  ret = false;
+    }
     return ret;
   }
 
@@ -132,22 +146,7 @@ export class NuevoservicioModalPage {
     let update_res = await this.servMan.loadServicios();
     this.loader.dismissLoader();
     this.dismiss();
-    
-    /*.subscribe(
-    (val)=>{
-      console.log("the new service has been generated");
-      this.presentToast("Completado");
-     
-      this.close();
-    },
-    response => {
-        console.log("POST call in error", response);
-        console.log("show error");
-        response.error.forEach(element => {
-          this.presentToast(element);
-        });
-      }
-  );*/
+   
 }
 
 async updateService(){
@@ -157,19 +156,7 @@ async updateService(){
   let update_res = await this.servMan.loadServicios();
   this.loader.dismissLoader();
   this.dismiss();
-  /*.subscribe(
-    (val)=>{
-      console.log("serviceupdated");
-      this.presentToast("Completado");
-      loader.dismiss();
-      this.close();
-    },
-    response => {
-        console.log("POST call in error", response);
-        console.log("show error");
-        loader.dismiss();
-      }
-  );*/
+ 
 }
 
 fixCostoOutput(){

@@ -50,6 +50,8 @@ export class NuevacitaModalPage {
   hourstring:string = null;
 
 
+
+
 date: Date;
 daysInThisMonth: any;
 daysInLastMonth: any;
@@ -70,6 +72,7 @@ hourIntervalMS:number = 30*60*1000;
 showerrors:boolean = false;
   
 horantr: string = '';
+horferror:boolean = false;
   formatear(evento){
     var hora = this.horantr.replace(':','');
     var arregloHora = hora.match(/.{1,2}/g) ? hora.match(/.{1,2}/g) : [];
@@ -107,20 +110,18 @@ horantr: string = '';
      *  setear intervalo en las horas correspondiente a esta hora.
      *
      * **/
-    console.log('GETTING CITA', navParams.get('cita'));
+   
     let aux_node = navParams.get('cita');
     if(aux_node){
       this.cita = aux_node;
-      Debugger.log(['cita en modal es',this.cita]);
+     
       this.isnew = false;
-      //this.selectedDate = Citas.getLocalDateIso(new Date(this.cita.data.field_datemsb['und'][0]['value']));//new Date().toISOString();
+     
       this.selectedHourISO = Citas.getLocalDateIso(new Date(this.cita.data.field_datemsb['und'][0]['value']));//new Date().toISOString();
       this.dateobj = new Date(this.cita.data.field_datemsb['und'][0]['value']);
       let dateobj_start = new Date(this.cita.data.field_datemsb['und'][0]['value']);
       dateobj_start.setHours(0,0,0,0);
       this.selectedHour = this.dateobj.getTime() - dateobj_start.getTime();
-      console.log('selected hour is:', this.selectedHour);
-      console.log(this.selectedDate);
       this.setHourstring();
     }else{
       this.isnew = true;
@@ -128,10 +129,7 @@ horantr: string = '';
       this.cita.date = new Date();
       this.dateobj = new Date();
       this.selectedHour = 0;
-   
-      //this.selectedDate = Citas.getLocalDateIso(new Date());//new Date().toISOString();
-      this.selectedHourISO = Citas.getLocalDateIso(this.getDateOnNextTreshold());//new Date().toISOString();
-     
+      this.selectedHourISO = Citas.getLocalDateIso(this.getDateOnNextTreshold());
     }
     if(Number(this.cita.data.field_telefono.und[0].value) === 0){
       this.cita.data.field_telefono.und[0].value = null;
@@ -139,20 +137,12 @@ horantr: string = '';
   }
 
   setHours(){
-  
- 
-    
   }
 
   setHourstring(){
-    console.log('trailsh setHourstring start');
-    
     if(!this.isnew){
-      console.log('trailsh setting hours');
       let aux_date = new Date(this.cita.dateMs);
       this.horantr = `${DateProvider.formatDateBinaryNumber(aux_date.getHours())}:${DateProvider.formatDateBinaryNumber(aux_date.getMinutes())}`;
-      //this.hourstring = aux_date.getHours()+':'+aux_date.getMinutes();
-      //console.log('trailsh setting hours' , this.hourstring,aux_date);
     }
   }
 
@@ -163,7 +153,7 @@ horantr: string = '';
 
   checkSelectedHour(hour):boolean{
     let ret = false;
-    //if(this.selectedHour >= hour && this.selectedHour < hour+(this.hourIntervalMS)) ret =  true;
+   
     if(DateProvider.isDateBetweenNumber( this.selectedHour, hour,hour+(this.hourIntervalMS) ) ) ret = true;
     return ret;
   }
@@ -176,7 +166,7 @@ horantr: string = '';
 
   datechange($event) {
     this.cita.date = $event;
-    //console.log($event);
+  
   }
 
   dismiss() {
@@ -188,10 +178,6 @@ horantr: string = '';
   }
 
   ionViewDidLoad() {
-    console.log('trailsh ionViewDidLoad NuevacitaModalPage');
-    //console.log('ionViewWillEnter');
- 
-    //this.calendarLoad();
   }
 
   getDisplayableDates(){
@@ -199,7 +185,7 @@ horantr: string = '';
   }
 
   choseHourClick(hour){
-    console.log(hour);
+   
     this.selectedHour = hour;
   }
 
@@ -222,7 +208,7 @@ horantr: string = '';
       this.cita.data.field_servicios_cita.und = []; //limpiamos los servicios porque nos deja basura
     await this.citasMan.generateNewCita( this.cita.data ).subscribe(
     (val)=>{
-      console.log(val.nid);
+     
       this.notiMan.generateNotification([this.cita.data.field_cita_doctor.und[0]],`Nueva Cita con ${this.cita.paciente} fecha: ${new Date(this.cita.data.field_datemsb['und'][0]['value'])}`,`cita-${this.cita.Nid}`);
       this.cita.data.Nid = val.nid;
       this.cita.Nid = val.nid;
@@ -230,36 +216,28 @@ horantr: string = '';
     },
     response => {
         console.log("POST call in error", response);
-        console.log("show error");
-        for (var key in response.error.form_errors) {
-          this.alert.presentAlert('Error', 'Se ha detectado un error inesperado en '+key);
-        }
+        
+       this.processCitaErrors(response.error.form_errors)
       }
   );
-  //await this.docMan.pushDisponivilidad(this.cita.data.field_cita_doctor.und[0], this.cita.data.field_datemsb['und'][0]['value'] );
-  //await this.citasMan.requestCitas().toPromise();
   this.loader.dismissLoader();
   this.close();
 }
 
 notEmptyNewCitaValidation(){
   let ret = true;
-  console.log('notEmptyNewCitaValidation');
   if(!this.checkIfInputfilledNPromtp(this.cita.data.field_paciente.und[0].value,ret)) ret = false;
-  //no hace falta revisar el doctor, porque ese ya esta validado.
   if(!this.checkIfInputfilledNPromtp(this.horantr,ret)) ret = false;
   return ret;
 }
 
 checkIfInputfilledNPromtp( input , actualret){
   let ret = true;
-  console.log('enter');
+ 
   if(!actualret){ return false;} ;
-  console.log('checkIfInputfilledNPromtp',input,input === null , input ? false : true );
   if( input ? false : true ){
-    console.log('this input is not filled mf',input);
     ret = false;
-    this.alert.presentAlert('Error','Revisar los campos marcados en rojo.');
+    this.alert.presentAlert('','Revisar los campos marcados en rojo.');
     this.showerrors = true;
   }
   return ret;
@@ -270,15 +248,14 @@ basicNewCitaValidation(){
   if(this.cita.data.field_telefono.und[0].value === null){
     this.cita.data.field_telefono.und[0].value = 0;
   }
-  
 
   if(this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])){
   }
   else{
     if( Number(this.cita.data.field_cita_doctor.und[0]) === 0 ){
-      this.alert.presentAlert('Error','Debe elegir un doctor para esta cita');
+      this.alert.presentAlert('','Debe elegir un doctor para esta cita');
       this.showerrors = true;
-      console.log('showerrors',this.showerrors);
+     
       ret = false;
     }
   }
@@ -287,17 +264,16 @@ basicNewCitaValidation(){
 
 citaDateValidation():boolean{
   let ret = true;
-  console.log('citaDateValidation',this.cita.data.field_datemsb);
-  console.log('citaDateValidation',new Date(this.cita.data.field_datemsb['und'][0]['value']));
-  console.log('this.hourstring',this.horantr);
+  this.horferror = false;
+  
   if(this.cita.data.field_datemsb['und'][0]['value'] < new Date().getTime()){
-    console.log('elegir fecha a futuro.');
-    this.alert.presentAlert('Error','Debe elegir una fecha a futuro');
+    this.horferror = true;
+    this.alert.presentAlert('','Debe elegir una fecha a futuro');
     ret = false;
   }
   if(!DateProvider.validateHhMm(this.horantr)){
-    console.log('la hora esta mal',this.horantr);
-    this.alert.presentAlert('Error','Formato de hora incorrecto');
+    this.horferror = true;
+    this.alert.presentAlert('','Formato de hora incorrecto');
     ret = false;
   }
   return ret;
@@ -306,7 +282,7 @@ citaDateValidation():boolean{
 getDateOnNextTreshold():Date{
   let aux_date = new Date();
   if(aux_date.getMinutes()%15 !== 0){
-    console.log('noes15');
+   
     let min = 15* Math.ceil(aux_date.getMinutes()/15);
     if(min >= 60){
       aux_date.setMinutes(0);
@@ -315,13 +291,13 @@ getDateOnNextTreshold():Date{
       aux_date.setMinutes(min);
     }
   }else{
-    console.log('es15');
+    
   }
   return aux_date;
 }
 
 async updateCita(){
-  //poner que el websocket envie la informacion al updatear cita morro >=0
+  
   if(!this.citaDateValidation()){ return false; }
   if(this.cita.data.field_telefono.und[0].value === null){
     this.cita.data.field_telefono.und[0].value = 0;
@@ -334,10 +310,7 @@ async updateCita(){
     },
     response => {
       console.log("POST call in error", response);
-      console.log("show error");
-      for (var key in response.error.form_errors) {
-        this.alert.presentAlert('Error', 'Se ha detectado un error inesperado en '+key);
-      }
+      this.processCitaErrors(response.error.form_errors);
     }
   );
   this.loader.dismissLoader();
@@ -501,31 +474,20 @@ async updateDoctores(){
   await this.updater.updateSuscription();
   await this.updater.updateDocList();
   this.loader.dismissLoader();
-  /*this.loader.presentLoader('Cargando Doctores...');
-  var uid = this.userData.userData.uid;
-  this.userData.loginSetData(uid);
-  this.docData.cleanDoctor();
-  await this.subscriptionManager.loadGroupSubuserSubs();
-  //console.log("UNIDO Y DIFERENTE",JSON.stringify(this.docData.doctores));
-  await this.docMan.loadGroupDoctors();
-  //console.log("UNIDO Y DIFERENTE",JSON.stringify(this.docData.doctores));
-  await this.docMan.initDoctoresUids();
-  //console.log("UNIDO Y DIFERENTE",JSON.stringify(this.docData.doctores));
-  await this.subscriptionManager.loadDoctorsSubscriptions();
-  //console.log("UNIDO Y DIFERENTE",JSON.stringify(this.docData.doctores));
-  this.docMan.filterActiveDoctors();
-  this.loader.dismissLoader();*/
+
 }
 
 
 
-
-
-
-
-
-
-
+processCitaErrors(e){
+  for (var key in e) {
+   if(key.includes('field_email')){
+      this.alert.presentAlert('', 'El formato del correo electrónico no es válido');
+    }else{
+      this.alert.presentAlert('', 'Se ha detectado un error inesperado en '+AlertProvider.cleanDrupalFieldString(key));
+    }
+  }
+}
 
 }
 

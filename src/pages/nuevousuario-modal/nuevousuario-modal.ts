@@ -63,7 +63,7 @@ export class NuevousuarioModalPage {
     public perm: PermissionsProvider
 
   ) {
-    console.log('GETTING userd', navParams.get('userd'));
+ 
     let aux_node = navParams.get('userd');
     if(aux_node){
       this.isnew = false;
@@ -86,13 +86,12 @@ export class NuevousuarioModalPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NuevousuarioModalPage');
-    console.log('tutorialstates', this.tutorial.subaccountsleft,this.tutorial.isGroup,this.tutorial.isplanholder  );
+  
   }
 
   selectOption( selected:number ){
     this.selectedUsersOptions = Number(selected);
-    console.log('selected user option is',this.selectedUsersOptions);
+    
   }
 
   checkSelectedOption(selected:number ){
@@ -104,20 +103,20 @@ export class NuevousuarioModalPage {
   }
 
   userTutorialStart(){
-    console.log('start tutorial');
+    
     this.newuser= true; 
     this.initialpage=false;
     this.tutorial.tutorial_users_selected_option = this.selectedUsersOptions;
-    console.log('selected option at tutorial start ', this.tutorial.tutorial_users_selected_option);
+    
     if(this.tutorial.tutorial_users_selected_option === TutorialProvider.TUTORIAL_USER_BOTH){
       console.log();
       this.newUser.field_tipo_de_usuario.und = [this.userData.TIPO_CAJA];
       this.tutorial.tutorial_user_created_step = TutorialProvider.TUTORIAL_USER_STEP_CAJA ; 
     }else if(this.tutorial.tutorial_users_selected_option === TutorialProvider.TUTORIAL_USER_CODE){
-      console.log('agregando usuarios por codigo');
+     
       this.codeuser = true;
       this.newuser= false; 
-      //this.nextCode = true;
+      
     }else{
       this.newUser.field_tipo_de_usuario.und = [this.userData.TIPO_CAJAYRECEPCION];
     }
@@ -179,13 +178,10 @@ export class NuevousuarioModalPage {
     delete this.newUser.field_sub_id;
     this.userMan.generateNewUserd( this.newUser ).subscribe(
     async (val)=>{
-      console.log('generated user now what',val);
-      console.log('subsisgrouo',this.subsData.isGroup);
       if(!this.subsData.subscription.field_subusuarios) this.subsData.subscription.field_subusuarios = new Array();
       this.subsData.subscription.field_subusuarios.push(val['uid']);
       let obs = this.subsManager.updateUserSuscription().subscribe( (val)=>{console.log('updating subs',val);});
-      console.log(obs);
-      //await obs.toPromise();
+    
       if(this.subsData.isGroup) this.wsMessenger.generateSubUserAddedMessage( val['uid'], this.newUser.field_nombre.und[0].value, this.subsData.subscription.field_doctores);
       else await this.subusersManager.cargarSubusuarios();
       this.loader.dismissLoader();
@@ -199,29 +195,47 @@ export class NuevousuarioModalPage {
       }
     },
     response => {
-      console.log('responsetrail',response);
-        for (var key in response.error.form_errors) {
-          console.log(key);
-          if(key === 'mail'){
-            if(response.error.form_errors[key].includes('ya se encuentra en uso')){
-              this.alert.presentAlert('¡Upss, tenemos un problema!','El correo que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
-            }else 
-            if(response.error.form_errors[key].includes('no es válida')){
-              this.alert.presentAlert('¡Upss, tenemos un problema!','El formato de tu correo electrónico no es correcto.');
-            }else{
-              this.alert.presentAlert('Error','Se ha detectado un error inesperado en el campo '+key);
-            }
-        
-          }else{
-            if(!(key === 'field_useremail][und][0')){
-          this.alert.presentAlert('Error','Se ha detectado un error inesperado en el campo '+key);
-        }
-        }
-        }
+        this.processDrupalUserErrors(response.error.form_errors);
         this.loader.dismissLoader();
       }
   );
 }
+}
+/*
+*
+
+*/
+
+processDrupalUserErrors(e){
+  for (var key in e) {
+    console.log('responsetrail', key);
+    switch (key){
+      case 'name': 
+      if(e[key].includes('ya se encuentra en uso')){
+        this.alert.presentAlert('','El nombre de usuario que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
+      }
+      break;
+      case 'mail':
+
+        if(e[key].includes('ya está registrada')){
+          this.alert.presentAlert('','El correo que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
+        }else 
+          if(e[key].includes('ya se encuentra en uso')){
+            this.alert.presentAlert('','El correo que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
+          }else 
+          if(e[key].includes('no es válida')){
+            this.alert.presentAlert('','El formato de tu correo electrónico no es correcto.');
+          }else{
+            this.alert.presentAlert('','Se ha detectado un error inesperado en el campo '+  AlertProvider.cleanDrupalFieldString(key));
+          }
+       break;
+       default: 
+       if(!(key === 'field_useremail][und][0')){
+        this.alert.presentAlert('','Se ha detectado un error inesperado en el campo '+  AlertProvider.cleanDrupalFieldString(key));
+      }
+    }
+
+  }
 }
 
 restart(){
@@ -234,23 +248,23 @@ restart(){
 createUserValidation():boolean{
   let ret = true;
   if( !this.userData.checkUserPlanHolder() ){
-    this.alert.presentAlert('Error','Solo el administrador de plan puede crear subcuentas');
+    this.alert.presentAlert('','Solo el administrador de plan puede crear subusuarios');
     ret = false;
   }
   if( this.userData.checkSusSubaccountsFull() ){
-    this.alert.presentAlert('Error','Se llego al limite de subcuentas');
+    this.alert.presentAlert('','Se llegó al límite de subusuarios');
     ret = false;
   }
   if(!(this.newUser.pass.localeCompare(this.checkpass) === 0)){
-    this.alert.presentAlert("Error", "las contraseñas no coinciden");
+    this.alert.presentAlert("", "las contraseñas no coinciden");
     ret = false;
   }
   if(!(this.newUser.mail.localeCompare(this.newUser.field_useremail.und[0].email) === 0)){
-    this.alert.presentAlert("Error", "Los correos no coinciden");
+    this.alert.presentAlert("", "Los correos no coinciden");
     ret = false;
   }
   if(this.newUser.field_tipo_de_usuario.und[0] === 0 ){
-    this.alert.presentAlert("Error", "Selecciona un tipo de usuario");
+    this.alert.presentAlert("", "Selecciona un tipo de usuario");
     ret = false;
   }
   return ret;
@@ -266,7 +280,7 @@ createrNotEmptyValidation():boolean{
     ret = false;
   }
   if(!ret){
-    this.alert.presentAlert("Error", "Los campos marcados en rojo son obligatorios");
+    this.alert.presentAlert("", "Los campos marcados en rojo son obligatorios");
     this.showerrors = true;
   }
   return ret;
@@ -278,16 +292,16 @@ async getUserByCode(){
   this.loader.presentLoader('Buscando usuario ...');
   let res = await this.userMan.requestUsers(new Array(),this.newUserCode).toPromise();
   if(res && res.length > 0){
-    console.log('user found',res[0]);
+   
     //revisar si este usuario esta en una suscripcion de grupo
     let subsdata = await this.subsManager.requestGroupSubscriptionsFor(res[0].uid).toPromise();
     if(subsdata){
       subsdata = subsdata.filter((subs)=>{
         return (Number(subs.field_plan_sus) === Number(SubscriptionDataProvider.PLAN_GROUP) )
       });
-      console.log('subsdata got',subsdata.length);
+   
       if(subsdata && subsdata.length > 0){
-        this.alert.presentAlert("Nada", "No se encontró ningún usuario usando este código");
+        this.alert.presentAlert("", "No se encontró ningún usuario usando este código");
         this.loader.dismissLoader();
         return false;
       }
@@ -304,93 +318,27 @@ async getUserByCode(){
       this.codeuser=false;
       this.tutorial.usuarioCreated = true;
     }else{
-      this.alert.presentAlert("Hecho",`Se le ha asignado el usuario ${res[0]['name']}`);
+      this.alert.presentAlert('',`Se le ha asignado el usuario ${res[0]['name']}`);
       this.added_user = true;    
       this.close();
     }
   }else{
-    this.alert.presentAlert("Nada", "No se encontró ningún usuario usando este código");
+    this.alert.presentAlert("", "No se encontró ningún usuario usando este código");
     this.loader.dismissLoader();
   }
-
-
-
-
- 
-
-/*
-  this.userMan.requestUsers(new Array(),this.newUserCode).subscribe(
-    (val)=>{ 
-      console.log(val);
-     
-      let aux_results = Object.keys(val).map(function (key) { return val[key]; });
-      if(aux_results.length == 0){
-        dis.presentAlert("Nada", "No se encontró ningún usuario usando este código");
-        loader.dismiss();
-        return false;
-      } 
-      aux_results.forEach(function(element) {
-        let aux_user = dis.userData.getEmptyUserd();
-        aux_user.uid = element.uid;
-        aux_user.name = element.name;
-        aux_user.field_alias.und[0].value = element.field_alias;
-        aux_user.field_nombre.und[0].value = element.field_nombre;
-        aux_user.field_apellidos.und[0].value = element.field_apellidos;
-        aux_user.field_useremail.und[0].email = element.field_useremail.email;
-        aux_user.mail = element.mail;
-        aux_user.status = "1";
-        aux_user.field_doctores.und = new Array();
-        let aux_docs = Object.keys(element.field_doctores).map(function (key) { return element.field_doctores[key]; });
-        aux_docs.forEach(function(element){
-          aux_user.field_doctores.und.push(element.uid);
-        });
-        aux_user.field_tipo_de_usuario.und = new Array();
-        let aux_tipos = Object.keys(element.field_tipo_de_usuario).map(function (key) { return element.field_tipo_de_usuario[key]; });
-        aux_tipos.forEach(function(element){
-          aux_user.field_tipo_de_usuario.und.push(element);
-        });
-        //agregar doctor
-        aux_user.field_doctores.und.push(dis.userData.userData.uid);
-       //guardar usuario
-       console.log("guardando usuario",aux_user);
-       //agregando doctor al usuario
-          dis.userMan.updateUserd( aux_user).subscribe(
-            (val)=>{
-              console.log("usuarioUpdated");
-              dis.presentToast("Usuario Agregado");
-              loader.dismiss();
-              dis.close();
-            },
-            response => {
-              console.log("POST call in error", response);
-              console.log("show error");
-              for (var key in response.error.form_errors) {
-                dis.presentAlert(key, response.error.form_errors[key]);
-              }
-              loader.dismiss();
-            }
-          );
-
-     });
-    },
-     response => {
-       console.log("POST call in error", response);
-     }
-    );*/
   }
 }
 
 gobackuser(){
-  console.log('gobackuser',this.isnew);
-  console.log('tutorial state is',this.tutorial.checkTutorialState());
+  
   if(this.isnew){
     this.newuser=false; this.codeuser=false; this.initialpage=true;
     if(this.tutorial.checkTutorialState()){
-      console.log('setting created step to 0');
+      
       this.tutorial.tutorial_user_created_step = 0;
     }
   }else{
-    console.log('okei no es new');
+  
     this.dismiss();
   }
 }
@@ -438,22 +386,7 @@ async addUserFromCode( user_data ){
            
           }
         );
-          /*this.userMan.updateUserd( aux_user).subscribe(
-            (val)=>{
-              console.log("usuarioUpdated");
-              this.presentToast("Usuario Agregado");
-              loader.dismiss();
-              dis.close();
-            },
-            response => {
-              console.log("POST call in error", response);
-              console.log("show error");
-              for (var key in response.error.form_errors) {
-                dis.presentAlert(key, response.error.form_errors[key]);
-              }
-              loader.dismiss();
-            }
-          );*/
+          
 }
 
 /*
@@ -476,9 +409,8 @@ updateUserd(){
       this.close();
     },
     response => {
-      for (var key in response.error.form_errors) {
-        this.alert.presentAlert('Error', 'Se ha detectado un error inesperado en el campo '+key);
-      }
+    
+      this.processDrupalUserErrors(response.error.form_errors);
       this.loader.dismissLoader();
     }
   );
@@ -489,26 +421,16 @@ updateUserValidation():boolean{
   let ret = true;
   if(this.newUser.pass || this.checkpass){
     if(!(this.newUser.pass === this.checkpass)){
-      this.alert.presentAlert("Error", "las contraseñas no coinciden");
+      this.alert.presentAlert("", "las contraseñas no coinciden");
       ret = false;
     }
     
   }
-  /*if(this.newUser.field_tipo_de_usuario.und[0] === 0 ){
-    this.alert.presentAlert("Error", "Selecciona un tipo de usuario");
-    ret = false;
-  }*/
+ 
   return ret;
 }
 
-/*presentToast(msg) {
-  let toast = this.toastCtrl.create({
-    message: msg,
-    duration: 6000,
-    position: 'top'
-  });
-  toast.present();
-}*/
+
 
 close( iscreated:boolean = false){
   this.viewCtrl.dismiss({"changed":this.added_user});
@@ -516,14 +438,7 @@ close( iscreated:boolean = false){
 
 
 
-/*presentAlert(key,Msg) {
-  let alert = this.alertCtrl.create({
-    title: key,
-    subTitle: Msg,
-    buttons: ['Dismiss']
-  });
-  alert.present();
-}*/
+
 
 
 randomCode(){

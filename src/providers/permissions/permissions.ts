@@ -81,8 +81,8 @@ checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean
     });
   }else{  //chequeos para doctores mijo
   if(this.subsData.subscription === null){return false;}
-  //console.log('trailpaystate',this.subsData.subscription.field_active);
-  if(Number(this.subsData.subscription.field_active) === Number(0)){return false;} //if not active returns false also
+  
+  if(!this.subsData.subscription.field_active || Number(this.subsData.subscription.field_active) === Number(0)){return false;} //if not active returns false also
   // checking for ANY, automatically returns true since we checked for not 0 or null up here
   plan_sus.push(this.subsData.subscription.field_plan_sus);
   }

@@ -78,7 +78,8 @@ export class MiplanPage {
     //conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
       let public_test ='key_GtbbRJpEKq8zTrtq3EPCTqQ';
       let public_prod='key_Wwir4csBhZwvzCny3TkeNUA';
-      conekta.init('https://cdn.conekta.io/js/latest/conekta.js',public_test).then((c) => {
+      let public_bardo_test = 'key_NG1gDM4rychaJSjqha7KuHg';
+      conekta.init('https://cdn.conekta.io/js/latest/conekta.js',public_bardo_test).then((c) => {
       
       //Este success se ejecuta con el javascript se cargó correctamente
       console.log(c);
@@ -90,11 +91,10 @@ export class MiplanPage {
 
 
   get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
-  get nextCobro(){ /*console.log('nextcobro',this.subsData.subscription.field_next_cobro);*/
+  get nextCobro(){ 
   let ret = '';
   if(this.subsData.checkForSub() && this.subsData.subscription.field_next_cobro){
-    //console.log('trailnextcobro field ',this.subsData.subscription.field_next_cobro);
-    //console.log('trailnextcobro date',new Date(Number(this.subsData.subscription.field_next_cobro)*1000));
+   
     let auxdate = new Date(Number(this.subsData.subscription.field_next_cobro)*1000);
     let aux_dispdates = DateProvider.getDisplayableDates(auxdate);
     ret = aux_dispdates.date;
@@ -138,7 +138,7 @@ export class MiplanPage {
         if(selected_plan){
         plan_costo = Number(selected_plan.field_costo);
         this.isgroup = ( Number(selected_plan.nid) === Number(SubscriptionDataProvider.PLAN_GROUP) ) ? true : false;
-          console.log('this.isgroup',this.isgroup);
+          
         }
       }
       ret = plan_costo;
@@ -148,9 +148,7 @@ export class MiplanPage {
       if(this.selectedAditionalsDocs > 0 && this.isgroup){
         ret += Number(this.selectedAditionalsDocs*SubscriptionDataProvider.EXTRA_DOC);
       }
-     /* if(this.subsData.subscription){
-      ret += Number(this.subsData.subscription.field_adicionales*40);
-    }*/
+    
     }
     return ret;
     }
@@ -182,20 +180,20 @@ export class MiplanPage {
     /***/
     async baja(){
       this.alert.chooseAlert(
-        'Cancelar suscripción',
-        '¿Estás seguro que deseas cancelar tu suscripción?, Si cancelas tu suscripción no podras acceder a tus citas, servicios y reportes.',
+        '',
+        '¿Estás seguro que deseas cancelar tu suscripción?, Si cancelas tu suscripción no podrás acceder a tus citas, servicios y reportes.',
         async ()=>{ /*console.log('AQUI HAY QUE CANCELAR LA SUSCRIPCION')*/
         if(this.subsManager.checkForSubscription()){
-          console.log('pre delete');
+          
           let ret = await this.subsManager.deletesSus(this.subsData.subscription).toPromise();
-          console.log('cancel ret is',ret);
+         
           if(ret){
-            console.log('location reload here');
+          
             this.bu.locationReload();
           }
         }
       },
-        ()=>{ console.log('se cancelo'); }
+        ()=>{  }
       );
     }
 
@@ -240,8 +238,7 @@ export class MiplanPage {
 
   
   ionViewDidEnter(){
-    console.log('ionViewDidEnter miplan.ts');
-    //this.setupStripe();
+    
     this.loadSources();
   }
 
@@ -255,11 +252,8 @@ export class MiplanPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MiplanPage');
-    console.log('planesdata is',this.planesData.planes);
-    console.log('my sub is',this.subsData.subscription);
-    this.subuserMan.cargarSubusuarios();
     if(!this.permissions.checkUserSuscription([this.userData.PLAN_ANY])){
+      this.subuserMan.cargarSubusuarios();
       this.activateChangePlanMode();
       this.cantcancel = true;
     }else{
@@ -270,8 +264,6 @@ export class MiplanPage {
   }
 
   activateChangePlanMode(){
-    //this.setupStripe();
-    console.log(' this.subsData.subscription', this.subsData.subscription);
     this.selectedAditionals =  this.subAdicionales;
     this.selectedAditionalsDocs =  this.docAdicionales;
     this.onplanchange = true;
@@ -279,18 +271,18 @@ export class MiplanPage {
   }
 
   editar(){
-    console.log('change to onplanchange true');
+   
     this.activateChangePlanMode();
   }
 
   async guardar(){
-    console.log('trail2 saving to  onplanchange false',this.selectedPlan,this.subsData.isGroup);
+   
     if(!this.guardar_basic_validation()) return false;
     if(!this.guardar_subusernumber_validation()) return false;
     await this.checkBasicToGroup();
     
     await this.suscribirse();
-    this.onplanchange = false;
+    //this.onplanchange = false;
   }  
 
   /**
@@ -298,8 +290,7 @@ export class MiplanPage {
    */
   async checkBasicToGroup(){
     if( !this.subsData.isGroup  && Number(this.selectedPlan) === Number(SubscriptionDataProvider.PLAN_GROUP)){
-      console.log('BTG1 this.subuserData.selectedForGroup',this.subuserData.selectedForGroup);
-      console.log('BTG1 this.subsData.subscription',this.subsData.subscription);
+     
       await this.subsManager.group_enter_selectedSubusersClean(this.subuserData.selectedForGroup,this.subsData.subscription);
       let reload_users = this.subsManager.aux_docstoReload.concat(this.subuserData.selectedForGroup.map((e)=>{ return Number(e.uid)}));
       this.wsMessenger.generateSuboutofgroup(reload_users,1);
@@ -308,24 +299,24 @@ export class MiplanPage {
 
   guardar_basic_validation():boolean{
     let ret = true;
-    console.log('guardar_basic_validation',this.selectedPlan);
-    if(!this.selectedPlan){  ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un plan'); }else{
+    
+    if(!this.selectedPlan){  ret = false; this.alert.presentAlert('','Es necesario seleccionar un plan'); }else{
       this.selectedPlanObject = this.planesData.getPlanById(this.selectedPlan);
     }
-    console.log('guardar_basic_validation ret',ret);
-    if(!this.selectedMethod){ ret = false; this.alert.presentAlert('Error','Es necesario seleccionar un Método de Pago'); }
+   
+    if(!this.selectedMethod){ ret = false; this.alert.presentAlert('','Es necesario seleccionar un Método de Pago'); }
     return ret;
   }
 
   guardar_subusernumber_validation():boolean{
     let ret = true;
-    console.log('guardar_subusernumber_validation',this.selectedAditionals,this.subsData.getSubAccountsTotal());
+   
     if((this.selectedAditionals + this.subsData.getplanAccounts()) < this.subsData.getUsedSubAccounts()){
-     console.log('no suficientes espacios mija');
+    
      ret = false;
      //title, msg, inputs, inputcallback, cancelCallback
      this.alert.setStrings('Usuarios','Cancelar');
-     this.alert.chooseAlert('Error','No puedes reducir tus usuarios adicionales por debajo del numero de usuarios con los que cuentas actualmente.',
+     this.alert.chooseAlert('','No puedes reducir tus usuarios adicionales por debajo del número de usuarios con los que cuentas actualmente.',
     ()=>{
       this.alert.resetStrings();
       this.navCtrl.setRoot('UsuariosPage');
@@ -339,13 +330,12 @@ export class MiplanPage {
 
   guardar_docnumber_validation(){
     let ret = true;
-    console.log('guardar_docnumber_validation',this.selectedAditionalsDocs,this.subsData.getDocAccountsTotal());
+   
     if((this.selectedAditionalsDocs + this.subsData.getplanDocAccounts()) < this.subsData.getUsedDocAccounts()){
-     console.log('no suficientes espacios mija');
      ret = false;
-     //title, msg, inputs, inputcallback, cancelCallback
+   
      this.alert.setStrings('Grupo','Cancelar');
-     this.alert.chooseAlert('Error','No puedes reducir tus doctores adicionales por debajo del numero de doctores con los que cuentas actualmente.',
+     this.alert.chooseAlert('','No puedes reducir tus doctores adicionales por debajo del número de doctores con los que cuentas actualmente.',
     ()=>{
       this.alert.resetStrings();
       this.navCtrl.setRoot('GroupPage');
@@ -358,90 +348,52 @@ export class MiplanPage {
   }
 
   cancelar(){
-    console.log('canceling to onplanchange false');
     this.onplanchange = false;
   }
 
   operateExtra(operand:number){
-    console.log('operateExtra',operand);
+  
     this.selectedAditionals += operand;
     if (this.selectedAditionals < 0) this.selectedAditionals = 0;
-    console.log('aditionals are',this.selectedAditionals);
+    
   }
 
   
   operateExtraDoc(operand:number){
-    console.log('operateExtra',operand);
+   
     this.selectedAditionalsDocs += operand;
     if (this.selectedAditionalsDocs < 0) this.selectedAditionalsDocs = 0;
-    console.log('aditionals are',this.selectedAditionalsDocs);
+   
   }
 
 
 
   async suscribirse(){
-    console.log('suscribirse start');
+   
     if(!this.enabledButton()) return false;
     this.loader.presentLoader('Subscribiendo ...');
-    console.log('suscribirse this.selectedMethod',this.selectedMethod);
-    console.log('suscribirse this.selectedPlanObject',this.selectedPlanObject);
     //Tengo para crear una suscripcion, pero no para editar una suscripcion. vamos a hacer un codigo para editar suscripcion.
     //must set custom price.
     
     if(this.subsManager.checkForSubscription()){ 
-      console.log('checked for subs did tru');
+   
       this.subsData.subscription.field_cantidad = this.selectedTotal;
       this.subsData.subscription.field_plan_sus = this.selectedPlan
       this.subsData.subscription.field_adicionales = Number(this.selectedAditionals);
-      //console.log('trailactivation field',this.subsData.subscription.field_active);
-      //return false;
+     
       if(this.isgroup)this.subsData.subscription.field_docsadicionales = Number(this.selectedAditionalsDocs);
       this.subsData.subscription.pay_state = 'wait';
       let ret = await this.subsManager.updateSus(this.subsData.subscription).toPromise();
       if(this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY])){
-      console.log('sus udate returned',ret);
       this.bu.locationReload();
+      this.onplanchange = false;
       this.loader.dismissLoader();
     }else{
-     
       this.loader.dismissLoader();
-      this.loader.presentLoader('Comprobando pago ...');
-      let interval = 5000;
-      let intervalobj = setInterval(()=>{
-        this.updater.updateSuscription().then(
-       async ()=>{
-        interval=3000;
-         console.log(this.subsData.subscription);
-        if(this.subsData.subscription.pay_state !== null){
-         switch(this.subsData.subscription.pay_state){
-          case 'done':
-          if(Number(this.subsData.subscription.field_active) === 1){
-          this.loader.dismissLoader();
-          this.bu.locationReload();
-        }
-        break;
-        case 'fail':
-         /*   clearInterval(intervalobj);
-          let delres = await this.subsManager.deletesSus(this.subsData.subscription).toPromise();
-          console.log('delres',delres);
-          this.subsData.subscription = null;
-          this.loader.dismissLoader();
-          this.alert.presentAlert('Cobro Fallido','No se ha podido completar la transacción. Por favor revise su método de pago');
-          this.activateChangePlanMode();
-        */
-       this.alert.presentAlert('Cobro Fallido','No se ha podido completar la transacción. Por favor revise su método de pago');
-       this.activateChangePlanMode();
-       this.loader.dismissLoader();
-       clearInterval(intervalobj);
-        break;
-      }
-       }
-      }
-        );
-      }, interval );
+      await this.CheckSuscriptionpayment();
     }
     }else{
-      console.log('akiwe');
+      
       let aux_sus = subscriptions.getEmptySuscription();
       aux_sus.field_cantidad = this.selectedTotal;
       aux_sus.field_plan_sus = this.selectedPlan;
@@ -449,40 +401,7 @@ export class MiplanPage {
       if(this.isgroup)aux_sus.field_adicionales = Number(this.selectedAditionalsDocs);
       let res = await this.subsManager.subscribe( this.selectedPlanObject, aux_sus);
       this.loader.dismissLoader();
-      this.loader.presentLoader('Comprobando pago ...');
-      let interval = 5000;
-      let intervalobj = setInterval(()=>{
-        this.updater.updateSuscription().then(
-       async ()=>{
-        interval=3000;
-         console.log(this.subsData.subscription);
-        if(this.subsData.subscription.pay_state !== null){
-         switch(this.subsData.subscription.pay_state){
-          case 'done':
-          if(Number(this.subsData.subscription.field_active) === 1){
-          this.loader.dismissLoader();
-          this.bu.locationReload();
-        }
-        break;
-        case 'fail':
-         /*   clearInterval(intervalobj);
-          let delres = await this.subsManager.deletesSus(this.subsData.subscription).toPromise();
-          console.log('delres',delres);
-          this.subsData.subscription = null;
-          this.loader.dismissLoader();
-          this.alert.presentAlert('Cobro Fallido','No se ha podido completar la transacción. Por favor revise su método de pago');
-          this.activateChangePlanMode();
-        */
-       this.alert.presentAlert('Cobro Fallido','No se ha podido completar la transacción. Por favor revise su método de pago');
-       this.activateChangePlanMode();
-       this.loader.dismissLoader();
-       clearInterval(intervalobj);
-        break;
-      }
-       }
-      }
-        );
-      }, interval );
+      await this.CheckSuscriptionpayment();
      
     }
    
@@ -490,8 +409,35 @@ export class MiplanPage {
     
   }
 
+  async CheckSuscriptionpayment(){
+    let done = false;
+    this.loader.presentLoader('Comprobando pago ...');
+    while(!done){
+      
+      await this.updater.updateSuscription();
+      if(this.subsData.subscription.pay_state !== null){
+        switch(this.subsData.subscription.pay_state){
+         case 'done':
+         if(Number(this.subsData.subscription.field_active) === 1){
+         this.loader.dismissLoader();
+         this.onplanchange = false;
+         window.location.reload();
+       }
+       break;
+       case 'fail':
+          this.activateChangePlanMode();
+      this.alert.presentAlert('','No se ha podido completar la transacción. Por favor revise su método de pago');
+      this.loader.dismissLoader();
+      done = true;
+       break;
+     }
+      }
+    }
+    
+  }
+
   gotoentergroup(){
-    console.log('entering enter group page');
+   
     this.navCtrl.setRoot('EntergrupoPage');
   }
 
@@ -503,96 +449,22 @@ export class MiplanPage {
       this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) 
       /*&& ( this.subsData.subscription === null || this.subsData.subscription.plan === null)*/
       );
+      //console.log('check stripe setup',ret, this.userData.checkUserPermission([UserDataProvider.TIPO_DOCTOR]),this.onplanchange );
       return ret;
   }
 
 
-  /*setupStripe(){
-    console.log('setting stripe');
-    if(this.checkStripeSetup()){
-      console.log(' stripe checked and needed');
-    let elements = this.stripe.elements();
-    var style = {
-      base: {
-        color: '#32325d',
-        lineHeight: '24px',
-        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        fontSmoothing: 'antialiased',
-        fontSize: '16px',
-        '::placeholder': {
-          color: '#aab7c4'
-        }
-      },
-      invalid: {
-        color: '#fa755a',
-        iconColor: '#fa755a'
-      }
-    };
-    console.log('LF card elements');
-    this.card = elements.create('card', { style: style });
-    //let crd = document.getElementById("card-element");
-    //Debugger.log([crd]);
-    this.card.mount('#card-element');
-    this.card.addEventListener('change', event => {
-      var displayError = document.getElementById('card-errors');
-      if (event.error) {
-        displayError.textContent = event.error.message;
-      } else {
-        displayError.textContent = '';
-      }
-    });
-
-    var form = document.getElementById('payment-form');
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      if(!this.enabledButton) return false;
-      this.loader.presentLoader('Agregando tarjeta...');
-      this.stripe.createSource(this.card).then( async result => {
-        if (result.error) {
-          var errorElement = document.getElementById('card-errors');
-          errorElement.textContent = result.error.message;
-          this.loader.dismissLoader();
-          return false;
-        } else {
-          let cu_src_data = {
-                            id:result.source.id,
-                            last4:result.source.card.last4,
-                            client_secret:result.source.client_secret,
-                            brand:result.source.card.brand
-                            };
-          this.userData.userData.field_src_json_info['und'].push({value: JSON.stringify(cu_src_data)});
-        }
-        //let updateUser_res =  /await this.userData.updateUser().subscribe((val)=>{ console.log(val);},(error)=>{ console.log(error) });
-        let updateUser_res = await this.userData.updateUser().toPromise();
-        this.loadSources();
-
-        if(!this.enabledButton) return false;
-        //await this.subsManager.subscribe( this.selectedPlanObject,this.selected_source);
-        window.location.reload();
-        
-        });
-      });
-    }
-  }*/
+  
 
 loadSources(){
-  console.log(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid);
+  //console.log(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid);
   this.http.get(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid).subscribe( (res:any) => {
     if(res!=null){
       this.selectedMethod = res.default_payment_source_id;
       this.parseSources(res);
     }
   });
-  //Debugger.log(['loading srcs']);
-  /*let old_selected = this.selected_source;
-  this.sources = new Array();
-  for(let i = 0; i < this.userData.userData.field_src_json_info.und.length; i++){
-    let new_source = new sources();
-    new_source.setData(this.userData.userData.field_src_json_info.und[i]);
-    this.sources.push(new_source);
-    if(old_selected !== null && new_source.src_id === old_selected.src_id){ this.selected_source = new_source; this.selected_source.set_selected()}
-    else  if(old_selected === null ){ this.selected_source = new_source; this.selected_source.set_selected()}
-  }*/
+  
 }
 
 parseSources(src){
@@ -602,7 +474,7 @@ parseSources(src){
 
 removeCard(index,card){
   let alerta = this.alert.alertCtrl.create({
-    title: "Eliminar tarjeta",
+    title: "",
     message:"¿Desea eliminar esta tarjeta?",
     buttons: [
       {
@@ -639,7 +511,7 @@ removeCard(index,card){
 
 selectCard( input_src:any ){
   let alerta = this.alert.alertCtrl.create({
-    title: "Confirmar tarjeta",
+    title: "",
     subTitle:"¿Desea asignar esta tarjeta como predeterminada?",
     message: "Todos sus pagos se realizarán por defecto con esta tarjeta.",
     buttons: [
@@ -647,7 +519,7 @@ selectCard( input_src:any ){
         text: "Cancelar",
         role: "cancel",
         handler: () =>  {
-          console.log('se canceló')
+          //console.log('se canceló')
         }
       },
       {
@@ -676,8 +548,6 @@ selectCard( input_src:any ){
 
 
   enabledButton():boolean{
-    console.log('enabledButton',this.selectedPlan !== null);
-    //return this.selected_source !== null && this.selected_plan !== null;
     return this.selectedPlan !== null;
   }
 
@@ -685,20 +555,20 @@ selectCard( input_src:any ){
 
   
   async removerSubsUser(uid){
-    console.log('toremove',uid);
     this.loader.presentLoader("Saliendo...");
     let recievers = this.subsData.subscription.field_doctores.concat(this.subsData.subscription.field_subusuarios);
     this.wsMessenger.generateDocoutgroup(recievers,uid);
     await this.subsManager.removeUser(uid);
     this.wsMessenger.generateSubsRemoveMessage(uid);
+   
     this.loader.dismissLoader();
   }
 
   getOut(){
     this.alert.chooseAlert(
-      '¿Salir del grupo?',
-      '¿Esta seguro que desea salir del grupo?',
-      ()=>{this.removerSubsUser(Number(this.userData.userData.uid))},
+      '',
+      '¿Está seguro que desea salir del grupo?',
+      async ()=>{ await this.removerSubsUser(Number(this.userData.userData.uid));  this.bu.locationReload();},
       ()=>{}
     );
   }

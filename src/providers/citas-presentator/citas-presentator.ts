@@ -58,7 +58,7 @@ export class CitasPresentatorProvider {
     console.log('updateStatePop',cita,state);
     let aux_title = CitasDataProvider.getStateLabel(state);
     this.alert.chooseAlert(
-      aux_title,
+      '',
       `¿Está seguro que desea colocar esta cita como ${aux_title}?`,
       ()=>{this.updateStateRequest(cita,state);},
       ()=>{}
@@ -90,7 +90,7 @@ export class CitasPresentatorProvider {
                 this.wsMessenger.generateWSupdateMessage(cita);
                 this.loader.dismissLoader();
               });
-              this.alert.presentAlert('¡Upss, tenemos un problema!','La información de esta cita cambio mientras estabas trabajando, inténtalo de nuevo.')
+              this.alert.presentAlert('','La información de esta cita cambio mientras estabas trabajando, inténtalo de nuevo.')
               return false;
         }
       }
@@ -152,7 +152,7 @@ export class CitasPresentatorProvider {
       this.openProgreso(cita);
     }else{
       if(DoctoresDataProvider.isDoctorBusy(aux_doc)){
-        this.alert.presentAlert("Ocupado","Este doctor esta ocupado con una cita Activa");
+        this.alert.presentAlert("","Este doctor está ocupado con una cita Activa");
       }else{
         this.loader.presentLoader('Actualizando...');
           DoctoresDataProvider.setDoctorBusy(aux_doc,cita);
@@ -169,19 +169,7 @@ export class CitasPresentatorProvider {
           );
           //this.openProgreso(cita);
           this.loader.dismissLoader(); 
-        /*
-      this.alert.chooseAlert(
-        "Iniciar Consulta",
-        '¿Está seguro que desea colocar esta cita como Activa?',
-        async ()=>{ 
-          this.loader.presentLoader('Actualizando...');
-          DoctoresDataProvider.setDoctorBusy(aux_doc,cita);
-          await this.citasManager.updateCitaState( cita , CitasDataProvider.STATE_ACTIVA ).toPromise(); 
-          this.wsMessenger.generateWSupdateMessage(cita);
-          this.loader.dismissLoader(); },
-        ()=>{}
-      );
-      */
+     
     }
   }
   }
@@ -234,7 +222,7 @@ export class CitasPresentatorProvider {
 
   delecitaCitaPop(cita:Citas){
     this.alert.chooseAlert(
-      "Eliminar Cita",
+      "",
       '¿Está seguro que desea eliminar esta cita?',
       ()=>{ this.deleteCita(cita) },
       ()=>{}

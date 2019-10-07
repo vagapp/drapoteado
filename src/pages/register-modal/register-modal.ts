@@ -13,6 +13,7 @@ import { AlertProvider } from '../../providers/alert/alert';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { PlanesDataProvider } from '../../providers/planes-data/planes-data';
+import { BaseUrlProvider } from '../../providers/base-url/base-url';
 
 
 declare var Stripe;
@@ -40,6 +41,7 @@ export class RegisterModalPage {
   mailsrefer:string = null;
   refuser:number = null;
   refuserName:string = null;
+  check_terminos:boolean = false;
 
   searchCode:string = null;
   currentpasswordNeeded: boolean = false; //especifica si es necesario incluir el pass actual, esto se requiere al cambiar pass o email.
@@ -80,7 +82,8 @@ export class RegisterModalPage {
     public subsManager: SubscriptionManagerProvider,
     public alert: AlertProvider,
     public loader: LoaderProvider,
-    public planesData: PlanesDataProvider
+    public planesData: PlanesDataProvider,
+    public bu: BaseUrlProvider
   ) {
   }
 
@@ -177,12 +180,12 @@ export class RegisterModalPage {
 
 
   checkemailSame(){
-    console.log('checkemailSame ');
+   
     let ret = false;
     if(this.userData.userData.mail !== null && this.emailconfirm !== null && Number(this.emailconfirm.localeCompare(this.userData.userData.mail)) === Number(0) ){
       ret = true;
     }else{
-      this.alert.presentAlert('Error','El correo electrónico no coincide con la confirmación.');
+      this.alert.presentAlert('','El correo electrónico no coincide con la confirmación.');
     }
     return ret;
   }
@@ -196,9 +199,7 @@ export class RegisterModalPage {
 
   checkForPasswordChange(){
     let ret = false;
-    console.log('checkForPasswordChange');
-    console.log(this.userData.userData.pass);
-    console.log(this.passconfirm);
+   
     if(this.userData.userData.pass !== null || this.passconfirm !== null){
       this.currentpasswordNeeded = true;
       ret = true;
@@ -208,15 +209,15 @@ export class RegisterModalPage {
 
 
   async actionBuscarRef(){
-    console.log('reference to search is', this.mailsrefer);
+   
     this.loader.presentLoader('Buscando...');
     this.userMan.searchByMail(this.mailsrefer).subscribe(
       (val:Array<any>)=>{
-        console.log('hola esto me salio',val);
-        if(Number(val.length) === 0){  this.alert.presentAlert('Nada','No se encontro un usuario con este email.'); }
+      
+        if(Number(val.length) === 0){  this.alert.presentAlert('','No se encontró nada con este correo electrónico.'); }
         else{
           if(Number(val[0]['field_tipo_de_usuario']['value']) !== 1){
-            this.alert.presentAlert('Nada','No se encontro un usuario con este email.');
+            this.alert.presentAlert('','No se encontró nada con este correo electrónico.');
           }else{
           this.refuser = val[0].uid;
           this.refuserName = val[0].field_nombre;
@@ -224,8 +225,8 @@ export class RegisterModalPage {
         }
         this.loader.dismissLoader();
       },(error)=>{
-        console.log('ayuda con esto',error);
-        this.alert.presentAlert('Nada','No se encontro un usuario con este email.');
+       
+        this.alert.presentAlert('','No se encontró nada con este correo electrónico.');
         this.loader.dismissLoader();
       }
     );
@@ -274,26 +275,26 @@ export class RegisterModalPage {
             switch (key){
               case 'name': 
               if(response.error.form_errors[key].includes('ya se encuentra en uso')){
-                this.alert.presentAlert('¡Upss, tenemos un problema!','El nombre que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
+                this.alert.presentAlert('','El nombre de usuario que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
               }
               break;
               case 'mail':
-                console.log('responsetrail entered case mail', response.error.form_errors[key]);
+
                 if(response.error.form_errors[key].includes('ya está registrada')){
-                  this.alert.presentAlert('¡Upss, tenemos un problema!','El correo que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
+                  this.alert.presentAlert('','El correo que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
                 }else 
                   if(response.error.form_errors[key].includes('ya se encuentra en uso')){
-                    this.alert.presentAlert('¡Upss, tenemos un problema!','El correo que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
+                    this.alert.presentAlert('','El correo que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
                   }else 
                   if(response.error.form_errors[key].includes('no es válida')){
-                    this.alert.presentAlert('¡Upss, tenemos un problema!','El formato de tu correo electrónico no es correcto.');
+                    this.alert.presentAlert('','El formato de tu correo electrónico no es correcto.');
                   }else{
-                    this.alert.presentAlert('Error','Se ha detectado un error inesperado en el campo '+key);
+                    this.alert.presentAlert('','Se ha detectado un error inesperado en el campo '+  AlertProvider.cleanDrupalFieldString(key));
                   }
                break;
                default: 
                if(!(key === 'field_useremail][und][0')){
-                this.alert.presentAlert('Error','Se ha detectado un error inesperado en el campo '+key);
+                this.alert.presentAlert('','Se ha detectado un error inesperado en el campo '+  AlertProvider.cleanDrupalFieldString(key));
               }
             }
             /*
@@ -317,11 +318,11 @@ export class RegisterModalPage {
     if(this.searchsubValidation()){
       this.loader.presentLoader('buscando...');
       let sus = await this.subsManager.searchSus(this.searchCode);
-      console.log('sus found',sus);
+   
       if(sus){
         await this.subsManager.susAssign(sus);
       }else{
-        this.alert.presentAlert('Nada','No se encontro ningun grupo médico');
+        this.alert.presentAlert('','No se encontro ningun grupo médico');
       }
       this.loader.dismissLoader();
     }
@@ -355,12 +356,12 @@ export class RegisterModalPage {
     console.log('ret a1 ', ret);
     if(this.userData.userData.pass && !this.passconfirm || !this.userData.userData.pass && this.passconfirm){
       ret = false;
-      this.alert.presentAlert('Error','Confirmar contraseña.');
+      this.alert.presentAlert('','Confirmar contraseña.');
     }
     console.log('ret a2 ', ret);
     if(this.userData.userData.pass && this.passconfirm && this.passconfirm.localeCompare(this.userData.userData.pass) !== 0){
       ret = false;
-      this.alert.presentAlert('Error','Las contraseñas no coinciden.');
+      this.alert.presentAlert('','Las contraseñas no coinciden.');
     }
     console.log('ret a3 ', ret);
     if(this.isnew){ // si es nuevo valida todo lo que se valida en registro.
@@ -378,7 +379,7 @@ export class RegisterModalPage {
     if( input ? false : true ){
       console.log('this input is not filled mf',input);
       ret = false;
-      this.alert.presentAlert('Error','Revisar los campos marcados en rojo.');
+      this.alert.presentAlert('','Revisar los campos marcados en rojo.');
       this.showerrors = true;
     }
     return ret;
@@ -476,61 +477,15 @@ export class RegisterModalPage {
   }
 
   popRemoveDoctorSus( uid ){
-    console.log('not implemented');
+    
     return false;
-    /*this.alert.chooseAlert(
-      'Remover Doctor',
-      '¿Está seguro que desea remover este doctor de la subscripción?',
-      ()=>{},
-      ()=>{this.removeDoctorSus(uid);}
-    );*/
-    /*
-    let alert = this.alertCtrl.create({
-      title: 'Remover Doctor',
-      message: '¿Está seguro que desea remover este doctor de la subscripción?',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-          handler: () => {
-           
-          }
-        },
-        {
-          text: 'Si',
-          handler: () => { 
-            this.removeDoctorSus(uid);
-          }
-        }
-      ]
-    });
-    alert.present();*/
+   
   }
 
   removeDoctorSus( uid ){
-    console.log('not implemented');
+    
     return false;
-    /*if(this.userData.userData.uid === uid){
-      return false;
-    }*/
-    /*let loading = this.loadingCtrl.create({
-      content: 'Eliminando usuario'
-    });
-    loading.present();
-    //Debugger.log(['removing ',uid]);
-    //Debugger.log(['index of uid',this.userData.subscription.field_doctores.indexOf(uid)]);
-    if(this.userData.subscription.field_doctores.indexOf(uid) >= 0){
-    this.userData.subscription.field_doctores.splice(this.userData.subscription.field_doctores.indexOf(uid), 1);
-    }
-    //Debugger.log(['userData after removing doctor',this.userData.subscription.field_doctores]);
-    this.userData.updateSus(this.userData.subscription).subscribe(
-      (val) =>{
-        //Debugger.log(['response from deleting doctor on subs',val]);
-        this.userData.cargarSubscription().subscribe((val)=>{
-        loading.dismiss();
-        });
-      }
-    );*/
+   
   }
 
   loadSources(){

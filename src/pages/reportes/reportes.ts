@@ -79,7 +79,7 @@ export class ReportesPage {
 
   elimiarReporte( report:reportes ){
     this.alert.chooseAlert(
-      'eliminar reporte',
+      '',
       `¿Está seguro que desea eliminar este reporte?`,
       async ()=>{
         this.loader.presentLoader('eliminando ...');

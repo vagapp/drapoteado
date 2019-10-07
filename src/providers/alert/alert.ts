@@ -94,4 +94,8 @@ export class AlertProvider {
     alert.present();
   }
 
+  static cleanDrupalFieldString(string){
+    return string.replace(/field_|\[|\]|und|0|:/gm,'');
+  }
+
 }

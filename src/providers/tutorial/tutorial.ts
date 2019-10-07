@@ -5,6 +5,7 @@ import { UserDataProvider } from '../user-data/user-data';
 import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
 import { ServiciosManagerProvider } from '../servicios-manager/servicios-manager';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
+import { BaseUrlProvider } from '../base-url/base-url';
 
 /*
   Generated class for the TutorialProvider provider.
@@ -59,14 +60,19 @@ export class TutorialProvider {
     public userData: UserDataProvider,
     public userMan: DrupalUserManagerProvider,
     public servMan: ServiciosManagerProvider,
-    public subsData: SubscriptionDataProvider
+    public subsData: SubscriptionDataProvider,
+    public bu: BaseUrlProvider
 
   ) {
   }
 
   checkNStart(){
 
-    if(this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY]) && this.checkTutorialState()){
+    if(
+      this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY]) 
+      && this.checkTutorialState()
+      && !this.bu.reloading
+      ){
       this.canClose = false;
       this.openTutorial();
     }

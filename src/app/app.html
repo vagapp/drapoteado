@@ -37,18 +37,18 @@
           Grupo médico
     </button>
       <button menuClose ion-item  (click)="openRegister()">
-          Mis Datos
+          Mis datos
       </button>
    
       <button *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR])" menuClose ion-item  (click)="openMiplan()">
-        Mi Plan
+        Mi plan
     </button>
       <!--<button *ngIf="tutorial.tutorialReplayAvailability()"  (click)="tutorial.openTutorialCanClose()" menuClose ion-item>
           Tutorial
         </button>-->
            
       <button menuClose ion-item  (click)="openterminos()">
-        Términos y Condiciones
+        Términos y condiciones
     </button>
       <button menuClose ion-item  (click)="logout()">
         <span class="fontPrimary">Salir</span>

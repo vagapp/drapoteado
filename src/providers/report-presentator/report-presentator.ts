@@ -211,7 +211,8 @@ exportExcel(){
   //this.docLoaded
   //console.log('exportExcel docloaded is ',this.docLoaded,this.docuid);
   //console.log(this.userData.userData.field_tipo_de_usuario['und'][0]['value']);
-  let report_excel = this.bu.backendUrl+`endpoint_Reporteexcel.php?r=${this.actualReport.nid}${this.docLoaded && this.docuid!==null ? '&doc='+this.docuid : ''}${'&ur='+this.userData.userData.field_tipo_de_usuario['und'][0]['value']}${this.isAdeudo ? '&adeudo=1' : '&adeudo=0'}${this.isGroup ? '&group=1&gdocs='+this.subsData.subscription.field_doctores.join(',') : '&group=0'}`;
+  let gwho = this.permissions.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) ?  this.subsData.subscription.field_doctores : this.docData.doctoresIDs;
+  let report_excel = this.bu.backendUrl+`endpoint_Reporteexcel.php?r=${this.actualReport.nid}${this.docLoaded && this.docuid!==null ? '&doc='+this.docuid : ''}${'&ur='+this.userData.userData.field_tipo_de_usuario['und'][0]['value']}${this.isAdeudo ? '&adeudo=1' : '&adeudo=0'}${this.isGroup ? '&group=1&gdocs='+gwho.join(',') : '&group=0'}`;
   //console.log(report_excel);
   console.log('report_excel url is',report_excel);
    window.location.href = report_excel;
@@ -322,10 +323,11 @@ async openReportGenerate( report:reportes = null ){
     
     this.docuid = null;
     //await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.docData.doctoresIDs);
-    /*console.log('trailRPG docdata ids',this.docData.doctoresIDs);
-    console.log('trailRPG subscription',this.subsData.subscription.field_doctores);
-    console.log('trailRPG groups',this.subsData.Groups[0]);*/
-    await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport, this.subsData.subscription.field_doctores);
+    console.log('trailRPG docdata ids',this.docData.doctoresIDs);
+    //console.log('trailRPG subscription',this.subsData.subscription.field_doctores);
+    console.log('trailRPG groups',this.subsData.Groups[0]);
+    let who = this.permissions.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) ?  this.subsData.subscription.field_doctores : this.docData.doctoresIDs;
+    await this.reporteCitas.reporteLoadCitasGrupales(this.actualReport,who);
   }
 
   async loadReportCitasAdeudo(){

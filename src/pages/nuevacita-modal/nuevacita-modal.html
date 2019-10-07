@@ -9,8 +9,8 @@
     <div class="modalPage_header">
         <div class="modalPage_logo"><img src="assets/imgs/citas.svg"/></div>
         <div class="modalPage_title">
-          <span class="spanBlock midFont" *ngIf="this.isnew" ><b>Nueva Cita</b></span>
-          <span class="spanBlock midFont" *ngIf="!this.isnew" ><b>Editar Cita</b></span>
+          <span class="spanBlock midFont" *ngIf="this.isnew" ><b>Nueva cita</b></span>
+          <span class="spanBlock midFont" *ngIf="!this.isnew" ><b>Editar cita</b></span>
         </div>
     </div>
     <div class="nuevaCita_form">
@@ -27,13 +27,13 @@
                   </button>-->
                 </b>
               <select [(ngModel)]="this.cita.data.field_cita_doctor.und[0]" [class.registerInputerror]="!this.cita.data.field_cita_doctor.und[0] && showerrors"  name="field_cita_doctor" class="input_select input">
-                  <option *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="0" >SELECT</option>
+                  <option *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="0" >seleccione un doctor</option>
                   <option *ngFor="let doc of this.docData.doctores"  value="{{doc.Uid}}" >{{doc.name}} </option>
                   <option *ngIf="this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="{{this.userData.userData.uid}}">{{this.userData.showname}}</option>
                 </select>
               </div>
           <div class="ModalInput_input">
-              <b>Email</b>
+              <b>Correo e.</b>
               <input [(ngModel)]="this.cita.data.field_email.und[0].email"  name="field_email"  type="text"/>
           </div>
           <div class="ModalInput_input">
@@ -76,7 +76,7 @@
   <div class="ModalInput_input">
     <b>Hora</b>
    <!-- <input [(ngModel)]="this.hourstring" [class.registerInputerror]="!this.cita.data.field_paciente.und[0].value && showerrors" name="time" type="text" placeholder="00:00"/>-->
-   <ion-input placeholder="00:00" type="text" [class.registerInputerrorCn]="!this.cita.data.field_paciente.und[0].value && showerrors" [(ngModel)]="horantr" [ngModelOptions]="{standalone: true}" (keyup)="formatear($event)"></ion-input>
+   <ion-input placeholder="00:00" type="text" [class.registerInputerrorCn]="(!horantr || horferror) && showerrors" [(ngModel)]="horantr" [ngModelOptions]="{standalone: true}" (keyup)="formatear($event)"></ion-input>
 </div>
   </div>
   <!--<ion-grid>

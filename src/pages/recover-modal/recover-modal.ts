@@ -44,11 +44,11 @@ export class RecoverModalPage {
     if(this.basicvalidation()){
       this.userData.requestRecover(this.recovername).subscribe(
         (val) => {
-          this.alert.presentAlert('Encontrado','recibirás tu eMail dentro de la brevedad');
+          this.alert.presentAlert('','recibirás tu correo electrónico dentro de la brevedad');
           Debugger.log(['return of recoverrequesto',val]);
           this.dismiss();
         },(response)=>{
-          this.alert.presentAlert('Error','No encontramos nada con estos datos');
+          this.alert.presentAlert('','No se encontró nada con este correo electrónico');
         },()=>{
 
         }
@@ -56,14 +56,6 @@ export class RecoverModalPage {
     }
   }
   
-  /*presentAlert(key,Msg) {
-    let alert = this.alertCtrl.create({
-      title: key,
-      subTitle: Msg,
-      buttons: ['Dismiss']
-    });
-    alert.present();
-  }*/
 
 
   dismiss() {

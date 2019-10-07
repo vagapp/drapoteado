@@ -11,7 +11,7 @@
     <div class="modalPage_header" *ngIf="!this.tutorial.checkTutorialState()">
         <div class="modalPage_logo"><img src="assets/imgs/servicios.svg"/></div>
         <div class="modalPage_title">
-          <span class="spanBlock largeFont" *ngIf="this.isnew"><b>Nuevo Servicio {{grouplabel}}</b></span>
+          <span class="spanBlock largeFont" *ngIf="this.isnew"><b>Nuevo servicio {{grouplabel}}</b></span>
           <span class="spanBlock largeFont" *ngIf="!this.isnew"><b>Editando {{this.newService.title}}</b></span>
         </div>
     </div>
@@ -21,28 +21,25 @@
         <span class=" largeFont" *ngIf="this.isnew"><b>Alta de servicio y costos</b></span></div>
         <div class="modalPage_title">
           <span class="spanBlock midSubFont">Para comenzar agrega un servicio.</span>
-          <span class="spanBlock midSubFont">Te recomendamos dar de alta desde el inicio todos los servicios que ofreces para que cobrar
-            tu consulta sea muy rápido y sencillo. Solo debes ingresar uno a uno el nombre y costo de
-            cada servicio.</span>
+          <span class="spanBlock midSubFont">Te recomendamos dar de alta desde el inicio todos los servicios que ofreces para que cobrar tu consulta sea muy rápido y sencillo. Solo debes ingresar uno a uno el nombre y costo de cada servicio.</span>
         </div>
     </div>
     <!--<div class="centered_bold" *ngIf="this.tutorial.checkTutorialState() && newTutService">Para comenzar agrega un servicio:</div>-->
     <div class="nuevoservicio_content modalContent" *ngIf="!this.tutorial.checkTutorialState()  || (this.tutorial.checkTutorialState() && !this.tutorial.serviceCreated)" >
         <div class="ModalInput_input">
             <b>Nombre</b>
-            <input [(ngModel)]="this.newService.title" placeholder="Ej. Consulta básica" type="text"/>
+            <input [(ngModel)]="this.newService.title" [class.registerInputerror]="!this.newService.title && showerrors" placeholder="Ej. Consulta básica" type="text"/>
         </div>
         <div class="ModalInput_input">
             <b>Costo</b>
-            <input [(ngModel)]="this.newService.field_costo_servicio.und[0].value" placeholder="$0000.00" type="number"/>
+            <input [(ngModel)]="this.newService.field_costo_servicio.und[0].value" [class.registerInputerror]="!this.newService.field_costo_servicio.und[0].value && showerrors" placeholder="Costo del servicio" type="number"/>
         </div>
     </div>
 
     <div class="nuevoservicio_content modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" >
         <span class="spanBlock bigBoldFont">¡Felicidades!</span>
-        <span class="spanBlock midMainFont"> El servicio {{this.newService.title}} ha sido agregado ahora lo podrás seleccionar cada vez que mandes cobrar una consulta.</span>
-        <span class="spanBlock midSubFont"> Siempre que lo desees puedes modificar o agregar más servicios en la sección de Alta de
-            Servicios y Costos en el Menú.</span>
+        <span class="spanBlock midMainFont"> El servicio {{this.newService.title}} ha sido agregadoha sido agregado. Ahora lo podrás seleccionar cada vez que mandes cobrar una consulta.</span>
+        <span class="spanBlock midSubFont"> Siempre que lo desees puedes modificar o agregar más servicios en la sección de alta de servicios y costos en el menú.</span>
         </div>
         
 

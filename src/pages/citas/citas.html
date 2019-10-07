@@ -10,10 +10,10 @@
     <div class="modalPage_logo"><img src="assets/imgs/citas.svg"/></div>
     <div class="modalPage_title">
       <span class="spanBlock midFont"><b>Citas Programadas</b></span>
-      <span class="spanBlock midSubFont">Revisa y administra tus citas</span>
+      <span class="spanBlock midSubFont">Revisa y administra tus citas.</span>
     </div>
     <div class="modalPage_btn_wrapper">
-      <button *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY]);"  class="bgColorSecondary generalButton" (click)="citasPresentator.openNuevaCita()">Agregar Nueva</button>
+      <button *ngIf="this.userData.checkUserFeature([this.userData.TIPO_DOCTOR,this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY]);"  class="bgColorSecondary generalButton" (click)="citasPresentator.openNuevaCita()">Agregar nueva</button>
     </div>
     </div>
     
@@ -35,8 +35,6 @@
                     <th>{{day.DayName}}</th>
                     <th>Paciente</th>
                     <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Doctor</th>
-                    <th *ngIf="!userData.checkUserPermission([userData.TIPO_DOCTOR]);">Tipo de Servicio</th>
-                  
                     <th>Estado</th>
                     <th></th>
                 </tr>
@@ -47,8 +45,6 @@
                   <td class="tdmaxedwid" ><span class="fontSecondary">{{cita.readableDate}}</span> - <span class="fontHigh">{{cita.readableTime}}</span></td>
                   <td class="tdmaxedwid">{{cita.data.field_paciente.und[0].value}}</td>
                   <td class="tdmaxedwid" *ngIf=" !this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">{{cita.doctor_name}}</td>
-                  <td class="tdmaxedwid" *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])">General</td>
-
                   <td class="tdmaxedwid"  [ngStyle]="{'color':cita.stateColor}" >{{cita.getStateString()}}</td>
                   <td  class="toolCol">
                     <!--<img src="assets/imgs/editar.svg" class="icon_drapo" (click)="citasPresentator.editCita(cita)" 
@@ -62,7 +58,7 @@
                     <button  *ngIf="cita.checkState(citasData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Activar</button>
                    <!--<button  *ngIf="cita.checkState(citasData.STATE_CONFIRMADA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.desConfirmarCita(cita);" class="bgColorSecondary generalButton tableButton">No confirmada</button>-->
     
-                    <button  *ngIf="cita.checkState(citasData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Ver Progreso</button>
+                    <button  *ngIf="cita.checkState(citasData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.iniciarCita(cita);" class="bgColorSecondary generalButton tableButton">Ver progreso</button>
                     <!--<button  *ngIf="cita.checkState(citasData.STATE_ACTIVA) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])" (click)="citasPresentator.desactivarCita(cita);" class="bgColorSecondary generalButton tableButton">Desactivar</button>-->
                     <button  *ngIf="(cita.checkState(citasData.STATE_COBRO) || cita.checkState(citasData.STATE_ADEUDO)) && this.userData.checkUserPermission([this.userData.TIPO_DOCTOR, this.userData.TIPO_CAJA, this.userData.TIPO_CAJAYRECEPCION])" (click)="citasPresentator.openProgreso(cita);" class="bgColorSecondary generalButton tableButton">Cobrar</button>
                     <button  *ngIf="!cita.checkState(citasData.STATE_CANCELADA) && !cita.checkState(citasData.STATE_ADEUDO) && !cita.checkState(citasData.STATE_FINALIZADA) && !cita.checkState(citasData.STATE_COBRO) && !this.userData.checkUserPermission([this.userData.TIPO_CAJA])" (click)="citasPresentator.updateStatePop(cita, this.citasData.STATE_CANCELADA)" class="bgColorPrimary generalButton tableButton">Cancelar</button>

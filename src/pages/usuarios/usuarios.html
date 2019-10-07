@@ -14,25 +14,26 @@
       <span class="spanBlock midSubFont">TUAL te permite elegir entre dos opciones de usuarios:</span>
       <span class="user_explanation_triple">
          <span class="user_explanation_section"> Recepción,</span>
-         <span class="user_explanation_section"> Caja y </span>
-         <span class="user_explanation_section">  Recepción & Caja</span>
+         <span class="user_explanation_section"> caja y </span>
+         <span class="user_explanation_section"> caja & recepción</span>
         </span>
     </div>
     <div class="modalPage_btn_wrapper">
-      <button class="bgColorSecondary generalButton" (click)="openNuevousuario()">Agregar Nuevo</button>
+      <button class="bgColorSecondary generalButton" (click)="openNuevousuario()">Agregar nuevo</button>
       <span class="">Usuarios restantes: {{this.subUsersLeft }}</span>
     </div>
   </div>
   <div class="Citas_grid result_wrapper">
       <div class="subusers_subscription_div midFont">
-        <p class="leyenda">Esta es la lista de usuarios que actualmente están dados de alta, recuerda que para compartir estos usuarios con otro doctor o agregar un usuario nuevo necesitas incluír el código que se muestra en la tabla. Compártelo con tus colegas para aprovechar TUAL al máximo. </p>
+        <p class="leyenda">Esta es la lista de usuarios que actualmente están dados de alta. Recuerda que para compartir estos usuarios con otro doctor o agregar un usuario nuevo necesitas incluir el código que se muestra en la tabla. Compártelo con tus colegas para aprovechar TUAL al máximo. 
+        </p>
       </div>
     <table class="results_table">
         <thead>
             <tr>
                 <th>Usuario</th>
-                <th>Tipo de Usuario</th>
-                <th *ngIf="!this.subsData.isGroup">Codigo</th>
+                <th>Tipo de usuario</th>
+                <th *ngIf="!this.subsData.isGroup">Código</th>
                 <th></th>
              </tr>
         </thead>

@@ -128,7 +128,14 @@ export class UsuariosPage {
     });
     Modal.present({});
   }else{
-    this.alert.presentAlert('Error','No puedes agregar mas usuarios')
+  
+    this.alert.setStrings('IR A MI PLAN','después');
+    this.alert.chooseAlert(
+    '',
+    'Ya agotaste los usuarios incluidos en tu suscripción mensual, agrega todos los usuarios adicionales que necesites ingresando aquí mi plan',
+    ()=>{ this.alert.resetStrings(); this.navCtrl.setRoot("MiplanPage"); },
+    ()=>{ this.alert.resetStrings(); }
+    )
   }
   }
 
@@ -140,7 +147,7 @@ export class UsuariosPage {
   
   deleteUsuario( userd , fromSub:boolean = false){
     this.alert.chooseAlert(
-      'Eliminar',
+      '',
       '¿Está seguro de que desea eliminar este usuario de la subscripción?',
       ()=>{ /*this.removeSubUserFromSubs(userd);*/this.completeSubUserRemove( userd );  },
       ()=>{}
@@ -149,8 +156,8 @@ export class UsuariosPage {
 
   removeUsuariopop( userd , fromSub:boolean = false){
     this.alert.chooseAlert(
-      'Remover',
-      '¿Está seguro de que desea remover? El usuario no se borrará, solo dejará de administrar sus citas',
+      '',
+      '¿Está seguro de que desea remover? El usuario no se borrará, sólo dejará de administrar sus citas',
       ()=>{  /*this.removeUsuario( userd );*/ /*this.removeSubUserFromSubs(userd);*/ this.completeSubUserRemove( userd ); },
       ()=>{}
     );
@@ -159,7 +166,7 @@ export class UsuariosPage {
   agregarusuariopop( userd ){
   
     this.alert.chooseAlert(
-      'Agregar',
+      '',
       '¿Está seguro de que desea asignarse a este usuario? El usuario administrara sus citas',
       ()=>{  this.addUsuario( userd ); },
       ()=>{}
@@ -172,30 +179,8 @@ export class UsuariosPage {
     this.loader.presentLoader("removiendo usuario . . .");
     await this.subusersManager.removeSubuser(userd);
     await this.subusersManager.cargarSubusuarios();
-    console.log('is removed yet?');
-    this.loader.dismissLoader();
-    //remove this user from array of doctors
-    /*SubusersManagerProvider.removeDoctorFromSubUser(userd, this.userData.userData.uid);
-    delete userd.field_sub_id;
-    this.user
-    console.log('ready to upodate',userd);*/
-    /*
-    this.userMan.updateUserd( userd ).subscribe(
-      (val)=>{
-        console.log("usuarioUpdated");
-        this.presentToast("Completado");
-        
-        this.cargarUsuarios();
-      },
-      response => {
-      
-        console.log("POST call in error", response);
-        console.log("show error");
-        for (var key in response.error.form_errors) {
-          this.presentAlert(key, response.error.form_errors[key]);
-        }
-      }
-    );*/
+   
+    this.loader.dismissLoader(); 
   }
 
   async addUsuario( userd ){
@@ -203,25 +188,7 @@ export class UsuariosPage {
     await this.subusersManager.addSubuser(userd);
     await this.subusersManager.cargarSubusuarios();
     this.loader.dismissLoader();
-    /*if( !userd.field_doctores.und ){  userd.field_doctores.und = new Array();}
-    userd.field_doctores.und.push(this.userData.userData.uid);
-    delete userd.field_sub_id;
-    this.userMan.updateUserd( userd ).subscribe(
-      (val)=>{
-        console.log("usuarioUpdated");
-        this.presentToast("Completado");
-        loader.dismiss();
-        this.cargarUsuarios();
-      },
-      response => {
-        loader.dismiss();
-        console.log("POST call in error", response);
-        console.log("show error");
-        for (var key in response.error.form_errors) {
-          this.presentAlert(key, response.error.form_errors[key]);
-        }
-      }
-    );*/
+   
   }
 
 
@@ -232,7 +199,7 @@ export class UsuariosPage {
     //await this.subusersManager.removeSubuser(userd);
     await this.subusersManager.removeUserFromSubscription(userd);
     await this.subusersManager.cargarSubusuarios();
-    console.log('is removed yet?');
+  
     this.loader.dismissLoader();
     /*let loader = this.loadingCtrl.create({
       content: "removiendo usuario . . ."
@@ -254,17 +221,17 @@ export class UsuariosPage {
   }
 
   async completeSubUserRemove( userd ){ //ya hice este metodo despues de tantos cambios maldicion
-    console.log('CHEKAME WEY');
+   
     this.loader.presentLoader('Removiendo usuario ...');
     //await this.subusersManager.removeSubuser(userd);
     await this.subusersManager.removeUserFromSubscription( userd );
-    console.log('CHEKAME WEY a ');
+   
     await this.subusersManager.removeSubuser(userd);
-    console.log('CHEKAME WEY b');
+   
     await this.subusersManager.cargarSubusuarios();
-    console.log('CHEKAME WEY c');
+   
     this.WS.generateSuboutofgroup(this.subsData.subscription.field_doctores.concat(userd.uid),userd.uid);
-    //console.log('is removed yet?');
+      
     this.loader.dismissLoader();
   }
 

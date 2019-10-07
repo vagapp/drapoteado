@@ -4,30 +4,25 @@
   <div class="register_contet_head">
     <div class="bigFont" *ngIf="this.isnew"> <span class="fontPrimary"><b>Registro</b></span> <span class="lightFont">de Nuevo Suscriptor</span></div>
     <div class="midSubFont" *ngIf="this.isnew"> Por favor proporciona los siguientes datos: </div>
-    <div class="bigFont" *ngIf="!this.isnew"> <span class="fontPrimary"><b>Datos</b></span> <span class="lightFont">de Usuario</span></div>
+    <div class="bigFont" *ngIf="!this.isnew"> <span class="fontPrimary"><b>Datos</b></span> <span class="lightFont">de usuario</span></div>
     <div class="bigFont" *ngIf="!this.isnew"> <span class="midSubFont">Usuario: {{this.userData.userData.name}}</span> </div>
   </div>
   <div class="code_wrapper"  *ngIf="!permissions.checkUserPermission([userData.TIPO_DOCTOR]) && !permissions.checkifgroup() && !this.isnew">
-   <span class="spanBlock"><b>Codigo de usuario:</b> <span class="ModalInput_input"><input [(ngModel)]="this.userData.userData.field_codigo.und[0].value" type="text" readonly/></span></span>
-   <span class="spanBlock">Los doctores pueden usar este codigo para que tengas acceso a sus citas.</span>
+   <span class="spanBlock"><b>Código de usuario:</b> <span class="ModalInput_input"><input [(ngModel)]="this.userData.userData.field_codigo.und[0].value" type="text" readonly/></span></span>
+   <span class="spanBlock">Los doctores pueden usar este código para que tengas acceso a sus citas.</span>
   </div>
   <div class="register_contet_form"  >
-
-
       <div *ngIf="this.isnew" class="register_aliasfield_wrapper">
           <div class="registerInput" >
               <b>Usuario:<span class="obligatoryast" *ngIf="this.isnew">*</span></b><input [(ngModel)]="this.userData.userData.name" [class.registerInputerror]="!this.userData.userData.name && showerrors" type="text" />
           </div>
           <div class="register_aliasfield_description midSubFont "> </div>
           </div>
-
-      
-
       <div *ngIf="this.isnew" class="register_aliasfield_wrapper">
           <div class="registerInput" >
             <b>Alias:<span class="obligatoryast" *ngIf="this.isnew">*</span></b><input [(ngModel)]="this.userData.userData.field_alias.und[0].value" [class.registerInputerror]="!this.userData.userData.field_alias.und[0].value && showerrors" type="text"/>
           </div>
-          <div class="register_aliasfield_description midSubFont "> Crea un Alias para que otros usuarios puedan identificarte dentro de TUAL ej "Dr Perez" </div>
+          <div class="register_aliasfield_description midSubFont "> Crea un alias para que otros usuarios puedan identificarte dentro de TUAL ej "Dr Perez". </div>
           </div>
 
           
@@ -37,7 +32,7 @@
             <b>Correo electrónico:<span class="obligatoryast" *ngIf="this.isnew">*</span></b><input [(ngModel)]="this.userData.userData.mail" [class.registerInputerror]="!this.userData.userData.mail && showerrors" type="text"/>
           </div>
           <div class="registerInput" *ngIf="this.isnew">
-            <b>Confirmar C. electrónico:<span class="obligatoryast" *ngIf="this.isnew">*</span></b><input [(ngModel)]="emailconfirm" [class.registerInputerror]="!this.emailconfirm && showerrors" type="text"/>
+            <b>Confirmar c. electrónico:<span class="obligatoryast" *ngIf="this.isnew">*</span></b><input [(ngModel)]="emailconfirm" [class.registerInputerror]="!this.emailconfirm && showerrors" type="text"/>
           </div>
 
          
@@ -87,12 +82,12 @@
             <b>País:</b><input [(ngModel)]="this.userData.userData.field_pais.und[0].value"    type="text"/>
         </div>
         <div class="registerInput">
-            <b>Municipio o Del.:</b><input [(ngModel)]="this.userData.userData.field_municipio.und[0].value"  type="text"/>
+            <b>Municipio o del.:</b><input [(ngModel)]="this.userData.userData.field_municipio.und[0].value"  type="text"/>
         </div>
         <div class="registerInput">
           <b>Estado:</b>
         <select  class="input_select input" [(ngModel)]="this.userData.userData.field_estado_ubicacion.und[0].value">
-            <option selected disabled value="0">SELECT</option>
+            <option selected disabled value="0">Seleccione un estado</option>
             <option selected  value="Aguascalientes">Aguascalientes</option>
             <option selected  value="Baja California">Baja California</option>
             <option selected  value="Baja California Sur">Baja California Sur</option>
@@ -177,12 +172,15 @@
     </div>
   -->
     <div class="register_last">
+        <div class="register_terminos_section" *ngIf="isnew" >
+            <span><ion-checkbox  [(ngModel)]="check_terminos"></ion-checkbox> Acepto los <a [href]="this.bu.terminosUrl" target="_blank">términos y condiciones</a></span>
+        </div>
     <div class="register_button_section">
-    <button *ngIf="isnew"   class="bgColorPrimary generalButton" (click)="actionRegister()" >Registrarme</button>
-    <button *ngIf="!isnew"   class="bgColorPrimary generalButton" (click)="actionUpdate()" >Actualizar Datos</button>
+    <button *ngIf="isnew"   class="bgColorPrimary generalButton" (click)="actionRegister()" [disabled]="!check_terminos" >Registrarme</button>
+    <button *ngIf="!isnew"   class="bgColorPrimary generalButton" (click)="actionUpdate()" >Actualizar datos</button>
     </div>
     <div class="bluelink_wrapper">
-    <a  *ngIf="this.isnew"   class="blueLink midFont" (click)="this.dismiss();">¡Ya Tengo una Cuenta!</a>
+    <a  *ngIf="this.isnew"   class="blueLink midFont" (click)="this.dismiss();">¡Ya tengo una cuenta!</a>
   
   </div>
   </div>
