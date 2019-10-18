@@ -31,14 +31,14 @@
             <span class="spanBlock midSubFont">Dentro de un grupo médico los usuarios creados serán compartidos por todos los doctores del grupo. A continuación te explicamos cómo funcionan y cómo crearlos. </span>
             <span *ngIf="this.tutorial.subaccountsleft < 2" > * no hay suficientes espacios en el grupo para seguir el tutorial.</span>
             <div class="user_explain_buttonsection">
-               <span class="spanBlock midSubFont"> puedes omitir el tutorial haciendo click <button class="generalButton bgColorSecondary" (click)="endUsers()">aquí</button></span>
+               <span class="spanBlock midSubFont"> Puedes omitir el tutorial haciendo click <button class="generalButton bgColorSecondary" (click)="endUsers()">aquí</button></span>
             </div>
         </div>
 
          <!-- cuando es un usuario de grupo entrando a tutorial a la pagina inicial y si requiere explicacion y NO es el que crea el grupo, es un doctor mas-->
     
     <div class="user_explain" *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.usuarioCreated === false" ><!-- Drap agregar usuarios explicacion block-->
-        <span class="spanBlock midSubFont">TUAL te permite elegir entre tres opciones de usuarios.</span>
+        <span class="spanBlock midSubFont">TUAL te permite elegir entre dos opciones de usuarios.</span>
         <!--<div class="trisectional">
             <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Recepción:</span><span class="spanBlock midSubFont">Crea Citas</span></div>
             <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Caja:</span><span class="spanBlock midSubFont">Cobra Citas</span></div>
@@ -59,20 +59,21 @@
                 <span class="spanBlock"> Crea un usuario de <span class="fontPrimary">caja & recepción</span></span>
             </div>
         </div>
-        <div class="addbycode" *ngIf="!this.tutorial.isGroup">
+        <!--<div class="addbycode" *ngIf="!this.tutorial.isGroup">
             <div class="bisectional_section"  (click)="selectOption(3)" [class.selectedOption]="checkSelectedOption(3)">
                 <span class="spanBlock"> ¿Compartes personal con otro usuario de TUAL?</span>
                 <span class="spanBlock"> Si los usuarios ya han sido creados puedes agregarlos usando sus <span class="fontPrimary">códigos</span> aquí.</span>
             </div>
-        </div>
-        <p *ngIf="this.tutorial.isplanholder" class="midSubFont" >Adquiere los usuarios adicionales que necesites ingresando en <span class="fontPrimary">mi plan</span></p>
+        </div>-->
+        <p *ngIf="!this.tutorial.isGroup" class="midSubFont justifyleft" >Compartes personal con otro usuario de TUAL?Si los usuarios ya han sido creados puedes agregarlos usando sus <span class="fontPrimary">códigos</span> aquí.</p>
+        <p *ngIf="this.tutorial.isplanholder" class="midSubFont justifyleft" >Adquiere los usuarios adicionales que necesites ingresando en <span class="fontPrimary">mi plan</span>.</p>
         <div class="buttonsection">
             <button class="generalButton bgColorSecondary"[class.disabledsubbtn]="!isSelectedOption" [disabled]="!isSelectedOption()" (click)="userTutorialStart()">Continuar</button>
         </div>
     </div>
     
     <div class="user_explain"  *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.isGroup && this.tutorial.usergroupexplain  && !this.tutorial.isplanholder">
-        <p class="spanBlock midSubFont">Dentro de un grupo médico los usuarios creados serán compartidos por todos los doctores del grupo. Puedes acceder a la pagina de usuarios desde el menu donde podras crear usuarios si lo necesitas pero probablemente ya existan usuarios en tu grupo.  </p>
+        <p class="spanBlock midSubFont">Dentro de un grupo médico los usuarios creados serán compartidos por todos los doctores del grupo. Puedes acceder a la pagina de usuarios desde el menú donde podrás crear usuarios si lo necesitas pero probablemente ya existan usuarios en tu grupo.  </p>
         <div class="user_explain_buttonsection">
             <span class="spanBlock midSubFont"><button class="generalButton bgColorSecondary" (click)="endUsers()">Continuar</button></span>
          </div>
@@ -88,9 +89,9 @@
         <span class="spanBlock" *ngIf="this.userData.checkUserPlanHolder()"> <button class="bgColorSecondary generalButton" (click)="newuser=true; initialpage=false;">Registrar nuevo</button></span>
       </div>
     <div class="nuevoservicio_content modalContent" *ngIf="codeuser">
-        <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="this.checkIfgoback()"> atrás </span>
+        <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="this.checkIfgoback()"> Atrás </span>
         <div class="ModalInput_input">
-            <span class="codetext"><b>Introducir código</b> <span class="label">usuarios disponibles: {{subsLeft}}</span></span>
+            <span class="codetext"><b>Introducir código de usuario</b> <span class="label">usuarios disponibles: {{subsLeft}}</span></span>
             <input  [(ngModel)]="this.newUserCode" type="text"/>
         </div>
         <div class="midAlign">
@@ -100,10 +101,10 @@
           </div>
     </div>
     <div class="nuevoservicio_content modalContent" *ngIf="this.newuser">
-            <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="this.checkIfgoback()"> atrás </span>
-            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> <span class="fontPrimary">Caja.</span> Esta persona cobra las citas </span>
-            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> <span class="fontPrimary">Recepción.</span> Esta persona administra citas </span>
-            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Caja & recepción.</span> Esta persona administra y cobra las citas </span>
+            <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="this.checkIfgoback()"> Atrás </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> <span class="fontPrimary">Caja.</span> Este usuario cobra las citas. </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> <span class="fontPrimary">Recepción.</span> Este usuario administra las citas </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Caja & recepción.</span> Este usuario administra y cobra las citas </span>
             
 
            
@@ -119,17 +120,17 @@
             <b>Tipo de usuario:</b>
           <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und"  class="input_select input" >
               <option selected disabled value="0">Seleccione un tipo de usuario</option>
-              <option value="2">recepción</option>
-              <option value="3">caja</option>
-              <option value="4">caja & recepción</option>
+              <option value="2">Recepción</option>
+              <option value="3">Caja</option>
+              <option value="4">Caja & recepción</option>
             </select>
           </div>
           <div class="ModalInput_input" *ngIf="this.tutorial.checkTutorialState()">
                 <b>Tipo de usuario:</b>
               <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und" class="input_select input" disabled>
-                  <option value="2" selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION">recepción</option>
-                  <option value="3"  selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA">caja</option>
-                  <option value="4"  selected  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR">caja & recepción</option>
+                  <option value="2" selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION">Recepción</option>
+                  <option value="3"  selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA">Caja</option>
+                  <option value="4"  selected  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR">Caja & recepción</option>
                 </select>
               </div>
           <div class="ModalInput_input">
@@ -163,11 +164,13 @@
     <div class="modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated" >
             <span class="spanBlock bigBoldFont">¡Felicidades!</span>
             <span class="spanBlock midMainFont">Tu usuario ha sido creado</span>
-            <span class="spanBlock midSubFont">Te proporcionamos sus datos para que pueda ingresar desde este momento en TUAL.</span>
-            <span class="spanBlock midSubFont">Nombre: <span class="fontHigh">{{this.newUser.name}}</span></span>
-            <span class="spanBlock midSubFont">Correo: <span class="fontHigh">{{this.newUser.mail}}</span></span>
-            <span class="spanBlock midSubFont" *ngIf="!this.codeuserNP">Contraseña: <span class="fontHigh">{{this.checkpass}}</span></span>
-            <span class="spanBlock midSubFont"> Puedes modificar los usuarios desde la sección de Alta de Usuarios en el Menú<Puedes modificar los usuarios desde la sección de alta de usuarios en el Menú.</span>
+            <div class="personaldatawrap">
+                <span class="spanBlock midSubFont justifyleft">Te proporcionamos sus datos para que pueda ingresar desde este momento en TUAL.</span>
+                <span class="spanBlock midSubFont justifyleft">Nombre: <span class="fontHigh">{{this.newUser.name}}</span></span>
+                <span class="spanBlock midSubFont justifyleft">Correo: <span class="fontHigh">{{this.newUser.mail}}</span></span>
+                <span class="spanBlock midSubFont justifyleft" *ngIf="!this.codeuserNP">Contraseña: <span class="fontHigh">{{this.checkpass}}</span></span>
+                <span class="spanBlock midSubFont justifyleft"> Puedes modificar los usuarios desde la sección de Alta de Usuarios en el Menú</span>
+            </div>
             </div>
             <div class="midAlign" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated">
                 <div class="register_button_section">

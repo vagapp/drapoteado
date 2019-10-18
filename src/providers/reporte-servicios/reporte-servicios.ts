@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ServiciosManagerProvider } from '../servicios-manager/servicios-manager';
 import { reportes } from '../user-data/reportes';
 import { CitaProgressControllerProvider } from '../cita-progress-controller/cita-progress-controller';
+import { CitasDataProvider } from '../citas-data/citas-data';
 
 @Injectable()
 export class ReporteServiciosProvider {
@@ -41,6 +42,9 @@ export class ReporteServiciosProvider {
             times:1,
             doc: cita.doctor_name,
             order: servicio.order
+          }
+          if(Number(aux_servresume.nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)){
+            aux_servresume.title = 'Consulta cortesía';
           }
           ret.push(aux_servresume);
         }

@@ -767,15 +767,15 @@ export class Citas{
     }
 
     setServicesData(){
-        console.log("populating data services_cita");
+        console.log("trailpc1 populating data services_cita");
         this.data.field_servicios_cita.und = new Array();
         this.addedServices.forEach(element => {
-            console.log("added service",element);
+            console.log("trailpc1 added service",element);
             this.data.field_servicios_cita.und.push(element.Nid);
         });
         this.data.aux_servicios_json = JSON.stringify( this.addedServices);
-        console.log('populated services json', this.data.aux_servicios_json);
-        console.log("populated services_cita data",this.data.field_servicios_cita);
+        console.log('trailpc1 populated services json', this.data.aux_servicios_json);
+        console.log("trailpc1 populated services_cita data",this.data.field_servicios_cita);
     }
 
    addServicio( servicio:servicios ):boolean{

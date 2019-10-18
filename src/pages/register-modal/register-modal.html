@@ -22,7 +22,7 @@
           <div class="registerInput" >
             <b>Alias:<span class="obligatoryast" *ngIf="this.isnew">*</span></b><input [(ngModel)]="this.userData.userData.field_alias.und[0].value" [class.registerInputerror]="!this.userData.userData.field_alias.und[0].value && showerrors" type="text"/>
           </div>
-          <div class="register_aliasfield_description midSubFont "> Crea un alias para que otros usuarios puedan identificarte dentro de TUAL ej "Dr Perez". </div>
+          <div class="register_aliasfield_description midSubFont "> Crea un alias para que otros usuarios puedan identificarte dentro de TUAL ej "Dr Pérez". </div>
           </div>
 
           
@@ -82,7 +82,7 @@
             <b>País:</b><input [(ngModel)]="this.userData.userData.field_pais.und[0].value"    type="text"/>
         </div>
         <div class="registerInput">
-            <b>Municipio o del.:</b><input [(ngModel)]="this.userData.userData.field_municipio.und[0].value"  type="text"/>
+            <b>Municipio o Alcaldía:</b><input [(ngModel)]="this.userData.userData.field_municipio.und[0].value"  type="text"/>
         </div>
         <div class="registerInput">
           <b>Estado:</b>

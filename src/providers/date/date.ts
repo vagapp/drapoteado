@@ -151,9 +151,9 @@ export class DateProvider {
             case 7: ret = 'Julio'; break;
             case 8: ret = 'Agosto'; break;
             case 9: ret = 'Septiembre'; break;
-            case 0: ret = 'Octubre'; break;
-            case 1: ret = 'Noviembre'; break;
-            case 2: ret = 'Diciembre'; break;
+            case 10: ret = 'Octubre'; break;
+            case 11: ret = 'Noviembre'; break;
+            case 12: ret = 'Diciembre'; break;
           
         }
         return ret;

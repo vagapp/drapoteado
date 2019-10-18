@@ -75,7 +75,7 @@ export class ServiciosManagerProvider {
     const aux_serv = new servicios();
     aux_serv.Nid = Number(CitasDataProvider.SERVICIO_CORTESIA_NID);
     aux_serv.Uid = 1;
-    aux_serv.title = 'Cortesía';
+    aux_serv.title = 'Consulta cortesía';
     aux_serv.costo = 0;
     aux_serv.order = 5;
     return aux_serv;

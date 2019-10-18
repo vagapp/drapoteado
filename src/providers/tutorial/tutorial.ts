@@ -67,7 +67,7 @@ export class TutorialProvider {
   }
 
   checkNStart(){
-
+   
     if(
       this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY]) 
       && this.checkTutorialState()

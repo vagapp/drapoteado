@@ -40,7 +40,7 @@
                                 <input [(ngModel)]="progressController.activeCita.data.field_email.und[0].email"  name="field_email"  type="text"/>
                             </div>
                             <div class="progress_input">
-                                <b>Télefono</b>
+                                <b>Teléfono</b>
                                 <input [(ngModel)]="progressController.activeCita.data.field_telefono.und[0].value" name="field_telefono" type="number"/>
                             </div>
                         </td>
@@ -104,6 +104,7 @@
                         <!--<span class="checkbox_wrapper_progreso spanBlock"><ion-checkbox (ionChange)="updateCheckedOptions(SERVICIO_CORTESIA_NID,$event)" [checked]="this.progressController.checkChecked(SERVICIO_CORTESIA_NID)"></ion-checkbox> Cortesía- <span class="fontSecondary">$0</span> </span>-->
                         <span class="checkbox_wrapper_progreso spanBlock" *ngFor="let service of progressController.activeCitaDoc.servicios" [class.cortesia_checkbox]="service.isCortesia" >
                             <!--<ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)"  [disabled]="service.isCortesia" [checked]="this.progressController.checkChecked(service.Nid)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">{{moneyFormat(service.costo)}}</span> -->
+                            <!--<ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)" [disabled]="this.progressController.isCortesiaOn(service.Nid)" [checked]="this.progressController.checkChecked(service.Nid)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">{{moneyFormat(service.costo)}}</span> -->
                             <ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)" [disabled]="this.progressController.isCortesiaOn(service.Nid)" [checked]="this.progressController.checkChecked(service.Nid)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">{{moneyFormat(service.costo)}}</span> 
                         </span>
                       </div>

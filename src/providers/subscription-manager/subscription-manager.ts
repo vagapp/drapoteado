@@ -478,6 +478,21 @@ getDocAccountsLeft(subscription:subscriptions){
     
   }
 
+  /**
+   * remueve de esta suscripcion todos los usuarios no seleccionados.
+  */
+  async group_enter_notselectedSubusers_remove(selected_subusers,loaded_group_sus,filterThis:boolean = false){
+    let selected_ids = selected_subusers.map((subuser)=>{return subuser.uid});
+    let subusuerstotal = loaded_group_sus.field_subusuarios;
+    let toremove = loaded_group_sus.field_subusuarios.filter((uid)=>{
+      return !selected_ids.includes(uid);
+    })
+    let sub = this.subsData.subscription;
+    sub.field_subusuarios = sub.field_subusuarios.filter((data)=>{ return !toremove.includes(data)});
+    this.aux_docstoReload = this.aux_docstoReload.concat(toremove);
+    //console.log('group_enter_notselectedSubusers_remove',selected_ids,subusuerstotal,toremove,sub.field_subusuarios);
+  }
+
   
 
 }

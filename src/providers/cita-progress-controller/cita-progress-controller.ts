@@ -269,6 +269,13 @@ export class CitaProgressControllerProvider {
     return ret;
   }
 
+  inZero(){
+    let ret = false;
+    this.calcularCosto();
+    if(Number(this.costoCita) === 0){ ret = true;}
+    return ret;
+  }
+
 
   evalServicios(){
     this.activeCita.setAddedServices(this.activeCitaDoc.servicios);
@@ -294,31 +301,43 @@ export class CitaProgressControllerProvider {
       console.log('updateCheckedOption start servicesCompare',JSON.stringify(this.servicesCompare));
       console.log('activecita addedservices',this.activeCita.addedServices);
       if(State){ //si se va a agregar
-        if(Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)) //si es cortesia se revisa que se pueda agregar , osea si no hay mas servicios agregados
+        /*if(Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)) //si es cortesia se revisa que se pueda agregar , osea si no hay mas servicios agregados
         {
           console.log('es cortesia');
-          this.removeAllServices();
+          //this.removeAllServices();
           /*if(this.activeCita.addedServices.length === 0){
              console.log('es 0 ');
              this.selectedService = Nid;
             this.addService();
           }else{
             //Eliminar todos los servicios y agregar cortesia.
-          }*/
+          }
         }else{
           this.selectedService = Nid;
           this.addService();
           this.removeServiceWnid(Number(CitasDataProvider.SERVICIO_CORTESIA_NID));
-        }
+        }*/
+        this.checkDisableCortesia();
+        this.selectedService = Nid;
+        this.addService();
       }else{
-        if(! (Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID) ) ) {
+        //if(! (Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID) ) ) {
         this.removeServiceWnid(Nid);
         this.cortesiaCheck();
-      }
+      //}
       
     }
       console.log('added',this.activeCita.addedServices);
       console.log('updateCheckedOption end servicesCompare',JSON.stringify(this.servicesCompare));
+    }
+
+
+    checkDisableCortesia(){
+      //si solo esta activo el servicio de cortesia y seleccionas otro, cortesia se des-selecciona
+      console.log('check disable cortesia',this.checkChecked(Number(CitasDataProvider.SERVICIO_CORTESIA_NID)),this.activeCita.addedServices.length === 1);
+      if(this.checkChecked(Number(CitasDataProvider.SERVICIO_CORTESIA_NID)) && this.activeCita.addedServices.length === 1){
+        this.removeServiceWnid(Number(CitasDataProvider.SERVICIO_CORTESIA_NID));
+      }
     }
 
     checkChecked(Nid:number):boolean{
@@ -326,7 +345,10 @@ export class CitaProgressControllerProvider {
     }
 
     isCortesiaOn(Nid){
-      return (Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)) && this.checkChecked(Nid);
+      if((Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)) )console.log('iscortesiaon',(Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)), this.checkChecked(Nid), !(this.activeCita.addedServices.length > 1));
+      return (Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)) 
+      && this.checkChecked(Nid)
+      && !(this.activeCita.addedServices.length > 1);
     }
 
    /* async guardarEdiciones(){

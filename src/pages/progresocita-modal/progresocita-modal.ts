@@ -64,10 +64,10 @@ export class ProgresocitaModalPage {
 
       finalizarPop(){
           console.log('trailcortesia',this.progressController.hasCortesia());
-          if(this.progressController.hasCortesia()){
+          if(this.progressController.inZero()){
             this.alert.chooseAlert(
               '',
-              `Si finaliza la cita como cortesía, se marcará automáticamente como pagada.`,
+              `¿Está seguro que desea finalizar la consulta con un costo de cero? la cita se marcará automáticamente como pagada.`,
               ()=>{ this.finalizarActualCita().then( ()=>{
                 this.pagarActualCita();
               }); },
@@ -75,9 +75,9 @@ export class ProgresocitaModalPage {
             );
           }else{
         this.finalizarActualCita().then( ()=>{this.close();});
-      }
-        
-    
+          }
+          //revisar si esta en 0
+      //this.finalizarActualCita().then( ()=>{this.close();});
       }
 
 

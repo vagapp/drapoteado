@@ -39,8 +39,24 @@ ion-content{
     text-decoration: none;
 }
 
+.personaldatawrap {
+    /* width: 75%; */
+    /* text-align: center; */
+    display: inline-block;
+}
+
+.justifyleft{
+    justify-content: left;
+    text-align: left;
+    width: 100%;
+}
+
 .margint20{
     margin-top: 20px;
+}
+
+.marginl20{
+    margin-left: 20px;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */

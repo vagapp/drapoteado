@@ -73,8 +73,10 @@ export class MiplanPage {
     public subuserData: SubusersDataProvider,
     public subuserMan: SubusersManagerProvider,
     public wsMessenger: WsMessengerProvider,
-    public updater: UpdaterProvider
+    public updater: UpdaterProvider,
+    public subuserManager: SubusersManagerProvider
   ) {
+      this.subuserManager.cargarSubusuarios();
     //conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
       let public_test ='key_GtbbRJpEKq8zTrtq3EPCTqQ';
       let public_prod='key_Wwir4csBhZwvzCny3TkeNUA';
@@ -280,7 +282,7 @@ export class MiplanPage {
     if(!this.guardar_basic_validation()) return false;
     if(!this.guardar_subusernumber_validation()) return false;
     await this.checkBasicToGroup();
-    
+    console.log('basictogroupcomplete');
     await this.suscribirse();
     //this.onplanchange = false;
   }  
@@ -289,11 +291,14 @@ export class MiplanPage {
    * Revisa si se esta cambiando de plan basico a plan grupo medico.
    */
   async checkBasicToGroup(){
-    if( !this.subsData.isGroup  && Number(this.selectedPlan) === Number(SubscriptionDataProvider.PLAN_GROUP)){
-     
+    console.log('checkBasicToGroup',this.subsManager.checkForSubscription(), !this.subsData.isGroup,Number(this.selectedPlan) === Number(SubscriptionDataProvider.PLAN_GROUP));
+    if( this.subsManager.checkForSubscription() && !this.subsData.isGroup  && Number(this.selectedPlan) === Number(SubscriptionDataProvider.PLAN_GROUP)){
+     console.log('basictogroupenter');
       await this.subsManager.group_enter_selectedSubusersClean(this.subuserData.selectedForGroup,this.subsData.subscription);
+      await this.subsManager.group_enter_notselectedSubusers_remove(this.subuserData.selectedForGroup,this.subsData.subscription);
       let reload_users = this.subsManager.aux_docstoReload.concat(this.subuserData.selectedForGroup.map((e)=>{ return Number(e.uid)}));
       this.wsMessenger.generateSuboutofgroup(reload_users,1);
+      //clean the selectedusers.
       }
   }
 
@@ -402,11 +407,7 @@ export class MiplanPage {
       let res = await this.subsManager.subscribe( this.selectedPlanObject, aux_sus);
       this.loader.dismissLoader();
       await this.CheckSuscriptionpayment();
-     
     }
-   
-    
-    
   }
 
   async CheckSuscriptionpayment(){
@@ -571,6 +572,16 @@ selectCard( input_src:any ){
       async ()=>{ await this.removerSubsUser(Number(this.userData.userData.uid));  this.bu.locationReload();},
       ()=>{}
     );
+  }
+
+
+  checkShowUserList(){
+    console.log('checkShowUserList',this.isgroup,!this.subsData.isGroup,this.permissions.checkUserSuscription([this.PLAN_ANY]),this.subuserData.mySubUsers.length > 0);
+    return (
+      this.isgroup && 
+      !this.subsData.isGroup && 
+      this.permissions.checkUserSuscription([this.PLAN_ANY]) &&  
+      this.subuserData.mySubUsers.length > 0);
   }
   
 

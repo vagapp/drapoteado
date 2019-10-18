@@ -182,6 +182,7 @@ export class CitasDataProvider{
     }
     if(this.checkMonth(day.DayMs)){
       day.monthlabel = DateProvider.getMonthLabel(this.amon);
+      console.log('setting month',day);
     }
     }
   }
@@ -231,6 +232,7 @@ export class CitasDataProvider{
         }else{
           ret = true;
           this.amon = month; console.log(' checkytrailcheckmon tru');
+         
         } 
        }
       return ret;
