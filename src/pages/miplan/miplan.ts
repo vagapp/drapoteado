@@ -57,6 +57,9 @@ export class MiplanPage {
   isgroup:boolean = false;
 
 
+
+
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -81,8 +84,7 @@ export class MiplanPage {
       let public_test ='key_GtbbRJpEKq8zTrtq3EPCTqQ';
       let public_prod='key_Wwir4csBhZwvzCny3TkeNUA';
       let public_bardo_test = 'key_NG1gDM4rychaJSjqha7KuHg';
-      conekta.init('https://cdn.conekta.io/js/latest/conekta.js',public_bardo_test).then((c) => {
-      
+      conekta.init('https://cdn.conekta.io/js/latest/conekta.js',public_bardo_test).then((c) => {    
       //Este success se ejecuta con el javascript se cargó correctamente
       console.log(c);
     }).catch((err) => {
@@ -91,7 +93,7 @@ export class MiplanPage {
     });
   }
 
-
+  get docsleft(){ return this.subsData.checkForSub() ? this.subsManager.getDocAccountsLeft(this.subsData.subscription) : 0 ; }
   get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
   get nextCobro(){ 
   let ret = '';
@@ -150,7 +152,6 @@ export class MiplanPage {
       if(this.selectedAditionalsDocs > 0 && this.isgroup){
         ret += Number(this.selectedAditionalsDocs*SubscriptionDataProvider.EXTRA_DOC);
       }
-    
     }
     return ret;
     }
@@ -275,6 +276,7 @@ export class MiplanPage {
   editar(){
    
     this.activateChangePlanMode();
+    console.log('editar end selectedplan',this.selectedPlan);
   }
 
   async guardar(){
@@ -582,6 +584,18 @@ selectCard( input_src:any ){
       !this.subsData.isGroup && 
       this.permissions.checkUserSuscription([this.PLAN_ANY]) &&  
       this.subuserData.mySubUsers.length > 0);
+  }
+
+
+  updateCheckedOptions( planNid , event ){
+    
+    this.selectedPlan = Number( planNid );
+    console.log('selected option is',planNid,this.selectedPlan);
+  }
+
+
+  checkChecked( planNid ):boolean{
+    return  Number( this.selectedPlan ) === Number( planNid );
   }
   
 

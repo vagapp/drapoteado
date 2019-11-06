@@ -25,7 +25,7 @@
   </div>
   <div class="Citas_grid result_wrapper">
       <div class="subusers_subscription_div midFont">
-        <p class="leyenda">Esta es la lista de usuarios que actualmente están dados de alta. Recuerda que para compartir estos usuarios con otro doctor o agregar un usuario nuevo necesitas incluir el código que se muestra en la tabla. Compártelo con tus colegas para aprovechar TUAL al máximo. 
+        <p class="leyenda">Esta es la lista de usuarios que actualmente están dados de alta. <span *ngIf="!this.subsData.isGroup">Recuerda que para compartir estos usuarios con otro doctor o agregar un usuario nuevo necesitas incluir el código que se muestra en la tabla. Compártelo con tus colegas para aprovechar TUAL al máximo.</span> 
         </p>
       </div>
     <table class="results_table">

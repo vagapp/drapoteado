@@ -45,6 +45,18 @@ ion-content{
     display: inline-block;
 }
 
+.tutorialnotewrap{
+   display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+}
+
+
+.tutorial_miniwrap{
+    width: 80%;
+}
+
 .justifyleft{
     justify-content: left;
     text-align: left;
@@ -73,6 +85,10 @@ ion-content{
 
 .registerInputerror{
     background: #f1d5d5 !important;
+}
+
+.alert-message{
+    overflow: hidden;
 }
 
 .calendar-body{
@@ -825,7 +841,10 @@ flex-flow: column;
 
 .modalPage_header{
     border-bottom: 1px solid lightgray;
-    
+}
+
+.reporte_header .modalPage_header{
+    border-bottom: none !important;
 }
 
 .smallModal .modal-wrapper{

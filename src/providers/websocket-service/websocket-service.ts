@@ -16,6 +16,7 @@ import { SubusersDataProvider } from '../subusers-data/subusers-data';
 import { SubusersManagerProvider } from '../subusers-manager/subusers-manager';
 import { SubscriptionManagerProvider } from '../subscription-manager/subscription-manager';
 import { UpdaterProvider } from '../updater/updater';
+import { WsconnectionProvider } from '../wsconnection/wsconnection';
 
 
 @Injectable()
@@ -32,7 +33,8 @@ export class WebsocketServiceProvider {
     public subusersManager: SubusersManagerProvider,
     public subuserData: SubusersDataProvider,
     public subscriptionManager:SubscriptionManagerProvider,
-    public updater: UpdaterProvider
+    public updater: UpdaterProvider,
+    public wscon: WsconnectionProvider
   ) {
     this.init();
   }

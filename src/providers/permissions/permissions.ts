@@ -111,5 +111,13 @@ checkUserPlanHolder(){
   return ret;
 }
 
+checkPlanholderUid(Uid):boolean{
+  let ret = false;
+  if(this.subsData.checkForSub()){
+    ret =  (Number(this.subsData.subscription.field_plan_holder) === Number(Uid));
+  } 
+  return ret;
+}
+
 
 }

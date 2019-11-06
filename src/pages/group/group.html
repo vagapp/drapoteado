@@ -19,11 +19,13 @@
             <tr> 
                 <th>Nombre</th>
                 <th></th>
+                <th></th>
             </tr>
           </thead>
       <tbody>
         <tr *ngFor="let doc of this.subsData.docs">
           <td> {{doc['name']}} </td>
+          <td><span *ngIf="checkPlanHolder(doc['uid'])">Administrador del grupo</span></td>
           <td  class="toolCol">
               <button *ngIf="!isThis(doc['uid']) && isplanHolder()" (click)="removerSubsUser(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Remover</button>
              <!-- <button *ngIf="isThis(doc['uid']) && !isplanHolder()" (click)="getOut(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Salir</button>-->

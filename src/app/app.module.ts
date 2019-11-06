@@ -60,6 +60,8 @@ import { TooltipsModule } from 'ionic-tooltips';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { UpdaterProvider } from '../providers/updater/updater';
+import { HidehideZeroDirective } from '../directives/hidehide-zero/hidehide-zero';
+import { WsconnectionProvider } from '../providers/wsconnection/wsconnection';
 
 
 
@@ -72,10 +74,11 @@ import { UpdaterProvider } from '../providers/updater/updater';
 
 @NgModule({
   declarations: [
-    MyApp,
+    MyApp
   ],
   imports: [
     BrowserModule,
+    
     DlDateTimePickerDateModule,
     IonicModule.forRoot(MyApp, {
       preloadModules: true,
@@ -151,7 +154,8 @@ import { UpdaterProvider } from '../providers/updater/updater';
     TutorialProvider,
     JsonUtilProvider,
     ConektaComponent,
-    UpdaterProvider
+    UpdaterProvider,
+    WsconnectionProvider
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

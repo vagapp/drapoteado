@@ -171,8 +171,8 @@ export class NuevousuarioModalPage {
     this.newUser.field_doctores.und[this.userData.userData.uid] = this.userData.userData.uid;
     this.newUser.field_owner.und[0] = this.userData.userData.uid;   //crear codigo, verificar que sea unique = S
     this.newUser.field_codigo.und[0].value = "add"+this.userData.userData.uid;
-    this.newUser.field_nombre.und[0].value = "Subusuario";
-    this.newUser.field_apellidos.und[0].value = "Subusuario";
+    this.newUser.field_nombre.und[0].value = "";
+    this.newUser.field_apellidos.und[0].value = "";
     this.newUser.field_nombre.und[0].value = this.checkpass;
     this.newUser.status = ""+1;
     delete this.newUser.field_sub_id;
@@ -273,12 +273,17 @@ createUserValidation():boolean{
 
 createrNotEmptyValidation():boolean{
   let ret = true;
-  if(!this.newUser.name){
-    ret = false;
-  }
-  if(!this.newUser.field_alias.und[0].value){
-    ret = false;
-  }
+  if(!this.newUser.name){ret = false;}
+  if(!this.newUser.field_alias.und[0].value){ret = false;}
+  if(!this.newUser.field_alias.und[0].value){ret = false;}
+  
+  if(this.newUser.field_tipo_de_usuario.und[0]===0){ret = false;}
+  if(!this.newUser.field_useremail.und[0].email){ret = false;}
+  if(!this.newUser.mail){ret = false;}
+  if(!this.newUser.pass){ret = false;}
+  if(!this.checkpass){ret = false;} 
+  
+  console.log('tipodeusuario',this.newUser.field_tipo_de_usuario.und);
   if(!ret){
     this.alert.presentAlert("", "Los campos marcados en rojo son obligatorios");
     this.showerrors = true;

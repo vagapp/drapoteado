@@ -82,7 +82,7 @@ export class CitasPresentatorProvider {
     console.log('antes de guardar el state quedo',cita);
     console.log('check cita before sending',JSON.stringify(cita.data.field_ediciones_json));
     let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise().catch(e => {
-      console.log(e);
+      console.log('error',e);
       for (var key in e.error.form_errors) {
         switch (key){
           case 'changed':
@@ -92,6 +92,12 @@ export class CitasPresentatorProvider {
               });
               this.alert.presentAlert('','La información de esta cita cambio mientras estabas trabajando, inténtalo de nuevo.')
               return false;
+         
+              case 'field_email][und][0':
+                  this.alert.presentAlert('','El formato del correo electrónico no es correcto.');
+              return false;
+              
+
         }
       }
 

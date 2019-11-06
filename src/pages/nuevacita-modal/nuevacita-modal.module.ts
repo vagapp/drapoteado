@@ -4,6 +4,7 @@ import { NuevacitaModalPage } from './nuevacita-modal';
 import { CalendarModule } from "ion2-calendar";
 import { momentPicker } from "angular-moment-picker";
 import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
+import { DirectivesModule } from '../../directives/directives.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
   imports: [
     IonicPageModule.forChild(NuevacitaModalPage),
     CalendarModule,
-    DlDateTimePickerDateModule
+    DlDateTimePickerDateModule,
+    DirectivesModule
   ],
 })
 export class NuevacitaModalPageModule {}

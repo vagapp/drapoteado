@@ -173,8 +173,9 @@ export class EntergrupoPage {
     return  this.subuserData.subUsers.filter((subusers)=>{ console.log( subusers.selectedForGroup ); return subusers.selectedForGroup === true });
   }
 
-
-
+  gotoplan(){
+    
+  }
 
 
 }

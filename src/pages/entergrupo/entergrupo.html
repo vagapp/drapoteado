@@ -52,7 +52,7 @@
         </table>
   </div>
   <div class="enter_toolbar">
-    <span class="fontPrimary left enter_comprar">¿Quieres comprar un plan médico?</span>
+    <span class="fontPrimary left enter_comprar" (click)="cancelar()">¿Quieres comprar un plan médico?</span>
     <div class="button_section">
     <button class="generalButton bgColorSecondary right" (click)="buscar()" *ngIf="!this.groupLoaded" >Buscar</button>
     <button class="generalButton bgColorSecondary right" (click)="guardar()" *ngIf="this.groupLoaded && this.canSave" >Entrar al grupo</button>

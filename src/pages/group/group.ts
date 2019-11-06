@@ -76,4 +76,13 @@ export class GroupPage {
    return this.perm.checkUserPlanHolder();
   }
 
+  checkPlanHolder(Uid){
+    return this.perm.checkPlanholderUid(Uid);
+
+  }
+
+
+
+  
+
 }

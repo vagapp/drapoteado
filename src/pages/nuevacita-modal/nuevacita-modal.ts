@@ -408,7 +408,7 @@ setCitaDateFromiNPUT(){
 
 calendarLoad(){
   this.date = new Date();
-    this.monthNames = ["Enero","Febrero","Marzo","Abril","Mayi","Junio","Julio","Augosto","Septiembre","Octubre","Noviembre","Diciembre"];
+    this.monthNames = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
     this.getDaysOfMonth();
     //this.loadEventThisMonth();
 }

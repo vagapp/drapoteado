@@ -38,7 +38,7 @@
           </div>
           <div class="ModalInput_input">
               <b>Teléfono</b>
-              <input [(ngModel)]="this.cita.data.field_telefono.und[0].value" name="field_telefono" type="text"/>
+              <input hidehide-zero disable-number-flow [(ngModel)]="this.cita.data.field_telefono.und[0].value" name="field_telefono" type="number"/>
           </div>
 
   <div *ngIf="cita.checkState(this.citasData.STATE_PENDIENTE)">        

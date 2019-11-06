@@ -81,7 +81,7 @@ export class NuevoservicioModalPage {
       title:"",
       costo:null,
       body:{und:[{value:""}]},
-      field_costo_servicio:{und:[{value:0}]},
+      field_costo_servicio:{und:[{value:null}]},
       field_doctor_uid:{und:[{value:0}]}
     }
   }

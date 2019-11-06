@@ -32,13 +32,13 @@
         </div>
         <div class="ModalInput_input">
             <b>Costo</b>
-            <input [(ngModel)]="this.newService.field_costo_servicio.und[0].value" [class.registerInputerror]="!this.newService.field_costo_servicio.und[0].value && showerrors" placeholder="Costo del servicio" type="number"/>
+            <input disable-number-flow onlynumber [(ngModel)]="this.newService.field_costo_servicio.und[0].value" [class.registerInputerror]="!this.newService.field_costo_servicio.und[0].value && showerrors" placeholder="Costo del servicio" type="text"/>
         </div>
     </div>
 
     <div class="nuevoservicio_content modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" >
         <span class="spanBlock bigBoldFont">¡Felicidades!</span>
-        <span class="spanBlock midMainFont"> El servicio {{this.newService.title}} ha sido agregadoha sido agregado. Ahora lo podrás seleccionar cada vez que mandes cobrar una consulta.</span>
+        <span class="spanBlock midMainFont"> El servicio {{this.newService.title}} ha sido agregado. Ahora lo podrás seleccionar cada vez que mandes cobrar una consulta.</span>
         <span class="spanBlock midSubFont"> Siempre que lo desees puedes modificar o agregar más servicios en la sección de alta de servicios y costos en el menú.</span>
         </div>
         

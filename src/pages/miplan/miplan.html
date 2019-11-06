@@ -17,8 +17,9 @@
     </div>
     <ng-container *ngIf="this.subsData.isGroup && !this.permissions.checkUserPlanHolder()">
     <div class="abandondiv"> 
-      <p>Al abandonar el grupo médico esta cuenta ya no tendrá acceso a las funciones de TUAL hasta comprar básico un plan o unirse a un grupo médico.</p>
-      <button  (click)="getOut()"  class="bgColorPrimary generalButton tableButton">Salir</button>
+      <p>Actualmente te encuentras dentro de un Grupo Médico, para hacer modificaciones en tus suscriptores o usuarios adicionales es necesario que contactes con el administrador del grupo.</p>
+      <p>Si abandonas este grupo deberás adquirir un plan básico o ingresar a otro grupo médico para poder seguir utilizando TUAL.</p>
+      <button  (click)="getOut()"  class="bgColorPrimary generalButton tableButton">Abandonar Grupo</button>
     </div>
   </ng-container>
   
@@ -27,7 +28,8 @@
     <div class="basicpadding nopadtop">
       Estamos convencidos que TUAL te ayudará a optimizar las consultas y pagos en tu consultorio. ¡Será mucho más fácil y seguro!
     </div>
-    <div class="plans_block" *ngIf="onplanchange"> <!-- Seleccion de plan cuando onplanchange  -->
+    <!-- Seleccion de plan cuando onplanchange  -->
+    <div class="plans_block" *ngIf="onplanchange"> 
       <span class="blockSpan info_plan_title" >Selecciona un plan </span>
 
       <div class="plan_section"  *ngFor="let plan of this.planesData.planes">
@@ -35,7 +37,7 @@
             <div class="control-group"> 
                 <label class="control control-radio">
                     <!--<input type="radio" name="rtype" value=""  [(ngModel)]="this.reportPresentator.type" checked="true"/>-->
-                    <input type="radio" name="selectedPlan" value="{{plan.nid}}" [(ngModel)]="this.selectedPlan"/>
+                    <input type="radio" name="selectedPlan" value="{{plan.nid}}" (change)="this.updateCheckedOptions(plan.nid,$event)"  [checked]="this.checkChecked(plan.nid)"/>
                     <div class="control_indicator"></div>
                 </label> 
                 </div>  
@@ -119,6 +121,7 @@
     <div class="plans_extras bisectional" *ngIf="this.isgroup" >
       <div class="plans_extras_section bisectional_section right_align">
         <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar más suscriptores a tu plan?</span> 
+        <p class="midSubFont" *ngIf="this.subsData.checkForSub()"> Cuentas con {{this.docsleft}} plazas disponibles. Haz agregado {{this.docAdicionales}} adicionales.</p>
         <p class="midSubFont">Puedes agregar suscriptores adicionales a los incluídos en tu grupo médico, tienen un costo preferencial de $169.00 y se agregan al pago de tu suscripción mensual. </p>
       </div>
 
@@ -188,7 +191,7 @@
          <div class="bisectional_section neuvo_metodo_pago"> 
             <div class="sources_wrapper"> <!-- INICIO STRIPE LISTED SOURCES-->
               <h3>Tarjetas activas</h3>
-              <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se han agregado método de pago. </div>
+              <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se ha agregado método de pago. </div>
               <ion-row *ngFor="let src of this.sources; let indice = index">
                 <ion-col col-10 [class.selectedsrc]="src.default" class="fact_src_unit">
                   <ion-row>

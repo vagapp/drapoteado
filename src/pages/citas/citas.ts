@@ -11,6 +11,7 @@ import { AlertProvider } from '../../providers/alert/alert';
 import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
 import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
 import { DateProvider } from '../../providers/date/date';
+import { UpdaterProvider } from '../../providers/updater/updater';
 /**
  * Generated class for the CitasPage page.
  *
@@ -36,11 +37,13 @@ export class CitasPage {
    public citasPresentator: CitasPresentatorProvider,
    public citasData: CitasDataProvider,
    public userData: UserDataProvider,
-   public date: DateProvider
+   public date: DateProvider,
+   public updater:UpdaterProvider
   ) {}
 
   ionViewDidLoad() {
-    this.citasData.defaultSort();
+    this.updater.updateCitas();
+    //this.citasData.defaultSort();
     this.actualyear=0;
     this.actualMonth=0;
   }

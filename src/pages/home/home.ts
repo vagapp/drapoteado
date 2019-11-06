@@ -11,6 +11,7 @@ import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-dat
 import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 import { TutorialProvider } from '../../providers/tutorial/tutorial';
 import { DateProvider } from '../../providers/date/date';
+import { UpdaterProvider } from '../../providers/updater/updater';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 @IonicPage({
@@ -36,7 +37,8 @@ export class HomePage {
     public doctoresData: DoctoresDataProvider,
     public citasData: CitasDataProvider,
     public tutoralProvider: TutorialProvider,
-    public dates:DateProvider
+    public dates:DateProvider,
+    public updater: UpdaterProvider
   ) {
     //console.log('hello',permissions.subsData.subscription);
   }
@@ -57,6 +59,7 @@ export class HomePage {
         console.log('update tutorial at dismiss');
     }*/
   }
+  this.updater.updateCitas();
   }
 
 

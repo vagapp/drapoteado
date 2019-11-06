@@ -41,7 +41,7 @@
                             </div>
                             <div class="progress_input">
                                 <b>Teléfono</b>
-                                <input [(ngModel)]="progressController.activeCita.data.field_telefono.und[0].value" name="field_telefono" type="number"/>
+                                <input hidehide-zero disable-number-flow [(ngModel)]="progressController.activeCita.data.field_telefono.und[0].value" name="field_telefono" type="number"/>
                             </div>
                         </td>
                         <td *ngIf="!(permissions.checkUserPermission([userData.TIPO_DOCTOR]))">{{progressController.activeCita.data.doctor_name}}</td>
@@ -135,15 +135,15 @@
                     <b>Formas de pago</b>
                 <div class="pagos-modal ModalInput_input">
                     Efectivo
-                    <input [(ngModel)]="progressController.cobroEfectivo" type="number"/>
+                    <input disable-number-flow onlynumber  [(ngModel)]="progressController.cobroEfectivo" type="text"/>
                 </div>
                 <div class="ModalInput_input">
                     Tarjeta
-                    <input [(ngModel)]="progressController.cobroTarjeta" type="number" />
+                    <input disable-number-flow  onlynumber [(ngModel)]="progressController.cobroTarjeta" type="text" />
                 </div>
                 <div class="ModalInput_input"> 
                     Cheque
-                    <input [(ngModel)]="progressController.cobroCheque"  type="number"/>
+                    <input  disable-number-flow onlynumber [(ngModel)]="progressController.cobroCheque"  type="text"/>
                 </div>
                 <span *ngIf="progressController.CantidadRestante > 0" class="spanBlock midAlign fontPrimary">
                     Faltan {{moneyFormat(progressController.CantidadRestante)}}
@@ -161,7 +161,7 @@
                     </div>
                     <div class="ModalInput_input" *ngIf="progressController.factura"> 
                         Monto de la factura
-                        <input [(ngModel)]="progressController.factura_cantidad" type="text"/>
+                        <input  disable-number-flow  onlynumber [(ngModel)]="progressController.factura_cantidad" type="text"/>
                     </div>
                     
                 </div>
