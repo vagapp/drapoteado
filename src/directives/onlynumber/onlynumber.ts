@@ -19,7 +19,7 @@ export class OnlynumberDirective {
   }
 
   onKeyUp ( $event ) {
-         if ($event.which > 31 && ($event.which < 48 || $event.which > 57)){
+         if ($event.which > 31 && ($event.which < 48 || $event.which > 57) && !($event.which >= 97 && $event.which <= 105 )){
           $event.preventDefault();
          }
        
