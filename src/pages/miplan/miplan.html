@@ -1,5 +1,5 @@
 <header></header>
-<ion-content padding>
+<ion-content class="wheader"  padding>
   <div class="modalPage_header">
     <div class="modalPage_title">
       <span class="spanBlock midFont"><b>Mi Plan</b></span>
@@ -12,13 +12,13 @@
     <div class="modalPage_lpane" *ngIf="!onplanchange && subsData.subscription">
       <span class="spanBlock midFont">Total de tu suscripción mensual: <span class="fontPrimary bold">${{cantidad}}</span></span>
       <span class="spanBlock midSubFont"> Vence el {{nextCobro}}</span>
-      <button class="generalButton bgColorPrimary " *ngIf="this.permissions.checkUserPlanHolder() && !onplanchange" (click)="editar()">Editar</button>
+      <button class="generalButton bgColorPrimary " *ngIf="this.permissions.checkUserPlanHolder() && !onplanchange" (click)="editar()">Modificar</button>
     </div>
     </div>
     <ng-container *ngIf="this.subsData.isGroup && !this.permissions.checkUserPlanHolder()">
     <div class="abandondiv"> 
-      <p>Actualmente te encuentras dentro de un Grupo Médico, para hacer modificaciones en tus suscriptores o usuarios adicionales es necesario que contactes con el administrador del grupo.</p>
-      <p>Si abandonas este grupo deberás adquirir un plan básico o ingresar a otro grupo médico para poder seguir utilizando TUAL.</p>
+      <p>Actualmente te encuentras en un paquete de Grupo Médico, el administrador del grupo es el único que puede hacer modificaciones, agregar suscriptores o usuarios adicionales al Plan.</p>
+      <p>Si abandonas este grupo deberás adquirir un plan básico o unirte a un grupo médico para poder seguir utilizando TUAL.</p>
       <button  (click)="getOut()"  class="bgColorPrimary generalButton tableButton">Abandonar Grupo</button>
     </div>
   </ng-container>
@@ -122,7 +122,7 @@
       <div class="plans_extras_section bisectional_section right_align">
         <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar más suscriptores a tu plan?</span> 
         <p class="midSubFont" *ngIf="this.subsData.checkForSub()"> Cuentas con {{this.docsleft}} plazas disponibles. Haz agregado {{this.docAdicionales}} adicionales.</p>
-        <p class="midSubFont">Puedes agregar suscriptores adicionales a los incluídos en tu grupo médico, tienen un costo preferencial de $169.00 y se agregan al pago de tu suscripción mensual. </p>
+        <p class="midSubFont">Puedes agregar suscriptores adicionales a los incluídos en tu grupo médico, tienen un costo preferencial de ${{EXTRA_DOC}}.00 y se agregan al pago de tu suscripción mensual. </p>
       </div>
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="onplanchange"> <!-- Usuarios adicionales onplanchange-->
@@ -130,21 +130,24 @@
           <span class="operator" (click)="operateExtraDoc(-1)" >-</span><input type="number" [(ngModel)]="this.selectedAditionalsDocs"/><span class="operator" (click)="operateExtraDoc(1)">+</span>
         </span>
        <!-- <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span></span>-->
-        <span class="spanBlock midSubFont"> Añadir <span class="fontPrimary">{{this.selectedAditionalsDocs}} suscriptores</span> por <span class="fontPrimary">${{this.selectedAditionalsDocs*169}}.</span></span>
+        <span class="spanBlock midSubFont"> Añadir <span class="fontPrimary">{{this.selectedAditionalsDocs}} suscriptores</span> por <span class="fontPrimary">${{this.selectedAditionalsDocs*EXTRA_DOC}}.</span></span>
         <!--<span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">${{(this.selectedAditionals*39) + (this.subsData.subscription.field_adicionales*39)}}.00</span></span>-->
-        <span class="spanBlock midFont" *ngIf="!onplanchange"> Costo total de suscriptores adicionales:  <span class="fontPrimary">${{(this.selectedAditionalsDocs*169)}}.00.</span></span>
+        <span class="spanBlock midFont" *ngIf="!onplanchange"> Costo total de suscriptores adicionales:  <span class="fontPrimary">${{(this.selectedAditionalsDocs*EXTRA_DOC)}}.00.</span></span>
 
         
       </div> <!-- fin de usuarios adicionales onplanchange-->
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
-        <span class="spanBlock midSubFont"> Actualmente cuentas con  <span class="fontPrimary">{{subAdicionales}} usuarios adicionales</span>  a los incluídos en tu plan. </span>
-        <span class="spanBlock midFont"> Total extra de subusuarios:  <span class="fontPrimary">${{subAdicionales*39}}.00.</span></span>
+        <span class="spanBlock midSubFont"> Actualmente cuentas con  <span class="fontPrimary">{{docAdicionales}} suscriptores adicionales</span>  a los incluídos en tu plan. </span>
+        <span class="spanBlock midFont"> Total extra de suscriptores:  <span class="fontPrimary">${{docAdicionales*EXTRA_DOC}}.00.</span></span>
       </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
 
      
 
     </div><!-- fin de plans extras -->
+    <div class="button_section"> 
+    <button class="generalButton bgColorPrimary " *ngIf="this.permissions.checkUserPlanHolder() && !onplanchange" (click)="editar()">Modificar</button>
+    </div>
     <div class="enter_subuser_selection_wrap" *ngIf="checkShowUserList()">
     <div class="enter_subuser_selection"  >
       
@@ -231,7 +234,7 @@
       <div class="button_section"> 
         <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>
         <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && cantcancel"  (click)="guardar()" >Suscribirse</button>
-        <button class="generalButton bgColorPrimary " *ngIf="!onplanchange" (click)="editar()" >Editar</button>
+        <button class="generalButton bgColorPrimary " *ngIf="this.permissions.checkUserPlanHolder() && !onplanchange" (click)="editar()">Modificar</button>
         
         <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="cancelar()" >Cancelar</button>
       </div>

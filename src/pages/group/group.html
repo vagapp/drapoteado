@@ -5,12 +5,14 @@
   Ionic pages and navigation.
 -->
 <header></header>
-<ion-content padding>
+<ion-content class="wheader"  padding>
     <div class="modalPage_header">
         <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
         <div class="modalPage_title">
-          <span class="spanBlock midFont"><b>Grupos Médicos</b></span>
-          <span class="spanBlock midSubFont">Revisa y administra los doctores de tu grupo.</span>
+          <span class="spanBlock midFont"><b>Suscriptores</b></span>
+          <span class="spanBlock midSubFont">Revisa y administra los suscriptores de tu grupo.</span>
+          <span class="spanBlock midSubFont">El administrador del grupo es el único que puede agregar suscriptores entrando a mi plan.</span>
+          <span class="spanBlock midSubFont">Cuentas con {{this.docsleft}} plazas disponibles.</span>
           <span class="spanBlock midMainFont"><input class="codigo" type="text" value="{{this.subsData.invcode}}" readonly></span>
         </div>
         </div>

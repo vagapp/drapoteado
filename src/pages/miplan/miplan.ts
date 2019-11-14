@@ -54,8 +54,16 @@ export class MiplanPage {
 
   cantcancel = false;
 
-  isgroup:boolean = false;
+  //isgroup:boolean = false;
 
+  get isgroup(){
+    return this.onplanchange ? ( Number(this.selectedPlan) === Number(SubscriptionDataProvider.PLAN_GROUP) ) ? true : false 
+                              : this.subsData.isGroup;
+  }
+  get EXTRA_DOC()
+{
+  return SubscriptionDataProvider.EXTRA_DOC
+}
 
 
 
@@ -104,7 +112,6 @@ export class MiplanPage {
     ret = aux_dispdates.date;
   }
   return ret;
-  
    }
   get subAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_adicionales) : 0;  }
   get docAdicionales(){  return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_docsadicionales) : 0;  }
@@ -141,7 +148,7 @@ export class MiplanPage {
         let selected_plan = this.planesData.getPlanById(this.selectedPlan);
         if(selected_plan){
         plan_costo = Number(selected_plan.field_costo);
-        this.isgroup = ( Number(selected_plan.nid) === Number(SubscriptionDataProvider.PLAN_GROUP) ) ? true : false;
+        //this.isgroup = ( Number(selected_plan.nid) === Number(SubscriptionDataProvider.PLAN_GROUP) ) ? true : false;
           
         }
       }
@@ -280,7 +287,6 @@ export class MiplanPage {
   }
 
   async guardar(){
-   
     if(!this.guardar_basic_validation()) return false;
     if(!this.guardar_subusernumber_validation()) return false;
     await this.checkBasicToGroup();
@@ -376,7 +382,6 @@ export class MiplanPage {
 
 
   async suscribirse(){
-   
     if(!this.enabledButton()) return false;
     this.loader.presentLoader('Subscribiendo ...');
     //Tengo para crear una suscripcion, pero no para editar una suscripcion. vamos a hacer un codigo para editar suscripcion.
@@ -400,12 +405,11 @@ export class MiplanPage {
       await this.CheckSuscriptionpayment();
     }
     }else{
-      
       let aux_sus = subscriptions.getEmptySuscription();
       aux_sus.field_cantidad = this.selectedTotal;
       aux_sus.field_plan_sus = this.selectedPlan;
       aux_sus.field_adicionales = Number(this.selectedAditionals);
-      if(this.isgroup)aux_sus.field_adicionales = Number(this.selectedAditionalsDocs);
+      if(this.isgroup)aux_sus.field_docsadicionales = Number(this.selectedAditionalsDocs);
       let res = await this.subsManager.subscribe( this.selectedPlanObject, aux_sus);
       this.loader.dismissLoader();
       await this.CheckSuscriptionpayment();

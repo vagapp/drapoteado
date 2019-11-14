@@ -37,6 +37,11 @@ export class GroupPage {
    
   }
 
+
+  get docsleft(){
+    return this.subsData.checkForSub() ? this.subsMan.getDocAccountsLeft(this.subsData.subscription) : 0 ;
+  }
+
   ionViewDidLoad() {
     /*if(!this.perm.checkUserFeature([UserDataProvider.PLAN_ANY],[PermissionsProvider.PLAN_GROUP])){
       this.navCtrl.setRoot("HomePage");

@@ -16,8 +16,8 @@ export class SubscriptionDataProvider {
   static PLAN_GROUP:number = 1205 ;
   static PLAN_ANY:number = -1;
 
-  static EXTRA_SUB:number = 40;
-  static EXTRA_DOC:number = 169;
+  static EXTRA_SUB:number = 39;
+  static EXTRA_DOC:number = 329;
 
 
   subscription: subscriptions = null;
