@@ -20,7 +20,7 @@ export class BaseUrlProvider {
   backend_tual_internas_full_name = 'https://bkint.tual.mx/';
   backend_tual_dev_full_name = 'https://bkdev.tual.mx/';
   backend_tual_pro_full_name = 'https://bkpro.tual.mx/';
-  backend_internas_name = 'backendint/';
+  backend_internas_name = 'backendint/';237362
   backend_pruebas_name = 'backenddev/';
   backend_pruebas_cp_name = 'backendcp/';
   Terminos_page = 'https://www.tual.mx/terminos-y-condiciones';

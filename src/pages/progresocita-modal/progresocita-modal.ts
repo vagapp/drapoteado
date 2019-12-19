@@ -53,6 +53,7 @@ export class ProgresocitaModalPage {
 
   async ionViewWillLeave(){
       this.progressController.stopInterval();
+      this.progressController.activeCitaDoc.resetServiceTimes();
       if(this.progressController.onAdeudo){
       this.loader.presentLoader('Cargando Reporte...');
       this.reportp.loadReporte().then(()=>{this.loader.dismissLoader();});
@@ -88,14 +89,24 @@ export class ProgresocitaModalPage {
         console.log('finish');
       }
 
+
+      operateTimes( Nid, operand ){
+        console.log('operateTimes',Nid,operand);
+        this.progressController.operateTimes(Nid,operand);
+        console.log('finish');
+      }
+
+      getAddedTimes( Nid ){
+        return this.progressController.getAddedTimes(Nid);
+      }
+
+
       async finalizarActualCita(state = CitasDataProvider.STATE_COBRO){
         this.progressController.finalizarCitaActiva();
         await this.citasPresentator.updateStateRequest( this.progressController.activeCita ,state );
       }
 
       pagadaPop(){
-        
-       
         if(!this.validarPagarNOEMPTY()){
           this.alert.presentAlert('','Introducir monto a pagar.');
           return false;
@@ -145,7 +156,8 @@ export class ProgresocitaModalPage {
         console.log(this.progressController.cobroEfectivo, this.progressController.cobroEfectivo  === null );
         console.log(this.progressController.cobroTarjeta, this.progressController.cobroTarjeta === null );
         console.log(this.progressController.cobroCheque, this.progressController.cobroCheque === null );
-        if( this.progressController.cobroEfectivo  === null &&  this.progressController.cobroTarjeta === null && this.progressController.cobroCheque === null ){
+        console.log(this.progressController.cobroBancaria, this.progressController.cobroBancaria === null );
+        if( this.progressController.cobroEfectivo  === null &&  this.progressController.cobroTarjeta === null && this.progressController.cobroCheque === null  && this.progressController.cobroBancaria === null ){
           console.log('nopusonada'  );
           ret = false;
         }
@@ -159,7 +171,8 @@ export class ProgresocitaModalPage {
         console.log(this.progressController.cobroEfectivo, Number(this.progressController.cobroEfectivo) );
         console.log(this.progressController.cobroTarjeta,Number(this.progressController.cobroTarjeta) );
         console.log(this.progressController.cobroCheque,Number(this.progressController.cobroCheque));
-        if( Number(this.progressController.cobroEfectivo) < 0 ||  Number(this.progressController.cobroTarjeta) < 0 ||  Number(this.progressController.cobroCheque) < 0){
+        console.log(this.progressController.cobroBancaria,Number(this.progressController.cobroBancaria));
+        if( Number(this.progressController.cobroEfectivo) < 0 ||  Number(this.progressController.cobroTarjeta) < 0 ||  Number(this.progressController.cobroCheque) < 0 ||  Number(this.progressController.cobroBancaria) < 0){
           ret = false;
         }
         return ret;
@@ -171,7 +184,8 @@ export class ProgresocitaModalPage {
         console.log(this.progressController.cobroEfectivo, Number(this.progressController.cobroEfectivo) );
         console.log(this.progressController.cobroTarjeta,Number(this.progressController.cobroTarjeta) );
         console.log(this.progressController.cobroCheque,Number(this.progressController.cobroCheque));
-        if( isNaN(this.progressController.cobroEfectivo)  ||  isNaN(this.progressController.cobroTarjeta)  ||  isNaN(this.progressController.cobroCheque) ){
+        console.log(this.progressController.cobroBancaria,Number(this.progressController.cobroBancaria));
+        if( isNaN(this.progressController.cobroEfectivo)  ||  isNaN(this.progressController.cobroTarjeta)  ||  isNaN(this.progressController.cobroCheque)  ||  isNaN(this.progressController.cobroBancaria) ){
           ret = false;
         }
         return ret;
@@ -182,7 +196,12 @@ export class ProgresocitaModalPage {
   
 
       async allsaveActualCita(){
-        console.log('allsaveActualCita');
+        console.log('allsaveActualCita',this.progressController.costoCita, this.progressController.activeCita.cantidadPagada);
+
+        if( Number( this.progressController.costoCita ) < Number( this.progressController.activeCita.cantidadPagada ) ){
+          this.alert.presentAlert('','El monto total de los servicios no puede ser menor a lo que ya se ha cobrado.');
+          return false;
+        }
         this.progressController.updateCitaActiva();
         //this.progressController.guardarEdiciones();
         await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
@@ -190,6 +209,16 @@ export class ProgresocitaModalPage {
       }
 
       async guardarEdiciones(){
+        if( Number( this.progressController.activeCita.restantePagos ) === 0){
+          this.alert.chooseAlert(
+            '',
+            `¿Está seguro que desea finalizar la consulta? la cita se marcará automáticamente como pagada.`,
+            ()=>{ this.finalizarActualCita().then( ()=>{
+              this.pagarActualCita();
+            }); },
+            ()=>{}
+          );
+        }else{
         if( !this.validarPagarNONEG() ){
           this.alert.presentAlert('','No se aceptan valores negativos.');
           return false;
@@ -207,11 +236,13 @@ export class ProgresocitaModalPage {
         this.progressController.loadcita(this.progressController.activeCita);
         //this.close();
       }
+    }
 
       moneyFormat( money:number ): string {
         return CitasDataProvider.moneyFormat(money);
        }
 
+  
   
       close(){
         this.viewCtrl.dismiss();

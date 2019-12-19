@@ -10,8 +10,10 @@
 <div class="login_chose" *ngIf="showLoginForm == false">
     <button class="generalButton largeButton bgColorPrimary" (click)="showLoginForm=true" >Ingresa</button>
     <button class="generalButton largeButton bgColorPrimary" (click)="openRegister()">Registro</button>
-    <div class="margint20">
-        <a [href]="this.bu.terminosUrl" class="whitelink">Términos y condiciones</a>
+    <div class="margint20 flexalign">
+        <a (click)="openterminos()" class="whitelink">Términos y condiciones</a>
+        <a (click)="openAviso()" class="whitelink">Aviso de Privacidad</a>
+        <a (click)="openFaq()" class="whitelink">F.A.Q.</a>
     </div>
 </div>
 <div class="login_form" *ngIf="showLoginForm">

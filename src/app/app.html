@@ -11,7 +11,9 @@
       <!--<button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
         {{p.title}}
       </button>-->
-     
+      <button *ngIf="!subscriptionManager.checkForSubscription()" menuClose ion-item  (click)="openLogin()">
+          Login
+      </button>
       <button *ngIf="perm.checkUserFeature([userData.TIPO_ANY],[userData.PLAN_ANY])" menuClose ion-item  (click)="openHomePage()">
           Home
       </button>
@@ -36,7 +38,7 @@
       <button *ngIf="perm.checkUserFeature([userData.TIPO_DOCTOR],[perm.PLAN_GROUP],false)" menuClose ion-item  (click)="openGrupoPage()">
           Suscriptores
     </button>
-      <button menuClose ion-item  (click)="openRegister()">
+      <button *ngIf="subscriptionManager.checkForSubscription()" menuClose ion-item  (click)="openRegister()">
           Mis datos
       </button>
    
@@ -47,10 +49,16 @@
           Tutorial
         </button>-->
            
-      <button menuClose ion-item  (click)="openterminos()">
+      <button   menuClose ion-item  (click)="openterminos()">
         Términos y condiciones
     </button>
-      <button menuClose ion-item  (click)="logout()">
+    <button   menuClose ion-item  (click)="openAviso()">
+        Aviso de Privacidad
+    </button>
+    <button   menuClose ion-item  (click)="openFaq()">
+        F.A.Q.
+    </button>
+      <button *ngIf="perm.checkUserFeature([userData.PLAN_ANY])" menuClose ion-item  (click)="logout()">
         <span class="fontPrimary">Salir</span>
       </button>
     </ion-list>

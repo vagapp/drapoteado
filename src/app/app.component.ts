@@ -144,6 +144,11 @@ export class MyApp {
     this.nav.setRoot("LoginPage");
   }
   
+
+  
+  openLogin(){
+    this.nav.setRoot("LoginPage");
+  }
   openHomePage(){this.nav.setRoot(this.Home);}
   openGrupoPage(){this.nav.setRoot("GroupPage");}
   openCitasPage(){this.nav.setRoot("CitasPage");}
@@ -151,9 +156,9 @@ export class MyApp {
   openUsuariosPage(){this.nav.setRoot("UsuariosPage");}
   openReportesPage(){this.nav.setRoot("ReportesPage");}
   openFacturacionPage(){this.nav.setRoot("FacturacionPage");}
-  openterminos(){
-    this.nav.setRoot('TerminosycondicionesPage');
-  }
+  openterminos(){this.nav.setRoot('TerminosycondicionesPage');}
+  openAviso(){this.nav.setRoot('AvisoprivacidadPage');}
+  openFaq(){this.nav.setRoot('FaqPage');}
   openMiplan(){
     this.nav.setRoot("MiplanPage");
   }

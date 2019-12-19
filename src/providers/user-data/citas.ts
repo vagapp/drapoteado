@@ -49,6 +49,7 @@ export class Citas{
     pagosEfectivo:number = 0;
     pagosCheque:number = 0;
     pagosTarjeta:number = 0;
+    pagosBancaria:number = 0;
     pagosFacturado: number = 0;
     pagosTotal:number = 0;
     originactivereport:boolean = false;
@@ -60,6 +61,7 @@ export class Citas{
     pagosEfectivoOut:number = 0;
     pagosChequeOut:number = 0;
     pagosTarjetaOut:number = 0;
+    pagosBancariaOut:number = 0;
     pagosFacturadoOut: number = 0;
     pagosTotalOut:number = 0;
 
@@ -67,6 +69,7 @@ export class Citas{
      pagosEfectivoDoc:number = 0;
      pagosChequeDoc:number = 0;
      pagosTarjetaDoc:number = 0;
+     pagosBancariaDoc:number = 0;
      pagosFacturadoDoc: number = 0;
      pagosTotalDoc:number = 0;
 
@@ -96,9 +99,7 @@ export class Citas{
     get paciente(){ return this.data.field_paciente.und[0].value;}
     get costo(){return Number(this.data.field_costo_sobrescribir.und[0].value);}
     get cobro(){return Number(this.data.field_cobro.und[0].value)}
-    //get cobroCheque(){return Number(this.data.field_cobro_cheque.und[0].value);}
-    //get cobroEfectivo(){return Number(this.data.field_cobro_efectivo.und[0].value);}
-    //get cobroTarjeta(){return Number(this.data.field_cobro_tarjeta.und[0].value);}
+  
     get CantidadRestante(){ return (Number(this.costo) - Number(this.cobro) ); }
     get stateNumber() { return Number(this.data.field_estado.und[0].value); }
     get stateLabel(){ return CitasDataProvider.getStateLabel(Number(this.data.field_estado.und[0].value)); }
@@ -108,6 +109,8 @@ export class Citas{
     set cobroCheque(val){ this.data.field_cobro_cheque.und[0].value = Number(val); this.calcularCobroTotal();} 
     set cobroEfectivo(val){ this.data.field_cobro_efectivo.und[0].value = Number(val); this.calcularCobroTotal();}
     set cobroTarjeta(val){ this.data.field_cobro_tarjeta.und[0].value = Number(val); this.calcularCobroTotal();}
+    set cobroBancaria(val){ this.data.field_cobro_bancaria.und[0].value = Number(val); this.calcularCobroTotal();}
+    
 
     get ShowCorreo() { return this.data.field_email.und[0].email ? this.data.field_email.und[0].email: 'Sin Correo' }
     get Showtelefono() { return  this.data.field_telefono.und[0].value && Number(this.data.field_telefono.und[0].value) !== 0 ? this.data.field_telefono.und[0].value : 'Sin Tel.' }
@@ -116,7 +119,7 @@ export class Citas{
 
     get isAdeudoAnterior():boolean{ return this.originactivereport && this.checkState(CitasDataProvider.STATE_ADEUDO)}
     
-    calcularCobroTotal(){ this.data.field_cobro.und[0].value = this.cobroTarjeta + this.cobroCheque + this.cobroEfectivo }
+    calcularCobroTotal(){ this.data.field_cobro.und[0].value = this.cobroTarjeta + this.cobroCheque + this.cobroEfectivo + this.cobroBancaria }
 
     get cantidadPagada():number{
         let cantidad_pagada = 0;
@@ -126,7 +129,8 @@ export class Citas{
             pago['efe'] = Number(pago['efe']).toFixed(2);
             pago['che'] = Number(pago['che']).toFixed(2);
             pago['tar'] = Number(pago['tar']).toFixed(2);
-            cantidad_pagada += (Number(pago['efe']) + Number(pago['tar']) +Number(pago['che'])); 
+            pago['ban'] = Number(pago['ban']).toFixed(2);
+            cantidad_pagada += (Number(pago['efe']) + Number(pago['tar']) +Number(pago['che'])+Number(pago['ban'])); 
            
         });
         //console.log('calculando cantidad pagada',cantidad_pagada);
@@ -134,7 +138,7 @@ export class Citas{
     }
 
     get restantePagos():number{
-      
+      console.log('restantePagos',this.costo,this.cantidadPagada)
         return this.costo - this.cantidadPagada;
     }
 
@@ -143,12 +147,14 @@ export class Citas{
     }
 
     get PagosonFecha(){
+        console.log('PagosonFecha checkpago',this.pagos);
         let ret;
         ret = this.pagos.filter((pago)=>{
             pago.efe = Number(Number(pago.efe).toFixed(2));
             pago.tar = Number(Number(pago.tar).toFixed(2));
             pago.che = Number(Number(pago.che).toFixed(2));
-            pago.total = Number(pago.efe)+Number(pago.tar)+Number(pago.che);
+            pago.ban = Number(Number(pago.ban).toFixed(2));
+            pago.total = Number(pago.efe)+Number(pago.tar)+Number(pago.che)+Number(pago.ban);
             pago.total = Number(Number(pago.total).toFixed(2));
             return (this.pagosfrom === 0 || (Number(pago.fec) >= Number( this.pagosfrom) && Number(pago.fec) < Number(this.pagosto)));
         });
@@ -225,16 +231,19 @@ export class Citas{
         this.pagosEfectivo = 0;
         this.pagosCheque = 0;
         this.pagosTarjeta = 0;
+        this.pagosBancaria = 0;
         this.pagosFacturado = 0;
 
         this.pagosEfectivoOut = 0;
         this.pagosChequeOut = 0;
         this.pagosTarjetaOut = 0;
+        this.pagosBancariaOut = 0;
         this.pagosFacturadoOut = 0;
 
         this.pagosEfectivoDoc = 0;
         this.pagosChequeDoc = 0;
         this.pagosTarjetaDoc = 0;
+        this.pagosBancariaDoc = 0;
         this.pagosFacturadoDoc = 0;
       
         console.log('traildater newcita ');
@@ -253,11 +262,11 @@ export class Citas{
         }
         this.PagosonFecha.forEach(pago => {
             console.log('traildater comparing date ',this.ultimaFechaPago,pago.fec);
-            
-            console.log('trailpago',pago);
+            console.log('trail rban1 trailpago',pago);
             this.pagosEfectivo += Number(pago.efe);
             this.pagosCheque += Number(pago.che);
             this.pagosTarjeta += Number(pago.tar);
+            this.pagosBancaria += Number(pago.ban);
             this.pagosFacturado += Number(pago.fac);
             console.log('checking pago',pago.uid,uid);
             console.log('trailpago efectivo',this.pagosEfectivo);
@@ -267,6 +276,7 @@ export class Citas{
                 this.pagosEfectivoDoc += Number(pago.efe);
                 this.pagosChequeDoc += Number(pago.che);
                 this.pagosTarjetaDoc += Number(pago.tar);
+                this.pagosBancariaDoc += Number(pago.ban);
                 this.pagosFacturadoDoc += Number(pago.fac);
             }
            
@@ -275,6 +285,7 @@ export class Citas{
                 this.pagosEfectivoOut += Number(pago.efe);
                 this.pagosChequeOut += Number(pago.che);
                 this.pagosTarjetaOut += Number(pago.tar);
+                this.pagosBancariaOut += Number(pago.ban);
                 this.pagosFacturadoOut += Number(pago.fac);
             }
         });
@@ -284,10 +295,10 @@ export class Citas{
         //field_datemsb  
         this.testOriginactivereport(this.pagosfrom, this.pagosto);
 
-        console.log( this.pagosEfectivo);
-        this.pagosTotal =  this.pagosEfectivo + this.pagosCheque + this.pagosTarjeta;
-        this.pagosTotalOut =  this.pagosEfectivoOut + this.pagosChequeOut + this.pagosTarjetaOut;
-        this.pagosTotalDoc =  this.pagosEfectivoDoc + this.pagosChequeDoc + this.pagosTarjetaDoc;
+        console.log('trail rban1 pagos', this.pagosEfectivo, this.pagosCheque,this.pagosTarjeta,this.pagosBancaria);
+        this.pagosTotal =  this.pagosEfectivo + this.pagosCheque + this.pagosTarjeta + this.pagosBancaria;
+        this.pagosTotalOut =  this.pagosEfectivoOut + this.pagosChequeOut + this.pagosTarjetaOut + this.pagosBancariaOut;
+        this.pagosTotalDoc =  this.pagosEfectivoDoc + this.pagosChequeDoc + this.pagosTarjetaDoc + this.pagosBancariaDoc;
         //this.ultimaFechaText = DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).date + DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).time;
         
     }
@@ -407,6 +418,7 @@ export class Citas{
           this.data.field_email.und[0].email = data_input.field_email;
           this.data.field_telefono.und[0].value = data_input.field_telefono;
           this.data.field_cita_doctor.und[0] = data_input.doctor_uid;
+          this.data.field_comentarios.und[0].value = data_input.field_comentarios;
             //let aux_caja_array = new Array();
           /*  this.data.field_cita_caja.und= new Array();
             if(data_input.caja_uid){
@@ -430,6 +442,7 @@ export class Citas{
           this.data.field_cobro_cheque.und[0].value = data_input.field_cobro_cheque;
           this.data.field_cobro_efectivo.und[0].value = data_input.field_cobro_efectivo;
           this.data.field_cobro_tarjeta.und[0].value = data_input.field_cobro_tarjeta;
+          this.data.field_cobro_bancaria.und[0].value = data_input.field_cobro_bancaria;
           this.data.field_costo_sobrescribir.und[0].value = data_input.field_costo_sobrescribir;
           this.data.field_datemsb.und[0].value = Number(data_input.field_datemsb.value);
           this.dateMs =  this.data.field_datemsb.und[0].value;
@@ -554,6 +567,10 @@ export class Citas{
             if(a.title < b.title) return -1;
             return 0;
         });
+        this.reporteServicios.forEach(serv => {
+            serv.singleunit = Number(serv.costo);
+            serv.costo = serv.singleunit * ( Number(serv.times ? serv.times : 1 ) )
+        });
         console.log('reporteServicios',this.reporteServicios);
         Debugger.log(['added reportservicios', this.reporteServicios]);
     }
@@ -567,6 +584,13 @@ export class Citas{
             console.log('is not array');
             this.pagos =  JSON.parse(input_data);
         }
+        this.pagos.forEach(pago => {
+            pago.che = this.getNumberOrZero(pago.che);
+            pago.tar = this.getNumberOrZero(pago.tar);
+            pago.ban = this.getNumberOrZero(pago.ban);
+            pago.efe = this.getNumberOrZero(pago.efe);
+            pago.fac = this.getNumberOrZero(pago.fac);
+        });
     }
 
     setEdicionesJson( input_data ){
@@ -581,6 +605,12 @@ export class Citas{
         console.log(this.ediciones);
     }
 
+
+    getNumberOrZero( something ):number{
+        let ret = 0;
+        if(something && !isNaN(something)){ ret = something }
+        return ret;
+    }
   
   
     
@@ -751,7 +781,7 @@ export class Citas{
 
 
     setAddedServices( servicios:servicios[] ){
-        console.log("populating addedServices with",servicios);
+        console.log("populating addedServices with",servicios,this.data.aux_servicios_json);
         this.addedServices = new Array();
         for(let i = 0; i < this.data.field_servicios_cita.und.length; i++){
             console.log("searching for ",this.data.field_servicios_cita.und[i]);
@@ -767,15 +797,17 @@ export class Citas{
     }
 
     setServicesData(){
-        console.log("trailpc1 populating data services_cita");
+        console.log("trailpc1c1 populating data services_cita");
         this.data.field_servicios_cita.und = new Array();
         this.addedServices.forEach(element => {
-            console.log("trailpc1 added service",element);
+            console.log("trailpc1c1 added service",element);
             this.data.field_servicios_cita.und.push(element.Nid);
         });
-        this.data.aux_servicios_json = JSON.stringify( this.addedServices);
-        console.log('trailpc1 populated services json', this.data.aux_servicios_json);
-        console.log("trailpc1 populated services_cita data",this.data.field_servicios_cita);
+            console.log('trailpc1c1 this.addedServices',this.addedServices);
+            this.data.aux_servicios_json = JSON.stringify( this.addedServices);
+            this.data.field_servicios_json.und[0]['value'] = JSON.stringify( this.addedServices)
+            console.log('trailpc1c1 populated services json', this.data.aux_servicios_json);
+            console.log("trailpc1c1 populated services_cita data",this.data.field_servicios_cita);
     }
 
    addServicio( servicio:servicios ):boolean{
@@ -790,6 +822,20 @@ export class Citas{
         return ret;
    }
 
+   operateServiceTimes(Nid, operand ){
+       let service = this.addedServices.find((serv)=>{return Number(serv.Nid) == Number(Nid);});
+       console.log('service times',service.times, operand);
+       service.times += Number( operand );
+       if(service.times <= 0){ service.times = 1;}
+       if(service.times >= 100){ service.times = 100; }
+       console.log('times is now',service.times);
+   }
+
+
+   getAddedTimes(Nid){
+    let service = this.addedServices.find((serv)=>{return Number(serv.Nid) == Number(Nid);}); 
+    return service.times;
+   }
 
 
    removeServicio( servicio:servicios ):boolean {

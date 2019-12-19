@@ -12,8 +12,11 @@
           <span class="spanBlock midFont"><b>Suscriptores</b></span>
           <span class="spanBlock midSubFont">Revisa y administra los suscriptores de tu grupo.</span>
           <span class="spanBlock midSubFont">El administrador del grupo es el único que puede agregar suscriptores entrando a mi plan.</span>
-          <span class="spanBlock midSubFont">Cuentas con {{this.docsleft}} plazas disponibles.</span>
           <span class="spanBlock midMainFont"><input class="codigo" type="text" value="{{this.subsData.invcode}}" readonly></span>
+        </div>
+        <div class="modalPage_btn_wrapper">
+          <button class="bgColorSecondary generalButton" (click)="openNuevoSuscriptor()">Agregar nuevo</button>
+          <span class="spanBlock midSubFont">Cuentas con {{this.docsleft}} plazas disponibles.</span>
         </div>
         </div>
     <table class="results_table">

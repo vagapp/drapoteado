@@ -8,6 +8,7 @@ export class servicios{
     title:string = null;
     costo:number = null;
     order:number = 0;
+    times:number = 1;
 
     constructor(){
       
@@ -24,6 +25,7 @@ export class servicios{
         this.Uid = data_input['Uid'];
         this.title = data_input['title'];
         this.costo = data_input['costo'];
+        this.times = 1;
         Debugger.log([`data set on servicio ${this.Nid}`,this]);
       }
 

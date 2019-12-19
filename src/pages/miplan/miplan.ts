@@ -20,6 +20,10 @@ import { SubusersManagerProvider } from '../../providers/subusers-manager/subuse
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { DateProvider } from '../../providers/date/date';
 import { UpdaterProvider } from '../../providers/updater/updater';
+import { IfObservable } from 'rxjs/observable/IfObservable';
+import { ThrowStmt } from '@angular/compiler';
+import { TutorialProvider } from '../../providers/tutorial/tutorial';
+import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
 
 declare var Stripe;
 
@@ -54,6 +58,9 @@ export class MiplanPage {
 
   cantcancel = false;
 
+
+  btgLayout:boolean = false;
+
   //isgroup:boolean = false;
 
   get isgroup(){
@@ -65,6 +72,21 @@ export class MiplanPage {
   return SubscriptionDataProvider.EXTRA_DOC
 }
 
+get usersOnNew(){
+  let selected_plan = this.planesData.getPlanById(this.selectedPlan);
+  console.log('TRAILSSU usersOnNew',selected_plan.field_no_subcuentas,this.selectedAditionals );
+  return Number(selected_plan.field_no_subcuentas) + Number(this.selectedAditionals);
+}
+
+
+get selected4g(){
+  return this.subuserData.mySubUsers.filter((element)=>{ return element.selectedForGroup }).length;
+}
+
+get subsLeftOnNew(){
+  console.log('TRAILSSU data',this.usersOnNew,this.selected4g);
+  return this.usersOnNew - this.selected4g
+}
 
 
 
@@ -85,7 +107,8 @@ export class MiplanPage {
     public subuserMan: SubusersManagerProvider,
     public wsMessenger: WsMessengerProvider,
     public updater: UpdaterProvider,
-    public subuserManager: SubusersManagerProvider
+    public subuserManager: SubusersManagerProvider,
+    public userMan: DrupalUserManagerProvider
   ) {
       this.subuserManager.cargarSubusuarios();
     //conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
@@ -248,7 +271,7 @@ export class MiplanPage {
 
   
   ionViewDidEnter(){
-    
+    this.btgLayout = false;
     this.loadSources();
   }
 
@@ -262,6 +285,7 @@ export class MiplanPage {
   }
 
   ionViewDidLoad() {
+    this.btgLayout = false;
     if(!this.permissions.checkUserSuscription([this.userData.PLAN_ANY])){
       this.subuserMan.cargarSubusuarios();
       this.activateChangePlanMode();
@@ -289,18 +313,41 @@ export class MiplanPage {
   async guardar(){
     if(!this.guardar_basic_validation()) return false;
     if(!this.guardar_subusernumber_validation()) return false;
-    await this.checkBasicToGroup();
-    console.log('basictogroupcomplete');
+    //await this.checkBasicToGroup();
+    if(this.isBasicToGroup() && this.checkShowUserList()){
+      this.setUsersSelected();
+      this.btgLayout = true;
+      console.log('changing from b to g');
+    }else{
+    //console.log('basictogroupcomplete');
     await this.suscribirse();
+    }
     //this.onplanchange = false;
   }  
 
+  async guardarbtg(){
+    if(!this.guardar_basic_validation()) return false;
+    if(!this.guardar_subusernumber_validation()) return false;
+    await this.userTutorialSetup();
+    await this.checkBasicToGroup();
+    await this.suscribirse();
+  }
+
+
+  async userTutorialSetup(){
+    this.userData.userData.tutorial_state.und[0].value = ""+TutorialProvider.TUTORIAL_GROUP_STATE_FROMBASIC;
+    let cloneData = {
+      uid:this.userData.userData.uid,
+      field_tutorial_state: {und: [{value: ""+TutorialProvider.TUTORIAL_GROUP_STATE_FROMBASIC}]},
+    }
+    await this.userMan.updateUserd(cloneData).toPromise();
+  }
   /**
    * Revisa si se esta cambiando de plan basico a plan grupo medico.
    */
   async checkBasicToGroup(){
     console.log('checkBasicToGroup',this.subsManager.checkForSubscription(), !this.subsData.isGroup,Number(this.selectedPlan) === Number(SubscriptionDataProvider.PLAN_GROUP));
-    if( this.subsManager.checkForSubscription() && !this.subsData.isGroup  && Number(this.selectedPlan) === Number(SubscriptionDataProvider.PLAN_GROUP)){
+    if( this.isBasicToGroup() ){
      console.log('basictogroupenter');
       await this.subsManager.group_enter_selectedSubusersClean(this.subuserData.selectedForGroup,this.subsData.subscription);
       await this.subsManager.group_enter_notselectedSubusers_remove(this.subuserData.selectedForGroup,this.subsData.subscription);
@@ -308,6 +355,14 @@ export class MiplanPage {
       this.wsMessenger.generateSuboutofgroup(reload_users,1);
       //clean the selectedusers.
       }
+  }
+
+  isBasicToGroup(){
+    let ret = false;
+    if( this.subsManager.checkForSubscription() && !this.subsData.isGroup  && Number(this.selectedPlan) === Number(SubscriptionDataProvider.PLAN_GROUP)){
+      ret = true;
+    }
+    return ret;
   }
 
   guardar_basic_validation():boolean{
@@ -362,13 +417,12 @@ export class MiplanPage {
 
   cancelar(){
     this.onplanchange = false;
+    this.btgLayout = false;
   }
 
   operateExtra(operand:number){
-  
     this.selectedAditionals += operand;
     if (this.selectedAditionals < 0) this.selectedAditionals = 0;
-    
   }
 
   
@@ -383,7 +437,7 @@ export class MiplanPage {
 
   async suscribirse(){
     if(!this.enabledButton()) return false;
-    this.loader.presentLoader('Subscribiendo ...');
+    this.loader.presentLoader('Suscribiendo ...');
     //Tengo para crear una suscripcion, pero no para editar una suscripcion. vamos a hacer un codigo para editar suscripcion.
     //must set custom price.
     
@@ -392,7 +446,6 @@ export class MiplanPage {
       this.subsData.subscription.field_cantidad = this.selectedTotal;
       this.subsData.subscription.field_plan_sus = this.selectedPlan
       this.subsData.subscription.field_adicionales = Number(this.selectedAditionals);
-     
       if(this.isgroup)this.subsData.subscription.field_docsadicionales = Number(this.selectedAditionalsDocs);
       this.subsData.subscription.pay_state = 'wait';
       let ret = await this.subsManager.updateSus(this.subsData.subscription).toPromise();
@@ -443,8 +496,11 @@ export class MiplanPage {
     
   }
 
+  cancelbtg(){
+    this.btgLayout = false;
+  }
+
   gotoentergroup(){
-   
     this.navCtrl.setRoot('EntergrupoPage');
   }
 
@@ -461,7 +517,6 @@ export class MiplanPage {
   }
 
 
-  
 
 loadSources(){
   //console.log(this.bu.endpointUrl+'payment_methods/'+this.userData.userData.uid);
@@ -602,5 +657,20 @@ selectCard( input_src:any ){
     return  Number( this.selectedPlan ) === Number( planNid );
   }
   
+
+
+  setUsersSelected(){
+    console.log('TRAILSSU setting selected users');
+    this.subuserData.mySubUsers.forEach((element)=>{
+      console.log('TRAILSSU',this.subsLeftOnNew);
+      if(this.subsLeftOnNew > 0){
+        element.selectedForGroup = true;
+      }
+    });
+  }  
+
+  setUsersNotSelected(){
+    this.subuserData.mySubUsers.forEach((element)=>{  element.selectedForGroup = false; });
+  }
 
 }

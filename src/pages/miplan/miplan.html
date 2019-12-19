@@ -5,7 +5,7 @@
       <span class="spanBlock midFont"><b>Mi Plan</b></span>
       <span class="spanBlock midSubFont">Revisa tu plan</span>
     </div>
-    <div class="modalPage_lpane" *ngIf="onplanchange">
+    <div class="modalPage_lpane" *ngIf="onplanchange && !this.btgLayout">
     <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>
     <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="cancelar()" >Cancelar</button>
     </div>
@@ -24,6 +24,7 @@
   </ng-container>
   
     <ng-container *ngIf="!this.subsData.checkForSub() || !(this.subsData.isGroup && !this.permissions.checkUserPlanHolder())">
+      <ng-container *ngIf="!this.btgLayout">
     <!-- Seccion con Información de planes  -->
     <div class="basicpadding nopadtop">
       Estamos convencidos que TUAL te ayudará a optimizar las consultas y pagos en tu consultorio. ¡Será mucho más fácil y seguro!
@@ -123,6 +124,7 @@
         <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar más suscriptores a tu plan?</span> 
         <p class="midSubFont" *ngIf="this.subsData.checkForSub()"> Cuentas con {{this.docsleft}} plazas disponibles. Haz agregado {{this.docAdicionales}} adicionales.</p>
         <p class="midSubFont">Puedes agregar suscriptores adicionales a los incluídos en tu grupo médico, tienen un costo preferencial de ${{EXTRA_DOC}}.00 y se agregan al pago de tu suscripción mensual. </p>
+        <!--<p class="midSubFont">El codigo de tu grupo medico es:  <span class="spanBlock midMainFont"><input class="codigo" type="text" value="{{this.subsData.invcode}}" readonly></span></p>-->
       </div>
 
       <div class="plans_extras_section bisectional_section center_align" *ngIf="onplanchange"> <!-- Usuarios adicionales onplanchange-->
@@ -148,7 +150,7 @@
     <div class="button_section"> 
     <button class="generalButton bgColorPrimary " *ngIf="this.permissions.checkUserPlanHolder() && !onplanchange" (click)="editar()">Modificar</button>
     </div>
-    <div class="enter_subuser_selection_wrap" *ngIf="checkShowUserList()">
+    <div class="enter_subuser_selection_wrap" *ngIf="false">
     <div class="enter_subuser_selection"  >
       
       <div class="enter_title fontPrimary"> Selección de usuarios </div>
@@ -244,6 +246,48 @@
  
 
   </div>
+</ng-container>
+</ng-container>
+<ng-container *ngIf="this.btgLayout">
+  <span class="fontPrimary" (click)="cancelbtg()">Volver</span>
+  <div class="enter_subuser_selection_wrap" >
+      <div class="enter_subuser_selection"  >
+        <div class="enter_title fontPrimary"> Selección de usuarios </div>
+        <div class="enter_description"> Este plan te permite compartir usuarios entre los doctores del grupo médico. Si hay plazas disponibles puedes llevarte a tus usuarios actuales. </div>
+          <div> <span class="enter_plazas_text">Plazas disponibles</span> <span class="enter_plazas_value fontPrimary">{{this.accountsLeft}}.</span></div>
+          <table class="results_table">
+              <thead>
+                  <tr>
+                      <th>Agregar</th>
+                      <th>Usuario</th>
+                      <th>Tipo de usuario</th>
+                   </tr>
+              </thead>
+              <tbody >
+                  <tr *ngFor="let usersub of this.subuserData.mySubUsers">
+                      <td>
+                          <ion-checkbox [checked]="usersub.selectedForGroup" (ionChange)="onChangeUsers($event,usersub)"></ion-checkbox>
+                          <!--<input type="checkbox" [checked]="usersub.selectedForGroup" (change)="onChangeUsers(this,usersub)"/>-->
+                        <!--
+                        <div class="control-group"> 
+                          <label class="control control-radio">
+                            
+                            
+                              <div class="control_indicator"></div>
+                          </label> 
+                          </div>  -->
+                      </td>
+                      <td class="midSubFont ">{{usersub.name}} </td>
+                      <td class="midSubFont fontHigh">{{this.userData.getTipoUsuarioString(usersub.field_tipo_de_usuario.und[0])}} </td>
+                   </tr>
+              </tbody>
+            </table>
+      </div>
+      </div>
+      <div class="button_section"> 
+          <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardarbtg()" >Guardar</button>
+          <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="cancelar()" >Cancelar</button>
+        </div>
 </ng-container>
   <div class="endmargin">
   </div>

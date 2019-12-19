@@ -6,6 +6,7 @@
 -->
 <ion-content id="reporte_identifier">
     <div class="modal_closer"  (click)="this.dismiss();">Volver</div>
+    <div class="modal_closer_desktop" (click)="this.dismiss();">Cerrar</div>
   <div class="reporte_header">
 <div class="modalPage_header">
   <div class="modalPage_logo drapo_icon_logo"><img src="assets/imgs/ticket.svg"/></div>
@@ -22,6 +23,7 @@
     <div class="ticket_row midSubFont">Efectivo <span class="fontSecondary">{{moneyFormat(this.reportPresentator.totalefectivo)}}</span></div>
     <div class="ticket_row midSubFont">Tarjeta <span class="fontSecondary">{{moneyFormat(this.reportPresentator.totalTarjeta)}}</span></div>
     <div class="ticket_row midSubFont">Cheque  <span class="fontSecondary">{{moneyFormat(this.reportPresentator.totalCheques)}}</span></div>
+    <div class="ticket_row midSubFont">Transferencia  <span class="fontSecondary">{{moneyFormat(this.reportPresentator.totalBancaria)}}</span></div>
     <div class="ticket_row midSubFont">Facturado <span class="fontHigh">{{moneyFormat(this.reportPresentator.facturadoTotal)}}</span></div>
     <div class="ticket_row midSubFont">Adeudos cobrados <span class="fontHigh">{{moneyFormat(reportPresentator.totalAdeudo)}}</span></div>
     <div class="ticket_row midSubFont">Pendiente <span class="fontPrimary">{{moneyFormat(this.reportPresentator.pendiente)}}</span></div>

@@ -1,6 +1,6 @@
 import { Component, ɵConsole } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, LoadingController } from 'ionic-angular';
-import { UserDataProvider  } from '../../providers/user-data/user-data';
+import { UserDataProvider, userd  } from '../../providers/user-data/user-data';
 //import { Debugger } from '../../providers/user-data/debugger';
 import { sources } from '../../providers/user-data/sources';
 import { planes } from '../../providers/user-data/planes';
@@ -14,6 +14,7 @@ import { LoaderProvider } from '../../providers/loader/loader';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { PlanesDataProvider } from '../../providers/planes-data/planes-data';
 import { BaseUrlProvider } from '../../providers/base-url/base-url';
+import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 
 
 declare var Stripe;
@@ -43,6 +44,8 @@ export class RegisterModalPage {
   refuserName:string = null;
   check_terminos:boolean = false;
 
+  actualUser;
+
   searchCode:string = null;
   currentpasswordNeeded: boolean = false; //especifica si es necesario incluir el pass actual, esto se requiere al cambiar pass o email.
 
@@ -64,6 +67,7 @@ export class RegisterModalPage {
   invitationCode:string = null;
   invitationshow:boolean = false;
   isnew = true;
+  newSus:boolean = false;
 
   currentPass:string = null;
   currentMail:string = null;
@@ -83,14 +87,14 @@ export class RegisterModalPage {
     public alert: AlertProvider,
     public loader: LoaderProvider,
     public planesData: PlanesDataProvider,
-    public bu: BaseUrlProvider
+    public bu: BaseUrlProvider,
+    public WS: WsMessengerProvider
   ) {
-  }
-
-  ionViewDidLoad() {
-    console.log('registro view load');
-    console.log(this.subsData.subscription);
-    console.log('this.userData.checkIsLoggedin()',this.userData.checkIsLoggedin());
+    this.newSus = this.navParams.get('newSus');
+    console.log('trailnewSus', this.newSus);
+    if(!this.newSus){
+    this.actualUser = this.userData.userData;
+    console.log('trailnewSus !newsus actualuser',this.actualUser);
     this.isnew = !this.userData.checkIsLoggedin();
     console.log('isnew',this.isnew);
     console.log('openingregister modal isnew? ',this.isnew);
@@ -99,11 +103,20 @@ export class RegisterModalPage {
       this.currentpasswordNeeded = false;
       this.currentMail = this.userData.userData.mail;
     }
+    }else{
+     
+      this.actualUser = this.userData.getEmptyUserd();
+      console.log('trailnewSus getempty',this.actualUser);
+    }
+  }
+
+  ionViewDidLoad() {
+  
   }
 
   ionViewDidEnter(){
    // this.setupStripe();
-    this.loadSources();
+  //this.loadSources();
   }
 
 
@@ -120,7 +133,7 @@ export class RegisterModalPage {
 
   async update(){
     this.loader.presentLoader('Actualizando...');
-    let aux_userData = JSON.parse(JSON.stringify(this.userData.userData));
+    let aux_userData = JSON.parse(JSON.stringify(this.actualUser));
     delete aux_userData.field_sub_id;
     delete aux_userData.field_tipo_de_usuario;
     
@@ -137,7 +150,7 @@ export class RegisterModalPage {
       if(this.checkForPasswordChange()){
         console.log('checkforpassword change is on');
         //aux_userData.pass.push({"value": this.userData.userData.pass});
-        aux_userData.pass = this.userData.userData.pass;
+        aux_userData.pass = this.actualUser.pass;
       }
     }
 
@@ -182,7 +195,7 @@ export class RegisterModalPage {
   checkemailSame(){
    
     let ret = false;
-    if(this.userData.userData.mail !== null && this.emailconfirm !== null && Number(this.emailconfirm.localeCompare(this.userData.userData.mail)) === Number(0) ){
+    if(this.actualUser.mail !== null && this.emailconfirm !== null && Number(this.emailconfirm.localeCompare(this.actualUser.mail)) === Number(0) ){
       ret = true;
     }else{
       this.alert.presentAlert('','El correo electrónico no coincide con la confirmación.');
@@ -192,7 +205,7 @@ export class RegisterModalPage {
   
 
   checkforEmailChange(){
-    if(this.userData.userData.mail !== this.currentMail){
+    if(this.actualUser.mail !== this.currentMail){
       this.currentpasswordNeeded = true;
     }
   }
@@ -200,7 +213,7 @@ export class RegisterModalPage {
   checkForPasswordChange(){
     let ret = false;
    
-    if(this.userData.userData.pass !== null || this.passconfirm !== null){
+    if(this.actualUser.pass !== null || this.passconfirm !== null){
       this.currentpasswordNeeded = true;
       ret = true;
     }
@@ -240,9 +253,9 @@ export class RegisterModalPage {
   actionRegister(){
     if(!this.basicValidation()){return 0;}
     this.loader.presentLoader('Registrando ...');
-  let cloneData = JSON.parse(JSON.stringify(this.userData.userData));
+  let cloneData = JSON.parse(JSON.stringify(this.actualUser));
   delete cloneData.field_sub_id;
-  cloneData.field_useremail.und[0].email = this.userData.userData.mail;
+  cloneData.field_useremail.und[0].email = this.actualUser.mail;
   cloneData.field_tipo_de_usuario.und[0]="1";
   delete cloneData.field_plan_date;
   delete cloneData.field_src_json_info;
@@ -314,11 +327,43 @@ export class RegisterModalPage {
       });
   }
 
+
+  actionCreate(){
+    if(!this.basicValidation()){return 0;}
+    this.loader.presentLoader('Registrando ...');
+  let cloneData = JSON.parse(JSON.stringify(this.actualUser));
+  delete cloneData.field_sub_id;
+  cloneData.field_useremail.und[0].email = this.actualUser.mail;
+  cloneData.field_tipo_de_usuario.und[0]="1";
+  delete cloneData.field_plan_date;
+  delete cloneData.field_src_json_info;
+  delete cloneData.field_stripe_customer_id;
+  delete cloneData.field_sub_id;
+  delete cloneData.field_doctores;
+  delete cloneData.field_forma_pago;
+  delete cloneData.field_plan_date;
+  delete cloneData.field_reference_user;
+  cloneData.status = "1";
+  delete cloneData.field_owner;
+  this.userMan.generateNewUserd( cloneData ).subscribe(
+    async (val)=>{
+      if(!this.subsData.subscription.field_doctores) this.subsData.subscription.field_doctores = new Array();
+      this.subsData.subscription.field_doctores.push(val['uid']);
+      let obs = this.subsManager.updateUserSuscription().subscribe( (val)=>{console.log('updating subs',val);});
+      let recievers = this.subsData.subscription.field_doctores.concat(this.subsData.subscription.field_subusuarios);
+      this.WS.generateDocoutgroup(recievers,val['uid']);
+      this.loader.dismissLoader();
+      this.dismiss();
+      },response => {
+        this.loader.dismissLoader(); 
+      });
+
+  }
+
   async searchsub(){
     if(this.searchsubValidation()){
       this.loader.presentLoader('buscando...');
       let sus = await this.subsManager.searchSus(this.searchCode);
-   
       if(sus){
         await this.subsManager.susAssign(sus);
       }else{
@@ -338,28 +383,28 @@ export class RegisterModalPage {
     let ret = true;
     if(this.isnew){
       console.log('checking obligatorios----------------------------');
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.mail,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.actualUser.mail,ret)) ret = false;
       if(!this.checkIfInputfilledNPromtp(this.emailconfirm,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.name,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.pass,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.actualUser.name,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.actualUser.pass,ret)) ret = false;
       if(!this.checkIfInputfilledNPromtp(this.passconfirm,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_nombre.und[0].value,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_apellidos.und[0].value,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_especialidad.und[0].value,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_alias.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.actualUser.field_nombre.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.actualUser.field_apellidos.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.actualUser.field_especialidad.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.actualUser.field_alias.und[0].value,ret)) ret = false;
       //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_no_ext.und[0].value,ret)) ret = false;
-      if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_codigo_postal.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.actualUser.field_codigo_postal.und[0].value,ret)) ret = false;
       //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_ciudad.und[0].value,ret)) ret = false;
       //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_pais.und[0].value,ret)) ret = false;
       console.log('end checking obligatorios----------------------------');
     }
     console.log('ret a1 ', ret);
-    if(this.userData.userData.pass && !this.passconfirm || !this.userData.userData.pass && this.passconfirm){
+    if(this.actualUser.pass && !this.passconfirm || !this.actualUser.pass && this.passconfirm){
       ret = false;
       this.alert.presentAlert('','Confirmar contraseña.');
     }
     console.log('ret a2 ', ret);
-    if(this.userData.userData.pass && this.passconfirm && this.passconfirm.localeCompare(this.userData.userData.pass) !== 0){
+    if(this.actualUser.pass && this.passconfirm && this.passconfirm.localeCompare(this.actualUser.pass) !== 0){
       ret = false;
       this.alert.presentAlert('','Las contraseñas no coinciden.');
     }
@@ -403,7 +448,7 @@ export class RegisterModalPage {
   
   async suscribirse(){
     if(!this.enabledButton) return false;
-    this.loader.presentLoader('Subscribiendo ...');
+    this.loader.presentLoader('Suscribiendo ...');
     console.log(this.selected_source);
     console.log(this.selected_plan);
     //await this.subsManager.subscribe( this.selected_plan,this.selected_source);
@@ -487,6 +532,7 @@ export class RegisterModalPage {
     return false;
    
   }
+  /*
 
   loadSources(){
     if(!this.isnew){
@@ -501,7 +547,7 @@ export class RegisterModalPage {
       else  if(old_selected === null ){ this.selected_source = new_source; this.selected_source.set_selected()}
     }
   }
-  }
+  }*/
 
 
 

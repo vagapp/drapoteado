@@ -67,6 +67,7 @@ export class CitasPresentatorProvider {
  
   async updateStateRequest( cita, state ) {
     console.log('updateStateRequest',cita,state);
+    console.log('cheking cita servicios json',cita.data.field_servicios_json);
     this.loader.presentLoader("Actualizando...");
     if(!this.reportesMan.reportesData.isSetTodayReport) await this.reportesMan.getTodayReport();
     let saveDate = !this.progresSController.editfinish;
@@ -80,6 +81,7 @@ export class CitasPresentatorProvider {
     //cita.compareServicios(this.progresSController.servicesCompare);
     //console.log('antes de guardar el state quedo ',state);
     console.log('antes de guardar el state quedo',cita);
+    console.log('cheking cita servicios json',cita.data.field_servicios_json);
     console.log('check cita before sending',JSON.stringify(cita.data.field_ediciones_json));
     let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise().catch(e => {
       console.log('error',e);

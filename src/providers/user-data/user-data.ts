@@ -39,6 +39,7 @@ export class UserDataProvider {
   get TIPO_CAJA(){return UserDataProvider.TIPO_CAJA;}
   get TIPO_CAJAYRECEPCION(){return UserDataProvider.TIPO_CAJAYRECEPCION;}
   get TIPO_ANY(){return UserDataProvider.TIPO_ANY;}
+  get TutorialState(){ return this.userData.tutorial_state.und[0].value ? Number(this.userData.tutorial_state.und[0].value) : 0 }
 
   get showname(){
     return this.userData.field_alias.und[0].value;
@@ -617,7 +618,7 @@ export class UserDataProvider {
       case UserDataProvider.TIPO_DOCTOR: ret = "doctor"; break;
       case UserDataProvider.TIPO_RECEPCION: ret = "recepción"; break;
       case UserDataProvider.TIPO_CAJA: ret = "caja"; break;
-      case UserDataProvider.TIPO_CAJAYRECEPCION: ret = "caja & recepción"; break;
+      case UserDataProvider.TIPO_CAJAYRECEPCION: ret = "recepción & caja"; break;
     }
     return ret;
   }
@@ -794,10 +795,12 @@ export class UserDataProvider {
       doctor_name:"",
       doctor_alias:"",
       field_servicios_cita:{und:[0]},
+      field_servicios_json:{und:[{value:''}]},
       field_cobro:{und:[{value:0}]},
       field_cobro_efectivo:{und:[{value:0}]},
       field_cobro_tarjeta:{und:[{value:0}]},
       field_cobro_cheque:{und:[{value:0}]},
+      field_cobro_bancaria:{und:[{value:0}]},
       field_datemsb:{und:[{value:0}]},
       field_hora_iniciomsb:{und:[{value:null}]},
       field_hora_finalmsb:{und:[{value:null}]},
@@ -810,6 +813,7 @@ export class UserDataProvider {
       field_facturar_cantidad:{und:[{value:0}]},
       field_caja_nombre:{und:[{value:""}]},
       field_cajas_filter:{und:[{value:0}]},
+      field_comentarios:{und:[{value:""}]},
     }
   }
 
@@ -896,10 +900,12 @@ export interface citasData{
     doctor_name:string,
     doctor_alias:string,
     field_servicios_cita:{und:any[]},
+    field_servicios_json:{und:[{value:string}]},
     field_cobro:{und:[{value:number}]},
     field_cobro_efectivo:{und:[{value:number}]},
     field_cobro_tarjeta:{und:[{value:number}]},
     field_cobro_cheque:{und:[{value:number}]},
+    field_cobro_bancaria:{und:[{value:number}]},
     field_datemsb:{und:[{value:number}]},
     field_hora_iniciomsb:{und:[{value:number}]},
     field_hora_finalmsb:{und:[{value:number}]},
@@ -914,6 +920,7 @@ export interface citasData{
     field_pagos_json:{und:[{value:string}]},
     field_ediciones_json:{und:[{value:string}]},
     field_cajas_filter:{und:[{value:number}]},
+    field_comentarios:{und:[{value:string}]},
     
 }
 
@@ -954,6 +961,5 @@ export interface userd{
     field_owner:{und:number[]};
 
 }
-
 
 

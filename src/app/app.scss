@@ -430,6 +430,23 @@ border: 1px solid lightgray;
     text-align: left;
     margin: 1.5em 0;
     font-size: 1.8rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.progress_input_section {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.pis_btn {
+    color: #C1272D;
+    font-size: x-large;
+}
+
+.pis_many {
+    margin: 10px;
 }
 
 .checkbox_wrapper_progreso ion-checkbox{
@@ -784,6 +801,11 @@ flex-flow: column;
     display: none;
 }
 
+.modal_closer_desktop{
+    color: #c1272d;
+    margin: 15px 0px 0px 15px;
+}
+
 .smallModal .modalPage_logo{
     height: 50px;
     width: 50px;
@@ -1104,6 +1126,10 @@ ion-menu {
         color: white;
     }
 
+    .modal_closer_desktop{
+       display: none; 
+       }
+
   
 }
 
@@ -1299,6 +1325,10 @@ ion-menu {
         padding-left: 20px;
         font-size: 2rem;
         color: white;
+    }
+
+    .modal_closer_desktop{
+     display: none;
     }
 
     .scroll-content{

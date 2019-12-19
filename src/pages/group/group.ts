@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
 import { SubscriptionDataProvider } from '../../providers/subscription-data/subscription-data';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
@@ -7,6 +7,7 @@ import { LoaderProvider } from '../../providers/loader/loader';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { BaseUrlProvider } from '../../providers/base-url/base-url';
+import { AlertProvider } from '../../providers/alert/alert';
 
 /**
  * Generated class for the GroupPage page.
@@ -31,7 +32,9 @@ export class GroupPage {
     public WS:WsMessengerProvider,
     public perm: PermissionsProvider,
     public navCtrl: NavController,
-    public bu: BaseUrlProvider
+    public bu: BaseUrlProvider,
+    public modalCtrl: ModalController,
+    public alert: AlertProvider
   ) {
     
    
@@ -87,6 +90,25 @@ export class GroupPage {
   }
 
 
+
+  openNuevoSuscriptor(){
+    console.log('subs restantes',this.subsData.getSubAccountsLeft());
+    if(this.docsleft > 0  ){ 
+    let Modal = this.modalCtrl.create("RegisterModalPage", { 'newSus': true }, { cssClass: "bigModal" });
+    Modal.onDidDismiss(data => {
+      console.log('reloaddocs ? ? ?');
+    });
+    Modal.present({});
+  }else{
+    this.alert.setStrings('IR A MI PLAN','después');
+    this.alert.chooseAlert(
+    '',
+    'Ya agotaste los suscriptores incluidos en tu suscripción mensual, agrega todos los suscriptores adicionales que necesites ingresando aquí mi plan',
+    ()=>{ this.alert.resetStrings(); this.navCtrl.setRoot("MiplanPage"); },
+    ()=>{ this.alert.resetStrings(); }
+    )
+  }
+  }
 
   
 

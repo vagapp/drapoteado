@@ -243,10 +243,11 @@ export class CitasManagerProvider {
 
   //CITAS METHODS
   generateNewCita( newCita ){return this.nodeMan.generateNewNode(newCita);}
-  updateCita( cita ){return this.nodeMan.updateNode(cita);}
+  updateCita( cita ){ console.log('cita',cita); return this.nodeMan.updateNode(cita);}
   deleteCita( cita ){return this.nodeMan.deleteNode(cita);}
   updateCitaState( cita:Citas , state, saveDate:boolean = true){
     console.log('updateCitaState',cita,state);
+    console.log('updateCitaState field_servicios_json',cita.data.field_servicios_json);
     //cita.estado_anterior();
     
     cita.data.field_estado.und[0].value = state;
@@ -263,12 +264,14 @@ export class CitasManagerProvider {
       //this.setCitaFechaReporte(cita,saveDate); 
       reportedateset = true; 
     }
+    console.log('updateCitaState field_servicios_json',cita.data.field_servicios_json);
     if(cita.checkState(CitasDataProvider.STATE_ADEUDO)){ // el estado de adeudo siempre se pone cuando mandas a finalizar y no se paga el monto completo.
       console.log('esta en adeudo');
       fechacobroset = this.setCitaFechaCobro(cita,saveDate); 
       this.setCaja(cita); 
       reportedateset = true; 
     }
+    console.log('updateCitaState field_servicios_json',cita.data.field_servicios_json);
     if(Number(state) === Number(CitasDataProvider.STATE_CANCELADA)){
       console.log('cancelando cita'); 
       this.setCitaFechaReporte(cita,saveDate); 
@@ -277,6 +280,7 @@ export class CitasManagerProvider {
       //this.reportesData.todayReport.nocancel++;
       //this.nodeMan.updateNode(this.reportesData.todayReport.getData()).subscribe((val)=>{console.log('updated report',val);},(error)=>{console.log('updated report error',error);});
     }
+    console.log('updateCitaState field_servicios_json',cita.data.field_servicios_json);
     if(!reportedateset){ delete cita.data.field_fecha_reporte; }
     if(!fechacobroset){ delete cita.data.field_hora_cobromsb; }
     console.log('updating cita',cita.data);
@@ -284,6 +288,7 @@ export class CitasManagerProvider {
     if(Number(cita.estado_anterior) !== Number(state)){
       cita.setStateChangeEdition(state);
       }
+      console.log('updateCitaState field_servicios_json',cita.data.field_servicios_json);
     return this.updateCita( cita.data ).share();
   }
 

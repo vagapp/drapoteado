@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ɵConsole } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { userd, UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
@@ -37,6 +37,7 @@ export class NuevousuarioModalPage {
   codeuser=false;
   showerrors:boolean = false;
   codeuserNP=false; //if tutorial user is gotten by code this disables password show
+  newSus:boolean = false;
 
   get subsLeft(){
     return this.subsData.getSubAccountsLeft();
@@ -63,8 +64,9 @@ export class NuevousuarioModalPage {
     public perm: PermissionsProvider
 
   ) {
- 
+    console.log('trailnewsus');
     let aux_node = navParams.get('userd');
+    this.newSus =  navParams.get('newSus');
     if(aux_node){
       this.isnew = false;
       this.newUser = SubusersManagerProvider.getEmptyUserd();
@@ -72,8 +74,14 @@ export class NuevousuarioModalPage {
       this.initialpage = false;
       this.newuser = true;
     }else{
+      console.log('trailnewsus onelse'); 
+      if(this.newSus){
+        this.resetNewUser();
+        this.isnew = false;
+      }else{
       this.isnew = true;
       this.resetNewUser();
+      }
     }
   }
 
@@ -83,6 +91,7 @@ export class NuevousuarioModalPage {
 
   resetNewUser(){
     this.newUser = SubusersManagerProvider.getEmptyUserd();
+    console.log('trailnewsus user reset ', this.newUser);
   }
 
   ionViewDidLoad() {

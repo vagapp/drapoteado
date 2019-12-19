@@ -60,6 +60,7 @@ export class EntergrupoPage {
 
   ionViewDidLoad() {
     this.subuserMan.cargarSubusuarios();
+ 
   }
 
   async buscar(){
@@ -77,6 +78,7 @@ export class EntergrupoPage {
         this.groupName = planholder.name;
         this.loaded_group_sus = sus;
         this.setSubacountsLeftDelta();
+        this.setUsersSelected();
         if(this.validateDocsLeft()){ this.canSave = true; }else{ this.canSave = false;}
         this.loader.dismissLoader();
       }else{
@@ -141,6 +143,15 @@ export class EntergrupoPage {
 
   cancelar(){
     this.navCtrl.setRoot('MiplanPage');
+  }
+
+  setUsersSelected(){
+    this.subuserData.mySubUsers.forEach((element)=>{
+      this.setSubacountsLeftDelta();
+      if(this.accountsleft > 0){
+        element.selectedForGroup = true;
+      }
+    });
   }
 
   onChangeUsers(element: Checkbox, subuser:userd){

@@ -4,8 +4,11 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-content padding>
-    <div class="modal_closer" *ngIf="!this.tutorial.checkTutorialState()" (click)="this.dismiss();">Volver</div>
+
+    <ng-container  *ngIf="!this.newSus" > 
+            <ion-content padding>
+                    <div class="modal_closer" *ngIf="!this.tutorial.checkTutorialState()" (click)="this.dismiss();">Volver</div>
+                    <div class="modal_closer_desktop"  *ngIf="!this.tutorial.checkTutorialState()" (click)="this.dismiss();">Cerrar</div>
     <div class="modalPage_header" *ngIf="!this.tutorial.checkTutorialState()">
         <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
         <div class="modalPage_title">
@@ -57,7 +60,7 @@
             </div>
             <div class="bisectional_section"  (click)="selectOption(1)" [class.selectedOption]="checkSelectedOption(1)">
                 <span class="spanBlock"> ¿Una sola persona administra y cobra tus citas?</span>
-                <span class="spanBlock"> Crea un usuario de <span class="fontPrimary">caja & recepción</span></span>
+                <span class="spanBlock"> Crea un usuario de <span class="fontPrimary">recepción & caja</span></span>
             </div>
         </div>
         <!--<div class="addbycode" *ngIf="!this.tutorial.isGroup">
@@ -108,7 +111,7 @@
             <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="this.checkIfgoback()"> Atrás </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> <span class="fontPrimary">Caja.</span> Este usuario cobra las citas. </span>
             <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> <span class="fontPrimary">Recepción.</span> Este usuario administra las citas </span>
-            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Caja & recepción.</span> Este usuario administra y cobra las citas </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Recepción & Caja.</span> Este usuario administra y cobra las citas </span>
             
 
            
@@ -126,7 +129,7 @@
               <option selected disabled value="0">Seleccione un tipo de usuario</option>
               <option value="2">Recepción</option>
               <option value="3">Caja</option>
-              <option value="4">Caja & recepción</option>
+              <option value="4">Recepción & Caja</option>
             </select>
           </div>
           <div class="ModalInput_input" *ngIf="this.tutorial.checkTutorialState()">
@@ -134,7 +137,7 @@
               <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und"  [class.registerInputerror]="this.newUser.field_tipo_de_usuario.und[0]===0 && showerrors" class="input_select input" disabled>
                   <option value="2" selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION">Recepción</option>
                   <option value="3"  selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA">Caja</option>
-                  <option value="4"  selected  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR">Caja & recepción</option>
+                  <option value="4"  selected  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR">Recepción & Caja</option>
                 </select>
               </div>
           <div class="ModalInput_input">
@@ -162,7 +165,10 @@
           </div>
 
     </div>
-  
+
+
+
+    
     </div>
 
     <div class="modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated" >
@@ -187,4 +193,152 @@
                 <!--<button (click)="this.dismiss()" class="bgColorSecondary generalButton">Continuar</button>-->
                 </div>
               </div>
-</ion-content>
+              </ion-content>
+              </ng-container> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <ng-container  *ngIf="this.newSus" > 
+                    <ion-content class="register_content">
+                    <div class="modalPage_header">
+                            <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
+                            <div class="modalPage_title">
+                              <span  class="spanBlock largeFont"><b>Alta de Suscriptor</b></span>
+                     
+                            </div>
+                        </div>
+                    <div class="register_contet_form"  >
+                      <div class="register_base register_form_section rfsFlex">
+                                <div class="registerInput" >
+                                        <b>Usuario:<span class="obligatoryast" >*</span></b><input [(ngModel)]="this.newUser.name" [class.registerInputerror]="!this.newUser.name && showerrors" type="text" />
+                                    </div>
+                                    <div class="registerInput" >
+                                            <b>Alias:<span class="obligatoryast" >*</span></b><input [(ngModel)]="this.newUser.field_alias.und[0].value" [class.registerInputerror]="!this.newUser.field_alias.und[0].value && showerrors" type="text"/>
+                                          </div>
+                              <div class="registerInput">
+                                  <b>Correo electrónico:<span class="obligatoryast" >*</span></b><input [(ngModel)]="this.newUser.mail" [class.registerInputerror]="!this.newUser.mail && showerrors" type="text"/>
+                                </div>
+                                <div class="registerInput" *ngIf="this.isnew">
+                                  <b>Confirmar c. electrónico:<span class="obligatoryast" >*</span></b><input [(ngModel)]="emailconfirm" [class.registerInputerror]="!this.emailconfirm && showerrors" type="text"/>
+                                </div>
+                      
+                               
+                                  <div class="registerInput">
+                                      <b>Contraseña:<span class="obligatoryast">*</span></b><input [(ngModel)]="this.newUser.pass"  [class.registerInputerror]="!this.newUser.pass && showerrors" type="password"/>
+                                    </div>
+                                    <div class="registerInput">
+                                      <b>Confirmar contraseña:<span class="obligatoryast" >*</span></b><input [(ngModel)]="passconfirm"  [class.registerInputerror]="!this.passconfirm && showerrors" type="password"/>
+                                    </div>
+                                    <div class="registerInput">
+                                      <b>Nombre:<span class="obligatoryast" >*</span></b><input [(ngModel)]="this.newUser.field_nombre.und[0].value" [class.registerInputerror]="!this.newUser.field_nombre.und[0].value && showerrors"  type="text"/>
+                                    </div>
+                                    <div class="registerInput">
+                                      <b>Apellido:<span class="obligatoryast" >*</span></b><input  [(ngModel)]="this.newUser.field_apellidos.und[0].value" [class.registerInputerror]="!this.newUser.field_apellidos.und[0].value && showerrors"  type="text" />
+                                    </div>
+                                    
+                                    <div class="registerInput" >
+                                      <b>Especialidad:<span class="obligatoryast" >*</span></b><input [(ngModel)]="this.newUser.field_especialidad.und[0].value" [class.registerInputerror]="!this.newUser.field_especialidad.und[0].value && showerrors" type="text"/>
+                                    </div>
+                          </div>
+                          
+                      
+                          
+                      
+                          <div class="register_ubication register_form_section rfsFlex" >
+                              <div class="registerInput">
+                                  <b>Calle:</b><input [(ngModel)]="this.newUser.field_calle.und[0].value"  type="text"/>
+                              </div>
+                              <div class="ubication_det">
+                                  <span class="ubdet_input"> <b>No. Ext.</b> <input [(ngModel)]="this.newUser.field_no_ext.und[0].value"   type="text"/></span>
+                                  <span class="ubdet_input"> <b>No. Int.</b><input [(ngModel)]="this.newUser.field_no_int.und[0].value"  type="text"/></span>
+                                  <span class="ubdet_input"> <b>C.P<span class="obligatoryast" *ngIf="this.isnew">*</span></b> <input [(ngModel)]="this.newUser.field_codigo_postal.und[0].value" [class.registerInputerrorOn]="!this.newUser.field_codigo_postal.und[0].value && showerrors" type="text"/></span>
+                              </div>
+                              <div class="registerInput">
+                                  <b>Ciudad:</b><input [(ngModel)]="this.newUser.field_ciudad.und[0].value"  type="text"/>
+                              </div>
+                              <div class="registerInput">
+                                  <b>Colonia:</b><input [(ngModel)]="this.newUser.field_colonia.und[0].value"   type="text"/>
+                              </div>
+                              <div class="registerInput">
+                                  <b>País:</b><input [(ngModel)]="this.newUser.field_pais.und[0].value"    type="text"/>
+                              </div>
+                              <div class="registerInput">
+                                  <b>Municipio o Alcaldía:</b><input [(ngModel)]="this.newUser.field_municipio.und[0].value"  type="text"/>
+                              </div>
+                              <div class="registerInput">
+                                <b>Estado:</b>
+                              <select  class="input_select input" [(ngModel)]="this.newUser.field_estado_ubicacion.und[0].value">
+                                  <option selected disabled value="0">Seleccione un estado</option>
+                                  <option selected  value="Aguascalientes">Aguascalientes</option>
+                                  <option selected  value="Baja California">Baja California</option>
+                                  <option selected  value="Baja California Sur">Baja California Sur</option>
+                                  <option selected  value="Campeche">Campeche</option>
+                                  <option selected  value="CDMX">CDMX</option>
+                                  <option selected  value="Chihuahua">Chihuahua</option>
+                                  <option selected  value="Chiapas">Chiapas</option>
+                                  <option selected  value="Coahuila">Coahuila</option>
+                                  <option selected  value="Colima">Colima</option>
+                                  <option selected  value="Durango">Durango</option>
+                                  <option selected  value="Guanajuato">Guanajuato</option>
+                                  <option selected  value="Guerrero">Guerrero</option>
+                                  <option selected  value="Hidalgo">Hidalgo</option>
+                                  <option selected  value="Jalisco">Jalisco</option>
+                                  <option selected  value="México">México</option>
+                                  <option selected  value="Michoacán">Michoacán</option>
+                                  <option selected  value="Morelos">Morelos</option>
+                                  <option selected  value="Nayarit">Nayarit</option>
+                                  <option selected  value="Nuevo León">Nuevo León</option>
+                                  <option selected  value="Oaxaca">Oaxaca</option>
+                                  <option selected  value="Puebla">Puebla</option>
+                                  <option selected  value="Querétaro">Querétaro</option>
+                                  <option selected  value="Quintana Roo">Quintana Roo</option>
+                                  <option selected  value="San Luis Potosí">San Luis Potosí</option>
+                                  <option selected  value="Sinaloa">Sinaloa</option>
+                                  <option selected  value="Sonora">Sonora</option>
+                                  <option selected  value="Tabasco">Tabasco</option>
+                                  <option selected  value="Tamaulipas">Tamaulipas</option>
+                                  <option selected  value="Tlaxcala">Tlaxcala</option>
+                                  <option selected  value="Veracruz">Veracruz</option>
+                                  <option selected  value="Yucatán">Yucatán</option>
+                                  <option selected  value="Zacatecas">Zacatecas</option>
+                                </select>
+                              </div>
+                          </div>
+                      
+             
+                   
+                         
+
+                          <div class="register_last">
+                          <div class="register_button_section">
+                          <button    class="bgColorPrimary generalButton" (click)="actionRegister()">Registrar</button>
+                          </div>
+                        </div>
+                        </div>
+                    </ion-content>
+                </ng-container>
+  
+                
+
+
+

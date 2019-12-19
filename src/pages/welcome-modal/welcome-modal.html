@@ -9,6 +9,7 @@
     <span class="spanBlock header_title"><img class="modal_title_logo" src="assets/imgs/logo-positivo.svg"/></span>
     <span class="spanBlock header_subtitle">¡Bienvenido!</span>
   </div>
+  <ng-container *ngIf="!this.tutorial.tutorial_ongroup">
   <div class="modal_body" *ngIf="this.tutorial.serviceCreated && this.tutorial.usuarioCreated">
     <span class="spanBlock midMainFont">¡Estás listo para comenzar!</span>
     <!--<p> ! Estas listo Para comenzar ! Hemos terminado de conﬁgurar los pasos básicos para que tu y tu equipo comiences ha consultar,  si tienes dudas sobre el funcionamiento de drap te invitamos a revisar nuestros tutoriales en <span class="fontPrimary">www.drap.com.mx</span> donde te explicamos a detalle como realizar y cobrar tus citas </p>
@@ -31,5 +32,62 @@
       <button class="generalButton bgColorSecondary" (click)="this.tutorial.showServicioModal()">Siguiente</button>
       </div>
   </div>
+  </ng-container>
+  <ng-container *ngIf="this.tutorial.tutorial_ongroup">
+  <div class="modal_body" *ngIf="this.tutorial.tutorial_ongroup  && this.tutorial.checkGPage(1,gt_fromStart)" >
+    <p>Te damos la bienvenida al plan Grupo Médico. Este tutorial te mostrará todo lo que necesitas saber sobre el funcionamiento de los Grupos Médicos.</p>
+    <div class="modal_buttons">
+      <button class="generalButton bgColorSecondary" (click)="this.tutorial.nextGPage()">Siguiente</button>
+      </div>
+  </div>
+  <div class="modal_body" *ngIf="this.tutorial.tutorial_ongroup  && this.tutorial.checkGPage(2,gt_fromStart)" >
+    <p>Este es el código de tu Grupo Médico. Compártelo con tus compañeros para que puedan ingresar al grupo. 
+      <span class="spanBlock midMainFont"><input class="codigo" type="text" value="{{this.subsData.invcode}}" readonly></span>
+        Siempre que lo desees puedes consultar este código ingresando en <span class="fontPrimary">Suscriptores</span>.</p>
+    <div class="modal_buttons">
+      <button class="generalButton bgColorSecondary" (click)="this.tutorial.nextGPage()">Siguiente</button>
+      </div>
+  </div>
+  <div class="modal_body" *ngIf="this.tutorial.tutorial_ongroup  && this.tutorial.checkGPage(3,gt_fromStart)" >
+      <p>Para darse de alta en un Grupo Médico cada suscriptor debe introducir el código ingresando desde la sección <span class="fontPrimary">Mi plan</span> en el Menú. </p>
+      <img src="assets/imgs/GT1.jpg"/>
+      <p> Puedes administrar a los usuarios del Grupo Médico desde la sección <span class="fontPrimary">Suscriptores</span> en el Menú.</p>
+      <div class="modal_buttons">
+        <button class="generalButton bgColorSecondary" (click)="gFinalizar()">Finalizar</button>
+        </div>
+    </div>
+
+    <div class="modal_body" *ngIf="this.tutorial.tutorial_ongroup  && this.tutorial.checkGPage(1,gt_fromBasic)" >
+      <p>Te damos la bienvenida al plan Grupo Médico. Este tutorial te mostrará todo lo que necesitas saber sobre el funcionamiento de los Grupos Médicos.</p>
+      <div class="modal_buttons">
+        <button class="generalButton bgColorSecondary" (click)="this.tutorial.nextGPage()">Siguiente</button>
+        </div>
+    </div>
+    <div class="modal_body" *ngIf="this.tutorial.tutorial_ongroup  && this.tutorial.checkGPage(2,gt_fromBasic)" >
+      <p>Este es el código de tu Grupo Médico. Compártelo con tus compañeros para que puedan ingresar al grupo. 
+        <span class="spanBlock midMainFont"><input class="codigo" type="text" value="{{this.subsData.invcode}}" readonly></span>
+          Siempre que lo desees puedes consultar este código ingresando en <span class="fontPrimary">Suscriptores</span>.</p>
+      <div class="modal_buttons">
+        <button class="generalButton bgColorSecondary" (click)="this.tutorial.nextGPage()">Siguiente</button>
+        </div>
+    </div>
+
+    <div class="modal_body" *ngIf="this.tutorial.tutorial_ongroup  && this.tutorial.checkGPage(3,gt_fromBasic)" >
+      <p>Para darse de alta en un Grupo Médico cada suscriptor debe introducir el código ingresando desde la sección <span class="fontPrimary">Mi plan</span> en el Menú. </p>
+      <img src="assets/imgs/GT1.jpg"/>
+      <p> Puedes administrar a los usuarios del Grupo Médico desde la sección <span class="fontPrimary">Suscriptores</span> en el Menú.</p>
+      <div class="modal_buttons">
+        <button class="generalButton bgColorSecondary" (click)="this.tutorial.nextGPage()">Siguiente</button>
+        </div>
+    </div>
+
+    <div class="modal_body" *ngIf="this.tutorial.tutorial_ongroup  && this.tutorial.checkGPage(4,gt_fromBasic)" >
+      <p>Al migrar a un grupo médico los suscriptores tienen la opción de seleccionar cuales  usuarios ya existentes en su plan anterior van a ingresar al grupo.</p>
+      <p>Los usuarios que entren a un grupo médico no podrán ser compartidos por usuarios fuera del grupo.</p>
+      <div class="modal_buttons">
+        <button class="generalButton bgColorSecondary" (click)="gFinalizar()">Finalizar</button>
+        </div>
+    </div>
+</ng-container>
   
 </ion-content>

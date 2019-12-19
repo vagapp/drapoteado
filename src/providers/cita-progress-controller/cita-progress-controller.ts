@@ -1,4 +1,3 @@
-
 import { Injectable, ɵConsole } from '@angular/core';
 import { Citas } from '../user-data/citas';
 import { servicios } from '../user-data/servicios';
@@ -24,6 +23,7 @@ export class CitaProgressControllerProvider {
   cobroEfectivo:number=null;
   cobroTarjeta:number=null;
   cobroCheque:number=null;
+  cobroBancaria:number=null;
   activeCitaDoc:Doctores;
   showinterval = null;
   editfinish:boolean = false;
@@ -44,14 +44,11 @@ export class CitaProgressControllerProvider {
 
 
   get CantidadRestante(){ 
-    //console.log('this.activeCita.restantePagos',this.activeCita.restantePagos);
-    //console.log('cobroEfectivo',this.cobroEfectivo);
-    //console.log('cobroCheque',this.cobroCheque);
-    //console.log('cobroTarjeta',this.cobroTarjeta);
+    
     
     let ret = 0 + 
     ( (Number(this.activeCita.restantePagos)) - 
-    (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) ) ); 
+    (Number(this.cobroEfectivo) + Number(this.cobroCheque) + Number(this.cobroTarjeta) + Number(this.cobroBancaria) ) ); 
     ret = Number(ret.toFixed(2));
     return ret;
   }
@@ -69,6 +66,7 @@ export class CitaProgressControllerProvider {
     this.cobroEfectivo=null;
     this.cobroTarjeta=null;
     this.cobroCheque=null;
+    this.cobroBancaria=null;
   
     this.factura = 0;
     this.factura_cantidad = null;
@@ -107,9 +105,9 @@ export class CitaProgressControllerProvider {
     this.activeCita.estado_anterior = cita.data.field_estado.und[0].value;
     console.log('trail3 setting estado anterior al setearcita', this.activeCita.estado_anterior);
     this.activeCitaDoc = this.citasManager.getDoctorOFCita(this.activeCita);
+    this.activeCitaDoc.setServiciosTimes(this.activeCita);
     console.log(this.activeCita.addedServices);
     this.activeCita.PagosonShow = this.activeCita.PagosonFecha;
-   
   }
 
   finalizarCitaActiva(){
@@ -125,21 +123,17 @@ export class CitaProgressControllerProvider {
   this.activeCita.cobroEfectivo = this.cobroEfectivo == null ? 0 : this.cobroEfectivo;
   this.activeCita.cobroCheque = this.cobroCheque == null ? 0 :this.cobroCheque;
   this.activeCita.cobroTarjeta = this.cobroTarjeta == null ? 0 : this.cobroTarjeta;
+  this.activeCita.cobroBancaria = this.cobroBancaria == null ? 0 : this.cobroBancaria;
   this.activeCita.data.field_facturar.und[0].value = this.factura;
   this.activeCita.data.field_facturar_cantidad.und[0].value = this.factura_cantidad == null ? 0 : this.factura_cantidad;
   this.citasManager.setCitaFechaReporte( this.activeCita, true );
-  /*let aux_pago = new Array();
-  aux_pago['efe'] = this.cobroEfectivo == null ? ''+0 : ''+this.cobroEfectivo;
-  aux_pago['tar'] = this.cobroTarjeta == null ? ''+0 : ''+this.cobroTarjeta;
-  aux_pago['che'] = this.cobroCheque == null ? ''+0 :''+this.cobroCheque;
-  aux_pago['fac'] = this.factura_cantidad == null ? ''+0 : ''+this.factura_cantidad;
-  aux_pago['fec'] = ''+new Date().getTime();
-  this.activeCita.pagos.push(aux_pago);*/
+
 
   let aux_pago = {
     efe:this.cobroEfectivo == null ? ''+0 : ''+this.cobroEfectivo,
     tar:this.cobroTarjeta == null ? ''+0 : ''+this.cobroTarjeta,
     che:this.cobroCheque == null ? ''+0 :''+this.cobroCheque,
+    ban:this.cobroBancaria == null ? ''+0 :''+this.cobroBancaria,
     fac: this.factura_cantidad == null ? ''+0 : ''+this.factura_cantidad,
     fec:''+new Date().getTime(),
     uid: Number(this.userData.userData.uid),
@@ -160,8 +154,10 @@ export class CitaProgressControllerProvider {
   console.log('this.cobroEfectivo',JSON.stringify(this.activeCita.cobroEfectivo)); 
   console.log('this.cobroCheque',JSON.stringify(this.activeCita.cobroCheque)); 
   console.log('this.cobroTarjeta',JSON.stringify(this.activeCita.cobroTarjeta)); 
+  console.log('this.cobroBancaria',JSON.stringify(this.activeCita.cobroBancaria)); 
   console.log('this.factura',JSON.stringify(this.activeCita.data.field_facturar.und[0].value)); 
   console.log('this.factura_cantidad',JSON.stringify(this.activeCita.data.field_facturar_cantidad.und[0].value)); 
+  console.log('checkforjson field_servicios_json',this.activeCita.data.field_servicios_json);
   }
 
   
@@ -171,6 +167,7 @@ export class CitaProgressControllerProvider {
     console.log('this.cobroEfectivo',JSON.stringify(this.cobroEfectivo)); 
     console.log('this.cobroCheque',JSON.stringify(this.cobroCheque)); 
     console.log('this.cobroTarjeta',JSON.stringify(this.cobroTarjeta)); 
+    console.log('this.cobroBancaria',JSON.stringify(this.cobroBancaria)); 
     console.log('this.factura',JSON.stringify(this.factura)); 
     console.log('this.factura_cantidad',JSON.stringify(this.factura_cantidad)); 
   }
@@ -182,6 +179,7 @@ export class CitaProgressControllerProvider {
     this.activeCita.cobroEfectivo = this.cobroEfectivo;
   this.activeCita.cobroCheque = this.cobroCheque;
   this.activeCita.cobroTarjeta = this.cobroTarjeta;
+  this.activeCita.cobroBancaria = this.cobroBancaria;
   this.activeCita.data.field_facturar.und[0].value = this.factura;
   this.activeCita.data.field_facturar_cantidad.und[0].value = this.factura_cantidad;
   
@@ -201,6 +199,7 @@ export class CitaProgressControllerProvider {
       console.log('service to add',service_to_add);
       if(this.activeCita.addServicio(service_to_add)){
         console.log('servicio added');
+        service_to_add.times = 1;
         this.available_services = this.activeCita.getServiciosAvailable(this.activeCitaDoc.servicios);
         this.calcularCosto();
         this.selectedService = 0;
@@ -251,7 +250,7 @@ export class CitaProgressControllerProvider {
     this.costoCita = 0;
     console.log(this.activeCita.addedServices);
     this.activeCita.addedServices.forEach(element => {
-      this.costoCita += Number(element.costo);
+      this.costoCita += (Number(element.costo) * Number(element.times));
       this.activeCita.data.field_costo_sobrescribir.und[0].value = this.costoCita;
     });
     console.log(this.costoCita);
@@ -301,22 +300,7 @@ export class CitaProgressControllerProvider {
       console.log('updateCheckedOption start servicesCompare',JSON.stringify(this.servicesCompare));
       console.log('activecita addedservices',this.activeCita.addedServices);
       if(State){ //si se va a agregar
-        /*if(Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)) //si es cortesia se revisa que se pueda agregar , osea si no hay mas servicios agregados
-        {
-          console.log('es cortesia');
-          //this.removeAllServices();
-          /*if(this.activeCita.addedServices.length === 0){
-             console.log('es 0 ');
-             this.selectedService = Nid;
-            this.addService();
-          }else{
-            //Eliminar todos los servicios y agregar cortesia.
-          }
-        }else{
-          this.selectedService = Nid;
-          this.addService();
-          this.removeServiceWnid(Number(CitasDataProvider.SERVICIO_CORTESIA_NID));
-        }*/
+       
         this.checkDisableCortesia();
         this.selectedService = Nid;
         this.addService();
@@ -329,6 +313,25 @@ export class CitaProgressControllerProvider {
     }
       console.log('added',this.activeCita.addedServices);
       console.log('updateCheckedOption end servicesCompare',JSON.stringify(this.servicesCompare));
+    }
+
+
+    operateTimes(Nid,operand){
+      console.log('progresscontroller operateTimes',Nid,operand);
+      console.log('updateCheckedOption start operateTimes',JSON.stringify(this.servicesCompare));
+      console.log('activecita addedservices',this.activeCita.addedServices); 
+      if(this.checkChecked(Nid)){
+      this.activeCita.operateServiceTimes(Nid,operand);
+      this.calcularCosto();
+      }
+    }
+
+    getAddedTimes( Nid ){
+      let ret = 0;
+      if(this.activeCita.checkServicio(Nid)){
+        ret = this.activeCita.getAddedTimes(Nid);
+      }
+      return ret;
     }
 
 

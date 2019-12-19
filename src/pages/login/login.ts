@@ -81,6 +81,9 @@ export class LoginPage {
     Modal.present({});
   }
 
+  openterminos(){this.navCtrl.setRoot('TerminosycondicionesPage');}
+  openAviso(){this.navCtrl.setRoot('AvisoprivacidadPage');}
+  openFaq(){this.navCtrl.setRoot('FaqPage');}
 
 
 

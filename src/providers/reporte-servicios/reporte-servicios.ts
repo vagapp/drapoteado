@@ -23,7 +23,9 @@ export class ReporteServiciosProvider {
     console.log('loading report');
     for(let cita of report.citas){
       cita.testOriginactivereport(Number(report.dateStartUTMS), Number(report.dateEndUTMS));
-      // console.log('added services',cita.reporteServicios);
+      //console.log('checktimes added services',cita.reporteServicios);
+      //console.log('checktimes cita',cita);
+      
       if(cita.originactivereport){
       for( let servicio of cita.reporteServicios){
         console.log('checking serv',servicio);
@@ -32,17 +34,19 @@ export class ReporteServiciosProvider {
         });
         console.log('servicio found is',found);
         if(found){
-          found.times++;
+          found.times += Number( servicio.times ? servicio.times : 1 ) ;
           found.costo += Number(servicio.costo);
+          console.log('servicio times l',servicio.times, found);
         }else{
           let aux_servresume = {
-            nid:Number(servicio.Nid),
-            title:servicio.title,
-            costo:Number(servicio.costo),
-            times:1,
+            nid: Number(servicio.Nid),
+            title: servicio.title,
+            costo: Number(servicio.costo),
+            times: Number( servicio.times ? servicio.times : 1 ),
             doc: cita.doctor_name,
             order: servicio.order
           }
+          console.log('servicio times f',servicio.times, aux_servresume);
           if(Number(aux_servresume.nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID)){
             aux_servresume.title = 'Consulta cortesía';
           }

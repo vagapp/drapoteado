@@ -1,5 +1,5 @@
 import { Citas } from "./citas";
-import { UserDataProvider } from "./user-data";
+import { UserDataProvider, citasData } from "./user-data";
 import { servicios } from "./servicios";
 import { Debugger } from "./debugger";
 import { CitasDataProvider } from "../citas-data/citas-data";
@@ -63,6 +63,32 @@ export class Doctores{
 
     setDisponibilidad(field_disp){
       console.log("setting doc disp",field_disp);
+    }
+
+
+    resetServiceTimes(){
+      this.servicios.forEach(element => {
+        element.times = 0;
+      });
+    }
+
+
+    setServiciosTimes(citaActiva:Citas){
+      this.resetServiceTimes();
+      let aux_servicios = JSON.parse(citaActiva.data.aux_servicios_json);
+      console.log('setServiciosTimes',aux_servicios);  
+      if(aux_servicios){
+      this.servicios.forEach((service)=>{
+        let found = aux_servicios.find((aux_serv)=>{return Number(service.Nid) === Number(aux_serv.Nid) });
+        console.log('setServiciosTimes found',found);
+        if(found){
+          service.times = 1;
+          if(found.times)  service.times = Number(found.times);
+        }
+      });
+    }
+     
+      //(citaActiva.data.aux_servicios_json);
     }
 
    

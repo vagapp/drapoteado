@@ -60,7 +60,8 @@ export class ReportPresentatorProvider {
   total:number;
   totalefectivo:number;
 	totalTarjeta:number;
-	totalCheques:number;
+  totalCheques:number;
+  totalBancaria:number;
 	totalcuentas:number;
   totalAdeudo:number;
   costoTotal:number;
@@ -70,7 +71,8 @@ export class ReportPresentatorProvider {
   totalOut:number;
   totalefectivoOut:number;
 	totalTarjetaOut:number;
-	totalChequesOut:number;
+  totalChequesOut:number;
+  totalBancariaOut:number;
 	totalcuentasOut:number;
   totalAdeudoOut:number;
   costoTotalOut:number;
@@ -81,7 +83,8 @@ export class ReportPresentatorProvider {
   totalDoc:number = 0;
   totalefectivoDoc:number;
 	totalTarjetaDoc:number;
-	totalChequesDoc:number;
+  totalChequesDoc:number;
+  totalBancariaDoc:number;
 	totalcuentasDoc:number;
   totalAdeudoDoc:number;
   costoTotalDoc:number;
@@ -95,7 +98,8 @@ export class ReportPresentatorProvider {
   caja:number;
 	cajaefectivo:number;
 	cajaTarjeta:number;
-	cajaCheques:number;
+  cajaCheques:number;
+  cajaBancaria:number;
 	cajacuentas:number;
   cajaAdeudo:number;
 
@@ -411,6 +415,7 @@ async openReportGenerate( report:reportes = null ){
         cita.setPagosFecha(0,0,this.userData.userData.uid);
         cita.setEdicionesFechas(0,0);
         this.cajaAdeudo += aux_costo - cita.pagosTotal;
+        console.log('trail rban1 setting cajadeudo',this.cajaAdeudo,cita.pagosTotal);
         this.costoTotal += aux_costo;
         this.total += cita.pagosTotal;
       }else{
@@ -426,18 +431,21 @@ async openReportGenerate( report:reportes = null ){
         this.totalefectivo += cita.pagosEfectivo;
         this.totalTarjeta += cita.pagosTarjeta;
         this.totalCheques += cita.pagosCheque;
+        this.totalBancaria += cita.pagosBancaria;
         this.facturadoTotal += cita.pagosFacturado;
 
         this.totalOut += cita.pagosTotalOut;
         this.totalefectivoOut += cita.pagosEfectivoOut;
         this.totalTarjetaOut += cita.pagosTarjetaOut;
         this.totalChequesOut += cita.pagosChequeOut;
+        this.totalBancariaOut += cita.pagosBancariaOut;
         this.facturadoTotalOut += cita.pagosFacturadoOut;
 
         this.totalDoc   += cita.pagosTotalDoc;
         this.totalefectivoDoc += cita.pagosEfectivoDoc;
         this.totalTarjetaDoc += cita.pagosTarjetaDoc;
         this.totalChequesDoc += cita.pagosChequeDoc;
+        this.totalBancariaOut += cita.pagosBancariaOut;
         this.facturadoTotalDoc += cita.pagosFacturadoDoc;
         if(aux_costo > cita.pagosTotal && !cita.checkState(CitasDataProvider.STATE_COBRO) ){ this.cajaAdeudo += aux_costo - cita.pagosTotal;   }
         
@@ -449,6 +457,7 @@ async openReportGenerate( report:reportes = null ){
         this.totalefectivo += cita.pagosEfectivo;
         this.totalTarjeta += cita.pagosTarjeta;
         this.totalCheques += cita.pagosCheque;
+        this.totalBancaria += cita.pagosBancaria;
         this.facturadoTotal += cita.pagosFacturado;
         this.totalAdeudo += cita.pagosTotal;
 
@@ -456,11 +465,13 @@ async openReportGenerate( report:reportes = null ){
         this.totalefectivoOut += cita.pagosEfectivoOut;
         this.totalTarjetaOut += cita.pagosTarjetaOut;
         this.totalChequesOut += cita.pagosChequeOut;
+        this.totalBancariaOut += cita.pagosBancariaOut;
         this.facturadoTotalOut += cita.pagosFacturadoOut;
 
          this.totalDoc   += cita.pagosTotalDoc;
         this.totalefectivoDoc += cita.pagosEfectivoDoc;
         this.totalTarjetaDoc += cita.pagosTarjetaDoc;
+        this.totalBancariaDoc += cita.pagosBancariaDoc;
         this.totalChequesDoc += cita.pagosChequeDoc;
         this.facturadoTotalDoc += cita.pagosFacturadoDoc;
       }
@@ -523,6 +534,7 @@ async openReportGenerate( report:reportes = null ){
     this.totalefectivo = 0;
     this.totalTarjeta = 0;
     this.totalCheques = 0;
+    this.totalBancaria = 0;
     this.totalcuentas = 0;
     this.totalAdeudo = 0;
     this.costoTotal = 0;
@@ -530,6 +542,7 @@ async openReportGenerate( report:reportes = null ){
     this.cajaefectivo = 0;
     this.cajaTarjeta = 0;
     this.cajaCheques = 0;
+    this.cajaBancaria = 0;
     this.cajacuentas = 0;
     this.cajaAdeudo = 0;
     this.facturadoTotal = 0;
@@ -540,6 +553,7 @@ async openReportGenerate( report:reportes = null ){
     this.totalefectivoOut = 0;
     this.totalTarjetaOut = 0;
     this.totalChequesOut = 0;
+    this.totalBancariaOut = 0;
     this.totalcuentasOut = 0;
     this.totalAdeudoOut = 0;
     this.costoTotalOut = 0;
@@ -549,6 +563,7 @@ async openReportGenerate( report:reportes = null ){
     this.totalefectivoDoc = 0;
     this.totalTarjetaDoc = 0;
     this.totalChequesDoc = 0;
+    this.totalBancariaDoc = 0;
     this.totalcuentasDoc = 0;
     this.totalAdeudoDoc = 0;
     this.costoTotalDoc = 0;
