@@ -76,16 +76,14 @@ export class SubusersManagerProvider {
    * @param subsids  //los subids que piensa que tiene este wey
    */
   healSubscription(res, subsids ){
-    //vamos a ver si es cierto lo que dices wey
-    subsids.forEach(subid => { //por cada subid en tu lista vamos a ver si existe el doctor en el resm osea en lo que si encontramos en los datos wey
-     //aquí no tengo como saber que hay en el puto res asi que necesito un usuario legal men.
+    subsids.forEach(subid => { 
     });
   }
 
   async loadGroupUsers(){
    let res = await this.requestGroupUsers().toPromise();
    for(let us of res){
-    //this.setGroupUserResult(us,SubusersDataProvider.SUBUSERS_SUBSCRIPTION);
+    
     }
     console.log('loaded GroupUsers', this.subusersData.subUsers);
   }
@@ -141,7 +139,7 @@ export class SubusersManagerProvider {
       }
       aux_user.field_tipo_de_usuario.und = new Array();
       if(user_data.field_tipo_de_usuario.value) aux_user.field_tipo_de_usuario.und.push(user_data.field_tipo_de_usuario.value);
-      //console.log('GENERATED sub user', aux_user);
+    
       return aux_user;
     }
 

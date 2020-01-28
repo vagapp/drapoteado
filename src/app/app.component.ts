@@ -71,7 +71,7 @@ export class MyApp {
       { title: 'Citas', component: "CitasPage" },
       { title: 'Servicios', component: "ServiciosPage" },
       { title: 'Usuarios', component: "UsuariosPage" },
-      { title: 'Reportes', component: "ReportesPage" },
+      { title: 'Reportes', component: "ReportesgenPage" },
       { title: 'Login', component: "LoginPage" }
     ];
   }
@@ -125,7 +125,6 @@ export class MyApp {
       console.log('into b');
       //await this.citasManager.requestCitas().toPromise();
       await this.updater.updateCitas();
-     
       //this.docMan.evaluateCitas();
       await this.updater.updateServicios();
       //this.serviciosManager.loadServicios();
@@ -154,7 +153,7 @@ export class MyApp {
   openCitasPage(){this.nav.setRoot("CitasPage");}
   openServiciosPage(){this.nav.setRoot("ServiciosPage");}
   openUsuariosPage(){this.nav.setRoot("UsuariosPage");}
-  openReportesPage(){this.nav.setRoot("ReportesPage");}
+  openReportesPage(){this.nav.setRoot("ReportesgenPage");}
   openFacturacionPage(){this.nav.setRoot("FacturacionPage");}
   openterminos(){this.nav.setRoot('TerminosycondicionesPage');}
   openAviso(){this.nav.setRoot('AvisoprivacidadPage');}

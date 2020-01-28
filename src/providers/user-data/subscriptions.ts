@@ -131,7 +131,7 @@ export class subscriptions{
         });
         }
     }else{
-        //Debugger.log(['is a new shit to save']);
+       
         ret =  {
             Nid:this.nid,
             type:"suscripcion",

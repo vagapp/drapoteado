@@ -41,7 +41,7 @@ export class ReportesPage {
   async ionViewDidLoad() {
     //console.log('ionViewDidLoad ReportesPage');
     this.loader.presentLoader('cargando ...');
-    await this.reportesMan.cargarListaReportes();
+   // await this.reportesMan.cargarListaReportes();
     this.loader.dismissLoader();
     //Debugger.log(["reportes carfados",this.userData.reportes]);
   }
@@ -83,7 +83,7 @@ export class ReportesPage {
       `¿Está seguro que desea eliminar este reporte?`,
       async ()=>{
         this.loader.presentLoader('eliminando ...');
-        let val = await this.reportesMan.deleteReport(report).toPromise();
+        //let val = await this.reportesMan.deleteReport(report).toPromise();
         this.loader.dismissLoader();
       },
       ()=>{}

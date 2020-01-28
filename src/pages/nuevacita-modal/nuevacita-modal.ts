@@ -61,6 +61,7 @@ currentMonth: any;
 currentMonthNum:any;
 currentYear: any;
 currentDate: any;
+compareDate: any;
 
 eventList: any;
 selectedEvent: any;
@@ -265,8 +266,10 @@ basicNewCitaValidation(){
 citaDateValidation():boolean{
   let ret = true;
   this.horferror = false;
-  
-  if(this.cita.data.field_datemsb['und'][0]['value'] < new Date().getTime()){
+  //console.log('checkcitaupdate', this.cita.data.field_datemsb['und'][0]['value'], new Date().getTime(), this.cita.data.field_datemsb['und'][0]['value'] < new Date().getTime());
+  //console.log('checkcitaupdate date',new Date(this.cita.data.field_datemsb['und'][0]['value']));
+  //console.log('checkcitaupdate x',new Date(this.CompareDate),new Date(), this.CompareDate < new Date().getTime() );
+  if( this.CompareDate < new Date().getTime()){
     this.horferror = true;
     this.alert.presentAlert('','Debe elegir una fecha a futuro');
     ret = false;
@@ -297,7 +300,7 @@ getDateOnNextTreshold():Date{
 }
 
 async updateCita(){
-  
+ 
   if(!this.citaDateValidation()){ return false; }
   if(this.cita.data.field_telefono.und[0].value === null){
     this.cita.data.field_telefono.und[0].value = 0;
@@ -325,82 +328,19 @@ close(){
 
 
 setCitaDateFromiNPUT(){
-  //get the timezoned input and put it on utc on this format 2018-07-04 14:30:00-07:00 to set data using citas code
-  //Debugger.log(['string that not works now is',this.selectedDate],false);
-  //this.cita.setDate(this.selectedDate,true);
-  //OLD CODE FROM IONIC DATEPICKER
-  /*let now = new Date();
-  Debugger.log([this.selectedDate]);
-  let auxdate = new Date(this.selectedDate);
-  Debugger.log([`times dif are now ${now.getTime()} vs sel ${auxdate.getTime()}`]);
-  Debugger.log([`offset is`,new Date().getTimezoneOffset()]);
-  let dateUT = auxdate.getTime();
-  const offset = (new Date().getTimezoneOffset() * 60 * 1000 * 2); // offset is in minutes so 60 * 1000 to get  milliseconds
-  dateUT = dateUT + offset;
-  this.cita.setDateUT(dateUT);
-  this.cita.data.field_datemsb['und'][0]['value'] = dateUT;
-  Debugger.log([`saving ${dateUT} for ${new Date(dateUT)}`]);*/
-
-  //CODE FOR CALENDAR PICKER
-  /*let aux_date = new Date(this.dateobj.getTime());
-  aux_date.setHours(0,0,0,0);
-  aux_date = new Date(aux_date.getTime()+this.selectedHour);
-  console.log('settingdateinput is',aux_date);
-  let dateUT = aux_date.getTime();//this.aux_date.getTime();
-  this.cita.setDateUT(dateUT);
-  this.cita.data.field_datemsb['und'][0]['value'] = dateUT;*/
-
- 
-  
-  //console.log('originaltime ', new Date().getTime() );
-  //console.log('-----------------------------' );
-  //console.log('obtained', aux_hour_date.getTime() );
-  //console.log('offset',new Date().getTimezoneOffset() * 60 * 1000);
- 
-  //console.log('-offset',aux_hour_date.getTime()  - (new Date().getTimezoneOffset() * 60 * 1000));
-  //let min = (aux_hour_date.getHours() * 60) + ( aux_hour_date.getMinutes() );
-  //console.log('minutos obtenidos',min, min/60);
-  
-  //aux_date = new Date(aux_date.getTime()+this.selectedHour);
-  /*console.log('selectedHourIso is',this.selectedHourISO);
-  let auxdatehour = new Date(this.selectedHourISO);
-  console.log('selecteddate is',auxdatehour);
-  let hours = DateProvider.getDayHours(auxdatehour);
-  console.log('setting date is', new Date(aux_date.getTime() + hours));
-  console.log('hours pulled', hours);
-  console.log('settingdateinput is',aux_date);
-  const offset = (new Date().getTimezoneOffset() * 60 * 1000 * 2); // offset is in minutes so 60 * 1000 to get  milliseconds
-  let dateUT = aux_date.getTime();
-  dateUT = dateUT + offset + hours;
-  console.log('dateUTset is',new Date(dateUT));
-  this.cita.setDateUT(dateUT);
-  this.cita.data.field_datemsb['und'][0]['value'] = dateUT;*/
-  
-   //CODE FOR CALENDAR AND HOUR PICKER
-  //obtenemos la fecha sin horas.
-  let aux_date = new Date(this.dateobj.getTime());
-  aux_date.setHours(0,0,0,0);
-  console.log('dia sin horas',aux_date);
-
-  //obtenemos las horas em ms
-  /*
-  console.log('selectedisohour',this.selectedHourISO);
-  let aux_hour_date = new Date(this.selectedHourISO);
-  aux_hour_date = new Date(aux_hour_date.getTime()  + (new Date().getTimezoneOffset() * 60 * 1000 * 2));
-  console.log(aux_hour_date);
-  let ms =  (aux_hour_date.getHours()*60*60*1000)+(aux_hour_date.getMinutes()*60*1000);
-  console.log('HOUR MS',ms,ms/(1000*60*60));*/
-  //NO USAMOS ESTE CODIGO YA PORQUE YA NO QUIEREN EL IONIC HOUR INPUT HERMOSO QUE HICE. putos.
-
-  console.log('hour string',this.horantr);
-  let ms = Number(this.horantr.split(':')[0])*60*60*1000;
-  ms += Number(this.horantr.split(':')[1])*60*1000;
-  console.log('MSAdded',ms);
-  
-  let final_date_UT = aux_date.getTime() + ms;
-  console.log('final date is', new Date(final_date_UT));
+  let final_date_UT = this.CompareDate;
   this.cita.setDateUT(final_date_UT);
   this.cita.data.field_datemsb['und'][0]['value'] = final_date_UT;
+}
+
+get CompareDate(){
+  let aux_date = new Date(this.dateobj.getTime());
+  aux_date.setHours(0,0,0,0);
+  let ms = Number(this.horantr.split(':')[0])*60*60*1000;
+  ms += Number(this.horantr.split(':')[1])*60*1000;
+  let final_date_UT = aux_date.getTime() + ms;
+  return final_date_UT;
+//this.compareDate = final_date_UT;
 }
 
 

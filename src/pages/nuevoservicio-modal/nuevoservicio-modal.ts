@@ -60,6 +60,9 @@ export class NuevoservicioModalPage {
         field_costo_servicio:aux_service.field_costo_servicio,
         field_doctor_uid:{und:[{value:aux_service.Uid}]}
       }
+      if(!this.newService.costo){
+        this.newService.costo = 0;
+      }
       //this.newService = aux_service;
     }else{
       this.isnew = true;
@@ -110,9 +113,9 @@ export class NuevoservicioModalPage {
     if(this.showerrors){
       this.alert.presentAlert('','Los campos en rojo son obligatorios');
     }
-    if(!this.showerrors && Number(this.newService.field_costo_servicio.und[0].value) <= 0){
+    /*if(!this.showerrors && Number(this.newService.field_costo_servicio.und[0].value) <= 0){
       this.alert.presentAlert('','El costo del servicio debe ser mayor a cero'); this.showerrors = true;  ret = false;
-    }
+    }*/
     return ret;
   }
 

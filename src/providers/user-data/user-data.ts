@@ -97,6 +97,8 @@ export class UserDataProvider {
     field_src_json_info:{und:[{value: ""}]},
     field_reference_user:{und:[0]},
     field_codigo:{und: [{value:""}]},
+    field_rfc:{und: [{value:""}]},
+    field_razon:{und: [{value:""}]},
 }
 
   constructor(
@@ -150,6 +152,8 @@ export class UserDataProvider {
       field_src_json_info: {und:[{value: ""}]},
       field_reference_user:{und:[]},
       field_codigo:{und: [{value:""}]},
+      field_rfc:{und: [{value:""}]},
+      field_razon:{und: [{value:""}]},
   }
   }
 
@@ -213,9 +217,16 @@ export class UserDataProvider {
     if(val['field_municipio'].length !== 0)this.userData.field_municipio = val['field_municipio'];
     if(val['field_estado_ubicacion'].length !== 0)this.userData.field_estado_ubicacion = val['field_estado_ubicacion'];
     if(val['field_codigo'].length !== 0)this.userData.field_codigo = val['field_codigo'];
+    
+    if(val['field_rfc'].length !== 0) this.userData.field_rfc = val['field_rfc']; 
+    if(val['field_razon'].length !== 0) this.userData.field_razon = val['field_razon'];
+
     this.userData.field_plan_date = val['field_plan_date'];
     this.userData.field_forma_pago = val['field_forma_pago'];
     this.userData.tutorial_state = val['field_tutorial_state'];
+    
+   
+    console.log('field_rfc',this.userData.field_rfc);
     /*if(val['field_doctores'].length !== 0){
     this.userData.field_doctores = val['field_doctores'];
     }else{ this.userData.field_doctores.und = new Array();}*/
@@ -864,8 +875,9 @@ export class UserDataProvider {
         field_src_json_info:{und:[{value: ""}]},
         field_reference_user:{und:[0]},
         selectedForGroup:false,
-        field_owner:{und:[0]}
-        
+        field_owner:{und:[0]},
+        field_rfc:{und:[{ value:""}]},
+    field_razon:{und: [{value:""}]},   
     }
   }
 }
@@ -921,7 +933,6 @@ export interface citasData{
     field_ediciones_json:{und:[{value:string}]},
     field_cajas_filter:{und:[{value:number}]},
     field_comentarios:{und:[{value:string}]},
-    
 }
 
 
@@ -959,7 +970,6 @@ export interface userd{
     field_reference_user:{und:number[]},
     selectedForGroup:boolean,
     field_owner:{und:number[]};
-
 }
 
 

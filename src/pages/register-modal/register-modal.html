@@ -2,7 +2,7 @@
 <ion-content class="register_content">
     <div class="modal_closer" *ngIf="!this.isnew" (click)="this.dismiss();">Volver</div>
     <div class="modal_closer_desktop"  *ngIf="!this.isnew"  (click)="this.dismiss();">Cerrar</div>
-    {{this.newSus}}
+   
   <div class="register_contet_head">
     <div class="bigFont" *ngIf="this.isnew"> <span class="fontPrimary"><b>Registro</b></span> <span class="lightFont">de Nuevo Suscriptor</span></div>
     <div class="midSubFont" *ngIf="this.isnew"> Por favor proporciona los siguientes datos: </div>
@@ -85,6 +85,12 @@
             <b>Municipio o Alcaldía:</b><input [(ngModel)]="this.actualUser.field_municipio.und[0].value"  type="text"/>
         </div>
         <div class="registerInput">
+          <b>RFC:<span class="obligatoryast" *ngIf="this.isnew && !this.newSus">*</span></b><input [(ngModel)]="this.actualUser.field_rfc.und[0].value" [class.registerInputerror]="!this.actualUser.field_rfc.und[0].value && showerrors && !this.newSus"    type="text" />
+      </div>
+      <div class="registerInput">
+        <b>Nombre o Razón Social:<span class="obligatoryast" *ngIf="this.isnew && !this.newSus">*</span></b><input [(ngModel)]="this.actualUser.field_razon.und[0].value" [class.registerInputerror]="!this.actualUser.field_razon.und[0].value && showerrors && !this.newSus"    type="text"/>
+    </div>
+        <div class="registerInput">
           <b>Estado:</b>
         <select  class="input_select input" [(ngModel)]="this.actualUser.field_estado_ubicacion.und[0].value">
             <option selected disabled value="0">Seleccione un estado</option>
@@ -122,6 +128,7 @@
             <option selected  value="Zacatecas">Zacatecas</option>
           </select>
         </div>
+     
     </div>
 
     <div class="register_ubication register_form_section rfsFlex" *ngIf="this.isnew && !this.newSus">

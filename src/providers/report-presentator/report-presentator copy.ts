@@ -11,7 +11,7 @@ import 'jspdf-autotable';
 import { UserDataProvider } from '../user-data/user-data';
 import { ReporteServiciosProvider } from '../reporte-servicios/reporte-servicios';
 import { ReportesDataProvider } from '../reportes-data/reportes-data';
-
+import { ReportesManagerProvider } from '../reportes-manager/reportes-manager';
 import { ModalController } from 'ionic-angular';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { SubusersDataProvider } from '../subusers-data/subusers-data';
@@ -122,7 +122,15 @@ export class ReportPresentatorProvider {
     return  Number(this.type) === Number(ReportPresentatorProvider.REPORT_GRUPAL); 
   }
 
-
+get isdialy(){
+  let ret = false;
+  console.log('checking if dialy', this.reportesData.todayReport, this.actualReport);
+  if(this.reportesData.todayReport && Number(this.reportesData.todayReport.nid) === Number(this.actualReport.nid) ){
+    ret = true;
+    console.log('checking if dialy isdialy');
+  }
+  return ret;
+}
 
   serviciosResume:{
     nid:number,
@@ -141,7 +149,7 @@ export class ReportPresentatorProvider {
     public docData: DoctoresDataProvider,
     public subUserData: SubusersDataProvider,
     public reportesData: ReportesDataProvider,
-    public dp: DateProvider,
+    public reportesManager: ReportesManagerProvider,
     public modalCtrl: ModalController,
     public permissions: PermissionsProvider,
     public subsData: SubscriptionDataProvider,
@@ -191,7 +199,7 @@ async openReporte( report:reportes = null){
 async loadReportNM(loadReport:boolean = true){ //este metodo lo cree a partir de querer abrir el reporte no en modal para cargar el reporte y retornar un valor que indique que esta cargado y abrir la pagina en el layout.
   console.log('loadReportNM',JSON.stringify(this.docuid),this.type);
   this.loader.presentLoader('Cargando ...');
-  await this.setReport();
+  //await this.setReport(report);
   if(this.isgroup){
     this.docuid = 0;
   }
@@ -206,10 +214,12 @@ async loadReportNM(loadReport:boolean = true){ //este metodo lo cree a partir de
 
 
 exportExcel(){
-
-  let gwho = this.permissions.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) ?  this.isGroup ? this.subsData.subscription.field_doctores : [this.userData.userData.uid] : this.docData.doctoresIDs;
-  let report_excel = this.bu.backendUrl+`endpoint_Reporteexceldev.php?r=${this.actualReport.dateStartUTMS}-${this.actualReport.dateEndUTMS}${this.docLoaded && this.docuid!==null ? '&doc='+this.docuid : ''}${'&ur='+this.userData.userData.field_tipo_de_usuario['und'][0]['value']}${this.isAdeudo ? '&adeudo=1' : '&adeudo=0'}${this.isGroup ? '&group=1&gdocs='+gwho.join(',') : '&gdocs='+gwho.join(',')}`;
-  
+  //this.actualReport.nid
+  //this.docLoaded
+  //console.log('exportExcel docloaded is ',this.docLoaded,this.docuid);
+  //console.log(this.userData.userData.field_tipo_de_usuario['und'][0]['value']);
+  let gwho = this.permissions.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) ?  this.subsData.subscription.field_doctores : this.docData.doctoresIDs;
+  let report_excel = this.bu.backendUrl+`endpoint_Reporteexcel.php?r=${this.actualReport.nid}${this.docLoaded && this.docuid!==null ? '&doc='+this.docuid : ''}${'&ur='+this.userData.userData.field_tipo_de_usuario['und'][0]['value']}${this.isAdeudo ? '&adeudo=1' : '&adeudo=0'}${this.isGroup ? '&group=1&gdocs='+gwho.join(',') : '&group=0'}`;
   //console.log(report_excel);
   console.log('report_excel url is',report_excel);
    window.location.href = report_excel;
@@ -238,23 +248,38 @@ async openReportGenerate( report:reportes = null ){
   
 
   async setReport(report:reportes = null){
-    let aux_dates = DateProvider.getStartEndOFDate(this.chosenDate);
-    let aux_displayable = DateProvider.getDisplayableDates(this.chosenDate).date;
-    const uax_treport = new reportes();
-      uax_treport.author_uid = this.userData.userData.uid;
-      uax_treport.doctores = this.docData.doctoresIDs;
-      uax_treport.dateStartUTMS = aux_dates.start.getTime();
-      uax_treport.dateEndUTMS = aux_dates.end.getTime();
-      uax_treport.dateString = aux_displayable;
-      if(this.permissions.checkUserPermission([UserDataProvider.TIPO_CAJA])){
-        uax_treport.cajas = [this.userData.userData.uid];
+    console.log('setReport');
+    if(report){this.actualReport = report;
+    }else{
+      console.log('setReporttrail a');
+      if(!this.reportesData.todayReport){
+        console.log('setReporttrail b');
+        //await this.reportesManager.cargarListaReportes();
+        console.log('setReporttrail c');
       }
-      uax_treport.doctores = new Array();
+      this.actualReport = this.reportesData.todayReport;
+      console.log('setReporttrail d',this.actualReport);
+    }
+    if(Number(this.actualReport.nid) === Number(this.reportesData.todayReport.nid)){
+      this.actualReport.doctores = new Array();
       this.docData.doctores.forEach((doc)=>{
-      uax_treport.doctores.push(Number(doc.Uid));
+        this.actualReport.doctores.push(Number(doc.Uid));
       });
-      this.actualReport = uax_treport;
-      console.log('trailsetactualreport', this.actualReport);
+     // await this.reportesManager.updateReporte(this.actualReport);
+      console.log('trailupdatetodaydocs update');
+      /*let aux_docs = this.docData.doctores.filter((doc)=>{
+        this.actualReport.doctores.indexOf(doc.Uid) === -1
+      });
+      //console.log('trailupdatetodaydocs setting todatreport, checking doctores',this.docData.doctores, this.actualReport.doctores,aux_docs);
+      /*if(aux_docs && aux_docs.length>0){
+      aux_docs.forEach((doc)=>{
+        this.actualReport.doctores.push(Number(doc.Uid));
+      });
+      await this.reportesManager.updateReporte(this.actualReport);
+      console.log('trailupdatetodaydocs update');
+      }*/
+    }
+    
   }
 
   async loadReporte(){

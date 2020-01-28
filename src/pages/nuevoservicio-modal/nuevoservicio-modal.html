@@ -33,7 +33,7 @@
         </div>
         <div class="ModalInput_input">
             <b>Costo</b>
-            <input disable-number-flow onlynumber [(ngModel)]="this.newService.field_costo_servicio.und[0].value" [class.registerInputerror]="!this.newService.field_costo_servicio.und[0].value && showerrors" placeholder="Costo del servicio" type="text"/>
+            <input [(ngModel)]="this.newService.field_costo_servicio.und[0].value" [class.registerInputerror]="!this.newService.field_costo_servicio.und[0].value && showerrors" placeholder="Costo del servicio" type="number"/>
         </div>
     </div>
 
@@ -46,7 +46,7 @@
 
     <div class="midAlign">
         <div class="register_button_section">
-                <button class="bgColorSecondary generalButton tutorialButton" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" (click)="resetServicio();">Agregar servicio</button>
+                <button class="bgColorSecondary generalButton tutorialButton"        *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" (click)="resetServicio();">Agregar servicio</button>
         <button class="bgColorSecondary generalButton tutorialButton" *ngIf="this.tutorial.checkTutorialState() && !this.tutorial.serviceCreated" (click)="createServiceTutorial();">Continuar</button>
         <button class="bgColorSecondary generalButton tutorialButton" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.serviceCreated" (click)=" this.tutorial.showUsuarioModal(); this.dismiss();">Continuar</button>
         <button class="bgColorSecondary generalButton" *ngIf="!this.tutorial.checkTutorialState() && this.isnew" (click)="createService()">Agregar</button>

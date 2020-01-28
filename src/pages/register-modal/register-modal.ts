@@ -124,7 +124,6 @@ export class RegisterModalPage {
     if(!this.basicValidation()){return 0;}
    console.log('basic validation ret ??? ');
     if(this.passwordNeededValidation() ){
- 
     }else{
       await this.update();
   }
@@ -133,6 +132,7 @@ export class RegisterModalPage {
 
   async update(){
     this.loader.presentLoader('Actualizando...');
+    console.log('actualuser',this.actualUser);
     let aux_userData = JSON.parse(JSON.stringify(this.actualUser));
     delete aux_userData.field_sub_id;
     delete aux_userData.field_tipo_de_usuario;
@@ -253,6 +253,7 @@ export class RegisterModalPage {
   actionRegister(){
     if(!this.basicValidation()){return 0;}
     this.loader.presentLoader('Registrando ...');
+    console.log('actualuser',this.actualUser);
   let cloneData = JSON.parse(JSON.stringify(this.actualUser));
   delete cloneData.field_sub_id;
   cloneData.field_useremail.und[0].email = this.actualUser.mail;
@@ -264,7 +265,7 @@ export class RegisterModalPage {
   delete cloneData.field_doctores;
   delete cloneData.field_forma_pago;
   delete cloneData.field_plan_date;
-
+    console.log('registering',cloneData);
   if(this.refuser){
     cloneData.field_reference_user.und[0] = this.refuser;
     /*aux_userData.field_reference_user = new Array();
@@ -396,8 +397,16 @@ export class RegisterModalPage {
       if(!this.checkIfInputfilledNPromtp(this.actualUser.field_codigo_postal.und[0].value,ret)) ret = false;
       //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_ciudad.und[0].value,ret)) ret = false;
       //if(!this.checkIfInputfilledNPromtp(this.userData.userData.field_pais.und[0].value,ret)) ret = false;
+      if(!this.newSus){
+    
+      if(!this.checkIfInputfilledNPromtp(this.actualUser.field_rfc.und[0].value,ret)) ret = false;
+      if(!this.checkIfInputfilledNPromtp(this.actualUser.field_razon.und[0].value,ret)) ret = false;
+
+      
+    }
       console.log('end checking obligatorios----------------------------');
     }
+ 
     console.log('ret a1 ', ret);
     if(this.actualUser.pass && !this.passconfirm || !this.actualUser.pass && this.passconfirm){
       ret = false;

@@ -17,6 +17,11 @@ page-miplan {
     margin-top: 50px;
     }
 
+    .pruebadias{
+    width: 100%;
+    text-align: center;
+    }
+
 
 
     .enter_title{
@@ -122,8 +127,10 @@ page-miplan {
         width: 100%;
         text-align: center;
         cursor: pointer;
-        font-size: 1em;
+        font-size: 1.3em;
+        font-weight: bold;
         margin-top: 15px;
+        grid-column: 1 / -1;
     }
 
   

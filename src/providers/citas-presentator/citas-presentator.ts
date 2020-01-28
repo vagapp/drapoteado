@@ -69,7 +69,7 @@ export class CitasPresentatorProvider {
     console.log('updateStateRequest',cita,state);
     console.log('cheking cita servicios json',cita.data.field_servicios_json);
     this.loader.presentLoader("Actualizando...");
-    if(!this.reportesMan.reportesData.isSetTodayReport) await this.reportesMan.getTodayReport();
+   // if(!this.reportesMan.reportesData.isSetTodayReport) await this.reportesMan.getTodayReport();
     let saveDate = !this.progresSController.editfinish;
     if(Number(state) === CitasDataProvider.STATE_FINALIZADA){
       console.log('cambiando a finalizada, checando cantidad restante',this.progresSController.activeCita.restantePagos);
@@ -112,7 +112,7 @@ export class CitasPresentatorProvider {
     if(Number(state) === CitasDataProvider.STATE_COBRO && cita.caja_playerid){ //cambiando a cita por cobrar
       this.notiMan.generateNotification([cita.data.field_cita_caja.und[0]],`La cita de de ${cita.paciente} esta en espera de cobro`,`cita-${cita.Nid}`);
     }
-    await this.reportesMan.checkUpdateTodayDocs(cita.data.field_cita_doctor.und[0]);
+    //await this.reportesMan.checkUpdateTodayDocs(cita.data.field_cita_doctor.und[0]);
     this.updater.updateCitas().then(()=>{
     this.wsMessenger.generateWSupdateMessage(cita);
     });
@@ -269,6 +269,7 @@ filterChangeExecute(){
   console.log('this.dateFilterStart',this.dateFilterStart);
   //2019-01-08
   //esta fecha k prk la puse aki o _ o 2019-05-13
+  //sigo sin entender pork puse aki al fecha O_ O 2020/01/16
   if(Number(this.dateFilterStart) != null && Number(this.dateFilterStart) !== 0){
   let date_Filter = DateProvider.dateWOffset(new Date(this.dateFilterStart));
   this.citasManager.citasData.customFilters = true;
