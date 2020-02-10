@@ -111,11 +111,11 @@ get subsLeftOnNew(){
     public userMan: DrupalUserManagerProvider
   ) {
       this.subuserManager.cargarSubusuarios();
-    //conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
+      //conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
       let public_test ='key_GtbbRJpEKq8zTrtq3EPCTqQ';
-      let public_prod='key_Wwir4csBhZwvzCny3TkeNUA';
+      let public_prod ='key_Wwir4csBhZwvzCny3TkeNUA';
       let public_bardo_test = 'key_NG1gDM4rychaJSjqha7KuHg';
-      conekta.init('https://cdn.conekta.io/js/latest/conekta.js',public_bardo_test).then((c) => {    
+      conekta.init('https://cdn.conekta.io/js/latest/conekta.js', public_bardo_test).then((c) => {    
       //Este success se ejecuta con el javascript se cargó correctamente
       console.log(c);
     }).catch((err) => {
@@ -129,7 +129,6 @@ get subsLeftOnNew(){
   get nextCobro(){ 
   let ret = '';
   if(this.subsData.checkForSub() && this.subsData.subscription.field_next_cobro){
-   
     let auxdate = new Date(Number(this.subsData.subscription.field_next_cobro)*1000);
     let aux_dispdates = DateProvider.getDisplayableDates(auxdate);
     ret = aux_dispdates.date;

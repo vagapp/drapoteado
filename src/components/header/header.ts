@@ -7,6 +7,7 @@ import { NotificationsDataProvider } from '../../providers/notifications-data/no
 import { NotificationsManagerProvider } from '../../providers/notifications-manager/notifications-manager';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
+import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 
 
 /**
@@ -38,7 +39,8 @@ export class HeaderComponent{
     public notificationData: NotificationsDataProvider,
     public notiMan: NotificationsManagerProvider,
     public perm:PermissionsProvider,
-    public reportPresentator: ReportPresentatorProvider
+    public reportPresentator: ReportPresentatorProvider,
+    public wss: WebsocketServiceProvider
   ) {
     //this.pagename = this.navCtrl.getActive().name;
     this.authObservable = userData.AuthSubject;
@@ -88,18 +90,11 @@ export class HeaderComponent{
           break;
           default:  this.navCtrl.setRoot('ReportePage'); 
          }
-       /* if(Number(this.reportPresentator.type) === Number(this.reportPresentator.REPORT_TICKET) ){ 
-        
-        }else{
-        
-        }*/
       }
-      
-      
-        }
+      }
     );
-    
     } //fin constructor
+
 
 
   handleNotificationAction( action:string){

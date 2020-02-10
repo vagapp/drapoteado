@@ -18,9 +18,16 @@ import { SubscriptionManagerProvider } from '../subscription-manager/subscriptio
 import { UpdaterProvider } from '../updater/updater';
 import { WsconnectionProvider } from '../wsconnection/wsconnection';
 
+import { RxWebsocketSubject } from './RxWebsocketSubject';
+import { retryWhen } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
+
+
 
 @Injectable()
 export class WebsocketServiceProvider {
+  //websocket:RxWebsocketSubject<Message>;
   websocket:WebSocketSubject<Message>;
   constructor(
     public bu:BaseUrlProvider,
@@ -34,10 +41,12 @@ export class WebsocketServiceProvider {
     public subuserData: SubusersDataProvider,
     public subscriptionManager:SubscriptionManagerProvider,
     public updater: UpdaterProvider,
-    public wscon: WsconnectionProvider
+    public wscon: WsconnectionProvider,
   ) {
     this.init();
+ 
   }
+  reconnectTime = 5000;
 
 
   static ACTION_DOC_TO_GROUP = 'ACTION_DOC_TO_GROUP'; // mensaje cuando un doctor entra a un grupo
@@ -51,19 +60,43 @@ export class WebsocketServiceProvider {
    this.websocketConnect();
   }
 
+
   websocketConnect(){
-    this.websocket = WebSocketSubject.create(this.bu.websocketUrl);
-    this.websocket.subscribe(
-      (message) => this.serverMessages(message),
-      (err) => { console.error(err); this.websocketConnect(); },
+    this.websocket = WebSocketSubject.create(this.bu.websocketUrl)
+    this.websocket.pipe(
+      retryWhen(errors =>
+        errors.pipe(
+          tap(err => {
+            console.error('Got error', err);
+          }),
+          delay(1000)
+        )
+      )
+    )
+    .subscribe(
+      (message) => {this.serverMessages(message)},
+      (err) => { console.error(err); },
       () => {console.log("websocket over");}
-      );
-      console.log("cosas feas terminadas que pedo");
+    );
+    //let recontimeout = null;
+    //this.websocket = new RxWebsocketSubject( this.bu.websocketUrl );// WebSocketSubject.create(this.bu.websocketUrl);
+    /*this.websocket.subscribe(
+      (message) => {this.serverMessages(message), this.con = true; if(recontimeout){  clearTimeout(recontimeout); }},
+      (err) => { console.error(err); 
+        recontimeout = setTimeout(function(){ if(!this.con){ this.websocketConnect(); this.updater.updateCitas(true); }  }, this.reconnectTime);
+      },
+      () => {console.log("websocket over");}
+      );*/
+    /*this.websocket.subscribe(
+      (message) => { this.serverMessages(message) },
+      (err) =>  { console.log('Unclean close', err) },
+      () => { console.log('Closed') }
+    );*/
   }
 
   serverMessages(message:Message){
     console.log('trail1 serverMessages st');
-    console.log('message received', message);
+    console.log('message received', message,message.action);
     switch(message.action){
       case 'addCita': this.addCita(message); break;
       case 'removeCita': this.removeCita(message); break;

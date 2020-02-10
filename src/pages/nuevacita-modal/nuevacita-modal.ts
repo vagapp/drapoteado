@@ -217,7 +217,6 @@ horferror:boolean = false;
     },
     response => {
         console.log("POST call in error", response);
-        
        this.processCitaErrors(response.error.form_errors)
       }
   );

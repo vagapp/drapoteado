@@ -86,6 +86,7 @@ export class CitasPresentatorProvider {
     let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise().catch(e => {
       console.log('error',e);
       for (var key in e.error.form_errors) {
+        console.log('key');
         switch (key){
           case 'changed':
               this.updater.updateCitas().then(()=>{

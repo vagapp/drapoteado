@@ -62,6 +62,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UpdaterProvider } from '../providers/updater/updater';
 import { HidehideZeroDirective } from '../directives/hidehide-zero/hidehide-zero';
 import { WsconnectionProvider } from '../providers/wsconnection/wsconnection';
+import { NetworkCheckerProvider } from '../providers/network-checker/network-checker';
+import { Network } from '@ionic-native/network';
+import { ErrorInterceptor } from '../providers/error-interceptor/error-interceptor';
+
+
+
+
 
 
 
@@ -78,7 +85,7 @@ import { WsconnectionProvider } from '../providers/wsconnection/wsconnection';
   ],
   imports: [
     BrowserModule,
-    
+   
     DlDateTimePickerDateModule,
     IonicModule.forRoot(MyApp, {
       preloadModules: true,
@@ -105,6 +112,11 @@ import { WsconnectionProvider } from '../providers/wsconnection/wsconnection';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
       multi: true
     },
     {
@@ -155,7 +167,10 @@ import { WsconnectionProvider } from '../providers/wsconnection/wsconnection';
     JsonUtilProvider,
     ConektaComponent,
     UpdaterProvider,
-    WsconnectionProvider
+    WsconnectionProvider,
+    NetworkCheckerProvider,
+    Network,
+    ErrorInterceptor,
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

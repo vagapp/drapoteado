@@ -18,6 +18,8 @@ import { SubusersManagerProvider } from '../providers/subusers-manager/subusers-
 import { UpdaterProvider } from '../providers/updater/updater';
 import { ReportPresentatorProvider } from '../providers/report-presentator/report-presentator';
 import { LoaderProvider } from '../providers/loader/loader';
+import { NetworkCheckerProvider } from '../providers/network-checker/network-checker';
+
 
 
 
@@ -61,7 +63,8 @@ export class MyApp {
     public tutorial: TutorialProvider,
     public updater: UpdaterProvider,
     public reportPresentator: ReportPresentatorProvider,
-    public loader: LoaderProvider
+    public loader: LoaderProvider,
+    public networkcheck: NetworkCheckerProvider
   ) {
     this.rootPage = 'LoginPage';
     this.startdate = new Date().getTime();

@@ -25,7 +25,7 @@ export class OnesignalManagerProvider {
   }
 
   init(){
-    if (this.isco.isCordovaAvailable){
+    /*if (this.isco.isCordovaAvailable){
       var iosSettings = {};
       iosSettings["kOSSettingsKeyAutoPrompt"] = true;
       iosSettings["kOSSettingsKeyInAppLaunchURL"] = false;
@@ -40,7 +40,7 @@ export class OnesignalManagerProvider {
       this.oneSignal.handleNotificationReceived().subscribe(data => this.onPushReceived(data.payload));
       this.oneSignal.handleNotificationOpened().subscribe(data => this.onPushOpened(data.notification.payload));
       this.oneSignal.endInit();
-    } 
+    } */
   }
 
   private onPushReceived(payload: OSNotificationPayload) {

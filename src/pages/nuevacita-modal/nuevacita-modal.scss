@@ -7,6 +7,9 @@ page-nuevacita-modal {
 
   }
  
+  .calendar-wrapper{
+    min-width: 250px;
+  }
 
     .nuevaCita_form{
         padding: 50px;
@@ -60,7 +63,7 @@ page-nuevacita-modal {
         text-align: center;
         padding: 5px;
         min-height: 28px;
-        min-width: 50px;
+        
       }
       .last-month, .next-month {
         color: #999999;

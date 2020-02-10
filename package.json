@@ -27,6 +27,7 @@
         "@ionic-native/core": "4.10.0",
         "@ionic-native/date-picker": "4.10.0",
         "@ionic-native/http": "4.10.0",
+        "@ionic-native/network": "^4.20.0",
         "@ionic-native/onesignal": "4.10.0",
         "@ionic-native/splash-screen": "4.9.2",
         "@ionic-native/status-bar": "^4.20.0",
@@ -46,6 +47,7 @@
         "cordova-plugin-file": "^6.0.2",
         "cordova-plugin-ionic-keyboard": "^2.2.0",
         "cordova-plugin-ionic-webview": "^1.2.1",
+        "cordova-plugin-network-information": "^2.0.2",
         "cordova-plugin-splashscreen": "^5.0.3",
         "cordova-plugin-statusbar": "^2.4.3",
         "cordova-plugin-stripe": "^1.5.3",
@@ -92,7 +94,8 @@
             "onesignal-cordova-plugin": {},
             "cordova-plugin-calendar": {
                 "CALENDAR_USAGE_DESCRIPTION": " "
-            }
+            },
+            "cordova-plugin-network-information": {}
         },
         "platforms": [
             "browser"

@@ -1004,44 +1004,6 @@ ion-menu {
     top:80px;
 }
 
-@media screen and (max-width: 450px){
-
-    ion-menu {
-        top:67px;
-    }
-
-    .two_cols_yano .section_row{
-        display: block !important;
-    }
-
-    .two_cols_yano .two_cols_section{
-        display: block !important;
-    }
-  
-}
-
-
-
-.menu-inner .header {
-    display: none;
-}
-
-.menu-inner .list-md {
-    padding-top: 2em;
-}
-
-.menu-inner .item-md {
-    font-size: 1.6rem;
-    color: #353232;
-    text-align: center;
-    padding-bottom: .5em;
-    padding-top: .5em;
-}
-
-.menu-inner .item-md:hover {
-    color: #C1272D;
-}
-
 
 
 @media screen and (min-width: 1000px) {
@@ -1522,4 +1484,109 @@ display:inline;
     margin: 10px;
     
 }
+}
+
+
+
+@media screen and (max-width: 450px){
+
+    ion-menu {
+        top:67px;
+    }
+
+    .two_cols_yano .section_row{
+        display: block !important;
+    }
+
+    .two_cols_yano .two_cols_section{
+        display: block !important;
+    }
+
+    .ModalInput_input {
+        font-size: 1.3rem !important;
+    }
+
+    .ModalInput_input input {
+        width: 100%;
+        margin: 8px;
+        background: #F2F2F2;
+        padding: 8px;
+        border: none;
+        border: 0px solid #000000;
+    } 
+
+    .section_button_home {
+        flex-flow: column;
+        width: 100%;
+    align-items: baseline;
+    padding-left: 10px;
+    padding-bottom: 20px;
+    }
+    
+    .icon_drapo{
+        height: 25px;
+    }
+    
+    .homegrid{
+        border:0;
+    }
+
+    .contentdown .scroll-content{
+        margin-top: 0;
+    }
+
+    .home_halfbtn{
+        font-size: 1.3em;
+        margin: 9px;
+    }
+
+    .section{
+        max-height: 90px;
+    }
+
+    .filters_wrapper input{
+        width: 90%;
+        font-size: 1.3rem;
+        padding: 8px;
+        height: unset;
+    }
+
+    .filtro-fecha{
+        border:none;
+        margin: 0 !important;
+        padding: 0;
+    }
+
+    .datetime-md{
+        font-size: 1.3rem;
+      
+    }
+
+    .results_table td{
+        font-size: 1.3em;
+    }
+ 
+  
+}
+
+
+
+.menu-inner .header {
+    display: none;
+}
+
+.menu-inner .list-md {
+    padding-top: 2em;
+}
+
+.menu-inner .item-md {
+    font-size: 1.6rem;
+    color: #353232;
+    text-align: center;
+    padding-bottom: .5em;
+    padding-top: .5em;
+}
+
+.menu-inner .item-md:hover {
+    color: #C1272D;
 }

@@ -42,7 +42,7 @@
               <input hidehide-zero disable-number-flow [(ngModel)]="this.cita.data.field_telefono.und[0].value" name="field_telefono" type="number"/>
           </div>
 
-  <div *ngIf="cita.checkState(this.citasData.STATE_PENDIENTE)">        
+  <div *ngIf="cita.checkState(this.citasData.STATE_PENDIENTE)" class="calendar-wrapper">        
   <div class="calendar-header">
     <ion-row class="calendar-month">
       <ion-col col-2 (click)="goToLastMonth()"><ion-icon name="arrow-back"></ion-icon></ion-col>
