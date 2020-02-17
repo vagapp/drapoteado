@@ -55,6 +55,7 @@ export class AlertProvider {
   presentPrompt(title, msg, inputs, inputcallback, cancelCallback){
     let alert = this.alertCtrl.create({
       title: title,
+      message: msg,
       inputs: inputs,
       buttons: [
         {

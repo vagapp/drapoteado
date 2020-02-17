@@ -8,6 +8,7 @@ import { NotificationsManagerProvider } from '../../providers/notifications-mana
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
+import { StorageProvider } from '../../providers/storage/storage';
 
 
 /**
@@ -40,7 +41,8 @@ export class HeaderComponent{
     public notiMan: NotificationsManagerProvider,
     public perm:PermissionsProvider,
     public reportPresentator: ReportPresentatorProvider,
-    public wss: WebsocketServiceProvider
+    public wss: WebsocketServiceProvider,
+    public storage:StorageProvider
   ) {
     //this.pagename = this.navCtrl.getActive().name;
     this.authObservable = userData.AuthSubject;
@@ -72,8 +74,11 @@ export class HeaderComponent{
     );
     this.authObservable.subscribe( 
       (val)=>{
-      if(Number(val) === Number(0) ) 
+      if(Number(val) === Number(0) ) {
+        this.storage.remove('usr');
+        this.storage.remove('pss');
         this.navCtrl.setRoot("LoginPage");
+      }
     });
 
     this.reportObservable.subscribe(

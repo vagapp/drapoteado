@@ -65,6 +65,8 @@ import { WsconnectionProvider } from '../providers/wsconnection/wsconnection';
 import { NetworkCheckerProvider } from '../providers/network-checker/network-checker';
 import { Network } from '@ionic-native/network';
 import { ErrorInterceptor } from '../providers/error-interceptor/error-interceptor';
+import { StorageProvider } from '../providers/storage/storage';
+import { IonicStorageModule } from '@ionic/storage';
 
 
 
@@ -85,7 +87,7 @@ import { ErrorInterceptor } from '../providers/error-interceptor/error-intercept
   ],
   imports: [
     BrowserModule,
-   
+    IonicStorageModule.forRoot(),
     DlDateTimePickerDateModule,
     IonicModule.forRoot(MyApp, {
       preloadModules: true,
@@ -171,6 +173,7 @@ import { ErrorInterceptor } from '../providers/error-interceptor/error-intercept
     NetworkCheckerProvider,
     Network,
     ErrorInterceptor,
+    StorageProvider,
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

@@ -19,6 +19,7 @@ import { UpdaterProvider } from '../providers/updater/updater';
 import { ReportPresentatorProvider } from '../providers/report-presentator/report-presentator';
 import { LoaderProvider } from '../providers/loader/loader';
 import { NetworkCheckerProvider } from '../providers/network-checker/network-checker';
+import { StorageProvider } from '../providers/storage/storage';
 
 
 
@@ -64,7 +65,8 @@ export class MyApp {
     public updater: UpdaterProvider,
     public reportPresentator: ReportPresentatorProvider,
     public loader: LoaderProvider,
-    public networkcheck: NetworkCheckerProvider
+    public networkcheck: NetworkCheckerProvider,
+    public storage: StorageProvider
   ) {
     this.rootPage = 'LoginPage';
     this.startdate = new Date().getTime();
@@ -112,8 +114,10 @@ export class MyApp {
 
   //loads token and planes syncronous
   async initLoad(){
+ await this.storage.get('usr').then( res => this.userData.sessionData.usr = res );
+ await this.storage.get('pss').then( res => this.userData.sessionData.pss = res );
     let token_data = await this.userData.requestToken().toPromise(); //obtener token de drupal
-    if( token_data ) this.userData.sessionData.token = token_data['token']; //si se obtiene el token se asigna a userdata
+    if( token_data ){ this.userData.sessionData.token = token_data['token'];} //si se obtiene el token se asigna a userdata
     let planes_data = await this.planes.requestPlanes().toPromise(); //obtener lista de planes disponibles
     if( planes_data ) this.planes.setPlanes(planes_data); //si se obtiene la informacion setearla
     let connec_Data = await this.userData.checkConnect().toPromise(); //obtener connect data. este es un evento del endpoint de drupal que da informacion de la sesion de drupal actual

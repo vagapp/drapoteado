@@ -147,37 +147,7 @@
       <span class="user_referenced_name"> {{this.refuserName}} </span> <span class="remove_reference_name" (click)="removeReference()" > X </span>
       </div>
    
-    <!--
-    <div class="register_payment register_form_section rfsFlex">
-        <div class="registerInput">
-            <b>Forma de Pago: </b>
-          <select  class="input_select input">
-              <option selected disabled value="0">SELECT</option>
-            </select>
-          </div>
-        <div class="registerInput">
-            <b>Referido Por:</b><input type="text"/>
-        </div>
-        <div class="registerInput">
-            <b>Tipo de Plan:</b>
-          <select  class="input_select input">
-              <option selected disabled value="0">Básico</option>
-            </select>
-          </div>
-    </div>
-    <div class="registro_planes register_form_section">
-      <div class="plan_basico plan_twosided plan_span">
-        <div class="reg_plan_section ">
-          <div class="rps_title bigFont">Plan <b class="fontPrimary">Básico</b></div>
-          <div class="bigSubFont">$199</div>
-        </div>
-        <div class="reg_plan_section rps_lefFont">
-          <div class="midFont">Características</div>
-          <div class="midSubFont">Obtén reportes detallados de tu actividad al cierre del día</div>
-        </div>
-      </div>
-    </div>
-  -->
+ 
     <div class="register_last">
         <div class="register_terminos_section" *ngIf="isnew && !this.newSus" >
             <span><ion-checkbox  [(ngModel)]="check_terminos"></ion-checkbox> Acepto los <a [href]="this.bu.terminosUrl" target="_blank">términos y condiciones</a></span>

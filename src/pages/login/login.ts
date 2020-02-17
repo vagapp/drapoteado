@@ -9,6 +9,7 @@ import { AlertProvider } from '../../providers/alert/alert';
 import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
 import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
 import { BaseUrlProvider } from '../../providers/base-url/base-url';
+import { StorageProvider } from '../../providers/storage/storage';
 //import { ToastController } from 'ionic-angular';
 //import { Debugger } from '../../providers/user-data/debugger';
 
@@ -41,7 +42,8 @@ export class LoginPage {
     public docMan: DoctoresManagerProvider,
     public subscriptionManager: SubscriptionManagerProvider,
     public serviciosManager: ServiciosManagerProvider,
-    public bu: BaseUrlProvider
+    public bu: BaseUrlProvider,
+    public storage: StorageProvider
   ) {
   }
 
@@ -58,7 +60,8 @@ export class LoginPage {
           //if logged in set session and userdata
       this.userData.setSessionData(val);
       await this.userData.loginSetData(val['user']['uid']);
-    
+      this.storage.set('usr',this.username);
+      this.storage.set('pss',this.password);
       location.reload();
       },
       response => {

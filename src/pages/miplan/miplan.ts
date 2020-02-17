@@ -115,9 +115,9 @@ get subsLeftOnNew(){
       let public_test ='key_GtbbRJpEKq8zTrtq3EPCTqQ';
       let public_prod ='key_Wwir4csBhZwvzCny3TkeNUA';
       let public_bardo_test = 'key_NG1gDM4rychaJSjqha7KuHg';
-      conekta.init('https://cdn.conekta.io/js/latest/conekta.js', public_bardo_test).then((c) => {    
+      conekta.init('https://cdn.conekta.io/js/latest/conekta.js', public_prod).then((c) => {    
       //Este success se ejecuta con el javascript se cargó correctamente
-      console.log(c);
+      console.log('conekta successs',c);
     }).catch((err) => {
       //Este error se ejecuta cuando el javascript no cargó, Ej. Error de conexión
       console.log(err);
@@ -244,6 +244,7 @@ get subsLeftOnNew(){
         "token":token.id
       }
     };
+    console.log('generated token is ',cu_src_data);
     this.http.post(this.bu.endpointUrl+'payment_methods',info).subscribe( (res:any) => {
       if(res!=null){
         this.selectedMethod = res.default_payment_source_id;

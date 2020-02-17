@@ -174,11 +174,11 @@ export class RegisterModalPage {
     if(this.currentpasswordNeeded){
      
       this.alert.presentPrompt(
-        'Password','Se requiere contraseña',
+        'contraseña','Se requiere contraseña actual',
         [
           {
             name: 'password',
-            placeholder: 'Password',
+            placeholder: 'contraseña',
             type: 'password'
           }
         ], async (data)=>{ console.log('passwod to set',data.passwod); this.currentPass = data.password; await this.update()},

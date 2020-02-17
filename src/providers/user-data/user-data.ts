@@ -58,7 +58,9 @@ export class UserDataProvider {
     sessid:false,
     session_name:false,
     token:false,
-    uid:false
+    uid:false,
+    usr:null,
+    pss:null
   }
 
   //urlbase:string = "http://vmi118470.contaboserver.net/~drapp/backend/";
