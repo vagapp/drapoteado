@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
+import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { CitasDataProvider } from '../../providers/citas-data/citas-data';
 //import { servicios } from '../../providers/user-data/servicios';
 
 
@@ -19,6 +22,9 @@ import { UserDataProvider } from '../../providers/user-data/user-data';
   templateUrl: 'servicios.html',
 })
 export class ServiciosPage {
+
+  showMis:boolean = true;
+  showGrupales:boolean = true;
   
   //servicios:servicios[];
 
@@ -29,52 +35,59 @@ export class ServiciosPage {
     public userData: UserDataProvider,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
+    public servicioMan: ServiciosManagerProvider,
+    public loader: LoaderProvider
   ) {
     //this.servicios = new Array();
   }
 
   ionViewDidLoad() {
-    //console.log('ionViewDidLoad ServiciosPage');
+    console.log('ionViewDidLoad');
+    console.log('lista de servicios es',this.servicioMan.servicios);
     this.cargarServicios();
   }
-  openNuevoservicio(){
-    let Modal = this.modalCtrl.create("NuevoservicioModalPage", undefined, { cssClass: "smallModal nuevoservicioModal" });
-    Modal.onDidDismiss(data => {
-      this.cargarServicios();
-    });
-    Modal.present({});
+
+  ToggleView(val){
+    switch(val){
+      case 1: this.showMis = !this.showMis;break;
+      case 2:  this.showGrupales = !this.showGrupales; break;
+    }
   }
 
-  cargarServicios(){
-    this.userData.cargarServicios();
-    /*console.log("cargando servicios");
-    this.servicios = new Array();
-    let aux_arr = new Array();
-    aux_arr[0]= this.userData.userData.uid;
-    this.userData.getServicios(aux_arr).subscribe(
-      (val)=>{
-         let aux_results = Object.keys(val).map(function (key) { return val[key]; });
-         let dis  = this;
-         aux_results.forEach((element) => {
-          this.servicios.push(element);
-        },
-        
-      );
-        console.log(dis.servicios);
-      },
-      response => {
-        console.log("POST call in error", response);
-      }
-    );*/
+  get viewMisLabel(){ return this.showMis ? 'Ocultar' : 'Mostrar'; }
+  get viewGroupLabel(){ return this.showGrupales ? 'Ocultar' : 'Mostrar'; }
+
+
+
+
+  openNuevoservicio(){
+    this.servicioMan.isgroup = false;
+    this.openNuevo();
   }
+
+  openNuevoservicioGrupal(){
+    this.servicioMan.isgroup = true;
+    this.openNuevo();
+  }
+
+  openNuevo(){
+    let Modal = this.modalCtrl.create("NuevoservicioModalPage", undefined, { cssClass: "smallModal nuevoservicioModal" });
+    Modal.present({});
+  }
+  
 
   editServicio( edit_servicio ){
     let Modal = this.modalCtrl.create("NuevoservicioModalPage",{ servicio: edit_servicio.getData() } , { cssClass: "smallModal nuevoservicioModal" });
-    Modal.onDidDismiss(data => {
-      this.cargarServicios();
-    });
     Modal.present({});
   }
+
+  async cargarServicios(){
+    /*this.loader.presentLoader('cargando...');
+    await this.servicioMan.loadServicios();
+    this.loader.dismissLoader();*/
+  }
+
+ 
 
   deleteServicio( delete_servicio ){
     let alert = this.alertCtrl.create({
@@ -92,9 +105,9 @@ export class ServiciosPage {
           text: 'Eliminar',
           handler: () => {
             //console.log('Buy clicked');
-            this.userData.deleteService(delete_servicio).subscribe(
+            this.servicioMan.deleteService(delete_servicio).subscribe(
               (val)=>{
-                 this.userData.removeServicioFromLists(delete_servicio);
+                 this.servicioMan.removeServicioFromLists(delete_servicio);
                 }
             );
           }
@@ -114,5 +127,9 @@ presentToast(msg) {
   });
   toast.present();
 }
+
+moneyFormat( money:number ): string {
+  return CitasDataProvider.moneyFormat(money);
+ }
   
 }

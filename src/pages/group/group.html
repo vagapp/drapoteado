@@ -1,0 +1,42 @@
+<!--
+  Generated template for the GroupPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<header></header>
+<ion-content class="wheader"  padding>
+    <div class="modalPage_header">
+        <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
+        <div class="modalPage_title">
+          <span class="spanBlock midFont"><b>Suscriptores</b></span>
+          <span class="spanBlock midSubFont">Revisa y administra los suscriptores de tu grupo.</span>
+          <span class="spanBlock midSubFont">El administrador del grupo es el único que puede agregar suscriptores entrando a mi plan.</span>
+          <span class="spanBlock midMainFont"><input class="codigo" type="text" value="{{this.subsData.invcode}}" readonly></span>
+        </div>
+        <div class="modalPage_btn_wrapper">
+          <button class="bgColorSecondary generalButton" (click)="openNuevoSuscriptor()">Agregar nuevo</button>
+          <span class="spanBlock midSubFont">Cuentas con {{this.docsleft}} plazas disponibles.</span>
+        </div>
+        </div>
+    <table class="results_table">
+        <thead>
+            <tr> 
+                <th>Nombre</th>
+                <th></th>
+                <th></th>
+            </tr>
+          </thead>
+      <tbody>
+        <tr *ngFor="let doc of this.subsData.docs">
+          <td> {{doc['name']}} </td>
+          <td><span *ngIf="checkPlanHolder(doc['uid'])">Administrador del grupo</span></td>
+          <td  class="toolCol">
+              <button *ngIf="!isThis(doc['uid']) && isplanHolder()" (click)="removerSubsUser(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Remover</button>
+             <!-- <button *ngIf="isThis(doc['uid']) && !isplanHolder()" (click)="getOut(doc['uid'])"  class="bgColorPrimary generalButton tableButton">Salir</button>-->
+            </td>
+        </tr>
+      </tbody>
+    </table>
+
+</ion-content>

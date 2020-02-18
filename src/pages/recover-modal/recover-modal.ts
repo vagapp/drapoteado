@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from '../../providers/user-data/debugger';
+import { AlertProvider } from '../../providers/alert/alert';
 
 /**
  * Generated class for the RecoverModalPage page.
@@ -23,7 +24,7 @@ export class RecoverModalPage {
     public navParams: NavParams,
     public userData: UserDataProvider,
     public viewCtrl: ViewController,
-    public alertCtrl: AlertController
+    public alert: AlertProvider
   ) {
   }
 
@@ -43,11 +44,11 @@ export class RecoverModalPage {
     if(this.basicvalidation()){
       this.userData.requestRecover(this.recovername).subscribe(
         (val) => {
-          this.presentAlert('Encontrado','recibirás tu eMail dentro de la brevedad');
+          this.alert.presentAlert('','Recibirás un correo electrónico a la brevedad.');
           Debugger.log(['return of recoverrequesto',val]);
           this.dismiss();
         },(response)=>{
-          this.presentAlert('Error','No encontramos nada con estos datos');
+          this.alert.presentAlert('','No se encontró nada con este correo electrónico');
         },()=>{
 
         }
@@ -55,14 +56,6 @@ export class RecoverModalPage {
     }
   }
   
-  presentAlert(key,Msg) {
-    let alert = this.alertCtrl.create({
-      title: key,
-      subTitle: Msg,
-      buttons: ['Dismiss']
-    });
-    alert.present();
-  }
 
 
   dismiss() {

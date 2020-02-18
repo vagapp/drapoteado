@@ -1,4 +1,5 @@
 import { UserDataProvider } from "./user-data";
+import { CitasDataProvider } from '../citas-data/citas-data';
 import { Debugger } from "./debugger";
 
 export class servicios{
@@ -6,10 +7,17 @@ export class servicios{
     Uid:number = null;
     title:string = null;
     costo:number = null;
+    order:number = 0;
+    times:number = 1;
 
     constructor(){
       
     }
+
+    get isCortesia(){
+        return Number(this.Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID);
+    }
+
     
     setData( data_input ){
         Debugger.log([`setting data for a service`,data_input]);
@@ -17,6 +25,7 @@ export class servicios{
         this.Uid = data_input['Uid'];
         this.title = data_input['title'];
         this.costo = data_input['costo'];
+        this.times = 1;
         Debugger.log([`data set on servicio ${this.Nid}`,this]);
       }
 

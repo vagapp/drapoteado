@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController } from 'ionic-angular';
 
 /**
  * Generated class for the FooterComponent component.
@@ -14,9 +15,14 @@ export class FooterComponent {
 
   text: string;
 
-  constructor() {
+  constructor(
+    public nav: NavController
+  ) {
     console.log('Hello FooterComponent Component');
     this.text = 'Hello World';
   }
 
+  openterminos(){
+    this.nav.setRoot('TerminosycondicionesPage');
+  }
 }

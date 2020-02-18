@@ -1,0 +1,46 @@
+<!--
+  Generated template for the ReporteModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content id="reporte_identifier">
+    <div class="modal_closer"  (click)="this.dismiss();">Volver</div>
+    <div class="modal_closer_desktop" (click)="this.dismiss();">Cerrar</div>
+  <div class="reporte_header">
+<div class="modalPage_header">
+  <div class="modalPage_logo drapo_icon_logo"><img src="assets/imgs/ticket.svg"/></div>
+  <div class="modalPage_title">
+    <span class="spanBlock midFont"><b>Resumen</b></span>
+    <span class="spanBlock midSubFont">{{this.reportPresentator.actualReport.dateString}}</span>
+  </div>
+  </div>
+  </div>
+  <div class="ticket_content">
+    <div class="ticket_row_block">
+    <div class="ticket_row midMainFont">Total de servicios <span class="fontPrimary">{{moneyFormat(this.reportPresentator.costoTotal)}}</span></div>
+    <div class="ticket_row midMainFont">Importe total <span class="fontSecondary">{{moneyFormat(this.reportPresentator.total)}}</span></div>
+    <div class="ticket_row midSubFont">Efectivo <span class="fontSecondary">{{moneyFormat(this.reportPresentator.totalefectivo)}}</span></div>
+    <div class="ticket_row midSubFont">Tarjeta <span class="fontSecondary">{{moneyFormat(this.reportPresentator.totalTarjeta)}}</span></div>
+    <div class="ticket_row midSubFont">Cheque  <span class="fontSecondary">{{moneyFormat(this.reportPresentator.totalCheques)}}</span></div>
+    <div class="ticket_row midSubFont">Transferencia  <span class="fontSecondary">{{moneyFormat(this.reportPresentator.totalBancaria)}}</span></div>
+    <div class="ticket_row midSubFont">Facturado <span class="fontHigh">{{moneyFormat(this.reportPresentator.facturadoTotal)}}</span></div>
+    <div class="ticket_row midSubFont">Adeudos cobrados <span class="fontHigh">{{moneyFormat(reportPresentator.totalAdeudo)}}</span></div>
+    <div class="ticket_row midSubFont">Pendiente <span class="fontPrimary">{{moneyFormat(this.reportPresentator.pendiente)}}</span></div>
+    <span class="ticket_row midSubFont" *ngIf="reportPresentator.totalDoc>0">Cobros por doctor: <span class="fontPrimary" >{{moneyFormat(reportPresentator.totalDoc)}}</span></span>
+   
+  </div>
+  <div class="ticket_row_block">
+    <div class="ticket_row midMainFont">Detalle de servicios</div>
+    <div class="ticket_row midSubFont" *ngFor="let servicio of this.reportPresentator.serviciosResume">{{servicio.title}} <span class="fontHigh">{{servicio.times}}</span> <span class="fontPrimary">{{moneyFormat(servicio.costo)}}</span></div>
+  </div>
+  <div class="ticket_row_block">
+      <div class="ticket_row midMainFont">Citas totales: <span class="fontSecondary">{{reportPresentator.noCitas}}</span></div>
+      <div class="ticket_row midSubFont">Citas canceladas: <span class="fontPrimary">{{reportPresentator.noCancel}}</span></div>
+      <div class="ticket_row midMainFont">Duración total: <span class="fontHigh">{{reportPresentator.duracionTotalStr}}</span></div>
+    </div>
+    <!--<div class="ticket_row_block">
+        <div class="ticket_row midMainFont" *ngFor="let servres of reportPresentator.serviciosResume">{{servres.title}}:{{servres.times}}</div>
+    </div>-->
+  </div>
+</ion-content>

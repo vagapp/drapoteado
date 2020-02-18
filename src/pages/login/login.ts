@@ -1,6 +1,15 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { UserDataProvider  } from '../../providers/user-data/user-data';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
+import { CitasManagerProvider } from '../../providers/citas-manager/citas-manager';
+import { DoctoresManagerProvider } from '../../providers/doctores-manager/doctores-manager';
+import { AlertProvider } from '../../providers/alert/alert';
+import { SubscriptionManagerProvider } from '../../providers/subscription-manager/subscription-manager';
+import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
+import { BaseUrlProvider } from '../../providers/base-url/base-url';
+import { StorageProvider } from '../../providers/storage/storage';
 //import { ToastController } from 'ionic-angular';
 //import { Debugger } from '../../providers/user-data/debugger';
 
@@ -26,118 +35,59 @@ export class LoginPage {
     public navParams: NavParams, 
     public modalCtrl: ModalController, 
     public userData: UserDataProvider,
-    public loadingCtrl: LoadingController,
-    //private toastCtrl: ToastController,
-    public alertCtrl: AlertController,
+    public loader: LoaderProvider,
+    public alert: AlertProvider,
+    public docData: DoctoresDataProvider,
+    public citasManager:CitasManagerProvider,
+    public docMan: DoctoresManagerProvider,
+    public subscriptionManager: SubscriptionManagerProvider,
+    public serviciosManager: ServiciosManagerProvider,
+    public bu: BaseUrlProvider,
+    public storage: StorageProvider
   ) {
   }
 
   ionViewDidLoad() {
-    //console.log('ionViewDidLoad LoginPage');
   }
 
-  actionLogin(){
-    //console.log("tryna login");
-    //console.log(this.username);
-    //console.log(this.password);
-    let loading = this.loadingCtrl.create({
-      content: 'Entrando...'
-    });
-    loading.present();
-    this.userData.requestToken().subscribe((val) => {
-      this.userData.sessionData.token = val['token'];
-      //console.log("token updated",this.userData.sessionData.token);
-      
+  async actionLogin(){
+    this.loader.presentLoader('Entrando ...');
+    let token_data = await this.userData.requestToken().toPromise();
+    if( token_data ) this.userData.sessionData.token = token_data['token'];
     let login_observer = this.userData.login(this.username,this.password);
-    let loader = this.loadingCtrl.create({
-      content: ""
-    });  
-  
-    login_observer.subscribe(
-      (val) => {
-
-        //Debugger.log(['checkConnect val',val]);
-          if(val['user']['uid'] != 0){
-            //console.log("logged in as", val['user']['name']);
-            this.userData.setSessionData(val);
-            //this doesnt give the complete info of the user. need to request the user info.
-            this.userData.requestUserData(val['user']['uid']).subscribe((val)=>{
-              //val['user'] = user_aux;
-              //console.log(val);
-              this.userData.setUserData(val);
-              this.userData.cargarSubscription();
-              let moveinterval = setInterval(() =>{
-                //Debugger.log(['checking initiation']);
-                //Debugger.log(['planes set',this.userData.are_planes_set]);
-                //Debugger.log(['planes set',this.userData.planes]);
-                //Debugger.log(['subscription',this.userData.subscription]);
-                if(
-                  this.userData.are_planes_set && 
-                  this.userData.subscription !== null && 
-                  this.userData.subscription.is_plan_set
-                ){
-                  //Debugger.log(["check of suscription",this.userData.subscription]);
-                  if(Number(this.userData.subscription.field_active) === 0){
-                  //this.rootPage=RegisterModalPage;
-                  this.navCtrl.setRoot("HomePage");
-                  loading.dismiss();
-                  clearInterval(moveinterval);
-                  }else{
-                  this.navCtrl.setRoot("HomePage");
-                  this.userData.cargarListaReportes();
-                  loading.dismiss();
-                  clearInterval(moveinterval);
-                  }
-              }
-              },500);
-            },  () => {
-          });
-          }else{
-            //console.log("not logged in.");
-            this.navCtrl.setRoot(LoginPage, {});
-            loading.dismiss();
-          }
+    await login_observer.subscribe(
+      async (val) => {
+          //if logged in set session and userdata
+      this.userData.setSessionData(val);
+      await this.userData.loginSetData(val['user']['uid']);
+      this.storage.set('usr',this.username);
+      this.storage.set('pss',this.password);
+      location.reload();
       },
       response => {
-          //Debugger.log(["POST call in error", JSON.stringify(response)]);
-          this.presentAlert(response.error,'Error');
-          loading.dismiss();
-      },
-      () => {
-          loader.dismiss();
-          //console.log("The POST observable is now completed.");
+        console.log('login error response',response);
+          this.alert.presentAlert('','Usuario o contraseña incorrectos');
+          this.loader.dismissLoader();
       });
     }
-  );
-  }
 
-  actionOpenRegister(){
-    //console.log("open Register");
-    let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
-    Modal.present({});
-  }
+    
+
 
   actionOpenRecover(){
     let Modal = this.modalCtrl.create("RecoverModalPage", undefined, { cssClass: "smallModal recoverModal" });
-    //let Modal = this.modalCtrl.create(RecoverModalPage);
     Modal.present({});
-    //console.log("open Recover");
   }
 
   openRegister(){
     let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
-    Modal.onDidDismiss(data => {});
     Modal.present({});
   }
 
-  presentAlert(msg:string,title:string){
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: msg,
-      buttons: ['Ok']
-      });
-      alert.present();
-  }
+  openterminos(){this.navCtrl.setRoot('TerminosycondicionesPage');}
+  openAviso(){this.navCtrl.setRoot('AvisoprivacidadPage');}
+  openFaq(){this.navCtrl.setRoot('FaqPage');}
+
 
 
   

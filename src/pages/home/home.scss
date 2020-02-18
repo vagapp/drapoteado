@@ -1,7 +1,44 @@
 page-home {
+
+    .homegrid{
+        border: 1px solid #E7E7E7;
+        margin-bottom: 0;
+    }
+
+    .homegrid .section{
+        height: 195px;
+    }
+    
+  .filters_wrapper div{
+      margin: 0px;
+  }
+
+    .datetime-md{
+       font-weight: 200;
+       font-size: 2rem;
+       align-items: center;
+    }
+    
+    .datetime-text{
+        overflow: initial;
+    }
+
+
     @media screen and (min-width: 1000px) {
         .modal-wrapper{
             min-width: 1000px;
         }
     }
+
+    @media screen and (max-width: 1200px){
+        .tableButton{
+            display: block;
+        }
+        .toolCol {
+            text-align: center !important;
+            padding: .8em 0 !important;
+        }
+    
+    }
 }
+

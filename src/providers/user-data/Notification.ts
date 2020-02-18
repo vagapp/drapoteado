@@ -1,6 +1,6 @@
 import { Debugger } from "./debugger";
 
-export class Notification{
+export class Notification_c{
     Nid:number = null;
     title: string; //titulo de la notificacion
     subtitle: string; //subtitulo de la notificacion

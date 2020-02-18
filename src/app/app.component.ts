@@ -1,10 +1,26 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, LoadingController, ModalController } from 'ionic-angular';
+import { Nav, Platform, LoadingController, ModalController, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { OneSignal, OSNotificationPayload } from '@ionic-native/onesignal';
-import { isCordovaAvailable } from '../common/is-cordova-available';
 import { UserDataProvider } from '../providers/user-data/user-data';
+import { CordovaAvailableProvider } from '../providers/cordova-available/cordova-available';
+import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
+import { CitasManagerProvider } from '../providers/citas-manager/citas-manager';
+import { PlanesDataProvider } from '../providers/planes-data/planes-data';
+import { OnesignalManagerProvider } from '../providers/onesignal-manager/onesignal-manager';
+import { DoctoresManagerProvider } from '../providers/doctores-manager/doctores-manager';
+import { WsMessengerProvider } from '../providers/ws-messenger/ws-messenger';
+import { ServiciosManagerProvider } from '../providers/servicios-manager/servicios-manager';
+import { SubscriptionManagerProvider } from '../providers/subscription-manager/subscription-manager';
+import { PermissionsProvider } from '../providers/permissions/permissions';
+import { TutorialProvider } from '../providers/tutorial/tutorial';
+import { SubusersManagerProvider } from '../providers/subusers-manager/subusers-manager';
+import { UpdaterProvider } from '../providers/updater/updater';
+import { ReportPresentatorProvider } from '../providers/report-presentator/report-presentator';
+import { LoaderProvider } from '../providers/loader/loader';
+import { NetworkCheckerProvider } from '../providers/network-checker/network-checker';
+import { StorageProvider } from '../providers/storage/storage';
+
 
 
 
@@ -19,7 +35,8 @@ export class MyApp {
   rootPage: any = "LoginPage";
   Home: any = 'HomePage';
   token: string;
-  connectcomp:boolean=false;
+  startdate:number;
+  loaddate:number;
 
 
   
@@ -33,163 +50,137 @@ export class MyApp {
     public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
-    private oneSignal: OneSignal
+    public ica: CordovaAvailableProvider,
+    public wsp: WebsocketServiceProvider,
+    public citasManager: CitasManagerProvider,
+    public planes: PlanesDataProvider,
+    public OneMan: OnesignalManagerProvider,
+    public docMan: DoctoresManagerProvider,
+    public wsMessenger: WsMessengerProvider,
+    public serviciosManager: ServiciosManagerProvider,
+    public subscriptionManager: SubscriptionManagerProvider,
+    public subUserMan: SubusersManagerProvider,
+    public perm: PermissionsProvider,
+    public tutorial: TutorialProvider,
+    public updater: UpdaterProvider,
+    public reportPresentator: ReportPresentatorProvider,
+    public loader: LoaderProvider,
+    public networkcheck: NetworkCheckerProvider,
+    public storage: StorageProvider
   ) {
+    this.rootPage = 'LoginPage';
+    this.startdate = new Date().getTime();
     this.initializeApp();
-    
-    // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: "HomePage" },
       { title: 'Citas', component: "CitasPage" },
       { title: 'Servicios', component: "ServiciosPage" },
       { title: 'Usuarios', component: "UsuariosPage" },
-      { title: 'Reportes', component: "ReportesPage" },
+      { title: 'Reportes', component: "ReportesgenPage" },
       { title: 'Login', component: "LoginPage" }
     ];
   }
 
-  /**
-   * ONESIGNAL WEB NOTIFICATION
-   * <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-<script>
-  var OneSignal = window.OneSignal || [];
-  OneSignal.push(function() {
-    OneSignal.init({
-      appId: "7902c2ba-310b-4eab-90c3-8cae53de891f",
-      autoRegister: false,
-      notifyButton: {
-        enable: true,
-      },
-    });
-  });
-</script>
-   * **/
 
-  initializeApp() {
-    
+
+  initializeApp(){
+    this.splashScreen.hide();
+    this.rootPage = 'LoginPage';
     this.platform.ready().then(() => {
-      this.initOnesignal();
-      
-      if(isCordovaAvailable())this.splashScreen.hide();
-      //Debugger.log(['platform redy']);
-      let loading = this.loadingCtrl.create({
-        content: 'Bienvenido'
-      });
-      loading.present();
-     
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
-      
-      this.userData.requestToken().subscribe((val) => {
-        this.userData.sessionData.token = val['token'];
-        //console.log("token updated",this.userData.sessionData.token);
-        //request token for this session, then check if conected to system connect.
-        //sometimes this runs faster so it should be assigned here.
-        this.userData.cargarPlanes();
-        this.connectcomp = false;
-        this.userData.checkConnect().subscribe((val)=>{
-          //Debugger.log(['checkConnect val',val]);
-          this.connectcomp = true;
-          if(val['user']['uid'] != 0){
-            //console.log("logged in as", val['user']['name']);
-            this.userData.setSessionData(val);
-            //this doesnt give the complete info of the user. need to request the user info.
-            this.userData.requestUserData(val['user']['uid']).subscribe((val)=>{
-              //val['user'] = user_aux;
-              //console.log(val);
-              this.userData.setUserData(val);
-              this.userData.cargarSubscription();
-              //this.userData.generateNotification( [76],'Hello World Notification cita', 'cita-196');
-              this.userData.cargarNotificaciones();
-              let moveinterval = setInterval(() =>{
-                //Debugger.log(['checking initiation']);
-                //Debugger.log(['planes set',this.userData.are_planes_set]);
-                //Debugger.log(['planes set',this.userData.planes]);
-                //Debugger.log(['subscription',this.userData.subscription]);
-                if(
-                  this.userData.are_planes_set && 
-                  this.userData.subscription !== null && 
-                  this.userData.subscription.is_plan_set
-                ){
-                  //Debugger.log(["check of suscription",this.userData.subscription]);
-                 
-                  if(Number(this.userData.subscription.field_active) === 0){
-                  //this.rootPage=RegisterModalPage;
-                 
-                  this.rootPage = 'HomePage';
-                  loading.dismiss();
-                  clearInterval(moveinterval);
-                  }else{
-                  this.rootPage = 'HomePage';
-                  this.userData.cargarListaReportes();
-                  loading.dismiss();
-                  clearInterval(moveinterval);
-                  }
-              }
-              },500);
-            },  () => {
-          });
-          }else{
-            //console.log("not logged in.");
-            this.rootPage = "LoginPage";
-            loading.dismiss();
-          }
-        });
-    }, response => {
-      console.log("POST call in error", JSON.stringify(response));
-  },() => {
-    //console.log("The POST observable is now completed.");
-});
-
+      this.OneMan.init();
+      if(this.ica.isCordovaAvailable)this.splashScreen.hide();
+      let loading = this.loadingCtrl.create({content: 'Bienvenido'});
+      loading.present();
+      this.initLoad().then(()=>{
+        if(this.userData.userData.uid !== 0){
+          this.rootPage = 'HomePage';
+          if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) && !this.perm.checkUserSuscription([UserDataProvider.PLAN_ANY])){
+            this.rootPage = 'MiplanPage';
+            }
+        }
+        loading.dismiss();
+        this.loaddate = new Date().getTime();
+        this.wsMessenger.generateMessage(
+          [76],
+          'loadedReport',
+          `${this.userData.userData.uid}`,
+          this.loaddate - this.startdate,
+          true,
+        );
+      });
     });
   }
 
-
-  initOnesignal(){
-    if (isCordovaAvailable()){
-      var iosSettings = {};
-      iosSettings["kOSSettingsKeyAutoPrompt"] = true;
-      iosSettings["kOSSettingsKeyInAppLaunchURL"] = false;
-      // Initialise plugin with OneSignal service
-      this.oneSignal.startInit(this.userData.onesignalAPPid, this.userData.onesignalSenderid).iOSSettings(iosSettings);
-      this.oneSignal.getIds()
-      .then((ids) =>
-      {
-         //console.log('getIds: ' + JSON.stringify(ids));
-         this.userData.onseignalDid = ids;
-      });
-      this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
-      this.oneSignal.handleNotificationReceived().subscribe(data => this.onPushReceived(data.payload));
-      this.oneSignal.handleNotificationOpened().subscribe(data => this.onPushOpened(data.notification.payload));
-      this.oneSignal.endInit();
-      
-      //postNotification(Parameters)
-    } 
-  }
-
-  private onPushReceived(payload: OSNotificationPayload) {
-    //alert('Push recevied:' + payload.body);
-    this.userData.cargarNotificaciones();
-  }
-  
-  private onPushOpened(payload: OSNotificationPayload) {
-    //Debugger.log(['onPushOpened',payload]);
-    this.userData.operatePushNotification(payload.additionalData.action);
-  }
+  //loads token and planes syncronous
+  async initLoad(){
+ await this.storage.get('usr').then( res => this.userData.sessionData.usr = res );
+ await this.storage.get('pss').then( res => this.userData.sessionData.pss = res );
+    let token_data = await this.userData.requestToken().toPromise(); //obtener token de drupal
+    if( token_data ){ this.userData.sessionData.token = token_data['token'];} //si se obtiene el token se asigna a userdata
+    let planes_data = await this.planes.requestPlanes().toPromise(); //obtener lista de planes disponibles
+    if( planes_data ) this.planes.setPlanes(planes_data); //si se obtiene la informacion setearla
+    let connec_Data = await this.userData.checkConnect().toPromise(); //obtener connect data. este es un evento del endpoint de drupal que da informacion de la sesion de drupal actual
+    if(connec_Data && connec_Data['user']['uid'] != 0){ //si se esta conectado
+      //if logged in set session and userdata
+      this.userData.setSessionData(connec_Data); //setear data de connect
+      await this.userData.loginSetData(connec_Data['user']['uid']); //esto no recuerdo bien que hacia
+      console.log('into 0');
+      await this.updater.updateSuscription();
+      console.log('into a');
+      await this.updater.updateDocList();
+      console.log('into b');
+      //await this.citasManager.requestCitas().toPromise();
+      await this.updater.updateCitas();
+      //this.docMan.evaluateCitas();
+      await this.updater.updateServicios();
+      //this.serviciosManager.loadServicios();
+      console.log(this.citasManager.citasData.citas);
+      console.log('docs end initload',JSON.stringify(this.docMan.docData.doctoresIDs));
+      //this.wsMessenger.testCitaSend();
+   }
+}
 
   openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
+  async logout(){
+    await this.userData.logout();
+    this.nav.setRoot("LoginPage");
+  }
   
+
+  
+  openLogin(){
+    this.nav.setRoot("LoginPage");
+  }
   openHomePage(){this.nav.setRoot(this.Home);}
+  openGrupoPage(){this.nav.setRoot("GroupPage");}
   openCitasPage(){this.nav.setRoot("CitasPage");}
   openServiciosPage(){this.nav.setRoot("ServiciosPage");}
   openUsuariosPage(){this.nav.setRoot("UsuariosPage");}
-  openReportesPage(){this.nav.setRoot("ReportesPage");}
+  openReportesPage(){this.nav.setRoot("ReportesgenPage");}
   openFacturacionPage(){this.nav.setRoot("FacturacionPage");}
+  openterminos(){this.nav.setRoot('TerminosycondicionesPage');}
+  openAviso(){this.nav.setRoot('AvisoprivacidadPage');}
+  openFaq(){this.nav.setRoot('FaqPage');}
+  openMiplan(){
+    this.nav.setRoot("MiplanPage");
+  }
+
+  openReporteAdeudos(){
+    console.log('openReportNoModal',this.reportPresentator.docuid, this.reportPresentator.type);
+    this.loader.presentLoader('Cargando ...');
+    this.reportPresentator.setReport().then(()=>{
+      this.loader.dismissLoader();
+      this.reportPresentator.type = ReportPresentatorProvider.REPORT_ADEUDO;
+      this.reportPresentator.loadReportNM().then(()=>{
+      });
+    });
+  
+  }
+
   openRegister(){
     //console.log("open Register");
     let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
@@ -203,3 +194,39 @@ export class MyApp {
 
 
 }
+
+
+
+//if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR])){ //si es doctor se carga la suscripcion
+  /**
+   * ACLARACION DE LOS SUBUSUARIOS:
+   *  los subusuarios no se "cargan" hasta que se abre la pagina de usuarios, sin embargo estos subusuarios estan listados en la suscripcion, asi que se tiene el numero de agregados en ese lugar para administrar el plan sin tener que cargar los subusuarios.
+   */
+/*let sus = await this.subscriptionManager.searchSus('kCsR0Z1ZrSCidi7s4m2jeV064');
+this.subscriptionManager.susAssign(sus);*/
+//await this.subscriptionManager.loadSubscription();
+//await this.subUserMan.requestGroupUsers();
+//this.subscriptionManager.subsData.subscription.removeUserFromSubs(189);
+/*}else{ 
+  //si son subusuarios buscar suscripciones a las que esten agregados
+  console.log('looking for subscriptions where this sub user is added');
+  await this.subscriptionManager.loadGroupSubuserSubs(); //se cargan subscripciones a las que estan agregados.
+  this.docMan.loadGroupDoctors(); //se cargan los doctores de las suscripciones a las que estan agregados.
+}*/
+
+  /*let subusuerArray = new Array();
+  subusuerArray.push(119);*/
+
+  /*let docsArray = new Array();
+  docsArray.push({uid:76,name:'do1'});
+  docsArray.push({uid:189,name:'do2do'});
+  //docsArray.push({uid:1202,name:'do3dx'});
+  */
+  /*
+await this.docMan.initDoctoresUids();
+await this.subscriptionManager.loadDoctorsSubscriptions();
+console.log('subscription initload is', this.subscriptionManager.subsData.subscription);
+console.log('kewe');
+console.log('docs before filter active',JSON.stringify(this.docMan.docData.doctoresIDs));
+this.docMan.filterActiveDoctors();
+console.log('docs after filter active',JSON.stringify(this.docMan.docData.doctoresIDs));*/

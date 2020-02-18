@@ -4,15 +4,30 @@ import { IonicModule } from 'ionic-angular';
 import { FooterComponent } from './footer/footer';
 import { DirectivesModule } from '../directives/directives.module';
 import { NlistComponent } from './nlist/nlist';
+import { ConektaComponent } from './conekta/conekta';
+
+
 
 
 @NgModule({
-	declarations: [HeaderComponent,
+	declarations: [
+    HeaderComponent,
     FooterComponent,
-    NlistComponent],
-	imports: [IonicModule, DirectivesModule],
+    NlistComponent,
+    ConektaComponent
+
+    
+],
+	imports: [
+        IonicModule, 
+        DirectivesModule
+    ],
 	exports: [HeaderComponent,
     FooterComponent,
-    NlistComponent]
+    NlistComponent,
+    ConektaComponent
+
+    
+]
 })
 export class ComponentsModule {}

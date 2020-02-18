@@ -5,14 +5,18 @@
   Ionic pages and navigation.
 -->
 <header></header>
-<ion-content padding class="drap_content">
+<ion-content padding class=" wheader drap_content">
   <div class="modalPage_header">
     <div class="modalPage_logo"><img src="assets/imgs/servicios.svg"/></div>
     <div class="modalPage_title">
       <span class="spanBlock midFont"><b>Alta de Servicios y Costos</b></span>
-      <span class="spanBlock midSubFont">Administra, agrega o elimina servicios para tus consultas. </span>
+      <span class="spanBlock midSubFont">Administra, agrega o elimina los servicios que ofreces en tu consultorio. </span>
     </div>
-      <button class="bgColorSecondary generalButton floatRight" (click)="openNuevoservicio()">Agregar Nuevo</button>
+    <div class="modalPage_btn_wrapper">
+      <button class="bgColorSecondary generalButton" (click)="openNuevoservicio()">Agregar nuevo</button>
+      
+     
+    </div>
   </div>
   <div class="Citas_grid result_wrapper">
     <table class="results_table">
@@ -20,13 +24,13 @@
             <tr>
                 <th>Servicio</th>
                 <th>Costo</th>
-                <th></th>
+                <th>  </th>
              </tr>
         </thead>
-        <tbody>
-            <tr *ngFor="let servicio of this.userData.doctores[0].servicios">
-                <td><b>{{servicio.Nid}}</b> {{servicio.title}}</td>
-                <td class="fontSecondary">${{servicio.costo}}</td>
+        <tbody *ngIf="this.showMis">
+            <tr *ngFor="let servicio of this.servicioMan.servicios">
+                <td>{{servicio.title}}</td>
+                <td class="fontSecondary">{{moneyFormat(servicio.costo)}}</td>
                 <td class="toolCol">
                   <img src="assets/imgs/editar.svg" class="icon_drapo" (click)="editServicio(servicio)"/>
                   <button class="bgColorPrimary generalButton tableButton" (click)="deleteServicio(servicio)">Eliminar</button>
@@ -35,5 +39,7 @@
         </tbody>
     </table>
   </div>
-<footer></footer>
+
+
+
 </ion-content>

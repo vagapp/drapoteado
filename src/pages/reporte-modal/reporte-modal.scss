@@ -7,6 +7,16 @@ page-reporte-modal {
         border-bottom: 1px solid lightgray;
     }
 
+
+    .ReportGrid .midFont {
+        font-size: 1.6rem;
+    }
+
+    .ReportGrid .bold {
+        margin-right: .5em;
+        margin-left: 1em;
+    }
+
     .reporte_header{
         display: -webkit-flex;
         display: flex;
@@ -29,13 +39,37 @@ page-reporte-modal {
         flex-wrap: wrap;
         justify-content: space-around;
     }
-    
 
+    .ReporteRow_TotalServicios {
+        padding: .5em;
+        margin-left: 6em;
+        margin-top: .5em;
+        margin-bottom: .5em;
+    }
+
+    .ReporteRow_TotalServicios .midFont {
+        font-size: 1.5rem;
+    }
+
+    .ReporteRow_Desglose{
+        border-top: 1px solid lightgray;
+        padding: .8em 6em;
+    }
+
+    .ReporteRow_Desglose_row {
+        padding: .5em;
+        padding-left: 1em;
+        /* border-top: 1px solid #eee; */
+        margin-top: .5em;
+        font-size: 1.5rem !important;
+        width: auto;
+        display: inline-block;
+    }
     
     .ReporteRow_head{
         border-top: 1px solid gray;
         background-color: #F6F6F6;
-        padding: 15px 30px 15px 30px;
+        padding:1em;
     }
     
     .ReporteRow_head .rbh_span{
@@ -97,7 +131,8 @@ page-reporte-modal {
     }
 
     .resumen_totales .totalespan{
-        margin: 20px;
+        margin:0 20px;
+        font-size: 1.6rem;
     }
 
     .Totales_Ingreso, .Totales_Caja{
@@ -112,6 +147,46 @@ page-reporte-modal {
 
     .toin_span{
         margin: 20px; 
+    }
+
+    .icon_drapo_sm {
+        height: 18px;
+        margin-right: 10px;
+    }
+
+    .servicios_totales {
+        width: 100%;
+        margin: 0em auto;
+        text-align: left;
+        padding: 1em 7em;
+        border-bottom: 1px solid lightgray;
+    }
+    
+    .servicios_totales .bold {
+        font-size: 1.6rem;
+        display: block;
+    }
+
+    .servicios_totales .ticket_row {
+        width: auto;
+        display: inline-block;
+        margin: .5em;
+        font-size: 1.6rem;
+        font-weight: 400;
+    }
+
+    .servicios_totales .ticket_row .fontSecondary {
+        font-size: 1.8rem;
+        margin-left: 6px;
+        font-weight: 500;  
+    }
+    
+    .Totales_Caja .midFont {
+        font-size: 1.6rem;
+    }
+
+    .Totales_Caja .toin_span span {
+        margin-left: 5px;
     }
 
 

@@ -1,3 +1,31 @@
 page-usuarios {
 
+    table{
+        margin-bottom:  40px;
+    }
+
+    .leyenda {
+        font-size: 1.6rem;
+        color: gray;
+        font-weight: 300;
+        text-align: justify;
+        width: 80%;
+        margin: 2em auto;
+        line-height: 1.5;
+    
+    }
+
+    .leyenda b {
+        color: #C1272D;
+    }
+
+
+    @media screen and (max-width: 800px){ 
+        .leyenda {
+            width: 90%;
+            border-bottom: 1px solid lightgray;
+            padding-bottom: 1em;
+        }
+    }
+    
 }

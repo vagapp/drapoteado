@@ -4,70 +4,341 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-content padding>
-    <div class="modal_closer" (click)="this.dismiss();">Volver</div>
-    <div class="modalPage_header">
+
+    <ng-container  *ngIf="!this.newSus" > 
+            <ion-content padding>
+                    <div class="modal_closer" *ngIf="!this.tutorial.checkTutorialState()" (click)="this.dismiss();">Volver</div>
+                    <div class="modal_closer_desktop"  *ngIf="!this.tutorial.checkTutorialState()" (click)="this.dismiss();">Cerrar</div>
+    <div class="modalPage_header" *ngIf="!this.tutorial.checkTutorialState()">
         <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
         <div class="modalPage_title">
           <span *ngIf="this.isnew" class="spanBlock largeFont"><b>Alta de Usuario</b></span>
           <span *ngIf="!this.isnew" class="spanBlock largeFont"><b>Editar Usuario {{this.newUser.name}}</b></span>
         </div>
     </div>
+
+    <!--<div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState() && initialpage" >
+            <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
+            <span class=" largeFont" *ngIf="this.isnew"><b>Alta de Usuario</b></span>
+            <p>Da de alta al personal que te ayuda a administrar y cobrar tus citas.</p>
+        </div>-->
+        <div class="modalPage_header justify_center" *ngIf="this.tutorial.checkTutorialState()" >
+                <div class="modal_justifytitle"><div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
+                <span class=" largeFont" *ngIf="this.isnew"><b>Alta de usuario</b></span></div>
+                <div class="modalPage_title">
+                  <span class="spanBlock midSubFont">Da de alta al personal que te ayuda a administrar y cobrar tus citas.</span>
+                </div>
+            </div>
+        <!-- cuando es un usuario de grupo entrando a tutorial a la pagina inicial y si requiere explicacion y es el que crea el grupo-->
+        <div class="tutorialnotewrap">
+        <div class="user_explain"  *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.isGroup && this.tutorial.usergroupexplain && this.tutorial.isplanholder">
+            <span class="spanBlock midSubFont">Dentro de un grupo médico los usuarios creados serán compartidos por todos los doctores del grupo. A continuación te explicamos cómo funcionan y cómo crearlos. </span>
+            <span *ngIf="this.tutorial.subaccountsleft < 2" > * no hay suficientes espacios en el grupo para seguir el tutorial.</span>
+            <div class="user_explain_buttonsection">
+               <span class="spanBlock midSubFont"> Puedes omitir el tutorial haciendo click <button class="generalButton bgColorSecondary" (click)="endUsers()">aquí</button></span>
+            </div>
+        </div>
+
+         <!-- cuando es un usuario de grupo entrando a tutorial a la pagina inicial y si requiere explicacion y NO es el que crea el grupo, es un doctor mas-->
+    
+    <div class="user_explain" *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.usuarioCreated === false" ><!-- Drap agregar usuarios explicacion block-->
+        <span class="spanBlock midSubFont">TUAL te permite elegir entre dos opciones de usuarios.</span>
+        <!--<div class="trisectional">
+            <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Recepción:</span><span class="spanBlock midSubFont">Crea Citas</span></div>
+            <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Caja:</span><span class="spanBlock midSubFont">Cobra Citas</span></div>
+            <div class="trisectional_section"> <span class="spanBlock fontPrimary midSubFont bold">Caja & Recepción:</span><span class="spanBlock midSubFont">Crea y Cobra Citas</span></div>
+        </div>-->
+      
+    </div>
+
+    <div class="user_tutorial_selection" *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.usuarioCreated === false && this.tutorial.isplanholder && this.tutorial.subaccountsleft >= 2">
+        <span class="spanBlock midSubFont">Por favor selecciona la opción de personal que mejor describa el proceso en tu consultorio</span>
+        <div class="bisectional">
+            <div class="bisectional_section" (click)="selectOption(2)"  [class.selectedOption]="checkSelectedOption(2)">
+                <span class="spanBlock"> ¿Cuentas con personal independiente en la recepción y en la caja?</span>
+                <span class="spanBlock"> Crea usuarios para <span class="fontPrimary">caja</span> y <span class="fontPrimary">recepción</span> </span>
+            </div>
+            <div class="bisectional_section"  (click)="selectOption(1)" [class.selectedOption]="checkSelectedOption(1)">
+                <span class="spanBlock"> ¿Una sola persona administra y cobra tus citas?</span>
+                <span class="spanBlock"> Crea un usuario de <span class="fontPrimary">recepción & caja</span></span>
+            </div>
+        </div>
+        <!--<div class="addbycode" *ngIf="!this.tutorial.isGroup">
+            <div class="bisectional_section"  (click)="selectOption(3)" [class.selectedOption]="checkSelectedOption(3)">
+                <span class="spanBlock"> ¿Compartes personal con otro usuario de TUAL?</span>
+                <span class="spanBlock"> Si los usuarios ya han sido creados puedes agregarlos usando sus <span class="fontPrimary">códigos</span> aquí.</span>
+            </div>
+        </div>-->
+        <div class="tutorial_miniwrap">
+        <p *ngIf="!this.tutorial.isGroup" class="midSubFont justifyleft" >Compartes personal con otro usuario de TUAL?Si los usuarios ya han sido creados puedes agregarlos usando sus <span class="fontPrimary" (click)="selectOption(3); userTutorialStart()">códigos aquí.</span> </p>
+        <p *ngIf="this.tutorial.isplanholder" class="midSubFont justifyleft" >Adquiere los usuarios adicionales que necesites ingresando en mi plan.</p>
+        </div>
+        <div class="buttonsection">
+            <button class="generalButton bgColorSecondary"[class.disabledsubbtn]="!isSelectedOption" [disabled]="!isSelectedOption()" (click)="userTutorialStart()">Continuar</button>
+        </div>
+    </div>
+    
+    <div class="user_explain"  *ngIf="this.tutorial.checkTutorialState() && initialpage && this.tutorial.isGroup && this.tutorial.usergroupexplain  && !this.tutorial.isplanholder">
+        <p class="spanBlock midSubFont">Dentro de un grupo médico los usuarios creados serán compartidos por todos los doctores del grupo. Puedes acceder a la pagina de usuarios desde el menú donde podrás crear usuarios si lo necesitas pero probablemente ya existan usuarios en tu grupo.  </p>
+        <div class="user_explain_buttonsection">
+            <span class="spanBlock midSubFont"><button class="generalButton bgColorSecondary" (click)="endUsers()">Continuar</button></span>
+         </div>
+    </div>
+</div>
+
+    
+
+
     <div class="modalContent">
-      <div class="alta_main" *ngIf="initialpage">
+      <div class="alta_main" *ngIf="initialpage && !this.tutorial.checkTutorialState()"  >
         <span class="spanBlock midSubFont">Busca usuarios compartidos o registra uno nuevo</span>
-        <span class="spanBlock"> <button class="bgColorSecondary generalButton" (click)="codeuser=true; initialpage=false;">Buscar Usuario</button></span>
-        <span class="spanBlock" *ngIf="this.userData.checkUserPlanHolder()"> <button class="bgColorSecondary generalButton" (click)="newuser=true; initialpage=false;">Registrar Nuevo</button></span>
+        <span class="spanBlock" *ngIf="!this.subsData.isGroup"> <button class="bgColorSecondary generalButton" (click)="codeuser=true; initialpage=false;">Buscar usuario</button></span>
+        <span class="spanBlock" *ngIf="this.userData.checkUserPlanHolder()"> <button class="bgColorSecondary generalButton" (click)="newuser=true; initialpage=false;">Registrar nuevo</button></span>
       </div>
     <div class="nuevoservicio_content modalContent" *ngIf="codeuser">
+        <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="this.checkIfgoback()"> Atrás </span>
         <div class="ModalInput_input">
-            <b>Introducir Código</b>
+            <span class="codetext"><b>Introducir código de usuario</b> <span class="label">usuarios disponibles: {{subsLeft}}</span></span>
             <input  [(ngModel)]="this.newUserCode" type="text"/>
         </div>
         <div class="midAlign">
             <div class="register_button_section">
-            <button (click)="getUserByCode()" class="bgColorSecondary generalButton">Buscar</button>
+            <button (click)="getUserByCode()"  *ngIf="subsLeft > 0" class="bgColorSecondary generalButton">Buscar</button>
             </div>
           </div>
     </div>
-    <div class="nuevoservicio_content modalContent" *ngIf="newuser">
+    <div class="nuevoservicio_content modalContent" *ngIf="this.newuser">
+            <span class="spanBlock optionspan" (click)="gobackuser()" *ngIf="this.checkIfgoback()"> Atrás </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA"> <span class="fontPrimary">Caja.</span> Este usuario cobra las citas. </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION"> <span class="fontPrimary">Recepción.</span> Este usuario administra las citas </span>
+            <span class="tutorial_explain_text" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR"> <span class="fontPrimary">Recepción & Caja.</span> Este usuario administra y cobra las citas </span>
+            
+
+           
         <div *ngIf="this.isnew" class="ModalInput_input">
-            <b>username</b>
-            <input  [(ngModel)]="this.newUser.name" type="text"/>
+            <b>Usuario</b>
+            <input  [(ngModel)]="this.newUser.name" [class.registerInputerror]="!this.newUser.name && showerrors" type="text"/>
         </div>
-        <div class="ModalInput_input">
-            <b>Tipo de Usuario:</b>
-          <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und" class="input_select input">
-              <option selected disabled value="0">SELECT</option>
-              <option value="2">recepción</option>
-              <option value="3">caja</option>
-              <option value="4">recepción&caja</option>
+        <div  class="ModalInput_input">
+            <b>Alias</b>
+            <input  [(ngModel)]="this.newUser.field_alias.und[0].value" [class.registerInputerror]="!this.newUser.field_alias.und[0].value && showerrors"  type="text"/>
+        </div>
+        <div class="ModalInput_input" *ngIf="!this.tutorial.checkTutorialState()">
+            <b>Tipo de usuario:</b>
+          <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und" [class.registerInputerror]="this.newUser.field_tipo_de_usuario.und[0]===0 && showerrors"   class="input_select input" >
+              <option selected disabled value="0">Seleccione un tipo de usuario</option>
+              <option value="2">Recepción</option>
+              <option value="3">Caja</option>
+              <option value="4">Recepción & Caja</option>
             </select>
           </div>
+          <div class="ModalInput_input" *ngIf="this.tutorial.checkTutorialState()">
+                <b>Tipo de usuario:</b>
+              <select  [(ngModel)]="this.newUser.field_tipo_de_usuario.und"  [class.registerInputerror]="this.newUser.field_tipo_de_usuario.und[0]===0 && showerrors" class="input_select input" disabled>
+                  <option value="2" selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION">Recepción</option>
+                  <option value="3"  selected  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA">Caja</option>
+                  <option value="4"  selected  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR">Recepción & Caja</option>
+                </select>
+              </div>
           <div class="ModalInput_input">
-            <b>Correo Electrónico</b>
-            <input [(ngModel)]="this.newUser.field_useremail.und[0].email" type="text"/>
+            <b>Correo electrónico</b>
+            <input [(ngModel)]="this.newUser.field_useremail.und[0].email" [class.registerInputerror]="!this.newUser.field_useremail.und[0].email && showerrors"  type="text"/>
         </div>
-        <div *ngIf="this.isnew" class="ModalInput_input">
-            <b>Confirmar Correo Electrónico</b>
-            <input [(ngModel)]="this.newUser.mail" type="text"/>
+        <div *ngIf="this.isnew"  class="ModalInput_input">
+            <b>Confirmar correo electrónico</b>
+            <input [(ngModel)]="this.newUser.mail"  [class.registerInputerror]="!this.newUser.mail && showerrors" type="text"/>
         </div>
         <div class="ModalInput_input">
             <b>Contraseña</b>
-            <input [(ngModel)]="this.newUser.pass" type="password"/>
+            <input [(ngModel)]="this.newUser.pass"  [class.registerInputerror]="!this.newUser.pass && showerrors" type="password"/>
         </div>
         <div class="ModalInput_input">
-            <b>Confirmar Contraseña</b>
-            <input [(ngModel)]="this.checkpass" type="password"/>
+            <b>Confirmar contraseña</b>
+            <input [(ngModel)]="this.checkpass" [class.registerInputerror]="!this.checkpass && showerrors" type="password"/>
         </div>
         <div class="midAlign">
             <div class="register_button_section">
+                
             <button *ngIf="this.isnew"  (click)="createUserd()" class="bgColorSecondary generalButton">Agregar</button>
             <button *ngIf="!this.isnew" (click)="updateUserd()"  class="bgColorSecondary generalButton">Actualizar</button>
             </div>
           </div>
 
     </div>
-  
+
+
+
+    
     </div>
-</ion-content>
+
+    <div class="modalContent" style="text-align: center;" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated" >
+            <span class="spanBlock bigBoldFont">¡Felicidades!</span>
+            <span class="spanBlock midMainFont">Tu usuario ha sido creado</span>
+            <div class="personaldatawrap">
+                <span class="spanBlock midSubFont justifyleft">Te proporcionamos sus datos para que pueda ingresar desde este momento en TUAL.</span>
+                <span class="spanBlock midSubFont justifyleft">Nombre: <span class="fontHigh">{{this.newUser.name}}</span></span>
+                <span class="spanBlock midSubFont justifyleft">Correo: <span class="fontHigh">{{this.newUser.mail}}</span></span>
+                <span class="spanBlock midSubFont justifyleft" *ngIf="!this.codeuserNP">Contraseña: <span class="fontHigh">{{this.checkpass}}</span></span>
+                <span class="spanBlock midSubFont justifyleft"> Puedes modificar los usuarios desde la sección de Alta de Usuarios en el Menú</span>
+            </div>
+            </div>
+            <div class="midAlign" *ngIf="this.tutorial.checkTutorialState() && this.tutorial.usuarioCreated">
+                <div class="register_button_section">
+                <button (click)="this.nextUser()"  *ngIf="this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_CAJA" class="bgColorSecondary generalButton tutorialButton">Continuar</button>
+                <button (click)="this.endUsers()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CNR || this.tutorial.tutorial_user_created_step === this.tutorial.TUTORIAL_USER_STEP_RECEPCION " class="bgColorSecondary generalButton tutorialButton">Continuar</button>
+                <button (click)="this.nextUser()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CODE && subsLeft > 0" class="bgColorSecondary generalButton tutorialButton">Introducir otro</button>
+                <button (click)="this.endUsers()"  *ngIf="this.tutorial.tutorial_users_selected_option === this.tutorial.TUTORIAL_USER_CODE" class="bgColorSecondary generalButton tutorialButton">Continuar</button>
+               
+                <!--<button (click)="this.restart()" class="bgColorSecondary generalButton">Crear Otro</button>-->
+                <!--<button (click)="this.dismiss()" class="bgColorSecondary generalButton">Continuar</button>-->
+                </div>
+              </div>
+              </ion-content>
+              </ng-container> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <ng-container  *ngIf="this.newSus" > 
+                    <ion-content class="register_content">
+                    <div class="modalPage_header">
+                            <div class="modalPage_logo"><img src="assets/imgs/usuarios.svg"/></div>
+                            <div class="modalPage_title">
+                              <span  class="spanBlock largeFont"><b>Alta de Suscriptor</b></span>
+                     
+                            </div>
+                        </div>
+                    <div class="register_contet_form"  >
+                      <div class="register_base register_form_section rfsFlex">
+                                <div class="registerInput" >
+                                        <b>Usuario:<span class="obligatoryast" >*</span></b><input [(ngModel)]="this.newUser.name" [class.registerInputerror]="!this.newUser.name && showerrors" type="text" />
+                                    </div>
+                                    <div class="registerInput" >
+                                            <b>Alias:<span class="obligatoryast" >*</span></b><input [(ngModel)]="this.newUser.field_alias.und[0].value" [class.registerInputerror]="!this.newUser.field_alias.und[0].value && showerrors" type="text"/>
+                                          </div>
+                              <div class="registerInput">
+                                  <b>Correo electrónico:<span class="obligatoryast" >*</span></b><input [(ngModel)]="this.newUser.mail" [class.registerInputerror]="!this.newUser.mail && showerrors" type="text"/>
+                                </div>
+                                <div class="registerInput" *ngIf="this.isnew">
+                                  <b>Confirmar c. electrónico:<span class="obligatoryast" >*</span></b><input [(ngModel)]="emailconfirm" [class.registerInputerror]="!this.emailconfirm && showerrors" type="text"/>
+                                </div>
+                      
+                               
+                                  <div class="registerInput">
+                                      <b>Contraseña:<span class="obligatoryast">*</span></b><input [(ngModel)]="this.newUser.pass"  [class.registerInputerror]="!this.newUser.pass && showerrors" type="password"/>
+                                    </div>
+                                    <div class="registerInput">
+                                      <b>Confirmar contraseña:<span class="obligatoryast" >*</span></b><input [(ngModel)]="passconfirm"  [class.registerInputerror]="!this.passconfirm && showerrors" type="password"/>
+                                    </div>
+                                    <div class="registerInput">
+                                      <b>Nombre:<span class="obligatoryast" >*</span></b><input [(ngModel)]="this.newUser.field_nombre.und[0].value" [class.registerInputerror]="!this.newUser.field_nombre.und[0].value && showerrors"  type="text"/>
+                                    </div>
+                                    <div class="registerInput">
+                                      <b>Apellido:<span class="obligatoryast" >*</span></b><input  [(ngModel)]="this.newUser.field_apellidos.und[0].value" [class.registerInputerror]="!this.newUser.field_apellidos.und[0].value && showerrors"  type="text" />
+                                    </div>
+                                    
+                                    <div class="registerInput" >
+                                      <b>Especialidad:<span class="obligatoryast" >*</span></b><input [(ngModel)]="this.newUser.field_especialidad.und[0].value" [class.registerInputerror]="!this.newUser.field_especialidad.und[0].value && showerrors" type="text"/>
+                                    </div>
+                          </div>
+                          
+                      
+                          
+                      
+                          <div class="register_ubication register_form_section rfsFlex" >
+                              <div class="registerInput">
+                                  <b>Calle:</b><input [(ngModel)]="this.newUser.field_calle.und[0].value"  type="text"/>
+                              </div>
+                              <div class="ubication_det">
+                                  <span class="ubdet_input"> <b>No. Ext.</b> <input [(ngModel)]="this.newUser.field_no_ext.und[0].value"   type="text"/></span>
+                                  <span class="ubdet_input"> <b>No. Int.</b><input [(ngModel)]="this.newUser.field_no_int.und[0].value"  type="text"/></span>
+                                  <span class="ubdet_input"> <b>C.P<span class="obligatoryast" *ngIf="this.isnew">*</span></b> <input [(ngModel)]="this.newUser.field_codigo_postal.und[0].value" [class.registerInputerrorOn]="!this.newUser.field_codigo_postal.und[0].value && showerrors" type="text"/></span>
+                              </div>
+                              <div class="registerInput">
+                                  <b>Ciudad:</b><input [(ngModel)]="this.newUser.field_ciudad.und[0].value"  type="text"/>
+                              </div>
+                              <div class="registerInput">
+                                  <b>Colonia:</b><input [(ngModel)]="this.newUser.field_colonia.und[0].value"   type="text"/>
+                              </div>
+                              <div class="registerInput">
+                                  <b>País:</b><input [(ngModel)]="this.newUser.field_pais.und[0].value"    type="text"/>
+                              </div>
+                              <div class="registerInput">
+                                  <b>Municipio o Alcaldía:</b><input [(ngModel)]="this.newUser.field_municipio.und[0].value"  type="text"/>
+                              </div>
+                              <div class="registerInput">
+                                <b>Estado:</b>
+                              <select  class="input_select input" [(ngModel)]="this.newUser.field_estado_ubicacion.und[0].value">
+                                  <option selected disabled value="0">Seleccione un estado</option>
+                                  <option selected  value="Aguascalientes">Aguascalientes</option>
+                                  <option selected  value="Baja California">Baja California</option>
+                                  <option selected  value="Baja California Sur">Baja California Sur</option>
+                                  <option selected  value="Campeche">Campeche</option>
+                                  <option selected  value="CDMX">CDMX</option>
+                                  <option selected  value="Chihuahua">Chihuahua</option>
+                                  <option selected  value="Chiapas">Chiapas</option>
+                                  <option selected  value="Coahuila">Coahuila</option>
+                                  <option selected  value="Colima">Colima</option>
+                                  <option selected  value="Durango">Durango</option>
+                                  <option selected  value="Guanajuato">Guanajuato</option>
+                                  <option selected  value="Guerrero">Guerrero</option>
+                                  <option selected  value="Hidalgo">Hidalgo</option>
+                                  <option selected  value="Jalisco">Jalisco</option>
+                                  <option selected  value="México">México</option>
+                                  <option selected  value="Michoacán">Michoacán</option>
+                                  <option selected  value="Morelos">Morelos</option>
+                                  <option selected  value="Nayarit">Nayarit</option>
+                                  <option selected  value="Nuevo León">Nuevo León</option>
+                                  <option selected  value="Oaxaca">Oaxaca</option>
+                                  <option selected  value="Puebla">Puebla</option>
+                                  <option selected  value="Querétaro">Querétaro</option>
+                                  <option selected  value="Quintana Roo">Quintana Roo</option>
+                                  <option selected  value="San Luis Potosí">San Luis Potosí</option>
+                                  <option selected  value="Sinaloa">Sinaloa</option>
+                                  <option selected  value="Sonora">Sonora</option>
+                                  <option selected  value="Tabasco">Tabasco</option>
+                                  <option selected  value="Tamaulipas">Tamaulipas</option>
+                                  <option selected  value="Tlaxcala">Tlaxcala</option>
+                                  <option selected  value="Veracruz">Veracruz</option>
+                                  <option selected  value="Yucatán">Yucatán</option>
+                                  <option selected  value="Zacatecas">Zacatecas</option>
+                                </select>
+                              </div>
+                          </div>
+                      
+             
+                   
+                         
+
+                          <div class="register_last">
+                          <div class="register_button_section">
+                          <button    class="bgColorPrimary generalButton" (click)="actionRegister()">Registrar</button>
+                          </div>
+                        </div>
+                        </div>
+                    </ion-content>
+                </ng-container>
+  
+                
+
+
+

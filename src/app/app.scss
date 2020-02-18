@@ -14,23 +14,230 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
 ion-content{
     color:#4D4D4D !important;
 }
 
-
-
-@media only screen and (min-height: 768px) and (min-width: 768px){
-
-    ion-modal{
-        display: flex;
-        justify-content: center;
-        align-items: center;
+.wheader{
+    margin-top: 100px;
+}
+.tutorial_explain_text_sm {
+    display: block;
     }
 
-    .modal-wrapper {
-        position: unset;
-    }
+
+.tutorial_usercode {
+    padding: 20px;
+    border-bottom: 2px solid lightgrey;
+    margin-bottom: 20px;
+}
+
+.ReportGrid .row_detail .servicio-item{
+    margin-right: 15px;
+}
+
+.whitelink{
+    color: white;
+    text-decoration: none;
+}
+
+.personaldatawrap {
+    /* width: 75%; */
+    /* text-align: center; */
+    display: inline-block;
+}
+
+.tutorialnotewrap{
+   display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+}
+
+
+.tutorial_miniwrap{
+    width: 80%;
+}
+
+.justifyleft{
+    justify-content: left;
+    text-align: left;
+    width: 100%;
+}
+
+.margint20{
+    margin-top: 20px;
+}
+
+.marginl20{
+    margin-left: 20px;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #bdbdbd;
+    opacity: 1; /* Firefox */
+  }
+
+.basicpadding{
+    padding: 3em;
+}
+.nopadtop{
+    padding-top: 0 !important; 
+}
+
+.registerInputerror{
+    background: #f1d5d5 !important;
+}
+
+.alert-message{
+    overflow: hidden;
+}
+
+.calendar-body{
+    margin-bottom: 15px;
+}
+
+.registerInputerrorOn{
+    background: #f1d5d5 !important;
+}
+
+
+.text_centered{
+    text-align: center;
+}
+
+.modal-wrapper {
+    position: unset;
+}
+
+ion-modal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-wrapper {
+    position: unset;
+}
+
+.optionspan{
+    margin-bottom: 40px;
+    color:#C1272D;
+    cursor: pointer
+}
+
+.reportButton {
+    font-size: 11px !important;
+    margin: 0px !important;
+    padding: 7px 0px !important;
+}
+
+
+.filters_wrapper{
+    position: relative;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    margin-top: 0px;
+    /* width: 80%; */
+    justify-content: space-between;
+    border-bottom: 1px solid #E7E7E7;
+}
+
+
+.filtro-fecha {
+    display: flex;
+    justify-content: center;
+    padding: 2em 2em;
+    align-items: center;
+    vertical-align: middle;
+    border-left: 1px solid #eee;
+
+}
+
+.filtro-nombre {
+    padding: 2em 2em;
+    width: 50%;
+    font-size: 1rem;
+} 
+.filters_wrapper .item-cover{
+    position: relative;
+    width: 100%;
+    height: 40px;
+}
+
+.anio{ 
+background: #4d4d4d;
+color: white;
+padding: .5rem;
+text-align: center;
+margin: 0;
+font-size: 21px;
+}
+
+.mes{
+background: #50a3c7ad;
+color: white;
+padding: .5rem;
+text-align: center;
+margin: 0;
+font-size: 18px;
+}
+
+
+.filters_wrapper input{
+    width: 60%;
+    background: #F6F6F6;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border: 0px solid #000000;
+    height: 60px;
+    text-align: center;
+    color: #C1272D;
+    margin: 0 10px;
+    font-size: 1.8rem;
+    padding:.8em 1em;
+}
+
+
+.remover{
+    position: relative;
+    z-index: 9999;
+    height: 100%;
+    color: #C1272D;
+    font-weight: 900;
+    font-size: 3rem;
+    padding: 20px;
+    cursor: pointer;
+}
+
+
+.filters_wrapper ion-datetime {
+    width: 250px;
+    background: #F6F6F6;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border: 0px solid #000000;
+}
+
+.codigo {
+    padding: .5em 1em;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    font-size: 1.6rem;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.codigo.list-md .item-input:last-child{
+    padding-bottom: 5px;
 }
 
 ion-header{
@@ -38,7 +245,6 @@ ion-header{
     /*height: 80px;*/
     padding-top: 25px;
 }
-
 
 ion-app.ios [padding] .scroll-content{
     padding:0;
@@ -54,21 +260,34 @@ ion-app.ios [padding] .scroll-content{
     margin-top: 65px;
 }
 
+.smlabel{
+    font-size: 0.7em;
+}
+
+
+
 .lightFont{
     font-weight: 200;   
 }
 
+
+.endmargin {
+    margin-bottom: 100px;
+display: block;
+height: 5px;
+}
+
 .bigFont{
-    font-size: 4.5rem;
+    font-size: 3.2rem;
 }
 
 .bigSubFont{
-    font-size: 3rem;
+    font-size: 2.3rem;
     font-weight: 100;
 }
 
 .midFont{
-    font-size: 2.2rem;
+    font-size: 2rem;
 }
 
 .largeFont{
@@ -81,19 +300,35 @@ ion-app.ios [padding] .scroll-content{
 }
 
 .midSubFont{
-    font-size: 1.9rem;
+    font-size: 1.6rem;
     color: gray;
     font-weight: 100;
 }
 
 .section_grid{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;   
+    grid-template-columns: 1fr 1fr;   
     /*flex-flow: row;*/
     /*flex-wrap: wrap;*/
     /*align-items: center;*/
     /*justify-content: center;*/
     margin-bottom: 150px;
+}
+
+.plan_section {
+    display: grid;
+    grid-template-columns: 1fr 2fr 4fr;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    padding: 1.5em;
+    min-width: 1000px;
+    margin: 20px 0px 1px 0px;
+
+    border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
+border: 1px solid lightgray;
 }
 
 .fontPrimary{
@@ -108,7 +343,16 @@ ion-app.ios [padding] .scroll-content{
     color: #6DB5DE;
 }
 
-
+.datetime-md{
+    padding: 13px 8px 13px 16px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    color: #C1272D;
+    font-weight: 800;
+    font-size: 2.8rem;
+}
 
 
 .section{
@@ -182,6 +426,33 @@ ion-app.ios [padding] .scroll-content{
     width: 100%;
 }
 
+.checkbox_wrapper_progreso{
+    text-align: left;
+    margin: 1.5em 0;
+    font-size: 1.8rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.progress_input_section {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.pis_btn {
+    color: #C1272D;
+    font-size: x-large;
+}
+
+.pis_many {
+    margin: 10px;
+}
+
+.checkbox_wrapper_progreso ion-checkbox{
+    margin-right: 10px;
+}
+
 .centered{
     text-align: center;
 }
@@ -208,6 +479,40 @@ ion-app.ios [padding] .scroll-content{
     bottom: 0;
 }
 
+.section_button_home {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+.home_halfbtn {
+    font-size: 1.5em;
+    margin: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    line-height: 1.5;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+
+
+.icon_drapo{
+    height: 45px;
+    margin-right: 10px;
+}
+
+.icon_drapo_sm{
+    height: 15px;
+    margin-right: 10px;
+}
+
+.section_button_vertical button{
+    display: block;
+}
+
 .notiPopover .popover-content{
     top: 80px !important;
     width: 300px;
@@ -229,6 +534,14 @@ ion-app.ios [padding] .scroll-content{
 
 .icon_drapo{
     cursor: pointer;
+}
+
+.icon_drapo_big{
+    cursor: pointer;
+    font-size: 1em;
+    max-height: 80%;
+    max-width: 50px;
+    margin-right: 30px;
 }
 
 .ModalInput_input input{
@@ -267,20 +580,32 @@ border: 0px solid #000000;
 }
 
 .generalButton{
-    padding: 15px 30px;
+    padding: 8px 21px;
     min-width: 100px;
     margin: 10px;
     margin-top: 25px;
+    margin-right: 10px;
+    margin-left: 10px;
     font-size: 2.2rem;
-    border-radius: 13px 13px 13px 13px;
-    -moz-border-radius: 13px 13px 13px 13px;
-    -webkit-border-radius: 13px 13px 13px 13px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
     border: 0px solid #000000;
 }
 
+.tutorialButton{
+    margin-top: 0px !important;
+}
+
+.register_button_section{
+    margin-top: 5px;
+    text-align: center;
+}
+
 .tableButton{
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     padding: 10px !important;
+    margin-top: 1em;
 }
 
 .largeButton{
@@ -298,16 +623,81 @@ border: 0px solid #000000;
 
 .nuevoservicioModal .modal-wrapper{
     height: 60% !important;
-    top: 20% !important;
+    /*top: 20% !important;*/
 }
 
 .modalPage_header{
     display: -webkit-flex;
     display: flex;
-    flex: row;
+    flex-flow: row;
     flex-wrap: wrap;
-    padding:30px;
+    padding: 0 0 1rem 0;
     align-items: center;
+    justify-content: center;
+}
+
+.modal_justifytitle{
+    display: flex;
+    flex-flow:row;
+    justify-content: center;
+    align-items: center;
+}
+
+.header_dayname{
+    height: 10px;
+    font-weight: 100;
+    font-size: 2rem;
+}
+
+.results_table th, .results_table td {
+    /*min-width: 120px;
+    width: 20%;*/
+    text-align: center;
+    padding: .8em;
+    align-items: center;
+    align-content: center;
+    vertical-align: middle;
+    font-size: 1.8rem;
+}
+
+.justify_center{
+    justify-content: center;
+}
+
+.bigBoldFont{
+    font-size: 3rem;
+    text-align: center;
+    font-weight: 900;
+}
+
+.centered_bold{
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 900;
+    margin-top: 17px;
+}
+
+.bold{
+    font-weight: 900;
+}
+
+.drap_default_select {
+    background: #F2F2F2;
+    border: none;
+    padding: 7px 30px;
+    font-weight: bold;
+    font-size: large;
+}
+.right_align{
+    text-align: right;
+}
+
+.left_align{
+    text-align: left
+}
+
+.center_align{
+    text-align: center;
 }
 
 .modalPage_toolbar{
@@ -325,16 +715,51 @@ border: 0px solid #000000;
     width: 60%;
     min-width: 800px;
 }
+.nuevoreportecontent .generalButton {
+    margin-left: 40px;
+}
 
 .floatRight{
     position: absolute;
     right: 50px;
 }
 
-.modalPage_logo{
-    height: 100px;
-    width: 100px;
-    display: inline-block;
+.modalPage_logo {
+    height: 80px;
+    width: 80px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ticket_row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: .5rem;
+}
+
+.ticket_row_block .midSubFont {
+    font-size: 1.8rem;
+}
+
+.ticket_row span {
+    margin-left: 8px;
+}
+
+.ticket_row_block{
+    margin: 30px
+}
+
+.ticket_content{
+display: flex;
+justify-content: center;
+align-items: center;
+flex-flow: column;
+}
+
+.drapo_icon_logo img {
+    max-height: 50px;
 }
 
 .drap_edit_icon{
@@ -346,8 +771,8 @@ border: 0px solid #000000;
 }
 
 .toolCol .icon_drapo {
-    max-width: 15px;
-    max-height: 15px;
+    max-width: 20px;
+    max-height: 20px;
 }
 
 .dateright{
@@ -358,6 +783,17 @@ border: 0px solid #000000;
     margin: 7px; 
 }
 
+
+
+.modalPage_btn_wrapper{
+    display: flex;
+    width: auto;
+    justify-content: flex-end;
+    flex-flow: column;
+    align-items: flex-end;
+    margin-left: 1em;
+}
+
 .modalCloser{
     display: none;
 }
@@ -365,10 +801,16 @@ border: 0px solid #000000;
     display: none;
 }
 
-.smallModal .modalPage_logo{
-    height: 70px;
-    width: 70px;
+.modal_closer_desktop{
+    color: #c1272d;
+    margin: 15px 0px 0px 15px;
 }
+
+.smallModal .modalPage_logo{
+    height: 50px;
+    width: 50px;
+}
+
 
 .recoverModal .modal-wrapper {
     height: 300px;
@@ -384,37 +826,70 @@ border: 0px solid #000000;
 .results_table{
     width: 100%;
     font-size: 2rem;
+    margin-top: 0em;
 }
 
 .result_wrapper{
-    padding: 20px;
+    padding: 0px;
+    margin-bottom: 100px;
 }
+
 .results_table th{
-    text-align: left;
+    width: 200px;
 }
 
 .results_table thead{
     background-color: #F6F6F6;
 }
 
+.tdmaxedwid{
+    max-width: 200px;
+}
+.results_table tr{
+    border-bottom: 1px solid #eee;
+ }
+
 .results_table th, .results_table td{
-    padding-left: 20px;
-    height: 60px;
+    /*padding-left: 20px;*/
+    /*height: auto;*/
+    text-align: center;
 }
 
 .toolCol{
-    text-align: right;
+    text-align: right !important; 
+    display: table-cell;
+    align-items: center;
+    justify-content: end;
+    padding: 0 !important;
+    width: 300px;
 }
 
 .modalPage_header{
     border-bottom: 1px solid lightgray;
-    
+}
+
+.reporte_header .modalPage_header{
+    border-bottom: none !important;
 }
 
 .smallModal .modal-wrapper{
     /*max-width: 60%;*/
     /*max-height: 80%;*/
-    min-width: 1000px;
+    min-width: 85%;
+    min-height: 80%;
+    /*left: 20%;*/
+    /*top: 10%;*/
+}
+
+.nuevousuarioModal .modal-wrapper, .nuevoservicioModal .modal-wrapper, .nuevoreporteModal .modal-wrapper {
+    min-width: 60%;
+    min-height: 70%;
+}
+
+.verysmallModal .modal-wrapper{
+    /*max-width: 60%;*/
+    /*max-height: 80%;*/
+    min-width:auto;
     /*left: 20%;*/
     /*top: 10%;*/
 }
@@ -434,6 +909,22 @@ border: 0px solid #000000;
     flex-wrap: wrap;
 }
 
+.costo-de-la-cita {
+    padding: 0 0 .5em 0;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1em;
+    font-size: 2rem;
+}
+
+.formas-de-pago b {
+    margin-bottom: 10px;
+    display: block;
+    font-size: 1.5rem;
+}
+
+.formas-de-pago {
+    font-size: 1.7rem;
+}
 .CitaDetailSection{
     display:inline-block;
     width: 49%;
@@ -443,7 +934,8 @@ border: 0px solid #000000;
 }
 
 .drap_content{
-    margin-top: 50px;
+    margin-top: 80px;
+
 }
 
 .borderRight{
@@ -480,7 +972,7 @@ border: 0px solid #000000;
 }
 
 .registerInput{
-    font-size: 2rem !important;
+    font-size: 1.3rem !important;
     text-align: right;
 }
 .registerInput input{
@@ -508,6 +1000,9 @@ border: 0px solid #000000;
     border: 0px solid #000000;
 }
 
+ion-menu {
+    top:80px;
+}
 
 
 
@@ -516,8 +1011,6 @@ border: 0px solid #000000;
         min-width: 1000px;
         width: 80%;
         height: 80%;
-        left: 10%;
-        top: 10%;
     }
 }
 
@@ -532,20 +1025,101 @@ border: 0px solid #000000;
 @media screen and (max-width: 1024px){
    
     .smallModal .modal-wrapper{
-        height: 100% !important;
+        height: 95% !important;
+        min-width: 80% !important;
+    }
+    .subscribe_wrap{
+        flex-flow: column;
+    }
+
+    .nuevaCita_form{
+        padding: 25px 5px;
+    }
+
+    .CitaDetailSection {
+        display: inline-block;
+        width: 100%;
         min-width: auto;
+        padding: 1em;
+        position: relative;
+        border-right: transparent !important;
+        border-bottom: 1px solid lightgray;
     }
 
 }
+
+
 
 @media screen and (max-width: 860px){
     .section_grid{
         grid-template-columns: 1fr;
     }
+    .filtro-nombre {
+        width: 80%;
+    }
+
+   
 
 }
 
-@media screen and (max-width: 450px){
+@media screen and (max-width: 767px){
+    ion-modal {
+        display: block;
+    }
+    .modal_closer {
+        width: 100%;
+        height: 80px;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: left;
+        -webkit-justify-content: left;
+        -ms-flex-pack: left;
+        justify-content: left;
+        -webkit-box-align: end;
+        -webkit-align-items: flex-end;
+        -ms-flex-align: end;
+        align-items: flex-end;
+        background: #C1272D;
+        padding-bottom: 10px;
+        padding-left: 20px;
+        font-size: 2rem;
+        color: white;
+    }
+
+    .modal_closer_desktop{
+       display: none; 
+       }
+
+  
+}
+
+@media screen and (max-width: 735px){
+    .filters_wrapper {
+        display: block;
+        text-align: center;
+    }
+
+    .filtro-fecha {
+            margin: 2em 0 0 0 !important;
+            border-left: transparent;
+            border-top: 1px solid #eee;
+    }
+
+    .filtro-nombre {
+        width: 100%;
+    }
+
+
+}
+
+
+@media screen and (max-width: 800px){
+
+    ion-modal{
+        display: block;
+    }
     .section_grid{
         grid-template-columns: 1fr;
     }
@@ -558,6 +1132,8 @@ border: 0px solid #000000;
     .section_button{
         position: unset;
     }
+
+    
 
     .bigFont{
         font-size: 2.5rem;
@@ -577,7 +1153,7 @@ border: 0px solid #000000;
         font-size: 1.7rem;
     }
     .midSubFont {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
 
     .generalButton{
@@ -641,22 +1217,47 @@ border: 0px solid #000000;
     .results_table tbody :first-child {
        
     }
-
+    .filters_wrapper {
+        border-bottom: 1px solid #eee; 
+        padding-bottom: 0em;
+    }
     .results_table tr{
-       border-bottom: 1px solid gray;
+       border-bottom: 1px solid #eee;
        margin-top: 5px;
-       width: 100%;
+       /*width: 100%;*/
+       margin-bottom: 1em;
+       position: relative;
+       display: flex;
+       flex-flow: column;
+       justify-content: center;
+       align-items: center;
+    }
+
+    .toolCol {
+        text-align: center !important;
+       
+    }
+    .toolCol .icon_drapo {
+        max-width: 25px;
+        max-height: 25px;
+        position: absolute;
+        margin-top: -4em;
+        right: 1em;
     }
 
     .results_table td{
         display: block;
         padding: 0;
         height: unset;
+        font-size: 2.2rem;
+        margin-bottom: .5em;
     }
 
     .tableButton{
         display: block;
-        width: 100%;
+        width: 50%;
+        margin: 1em auto;
+        padding: .6em 0 !important;
     }
 
     ion-app.md [padding]{
@@ -688,6 +1289,10 @@ border: 0px solid #000000;
         color: white;
     }
 
+    .modal_closer_desktop{
+     display: none;
+    }
+
     .scroll-content{
         overflow: scroll;
         overflow-x: hidden;
@@ -701,6 +1306,21 @@ border: 0px solid #000000;
         background: #FF0000;
     }
 
+    .CitaDetail_Content {
+        width: 95%;
+        margin: 1em auto;
+    }
+
+    .CitaDetail_Content  .results_table tr {
+        border-bottom: transparent;
+    }
+
+    .CitaDetail_Content  .generalButton, .nuevaCita_form .generalButton {    
+        margin-top: 1em;
+    }
+
+    .ticket_row, .ticket_content {display: block;}
+
 
    
 }
@@ -712,21 +1332,261 @@ display:inline;
 
 //FACTURACION CSS
 
-.fact_src_unit {
-    width: 100%;
-    height: 50px;
+
+.two_cols{
     display: flex;
+    flex: 1 1;
+    flex-flow: row;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    font-weight: bold;
-    font-size: 1.5rem;
-    background-color: lightgray;
+}
+
+.two_cols_yano{
+    display: flex;
+    flex: 1 1;
+    flex-flow: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.two_cols_section{
+    display:inline-flex;
+    width: 49%;
+    min-width: 200px;
+    flex-flow: column;
+}
+
+.section_row{
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.two_cols_yano .two_cols_section{
+    display:inline-flex;
+    /*width: auto !important;*/
+    width: 80%;
+    min-width: 200px;
+    flex-flow: row;
+}
+
+.two_cols_yano .section_row{
+    display: inline-flex;
+    width: 100%;
+    justify-content: left;
+}
+
+
+
+/** GENERATED RADIO BUTTON CSS**/
+.control {
+    font-family: arial;
+    display: block;
+    position: relative;
     padding-left: 30px;
+    margin-bottom: 5px;
+    padding-top: 3px;
     cursor: pointer;
+    font-size: 16px;
+}
+    .control input {
+        position: absolute;
+        z-index: -1;
+        opacity: 0;
+    }
+.control_indicator {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 0;
+    top: 18px;
+    background: #e6e6e6;
+    border: 0px solid #000000;
+}
+.control-radio .control_indicator {
+    border-radius: 50%;
 }
 
-.selectedsrc{
-    background: linear-gradient(to right, rgba(255,0,0,0), #94BA3A);
+.control:hover input ~ .control_indicator,
+.control input:focus ~ .control_indicator {
+    background: #cccccc;
+}
+
+.control input:checked ~ .control_indicator {
+    background: #92b838;
+}
+.control:hover input:not([disabled]):checked ~ .control_indicator,
+.control input:checked:focus ~ .control_indicator {
+    background: #92b838;
+}
+.control input:disabled ~ .control_indicator {
+    background: #e6e6e6;
+    opacity: 0.6;
+    pointer-events: none;
+}
+.control_indicator:after {
+    box-sizing: unset;
+    content: '';
+    position: absolute;
+    display: none;
+}
+.control input:checked ~ .control_indicator:after {
+    display: block;
+}
+.control-radio .control_indicator:after {
+    left: 7px;
+    top: 7px;
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    background: #92b838;
+}
+.control-radio input:disabled ~ .control_indicator:after {
+    background: #7b7b7b;
+}
+
+
+.section_row .control{
+    display: flex;
+    flex-flow: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.section_row .icon_drapo_big{
+    cursor: pointer;
+    font-size: 1em;
+    max-height: 40px;
+    margin: 5px 27px;
+}
+
+.buttonWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.filters_wrapper{
+    .icon_drapo {
+        height: 25px;
+    }
+    ion-datetime {
+	    width: auto;
+    text-align: left;
+    background-color: transparent;
+    padding: 0;
+}
+.datetime-text {
+    margin: 10px;
+    
+}
 }
 
 
 
+@media screen and (max-width: 450px){
+
+    ion-menu {
+        top:67px;
+    }
+
+    .two_cols_yano .section_row{
+        display: block !important;
+    }
+
+    .two_cols_yano .two_cols_section{
+        display: block !important;
+    }
+
+    .ModalInput_input {
+        font-size: 1.3rem !important;
+    }
+
+    .ModalInput_input input {
+        width: 100%;
+        margin: 8px;
+        background: #F2F2F2;
+        padding: 8px;
+        border: none;
+        border: 0px solid #000000;
+    } 
+
+    .section_button_home {
+        flex-flow: column;
+        width: 100%;
+    align-items: baseline;
+    padding-left: 10px;
+    padding-bottom: 20px;
+    }
+    
+    .icon_drapo{
+        height: 25px;
+    }
+    
+    .homegrid{
+        border:0;
+    }
+
+    .contentdown .scroll-content{
+        margin-top: 0;
+    }
+
+    .home_halfbtn{
+        font-size: 1.3em;
+        margin: 9px;
+    }
+
+    .section{
+        max-height: 90px;
+    }
+
+    .filters_wrapper input{
+        width: 90%;
+        font-size: 1.3rem;
+        padding: 8px;
+        height: unset;
+    }
+
+    .filtro-fecha{
+        border:none;
+        margin: 0 !important;
+        padding: 0;
+    }
+
+    .datetime-md{
+        font-size: 1.3rem;
+      
+    }
+
+    .results_table td{
+        font-size: 1.3em;
+    }
+ 
+  
+}
+
+
+
+.menu-inner .header {
+    display: none;
+}
+
+.menu-inner .list-md {
+    padding-top: 2em;
+}
+
+.menu-inner .item-md {
+    font-size: 1.6rem;
+    color: #353232;
+    text-align: center;
+    padding-bottom: .5em;
+    padding-top: .5em;
+}
+
+.menu-inner .item-md:hover {
+    color: #C1272D;
+}

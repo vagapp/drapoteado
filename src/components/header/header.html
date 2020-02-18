@@ -5,7 +5,7 @@
       <ion-title (click)="goHome()" ><img src="assets/imgs/logo-blanco.svg" class="header_logo_drap"/></ion-title>
       <ion-buttons right class="menu_buttons" *ngIf="this.userData.checkUserFeature([this.userData.TIPO_ANY],[this.userData.PLAN_ANY],false);">
       <button ion-button>Alertas <span>10</span></button>
-      <button ion-button>{{this.userData.userData.name}} <img src="assets/imgs/flecha-blanca.svg" class="header_flecha_blanca" /></button>
+      <button ion-button>{{this.userData.showname}} <img src="assets/imgs/flecha-blanca.svg" class="header_flecha_blanca" /></button>
       <button ion-button class="header_showdate">{{this.userData.showhour}}</button>
       </ion-buttons>
       <button ion-button end menuToggle >
@@ -17,14 +17,16 @@
   <ion-header>
     <div class="drap_global_header">
         <img  (click)="goHome()"  src="assets/imgs/logo-blanco.svg" class="header_logo_drap"/>
+        <span class="rol_title" *ngIf="this.userData.checkUserFeature([this.userData.TIPO_CAJA,this.userData.TIPO_RECEPCION,this.userData.TIPO_CAJAYRECEPCION],[this.userData.PLAN_ANY],false);" >( {{this.userData.getTipoUsuarioString(this.userData.userData.field_tipo_de_usuario['und'][0]['value'])}} ) </span>
+        <div *ngIf="!iscon" class="no-con"></div>
         <div class="menu_buttons">
-          <div class="header_span header_span_name open_nlist1" (click)="presentNotifications($event)" >{{this.userData.userData.name}}
+          <div class="header_span header_span_name open_nlist1" (click)="presentNotifications($event)" >{{this.userData.showname}}
+            <span class="teston1"></span>
             <!--<nlist [nlistn]="1" [openClass]="'open_nlist1'"></nlist>-->
           </div>
-          <div class="header_span header_showdate">{{this.userData.showhour}}</div>
+          <!--<div class="header_span header_showdate">{{this.userData.showhour}}</div>-->
           <div menuToggle><img src="assets/imgs/menu.svg" class="header_menu_drap" /></div>
         </div>
         </div>
     </ion-header>
   
-

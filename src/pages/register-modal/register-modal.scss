@@ -7,6 +7,11 @@ page-register-modal {
         margin-bottom: 10px;
     }
 
+    .remove_reference_name{
+        margin-left: 20px;
+        cursor: pointer;
+    }
+
 
     .rfsFlex{
         display: -webkit-flex;
@@ -14,6 +19,7 @@ page-register-modal {
         flex-flow: row;
         flex-wrap: wrap;
         padding: 20px 10% 20px 10%;
+        align-items: center;
     }
 
     .radio_group_wrapper{
@@ -51,6 +57,28 @@ page-register-modal {
         margin: 15px;
     }
 
+
+    .register_terminos_section{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+
+    .register_aliasfield_wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .register_aliasfield_wrapper div{
+        width: 50%;
+    }
+
+    .register_aliasfield_wrapper .registerInput input{
+        width: 45%;
+    }
+
     
     .ubdet_input{
         text-align:  right;
@@ -68,7 +96,7 @@ page-register-modal {
     }
 
     .ubdet_input b{
-        font-size: 2rem !important;
+        font-size: 1.3rem !important;
         color: #4D4D4D;
         font-weight: 600;
     }
@@ -137,6 +165,7 @@ page-register-modal {
     }
 
     .register_button_section{
+        margin-top: 5px;
         text-align: center;
     }
 
@@ -161,11 +190,37 @@ page-register-modal {
 
 
 
+.button_section_inline{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.button_section_inline button{
+    width: 10%;
+}
 
+.fact_page_wrapper{
+    padding-top: 40px;
+    width:100%;
+    text-align: center;
+}
 
+.subscribe_wrap{
+    width: 100%;
+    display: flex;
+    flex: 2 1
+}
 
+.fact_label_main{
+    font-size: 1.5em;
+}
 
+.left_label{
+    width: 100%;
+    text-align: left;
+    display: block;
+}
 
 
 
@@ -207,12 +262,6 @@ page-register-modal {
         font-weight: bold;
       }
 
-      .fact_page_wrapper{
-        display: flex;
-        width: 100%;
-        flex-flow: row;
-        flex-wrap: wrap;
-      }
 
       .fact_section{
         display: flex;
@@ -226,8 +275,18 @@ page-register-modal {
         padding: 40px;
     }
 
+    .nopayment_label{
+        font-size: 1.2em;
+        padding: 20px;
+    }
+
+    .sources_wrapper{
+        min-height: 100px;
+    }
+
     .fact_src_unit, .fact_pna_item{
       width: 100%;
+      max-width: 500px;
       height: 50px;
       display: flex;
       align-items: center;
@@ -236,10 +295,20 @@ page-register-modal {
       background-color: lightgray;
       padding-left: 30px;
       cursor: pointer;
+      margin-bottom: 5px;
+    border-radius: 4px 4px 4px 4px;
+    -moz-border-radius: 4px 4px 4px 4px;
+    -webkit-border-radius: 4px 4px 4px 4px;
+    border: 0px solid #000000;
   }
   
   .selectedsrc, .selectedplan{
-      background-color:  #94BA3A;
+    background-color: #50A3C7;
+    color: white;
+  }
+
+  .disabledsubbtn{
+      background-color: gray;
   }
 
   .forwrapper{
@@ -254,15 +323,17 @@ page-register-modal {
   }
 
   .checkout{
+    width: 100%;
     display: flex;
-    flex-flow: row;
-    flex-wrap: wrap; 
+    flex-flow: column;
+    align-items: flex-end;
+    padding: 20px;
+    padding-right: 95px;
   }
 
   .checkout div{
     display: inline-block;
     min-width: 300px;
-    width: 75%;
   }
 
   .checkout .button_section{
@@ -308,13 +379,14 @@ page-register-modal {
     margin-right: 50px;
   }
 
-  .copyCodeBtn{
-      
-  }
 
 
-
-  @media screen and (max-width: 600px) {
+  
+@media screen and (max-width: 1000px) {
+    .checkout{
+        padding: 0;
+        align-items: center;
+    }
 
     .rfsFlex .registerInput, .rfsFlex .ubication_det{
         width: 100%;
@@ -372,12 +444,75 @@ page-register-modal {
     .scroll-content{
         padding-top: 20px;
     }
-
 }
+
+.modal_header{
+    text-align: center;
+    width: auto;
+    margin: 30px;
+    padding: 10px;
+    border-bottom: 1px solid gray;
+ }
+ .header_title{
+     font-size: 8rem;
+ }
+ .header_subtitle{
+     font-size: 3.5rem;
+     font-weight: bold;
+ }
+ .modal_title_logo{
+     display: inline-block;
+     max-width: 250px;
+     max-height: 70px;
+     height: auto;
+     width: auto;
+ }
+ .modal_body{
+     text-align: center;
+     font-size: 2rem;
+     padding-left: 20px;
+     padding-right: 20px;
+ }
+
+ .code_wrapper{
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     flex-flow: column;
+     padding: 10px 200px;
+     border-bottom: 1px solid #a0a0a059;
+     margin-bottom: 20px;
+     padding-bottom: 30px;
+ }
+
+
+
+  @media screen and (max-width: 768px) {
+
+  .rfsFlex{
+    flex-flow: column ;
+    }
+
+    .registerInput{
+        width: 100% !important;
+        text-align: left;
+    }
+
+    .ubdet_input{
+        text-align: left;
+    }
+
+    .rfsFlex .registerInput, .rfsFlex .ubication_det{
+        width: 100%;
+    }
+}
+
+
 
   
 
-    
+  
+
 
 }
 

@@ -1,0 +1,44 @@
+
+
+<header></header>
+<ion-content  class="wheader"  padding>
+  <div class="reporte_header">
+    <div class="modalPage_header">
+    <div class="modalPage_logo"><img src="assets/imgs/reportes.svg"/></div>
+    <div class="modalPage_title">
+      <span class="spanBlock midFont"><b>Reporte Grupal</b></span>
+      <span class="spanBlock midSubFont">Te mostramos los servicios realizados por el grupo a lo largo del día.</span>
+    </div>
+    </div>
+    <div class="modalPage_toolbar">
+            <div class="info_tool">
+                <span class="spanBlock midFont"><b>Fecha</b></span>
+                <span class="spanBlock fontSecondary midFont">{{this.reportPresentator.actualReport.dateString}}</span>
+              </div>
+              <button class="bgColorSecondary generalButton export-big" (click)="exportars()" >Exportar</button>
+    </div>
+    </div>
+    
+    <table class="results_table">
+      <thead>
+          <tr>
+              <th>Servicio</th>
+              <th>Médico</th>
+              <th>No. de servicios</th>
+              <th>Total</th>
+              <!--<th>Cantidad</th>-->
+           </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let servicio of this.reportPresentator.serviciosResume">
+              <td>{{servicio.title}}</td>
+              <td>{{servicio.doc}}</td>
+              <td>{{servicio.times}}</td>
+              <td>{{this.moneyFormat(servicio.costo)}}</td>
+              <!--<td>{{servicio.costo}}</td>-->
+             
+           </tr>
+      </tbody>
+  </table>
+
+</ion-content>

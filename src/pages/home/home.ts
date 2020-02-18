@@ -1,7 +1,17 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, LoadingController, ModalController, IonicPage } from 'ionic-angular';
+import { NavController, ModalController, IonicPage } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
+import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
+import { CitasPresentatorProvider } from '../../providers/citas-presentator/citas-presentator';
+import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
+import { ReportesDataProvider } from '../../providers/reportes-data/reportes-data';
+import { PermissionsProvider } from '../../providers/permissions/permissions';
+import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
+import { CitasDataProvider } from '../../providers/citas-data/citas-data';
+import { TutorialProvider } from '../../providers/tutorial/tutorial';
+import { DateProvider } from '../../providers/date/date';
+import { UpdaterProvider } from '../../providers/updater/updater';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 @IonicPage({
@@ -14,17 +24,30 @@ import { Citas } from '../../providers/user-data/citas';
 })
 export class HomePage {
   rifa:string = 'nadien';
+  todayDay:string = DateProvider.getStringDate(new Date());
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController, 
     public userData: UserDataProvider,
-    public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController
+    public userMan: DrupalUserManagerProvider,
+    public citasPresentator: CitasPresentatorProvider,
+    public reportPresentator: ReportPresentatorProvider,
+    public reportesData: ReportesDataProvider,
+    public permissions: PermissionsProvider,
+    public doctoresData: DoctoresDataProvider,
+    public citasData: CitasDataProvider,
+    public tutoralProvider: TutorialProvider,
+    public dates:DateProvider,
+    public updater: UpdaterProvider
   ) {
+    //console.log('hello',permissions.subsData.subscription);
   }
 
-  ionViewDidLoad(){
-      if( this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){
+  async ionViewDidLoad(){
+    this.todayDay
+    if(this.userData.userData.uid !== 0){
+      this.tutoralProvider.checkNStart();
+      /*if(this.permissions.checkUserSuscription([UserDataProvider.PLAN_ANY]) && this.userData.userData.tutorial_state.und && Number(this.userData.userData.tutorial_state.und[0].value) === 0){
         let Modal = this.modalCtrl.create("WelcomeModalPage");
         Modal.present({});
         this.userData.userData.tutorial_state.und[0].value = "1";
@@ -32,78 +55,34 @@ export class HomePage {
           uid:this.userData.userData.uid,
           field_tutorial_state: {und: [{value: "1"}]},
         }
-        this.userData.updateUserd(cloneData).subscribe(
-          (val)=>{
-          }, (response) => {
-          }
-        );
-    }
-    this.userData.cargarCitas();
+        await this.userMan.updateUserd(cloneData).toPromise();
+        console.log('update tutorial at dismiss');
+    }*/
+  }
+  this.updater.updateCitas();
   }
 
 
   iniciarCita( cita:Citas ){
-    let loader = this.loadingCtrl.create({
-      content: "Iniciando Cita..."
-    });
-    let aux_doc = this.userData.getDoctorOFCita(cita);
-    
-    if(cita.checkState(UserDataProvider.STATE_ACTIVA) || cita.checkState(UserDataProvider.STATE_COBRO)){
-      this.openProgreso(cita);
-    }else{
-      if(aux_doc.citaActiva){
-        this.presentAlert("Ocupado","Este doctor esta ocupado con una cita Activa");
-        return 0;
-      }
-    let alert = this.alertCtrl.create({
-      title: "Iniciar Consulta",
-      message: '¿Está seguro que desea colocar esta cita como Activa?',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-          handler: () => {
-          }
-        },
-        {
-          text: 'Si',
-          handler: () => {
-            loader.present();
-            this.userData.updateCitaState( cita , UserDataProvider.STATE_ACTIVA ).subscribe(
-              (val)=>{
-                this.userData.cargarCitas().subscribe(
-                  (val)=>{
-                    loader.dismiss();
-                    this.openProgreso(cita);
-                  },(response)=>{ loader.dismiss();}
-                );
-              },(response)=>{ loader.dismiss();});
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
+   this.citasPresentator.iniciarCita(cita);
   }
 
 
   confirmarCita(cita:Citas){
-    this.userData.updateCitaState( cita , UserDataProvider.STATE_CONFIRMADA ).subscribe((val)=>{
-        this.userData.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
-      this.userData.cargarCitas()
-    });
+    this.citasPresentator.confirmarCita(cita);
   }
 
 
   openReportModal(){
-    let Modal = this.modalCtrl.create("ReporteModalPage", undefined, { cssClass: "bigModal reportModal" });
-    Modal.present({});
+    //this.reportPresentator.openReportModal();
+    //this.reportPresentator.openReportGenerate();
+    this.reportPresentator.openTicket();
   }
 
   openProgreso( cita: Citas){
     let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
     Modal.onDidDismiss(data => {
-      this.userData.cargarCitas();
+      //this.userData.cargarCitas();
     });
     Modal.present({});
   }
@@ -113,9 +92,9 @@ export class HomePage {
   }
   openRegister(){
     let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
-    Modal.onDidDismiss(data => {});
     Modal.present({});
   }
+  
   openCitas(){
     this.navCtrl.setRoot("CitasPage");
   }
@@ -134,14 +113,7 @@ export class HomePage {
   }
 
 
-  presentAlert(key,Msg) {
-    let alert = this.alertCtrl.create({
-      title: key,
-      subTitle: Msg,
-      buttons: ['Dismiss']
-    });
-    alert.present();
-  }
+
 
   calcularRifa(){
     let random = Math.floor(Math.random() * 6) + 1;

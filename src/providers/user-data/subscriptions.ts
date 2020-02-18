@@ -26,12 +26,17 @@ export class subscriptions{
     noSubcuentas:number = 0;
     isDocfull:boolean = true;
     isSubFull:boolean = true;
+    field_cantidad:number = 0;
+    field_adicionales:number = 0;
+    field_docsadicionales:number = 0;
+    pay_state:string = null;
 
 
     constructor(){
     }
 
     setData(input_data):boolean{
+        console.log('setting subs data', input_data);
         let ret = false;
         if(!input_data) return ret;
         ret = true;
@@ -40,6 +45,8 @@ export class subscriptions{
         this.field_plan_sus = input_data['field_plan_sus'];
         this.field_plan_holder = input_data['field_plan_holder'];
         this.field_doctores = null;
+        console.log('doctors error comming from this',input_data['field_doctores_json']);
+        /* parece que los json se pueden joder inesperadamente,*/
         this.field_doctores_json = input_data['field_doctores_json'];
         this.field_subusuarios = null; 
         this.field_invitation_code = input_data['field_invitation_code'];
@@ -49,7 +56,16 @@ export class subscriptions{
         this.field_stripe_sus_id = input_data['field_stripe_sus_id'];
         this.field_stripe_src_sus_id = input_data['field_stripe_src_sus_id'];
         this.field_stripe_cus_sub_id = input_data['field_stripe_cus_sub_id'];
+        this.field_cantidad = input_data['field_cantidad'];
+        this.field_adicionales = input_data['field_adicionales'];
+        this.field_docsadicionales = input_data['field_docsadicionales'];
+        this.pay_state = input_data['field_pay_state']; 
+       
+        if(!input_data['field_cantidad']){this.field_cantidad = 0;}
+        if(!input_data['field_adicionales']){this.field_adicionales = 0;}
+        if(!input_data['field_docsadicionales']){this.field_docsadicionales = 0;}
         this.field_doctores_info = new Array();
+       
         if(input_data['field_doctores']){
             this.field_doctores = new Array();
             input_data['field_doctores'].forEach(element => {
@@ -62,15 +78,27 @@ export class subscriptions{
                 this.field_subusuarios.push(element['uid']);
             });
         }
+       
         //Debugger.log(['field_subusuarios at set data subscription',this.field_subusuarios]);
-        this.field_doctores_info = JSON.parse(this.field_doctores_json);
+        try {
+            this.field_doctores_info = JSON.parse(this.field_doctores_json);
+        } catch (e) {
+          console.log('subscriptions:setData error on json ',this.field_doctores_json);
+          this.field_doctores_info = new Array();
+        }
+       
         if(this.field_subusuarios)
         this.noSubcuentas = this.field_subusuarios.length;
+        this.validateSuscriptionActive();
         return ret;
     }
 
+    validateSuscriptionActive(){ //this methods validates everything that needs to be in order to really be an active suscription. and sets field active acordingly
+        if(!this.field_plan_sus){this.field_active = 0;} //checking what kind of plan do you have before deciding if its active.
+    }
+
     getData():any{
-        //Debugger.log(['tryna get data from',this]);
+       
         let ret = null;
         if(this.nid !== null){
         ret =  {
@@ -82,24 +110,28 @@ export class subscriptions{
             field_subusuarios:{und:[]}, 
             field_invitation_code:{und:[{value:this.field_invitation_code}]}, 
             field_group_name:{und:[{value:this.field_group_name}]}, 
-            field_active:{und:[{value:this.field_active}]}, 
+            field_active:{und:Number(this.field_active) !== 0 ? this.field_active: null}, 
             //field_next_cobro:this.field_next_cobro,
             field_stripe_sus_id:{und:[{value:this.field_stripe_sus_id}]}, 
             field_stripe_src_sus_id:{und:[{value:this.field_stripe_src_sus_id}]}, 
             field_stripe_cus_sub_id:{und:[{value:this.field_stripe_cus_sub_id}]}, 
+            field_cantidad:{und:[{value:this.field_cantidad}]},
+            field_adicionales:{und:[{value:this.field_adicionales}]},
+            field_docsadicionales:{und:[{value:this.field_docsadicionales}]},
+            field_pay_state:{und:[{value:this.pay_state}]}
         }
         if(this.field_doctores){
             this.field_doctores.forEach(element => {
-            ret.field_doctores.und.push(element);
+            ret.field_doctores.und.push(Number(element));
         });
         }
         if(this.field_subusuarios){
         this.field_subusuarios.forEach(element => {
-            ret.field_subusuarios.und.push(element);
+            ret.field_subusuarios.und.push(Number(element));
         });
         }
     }else{
-        //Debugger.log(['is a new shit to save']);
+       
         ret =  {
             Nid:this.nid,
             type:"suscripcion",
@@ -109,19 +141,23 @@ export class subscriptions{
             field_subusuarios:{und:[]}, 
             field_invitation_code:{und:[{value:this.field_invitation_code}]}, 
             field_group_name:{und:[{value:this.field_group_name}]}, 
-            field_active:{und:[{value:this.field_active}]}, 
+            field_active:{und:Number(this.field_active) !== 0 ? this.field_active: null}, 
             field_stripe_sus_id:{und:[{value:this.field_stripe_sus_id}]}, 
             field_stripe_src_sus_id:{und:[{value:this.field_stripe_src_sus_id}]}, 
             field_stripe_cus_sub_id:{und:[{value:this.field_stripe_cus_sub_id}]}, 
+            field_cantidad:{und:[{value:this.field_cantidad}]},
+            field_adicionales:{und:[{value:this.field_adicionales}]},
+            field_docsadicionales:{und:[{value:this.field_docsadicionales}]},
+            field_pay_state:{und:[{value:this.pay_state}]}
         }
         if(this.field_doctores !== null){
             this.field_doctores.forEach(element => {
-            ret.field_doctores.und.push(element);
+            ret.field_doctores.und.push(Number(element));
         });
         }
         if(this.field_subusuarios !== null){
         this.field_subusuarios.forEach(element => {
-            ret.field_subusuarios.und.push(element);
+            ret.field_subusuarios.und.push(Number(element));
         });
         }
     }
@@ -143,6 +179,7 @@ export class subscriptions{
        return ret; 
     }
     
+    
     checkfullness(){
         //Debugger.log(['checking fullness from plan',this.plan]);
         if(this.plan && this.plan.nid){
@@ -160,21 +197,26 @@ export class subscriptions{
 
     static getEmptySuscription(){
         let aux_sus = new subscriptions();
-        aux_sus.field_active = 0;
+        aux_sus.field_active = null;
         aux_sus.is_plan_set = false;
         aux_sus.plan = null;
         return aux_sus;
     }
 
+    removeUserFromSubs( uid ){
+        console.log('field doctores insubs',this.field_doctores);
+        this.field_doctores = this.field_doctores.filter((docs)=>{ return Number(docs) !== Number(uid)});
+        console.log('remvoed',uid,this.field_doctores);
+        //this.field_doctores = this.field_doctores.filter();
+    }
+
 
     removeSubUserFromSubs( userd ){
-        //Debugger.log(['trata de remover este usuario de esta subscripcion',userd]);
-        if(this.field_subusuarios){
-            //Debugger.log(['inde of this subuser', this.field_subusuarios.indexOf(userd['uid'])]);
+        this.field_subusuarios = this.field_subusuarios.filter((s_uid)=>{ return Number(s_uid) !== Number(userd['uid']) });
+        /*if(this.field_subusuarios){
             let aux_index = this.field_subusuarios.indexOf(userd['uid']);
             if(aux_index !== -1)this.field_subusuarios.splice(aux_index,1);
-            //Debugger.log(['subusuarios after removing user from this index ,redy to save', this.field_subusuarios]);
-        }
-
+           
+        }*/
     }
 }

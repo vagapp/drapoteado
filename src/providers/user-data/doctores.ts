@@ -1,28 +1,25 @@
 import { Citas } from "./citas";
-import { UserDataProvider } from "./user-data";
+import { UserDataProvider, citasData } from "./user-data";
 import { servicios } from "./servicios";
 import { Debugger } from "./debugger";
+import { CitasDataProvider } from "../citas-data/citas-data";
 
 export class Doctores{
     Uid:number = null;
-
     citas:Citas[]; //listado de todas las citas
-    nextCita:Citas = null; //proxima cita pendiente
-    citasPendientes:Citas[]; //citas pendientes
-    citasCobrar:Citas[]; // citas por cobrar
+    citasPendientes:Citas[] = new Array();
     citaActiva:Citas = null //cita activa
-    citasRetrasadas:Citas[];
-    citasParaHoy:number = 0; //numero de citas pendientes para hoy.
+    nextCita:Citas = null //cita activa
     servicios:servicios[] = new Array();
     name:string = '';
     field_alias:string = '';
     playerID:string = '';
+    showDate: Citas = null;
+    field_disponibilidad: number[] = new Array();
 
-    public constructor(public userData: UserDataProvider){
-        this.citas = new Array();
-        this.citasPendientes = new Array();
-        this.citasCobrar = new Array();
-        }
+    public constructor(){
+      this.citas = new Array();
+    }
     
 
     setCitaActiva(cita:Citas):boolean{
@@ -55,8 +52,6 @@ export class Doctores{
     removeCitaFromLists(cita:Citas){
       const ArrOfArrs = [
       this.citas,
-      this.citasPendientes,
-      this.citasCobrar
       ];
       ArrOfArrs.forEach(arr => {
         UserDataProvider.removeElementFromArray(cita,arr);
@@ -64,15 +59,39 @@ export class Doctores{
       if(this.citaActiva && Number(this.citaActiva.Nid) === Number(cita.Nid)){ 
         this.citaActiva = null;
       }
-      if(this.citaActiva && Number(this.citaActiva.Nid) === Number(cita.Nid) ){
-        this.nextCita = null;
-      }
-      this.calculateCitasParaHoy();
     }
 
-    calculateCitasParaHoy(){
-      this.citasParaHoy = this.citasPendientes.length;
+    setDisponibilidad(field_disp){
+      console.log("setting doc disp",field_disp);
     }
+
+
+    resetServiceTimes(){
+      this.servicios.forEach(element => {
+        element.times = 0;
+      });
+    }
+
+
+    setServiciosTimes(citaActiva:Citas){
+      this.resetServiceTimes();
+      let aux_servicios = JSON.parse(citaActiva.data.aux_servicios_json);
+      console.log('setServiciosTimes',aux_servicios);  
+      if(aux_servicios){
+      this.servicios.forEach((service)=>{
+        let found = aux_servicios.find((aux_serv)=>{return Number(service.Nid) === Number(aux_serv.Nid) });
+        console.log('setServiciosTimes found',found);
+        if(found){
+          service.times = 1;
+          if(found.times)  service.times = Number(found.times);
+        }
+      });
+    }
+     
+      //(citaActiva.data.aux_servicios_json);
+    }
+
+   
 
 
  //Actualizar citas desde afuera introduciendo los resultados de la busqueda de todas las citas.
@@ -91,9 +110,6 @@ export class Doctores{
   * **/
     setCitas( citas_input ){
         console.log("----------------------------------empezar cita "+citas_input);
-    this.citasPendientes = new Array();
-    this.citasCobrar = new Array();
-    this.citasRetrasadas = new Array();
     this.citas = new Array();
     let aux_citasparahoy = 0;
     let aux_nextCita = null;
@@ -103,20 +119,16 @@ export class Doctores{
             //console.log("encontro cita propia");
       this.citas.push(cita);
       cita.getUntilMs();
-      if(cita.checkState(UserDataProvider.STATE_PENDIENTE) || cita.checkState(UserDataProvider.STATE_CONFIRMADA)){
+      if(cita.checkState(CitasDataProvider.STATE_PENDIENTE) || cita.checkState(CitasDataProvider.STATE_CONFIRMADA)){
         aux_citasparahoy++;
-        this.citasPendientes.push(cita);
-      if(cita.untilMs < 0){ cita.retrasada = true; this.citasRetrasadas.push(cita); } //si se paso la fecha ponerla como retrasada. es decir si el numero es negativo, menor a 0
+      if(cita.untilMs < 0){ cita.retrasada = true; } //si se paso la fecha ponerla como retrasada. es decir si el numero es negativo, menor a 0
       else if(smallestUntilMs === null || cita.untilMs < smallestUntilMs){
           //si no hay mas pequeño    O  si la cita es mas pequeño
           aux_nextCita = cita; //esta cita es la mas cercana
           smallestUntilMs = cita.untilMs;
         }
       }
-      if(cita.checkState(UserDataProvider.STATE_COBRO)){
-        this.citasCobrar.push(cita);
-      }
-      if(cita.checkState(UserDataProvider.STATE_ACTIVA)){
+      if(cita.checkState(CitasDataProvider.STATE_ACTIVA)){
         console.log("cita activa.",this.citaActiva);
         if(!this.citaActiva){
           console.log("agregando cita");
@@ -129,10 +141,19 @@ export class Doctores{
         }
       }
     }
-    this.citasParaHoy = aux_citasparahoy;
     this.nextCita = aux_nextCita;
 });
 console.log("doctor got itself:",this);
+}
+
+
+
+checkUid( Uid:number ):boolean{
+  let ret = false;
+  if(Number(this.Uid) === Number(Uid) ){
+      ret = true;
+  }
+  return ret;
 }
 
  

@@ -1,6 +1,11 @@
 import { citasData, UserDataProvider } from '../../providers/user-data/user-data';
 import { Debugger } from './debugger';
 import { servicios } from './servicios';
+import { DateProvider } from '../date/date';
+import { CitasDataProvider } from '../citas-data/citas-data';
+import { IfObservable } from 'rxjs/observable/IfObservable';
+import { ɵConsole } from '@angular/core';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 export class Citas{
@@ -18,13 +23,65 @@ export class Citas{
     retrasada:boolean = false;
     duracionMs:number;
     duracionText:string;
+    facturado:number = 0;
     serviceDataSet:boolean = false; //describe si los servicios de la cita han sido seteados cuando esta activa, evitando que se actualicen externamente.
     cobroDataSet:boolean = false; //describe si los cobros de la cita han sido seteados cuando esta en cobro, evitando que se actualicen externamente.
     reporteServicios:any[] = new Array();
+    pagos:any[] = new Array();
+    PagosonShow:any[] = new Array();
     doctor_playerid:string = null;
     caja_playerid:string = null;
     recepcion_playerid:string = null;
+    opendetail=false;
+    docuid = 0;
+    bydoc:boolean = false;
 
+    reporteCosto:number = 0;
+    
+    
+
+    ediciones:any[] = new Array();
+    todayEdiciones:any[] = new Array();
+
+    //variables para reportes con pagos incluidos
+    pagosfrom:number = 0;
+    pagosto:number = 0;    
+    pagosEfectivo:number = 0;
+    pagosCheque:number = 0;
+    pagosTarjeta:number = 0;
+    pagosBancaria:number = 0;
+    pagosFacturado: number = 0;
+    pagosTotal:number = 0;
+    originactivereport:boolean = false;
+    ultimaFechaPago: number = 0;
+    ultimaFechaText:string = '';
+    ultimaFechaDisplayable = null;
+
+    //variables con pagos de terceros
+    pagosEfectivoOut:number = 0;
+    pagosChequeOut:number = 0;
+    pagosTarjetaOut:number = 0;
+    pagosBancariaOut:number = 0;
+    pagosFacturadoOut: number = 0;
+    pagosTotalOut:number = 0;
+
+     //variables con pagos de doctor
+     pagosEfectivoDoc:number = 0;
+     pagosChequeDoc:number = 0;
+     pagosTarjetaDoc:number = 0;
+     pagosBancariaDoc:number = 0;
+     pagosFacturadoDoc: number = 0;
+     pagosTotalDoc:number = 0;
+
+
+    //variables para reportes con ediciones incluidas.
+    festado:number = 0;
+    addedServicesFechas: servicios[];
+    edicionesFechas: any[];
+    estado_anterior: number = null;
+
+    
+    get cajaSaved(){ console.log('cajasaved',this.data.field_cita_caja); return this.data.field_cita_caja.und[0].localeCompare('_none') !== 0 ? true : false};
     
     constructor(){
         this.init();
@@ -34,40 +91,350 @@ export class Citas{
         this.addedServices = new Array();
         this.data = UserDataProvider.getEmptyCita();
     }
+    
 
-    get doctor_name(){return this.data.doctor_name;}
+    get doctor_name(){/*return this.data.doctor_name;*/ /*console.log('doctor alias is', this.data.doctor_alias);*/ return this.data.doctor_alias;}
     get doctor_alias(){return this.data.doctor_alias;}
-    get paciente(){return this.data.field_paciente.und[0].value;}
+    get caja_name(){ return this.data.field_caja_nombre.und[0].value;}
+    get paciente(){ return this.data.field_paciente.und[0].value;}
     get costo(){return Number(this.data.field_costo_sobrescribir.und[0].value);}
     get cobro(){return Number(this.data.field_cobro.und[0].value)}
-    get cobroCheque(){return Number(this.data.field_cobro_cheque.und[0].value);}
-    get cobroEfectivo(){return Number(this.data.field_cobro_efectivo.und[0].value);}
-    get cobroTarjeta(){return Number(this.data.field_cobro_tarjeta.und[0].value);}
+  
     get CantidadRestante(){ return (Number(this.costo) - Number(this.cobro) ); }
-    
-    
+    get stateNumber() { return Number(this.data.field_estado.und[0].value); }
+    get stateLabel(){ return CitasDataProvider.getStateLabel(Number(this.data.field_estado.und[0].value)); }
+    get fstateLabel(){ return CitasDataProvider.getStateLabel(Number(this.festado)); }
+    get stateColor(){ return CitasDataProvider.getStateColor(Number(this.data.field_estado.und[0].value));}
+    get fstateColor(){ return CitasDataProvider.getStateColor(Number(this.festado));}
     set cobroCheque(val){ this.data.field_cobro_cheque.und[0].value = Number(val); this.calcularCobroTotal();} 
     set cobroEfectivo(val){ this.data.field_cobro_efectivo.und[0].value = Number(val); this.calcularCobroTotal();}
     set cobroTarjeta(val){ this.data.field_cobro_tarjeta.und[0].value = Number(val); this.calcularCobroTotal();}
+    set cobroBancaria(val){ this.data.field_cobro_bancaria.und[0].value = Number(val); this.calcularCobroTotal();}
+    
 
-    calcularCobroTotal(){ this.data.field_cobro.und[0].value = this.cobroTarjeta + this.cobroCheque + this.cobroEfectivo }
+    get ShowCorreo() { return this.data.field_email.und[0].email ? this.data.field_email.und[0].email: 'Sin Correo' }
+    get Showtelefono() { return  this.data.field_telefono.und[0].value && Number(this.data.field_telefono.und[0].value) !== 0 ? this.data.field_telefono.und[0].value : 'Sin Tel.' }
 
+
+
+    get isAdeudoAnterior():boolean{ return this.originactivereport && this.checkState(CitasDataProvider.STATE_ADEUDO)}
+    
+    calcularCobroTotal(){ this.data.field_cobro.und[0].value = this.cobroTarjeta + this.cobroCheque + this.cobroEfectivo + this.cobroBancaria }
+
+    get cantidadPagada():number{
+        let cantidad_pagada = 0;
+        //console.log(this.pagos);
+        this.pagos.forEach(pago => {
+            //console.log(pago['efe']);
+            pago['efe'] = Number(pago['efe']).toFixed(2);
+            pago['che'] = Number(pago['che']).toFixed(2);
+            pago['tar'] = Number(pago['tar']).toFixed(2);
+            pago['ban'] = Number(pago['ban']).toFixed(2);
+            cantidad_pagada += (Number(pago['efe']) + Number(pago['tar']) +Number(pago['che'])+Number(pago['ban'])); 
+           
+        });
+        //console.log('calculando cantidad pagada',cantidad_pagada);
+        return cantidad_pagada;
+    }
+
+    get restantePagos():number{
+      console.log('restantePagos',this.costo,this.cantidadPagada)
+        return this.costo - this.cantidadPagada;
+    }
+
+    get reporteRestantePagos():number{
+        return this.reporteCosto - this.cantidadPagada;
+    }
+
+    get PagosonFecha(){
+        console.log('PagosonFecha checkpago',this.pagos);
+        let ret;
+        ret = this.pagos.filter((pago)=>{
+            pago.efe = Number(Number(pago.efe).toFixed(2));
+            pago.tar = Number(Number(pago.tar).toFixed(2));
+            pago.che = Number(Number(pago.che).toFixed(2));
+            pago.ban = Number(Number(pago.ban).toFixed(2));
+            pago.total = Number(pago.efe)+Number(pago.tar)+Number(pago.che)+Number(pago.ban);
+            pago.total = Number(Number(pago.total).toFixed(2));
+            return (this.pagosfrom === 0 || (Number(pago.fec) >= Number( this.pagosfrom) && Number(pago.fec) < Number(this.pagosto)));
+        });
+        return ret.sort((a,b)=>{
+            if(a.fec > b.fec) return 1
+            if(a.fec < b.fec) return -1
+            return 0;
+        });
+    }
+
+ /**
+  * Este metodo compara los addedServices de esta cita con una lista de servicios introducida serviciosArray, retorna los servicios que se agregaron o se quitaron.
+  * **/
+    compareServicios(serviciosArray:servicios[]){
+        console.log('compareServicios',JSON.stringify(serviciosArray));
+        console.log('addedServices',JSON.stringify(this.addedServices));
+        this.todayEdiciones = new Array();
+        
+        let newRemovedServices = serviciosArray.filter(
+            (aux_serv_original)=>{
+                let found = this.addedServices.find((aux_serv_actual)=>{
+                    return ( Number(aux_serv_actual.Nid) === Number(aux_serv_original.Nid) );
+                });
+                return !found;
+            }
+        );
+
+       let newAddedServices = this.addedServices.filter(
+           (aux_serv_original)=>{
+               console.log('aux_serv_original',aux_serv_original);
+               let found = serviciosArray.find((aux_serv_actual)=>{
+                return ( Number(aux_serv_actual.Nid) === Number(aux_serv_original.Nid) );
+            });
+            console.log('found',found);
+                return !found;
+           }
+       );
+        console.log('added Services',newAddedServices);
+        console.log('removed Services',newRemovedServices);
+
+        newAddedServices.forEach((servicio)=>{
+            let aux_edicion = {
+                act: true, 
+                cos: Number(servicio.costo),
+                title: 'se agrego servicio: '+servicio.title,
+                Nid:servicio.Nid, 
+                fec:''+new Date().getTime()
+              };
+              this.todayEdiciones.push(aux_edicion);
+        });
+
+        newRemovedServices.forEach((servicio)=>{
+            let aux_edicion = {
+                act: false, 
+                cos: 0-servicio.costo,
+                title: 'se removio servicio: '+servicio.title,
+                Nid:servicio.Nid, 
+                fec:''+new Date().getTime()
+              };
+              this.todayEdiciones.push(aux_edicion);
+        });
+        console.log('ediciones encontradas',this.todayEdiciones);
+    }
+    
+    //obtiene los pagos que se hicieron a esta cita de fecha from a fecha to.
+    //uid es el uid del usuario que esta consultado. para saber que pagos realizo el. y cuales no 
+    setPagosFecha(from:number, to:number, uid:number){
+        console.log('traildater  setPagosFecha',from,to,uid);
+        this.pagosfrom = from;
+        this.pagosto = to;
+        this.ultimaFechaPago = to;
+        this.ultimaFechaText = '';
+
+        this.pagosEfectivo = 0;
+        this.pagosCheque = 0;
+        this.pagosTarjeta = 0;
+        this.pagosBancaria = 0;
+        this.pagosFacturado = 0;
+
+        this.pagosEfectivoOut = 0;
+        this.pagosChequeOut = 0;
+        this.pagosTarjetaOut = 0;
+        this.pagosBancariaOut = 0;
+        this.pagosFacturadoOut = 0;
+
+        this.pagosEfectivoDoc = 0;
+        this.pagosChequeDoc = 0;
+        this.pagosTarjetaDoc = 0;
+        this.pagosBancariaDoc = 0;
+        this.pagosFacturadoDoc = 0;
+      
+        console.log('traildater newcita ');
+        
+        console.log('citadoctor es',this.data.field_cita_doctor);
+        this.docuid = Number(this.data.field_cita_doctor.und[0]);
+        if(!this.originactivereport){
+        let aux_lastcita = this.PagosonFecha.pop();
+        if( aux_lastcita ){this.ultimaFechaPago = Number(aux_lastcita.fec);}
+        this.ultimaFechaText = DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).date + ' - '+ DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).time;
+        this.ultimaFechaDisplayable = DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago));
+        }else{ 
+            this.ultimaFechaPago = this.dateMs;
+            this.ultimaFechaText = this.getDisplayableDates().date + ' - '+this.getDisplayableDates().time
+            this.ultimaFechaDisplayable = this.getDisplayableDates();
+        }
+        this.PagosonFecha.forEach(pago => {
+            console.log('traildater comparing date ',this.ultimaFechaPago,pago.fec);
+            console.log('trail rban1 trailpago',pago);
+            this.pagosEfectivo += Number(pago.efe);
+            this.pagosCheque += Number(pago.che);
+            this.pagosTarjeta += Number(pago.tar);
+            this.pagosBancaria += Number(pago.ban);
+            this.pagosFacturado += Number(pago.fac);
+            console.log('checking pago',pago.uid,uid);
+            console.log('trailpago efectivo',this.pagosEfectivo);
+
+            if(pago.uid && Number(pago.uid)=== this.docuid){
+                console.log('este pago  fue realizado por el doctor',pago);
+                this.pagosEfectivoDoc += Number(pago.efe);
+                this.pagosChequeDoc += Number(pago.che);
+                this.pagosTarjetaDoc += Number(pago.tar);
+                this.pagosBancariaDoc += Number(pago.ban);
+                this.pagosFacturadoDoc += Number(pago.fac);
+            }
+           
+            if(pago.uid && Number(pago.uid) !== Number(uid)){
+                console.log('este pago no fue realizado por este usuario',pago);
+                this.pagosEfectivoOut += Number(pago.efe);
+                this.pagosChequeOut += Number(pago.che);
+                this.pagosTarjetaOut += Number(pago.tar);
+                this.pagosBancariaOut += Number(pago.ban);
+                this.pagosFacturadoOut += Number(pago.fac);
+            }
+        });
+
+        console.log('setPagosFecha cita is',this);
+        //originactivereport
+        //field_datemsb  
+        this.testOriginactivereport(this.pagosfrom, this.pagosto);
+
+        console.log('trail rban1 pagos', this.pagosEfectivo, this.pagosCheque,this.pagosTarjeta,this.pagosBancaria);
+        this.pagosTotal =  this.pagosEfectivo + this.pagosCheque + this.pagosTarjeta + this.pagosBancaria;
+        this.pagosTotalOut =  this.pagosEfectivoOut + this.pagosChequeOut + this.pagosTarjetaOut + this.pagosBancariaOut;
+        this.pagosTotalDoc =  this.pagosEfectivoDoc + this.pagosChequeDoc + this.pagosTarjetaDoc + this.pagosBancariaDoc;
+        //this.ultimaFechaText = DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).date + DateProvider.getDisplayableDates(new Date(this.ultimaFechaPago)).time;
+        
+    }
+
+    setEdicionesFechas(from:number, to:number){
+        console.log('setEdicionesFechas',this.ediciones);
+        if(Number(to) === 0){
+            console.log('to is 0');
+            to = new Date().getTime();
+            console.log('to is now',to);
+        }
+        this.festado = 0;
+        this.addedServicesFechas = new Array();
+        this.edicionesFechas = new Array();
+        console.log('ediciones',this.ediciones);
+        //filtrar ediciones hasta este dia y ordenarlas por fecha
+        this.edicionesFechas = this.ediciones.filter((edicion)=>{
+            console.log('filtrando ediciones fechas edicion',edicion);
+            console.log('edicion fecha',edicion.fec);
+            console.log('filtro to',to);
+            console.log('fec < to',Number(edicion.fec) <= Number(to));
+            let ret = false;
+            if(Number(edicion.fec) <= Number(to)){
+                ret = true;
+            }
+            if(ret){ edicion.dst = DateProvider.getStringDate(new Date(Number(edicion.fec))); console.log('edicion.dst',edicion.dst); }
+            return ret;
+        }).sort((a,b)=>{
+            let ret = 0;
+            if(a.fec > b.fec) ret = 1;
+            if(a.fec < b.fec) ret = -1;
+            return ret;
+        });
+
+        //filtrar ediciones que sean estado y ordenarlos por fecha
+        let states = this.edicionesFechas.filter((edicion)=>{
+            let ret = false;
+            if(edicion.state) ret = true;
+            return ret;
+        }).sort((a,b)=>{
+            let ret = 0;
+            if(a.fec > b.fec) ret = 1;
+            if(a.fec < b.fec) ret = -1;
+            return ret;
+        });
+     
+        //obtener el ultimo estado (el mas actual)
+        console.log('trailadeudo obtaining state');
+        let latestState = {state:0,fec:0};
+        if(states.length > 0)
+        latestState = states[states.length-1];
+        console.log('trailadeudo obtaining statelatestState',latestState);
+        this.festado = latestState.state;
+        if( this.festado === CitasDataProvider.STATE_CANCELADA){
+            this.ultimaFechaDisplayable = DateProvider.getDisplayableDates(new Date(Number(latestState.fec)));
+        }
+    }
+
+    setEdicionesField(){
+        console.log('setEdicionesField');
+        console.log('todayEdiciones',this.todayEdiciones);
+        console.log('ediciones',this.ediciones);
+        let aux_edicion = this.ediciones;
+        if(this.todayEdiciones){
+            aux_edicion = this.ediciones.concat(this.todayEdiciones);
+        }
+        this.data.field_ediciones_json =  {und:[{value:''}]};
+        this.data.field_ediciones_json.und[0].value= JSON.stringify(aux_edicion);
+        console.log('ediciones field final ', this.data.field_ediciones_json);
+    }
+
+    setStateChangeEdition(state){
+        console.log('trail3 setStateChangeEdition',state);
+        if(Number(state) !== Number(this.estado_anterior)){
+        let aux_edicion = {
+            act: true, 
+            cos: 0,
+            title: 'Cambio de estado a '+CitasDataProvider.getStateLabel(state),
+            Nid:0,
+            state: state, 
+            fec:''+new Date().getTime()
+          };
+          this.todayEdiciones.push(aux_edicion);
+          this.setEdicionesField();
+          this.estado_anterior = state;
+        }
+    }
+ 
+    testOriginactivereport(from:Number,to:Number){
+        console.log('testOriginactivereport',this.dateMs,from,to);
+        if( Number(this.dateMs) >= from && Number(this.dateMs) < to){
+            console.log('es del reporte');
+            this.originactivereport = true;
+            console.log('isorigin');
+        }else{
+            console.log('no es del reporte');
+            this.originactivereport = false;
+            console.log('notorigin');
+        }
+    }
     
     /**
      * Sets Data from a result of the citas view on drupal.
      **/
     setData( data_input ){
         console.log("setData on cita",data_input);
+        console.log("trailstartnul setData on cita",data_input);
+       /* console.log('field_fechas_reporte',data_input.field_fechas_reporte);
+        console.log('field_ediciones_json',data_input['field_ediciones_json']);
+        console.log('field_ediciones_json', data_input['field_ediciones_json'][0]['value'] );*/
+        console.log('field_ediciones_json',data_input['field_ediciones_json']);
           this.data = UserDataProvider.getEmptyCita();
           this.data.Nid = data_input.Nid;
-          this.Nid = data_input.Nid;
           this.data.doctor_name = data_input.doctor_name;
           this.data.doctor_alias = data_input.doctor_alias;
           this.data.field_paciente.und[0].value = data_input.field_paciente;
           this.data.field_email.und[0].email = data_input.field_email;
           this.data.field_telefono.und[0].value = data_input.field_telefono;
           this.data.field_cita_doctor.und[0] = data_input.doctor_uid;
+          this.data.field_comentarios.und[0].value = data_input.field_comentarios;
+            //let aux_caja_array = new Array();
+          /*  this.data.field_cita_caja.und= new Array();
+            if(data_input.caja_uid){
+                console.log('datainput si tiene cajai',data_input.caja_uid);
+                if((data_input.caja_uid+"").localeCompare("_none") !== 0){
+                    this.data.field_cita_caja.und.push(data_input.caja_uid);
+                }
+            }
+         
+          console.log((data_input.caja_uid+"").localeCompare("_none"));
+          console.log(data_input.caja_uid);
+          console.log('setting caja ',this.data.field_cita_caja );*/
+         
+          
           this.data.field_cita_caja.und[0] = data_input.caja_uid;
+          if( Number(this.data.field_cita_caja.und[0]) === Number(this.data.field_cita_doctor.und[0]) ){ this.bydoc = true; console.log('espordoctor woe'); }
           this.data.field_cita_recepcion.und[0] = data_input.recepcion_uid;
           this.data.field_estado.und[0].value = data_input.field_estado;
           this.data.field_servicios_cita.und = data_input.field_servicios_cita;
@@ -75,23 +442,70 @@ export class Citas{
           this.data.field_cobro_cheque.und[0].value = data_input.field_cobro_cheque;
           this.data.field_cobro_efectivo.und[0].value = data_input.field_cobro_efectivo;
           this.data.field_cobro_tarjeta.und[0].value = data_input.field_cobro_tarjeta;
+          this.data.field_cobro_bancaria.und[0].value = data_input.field_cobro_bancaria;
           this.data.field_costo_sobrescribir.und[0].value = data_input.field_costo_sobrescribir;
           this.data.field_datemsb.und[0].value = Number(data_input.field_datemsb.value);
+          this.dateMs =  this.data.field_datemsb.und[0].value;
           this.data.field_retrasda.und[0].value = data_input.field_retrasda;
+          this.data.field_hora_cobromsb.und[0].value = 0;
+          this.data.field_fecha_reporte.und[0].value = 0;
+          this.data.field_pagos_json = null;
+          this.data.field_ediciones_json = null;
+          this.data.field_fechas_reporte = {und:[]};
+          this.data.field_caja_nombre.und[0].value = data_input.field_caja_nombre ? data_input.field_caja_nombre : "sin nombre";
+          if(data_input.field_fecha_reporte)  this.data.field_fecha_reporte.und[0].value = data_input.field_fecha_reporte;
+          if(data_input.field_hora_cobromsb)  this.data.field_hora_cobromsb.und[0].value = data_input.field_hora_cobromsb;
           if(data_input.field_hora_iniciomsb) this.data.field_hora_iniciomsb.und[0].value = Number(data_input.field_hora_iniciomsb.value);
           if(data_input.field_hora_finalmsb) this.data.field_hora_finalmsb.und[0].value = Number(data_input.field_hora_finalmsb.value);
-          if(data_input['field_servicios_json'] && data_input['field_servicios_json']['value'])this.setServiciosReport(data_input['field_servicios_json']['value']);
+          if(data_input['field_servicios_json'] && data_input['field_servicios_json']['value']) this.data.aux_servicios_json = data_input['field_servicios_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
+          if(data_input['field_pagos_json'] && data_input['field_pagos_json']['value']) this.data.field_pagos_json = data_input['field_pagos_json']['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
+          if(data_input['field_ediciones_json'] && data_input['field_ediciones_json'][0])this.data.field_ediciones_json = data_input['field_ediciones_json'][0]['value'];//this.setServiciosReport(data_input['field_servicios_json']['value']);
+          if(data_input.field_fechas_reporte) this.data.field_fechas_reporte.und = data_input.field_fechas_reporte;
           if(data_input.doctor_playerid) this.doctor_playerid = data_input.doctor_playerid;
           if(data_input.recepcion_playerid)  this.recepcion_playerid = data_input.recepcion_playerid;
           if(data_input.caja_playerid)  this.caja_playerid = data_input.caja_playerid;
+          if(data_input.field_facturar)  this.data.field_facturar.und[0] = data_input.field_facturar;
+          if(data_input.field_facturar_cantidad){  
+              this.data.field_facturar_cantidad.und[0] = data_input.field_facturar_cantidad;
+                this.facturado = Number(data_input.field_facturar_cantidad.value);
+            }
+
+            console.log('cajas filter is ',data_input.field_cajas_filter);
+        if(data_input.field_cajas_filter){
+            this.data.field_cajas_filter.und = data_input.field_cajas_filter.map(
+                (cajauid)=>{ return {value:cajauid}; }
+            );
+           
+        }
+        console.log('cajas filter data set as  ',this.data.field_cajas_filter);
           //this.setDate(data_input.field_date.value);
-          this.setDateUT(this.data.field_datemsb.und[0].value);
-          this.setDurationDates(this.data.field_hora_iniciomsb.und[0].value,this.data.field_hora_finalmsb.und[0].value);
+          console.log('processDatay setData');
+          this.processData();
           console.log("savedData",this.data);
+          console.log('cita ended laik',this);
         }
 
+    
+
+    processData(){
+        console.log('trail1 processdata ',this.data.Nid);
+        console.log('cita processing data')
+        this.Nid = this.data.Nid
+        this.dateMs =  this.data.field_datemsb.und[0].value;
+        console.log('setting processData dateMs',this.dateMs);
+        console.log('processData ediciones json ',this.data.field_ediciones_json);
+        console.log('aux servicios json ',this.data.aux_servicios_json);
+        if(this.data.aux_servicios_json) this.setServiciosReport(this.data.aux_servicios_json);
+        if(this.data.field_pagos_json) this.setPagosJson(this.data.field_pagos_json);
+        if(this.data.field_ediciones_json) this.setEdicionesJson(this.data.field_ediciones_json);
+        this.facturado = Number( this.data.field_facturar_cantidad.und[0].value);
+        this.setDateUT(this.data.field_datemsb.und[0].value);
+        console.log('processdata hora cobro check',this.data.field_hora_cobromsb);
+        this.setDurationDates(this.data.field_hora_iniciomsb.und[0].value,this.data.field_hora_finalmsb.und[0].value);
+    }
+
             /**
-             * estos dos metodos se encargan de guardar la hora de inicio y fin de la cita cuando cambia de estados pendiente a activa o activa a cobro.
+             * estos dos metodos se encargan de guardar la hora de inicio y fin def la cita cuando cambia de estados pendiente a activa o activa a cobro.
             */
     setHoraInicio(){
         let now = new Date();
@@ -110,14 +524,94 @@ export class Citas{
         this.data.field_hora_final.und[0].value.time = now.getUTCHours()+":"+now.getUTCMinutes();
         console.log("hora final on data",this.data.field_hora_final);
         //and this is saved later
+      
+    }
+
+    /**
+     * Este metodo revisa si esta cita esta siendo cobrada en dias anteriores a la fecha en que se planifico.
+     * en otras palabras revisa si la cita es del futuro. y si es del futuro y esta siendo cobrada hoy, se transforma en una cita de hoy.
+     * cambiando la "fecha" de la cita al momento en que se cobra.
+     */
+    checkFromFuture(){
+        let now = new Date();
+        //let nowstart = new Date().setHours(0,0,0,0);
+        let nowend = new Date().setHours(23,59,59,999);     
+        let datestart = new Date(this.dateMs).setHours(0,0,0,0);
+        //let dateend = new Date(this.dateMs).setHours(23,59,59,999);  
+        if(now.getTime() < datestart){ //si ahorita no pasa el inicio del dia de la cita. entonces es una fecha del futuro. asi que cambiamos la fecha a este momento. que seria el momento en que se atendio.
+            console.log('el dia de la cita aun no ha empezado.');
+            /*this.data.field_datemsb.und[0].value = now.getTime();
+            this.dateMs = now.getTime();*/
+       
+            //borrar las fechas del reporte que sobrepasan esta fecha porque ya no tendran valides.
+            this.data.field_fechas_reporte.und = this.data.field_fechas_reporte.und.filter((fecha)=>{
+                //console.log('fecha es',fecha, new Date(fecha.value));
+                return fecha.value <= nowend;
+            });
+        }
+
+    }
+
+    saveDate(){
+        let now = new Date();
+        this.data.field_datemsb.und[0].value = now.getTime();
+        this.dateMs = now.getTime();
     }
 
 
     setServiciosReport( input_data ){
+        console.log('setServiciosReport',input_data);
         this.reporteServicios =  JSON.parse(input_data);
+        this.reporteServicios = this.reporteServicios.sort((a,b)=>{ 
+            if(a.title > b.title) return 1;
+            if(a.title < b.title) return -1;
+            return 0;
+        });
+        this.reporteServicios.forEach(serv => {
+            serv.singleunit = Number(serv.costo);
+            serv.costo = serv.singleunit * ( Number(serv.times ? serv.times : 1 ) )
+        });
+        console.log('reporteServicios',this.reporteServicios);
         Debugger.log(['added reportservicios', this.reporteServicios]);
     }
 
+    setPagosJson( input_data ){
+        console.log('input_data is',input_data);
+        if(input_data['und']){
+            console.log('isarray');
+        this.pagos =  JSON.parse(input_data['und'][0]['value']);
+        }else{
+            console.log('is not array');
+            this.pagos =  JSON.parse(input_data);
+        }
+        this.pagos.forEach(pago => {
+            pago.che = this.getNumberOrZero(pago.che);
+            pago.tar = this.getNumberOrZero(pago.tar);
+            pago.ban = this.getNumberOrZero(pago.ban);
+            pago.efe = this.getNumberOrZero(pago.efe);
+            pago.fac = this.getNumberOrZero(pago.fac);
+        });
+    }
+
+    setEdicionesJson( input_data ){
+        console.log('setEdicionesJson input_data is',input_data);
+        if(input_data['und']){
+            console.log('isarray');
+        this.ediciones =  JSON.parse(input_data['und'][0]['value']);
+        }else{
+            console.log('is not array');
+            this.ediciones =  JSON.parse(input_data);
+        }
+        console.log(this.ediciones);
+    }
+
+
+    getNumberOrZero( something ):number{
+        let ret = 0;
+        if(something && !isNaN(something)){ ret = something }
+        return ret;
+    }
+  
   
     
     /**
@@ -156,8 +650,8 @@ export class Citas{
         this.date = new Date(dateUTms);
         Debugger.log(["cita UTms date is: "+this.date]);
         //set data date fields on the format requiered by inputs:
-        this.data.field_date.und[0].value.date = `${UserDataProvider.formatDateBinaryNumber(this.date.getUTCDate())}/${UserDataProvider.formatDateBinaryNumber((this.date.getUTCMonth()+1))}/${UserDataProvider.formatDateBinaryNumber(this.date.getUTCFullYear())}`
-        this.data.field_date.und[0].value.time = `${UserDataProvider.formatDateBinaryNumber(this.date.getUTCHours())}:${UserDataProvider.formatDateBinaryNumber(this.date.getUTCMinutes())}`;
+        this.data.field_date.und[0].value.date = `${DateProvider.formatDateBinaryNumber(this.date.getUTCDate())}/${DateProvider.formatDateBinaryNumber((this.date.getUTCMonth()+1))}/${DateProvider.formatDateBinaryNumber(this.date.getUTCFullYear())}`
+        this.data.field_date.und[0].value.time = `${DateProvider.formatDateBinaryNumber(this.date.getUTCHours())}:${DateProvider.formatDateBinaryNumber(this.date.getUTCMinutes())}`;
         Debugger.log(['set date is',this.data.field_date]);
         //set time until this date:
         this.getUntilMs();
@@ -168,6 +662,10 @@ export class Citas{
             this.retrasada=true;
             Debugger.log(['esta cita esta retrasada']);
         }
+        this.readableDate = this.getDisplayableDates().date;
+        this.readableTime = this.getDisplayableDates().time;
+        console.log('this.readableDate',this.readableDate);
+        console.log('this.readableTime',this.readableTime);
 }
 
 
@@ -199,7 +697,7 @@ export class Citas{
             }
         }
         this.setDuracionMs();
-        console.log("obtained duracionMs",this.duracionMs);
+        //console.log("obtained duracionMs",this.duracionMs);
     }
 
     isValidDate(d){
@@ -207,10 +705,6 @@ export class Citas{
     }
 
     setDuracionMs(){
-        //let now = new Date('2018/5/14 01:35:00Z');
-        Debugger.log(['dates setduration'])
-        Debugger.log([this.data.field_hora_iniciomsb.und[0].value]);
-        Debugger.log([this.data.field_hora_finalmsb['und'][0]['value']]);
         if(this.data.field_hora_iniciomsb['und'][0]['value'] && this.data.field_hora_finalmsb['und'][0]['value']){
             this.duracionMs = ( new Date(this.data.field_hora_finalmsb['und'][0]['value']).getTime() - new Date(this.data.field_hora_iniciomsb['und'][0]['value']).getTime());
         }else if( this.data.field_hora_iniciomsb['und'][0]['value'] ){
@@ -218,32 +712,12 @@ export class Citas{
         }else{
             this.duracionMs = 0;
         }
-        Debugger.log(['this.duracionMs',this.duracionMs]);
-        this.duracionText = Citas.getDateDifText(this.duracionMs);
-        Debugger.log(['this.duracionText', this.duracionText]);
+        //Debugger.log(['this.duracionMs',this.duracionMs]);
+        this.duracionText = DateProvider.getDateDifText(this.duracionMs);
+        //Debugger.log(['this.duracionText', this.duracionText]);
     }
 
-    static getDateDifText( numberdatedif ):string{ //regresa la diferencia en texto ej. "hace 05 minutos"
-        let ret = "00";
-        let aux_ms = Math.abs(numberdatedif);
-        if(aux_ms < (60 * 1000)){ //menos de un minuto
-            ret =  `${UserDataProvider.formatDateBinaryNumber( Math.floor(aux_ms / 1000))} segundos`
-        }else if(aux_ms < ( 60 * 60 * 1000)){ //menos de una hora
-            ret =  `${UserDataProvider.formatDateBinaryNumber( Math.floor(aux_ms / (1000 * 60) ))} Minutos`
-        }else{
-            Debugger.log(['calculating diftext',aux_ms]);
-            let aux_hours = Math.floor(aux_ms / (1000 * 60 * 60));
-            aux_ms -= aux_hours * ( 1000 * 60 * 60 );
-            Debugger.log(['calculating diftext ah',aux_ms]);
-            let aux_minutes = Math.floor(aux_ms / (1000 * 60));
-            aux_ms -= aux_minutes * ( 1000 * 60 );
-            Debugger.log(['calculating diftext am',aux_ms]);
-            let aux_seconds = Math.floor(aux_ms / (1000) );
-            ret =  `${UserDataProvider.formatDateBinaryNumber(aux_hours)}:${UserDataProvider.formatDateBinaryNumber(aux_minutes)}:${UserDataProvider.formatDateBinaryNumber(aux_seconds)} Hrs`
-        }
-        if(numberdatedif < 0) ret = `hace ${ret}`;
-        return ret;
-    }
+    
 
 
     
@@ -265,7 +739,7 @@ export class Citas{
 
     getUntilTimeString():string{
         let ret = "00";
-        ret = Citas.getDateDifText(this.untilMs);
+        ret = DateProvider.getDateDifText(this.untilMs);
         this.untilText = ret;
         return ret;
         /*let ret = null;
@@ -307,7 +781,7 @@ export class Citas{
 
 
     setAddedServices( servicios:servicios[] ){
-        console.log("populating addedServices with",servicios);
+        console.log("populating addedServices with",servicios,this.data.aux_servicios_json);
         this.addedServices = new Array();
         for(let i = 0; i < this.data.field_servicios_cita.und.length; i++){
             console.log("searching for ",this.data.field_servicios_cita.und[i]);
@@ -323,22 +797,61 @@ export class Citas{
     }
 
     setServicesData(){
-        console.log("populating data services_cita");
+        console.log("trailpc1c1 populating data services_cita");
         this.data.field_servicios_cita.und = new Array();
         this.addedServices.forEach(element => {
-            console.log("added service",element);
+            console.log("trailpc1c1 added service",element);
             this.data.field_servicios_cita.und.push(element.Nid);
         });
-        console.log("populated services_cita data",this.data.field_servicios_cita);
+            console.log('trailpc1c1 this.addedServices',this.addedServices);
+            this.data.aux_servicios_json = JSON.stringify( this.addedServices);
+            this.data.field_servicios_json.und[0]['value'] = JSON.stringify( this.addedServices)
+            console.log('trailpc1c1 populated services json', this.data.aux_servicios_json);
+            console.log("trailpc1c1 populated services_cita data",this.data.field_servicios_cita);
     }
 
    addServicio( servicio:servicios ):boolean{
+       console.log('adding servicio',servicio);
        let ret = false;
+       if(!servicio) return false;
         if(!this.checkServicio(servicio)){
             this.addedServices.push(servicio);
+            console.log('addServicio added services ',this.addedServices);
             ret = true;
         }
         return ret;
+   }
+
+   operateServiceTimes(Nid, operand ){
+       let service = this.addedServices.find((serv)=>{return Number(serv.Nid) == Number(Nid);});
+       console.log('service times',service.times, operand);
+       service.times += Number( operand );
+       if(service.times <= 0){ service.times = 1;}
+       if(service.times >= 100){ service.times = 100; }
+       console.log('times is now',service.times);
+   }
+
+
+   getAddedTimes(Nid){
+    let service = this.addedServices.find((serv)=>{return Number(serv.Nid) == Number(Nid);}); 
+    return service.times;
+   }
+
+
+   removeServicio( servicio:servicios ):boolean {
+     return this.removeServicioNid(Number(servicio.Nid));
+   }
+
+   removeServicioNid( Nid ):boolean{
+    let ret = false;
+    this.addedServices = this.addedServices.filter( (servicios)=>{ return Number(servicios.Nid) !== Number(Nid)});
+    return ret = true;
+   }
+
+   removeAllServices(){
+    let ret = false;
+    this.addedServices = new Array();
+    return ret = true;
    }
 
    /**
@@ -348,11 +861,17 @@ export class Citas{
    getServiciosAvailable( servicios: servicios[]):servicios[]{
        let ret = new Array();
        console.log("trynna get servicios available from",servicios);
-        servicios.forEach(element => {
+       for(let servicio of servicios){
+           console.log('checking servicio',servicio);
+        if(servicio && !this.checkServicio(servicio)){
+            ret.push(servicio);
+        }
+       }
+        /*servicios.forEach(element => {
             if(!this.checkServicio(element)){
                 ret.push(element);
             }
-       });
+       });*/
        return ret;
    }
 
@@ -362,17 +881,21 @@ export class Citas{
    checkServicio( servicio:servicios ):boolean{
        let ret = false;
         console.log("checking if cita contains servicio ",servicio);
-        this.addedServices.forEach(element => {
+        /*this.addedServices.forEach(element => {
             if(Number(element.Nid) === Number(servicio.Nid)  ){
                 ret = true;
                 console.log("added service");
             }
-        });
+        });*/
+        if(this.addedServices.find((servicios)=>{ return Number(servicios.Nid) === Number(servicio.Nid)})) ret = true;
+        console.log('found ? ',ret);
         return ret;
    }
    
-
+   /* Esta mamada que xD**/
     getStateString(){
+        return this.stateLabel;
+        /*
         let state = parseInt(""+this.data.field_estado.und[0].value);
         let ret = "";
         switch(state){
@@ -383,7 +906,7 @@ export class Citas{
           case UserDataProvider.STATE_FINALIZADA: ret="Finalizada"; break;
           case UserDataProvider.STATE_CANCELADA: ret="Cancelada"; break;
         }
-        return ret;
+        return ret;*/
       }
 
       save(){
@@ -393,8 +916,8 @@ export class Citas{
 
       getDatetimeFormat():string{
         let ret = "";
-        let datestring = `${this.date.getDate()}/${(this.date.getMonth()+1)}/${this.date.getFullYear()}`;
-        let timestring =  `${this.date.getHours()}:${this.date.getMinutes()}`;
+        let datestring = `${DateProvider.formatDateBinaryNumber(this.date.getDate())}/${(DateProvider.formatDateBinaryNumber(this.date.getMonth()+1))}/${this.date.getFullYear()}`;
+        let timestring =  `${DateProvider.formatDateBinaryNumber(this.date.getHours())}:${DateProvider.formatDateBinaryNumber(this.date.getMinutes())}`;
         ret = `${datestring}T${timestring}`;
         return ret;
       }
@@ -402,10 +925,22 @@ export class Citas{
 
       getDisplayableDates():{"date":string,"time":string}{
         let ret = {"date":'',"time":''};
-        let datestring = `${this.date.getDate()}/${(this.date.getMonth()+1)}/${this.date.getFullYear()}`;
-        let timestring =  `${this.date.getHours()}:${this.date.getMinutes()}`;
+        let datestring = `${DateProvider.formatDateBinaryNumber(this.date.getDate())}/${(DateProvider.formatDateBinaryNumber(this.date.getMonth()+1))}/${this.date.getFullYear()}`;
+        let timestring =  `${DateProvider.formatDateBinaryNumber(this.date.getHours())}:${DateProvider.formatDateBinaryNumber(this.date.getMinutes())}`;
         ret = { "date":datestring ,"time":timestring};
         return ret;
+      }
+
+      isDateOnly():boolean{
+        let ret = false;
+        if((Number(this.data.field_estado.und[0]['value']) === -1)){
+            ret = true;
+        }
+        return ret;
+      }
+
+      static dateTOTiers(){
+          
       }
 
       static getLocalDateIso( date:Date ){
@@ -426,5 +961,24 @@ export class Citas{
       }
     
 
+      static formatDateBinaryNumber( num ){
+        return (num < 10 ? '0' : '') + num;
+      }
 
+
+      cortesiaAvailable(){
+          console.log('cortesiaAvailable');
+          console.log(this.addedServices);
+          let addedWithoutCortesia = this.addedServices.filter(
+              (added)=>{
+                  return Number(added.order) !== 5
+              }
+          );
+          let ret =true;
+          if(addedWithoutCortesia.length > 0){
+              ret = false;
+          }
+          return ret;
+      }
+      
 }

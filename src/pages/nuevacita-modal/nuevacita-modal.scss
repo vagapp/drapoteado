@@ -1,9 +1,15 @@
+
 page-nuevacita-modal {
-   
 
 
+  .registerInputerrorCn input{
+    background: #f1d5d5 !important;
 
+  }
  
+  .calendar-wrapper{
+    min-width: 250px;
+  }
 
     .nuevaCita_form{
         padding: 50px;
@@ -16,17 +22,118 @@ page-nuevacita-modal {
     }
 
     .nuevacita_dates{
+        min-height: 275px;
         display: -webkit-flex;
         display: flex;
         flex-flow: row;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: space-around;
+        align-items: center;
     }
 
+        .row{
+            overflow-wrap: normal;
+            flex-flow: wrap;
+        }
  
     .nuevacita_dates .ModalInput_input{
         width: 50%;
         padding: 20px;
+    }
+    
+    dl-date-time-picker{
+        min-width: 320px;
+    }
+
+
+
+
+
+
+
+    [col-1] {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 8.33333%;
+        -ms-flex: 0 0 8.33333%;
+        flex: 0 0 14.285714285714286%;
+        width: 14.285714285714286%;
+        max-width: none;
+      }
+      .col {
+        text-align: center;
+        padding: 5px;
+        min-height: 28px;
+        
+      }
+      .last-month, .next-month {
+        color: #999999;
+        font-size: 90%;
+      }
+      .currentDate, .otherDate {
+        padding: 5px;
+      }
+      .currentDate {
+        font-weight: bold;
+        background-color: red;
+        color: white;
+        border-radius: 30px;
+      }
+      .calendar-header {
+        background-color: #c1272d;
+        color: #FFFFFF;
+      }
+      .event-bullet {
+        margin: 2px auto;
+        height: 5px;
+        width: 5px;
+        background-color: green;
+        border-radius: 30px;
+      }
+      .selected-date {
+        width: 20px;
+        height: 2px;
+        background-color: blue;
+      }
+      .unselected-date {
+        border: none;
+      }
+      .calendar-body {
+        .grid {
+          padding: 0;
+        }
+        .col:last-child {
+          border-right: none;
+        }
+        .calendar-weekday, .calendar-date {
+          text-align: center;
+          margin: 0;
+        }
+        .calendar-weekday {
+          font-weight: bold;
+          border-bottom: solid 1px #C1272D;
+          background-color: #C1272D;
+          color: white  
+        }
+        .calendar-date {
+          border-top: solid 1px #74171B;
+          border-bottom: solid 1px #74171B;
+        }
+      }
+
+      @media screen and (max-width: 1024px){
+        .nuevaCita_form{
+            padding: 25px 5px;
+        }
+    }
+
+    .refresh-doctors, .refresh-doctors:hover, .refresh-doctors:active{
+      color: #6DB5DE;
+      background-color: transparent !important;
+      padding: 0;
+      margin: 0;
+      box-shadow: initial;
+      display: inline-block;
+      vertical-align: middle;
     }
 
 

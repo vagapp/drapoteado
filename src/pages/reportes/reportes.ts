@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { reportes } from '../../providers/user-data/reportes';
 import { UserDataProvider } from '../../providers/user-data/user-data';
+import { ReportesManagerProvider } from '../../providers/reportes-manager/reportes-manager';
+import { ReportesDataProvider } from '../../providers/reportes-data/reportes-data';
+import { LoaderProvider } from '../../providers/loader/loader';
+import { AlertProvider } from '../../providers/alert/alert';
+import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 //import { Debugger } from '../../providers/user-data/debugger';
 
 
@@ -25,28 +30,65 @@ export class ReportesPage {
     public navParams: NavParams,
      public modalCtrl: ModalController,
     public userData: UserDataProvider,
-    private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController
+    public reportesMan: ReportesManagerProvider,
+    public reportesData: ReportesDataProvider,
+    public loader: LoaderProvider,
+    public alert: AlertProvider,
+    public reportPresentator: ReportPresentatorProvider
     ) {
   }
 
-  ionViewDidLoad() {
+  async ionViewDidLoad() {
     //console.log('ionViewDidLoad ReportesPage');
-    this.userData.cargarListaReportes();
+    this.loader.presentLoader('cargando ...');
+   // await this.reportesMan.cargarListaReportes();
+    this.loader.dismissLoader();
     //Debugger.log(["reportes carfados",this.userData.reportes]);
   }
 
-  openNuevoreporte(){
-    let Modal = this.modalCtrl.create("NuevoreporteModalPage", undefined, { cssClass: "smallModal nuevoreporteModal" });
-    Modal.present({});
+  openNuevoreporte(report:reportes){
+    console.log('openingnuevoreporte');
+   /* let Modal = this.modalCtrl.create("NuevoreporteModalPage", undefined, { cssClass: "smallModal nuevoreporteModal" });
+    Modal.present({});*/
+    //this.openNuevoreporteNoModal();
+    this.reportPresentator.openReportGenerate(report);
   }
   
   openReportModal( report:reportes ){
-    let Modal = this.modalCtrl.create("ReporteModalPage", {reporte:report}, { cssClass: "bigModal reportModal" });
-    Modal.present({});
+    this.reportPresentator.openReportModal(report);
+    //this.openReportNoModal();
+    /*let Modal = this.modalCtrl.create("ReporteModalPage", {reporte:report}, { cssClass: "bigModal reportModal" });
+    Modal.present({});*/
+  }
+
+  openNuevoreporteNoModal(){
+    this.reportPresentator.loadReportNM().then(()=>{
+      console.log('report loaded');
+    });
+  }
+
+  openReportNoModal(){
+    this.reportPresentator.loadReportNM().then(()=>{
+      console.log('report loaded');
+    });
+  }
+
+  openTicket(report:reportes){
+    this.reportPresentator.openTicket(report);
   }
 
   elimiarReporte( report:reportes ){
+    this.alert.chooseAlert(
+      '',
+      `¿Está seguro que desea eliminar este reporte?`,
+      async ()=>{
+        this.loader.presentLoader('eliminando ...');
+        //let val = await this.reportesMan.deleteReport(report).toPromise();
+        this.loader.dismissLoader();
+      },
+      ()=>{}
+    );
+    /*
     let alert = this.alertCtrl.create({
       title: 'eliminar reporte',
       message: `¿Está seguro que desea eliminar este reporte?`,
@@ -55,7 +97,6 @@ export class ReportesPage {
           text: 'No',
           role: 'cancel',
           handler: () => {
-           
           }
         },
         {
@@ -65,20 +106,11 @@ export class ReportesPage {
               content: "Eliminando..."
             });
             loader.present();
-            this.userData.loading_reports = true;
-            let loadrepointerval = setInterval(
-              ()=>{
-                if(!this.userData.loading_reports){ loader.dismiss();clearInterval(loadrepointerval);}
-              },500
-            );
-            this.userData.deleteReport(report).subscribe(
+            this.reportesMan.deleteReport(report).subscribe(
               (val) => {
-                //Debugger.log([val]);
-                this.userData.cargarListaReportes();
+                this.reportesMan.cargarListaReportes();
               },
               (response)=>{
-                this.userData.loading_reports = false;
-                //Debugger.log(['deleting node error',response]);
               }
             );
           }
@@ -86,7 +118,15 @@ export class ReportesPage {
       ]
     });
     alert.present();
-   
+   */
+  }
+
+  openReporteAdeudos(){
+    console.log('openReportNoModal',this.reportPresentator.docuid, this.reportPresentator.type);
+    this.reportPresentator.setReport();
+    this.reportPresentator.type = ReportPresentatorProvider.REPORT_ADEUDO;
+    this.reportPresentator.loadReportNM().then(()=>{
+    });
   }
 
 }

@@ -6,41 +6,120 @@
 -->
 <ion-content padding>
     <div class="modal_closer" (click)="this.dismiss();">Volver</div>
+    <div class="modal_closer_desktop" (click)="this.dismiss();">Cerrar</div>
     <div class="modalPage_header">
         <div class="modalPage_logo"><img src="assets/imgs/citas.svg"/></div>
         <div class="modalPage_title">
-          <span class="spanBlock largeFont" *ngIf="this.isnew" ><b>Nueva Cita</b></span>
-          <span class="spanBlock largeFont" *ngIf="!this.isnew" ><b>Editar Cita</b></span>
+          <span class="spanBlock midFont" *ngIf="this.isnew" ><b>Nueva cita</b></span>
+          <span class="spanBlock midFont" *ngIf="!this.isnew" ><b>Editar cita</b></span>
         </div>
     </div>
     <div class="nuevaCita_form">
       <form>
           <div class="ModalInput_input">
               <b>Nombre del paciente</b>
-              <input [(ngModel)]="this.cita.data.field_paciente.und[0].value" name="field_paciente" type="text"/>
+              <input [(ngModel)]="this.cita.data.field_paciente.und[0].value" [class.registerInputerror]="!this.cita.data.field_paciente.und[0].value && showerrors"name="field_paciente" type="text"/>
           </div>
           <!--<div class="ModalInput_input" *ngIf="!(this.userData.userData.field_tipo_de_usuario.und[0].value == 1)">-->
-            <div class="ModalInput_input" *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]);" >
-                <b>Doctor:</b>
-              <select [(ngModel)]="this.cita.data.field_cita_doctor.und[0]"  name="field_cita_doctor" class="input_select input">
-                  <option *ngIf="!this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="0" >SELECT</option>
-                  <option *ngFor="let doc of this.userData.doctores"  value="{{doc.Uid}}" >{{doc.name}} / {{doc.field_alias}} </option>
-                  <option *ngIf="this.userData.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="{{this.userData.userData.uid}}">{{this.userData.userData.name}}</option>
+            <div class="ModalInput_input" *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" >
+                <b>Doctor:
+                  <!--<button (click)="updateDoctores()" ion-button icon-only no-padding class="refresh-doctors">
+                    <ion-icon name="refresh"></ion-icon>
+                  </button>-->
+                </b>
+              <select [(ngModel)]="this.cita.data.field_cita_doctor.und[0]" [class.registerInputerror]="!this.cita.data.field_cita_doctor.und[0] && showerrors"  name="field_cita_doctor" class="input_select input">
+                  <option *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="0" >Seleccione un doctor</option>
+                  <option *ngFor="let doc of this.docData.doctores"  value="{{doc.Uid}}" >{{doc.name}} </option>
+                  <option *ngIf="this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="{{this.userData.userData.uid}}">{{this.userData.showname}}</option>
                 </select>
               </div>
           <div class="ModalInput_input">
-              <b>Email</b>
+              <b>Correo e.</b>
               <input [(ngModel)]="this.cita.data.field_email.und[0].email"  name="field_email"  type="text"/>
           </div>
           <div class="ModalInput_input">
-              <b>Télefono</b>
-              <input [(ngModel)]="this.cita.data.field_telefono.und[0].value" name="field_telefono" type="text"/>
+              <b>Teléfono</b>
+              <input hidehide-zero disable-number-flow [(ngModel)]="this.cita.data.field_telefono.und[0].value" name="field_telefono" type="number"/>
           </div>
-          <div class="nuevacita_dates">
-                <ion-item>
+
+  <div *ngIf="cita.checkState(this.citasData.STATE_PENDIENTE)" class="calendar-wrapper">        
+  <div class="calendar-header">
+    <ion-row class="calendar-month">
+      <ion-col col-2 (click)="goToLastMonth()"><ion-icon name="arrow-back"></ion-icon></ion-col>
+      <ion-col col-8>{{currentMonth}} {{currentYear}}</ion-col>
+      <ion-col col-2 (click)="goToNextMonth()"><ion-icon name="arrow-forward"></ion-icon></ion-col>
+    </ion-row>
+  </div>
+  <div class="calendar-body">
+    <ion-grid>
+      <ion-row class="calendar-weekday">
+        <ion-col>Dom</ion-col>
+        <ion-col>Lun</ion-col>
+        <ion-col>Mar</ion-col>
+        <ion-col>Mie</ion-col>
+        <ion-col>Jue</ion-col>
+        <ion-col>Vie</ion-col>
+        <ion-col>Sab</ion-col>
+      </ion-row>
+      <ion-row class="calendar-date">
+        <ion-col col-1 *ngFor="let lastDay of daysInLastMonth" class="last-month">{{lastDay}}</ion-col>
+        <ion-col col-1 *ngFor="let day of daysInThisMonth" (click)="chosedayClick(day);">
+          <span class="currentDate" *ngIf="currentDate === day; else otherDate" >{{day}}</span>
+          <ng-template #otherDate class="otherDate" >{{day}}</ng-template>
+        </ion-col>
+        <ion-col col-1 *ngFor="let nextDay of daysInNextMonth" class="next-month">{{nextDay}}</ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <!--<ion-item>
+    <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="selectedHourISO" name="selectedHourISO" minuteValues="00,15,30,45"></ion-datetime>
+  </ion-item>-->
+  <div class="ModalInput_input">
+    <b>Hora</b>
+   <!-- <input [(ngModel)]="this.hourstring" [class.registerInputerror]="!this.cita.data.field_paciente.und[0].value && showerrors" name="time" type="text" placeholder="00:00"/>-->
+   <ion-input placeholder="00:00" type="text" [class.registerInputerrorCn]="(!horantr || horferror) && showerrors" [(ngModel)]="horantr" [ngModelOptions]="{standalone: true}" (keyup)="formatear($event)"></ion-input>
+</div>
+  </div>
+  <!--<ion-grid>
+        <ion-row class="calendar-hour">
+          <ion-col col-1 *ngFor="let hour of hours" (click)="choseHourClick(hour);">
+            <span class="currentDate" *ngIf="checkSelectedHour(hour); else otherDate" >{{this.hourDisplay(hour)}}</span>
+            <ng-template #otherDate class="otherDate" >{{this.hourDisplay(hour)}}</ng-template>
+          </ion-col>
+        </ion-row>
+      </ion-grid>-->
+
+
+
+
+
+
+
+
+
+          <!--<div class="nuevacita_dates">
+              
+              <span class="midMainFont"> {{getDisplayableDates().date}} {{getDisplayableDates().time}}</span>
+                <dl-date-time-picker name="date" [(ngModel)]="dateobj" (ngModelChange)="datechange($event)" minView="hour"></dl-date-time-picker>
+               
+               <!-- <div moment-picker="ctrl.myInput"
+                locale="es"
+                format="LL LTS"
+                min-view="month"
+                max-view="day"
+                today="true"
+                inline="true"
+                set-on-select="true">
+           </div>-->
+               <!-- <ion-calendar  name="date" [(ngModel)]="date"
+                (onChange)="onChange($event)"
+                [type]="type"
+                [format]="'YYYY-MM-DD'">
+          </ion-calendar>-->    
+                <!--<ion-item>
                         <ion-label>Fecha</ion-label>
                         <ion-datetime displayFormat="DDD DD/MMM/YYYY HH:mm" [(ngModel)]="selectedDate" name="selectedDate"></ion-datetime>
-                      </ion-item>
+                      </ion-item>-->
                 
               <!--<div class="ModalInput_input">
                   <b>Fecha</b>
@@ -50,7 +129,8 @@
                   <b>Hora</b>
                   <input [(ngModel)]="this.newCita.field_date.und[0].value.time" name="time" type="text" placeholder="00:00"/>
               </div>-->
-          </div>
+          <!--</div>-->
+          
           <div class="ncf_buttonsection">
           <button class="generalButton bgColorSecondary" (click)="createCita();" *ngIf="this.isnew">Agregar</button>
           <button class="generalButton bgColorSecondary" (click)="updateCita();" *ngIf="!this.isnew">Actualizar</button>

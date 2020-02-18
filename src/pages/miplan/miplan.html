@@ -1,0 +1,297 @@
+<header></header>
+<ion-content class="wheader"  padding>
+  <div class="modalPage_header">
+    <div class="modalPage_title">
+      <span class="spanBlock midFont"><b>Mi Plan</b></span>
+      <span class="spanBlock midSubFont">Revisa tu plan</span>
+    </div>
+    <div class="modalPage_lpane" *ngIf="onplanchange && !this.btgLayout">
+    <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>
+    <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="cancelar()" >Cancelar</button>
+    </div>
+    <div class="modalPage_lpane" *ngIf="!onplanchange && subsData.subscription">
+      <span class="spanBlock midFont">Total de tu suscripción mensual: <span class="fontPrimary bold">${{cantidad}}</span></span>
+      <span class="spanBlock midSubFont"> Vence el {{nextCobro}}</span>
+      <button class="generalButton bgColorPrimary " *ngIf="this.permissions.checkUserPlanHolder() && !onplanchange" (click)="editar()">Modificar</button>
+    </div>
+    </div>
+    <ng-container *ngIf="this.subsData.isGroup && !this.permissions.checkUserPlanHolder()">
+    <div class="abandondiv"> 
+      <p>Actualmente te encuentras en un paquete de Grupo Médico, el administrador del grupo es el único que puede hacer modificaciones, agregar suscriptores o usuarios adicionales al Plan.</p>
+      <p>Si abandonas este grupo deberás adquirir un plan básico o unirte a un grupo médico para poder seguir utilizando TUAL.</p>
+      <button  (click)="getOut()"  class="bgColorPrimary generalButton tableButton">Abandonar Grupo</button>
+    </div>
+  </ng-container>
+  
+    <ng-container *ngIf="!this.subsData.checkForSub() || !(this.subsData.isGroup && !this.permissions.checkUserPlanHolder())">
+      <ng-container *ngIf="!this.btgLayout">
+    <!-- Seccion con Información de planes  -->
+    <div class="basicpadding nopadtop">
+      Estamos convencidos que TUAL te ayudará a optimizar las consultas y pagos en tu consultorio. ¡Será mucho más fácil y seguro!
+    </div>
+    <!-- Seleccion de plan cuando onplanchange  -->
+    <div class="plans_block" *ngIf="onplanchange"> 
+      <span class="blockSpan info_plan_title" >Selecciona un plan </span>
+
+      <div class="plan_section"  *ngFor="let plan of this.planesData.planes">
+        <div class="plan_section_hr">  <!-- Plan selection check start -->
+            <div class="control-group"> 
+                <label class="control control-radio">
+                    <!--<input type="radio" name="rtype" value=""  [(ngModel)]="this.reportPresentator.type" checked="true"/>-->
+                    <input type="radio" name="selectedPlan" value="{{plan.nid}}" (change)="this.updateCheckedOptions(plan.nid,$event)"  [checked]="this.checkChecked(plan.nid)"/>
+                    <div class="control_indicator"></div>
+                </label> 
+                </div>  
+        </div> <!-- Plan selection check end -->
+        
+        <div class="plan_section_hr">  <span class="spanBlock bigSubFont">Plan <span class="fontPrimary bold"> {{plan.title}} </span></span> <span class="spanBlock"> <span class="midSubFont"></span> <span class="largeFont">${{plan.field_costo}}</span></span> </div>
+        <div class="plan_section_hr"> <span class="spanBlock midFont">Características</span>  
+          <span class="plan_description_bullets midSubFont">
+            <span class="spanBlock plan_bullet" *ngFor="let bullet of plan.field_description_points">
+             <span class="bulleting">-</span> {{bullet}}
+            </span>
+      
+          
+        </span> 
+    
+      </div>
+      <span *ngIf=" this.checkIfisgroupPlan(plan)"  class="grupos_medicos_code" (click)="gotoentergroup()">
+        ¿Tienes un código para grupo médico?  <span class="fontPrimary">Ingrésalo aquí.</span>
+      </span>
+      </div><!-- fin de plans section -->
+
+    
+
+    </div><!-- fin de plans block en onplanchange-->
+
+    <div class="plans_block" *ngIf="!onplanchange && subsData.subscription"> <!-- Información  de plan cuando no en onplanchange  -->
+      <span class="blockSpan info_plan_title" >Información  de tu Plan</span>
+
+      <div class="plan_section">
+        <div class="plan_section_hr">  <!-- Plan selection check start -->
+            <div class="control-group"> 
+                <label class="control control-radio">
+                    <!--<input type="radio" name="rtype" value=""  [(ngModel)]="this.reportPresentator.type" checked="true"/>-->
+                    <input type="radio" name="rtype" value="" checked="true" />
+                    <div class="control_indicator"></div>
+                </label> 
+                </div>  
+        </div> <!-- Plan selection check end -->
+        <div class="plan_section_hr">  <span class="spanBlock bigSubFont">Plan <span class="fontPrimary bold"> {{subsData.subscription.plan.title}} </span></span> <!--<span class="spanBlock"> <span class="midSubFont">costo base:</span> <span class="largeFont">${{subsData.subscription.plan.field_costo}}</span></span>--> </div>
+        <div class="plan_section_hr"> <span class="spanBlock midFont">Características</span>  
+          <span class="plan_description_bullets midSubFont">
+            <span class="spanBlock plan_bullet" *ngFor="let bullet of subsData.subscription.plan.field_description_points">
+             <span class="bulleting">-</span> {{bullet}}
+            </span>
+        </span> 
+      </div>
+      </div><!-- fin de plans section -->
+
+     
+
+    </div><!-- fin de plans block cuando no onplanchange-->
+  <!-- fin de Seccion con Información  de planes  -->
+
+
+    <div class="plans_extras bisectional">
+      <div class="plans_extras_section bisectional_section right_align">
+        <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar más usuarios a tu plan?</span> 
+        <p class="midSubFont"> ¡Agrega todos los usuarios que necesites de acuerdo con el personal en tu consultorio!
+          Contrata usuarios adicionales por $39 pesos al mes.</p>
+      </div>
+
+      <div class="plans_extras_section bisectional_section center_align" *ngIf="onplanchange"> <!-- Usuarios adicionales onplanchange-->
+        <span class="spanBlock" > 
+          <span class="operator" (click)="operateExtra(-1)" >-</span><input type="number" [(ngModel)]="this.selectedAditionals"/><span class="operator" (click)="operateExtra(1)">+</span>
+        </span>
+       <!-- <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span></span>-->
+        <span class="spanBlock midSubFont"> Añadir <span class="fontPrimary">{{this.selectedAditionals}} usuarios adicionales</span> por <span class="fontPrimary">${{this.selectedAditionals*39}}.00.</span></span>
+        <!--<span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">${{(this.selectedAditionals*39) + (this.subsData.subscription.field_adicionales*39)}}.00</span></span>-->
+        <span class="spanBlock midFont" *ngIf="!onplanchange"> Total de usuarios:  <span class="fontPrimary">${{(this.selectedAditionals*39)}}.00.</span></span>
+
+        
+      </div> <!-- fin de usuarios adicionales onplanchange-->
+
+      <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
+        <span class="spanBlock midSubFont"> Actualmente cuentas con <span class="fontPrimary">{{subAdicionales}} usuarios adicionales.</span> </span>
+        <span class="spanBlock midFont"> Costo total de usuarios adicionales:  <span class="fontPrimary">${{subAdicionales*39}}.00.</span></span>
+      </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
+
+    </div><!-- fin de plans extras -->
+
+
+    <div class="plans_extras bisectional" *ngIf="this.isgroup" >
+      <div class="plans_extras_section bisectional_section right_align">
+        <span class="spanBlock midFont" *ngIf="onplanchange">¿Deseas agregar más suscriptores a tu plan?</span> 
+        <p class="midSubFont" *ngIf="this.subsData.checkForSub()"> Cuentas con {{this.docsleft}} plazas disponibles. Haz agregado {{this.docAdicionales}} adicionales.</p>
+        <p class="midSubFont">Puedes agregar suscriptores adicionales a los incluídos en tu grupo médico, tienen un costo preferencial de ${{EXTRA_DOC}}.00 y se agregan al pago de tu suscripción mensual. </p>
+        <!--<p class="midSubFont">El codigo de tu grupo medico es:  <span class="spanBlock midMainFont"><input class="codigo" type="text" value="{{this.subsData.invcode}}" readonly></span></p>-->
+      </div>
+
+      <div class="plans_extras_section bisectional_section center_align" *ngIf="onplanchange"> <!-- Usuarios adicionales onplanchange-->
+        <span class="spanBlock" > 
+          <span class="operator" (click)="operateExtraDoc(-1)" >-</span><input type="number" [(ngModel)]="this.selectedAditionalsDocs"/><span class="operator" (click)="operateExtraDoc(1)">+</span>
+        </span>
+       <!-- <span class="spanBlock midSubFont"> actualmente cuentas con <span class="fontPrimary">{{this.subsData.subscription.field_adicionales}} adicionales</span></span>-->
+        <span class="spanBlock midSubFont"> Añadir <span class="fontPrimary">{{this.selectedAditionalsDocs}} suscriptores</span> por <span class="fontPrimary">${{this.selectedAditionalsDocs*EXTRA_DOC}}.</span></span>
+        <!--<span class="spanBlock midFont"> Total de subusuarios:  <span class="fontPrimary">${{(this.selectedAditionals*39) + (this.subsData.subscription.field_adicionales*39)}}.00</span></span>-->
+        <span class="spanBlock midFont" *ngIf="!onplanchange"> Costo total de suscriptores adicionales:  <span class="fontPrimary">${{(this.selectedAditionalsDocs*EXTRA_DOC)}}.00.</span></span>
+
+        
+      </div> <!-- fin de usuarios adicionales onplanchange-->
+
+      <div class="plans_extras_section bisectional_section center_align" *ngIf="!onplanchange && this.subsData.subscription"> <!-- Usuarios adicionales  cuando no onplanchange-->
+        <span class="spanBlock midSubFont"> Actualmente cuentas con  <span class="fontPrimary">{{docAdicionales}} suscriptores adicionales</span>  a los incluídos en tu plan. </span>
+        <span class="spanBlock midFont"> Total extra de suscriptores:  <span class="fontPrimary">${{docAdicionales*EXTRA_DOC}}.00.</span></span>
+      </div> <!-- fin de usuarios adicionales cuando no  onplanchange-->
+
+     
+
+    </div><!-- fin de plans extras -->
+    <div class="button_section"> 
+    <button class="generalButton bgColorPrimary " *ngIf="this.permissions.checkUserPlanHolder() && !onplanchange" (click)="editar()">Modificar</button>
+    </div>
+    <div class="enter_subuser_selection_wrap" *ngIf="false">
+    <div class="enter_subuser_selection"  >
+      
+      <div class="enter_title fontPrimary"> Selección de usuarios </div>
+      <div class="enter_description"> Este plan te permite compartir usuarios entre los doctores del grupo médico. Si hay plazas disponibles puedes llevarte a tus usuarios actuales. </div>
+        <div> <span class="enter_plazas_text">Plazas disponibles</span> <span class="enter_plazas_value fontPrimary">{{this.accountsLeft}}.</span></div>
+        <table class="results_table">
+            <thead>
+                <tr>
+                    <th>Agregar</th>
+                    <th>Usuario</th>
+                    <th>Tipo de usuario</th>
+                 </tr>
+            </thead>
+            <tbody >
+                <tr *ngFor="let usersub of this.subuserData.mySubUsers">
+                    <td>
+                        <ion-checkbox [checked]="usersub.selectedForGroup" (ionChange)="onChangeUsers($event,usersub)"></ion-checkbox>
+                        <!--<input type="checkbox" [checked]="usersub.selectedForGroup" (change)="onChangeUsers(this,usersub)"/>-->
+                      <!--
+                      <div class="control-group"> 
+                        <label class="control control-radio">
+                          
+                          
+                            <div class="control_indicator"></div>
+                        </label> 
+                        </div>  -->
+                    </td>
+                    <td class="midSubFont ">{{usersub.name}} </td>
+                    <td class="midSubFont fontHigh">{{this.userData.getTipoUsuarioString(usersub.field_tipo_de_usuario.und[0])}} </td>
+                 </tr>
+            </tbody>
+          </table>
+    </div>
+    </div>
+
+
+    <div class="informacion_pagos">
+      <span class="spanBlock info_plan_title">Método de pago</span>
+      <div class="bisectional pagos_block">
+        <div class="bisectional_section metodos_pago"> 
+          <conekta *ngIf="onplanchange == true" (successToken)='successToken($event)' (errorToken)='errorToken($event)'></conekta>
+          <div class="pruebadias" *ngIf="onplanchange == true">7 dias de prueba sin costo <span class="fontPrimary">¡Te sorprenderas!</span></div>
+        </div>
+         <div class="bisectional_section neuvo_metodo_pago"> 
+            <div class="sources_wrapper"> <!-- INICIO STRIPE LISTED SOURCES-->
+              <h3>Tarjetas activas</h3>
+              <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se ha agregado método de pago. </div>
+              <ion-row *ngFor="let src of this.sources; let indice = index">
+                <ion-col col-10 [class.selectedsrc]="src.default" class="fact_src_unit">
+                  <ion-row>
+                    <ion-col no-padding col-2>
+                      {{src.brand}}
+                      <ion-row *ngIf="src.default">
+                        <ion-col no-padding>
+                          Pred.
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+                    <ion-col no-padding col-10>
+                      **** **** **** {{src.last4}}
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+                <ion-col *ngIf="onplanchange == true " class="cont-buttons-srcs" col-2 no-padding>
+                    <button ion-button icon-only full small clear (click)="selectCard(src)" tooltip="Predeterminar Tarjeta" positionV="bottom">
+                        <ion-icon name="star"></ion-icon>
+                            
+                  </button>
+                  <button ion-button icon-only full small clear (click)="removeCard(indice,src)" tooltip="Eliminar Tarjeta" positionV="bottom">
+                    <ion-icon name="close"></ion-icon>
+                   
+                  </button>
+                </ion-col>
+              </ion-row>
+            </div> <!-- FIN STRIPE LISTED SOURCES-->  
+        </div>
+      </div>
+      <div class="subtotal_pago">
+        <span class="spanBlock midFont" *ngIf="this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{selectedTotal}}.00</span></span>
+        <span class="spanBlock midFont" *ngIf="!this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{cantidad}}.00</span></span>
+        <p class="midSubFont" *ngIf="this.onplanchange && subsData.subscription && !this.subsData.isGroup"> Cualquier cambio en el monto total de tú suscripción se verá reflejado en tu próxima mensualidad el {{nextCobro}}.</p>
+        <p class="midSubFont" *ngIf="this.onplanchange && subsData.subscription && this.subsData.isGroup"> Cualquier cambio en el monto total de la suscripción se verá reflejado en la próxima mensualidad el {{nextCobro}}.</p>
+      </div>  
+      <div class="button_section"> 
+        <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardar()" >Guardar</button>
+        <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && cantcancel"  (click)="guardar()" >Suscribirse</button>
+        <button class="generalButton bgColorPrimary " *ngIf="this.permissions.checkUserPlanHolder() && !onplanchange" (click)="editar()">Modificar</button>
+        
+        <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="cancelar()" >Cancelar</button>
+      </div>
+      <div class="button_section" *ngIf="onplanchange && !cantcancel">
+      <a class="PrimaryLink " (click)="baja()" >Cancelar suscripción</a>
+    </div>
+ 
+
+  </div>
+</ng-container>
+</ng-container>
+<ng-container *ngIf="this.btgLayout">
+  <span class="fontPrimary" (click)="cancelbtg()">Volver</span>
+  <div class="enter_subuser_selection_wrap" >
+      <div class="enter_subuser_selection"  >
+        <div class="enter_title fontPrimary"> Selección de usuarios </div>
+        <div class="enter_description"> Este plan te permite compartir usuarios entre los doctores del grupo médico. Si hay plazas disponibles puedes llevarte a tus usuarios actuales. </div>
+          <div> <span class="enter_plazas_text">Plazas disponibles</span> <span class="enter_plazas_value fontPrimary">{{this.accountsLeft}}.</span></div>
+          <table class="results_table">
+              <thead>
+                  <tr>
+                      <th>Agregar</th>
+                      <th>Usuario</th>
+                      <th>Tipo de usuario</th>
+                   </tr>
+              </thead>
+              <tbody >
+                  <tr *ngFor="let usersub of this.subuserData.mySubUsers">
+                      <td>
+                          <ion-checkbox [checked]="usersub.selectedForGroup" (ionChange)="onChangeUsers($event,usersub)"></ion-checkbox>
+                          <!--<input type="checkbox" [checked]="usersub.selectedForGroup" (change)="onChangeUsers(this,usersub)"/>-->
+                        <!--
+                        <div class="control-group"> 
+                          <label class="control control-radio">
+                            
+                            
+                              <div class="control_indicator"></div>
+                          </label> 
+                          </div>  -->
+                      </td>
+                      <td class="midSubFont ">{{usersub.name}} </td>
+                      <td class="midSubFont fontHigh">{{this.userData.getTipoUsuarioString(usersub.field_tipo_de_usuario.und[0])}} </td>
+                   </tr>
+              </tbody>
+            </table>
+      </div>
+      </div>
+      <div class="button_section"> 
+          <button class="generalButton bgColorPrimary " [class.disabledsubbtn]="!this.enabledButton" [disabled]="this.selectCard === null || this.selected_plan === null" *ngIf="this.checkStripeSetup() && !cantcancel"  (click)="guardarbtg()" >Guardar</button>
+          <button class="generalButton bgColorPrimary " *ngIf="onplanchange && !cantcancel" (click)="cancelar()" >Cancelar</button>
+        </div>
+</ng-container>
+  <div class="endmargin">
+  </div>
+
+</ion-content>

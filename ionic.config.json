@@ -1,7 +1,8 @@
 {
   "name": "DRAP",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "ionic-angular",
   "proxies": [
@@ -10,5 +11,6 @@
       "proxyUrl": "http://vmi118470.contaboserver.net/~drapp/backend"
     }
   ],
-  "pro_id": "9567080c"
+  "pro_id": "9567080c",
+  "id": "9567080c"
 }

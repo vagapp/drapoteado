@@ -1,0 +1,413 @@
+page-reportegrupal {
+    ion-content{
+        margin-top: 70px;
+        padding: 0;
+    }
+
+    .floatingbutton {
+        display: inline-block;
+        padding: 20px;
+        margin: 20px;
+    }
+
+    .floating_buttons {
+        position: absolute;
+        bottom: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: row;
+        width: 100%;
+    }
+    
+    .ReportGrid{
+        display: -webkit-flex;
+        display: flex;
+        flex-flow: column;
+        border-bottom: 1px solid lightgray;
+    }
+
+
+    .ReportGrid .midFont {
+        font-size: 1.6rem;
+    }
+
+    .ReportGrid .bold {
+        margin-right: .5em;
+        margin-left: 1em;
+    }
+
+    .reporte_header{
+        display: -webkit-flex;
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    
+    .reporte_header .modalPage_header{
+        width: 49%;
+        min-width: 580px;
+    }
+
+    .reporte_header .modalPage_toolbar{
+        width: 49%;
+        min-width: 250px;
+        text-align: center;
+        display: -webkit-box;
+        display: flex;
+        flex-flow: space-around;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        font-size: 1.6rem;   
+    }
+
+    .reporte_header .midFont {
+        font-size: 1.6rem;
+    }
+
+    .ReporteRow_TotalServicios {
+        padding: .5em;
+        margin-left: 6em;
+        margin-top: .5em;
+        margin-bottom: .5em;
+    }
+
+    .ReporteRow_TotalServicios .midFont {
+        font-size: 1.5rem;
+    }
+
+    .ReporteRow_Desglose{
+        border-top: 1px solid lightgray;
+        padding: .8em 6em;
+    }
+
+    .ReporteRow_Desglose_row {
+        padding: .5em;
+        padding-left: 1em;
+        /* border-top: 1px solid #eee; */
+        margin-top: .5em;
+        font-size: 1.5rem !important;
+        width: auto;
+        display: inline-block;
+    }
+    
+    .ReporteRow_head{
+        border-top: 1px solid gray;
+        background-color: #F6F6F6;
+        padding:1em;
+    }
+    
+    .ReporteRow_head .rbh_span{
+        margin:15px;
+    }
+
+    .ReporteRow_Services{
+        padding: 30px;
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+        width: 100%;
+        border-bottom: 1px solid lightgray;
+    }
+
+    .ReporteRow_Services .rpr_service{
+        width: 25%;
+        min-width: 200px;
+    }
+
+    .rbh_span_toolbar .generalButton{
+        /*padding-top: 5px;*/
+        padding-bottom: 5px;
+        margin: 0;
+    }
+
+    .ReporteRow_Totals{
+        padding: 0px 30px 0px 30px;
+        display: -webkit-flex;
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .ReporteRow_Totals div{
+        padding: 30px 0px 30px 0px;
+
+    }
+
+    .rrt_left{
+        width: 20%;
+        min-width: 300px; 
+        border-right: 1px solid lightgray;
+    }
+
+    .rrt_right{
+        margin-left: 30px;
+    }
+
+    .resumen_totales{
+        display:-webkit-flex;
+        display:flex;
+        justify-content: center;
+        flex-flow: row;
+        flex-wrap: wrap;
+        padding:5px;
+        border-bottom: 1px solid lightgray;
+    }
+
+    .resumen_totales .totalespan{
+        margin:0 20px;
+        font-size: 1.6rem;
+    }
+
+    .Totales_Ingreso, .Totales_Caja{
+        display:-webkit-flex;
+        display:flex;
+        justify-content: center;
+        flex-flow: row;
+        flex-wrap: wrap;
+        padding:5px;
+        border-bottom: 1px solid lightgray;
+    }
+
+    .toin_span{
+        margin: 20px; 
+    }
+
+    .icon_drapo_sm {
+        height: 18px;
+        margin-right: 10px;
+    }
+
+    .servicios_totales {
+        width: 100%;
+        margin: 0em auto;
+        text-align: left;
+        padding: 1em 7em;
+        border-bottom: 1px solid lightgray;
+    }
+    
+    .servicios_totales .bold {
+        font-size: 1.6rem;
+        display: block;
+    }
+
+    .servicios_totales .ticket_row {
+        width: auto;
+        display: inline-block;
+        margin: .5em;
+        font-size: 1.6rem;
+        font-weight: 400;
+    }
+
+    .servicios_totales .ticket_row .fontSecondary {
+        font-size: 1.8rem;
+        margin-left: 6px;
+        font-weight: 500;  
+    }
+    
+    .Totales_Caja .midFont {
+        font-size: 1.6rem;
+    }
+
+    .Totales_Caja .toin_span span {
+        margin-left: 5px;
+    }
+
+    .estado-cita-reporte {
+        margin-bottom: 0 !important;
+        float: right;
+        margin-top: 0 !important;
+    }
+
+    ion-footer {display:none;}
+
+    ion-footer .toolbar{ 
+        padding: 0!important;
+    }
+
+    ion-footer ion-col{ 
+        padding: 0!important;
+    }
+
+    .toolbar:last-child {
+        padding-bottom: 0 !important;
+        min-height: auto!important;
+    }
+
+    ion-footer button {
+        margin: 0 !important;
+        height: 6.6rem !important;
+       
+    }
+
+    .ReportesTotales {
+        padding-bottom: 10rem;
+    }
+
+    .reporte-movil {
+        display: none;
+        border-bottom: transparent;
+    }
+
+    .reporte-movil  .ReporteRow_head {
+        display: grid;
+    grid-template-columns: 1fr 5fr 3fr;
+    justify-content: center;
+    align-items: center;
+    padding: .5em;
+    }
+
+    .reporte-movil .totalycitas span, {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin: 5px 0;
+    }
+
+    .reporte-movil .nombres-reporte  .rbh_span {
+        display: block;
+        margin: .5em;
+    }
+
+    .reporte-movil .bold {
+        margin-right: 5px;
+        margin-left: 0;
+    }
+
+
+
+    @media screen and (max-width: 1024px){
+    ion-footer {
+        display:block;}
+
+     
+        .reporte_header .modalPage_toolbar{
+            margin: 1em 0;
+        }
+    .ReportesTotales, .export-big, .modalPage_title .midSubFon, .reporte-desk   {display:none;}
+
+    .reporte_header .modalPage_header {
+        width: auto;
+        min-width: auto;
+        display: flex;
+        padding: 1em;
+    }
+
+    .modalPage_toolbar .spanBlock {
+        display: inline-block;
+        width: auto;
+        margin: 5px;
+        font-size: 1.6rem;
+    }
+
+    .modalPage_logo {
+        height: 50px;
+        width: 50px;}
+
+    
+        ion-content {
+            margin-top: 70px;}
+
+    .ReporteRow:last-child {
+        padding-bottom: 15rem;
+    }
+
+    .reporte-movil {
+        display: flex;
+    }
+
+    .reporte-movil {
+        .ReporteRow_Desglose {
+            border-top: 1px solid lightgray;
+            padding: .8em 1em;
+            text-align: left;
+        }
+        .ReporteRow_TotalServicios {
+            margin: 1em 0;
+            padding: 1em 0;
+            border-top: 1px solid lightgray;
+            border-bottom: 1px solid lightgray;
+        }
+        .ReporteRow_Desglose_row {
+            width: 100%;
+        }
+
+        .ReporteRow_Desglose_row .rbh_span, .ReporteRow_Desglose_row .rrt_span {
+            margin-right: .5em;
+            margin-bottom: .5em;
+            display: inline-block;
+        }
+    }
+
+   
+
+
+    }
+
+    @media screen and (max-width: 450px){
+    .reporte_header .modalPage_toolbar{
+        width: auto !important;
+        min-width: auto !important;
+    }
+
+    .reporte_header .modalPage_header{
+        width: auto !important;
+        min-width: auto !important;
+    }
+
+    .resumen_totales .totalespan{
+        margin: 5px;
+        width: 100%;
+    }
+
+    .Totales_Ingreso, .Totales_Caja{
+        justify-content: flex-start;
+    }
+
+    .toin_span{
+        width: 100%;
+        margin: 5px;
+    }
+
+    .info_tool{
+        display: flex;
+        padding: 10px;
+    }
+
+    .info_tool .spanBlock{
+        display: inline-block;
+    }
+
+    .ReporteRow_Totals div {
+        width: 100%;
+        margin: 0;
+        padding: 5px !important;
+        font-size: 1.5rem;
+    }
+
+    .ReporteRow_Services{
+       font-size: 1.5rem;
+    }
+
+    .rpr_service {
+        font-size: 1.4rem;
+    }
+
+    .ReporteRow_head .rbh_span {
+        display: block;
+        width: 100%;
+        padding: 1px;
+        margin: 0px;
+        font-size: 1.6rem;
+    }
+
+    .ReporteRow{
+        margin: 10px;
+    }
+    
+
+
+}
+}

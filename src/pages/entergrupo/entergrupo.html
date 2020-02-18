@@ -1,0 +1,63 @@
+<header></header>
+<ion-content class="wheader"  padding>
+<div class="base_form">
+  <div class="text_centered">
+    <div class="enter_title fontPrimary">Activación de grupo médico</div>
+    <div class="enter_description">
+      TUAL se preocupa por hacer tu vida más fácil. Por eso nuestro plan de grupos médicos te brinda funciones para compartir usuarios grupales con otros doctores. Si un doctor de tu grupo te ha compartido un código, ingrésalo aquí.
+    </div>
+    
+    <div class="enter_field" *ngIf="!groupLoaded">
+      <ion-list>
+        <ion-item class="loginInput">
+          <ion-input [(ngModel)]="groupCode" placeholder="Codigo de Grupo Médico"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    </div>
+    <div class="groupName_shower" *ngIf="groupLoaded">
+        Se encontró el grupo de <span class="fontPrimary">{{groupName}}</span>  con <span class="fontPrimary">{{this.docsleft}}</span> lugares disponibles.
+    </div>
+  </div>
+  <div class="enter_subuser_selection"  *ngIf="groupLoaded && isbasico">
+    <div class="enter_title fontPrimary"> Selección de Usuarios </div>
+    <div class="enter_description">El plan de grupos médicos te permite compartir usuarios entre los doctores del grupo. Si hay plazas disponibles puedes llevar contigo a tus usuarios actuales seleccionándolos en la lista de abajo. Si no hay plazas activas habla con el administrador del grupo para activarlas.</div>
+      <div> <span class="enter_plazas_text">Plazas disponibles</span> <span class="enter_plazas_value fontPrimary">{{this.accountsleft}}</span></div>
+      <table class="results_table">
+          <thead>
+              <tr>
+                  <th>Agregar</th>
+                  <th>Usuario</th>
+                  <th>Tipo de usuario</th>
+               </tr>
+          </thead>
+          <tbody >
+              <tr *ngFor="let usersub of this.subuserData.mySubUsers">
+                  <td>
+                      <ion-checkbox [checked]="usersub.selectedForGroup" (ionChange)="onChangeUsers($event,usersub)"></ion-checkbox>
+                      <!--<input type="checkbox" [checked]="usersub.selectedForGroup" (change)="onChangeUsers(this,usersub)"/>-->
+                    <!--
+                    <div class="control-group"> 
+                      <label class="control control-radio">
+                        
+                        
+                          <div class="control_indicator"></div>
+                      </label> 
+                      </div>  -->
+                  </td>
+                  <td class="midSubFont ">{{usersub.name}} </td>
+                  <td class="midSubFont fontHigh">{{this.userData.getTipoUsuarioString(usersub.field_tipo_de_usuario.und[0])}} </td>
+               </tr>
+          </tbody>
+        </table>
+  </div>
+  <div class="enter_toolbar">
+    <span class="fontPrimary left enter_comprar" (click)="cancelar()">¿Quieres comprar un plan médico?</span>
+    <div class="button_section">
+    <button class="generalButton bgColorSecondary right" (click)="buscar()" *ngIf="!this.groupLoaded" >Buscar</button>
+    <button class="generalButton bgColorSecondary right" (click)="guardar()" *ngIf="this.groupLoaded && this.canSave" >Entrar al grupo</button>
+    <button class="generalButton bgColorPrimary right" (click)="cancelar()" >Cancelar</button>
+    </div>
+  </div>
+</div>
+</ion-content>

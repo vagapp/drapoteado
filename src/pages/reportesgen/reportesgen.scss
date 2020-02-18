@@ -1,0 +1,46 @@
+page-reportesgen {
+    .nuevoreportecontent .two_cols_section {
+        margin-bottom: 3em;
+    }
+
+
+    .nuevoreporte_content{
+            /* width: 80%; */
+    display: flex;
+    /* text-align: center; */
+    justify-content: center;
+ 
+    }
+    .reportesgen_main_content{
+        
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    width: 80%;
+    
+}
+
+.filtro-fecha{
+    border:none;
+    position: relative;
+   
+}
+
+.datetime-text {
+    font-size: 0.6em !important
+}
+
+.buttonWrapper{
+    margin-bottom: 100px;
+    width: 80%;
+    justify-content: flex-end;
+}
+
+
+
+.ModalInput_input {
+    margin-right: 50px;
+}
+
+}

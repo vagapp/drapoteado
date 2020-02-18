@@ -3,4 +3,28 @@ page-citas {
         margin-top: 50px;
         padding: 0;
     }
+
+    .filters_wrapper div{
+        margin: 0px;
+    }
+  
+      .datetime-md{
+         font-weight: 200;
+         font-size: 2rem;
+         align-items: center;
+      }
+      
+      .datetime-text{
+          overflow: initial;
+      }
+
+    @media screen and (max-width: 1200px){
+        .tableButton{
+            display: block;
+        }
+        .toolCol {
+            text-align: center !important;
+        }
+    
+    }
 }

@@ -1,0 +1,51 @@
+<form (ngSubmit)="getToken()">
+  <div>
+    <ion-row>
+      <ion-col class="card-name" col-12 col-sm-12>
+        <ion-row>
+          <ion-col col-10>
+            <ion-label stacked><ion-icon name="person"></ion-icon>&nbsp;&nbsp;&nbsp;Nombre</ion-label>
+            <ion-input type="text" [(ngModel)]="card.name" name="name"></ion-input>
+          </ion-col>
+          <ion-col col-2>
+            <div *ngIf="cardBrand === 'visa'" class="card-icon visa"></div>
+            <div *ngIf="cardBrand === 'mastercard'" class="card-icon mastercard"></div>
+            <div *ngIf="cardBrand === 'amex'" class="card-icon amex"></div>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col col-12 col-sm-6>
+        <ion-label stacked><ion-icon name="card"></ion-icon>&nbsp;&nbsp;&nbsp;Número de Tarjeta&nbsp;&nbsp;<ion-icon *ngIf="validCard===true" name="checkmark"></ion-icon><ion-icon *ngIf="validCard===false" name="close"></ion-icon></ion-label>
+        <ion-input type="text" [(ngModel)]="card.number" (keyup)="validateNumber()" name="number" maxlength="20"></ion-input>
+      </ion-col>
+      <ion-col col-4 col-sm-2 class="select">
+        <ion-label stacked>MM</ion-label>
+        <ion-select [(ngModel)]="card.exp_month" name="exp_month">
+          <ion-option value="01">01</ion-option>
+          <ion-option value="02">02</ion-option>
+          <ion-option value="03">03</ion-option>
+          <ion-option value="04">04</ion-option>
+          <ion-option value="05">05</ion-option>
+          <ion-option value="06">06</ion-option>
+          <ion-option value="07">07</ion-option>
+          <ion-option value="08">08</ion-option>
+          <ion-option value="09">09</ion-option>
+          <ion-option value="10">10</ion-option>
+          <ion-option value="11">11</ion-option>
+          <ion-option value="12">12</ion-option>
+        </ion-select>
+      </ion-col>
+      <ion-col col-4 col-sm-2 class="select">
+        <ion-label stacked>AA</ion-label>
+        <ion-select [(ngModel)]="card.exp_year" name="exp_year">
+          <ion-option *ngFor="let year of years" [value]="year">{{ year }}</ion-option>
+        </ion-select>
+      </ion-col>
+      <ion-col col-4 col-sm-2 class="select">
+        <ion-label stacked>CVC&nbsp;&nbsp;<ion-icon *ngIf="validCVC===true" name="checkmark"></ion-icon><ion-icon *ngIf="validCVC===false" name="close"></ion-icon></ion-label>
+        <ion-input [(ngModel)]="card.cvc"  (keyup)="validateCVC()" name="cvc" type="number" max="9999" min="0001" maxlength="4"></ion-input>
+      </ion-col>
+    </ion-row>
+  </div>
+  <button ion-button type="submit" block>Agregar Tarjeta</button>
+</form>

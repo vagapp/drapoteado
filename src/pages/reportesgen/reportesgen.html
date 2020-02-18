@@ -1,0 +1,91 @@
+<header></header>
+<ion-content padding class="wheader drap_content">
+  <div class="modalPage_header">
+    <div class="modalPage_logo"><img src="assets/imgs/reportes.svg"/></div>
+    <div class="modalPage_title">
+      <span class="spanBlock midFont"><b>Reportes</b></span>
+      <span class="spanBlock midSubFont">Genera y exporta reportes de tus actividades.</span>
+    </div>
+    <div class="modalPage_btn_wrapper">
+      <!--<button class="bgColorSecondary generalButton" (click)="openReporteAdeudos()">Adeudos</button>-->
+     
+    </div>
+      <!--<button class="bgColorSecondary generalButton floatRight" *ngIf="true" (click)="openNuevoreporte();">Generar Nuevo</button>-->
+  </div>
+<div class="nuevoreporte_content">
+  <div class="reportesgen_main_content">
+  <div  class="filtro-fecha">
+    <span class="midFont"> <img src="assets/imgs/fecha.svg"  class="icon_drapo"></span> 
+  <!--<ion-datetime  placeholder="Selecciona una fecha" [(ngModel)]="chosenDate" [max]="todayDate" (ngModelChange)="dateChange();" ></ion-datetime>-->
+  <ion-datetime  placeholder="Selecciona una fecha" [(ngModel)]="chosenDate" (ngModelChange)="dateChange();" ></ion-datetime>
+ </div>
+
+<div class="nuevoreportecontent">
+  <!--<div class="two_cols">-->
+  <div class="two_cols_yano">
+    <div class="two_cols_section">
+      <div class="section_row"> 
+          <div class="control-group">
+              <label class="control control-radio">
+                  <input type="radio" name="rtype" value="{{this.reportPresentator.REPORT_COMPLETE}}"  [(ngModel)]="this.reportPresentator.type" checked="true"/>
+                  <div class="control_indicator"></div>
+                  <img  src="assets/imgs/reporte.svg"  class="icon_drapo_big">
+                  Reporte
+              </label> 
+              </div>
+      </div>
+      <div class="section_row">Incluye toda la información desglosada de las citas del día. Su importe, formas de pago, pendiente de cobro y/o citas totales.</div>
+    </div>
+    <div class="two_cols_section">
+        <div class="section_row"> 
+            <div class="control-group">
+                <label class="control control-radio">
+                    <input type="radio" name="rtype" value="{{this.reportPresentator.REPORT_TICKET}}"  [(ngModel)]="this.reportPresentator.type" />
+                    <div class="control_indicator"></div>
+                    <img  src="assets/imgs/ticket.svg"  class="icon_drapo_big">
+                    Resumen
+                </label> 
+                </div>
+        </div>
+        <div class="section_row">Incluye el total de servicios, total de citas, detalles de los servicios y la duración de las citas del día.</div>
+      </div>
+
+      <div class="two_cols_section" *ngIf="(!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR])) && this.permissions.checkifgroup();">
+        <div class="section_row"> 
+            <div class="control-group">
+                <label class="control control-radio">
+                    <input type="radio" name="rtype" value="{{this.reportPresentator.REPORT_GRUPAL}}"  [(ngModel)]="this.reportPresentator.type" />
+                    <div class="control_indicator"></div>
+                    <img  src="assets/imgs/reporte.svg"  class="icon_drapo_big">
+                    Reporte Grupal
+                </label> 
+                </div>
+        </div>
+        <div class="section_row">Genera un reporte grupal basado en los servicios del Grupo Médico.</div>
+      </div>
+  </div>
+  <!--<div class="ModalInput_input">
+    <b>Tipo de Archivo:</b>
+  <select  class="input_select input">
+      <option selected disabled value="0">SELECT</option>
+    </select>
+  </div>-->
+  <!--<div class="ModalInput_input">
+      <span class="spanBlock radio_input"><input type="checkbox" class="input" name="copia" value="1" checked><b>Enviar una copia a mi correo</b></span>
+  </div>-->
+  </div>
+  <div class="buttonWrapper">
+      <div class="ModalInput_input" *ngIf="(!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR])) && (!this.reportPresentator.isgroup)" >
+          <b>Doctor:</b>
+          <select [(ngModel)]="this.reportPresentator.docuid"  name="field_cita_doctor" class="input_select input">
+              <option *ngIf="!this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);"  value="0" >General</option>
+              <option *ngFor="let doc of this.docData.doctores"  value="{{doc.Uid}}" >{{doc.name}}</option>
+              <option *ngIf="this.permissions.checkUserPermission([this.userData.TIPO_DOCTOR]);" selected disabled value="{{this.userData.userData.uid}}">{{this.userData.showname}}</option>
+            </select>
+        </div>
+      
+  <button (click)="openReporte()" class="bgColorSecondary generalButton" >Generar</button>
+  </div>
+</div>
+</div>
+</ion-content>
