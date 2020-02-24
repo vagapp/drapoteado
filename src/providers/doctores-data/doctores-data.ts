@@ -61,7 +61,8 @@ export class DoctoresDataProvider {
    }
 
    static isDoctorBusy( doc:Doctores ){
-    return doc.citaActiva !== null;
+    return false;
+    //return doc.citaActiva !== null;
    }
 
    static setDoctorBusy( doc:Doctores , cita:Citas ){

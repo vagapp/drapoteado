@@ -212,7 +212,8 @@ exportExcel(){
   
   //console.log(report_excel);
   console.log('report_excel url is',report_excel);
-   window.location.href = report_excel;
+   //window.location.href = report_excel;
+   window.open(report_excel, '_blank');
   //console.log('report_excel',report_excel);
 }
 

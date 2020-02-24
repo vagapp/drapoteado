@@ -73,7 +73,11 @@ export class ReporteCitasProvider {
 
   checkForCitaUpdate(report:reportes, cita:Citas){
     let exists = report.citas.filter((citas)=>{return Number(citas.Nid) === Number(cita.Nid)});
-    if(exists.length > 0){
+    console.log('changeDatet exists',exists);
+    if(exists.length > 0) console.log('changeDatet checking dates',exists[0].data.field_changedate.und[0].value, cita.data.field_changedate.und[0].value);
+    if(exists.length > 0 && exists[0].data.field_changedate.und[0].value < cita.data.field_changedate.und[0].value){
+      console.log('changeDatet filter passed', exists[0].data.field_changedate.und[0].value, cita.data.field_changedate.und[0].value );
+      exists[0].data.field_changedate.und[0].value = cita.data.field_changedate.und[0].value;
       exists[0].data = cita.data;
       console.log('processDatay checkForCitaUpdate');
       exists[0].processData();

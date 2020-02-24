@@ -86,6 +86,7 @@ export class CitaProgressControllerProvider {
     this.loadcita(cita);
     let Modal = this.modalCtrl.create("ProgresocitaModalPage", {cita : cita}, { cssClass: "smallModal progressModal" });
     Modal.present({});
+    cita.enabledButtons = true;
   }
 
   loadcita(cita){

@@ -124,14 +124,21 @@ export class CitasDataProvider{
 
 
   updateCita( data:citasData, call:boolean = true ){
+   console.log('changedatet updatecita',data.field_changedate.und[0].value,data.field_estado);
     for( let cita of this.citas ){
       if(cita.Nid === data.Nid){
-        cita.data = data;
+        //if(cita.data.field_paciente.und[0].value.includes('cdt'))console.log('check if block',cita.data.field_paciente.und[0].value, cita.data.field_changedate.und[0].value, data.field_changedate.und[0].value);
+        if(cita.data.field_changedate.und[0].value <= data.field_changedate.und[0].value){
+           console.log('changeDateb', cita.data.field_changedate.und[0].value, data.field_changedate.und[0].value, data.field_estado);
+          cita.data = data;
         console.log('processDatay updateCita');
         cita.processData();
         /*cita.setData(data);*/
          if( call ) this.subject.next(this.citas);
         console.log('updated cita',cita);
+      }else{
+        console.log('changeDatet blocking updatecita because of change date', cita.data.field_changedate.und[0].value, data.field_changedate.und[0].value);
+      }
       }
     }
     this.defaultSort();

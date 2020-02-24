@@ -39,7 +39,6 @@ export class ProgresocitaModalPage {
     public datep: DateProvider,
     public updater: UpdaterProvider,
     public reportp:ReportPresentatorProvider
-   
   ) {
   }
 
@@ -48,7 +47,8 @@ export class ProgresocitaModalPage {
   }
 
   ionViewDidLoad() {
-    console.log('Cita activa ionViewDidLoad',this.progressController.activeCita);
+    
+    //console.log('Cita activa ionViewDidLoad',this.progressController.activeCita);
   }
 
   async ionViewWillLeave(){
@@ -75,7 +75,7 @@ export class ProgresocitaModalPage {
               ()=>{}
             );
           }else{
-        this.finalizarActualCita().then( ()=>{this.close();});
+        this.finalizarActualCita().then( /*()=>{}*/);
           }
           //revisar si esta en 0
       //this.finalizarActualCita().then( ()=>{this.close();});
@@ -103,7 +103,8 @@ export class ProgresocitaModalPage {
 
       async finalizarActualCita(state = CitasDataProvider.STATE_COBRO){
         this.progressController.finalizarCitaActiva();
-        await this.citasPresentator.updateStateRequest( this.progressController.activeCita ,state );
+        this.citasPresentator.updateStateRequest( this.progressController.activeCita ,state );
+        this.close();
       }
 
       pagadaPop(){
@@ -138,7 +139,9 @@ export class ProgresocitaModalPage {
         console.log('pagarActualCita start servicesCompare',JSON.stringify(this.progressController.servicesCompare));
         this.progressController.pagarCitaActiva();
         console.log('pagarActualCita',this.progressController.activeCita);
-        await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
+        console.log('pagartrailc 1');
+        this.citasPresentator.updateStateRequest(this.progressController.activeCita ,CitasDataProvider.STATE_FINALIZADA );
+        console.log('pagartrailc 2');
         console.log('pagarActualCita end servicesCompare',JSON.stringify(this.progressController.servicesCompare));
         this.close();
       }

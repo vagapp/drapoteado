@@ -15,6 +15,7 @@ import { DateProvider } from '../date/date';
 import { ReportesManagerProvider } from '../reportes-manager/reportes-manager';
 import { UpdaterProvider } from '../updater/updater';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ToasterProvider } from '../toaster/toaster';
 
 
 /*
@@ -43,6 +44,7 @@ export class CitasPresentatorProvider {
     public progresSController: CitaProgressControllerProvider,
     public reportesMan: ReportesManagerProvider,
     public updater: UpdaterProvider,
+    public toaster: ToasterProvider
   ) {
 
   }
@@ -68,8 +70,9 @@ export class CitasPresentatorProvider {
   async updateStateRequest( cita, state ) {
     console.log('updateStateRequest',cita,state);
     console.log('cheking cita servicios json',cita.data.field_servicios_json);
-    this.loader.presentLoader("Actualizando...");
-   // if(!this.reportesMan.reportesData.isSetTodayReport) await this.reportesMan.getTodayReport();
+    //this.loader.presentLoader("Actualizando...");
+    cita.enabledButtons = false;
+    // if(!this.reportesMan.reportesData.isSetTodayReport) await this.reportesMan.getTodayReport();
     let saveDate = !this.progresSController.editfinish;
     if(Number(state) === CitasDataProvider.STATE_FINALIZADA){
       console.log('cambiando a finalizada, checando cantidad restante',this.progresSController.activeCita.restantePagos);
@@ -83,7 +86,7 @@ export class CitasPresentatorProvider {
     console.log('antes de guardar el state quedo',cita);
     console.log('cheking cita servicios json',cita.data.field_servicios_json);
     console.log('check cita before sending',JSON.stringify(cita.data.field_ediciones_json));
-    let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).toPromise().catch(e => {
+    await this.citasManager.updateCitaState(cita,state, saveDate).toPromise().catch(e => {
       console.log('error',e);
       for (var key in e.error.form_errors) {
         console.log('key');
@@ -91,7 +94,7 @@ export class CitasPresentatorProvider {
           case 'changed':
               this.updater.updateCitas().then(()=>{
                 this.wsMessenger.generateWSupdateMessage(cita);
-                this.loader.dismissLoader();
+              
               });
               this.alert.presentAlert('','La información de esta cita cambio mientras estabas trabajando, inténtalo de nuevo.')
               return false;
@@ -105,7 +108,7 @@ export class CitasPresentatorProvider {
       }
 
     });
-    
+    cita.enabledButtons = true;
     //let state_res = await this.citasManager.updateCitaState(cita,state, saveDate).subscribe((val)=>{console.log('wele a pedo',val),(error)=>{console.log('wele a pedo',error)}});
     if(Number(state) === CitasDataProvider.STATE_CONFIRMADA && cita.doctor_playerid){  //crear notificacion para doctor a quien le confirmaron la cita
       this.notiMan.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
@@ -117,7 +120,7 @@ export class CitasPresentatorProvider {
     this.updater.updateCitas().then(()=>{
     this.wsMessenger.generateWSupdateMessage(cita);
     });
-    this.setBlockNdismiss(cita.Nid);
+    //this.setBlockNdismiss(cita.Nid);
   } 
 
   async saveCita( cita ){
@@ -163,21 +166,22 @@ export class CitasPresentatorProvider {
       if(DoctoresDataProvider.isDoctorBusy(aux_doc)){
         this.alert.presentAlert("","Este doctor está ocupado con una cita Activa");
       }else{
-        this.loader.presentLoader('Actualizando...');
-          DoctoresDataProvider.setDoctorBusy(aux_doc,cita);
+        //this.loader.presentLoader('Actualizando...');
+        cita.enabledButtons = false;  
+        DoctoresDataProvider.setDoctorBusy(aux_doc,cita);
           await this.citasManager.updateCitaState( cita , CitasDataProvider.STATE_ACTIVA ).toPromise(); 
           this.wsMessenger.generateWSupdateMessage(cita);
           this.citasManager.blockOnWaiting(cita.Nid,
             ()=>{
               this.openProgreso(cita);
-              this.loader.dismissLoader(); 
+              /*cita.enabledButtons = true;*/ 
           },
           ()=>{
-            this.loader.dismissLoader(); 
+            cita.enabledButtons = true; 
           }
           );
           //this.openProgreso(cita);
-          this.loader.dismissLoader(); 
+          //cita.enabledButtons = true; 
      
     }
   }
@@ -208,24 +212,28 @@ export class CitasPresentatorProvider {
   }
 
   async confirmarCita(cita:Citas){
-    this.loader.presentLoader('confirmando cita...');
+    //this.loader.presentLoader('confirmando cita...');
+    //this.toaster.genToast('confirmar','confirmando cita...');
+    cita.enabledButtons = false;
     let res =  await this.citasManager.updateCitaState( cita , CitasDataProvider.STATE_CONFIRMADA ).toPromise();
-    console.log('confirmar cita res',res);
+    //console.log('confirmar cita res',res);
     if(res){
       this.notiMan.generateNotification([cita.data.field_cita_doctor.und[0]],`Cita Confirmada con ${cita.paciente} fecha: ${new Date(cita.data.field_datemsb['und'][0]['value'])}`,`cita-${cita.Nid}`);
       this.wsMessenger.generateWSupdateMessage(cita);
-      this.setBlockNdismiss(cita.Nid);
+      cita.enabledButtons = true;
+      //this.setBlockNdismiss(cita);
     }else{
-      this.loader.dismissLoader();
+      cita.enabledButtons = true;
     }
+   
   }
 
 
-  setBlockNdismiss(citaNid){
+  setBlockNdismiss(cita){
     this.citasManager.blockOnWaiting(
-      citaNid,
-      ()=>{ this.loader.dismissLoader();},
-      ()=>{ this.loader.dismissLoader();}
+      cita.Nid,
+      ()=>{ cita.enabledButtons = true; /*this.loader.dismissLoader();*/},
+      ()=>{ cita.enabledButtons = true;/*this.loader.dismissLoader();*/}
       );
   }
 
@@ -239,10 +247,12 @@ export class CitasPresentatorProvider {
   }
 
   async deleteCita( cita:Citas ){
-   this.loader.presentLoader('Eliminando...');
+   //this.loader.presentLoader('Eliminando...');
+   cita.enabledButtons = false;
    await this.citasManager.deleteCita( cita.data ).toPromise();
    this.wsMessenger.generateWSremoveCitaMessage(cita);
-   this.loader.dismissLoader();
+   cita.enabledButtons = true;
+   //this.loader.dismissLoader();
   }
 
   

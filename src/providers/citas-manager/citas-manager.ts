@@ -243,7 +243,7 @@ export class CitasManagerProvider {
 
   //CITAS METHODS
   generateNewCita( newCita ){return this.nodeMan.generateNewNode(newCita);}
-  updateCita( cita ){ console.log('cita',cita); return this.nodeMan.updateNode(cita);}
+  updateCita( cita ){ cita.field_changedate.und[0].value = new Date().getTime(); return this.nodeMan.updateNode(cita);}
   deleteCita( cita ){return this.nodeMan.deleteNode(cita);}
   updateCitaState( cita:Citas , state, saveDate:boolean = true){
     console.log('updateCitaState',cita,state);

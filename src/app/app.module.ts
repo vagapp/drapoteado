@@ -67,6 +67,7 @@ import { Network } from '@ionic-native/network';
 import { ErrorInterceptor } from '../providers/error-interceptor/error-interceptor';
 import { StorageProvider } from '../providers/storage/storage';
 import { IonicStorageModule } from '@ionic/storage';
+import { ToasterProvider } from '../providers/toaster/toaster';
 
 
 
@@ -174,6 +175,7 @@ import { IonicStorageModule } from '@ionic/storage';
     Network,
     ErrorInterceptor,
     StorageProvider,
+    ToasterProvider,
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

@@ -6,6 +6,7 @@ import { CitasDataProvider } from '../citas-data/citas-data';
 import { IfObservable } from 'rxjs/observable/IfObservable';
 import { ɵConsole } from '@angular/core';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { now } from 'moment';
 
 
 export class Citas{
@@ -80,8 +81,15 @@ export class Citas{
     edicionesFechas: any[];
     estado_anterior: number = null;
 
+    enabledButtons:boolean = true;
+
+
     
-    get cajaSaved(){ console.log('cajasaved',this.data.field_cita_caja); return this.data.field_cita_caja.und[0].localeCompare('_none') !== 0 ? true : false};
+    get (){ 
+        let ret = false;
+        console.log('cajasaved',this.data.field_cita_caja); 
+        let cmp = String(this.data.field_cita_caja.und[0]);
+    return cmp.localeCompare('_none') !== 0 || cmp.localeCompare('0') ? true : false};
     
     constructor(){
         this.init();
@@ -404,6 +412,11 @@ export class Citas{
      * Sets Data from a result of the citas view on drupal.
      **/
     setData( data_input ){
+        console.log('datainput changedatet',data_input);
+        if(!this.data.field_changedate.und[0].value){ this.data.field_changedate.und[0].value = 0;}
+        if(!data_input.field_changedate){ data_input.field_changedate={value: 0};}
+        if(data_input.field_paciente.includes('dlsv1')) console.log('dlsv1 datainput 2',data_input,this.data.field_changedate.und[0].value);
+        if(this.data.field_changedate.und[0].value <= data_input.field_changedate.value){ //si se quiere introducir informacion mas nueva se hace
         console.log("setData on cita",data_input);
         console.log("trailstartnul setData on cita",data_input);
        /* console.log('field_fechas_reporte',data_input.field_fechas_reporte);
@@ -419,20 +432,6 @@ export class Citas{
           this.data.field_telefono.und[0].value = data_input.field_telefono;
           this.data.field_cita_doctor.und[0] = data_input.doctor_uid;
           this.data.field_comentarios.und[0].value = data_input.field_comentarios;
-            //let aux_caja_array = new Array();
-          /*  this.data.field_cita_caja.und= new Array();
-            if(data_input.caja_uid){
-                console.log('datainput si tiene cajai',data_input.caja_uid);
-                if((data_input.caja_uid+"").localeCompare("_none") !== 0){
-                    this.data.field_cita_caja.und.push(data_input.caja_uid);
-                }
-            }
-         
-          console.log((data_input.caja_uid+"").localeCompare("_none"));
-          console.log(data_input.caja_uid);
-          console.log('setting caja ',this.data.field_cita_caja );*/
-         
-          
           this.data.field_cita_caja.und[0] = data_input.caja_uid;
           if( Number(this.data.field_cita_caja.und[0]) === Number(this.data.field_cita_doctor.und[0]) ){ this.bydoc = true; console.log('espordoctor woe'); }
           this.data.field_cita_recepcion.und[0] = data_input.recepcion_uid;
@@ -445,6 +444,7 @@ export class Citas{
           this.data.field_cobro_bancaria.und[0].value = data_input.field_cobro_bancaria;
           this.data.field_costo_sobrescribir.und[0].value = data_input.field_costo_sobrescribir;
           this.data.field_datemsb.und[0].value = Number(data_input.field_datemsb.value);
+          this.data.field_changedate.und[0].value = Number(data_input.field_changedate.value);
           this.dateMs =  this.data.field_datemsb.und[0].value;
           this.data.field_retrasda.und[0].value = data_input.field_retrasda;
           this.data.field_hora_cobromsb.und[0].value = 0;
@@ -483,6 +483,9 @@ export class Citas{
           this.processData();
           console.log("savedData",this.data);
           console.log('cita ended laik',this);
+        }else{
+         console.log('changeDatet blocking setData because of changedate',this.data.field_changedate.und[0].value, data_input.field_changedate.value);
+        }
         }
 
     

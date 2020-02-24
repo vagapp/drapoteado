@@ -6,6 +6,7 @@ import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { subscriptions } from '../user-data/subscriptions';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { DateProvider } from '../date/date';
 
 /*
 This class is a message generator for  the websocketService
@@ -64,6 +65,8 @@ export class WsMessengerProvider {
     console.log('obtained doctor',doctor,uid);
     cita.data.doctor_name =  doctor.field_alias;//doctor.name;
     cita.data.doctor_alias = doctor.field_alias;
+    //cita.data.field_changedate.und[0].value = new Date().getTime();
+    console.log('changeDatet setting date on ws msg',cita.data.field_changedate.und[0].value);
     this.generateMessage(
       [doctor.Uid],
       'addCita',

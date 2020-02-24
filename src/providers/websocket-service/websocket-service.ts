@@ -1,15 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Injectable, ɵConsole } from '@angular/core';
+
 import { WebSocketSubject } from 'rxjs/observable/dom/WebSocketSubject';
 import { BaseUrlProvider } from '../base-url/base-url';
 import { CitasManagerProvider } from '../citas-manager/citas-manager';
 import { UserDataProvider } from '../user-data/user-data';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
-import { CitasDataProvider } from '../citas-data/citas-data';
-import { Citas } from '../user-data/citas';
+
 import { ReportPresentatorProvider } from '../report-presentator/report-presentator';
 import { DoctoresManagerProvider } from '../doctores-manager/doctores-manager';
-import { subscriptions } from '../user-data/subscriptions';
+
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 import { Doctores } from '../user-data/doctores';
 import { SubusersDataProvider } from '../subusers-data/subusers-data';
@@ -18,7 +17,7 @@ import { SubscriptionManagerProvider } from '../subscription-manager/subscriptio
 import { UpdaterProvider } from '../updater/updater';
 import { WsconnectionProvider } from '../wsconnection/wsconnection';
 
-import { RxWebsocketSubject } from './RxWebsocketSubject';
+
 import { retryWhen } from 'rxjs/operators';
 import { tap } from 'rxjs/operators';
 import { delay } from 'rxjs/operators';
@@ -166,10 +165,11 @@ export class WebsocketServiceProvider {
     console.log('trail1 addCita st');
     if(this.FilterMessageCita(message)){
       console.log("cita2addfiltered");
+      console.log("changeDatet addcita contebt",message.content.changeDate);
       let aux_cita = this.cmanager.generateCitaFullData(message.content);
       this.reportPresentator.updateCita(aux_cita);
       this.updateGot(aux_cita.Nid);
-      await this.updater.updateServicios();
+      //await this.updater.updateServicios();
       //await this.updater.updateCitas();
     }
     console.log('trail1 addCita end');

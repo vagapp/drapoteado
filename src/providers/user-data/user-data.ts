@@ -827,6 +827,7 @@ export class UserDataProvider {
       field_caja_nombre:{und:[{value:""}]},
       field_cajas_filter:{und:[{value:0}]},
       field_comentarios:{und:[{value:""}]},
+      field_changedate:{und:[{value:0}]}
     }
   }
 
@@ -935,6 +936,8 @@ export interface citasData{
     field_ediciones_json:{und:[{value:string}]},
     field_cajas_filter:{und:[{value:number}]},
     field_comentarios:{und:[{value:string}]},
+    field_changedate:{und:[{value:number}]},
+    
 }
 
 

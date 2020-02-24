@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
 import { UserDataProvider } from '../../providers/user-data/user-data';
 import { Citas } from '../../providers/user-data/citas';
 import { Debugger } from '../../providers/user-data/debugger';
@@ -102,7 +102,8 @@ horferror:boolean = false;
     private calendar: Calendar,
     public citasData: CitasDataProvider,
     public subscriptionManager:SubscriptionManagerProvider,
-    public updater: UpdaterProvider
+    public updater: UpdaterProvider,
+    public toastc: ToastController
   ) {
     
     /** 
@@ -197,7 +198,12 @@ horferror:boolean = false;
     this.setCitaDateFromiNPUT();
     if(!this.citaDateValidation()){ return false; }
     
-    this.loader.presentLoader('creando cita...');
+    //this.loader.presentLoader('creando cita...');
+    let toast = this.toastc.create({
+      message: 'creando cita...',
+      position: 'top'
+    });
+    toast.present();
     this.cita.data.field_estado.und["0"].value = 0;
     if(this.userData.checkUserPermission([this.userData.TIPO_DOCTOR])){
       this.cita.data.field_cita_doctor.und[0]=this.userData.userData.uid;
@@ -220,7 +226,8 @@ horferror:boolean = false;
        this.processCitaErrors(response.error.form_errors)
       }
   );
-  this.loader.dismissLoader();
+  toast.dismiss();
+  //this.loader.dismissLoader();
   this.close();
 }
 
@@ -305,7 +312,12 @@ async updateCita(){
     this.cita.data.field_telefono.und[0].value = 0;
   }
   this.setCitaDateFromiNPUT();
-  this.loader.presentLoader('actualizando ...');
+  //this.loader.presentLoader('actualizando ...');
+  let toast = this.toastc.create({
+    message: 'actualizando...',
+    position: 'top'
+  });
+  toast.present();
   await this.citasMan.updateCita( this.cita.data ).subscribe(
     (val)=>{
       this.wsMessenger.generateWSupdateMessage(this.cita);    
@@ -315,7 +327,7 @@ async updateCita(){
       this.processCitaErrors(response.error.form_errors);
     }
   );
-  this.loader.dismissLoader();
+  toast.dismiss();
   this.close();
 }
 
