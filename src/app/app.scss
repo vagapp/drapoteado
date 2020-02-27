@@ -1162,6 +1162,11 @@ ion-menu {
         margin-top: 0;
     }
 
+    .login_form .generalButton{
+        margin-top: 15px;
+    }
+
+
     .modalCloser{
         display: flex;
         position: fixed;
@@ -1555,7 +1560,7 @@ display:inline;
         height: unset;
     }
 
-    .filtro-fecha{
+    .filters_wrapper .filtro-fecha{
         border:none;
         margin: 0 !important;
         padding: 0;

@@ -16,10 +16,11 @@
         <a (click)="openFaq()" class="whitelink">F.A.Q.</a>
     </div>
 </div>
+<div class="login_form_wrapper">
 <div class="login_form" *ngIf="showLoginForm">
     <ion-list>
         <ion-item class="loginInput">
-          <ion-input placeholder="Nombre de usuario o correo electrónico" [(ngModel)]="username"></ion-input>
+          <ion-input type="url" placeholder="Nombre de usuario o correo electrónico" [(ngModel)]="username"></ion-input>
         </ion-item>
         <ion-item class="loginInput">
             <ion-input type="password" placeholder="Contraseña" [(ngModel)]="password"></ion-input>
@@ -28,6 +29,7 @@
     <button class="generalButton largeButton bgColorPrimary" (click)="actionLogin()" >Log In</button>  
     <span class="spanBlock spanLink midFont lightFont"  (click)="actionOpenRecover()" >¿Olvidaste tu contraseña?</span>
     <span class="spanBlock spanLink midFont lightFont"  (click)="openRegister()" >¿No tienes una cuenta?</span>
+</div>
 </div>
 
 </div>

@@ -157,6 +157,7 @@ export class UserDataProvider {
       field_rfc:{und: [{value:""}]},
       field_razon:{und: [{value:""}]},
   }
+
   }
 
 
@@ -192,6 +193,16 @@ export class UserDataProvider {
       //console.log("updating token");
     this.sessionData.token = val['token'];
   }
+  }
+
+  unsetSessionData(){
+    this.sessionData.sessid = null;
+    this.sessionData.session_name = null;
+    this.sessionData.token= null;
+    this.sessionData.pss = null;
+    this.sessionData.usr = null;
+    this.sessionData.uid = false;
+     
   }
 
   setUserData(val){
@@ -272,6 +283,7 @@ export class UserDataProvider {
     let logout_request = this.http.post(url,``).share();
     logout_request.subscribe(
       (val) => {
+        console.log('logout result',val);
         this.initreset();
         this.AuthSubject.next(this.userData.uid);
       });

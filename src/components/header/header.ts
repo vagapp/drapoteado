@@ -77,6 +77,7 @@ export class HeaderComponent{
       if(Number(val) === Number(0) ) {
         this.storage.remove('usr');
         this.storage.remove('pss');
+        this.userData.unsetSessionData();
         this.navCtrl.setRoot("LoginPage");
       }
     });

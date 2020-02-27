@@ -10,7 +10,12 @@ page-login {
         align-items: center;
         height: 100%;
     }
-    
+
+    .login_form_wrapper{
+    display: flex;
+    justify-content: center;
+}
+
     .flexalign{
         display:flex;
         flex-flow: column;
