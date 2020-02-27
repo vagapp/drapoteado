@@ -97,7 +97,7 @@ checkUserSuscription( suscriptions:Array<number>, debug:boolean = false):boolean
 
 checkifgroup(){
 //if(this.checkPlan)
-console.log('CHECK IF GROUP NIGGA', this.checkUserSuscription([SubscriptionDataProvider.PLAN_GROUP]));
+console.log('CHECK IF GROUP', this.checkUserSuscription([SubscriptionDataProvider.PLAN_GROUP]));
 return this.checkUserSuscription([SubscriptionDataProvider.PLAN_GROUP]);
  //return this.subsData.isGroup;
 }

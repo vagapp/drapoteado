@@ -115,7 +115,7 @@ get subsLeftOnNew(){
       let public_test ='key_GtbbRJpEKq8zTrtq3EPCTqQ';
       let public_prod ='key_Wwir4csBhZwvzCny3TkeNUA';
       let public_bardo_test = 'key_NG1gDM4rychaJSjqha7KuHg';
-      conekta.init('https://cdn.conekta.io/js/latest/conekta.js', public_prod).then((c) => {    
+      conekta.init('https://cdn.conekta.io/js/latest/conekta.js', public_test).then((c) => {    
       //Este success se ejecuta con el javascript se cargó correctamente
       console.log('conekta successs',c);
     }).catch((err) => {

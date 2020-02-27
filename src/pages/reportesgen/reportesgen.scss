@@ -43,4 +43,23 @@ page-reportesgen {
     margin-right: 50px;
 }
 
+@media screen and (max-width: 450px){
+    .buttonWrapper{
+        flex-flow: column;
+    }
+
+    .ModalInput_input{
+        margin: 0;
+        width: 100%;
+    }
+
+    .ModalInput_input select{
+        margin: 20px 0px;
+    }
+
+    .generalButton{
+        width: 100%;
+    }
+}
+
 }

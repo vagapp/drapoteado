@@ -60,8 +60,12 @@ export class LoginPage {
           //if logged in set session and userdata
       this.userData.setSessionData(val);
       await this.userData.loginSetData(val['user']['uid']);
-      this.storage.set('usr',this.username);
-      this.storage.set('pss',this.password);
+      console.log('setting usr n pass');
+      await this.storage.set('usr',this.username);
+      await this.storage.set('pss',this.password);
+      await this.storage.get('usr').then( res => this.userData.sessionData.usr = res );
+      await this.storage.get('pss').then( res => this.userData.sessionData.pss = res );
+      //console.log('finished');
       location.reload();
       },
       response => {

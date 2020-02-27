@@ -114,6 +114,7 @@ export class MyApp {
 
   //loads token and planes syncronous
   async initLoad(){
+  console.log('trying to access storage');
  await this.storage.get('usr').then( res => this.userData.sessionData.usr = res );
  await this.storage.get('pss').then( res => this.userData.sessionData.pss = res );
     let token_data = await this.userData.requestToken().toPromise(); //obtener token de drupal
