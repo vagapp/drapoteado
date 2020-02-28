@@ -14,7 +14,7 @@
           </ion-item>
       </ion-list>
       <div class="modal_buttons">
-        <button  (click)="actionRequestRecover()"   class="generalButton bgColorPrimary floatRight"> Enviar </button>
+        <button  (click)="actionRequestRecover()"  [disabled]="this.busy"   class="generalButton bgColorPrimary floatRight"> <ion-spinner *ngIf="this.busy" ></ion-spinner> <ng-container *ngIf="!this.busy"> Enviar </ng-container></button>
       </div>
     </div>
   </ion-content>

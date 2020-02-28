@@ -18,6 +18,7 @@ import { AlertProvider } from '../../providers/alert/alert';
 })
 export class RecoverModalPage {
   recovername:string = '';
+  busy:boolean = false;
 
   constructor(
     public navCtrl: NavController, 
@@ -42,12 +43,15 @@ export class RecoverModalPage {
 
   actionRequestRecover(){
     if(this.basicvalidation()){
+      this.busy = true;
       this.userData.requestRecover(this.recovername).subscribe(
         (val) => {
+          this.busy = false;
           this.alert.presentAlert('','Recibirás un correo electrónico a la brevedad.');
           Debugger.log(['return of recoverrequesto',val]);
           this.dismiss();
         },(response)=>{
+          this.busy = false;
           this.alert.presentAlert('','No se encontró nada con este correo electrónico');
         },()=>{
 
