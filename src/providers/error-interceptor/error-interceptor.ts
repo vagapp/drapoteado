@@ -4,6 +4,8 @@ import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpResponse, Htt
 import { Observable} from 'rxjs';
 import { _throw as throwError } from 'rxjs/observable/throw';
 import { map, catchError } from 'rxjs/operators';
+import { UserDataProvider } from '../user-data/user-data';
+import { AlertProvider } from '../alert/alert';
 
 /*
   Generated class for the ErrorInterceptorProvider provider.
@@ -13,8 +15,9 @@ import { map, catchError } from 'rxjs/operators';
 */
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+  autherror_already=false;
 
-  constructor(){
+  constructor(public userData:UserDataProvider, public alert:AlertProvider){
     console.log('ErrorInterceptor online');
   }
 
@@ -28,6 +31,15 @@ export class ErrorInterceptor implements HttpInterceptor {
       }),
       catchError((error: HttpErrorResponse) => {
         console.error(error);
+        if(!this.autherror_already && Number(error.status) === 401 && Number(this.userData.userData.uid) != 0){
+          this.autherror_already = true;
+          this.userData.initreset();
+          this.userData.AuthSubject.next(this.userData.userData.uid);
+          this.alert.presentAlert('','ocurrió un problema al autenticar su sesión, por favor vuelva a ingresar.');
+         
+          //this.userData.logout();
+          //window.location.reload();
+        }
         return throwError(error);
       })
     );

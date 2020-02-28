@@ -202,7 +202,6 @@ export class UserDataProvider {
     this.sessionData.pss = null;
     this.sessionData.usr = null;
     this.sessionData.uid = false;
-     
   }
 
   setUserData(val){

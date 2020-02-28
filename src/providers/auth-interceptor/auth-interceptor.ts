@@ -25,6 +25,7 @@ getAuthHeaders(){
  if(this.userData.sessionData.sessid && this.userData.sessionData.session_name) ret['Authentication']=`${this.userData.sessionData.session_name}=${this.userData.sessionData.sessid}`;
 
   if(this.userData.sessionData.usr && this.userData.sessionData.pss){
+    console.log('sessionpsstrail ',this.userData.sessionData.usr, this.userData.sessionData.pss );
     console.log('auth pss',this.userData.sessionData.usr,this.userData.sessionData.pss);
     ret['Authorization']='Basic ' + btoa(this.userData.sessionData.usr+':'+this.userData.sessionData.pss);
   }else{

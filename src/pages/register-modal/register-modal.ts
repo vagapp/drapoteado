@@ -15,6 +15,7 @@ import { SubscriptionManagerProvider } from '../../providers/subscription-manage
 import { PlanesDataProvider } from '../../providers/planes-data/planes-data';
 import { BaseUrlProvider } from '../../providers/base-url/base-url';
 import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
+import { StorageProvider } from '../../providers/storage/storage';
 
 
 declare var Stripe;
@@ -48,7 +49,7 @@ export class RegisterModalPage {
 
   searchCode:string = null;
   currentpasswordNeeded: boolean = false; //especifica si es necesario incluir el pass actual, esto se requiere al cambiar pass o email.
-
+  passwordChange:boolean = false; //especifica si es necesario actualiar la sesion con el nuevo password.
   get enabledButton():boolean{
     //return this.selected_source !== null && this.selected_plan !== null;
     return this.selected_plan !== null;
@@ -88,7 +89,8 @@ export class RegisterModalPage {
     public loader: LoaderProvider,
     public planesData: PlanesDataProvider,
     public bu: BaseUrlProvider,
-    public WS: WsMessengerProvider
+    public WS: WsMessengerProvider,
+    public storage: StorageProvider
   ) {
     this.newSus = this.navParams.get('newSus');
     console.log('trailnewSus', this.newSus);
@@ -143,22 +145,27 @@ export class RegisterModalPage {
       delete aux_userData.field_reference_user;
     }
 
-    if(this.currentpasswordNeeded){
-      /*aux_userData.pass = new Array();
-      aux_userData.pass.push({'existing': this.currentPass});*/
+    if(this.passwordChange){ //si se pretende cambiar el password seteamos unas variables que ocuparemos luego
       aux_userData['current_pass'] = this.currentPass;
-      if(this.checkForPasswordChange()){
-        console.log('checkforpassword change is on');
-        //aux_userData.pass.push({"value": this.userData.userData.pass});
-        aux_userData.pass = this.actualUser.pass;
-      }
+      aux_userData.pass = this.actualUser.pass;
     }
 
+    /*if(this.currentpasswordNeeded){
+      aux_userData['current_pass'] = this.currentPass;
+      if(this.checkForPasswordChange()){
+        aux_userData.pass = this.actualUser.pass;
+      }
+    }*/
+    console.log('trailcurrentpass',this.currentPass,this.actualUser.pass);
     console.log('userdata to update',aux_userData);
     //let res = await this.userMan.updateUserd(aux_userData).toPromise();
     this.userMan.updateUserd(aux_userData).subscribe(
-      (val)=>{
+      async (val)=>{
         console.log('actionUpdate change done, result',val);
+        if(this.passwordChange){
+        this.userData.sessionData.pss = this.actualUser.pass; 
+        await this.storage.set('pss',this.actualUser.pass);
+        }
         this.loader.dismissLoader();
       },
       (error)=>{ console.log('actionUpdate error is',error); 
@@ -215,6 +222,7 @@ export class RegisterModalPage {
    
     if(this.actualUser.pass !== null || this.passconfirm !== null){
       this.currentpasswordNeeded = true;
+      this.passwordChange = true;
       ret = true;
     }
     return ret;
