@@ -69,8 +69,12 @@ export class LoginPage {
       location.reload();
       },
       response => {
-        console.log('login error response',response);
-          this.alert.presentAlert('','Usuario o contraseña incorrectos');
+        console.log('login error response',response,response.status);
+        switch(Number(response.status)){
+          case (401): this.alert.presentAlert('','Usuario o contraseña incorrectos.'); break;
+          case (406): this.alert.presentAlert('','Su cuenta ha sido bloqueada temporalmente.'); break;
+          default : this.alert.presentAlert('','Ha ocurrido un error inesperado, inténtelo mas tarde.');
+        }
           this.loader.dismissLoader();
       });
     }

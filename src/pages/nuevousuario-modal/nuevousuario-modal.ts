@@ -222,10 +222,13 @@ processDrupalUserErrors(e){
       case 'name': 
       if(e[key].includes('ya se encuentra en uso')){
         this.alert.presentAlert('','El nombre de usuario que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
+      }    else if(e[key].includes('El nombre de usuario contiene un carácter no permitido')){
+        this.alert.presentAlert('','El nombre de usuario contiene un carácter no permitido');
+      }else{
+        this.alert.presentAlert('','Se ha detectado un error inesperado en el campo '+  AlertProvider.cleanDrupalFieldString(key));
       }
-      break;
+        break;
       case 'mail':
-
         if(e[key].includes('ya está registrada')){
           this.alert.presentAlert('','El correo que intentas utilizar ya existe, intenta con otro o recupera tu contraseña.');
         }else 
@@ -234,7 +237,9 @@ processDrupalUserErrors(e){
           }else 
           if(e[key].includes('no es válida')){
             this.alert.presentAlert('','El formato de tu correo electrónico no es correcto.');
-          }else{
+      
+          }
+          else{
             this.alert.presentAlert('','Se ha detectado un error inesperado en el campo '+  AlertProvider.cleanDrupalFieldString(key));
           }
        break;
