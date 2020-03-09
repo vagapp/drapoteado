@@ -6,6 +6,7 @@ import { LoaderProvider } from '../../providers/loader/loader';
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
+import { DateProvider } from '../../providers/date/date';
 
 /**
  * Generated class for the ReportesgenPage page.
@@ -33,13 +34,16 @@ export class ReportesgenPage {
   ) {
   }
 
-  chosenDate: string = new Date().toISOString();
-  todayDate: string = new Date().toISOString();
+  chosenDate: string =  DateProvider.dateAsYYYYMMDDHHNNSS(new Date()); //DateProvider.getStringDate(new Date());
+  todayDate: string =  DateProvider.dateAsYYYYMMDDHHNNSS(new Date());//DateProvider.getStringDate(new Date());
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ReportesgenPage');
-    //this.reportPresentator.chosenDate = new Date();
-   this.todayDate = new Date().toISOString();
+    console.log('setting date', new Date().toISOString()  );
+   this.todayDate =  DateProvider.dateAsYYYYMMDDHHNNSS(new Date());//DateProvider.getStringDate(new Date());
+   console.log(this.todayDate);
+   //this.todayDate = this.todayDate.replace('Z','');
+   console.log(this.todayDate);
    this.chosenDate = this.todayDate;
   }
 
