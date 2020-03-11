@@ -30,7 +30,7 @@ export class BaseUrlProvider {
 
   get baseUrl():string{  return `${this.protocol}${this.hostname}`; }
   //get backendUrl():string{  return `${this.baseUrl}${this.backend_internas_name}`; }
-  get backendUrl():string{  return `${this.backend_tual_dev_full_name}`; }
+  get backendUrl():string{  return `${this.backend_tual_pro_full_name}`; }
   //get backendUrl():string{  return `${this.baseUrl}backenddcp/`; }
   get endpointUrl():string{  return `${this.backendUrl}appoint/`; }
   get HomeUrl():string{ return window.location.href.replace( /[\?#].*|$/, "#/home" ); }
