@@ -19,8 +19,26 @@ ion-content{
     color:#4D4D4D !important;
 }
 
+.header-ios{
+    padding-top: 0 !important;
+    height: 40px !important;
+    .menu_buttons{
+        padding-right: 0 !important;
+    }
+    .drap_global_header{
+        height: 40px;
+    }
+}
 .wheader{
-    margin-top: 100px;
+    padding-top: 100px;
+}
+ion-app.ios{
+    .wheader{
+        padding-top: 40px;
+        .scroll-content{
+            padding-top: 40px;
+        }
+    }
 }
 .tutorial_explain_text_sm {
     display: block;
