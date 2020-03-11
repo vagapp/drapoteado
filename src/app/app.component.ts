@@ -91,8 +91,10 @@ export class MyApp {
     this.splashScreen.hide();
     this.rootPage = 'LoginPage';
     this.platform.ready().then(() => {
+      this.statusBar.overlaysWebView(false);
       this.keyboard.disableScroll(false);
-      this.statusBar.styleDefault();
+      this.statusBar.styleLightContent();
+      this.statusBar.backgroundColorByHexString('#C1272D');
       this.OneMan.init();
       if(this.ica.isCordovaAvailable){  this.splashScreen.hide();  }
       let loading = this.loadingCtrl.create({content: 'Bienvenido'});
