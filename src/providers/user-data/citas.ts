@@ -85,7 +85,7 @@ export class Citas{
 
 
     
-    get (){ 
+    get cajasaved(){ 
         let ret = false;
         console.log('cajasaved',this.data.field_cita_caja); 
         let cmp = String(this.data.field_cita_caja.und[0]);
@@ -432,9 +432,9 @@ export class Citas{
           this.data.field_telefono.und[0].value = data_input.field_telefono;
           this.data.field_cita_doctor.und[0] = data_input.doctor_uid;
           this.data.field_comentarios.und[0].value = data_input.field_comentarios;
-          this.data.field_cita_caja.und[0] = data_input.caja_uid;
+          this.data.field_cita_caja.und[0] = data_input.field_cita_caja ? Number(data_input.field_cita_caja) : "_none"; //data_input.caja_uid;
           if( Number(this.data.field_cita_caja.und[0]) === Number(this.data.field_cita_doctor.und[0]) ){ this.bydoc = true; console.log('espordoctor woe'); }
-          this.data.field_cita_recepcion.und[0] = data_input.recepcion_uid;
+          this.data.field_cita_recepcion.und[0] = Number(data_input.field_cita_recepcion ? data_input.field_cita_recepcion : 0)//data_input.recepcion_uid;
           this.data.field_estado.und[0].value = data_input.field_estado;
           this.data.field_servicios_cita.und = data_input.field_servicios_cita;
           this.data.field_cobro.und[0].value = data_input.field_cobro;

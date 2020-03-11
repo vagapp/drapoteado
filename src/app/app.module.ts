@@ -68,6 +68,8 @@ import { ErrorInterceptor } from '../providers/error-interceptor/error-intercept
 import { StorageProvider } from '../providers/storage/storage';
 import { IonicStorageModule } from '@ionic/storage';
 import { ToasterProvider } from '../providers/toaster/toaster';
+import { Keyboard } from '@ionic-native/keyboard';
+
 
 
 
@@ -96,6 +98,8 @@ import { ToasterProvider } from '../providers/toaster/toaster';
       monthShortNames: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic' ],
       dayNames:['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'],
       dayShortNames: ['Dom', 'Lun', 'Mar', 'Mie','Jue','Vie','Sab' ],
+      scrollAssist: false, 
+      autoFocusAssist: false
      }),
      TooltipsModule.forRoot(),
      BrowserAnimationsModule,
@@ -176,6 +180,7 @@ import { ToasterProvider } from '../providers/toaster/toaster';
     ErrorInterceptor,
     StorageProvider,
     ToasterProvider,
+    Keyboard
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

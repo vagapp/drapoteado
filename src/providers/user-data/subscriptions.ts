@@ -40,18 +40,15 @@ export class subscriptions{
         let ret = false;
         if(!input_data) return ret;
         ret = true;
-        console.log("tryna assign input data to subscription",input_data);
         this.nid = input_data['nid'];
         this.field_plan_sus = input_data['field_plan_sus'];
         this.field_plan_holder = input_data['field_plan_holder'];
         this.field_doctores = null;
-        console.log('doctors error comming from this',input_data['field_doctores_json']);
-        /* parece que los json se pueden joder inesperadamente,*/
         this.field_doctores_json = input_data['field_doctores_json'];
         this.field_subusuarios = null; 
         this.field_invitation_code = input_data['field_invitation_code'];
         this.field_group_name = input_data['field_group_name'];
-        this.field_active = input_data['field_active']['value'];
+        this.field_active = input_data['field_active'] && input_data['field_active']['value'] ? input_data['field_active']['value'] : false ;
         this.field_next_cobro = input_data['field_next_cobro'];
         this.field_stripe_sus_id = input_data['field_stripe_sus_id'];
         this.field_stripe_src_sus_id = input_data['field_stripe_src_sus_id'];
@@ -60,7 +57,6 @@ export class subscriptions{
         this.field_adicionales = input_data['field_adicionales'];
         this.field_docsadicionales = input_data['field_docsadicionales'];
         this.pay_state = input_data['field_pay_state']; 
-       
         if(!input_data['field_cantidad']){this.field_cantidad = 0;}
         if(!input_data['field_adicionales']){this.field_adicionales = 0;}
         if(!input_data['field_docsadicionales']){this.field_docsadicionales = 0;}

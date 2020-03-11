@@ -20,6 +20,7 @@ import { ReportPresentatorProvider } from '../providers/report-presentator/repor
 import { LoaderProvider } from '../providers/loader/loader';
 import { NetworkCheckerProvider } from '../providers/network-checker/network-checker';
 import { StorageProvider } from '../providers/storage/storage';
+import { Keyboard } from '@ionic-native/keyboard';
 
 
 
@@ -66,9 +67,8 @@ export class MyApp {
     public reportPresentator: ReportPresentatorProvider,
     public loader: LoaderProvider,
     public networkcheck: NetworkCheckerProvider,
-    public storage: StorageProvider,
-
-  
+    public storage: StorageProvider,  
+    public keyboard: Keyboard
   ) {
     
     this.rootPage = 'LoginPage';
@@ -87,13 +87,14 @@ export class MyApp {
 
 
   initializeApp(){
+    
     this.splashScreen.hide();
     this.rootPage = 'LoginPage';
     this.platform.ready().then(() => {
-    
+      this.keyboard.disableScroll(false);
       this.statusBar.styleDefault();
       this.OneMan.init();
-      if(this.ica.isCordovaAvailable)this.splashScreen.hide();
+      if(this.ica.isCordovaAvailable){  this.splashScreen.hide();  }
       let loading = this.loadingCtrl.create({content: 'Bienvenido'});
       loading.present();
       this.initLoad().then(()=>{
@@ -176,12 +177,15 @@ export class MyApp {
 
   openReporteAdeudos(){
     console.log('openReportNoModal',this.reportPresentator.docuid, this.reportPresentator.type);
-    this.loader.presentLoader('Cargando ...');
+    /*this.loader.presentLoader('Cargando ...');
     this.reportPresentator.setReport().then(()=>{
       this.loader.dismissLoader();
       this.reportPresentator.type = ReportPresentatorProvider.REPORT_ADEUDO;
       this.reportPresentator.loadReportNM().then(()=>{
       });
+    });*/
+    this.reportPresentator.type = ReportPresentatorProvider.REPORT_ADEUDO;
+    this.reportPresentator.loadReportNM().then(()=>{
     });
   
   }

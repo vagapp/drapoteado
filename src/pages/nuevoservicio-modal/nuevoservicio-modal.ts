@@ -101,6 +101,7 @@ export class NuevoservicioModalPage {
   }
 
   basicValidation():boolean{
+    this.noNegativeValidation();
     this.showerrors = false;
     let ret = true;
     console.log('title is',this.newService.title, this.newService.title.length === 0);
@@ -119,10 +120,18 @@ export class NuevoservicioModalPage {
     return ret;
   }
 
+  noNegativeValidation(){
+    
+    this.newService.field_costo_servicio.und[0].value = Math.abs(this.newService.field_costo_servicio.und[0].value);
+    console.log('noNegativeValidation',this.newService.field_costo_servicio.und[0].value);
+    /*this.alert.presentAlert('','No es posible ingresar costo negativo');
+    return !(Number(this.newService.field_costo_servicio.und[0].value) < 0);*/
+  }
+
   async createServiceTutorial(){
     this.fixCostoOutput();
     this.newTutService = false;
-    if(!this.basicValidation()){return false;}
+    if(!this.basicValidation() ){return false;}
     this.loader.presentLoader('Creando Servicio ...');
     this.newService.body.und[0].value="automatic description";
     this.newService.field_doctor_uid.und[0].value= this.userData.userData.uid;
@@ -135,6 +144,7 @@ export class NuevoservicioModalPage {
 
   async createService(){
     this.fixCostoOutput();
+    
     if(!this.basicValidation()){return false;}
     this.loader.presentLoader('Creando Servicio ...');
     this.newService.body.und[0].value="automatic description";
