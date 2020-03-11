@@ -33,8 +33,9 @@ export class DoctoresManagerProvider {
     this.citasSubject = this.citasData.citasSubject;
     this.citasSubject.subscribe(
       (val)=>{
+        
         //whem there is a change on citas, doctor manager evaluates citas to get nextCitas for these doctors.
-       console.log('citas change on doctor manager',val);
+       console.log('citas change on doctor manager',val,citasData.citas);
        this.evaluateCitas();
       }
     );

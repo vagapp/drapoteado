@@ -101,7 +101,7 @@ export class CitasManagerProvider {
    }
     let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=${(from !== null && to !== null) ?  from+'--'+to: 'all'}${/*pacientefilter*/endfilter}`;
     //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
-    let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
+    let url = `${this.baseurl.endpointUrl}rest_citas2.json${filterString}`;
     console.log('url getting citas',url);
     return this.http.get(url);
   }
@@ -125,22 +125,24 @@ export class CitasManagerProvider {
     cajas = null; //no limitamos las cajas = ( )
     let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? cajas.join() : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? recepciones.join() : 'all'}&args[3]=all&args[4]=all&args[5]=all&args[6]=all&args[7]=all&args[8]=${from}--${to}`;
     //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
-    let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
+    let url = `${this.baseurl.endpointUrl}rest_citas2.json${filterString}`;
     console.log('url getting citas',url);
     return this.http.get(url);
   }
 
   getCitasObservableAdeudos(
+
     doctores:number[] = this.doctores.doctoresIDs,  
     cajas:number[] = null,  
     recepciones:number[] = null,
     ):Observable<any>{
+      console.log('getCitasObservableAdeudos');
       console.log('doctores',doctores);
-      console.log('cajas',cajas);
-      console.log('recepciones',recepciones);
-      let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}&args[1]=${cajas && cajas.length > 0 ? /*cajas.join()*/'all' : 'all'}&args[2]=${recepciones && recepciones.length > 0 ? /*recepciones.join()*/ 'all' : 'all'}&args[3]=all&args[4]=all&args[5]=all&args[6]=all&args[7]=all&args[8]=all&args[9]=3,7`;
+      //console.log('cajas',cajas);
+      //console.log('recepciones',recepciones);
+      let filterString = `?args[0]=${doctores && doctores.length > 0 ? doctores.join() : '0'}`;
       //let filterString = `?args[0]=${doctores ? doctores.join() : 'all'}&args[1]=${cajas ? cajas.join() : 'all'}&args[2]=${recepciones ? recepciones.join() : 'all'}`;
-      let url = `${this.baseurl.endpointUrl}rest_citas.json${filterString}`;
+      let url = `${this.baseurl.endpointUrl}rest_adeudos.json${filterString}`;
       console.log('url getting citas adeudos',url);
       return this.http.get(url);
   }
@@ -148,7 +150,7 @@ export class CitasManagerProvider {
   
 
   getCitaObservable( Nid ):Observable<any>{
-    let url = `${this.baseurl.endpointUrl}rest_citas.json?args[0]=all&args[1]=all&args[2]=all&args[3]=all&args[4]=all&args[5]=${Nid}`;
+    let url = `${this.baseurl.endpointUrl}rest_citas2.json?args[0]=all&args[1]=all&args[2]=all&args[3]=all&args[4]=all&args[5]=${Nid}`;
     return this.http.get(url);
   }
 
@@ -186,9 +188,10 @@ export class CitasManagerProvider {
 
   //este metodo revisa que el doctor este activo y en la suscripcion cargada para este usuario.
   checkDoctorListDataFilter(citaData):boolean{
-    console.log('checkDoctorListDataFilter');
+    console.log('checkDoctorListDataFilter',citaData,citaData.field_cita_doctor.uid);
     let ret = true;
     let docsuids = this.doctores.doctores.map((docs)=>{ return Number(docs.Uid); });
+    if(citaData.field_cita_doctor && citaData.field_cita_doctor.uid) citaData.doctor_uid = citaData.field_cita_doctor.uid;
     let docuid = Number(citaData.doctor_uid);
     let found = docsuids.find((docs)=>{ return docs === docuid});
     if(!found){

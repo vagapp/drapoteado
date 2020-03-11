@@ -588,7 +588,7 @@ export class UserDataProvider {
     if(cajas.length == 0){cajafilter = "&args[1]=all";}
     if(recepciones.length == 0){recepcionfilter = "&args[2]=all";}
     let datefilter = "?date[min][date]="+fechaFrom+"&date[max][date]="+fechaTo;
-    let url = this.bu.endpointUrl+'rest_citas.json'+datefilter+doctorfilter+cajafilter+recepcionfilter;
+    let url = this.bu.endpointUrl+'rest_citas2.json'+datefilter+doctorfilter+cajafilter+recepcionfilter;
     console.log("url",url);
     let observer = this.http.get(url);
     //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
@@ -605,7 +605,7 @@ export class UserDataProvider {
     if(cajas.length == 0){cajafilter = "&args[1]=all";}
     if(recepciones.length == 0){recepcionfilter = "&args[2]=all";}
     //let datefilter = "?date[min][date]="+fechaFrom+"&date[max][date]="+fechaTo;
-    let url = this.bu.endpointUrl+'rest_citas.json?'+doctorfilter+cajafilter+recepcionfilter+rangeFilter;
+    let url = this.bu.endpointUrl+'rest_citas2.json?'+doctorfilter+cajafilter+recepcionfilter+rangeFilter;
     console.log("url",url);
     let observer = this.http.get(url);
     //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
@@ -613,7 +613,7 @@ export class UserDataProvider {
   }
 
   getCitasNidObservable(Nid){
-    let url = this.bu.endpointUrl+'rest_citas.json?'+`args[0]=all&args[1]=all&args[2]=all&args[3]=all&args[4]=${Nid}`;
+    let url = this.bu.endpointUrl+'rest_citas2.json?'+`args[0]=all&args[1]=all&args[2]=all&args[3]=all&args[4]=${Nid}`;
     Debugger.log(['loadinc single cita w nid',url]);
     let observer = this.http.get(url);
     //observer.subscribe(); //suscribes to send the post regardless of what view does with the observer
