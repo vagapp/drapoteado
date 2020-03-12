@@ -148,9 +148,7 @@ export class ReporteModalPage {
        */
       //}
 
-      generatePDF(){
-        this.reportPresentator.generatePDF();
-      }
+
 
       
       dismiss() {
