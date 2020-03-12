@@ -430,7 +430,8 @@ export class Citas{
           this.data.field_paciente.und[0].value = data_input.field_paciente;
           this.data.field_email.und[0].email = data_input.field_email;
           this.data.field_telefono.und[0].value = data_input.field_telefono;
-          this.data.field_cita_doctor.und[0] = data_input.doctor_uid;
+          this.data.field_cita_doctor.und[0] = Number(data_input.doctor_uid);
+          console.log('trailCD1 setting doc',this.data.field_cita_doctor);
           this.data.field_comentarios.und[0].value = data_input.field_comentarios;
           this.data.field_cita_caja.und[0] = data_input.field_cita_caja ? Number(data_input.field_cita_caja) : "_none"; //data_input.caja_uid;
           if( Number(this.data.field_cita_caja.und[0]) === Number(this.data.field_cita_doctor.und[0]) ){ this.bydoc = true; console.log('espordoctor woe'); }

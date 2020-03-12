@@ -188,10 +188,10 @@ export class CitasManagerProvider {
 
   //este metodo revisa que el doctor este activo y en la suscripcion cargada para este usuario.
   checkDoctorListDataFilter(citaData):boolean{
-    console.log('checkDoctorListDataFilter',citaData,citaData.field_cita_doctor.uid);
+    console.log('checkDoctorListDataFilter',citaData,citaData.doctor_uid);
     let ret = true;
     let docsuids = this.doctores.doctores.map((docs)=>{ return Number(docs.Uid); });
-    if(citaData.field_cita_doctor && citaData.field_cita_doctor.uid) citaData.doctor_uid = citaData.field_cita_doctor.uid;
+    //if(citaData.doctor_uid) citaData.doctor_uid = citaData.field_cita_doctor.uid;
     let docuid = Number(citaData.doctor_uid);
     let found = docsuids.find((docs)=>{ return docs === docuid});
     if(!found){
@@ -363,6 +363,7 @@ export class CitasManagerProvider {
     let ret = null;
     let uid = Cita.data.field_cita_doctor.und[0];
     ret = this.doctores.getDoctorByUid(uid);
+    console.log('trailCD1x',Cita.data,uid,ret);
     return ret;
   }
 
