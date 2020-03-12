@@ -58,8 +58,10 @@ export class ReporteCitasProvider {
     console.log('trailstartnull generating cita from data', citas_data);
     let aux_citalit = new Array<Citas>()
       for(let cita of citas_data){
+        console.log('trailCD1gc data',cita);
         let aux_cita = new Citas();
         aux_cita.setData(cita);
+        console.log('trailCD1gc',aux_cita);
         let exists = aux_citalit.find((citax)=>{ return Number(citax.Nid) === Number(cita.Nid)});
         if(!exists){
          
@@ -104,9 +106,6 @@ export class ReporteCitasProvider {
   }
   
   async reporteLoadCitasAdeudo(report:reportes , doctorUids:number[] = null){
-    let aux_citas = new Array<Citas>();
-    console.log('reportadeudotrail reporteLoadCitasAdeudo',report);
-    console.log('docuids',doctorUids);
     let res = await this.citasManager.getCitasObservableAdeudos(
       doctorUids,
       report.cajaFilter,
