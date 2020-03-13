@@ -4,12 +4,13 @@ import { reportes } from '../user-data/reportes';
 import { ReporteCitasProvider } from '../reporte-citas/reporte-citas';
 import { Citas } from '../user-data/citas';
 import { LoaderProvider } from '../loader/loader';
+import { AlertProvider } from '../alert/alert';
 import { CitasDataProvider } from '../citas-data/citas-data';
 import { DateProvider } from '../date/date';
 import { UserDataProvider } from '../user-data/user-data';
 import { ReporteServiciosProvider } from '../reporte-servicios/reporte-servicios';
 import { ReportesDataProvider } from '../reportes-data/reportes-data';
-import { ModalController } from 'ionic-angular';
+import { ModalController, Platform } from 'ionic-angular';
 import { DoctoresDataProvider } from '../doctores-data/doctores-data';
 import { SubusersDataProvider } from '../subusers-data/subusers-data';
 import { Subject } from 'rxjs/Subject';
@@ -17,6 +18,9 @@ import { PermissionsProvider } from '../permissions/permissions';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 import { BaseUrlProvider } from '../base-url/base-url';
 import { CitasManagerProvider } from '../citas-manager/citas-manager';
+
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
 
 /*
   Generated class for the ReportPresentatorProvider provider.
@@ -122,6 +126,7 @@ export class ReportPresentatorProvider {
     public reporteCitas: ReporteCitasProvider,
     public reporteServicios: ReporteServiciosProvider,
     public loader: LoaderProvider,
+    public alert: AlertProvider,
     public userData: UserDataProvider,
     public docData: DoctoresDataProvider,
     public subUserData: SubusersDataProvider,
@@ -131,7 +136,10 @@ export class ReportPresentatorProvider {
     public permissions: PermissionsProvider,
     public subsData: SubscriptionDataProvider,
     public bu: BaseUrlProvider,
-    public cm: CitasManagerProvider
+    public cm: CitasManagerProvider,
+    private transfer: FileTransfer,
+    private file: File,
+    public platform: Platform
   ) {
     
   }
@@ -174,7 +182,24 @@ async loadReportNM(loadReport:boolean = true){
 exportExcel(){
   let gwho = this.permissions.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) ?  this.isGroup ? this.subsData.subscription.field_doctores : [this.userData.userData.uid] : this.docData.doctoresIDs;
   let report_excel = this.bu.backendUrl+`endpoint_Reporteexceldev.php?r=${this.actualReport.dateStartUTMS}-${this.actualReport.dateEndUTMS}${this.docLoaded && this.docuid!==null ? '&doc='+this.docuid : ''}${'&ur='+this.userData.userData.field_tipo_de_usuario['und'][0]['value']}${this.isAdeudo ? '&adeudo=1' : '&adeudo=0'}${this.isGroup ? '&group=1&gdocs='+gwho.join(',') : '&gdocs='+gwho.join(',')}`;
-   window.open(report_excel, '_blank');
+  if(this.platform.is('cordova')){
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    var savingPath = this.platform.is('ios') ? this.file.documentsDirectory : this.file.externalRootDirectory;
+    var msg = this.platform.is('ios') ? 'Se ha almacenado en tus documentos.' : "Se ha guardado en tu almacenamiento interno o tu tarjega SD.";
+    var d = new Date();
+    var n = d.getTime();
+    this.loader.presentLoader('Estamos generando tu reporte.');
+    fileTransfer.download(report_excel, savingPath + 'Tual Reporte - '+n+'.xlsx').then((entry) => {
+      this.loader.dismissLoader();
+      this.alert.presentAlert('Reporte',"Tu reporte se ha descargado exitosamente.<br>"+msg);
+    }, (error) => {
+      console.log(error);
+      this.loader.dismissLoader();
+      this.alert.presentAlert('Reporte',"Tuvimos un problema generando tu reporte.");
+    });
+  }else{
+    window.open(report_excel, '_blank');
+  }
 }
 
 async openReportGenerate( report:reportes = null ){
