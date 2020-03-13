@@ -69,6 +69,8 @@ import { StorageProvider } from '../providers/storage/storage';
 import { IonicStorageModule } from '@ionic/storage';
 import { ToasterProvider } from '../providers/toaster/toaster';
 import { Keyboard } from '@ionic-native/keyboard';
+import { File } from '@ionic-native/file';
+import { FileTransfer } from '@ionic-native/file-transfer';
 
 
 
@@ -180,7 +182,9 @@ import { Keyboard } from '@ionic-native/keyboard';
     ErrorInterceptor,
     StorageProvider,
     ToasterProvider,
-    Keyboard
+    Keyboard,
+    File,
+    FileTransfer
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })
