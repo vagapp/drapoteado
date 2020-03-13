@@ -26,7 +26,7 @@ ion-content{
         padding-right: 0 !important;
     }
     .drap_global_header{
-        height: 40px;
+        height: 40px !important;
     }
 }
 .wheader{
@@ -34,9 +34,10 @@ ion-content{
 }
 ion-app.ios{
     .wheader{
-        padding-top: 40px;
+        padding-top: 40px !important;
+        margin-top: 0 !important;
         .scroll-content{
-            padding-top: 40px;
+            padding-top: 40px !important;
         }
     }
 }

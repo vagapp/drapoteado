@@ -71,6 +71,7 @@ import { ToasterProvider } from '../providers/toaster/toaster';
 import { Keyboard } from '@ionic-native/keyboard';
 import { File } from '@ionic-native/file';
 import { FileTransfer } from '@ionic-native/file-transfer';
+import { FileOpener } from '@ionic-native/file-opener';
 
 
 
@@ -184,7 +185,8 @@ import { FileTransfer } from '@ionic-native/file-transfer';
     ToasterProvider,
     Keyboard,
     File,
-    FileTransfer
+    FileTransfer,
+    FileOpener
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })
