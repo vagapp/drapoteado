@@ -21,6 +21,7 @@ import { CitasManagerProvider } from '../citas-manager/citas-manager';
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { FileOpener } from '@ionic-native/file-opener';
 
 /*
   Generated class for the ReportPresentatorProvider provider.
@@ -139,6 +140,7 @@ export class ReportPresentatorProvider {
     public cm: CitasManagerProvider,
     private transfer: FileTransfer,
     private file: File,
+    private fileOpener: FileOpener,
     public platform: Platform
   ) {
     
@@ -191,7 +193,8 @@ exportExcel(){
     this.loader.presentLoader('Estamos generando tu reporte.');
     fileTransfer.download(report_excel, savingPath + 'Tual Reporte - '+n+'.xlsx').then((entry) => {
       this.loader.dismissLoader();
-      this.alert.presentAlert('Reporte',"Tu reporte se ha descargado exitosamente.<br>"+msg);
+      this.fileOpener.open(entry.toURL(),'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+      //this.alert.presentAlert('Reporte',"Tu reporte se ha descargado exitosamente.<br>"+msg);
     }, (error) => {
       console.log(error);
       this.loader.dismissLoader();
