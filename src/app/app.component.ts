@@ -21,6 +21,7 @@ import { LoaderProvider } from '../providers/loader/loader';
 import { NetworkCheckerProvider } from '../providers/network-checker/network-checker';
 import { StorageProvider } from '../providers/storage/storage';
 import { Keyboard } from '@ionic-native/keyboard';
+import { PwaProvider } from '../providers/pwa/pwa';
 
 
 
@@ -68,7 +69,8 @@ export class MyApp {
     public loader: LoaderProvider,
     public networkcheck: NetworkCheckerProvider,
     public storage: StorageProvider,  
-    public keyboard: Keyboard
+    public keyboard: Keyboard,
+    public pwa: PwaProvider
   ) {
     
     this.rootPage = 'LoginPage';
@@ -83,14 +85,27 @@ export class MyApp {
       { title: 'Login', component: "LoginPage" }
     ];
   }
-
-
+  get showPWA():Boolean{ return this.pwa.showInstall; }
+  DownloadPromt(){ this.pwa.show(); }
 
   initializeApp(){
     
     this.splashScreen.hide();
     this.rootPage = 'LoginPage';
     this.platform.ready().then(() => {
+
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        console.log('beforeinstallprompt start');
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        this.pwa.pwaevent = e;
+        this.pwa.showInstall = true;
+        // Update UI notify the user they can install the PWA
+        console.log('beforeinstallprompt',e);
+      });
+
       this.statusBar.overlaysWebView(false);
       this.keyboard.disableScroll(false);
       this.statusBar.styleLightContent();

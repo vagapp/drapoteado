@@ -10,6 +10,7 @@ import { SubscriptionManagerProvider } from '../../providers/subscription-manage
 import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
 import { BaseUrlProvider } from '../../providers/base-url/base-url';
 import { StorageProvider } from '../../providers/storage/storage';
+import { PwaProvider } from '../../providers/pwa/pwa';
 //import { ToastController } from 'ionic-angular';
 //import { Debugger } from '../../providers/user-data/debugger';
 
@@ -43,11 +44,20 @@ export class LoginPage {
     public subscriptionManager: SubscriptionManagerProvider,
     public serviciosManager: ServiciosManagerProvider,
     public bu: BaseUrlProvider,
-    public storage: StorageProvider
+    public storage: StorageProvider,
+    public pwa: PwaProvider
   ) {
   }
 
   ionViewDidLoad() {
+  }
+
+  get showPwa():Boolean{
+    return this.pwa.showInstall;
+  }
+
+  downloadPWA(){
+    this.pwa.show();
   }
 
   async actionLogin(){

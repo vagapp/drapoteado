@@ -72,6 +72,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { File } from '@ionic-native/file';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { FileOpener } from '@ionic-native/file-opener';
+import { PwaProvider } from '../providers/pwa/pwa';
 
 
 
@@ -186,7 +187,8 @@ import { FileOpener } from '@ionic-native/file-opener';
     Keyboard,
     File,
     FileTransfer,
-    FileOpener
+    FileOpener,
+    PwaProvider
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

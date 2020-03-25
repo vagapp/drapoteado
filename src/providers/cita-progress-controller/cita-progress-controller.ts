@@ -193,12 +193,11 @@ export class CitaProgressControllerProvider {
 
   addService(){
     console.log('addService start servicesCompare',JSON.stringify(this.servicesCompare));
-    let aux_servicio = null;
     console.log(this.selectedService);
     if(Number(this.selectedService) !== Number(0)){
       let service_to_add = this.available_services.find((services)=>{ return Number(services.Nid) === Number(this.selectedService)});
       console.log('service to add',service_to_add);
-      if(this.activeCita.addServicio(service_to_add)){
+      if(service_to_add && this.activeCita.addServicio(service_to_add)){
         console.log('servicio added');
         service_to_add.times = 1;
         this.available_services = this.activeCita.getServiciosAvailable(this.activeCitaDoc.servicios);
@@ -301,14 +300,13 @@ export class CitaProgressControllerProvider {
       console.log('updateCheckedOption start servicesCompare',JSON.stringify(this.servicesCompare));
       console.log('activecita addedservices',this.activeCita.addedServices);
       if(State){ //si se va a agregar
-       
-        this.checkDisableCortesia();
+        //this.checkDisableCortesia();
         this.selectedService = Nid;
         this.addService();
       }else{
         //if(! (Number(Nid) === Number(CitasDataProvider.SERVICIO_CORTESIA_NID) ) ) {
         this.removeServiceWnid(Nid);
-        this.cortesiaCheck();
+        //this.cortesiaCheck();
       //}
       
     }
@@ -327,6 +325,8 @@ export class CitaProgressControllerProvider {
       }
     }
 
+
+
     getAddedTimes( Nid ){
       let ret = 0;
       if(this.activeCita.checkServicio(Nid)){
@@ -334,7 +334,7 @@ export class CitaProgressControllerProvider {
       }
       return ret;
     }
-
+ 
 
     checkDisableCortesia(){
       //si solo esta activo el servicio de cortesia y seleccionas otro, cortesia se des-selecciona
@@ -342,6 +342,10 @@ export class CitaProgressControllerProvider {
       if(this.checkChecked(Number(CitasDataProvider.SERVICIO_CORTESIA_NID)) && this.activeCita.addedServices.length === 1){
         this.removeServiceWnid(Number(CitasDataProvider.SERVICIO_CORTESIA_NID));
       }
+    }
+    
+    checkNoServices(){
+      return this.activeCita.addedServices.length === 0;
     }
 
     checkChecked(Nid:number):boolean{
@@ -364,11 +368,11 @@ export class CitaProgressControllerProvider {
 
     cortesiaCheck(){
       console.log('cortesiaCheck', this.activeCita.addedServices);
-      if(this.activeCita.addedServices.length <= 0){
+      /*if(this.activeCita.addedServices.length <= 0){
         this.selectedService = Number(CitasDataProvider.SERVICIO_CORTESIA_NID);
         this.addService();
         this.selectedService = null;
-      }
+      }*/
     }
 
     /*cortesiaRemoveIfin(){

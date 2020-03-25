@@ -65,6 +65,9 @@ export class ProgresocitaModalPage {
 
       finalizarPop(){
           console.log('trailcortesia',this.progressController.hasCortesia());
+          if(this.progressController.checkNoServices()){
+            this.alert.presentAlert('','No es posible guardar una cita sin introducir ningún servicio');
+          }else
           if(this.progressController.inZero()){
             this.alert.chooseAlert(
               '',
@@ -235,9 +238,9 @@ export class ProgresocitaModalPage {
         this.progressController.updateCitaActiva();
         console.log('check cita before sending',JSON.stringify(this.progressController.activeCita.data.field_ediciones_json), this.progressController.activeCita.data.aux_servicios_json);
         
-        await this.citasPresentator.updateStateRequest(this.progressController.activeCita ,this.progressController.activeCita.stateNumber );
+        this.citasPresentator.updateStateRequest(this.progressController.activeCita ,this.progressController.activeCita.stateNumber );
         this.progressController.loadcita(this.progressController.activeCita);
-        //this.close();
+        this.close();
       }
     }
 
