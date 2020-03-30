@@ -58,9 +58,7 @@ import { TutorialProvider } from '../providers/tutorial/tutorial';
 import { JsonUtilProvider } from '../providers/json-util/json-util';
 import { TooltipsModule } from 'ionic-tooltips';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { UpdaterProvider } from '../providers/updater/updater';
-import { HidehideZeroDirective } from '../directives/hidehide-zero/hidehide-zero';
 import { WsconnectionProvider } from '../providers/wsconnection/wsconnection';
 import { NetworkCheckerProvider } from '../providers/network-checker/network-checker';
 import { Network } from '@ionic-native/network';
@@ -73,6 +71,7 @@ import { File } from '@ionic-native/file';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { FileOpener } from '@ionic-native/file-opener';
 import { PwaProvider } from '../providers/pwa/pwa';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 
 
@@ -188,7 +187,8 @@ import { PwaProvider } from '../providers/pwa/pwa';
     File,
     FileTransfer,
     FileOpener,
-    PwaProvider
+    PwaProvider,
+    InAppBrowser
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })

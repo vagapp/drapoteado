@@ -26,6 +26,7 @@ import { PwaProvider } from '../providers/pwa/pwa';
 
 
 
+
 //import { Debugger } from '../providers/user-data/debugger';
 
 
@@ -70,7 +71,7 @@ export class MyApp {
     public networkcheck: NetworkCheckerProvider,
     public storage: StorageProvider,  
     public keyboard: Keyboard,
-    public pwa: PwaProvider
+    public pwa: PwaProvider,
   ) {
     
     this.rootPage = 'LoginPage';
@@ -105,7 +106,6 @@ export class MyApp {
         // Update UI notify the user they can install the PWA
         console.log('beforeinstallprompt',e);
       });
-
       this.statusBar.overlaysWebView(false);
       this.keyboard.disableScroll(false);
       this.statusBar.styleLightContent();
@@ -118,7 +118,11 @@ export class MyApp {
         if(this.userData.userData.uid !== 0){
           this.rootPage = 'HomePage';
           if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) && !this.perm.checkUserSuscription([UserDataProvider.PLAN_ANY])){
+            if(this.ica.isIos){
+              this.ica.directToWebApp();
+            }else{
             this.rootPage = 'MiplanPage';
+            }
             }
         }
         loading.dismiss();
@@ -189,6 +193,10 @@ export class MyApp {
   openAviso(){this.nav.setRoot('AvisoprivacidadPage');}
   openFaq(){this.nav.setRoot('FaqPage');}
   openMiplan(){
+    if( this.ica.isIos){
+      this.ica.directToWebApp();
+    }
+    else
     this.nav.setRoot("MiplanPage");
   }
 

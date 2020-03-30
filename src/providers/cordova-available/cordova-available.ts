@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Injectable()
 export class CordovaAvailableProvider {
 
-  constructor(public plt: Platform) {
+  constructor(public plt: Platform, public iab: InAppBrowser) {
   }
 
   get isCordovaAvailable():boolean{
@@ -16,5 +17,14 @@ export class CordovaAvailableProvider {
     if (this.plt.is('core') || this.plt.is('mobileweb')) ret = false;
     return ret;
   }
+  
+  get isIos():boolean{
+    console.log('platform is ', this.plt.is('iOS') )
+    return this.plt.is('android');
+  }
 
+
+  directToWebApp(){
+    this.iab.create('https://app.tual.mx/','_system');
+  }
 }
