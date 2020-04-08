@@ -56,9 +56,7 @@
     <button   menuClose ion-item  (click)="openFaq()">
         F.A.Q.
     </button>
-    <button   menuClose ion-item  *ngIf="showPWA" (click)="DownloadPromt()">
-      Descargar
-  </button>
+
       <button *ngIf="perm.checkUserFeature([userData.PLAN_ANY])" menuClose ion-item  (click)="logout()">
         <span class="fontPrimary">Salir</span>
       </button>

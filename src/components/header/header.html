@@ -25,6 +25,7 @@
             <!--<nlist [nlistn]="1" [openClass]="'open_nlist1'"></nlist>-->
           </div>
           <!--<div class="header_span header_showdate">{{this.userData.showhour}}</div>-->
+          <button class="pwaDownload" *ngIf="showPWA" (click)="DownloadPromt()" >Descargar</button>
           <div menuToggle><img src="assets/imgs/menu.svg" class="header_menu_drap" /></div>
         </div>
         </div>
