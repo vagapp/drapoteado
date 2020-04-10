@@ -95,7 +95,7 @@ export class MyApp {
     this.rootPage = 'LoginPage';
     this.platform.ready().then(() => {
 
-
+      console.log('gonna add event listener');
       window.addEventListener('beforeinstallprompt', (e) => {
         console.log('beforeinstallprompt start');
         // Prevent the mini-infobar from appearing on mobile
