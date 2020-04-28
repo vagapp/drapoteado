@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Platform } from 'ionic-angular';
 import { UserDataProvider  } from '../../providers/user-data/user-data';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { DoctoresDataProvider } from '../../providers/doctores-data/doctores-data';
@@ -10,6 +10,8 @@ import { SubscriptionManagerProvider } from '../../providers/subscription-manage
 import { ServiciosManagerProvider } from '../../providers/servicios-manager/servicios-manager';
 import { BaseUrlProvider } from '../../providers/base-url/base-url';
 import { StorageProvider } from '../../providers/storage/storage';
+import { PwaProvider } from '../../providers/pwa/pwa';
+import { CordovaAvailableProvider } from '../../providers/cordova-available/cordova-available';
 //import { ToastController } from 'ionic-angular';
 //import { Debugger } from '../../providers/user-data/debugger';
 
@@ -43,11 +45,32 @@ export class LoginPage {
     public subscriptionManager: SubscriptionManagerProvider,
     public serviciosManager: ServiciosManagerProvider,
     public bu: BaseUrlProvider,
-    public storage: StorageProvider
+    public storage: StorageProvider,
+    public pwa: PwaProvider,
+    public cap: CordovaAvailableProvider,
+    public plt: Platform
   ) {
   }
 
   ionViewDidLoad() {
+
+    if(this.isIos){
+      this.showLoginForm = true;
+    }
+  }
+
+
+    get isIos():boolean{
+      return this.cap.isIos;
+    }
+
+
+  get showPwa():Boolean{
+    return this.pwa.showInstall;
+  }
+
+  downloadPWA(){
+    this.pwa.show();
   }
 
   async actionLogin(){
@@ -88,8 +111,12 @@ export class LoginPage {
   }
 
   openRegister(){
+    if(this.cap.isCordovaAvailable && this.isIos){
+      this.cap.directToWebApp();
+    }else{ 
     let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
     Modal.present({});
+    }
   }
 
   openterminos(){this.navCtrl.setRoot('TerminosycondicionesPage');}

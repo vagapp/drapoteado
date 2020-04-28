@@ -9,6 +9,7 @@ import { PermissionsProvider } from '../../providers/permissions/permissions';
 import { ReportPresentatorProvider } from '../../providers/report-presentator/report-presentator';
 import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { StorageProvider } from '../../providers/storage/storage';
+import { PwaProvider } from '../../providers/pwa/pwa';
 
 
 /**
@@ -42,7 +43,8 @@ export class HeaderComponent{
     public perm:PermissionsProvider,
     public reportPresentator: ReportPresentatorProvider,
     public wss: WebsocketServiceProvider,
-    public storage:StorageProvider
+    public storage:StorageProvider,
+    public pwa: PwaProvider
   ) {
     //this.pagename = this.navCtrl.getActive().name;
     this.authObservable = userData.AuthSubject;
@@ -191,7 +193,8 @@ export class HeaderComponent{
 
   
 
-  
+  get showPWA():Boolean{ return this.pwa.showInstall; }
+  DownloadPromt(){ this.pwa.show(); }
 
 
 

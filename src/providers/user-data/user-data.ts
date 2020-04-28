@@ -1,15 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-//import { Storage } from '@ionic/storage';
-import { Citas } from './citas';
-import { Notification_c } from './Notification';
-import { Doctores } from './doctores';
-import { servicios } from './servicios';
+import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { planes } from './planes';
-import { subscriptions } from './subscriptions';
 import { Debugger } from './debugger';
-import { reportes } from './reportes';
 import { Observable } from 'rxjs/Observable';
 import { CordovaAvailableProvider } from '../cordova-available/cordova-available';
 import { CitasDataProvider } from '../citas-data/citas-data';
@@ -18,12 +11,12 @@ import { PlanesDataProvider } from '../planes-data/planes-data';
 import { SubscriptionDataProvider } from '../subscription-data/subscription-data';
 import { BaseUrlProvider } from '../base-url/base-url';
 import { DrupalUserManagerProvider } from '../drupal-user-manager/drupal-user-manager';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 
 
 @Injectable()
 export class UserDataProvider {
- 
+
 
   
   //VARIABLES STATICAS, y osea se necesitan getters porque los html no pueden acceder a las variables static que pedo

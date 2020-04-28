@@ -24,6 +24,7 @@ import { IfObservable } from 'rxjs/observable/IfObservable';
 import { ThrowStmt } from '@angular/compiler';
 import { TutorialProvider } from '../../providers/tutorial/tutorial';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
+import { CordovaAvailableProvider } from '../../providers/cordova-available/cordova-available';
 
 declare var Stripe;
 
@@ -108,8 +109,10 @@ get subsLeftOnNew(){
     public wsMessenger: WsMessengerProvider,
     public updater: UpdaterProvider,
     public subuserManager: SubusersManagerProvider,
-    public userMan: DrupalUserManagerProvider
+    public userMan: DrupalUserManagerProvider,
+    public ica: CordovaAvailableProvider
   ) {
+    console.log('miplanactualpage');
       this.subuserManager.cargarSubusuarios();
       //conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
       let public_test ='key_GtbbRJpEKq8zTrtq3EPCTqQ';
@@ -124,6 +127,7 @@ get subsLeftOnNew(){
     });
   }
 
+  get isIos(){ return this.ica.isIos; }
   get docsleft(){ return this.subsData.checkForSub() ? this.subsManager.getDocAccountsLeft(this.subsData.subscription) : 0 ; }
   get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
   get nextCobro(){ 
@@ -308,6 +312,10 @@ get subsLeftOnNew(){
    
     this.activateChangePlanMode();
     console.log('editar end selectedplan',this.selectedPlan);
+  }
+
+  planadmin(){
+    this.ica.directToWebApp();
   }
 
   async guardar(){

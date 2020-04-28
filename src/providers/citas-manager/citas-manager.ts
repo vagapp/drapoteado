@@ -214,6 +214,9 @@ export class CitasManagerProvider {
   generateCita( data ){
     let aux_cita = new Citas();
     aux_cita.setData(data);
+    let doc = this.getDoctorOFCita(aux_cita);
+    aux_cita.data.doctor_alias = doc.field_alias;
+    console.log('setting alias',doc.field_alias );
     this.citasData.addCita(aux_cita,false);
   }
 

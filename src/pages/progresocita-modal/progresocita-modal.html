@@ -99,8 +99,9 @@
                         <!--<ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)"  [disabled]="service.isCortesia" [checked]="this.progressController.checkChecked(service.Nid)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">{{moneyFormat(service.costo)}}</span> -->
                         <!--<ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)" [disabled]="this.progressController.isCortesiaOn(service.Nid)" [checked]="this.progressController.checkChecked(service.Nid)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">{{moneyFormat(service.costo)}}</span> -->
                         <span class="progress_input_section">
-                        <ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)" [disabled]="this.progressController.isCortesiaOn(service.Nid)" [checked]="this.progressController.checkChecked(service.Nid)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">{{moneyFormat(service.costo)}}</span> 
-                        </span>
+                        <!--<ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)" [disabled]="this.progressController.isCortesiaOn(service.Nid)" [checked]="this.progressController.checkChecked(service.Nid)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">{{moneyFormat(service.costo)}}</span> -->
+                        <ion-checkbox  (ionChange)="updateCheckedOptions(service.Nid,$event)" [checked]="this.progressController.checkChecked(service.Nid)"></ion-checkbox> {{service.title}}- <span class="fontSecondary">{{moneyFormat(service.costo)}}</span>     
+                    </span>
                         <span class="progress_input_section">
                             <span class="pis_btn" (click)="operateTimes(service.Nid,-1)" >-</span>
                             <span class="pis_many" *ngIf="this.progressController.checkChecked(service.Nid)">{{ service.times }}</span>
