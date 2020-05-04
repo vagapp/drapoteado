@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Checkbox } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Checkbox, Platform } from 'ionic-angular';
 import { UserDataProvider, userd } from '../../providers/user-data/user-data';
 import { PlanesDataProvider } from '../../providers/planes-data/planes-data';
 import { PermissionsProvider } from '../../providers/permissions/permissions';
@@ -25,6 +25,7 @@ import { ThrowStmt } from '@angular/compiler';
 import { TutorialProvider } from '../../providers/tutorial/tutorial';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
 import { CordovaAvailableProvider } from '../../providers/cordova-available/cordova-available';
+import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
 
 declare var Stripe;
 
@@ -110,7 +111,9 @@ get subsLeftOnNew(){
     public updater: UpdaterProvider,
     public subuserManager: SubusersManagerProvider,
     public userMan: DrupalUserManagerProvider,
-    public ica: CordovaAvailableProvider
+    public ica: CordovaAvailableProvider,
+    public ptl: Platform,
+    public iap: InAppPurchase
   ) {
     console.log('miplanactualpage');
       this.subuserManager.cargarSubusuarios();
@@ -121,11 +124,26 @@ get subsLeftOnNew(){
       conekta.init('https://cdn.conekta.io/js/latest/conekta.js', public_prod).then((c) => {    
       //Este success se ejecuta con el javascript se cargó correctamente
       console.log('conekta successs',c);
+
     }).catch((err) => {
       //Este error se ejecuta cuando el javascript no cargó, Ej. Error de conexión
       console.log(err);
     });
+
+    
+    this.ptl.ready().then(()=>{
+      if(this.isIos){
+      this.iap.getProducts([SubscriptionDataProvider.PLAN_BASIC_IOS_PID]).then((products)=>{
+        console.log('products',products);
+      });
+    }
+    }).catch((error)=>{
+    console.log(error);
+  });
+
+
   }
+  
 
   get isIos(){ return this.ica.isIos; }
   get docsleft(){ return this.subsData.checkForSub() ? this.subsManager.getDocAccountsLeft(this.subsData.subscription) : 0 ; }

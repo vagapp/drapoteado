@@ -221,6 +221,7 @@ async openReportGenerate( report:reportes = null ){
 
   async setReport(report:reportes = null){
     let aux_dates = DateProvider.getStartEndOFDate(this.chosenDate);
+    console.log('aux_dates',aux_dates);
     let aux_displayable = DateProvider.getDisplayableDates(this.chosenDate).date;
     const uax_treport = new reportes();
       uax_treport.author_uid = this.userData.userData.uid;

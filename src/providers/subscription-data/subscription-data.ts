@@ -16,6 +16,8 @@ export class SubscriptionDataProvider {
   static PLAN_GROUP:number = 1205 ;
   static PLAN_ANY:number = -1;
 
+  static PLAN_BASIC_IOS_PID:string = "com.tual.mx.pb1";
+
   static EXTRA_SUB:number = 39;
   static EXTRA_DOC:number = 329;
 
