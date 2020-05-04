@@ -72,6 +72,7 @@ import { FileTransfer } from '@ionic-native/file-transfer';
 import { FileOpener } from '@ionic-native/file-opener';
 import { PwaProvider } from '../providers/pwa/pwa';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
 
 
 
@@ -188,7 +189,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
     FileTransfer,
     FileOpener,
     PwaProvider,
-    InAppBrowser
+    InAppBrowser,
+    InAppPurchase
     //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })
