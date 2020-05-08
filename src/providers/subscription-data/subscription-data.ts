@@ -21,6 +21,8 @@ export class SubscriptionDataProvider {
   static EXTRA_SUB:number = 39;
   static EXTRA_DOC:number = 329;
 
+  loadproducts;
+
 
   subscription: subscriptions = null;
   Groups: subscriptions[] = new Array();

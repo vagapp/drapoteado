@@ -5,6 +5,12 @@
   Ionic pages and navigation.
 -->
 <ion-content padding>
+  <div *ngFor="let product of products">
+    {{
+      product.title
+    }}
+  <div (click)="buyproduct(product.productId)" > buy</div>
+  </div>
   <div class="loginContent">
     <span class="spanBlock titleFont titleFontSpan"><img class="main_logo" src="assets/imgs/logo-rojo-blanco.svg"/></span>
 <div class="login_chose" *ngIf="showLoginForm == false">

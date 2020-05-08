@@ -72,7 +72,7 @@ import { FileTransfer } from '@ionic-native/file-transfer';
 import { FileOpener } from '@ionic-native/file-opener';
 import { PwaProvider } from '../providers/pwa/pwa';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
+import { InAppPurchase } from '@ionic-native/in-app-purchase';
 
 
 
@@ -190,8 +190,7 @@ import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
     FileOpener,
     PwaProvider,
     InAppBrowser,
-    InAppPurchase
-    //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
+    InAppPurchase    //{provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
   ]
 })
 export class AppModule {}

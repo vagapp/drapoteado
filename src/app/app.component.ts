@@ -22,6 +22,9 @@ import { NetworkCheckerProvider } from '../providers/network-checker/network-che
 import { StorageProvider } from '../providers/storage/storage';
 import { Keyboard } from '@ionic-native/keyboard';
 import { PwaProvider } from '../providers/pwa/pwa';
+import { SubscriptionDataProvider } from '../providers/subscription-data/subscription-data';
+import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2';
+import { InAppPurchase } from '@ionic-native/in-app-purchase';
 
 
 
@@ -72,6 +75,8 @@ export class MyApp {
     public storage: StorageProvider,  
     public keyboard: Keyboard,
     public pwa: PwaProvider,
+    public iap: InAppPurchase,
+    public subsData: SubscriptionDataProvider
   ) {
     
     this.rootPage = 'LoginPage';
@@ -93,6 +98,20 @@ export class MyApp {
     
     this.splashScreen.hide();
     this.rootPage = 'LoginPage';
+    this.platform.ready().then(()=>{
+      let testconsole =  'console testing' ;    
+      console.log('trailstore plt redy',testconsole);
+      if(this.ica.isIos){
+        console.log('trailstore plt isios');
+        this.iap.getProducts([SubscriptionDataProvider.PLAN_BASIC_IOS_PID]).then((products)=>{
+          this.subsData.loadproducts = products;
+        console.log('trailstore products',products);
+        console.log(products);
+        }).catch((error)=>{console.log('trailstore error',error)});
+        }
+    });
+
+  
     this.platform.ready().then(() => {
 
       console.log('gonna add event listener');
@@ -107,7 +126,6 @@ export class MyApp {
         console.log('beforeinstallprompt',e);
       });
       this.statusBar.overlaysWebView(false);
-      this.keyboard.disableScroll(false);
       this.statusBar.styleLightContent();
       this.statusBar.backgroundColorByHexString('#C1272D');
       this.OneMan.init();

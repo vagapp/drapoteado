@@ -25,7 +25,7 @@ import { ThrowStmt } from '@angular/compiler';
 import { TutorialProvider } from '../../providers/tutorial/tutorial';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
 import { CordovaAvailableProvider } from '../../providers/cordova-available/cordova-available';
-import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
+import { InAppPurchase } from '@ionic-native/in-app-purchase';
 
 declare var Stripe;
 

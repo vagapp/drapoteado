@@ -19,9 +19,8 @@ export class CordovaAvailableProvider {
   }
   
   get isIos():boolean{
-    console.log('platform is ', this.plt.is('iOS') )
-    return true;
-    //return this.plt.is('iOS');
+    console.log('platform is ', this.plt.is('ios') )
+    return this.plt.is('ios');
   }
 
 

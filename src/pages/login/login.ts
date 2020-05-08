@@ -12,6 +12,7 @@ import { BaseUrlProvider } from '../../providers/base-url/base-url';
 import { StorageProvider } from '../../providers/storage/storage';
 import { PwaProvider } from '../../providers/pwa/pwa';
 import { CordovaAvailableProvider } from '../../providers/cordova-available/cordova-available';
+import { InAppPurchase } from '@ionic-native/in-app-purchase';
 //import { ToastController } from 'ionic-angular';
 //import { Debugger } from '../../providers/user-data/debugger';
 
@@ -48,8 +49,25 @@ export class LoginPage {
     public storage: StorageProvider,
     public pwa: PwaProvider,
     public cap: CordovaAvailableProvider,
-    public plt: Platform
+    public plt: Platform,
+    public iap: InAppPurchase,
+
+
   ) {
+  }
+
+
+  get products () {
+    return this.subscriptionManager.subsData.loadproducts;
+  }
+
+  buyproduct( productid ){
+    console.log('buyproduct', productid);
+    this.iap.buy(productid).then(data =>{ 
+      console.log("buy data", data );
+    }).catch((error)=>{
+      console.log('trailstore error buy',error);
+    });
   }
 
   ionViewDidLoad() {
