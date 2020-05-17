@@ -57,21 +57,18 @@ export class LoginPage {
   }
 
 
-  get products () {
-    return this.subscriptionManager.subsData.loadproducts;
-  }
+
 
   buyproduct( productid ){
     console.log('buyproduct', productid);
     this.iap.buy(productid).then(data =>{ 
-      console.log("buy data", data );
+    console.log("buy data", data );
     }).catch((error)=>{
-      console.log('trailstore error buy',error);
+    console.log('trailstore error buy',error);
     });
   }
 
   ionViewDidLoad() {
-
     if(this.isIos){
       this.showLoginForm = true;
     }

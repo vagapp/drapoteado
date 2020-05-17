@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { planes } from '../user-data/planes';
-import { Observable } from 'rxjs/Observable';
 import { subscriptions } from '../user-data/subscriptions';
+import { CordovaAvailableProvider } from '../cordova-available/cordova-available';
 
 /*
   Generated class for the SubscriptionDataProvider provider.
@@ -16,12 +16,9 @@ export class SubscriptionDataProvider {
   static PLAN_GROUP:number = 1205 ;
   static PLAN_ANY:number = -1;
 
-  static PLAN_BASIC_IOS_PID:string = "com.tual.mx.pb1";
-
+  //static PLAN_BASIC_IOS_PID:string = "com.tual.mx.pb1";
   static EXTRA_SUB:number = 39;
   static EXTRA_DOC:number = 329;
-
-  loadproducts;
 
 
   subscription: subscriptions = null;
@@ -45,11 +42,19 @@ export class SubscriptionDataProvider {
   get EXTRA_SUB(){ return SubscriptionDataProvider.EXTRA_SUB; }
   get EXTRA_DOC(){ return SubscriptionDataProvider.EXTRA_DOC; }
 
-  get isactive(){ let ret = 0; if(this.checkForPlan() ){ ret = this.subscription.field_active  } return ret;}
-  get invcode(){ let ret = ''; if(this.checkForSub() ){ ret =  this.subscription.field_invitation_code  } return ret;}
+  get isactive(){ let ret = 0; if(this.checkForPlan() ){ ret = this.subscription.field_active;  } return ret;}
+  get invcode(){ let ret = ''; if(this.checkForSub() ){ ret =  this.subscription.field_invitation_code;  } return ret;}
+  /**Este metodo retorna si esta suscripcion fue pagada utilizando la tienda de ios */
+  get is_ios_inapp():boolean{ throw new Error("NOT IMPLEMENTED");  }
+  /** retorna el string de la platafoma en que fue pagada esta suscripcion, de la lista de suscripciones en CordovaAvailableProvider provider */
+  get platform():string{
+    return CordovaAvailableProvider.PLATFORM_DEFAULT;
+  }
+  get PlatformComparer():boolean{ return true; }
 
   constructor() {
   }
+
 
   setDoctores(){
     this.docs = JSON.parse(this.subscription.field_doctores_json);

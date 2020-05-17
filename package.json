@@ -90,7 +90,7 @@
         "@ionic/app-scripts": "3.2.3",
         "typescript": "^2.7.2"
     },
-    "description": "Drap",
+    "description": "TUAL",
     "cordova": {
         "plugins": {
             "cordova-plugin-whitelist": {},

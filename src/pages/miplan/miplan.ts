@@ -60,9 +60,9 @@ export class MiplanPage {
 
   cantcancel = false;
 
-
   btgLayout:boolean = false;
-
+  wrongmsng='ptm';
+  
   //isgroup:boolean = false;
 
   get isgroup(){
@@ -129,22 +129,29 @@ get subsLeftOnNew(){
       //Este error se ejecuta cuando el javascript no cargó, Ej. Error de conexión
       console.log(err);
     });
-
-    
-    this.ptl.ready().then(()=>{
-      if(this.isIos){
-      this.iap.getProducts([SubscriptionDataProvider.PLAN_BASIC_IOS_PID]).then((products)=>{
-        console.log('products',products);
-      });
-    }
-    }).catch((error)=>{
-    console.log(error);
-  });
-
-
   }
   
 
+
+  
+  /**Especifica si esta tienda es la equivocada para la suscripcion que maneja este usuario */
+  get wrong_store_mode():boolean{ 
+    let ret = false; 
+    if(!(this.ica.ActivePlatform.localeCompare(this.subsData.platform) === 0)){
+      ret =true;       
+    }
+    return ret;
+  }
+  get wrong_store_msg():string{
+    let ret = 'default';
+    console.log('wrongstoremsg plat',this.subsData.platform);
+    switch(this.subsData.platform){
+      case CordovaAvailableProvider.PLATFORM_IOS: ret = 'Adquiriste tu suscripcion utilizando la aplicacion de iOs, porfavor utiliza esta version de la aplicacion para editar tu plan'; break;
+      default: ret = 'Tu suscripcion ha sido adquirida utilizando otra plataforma, por favor edita tu plan utilizando la version de TUAL de dicha plataforma';
+    }
+    console.log('wrong_store_msg',ret);
+    return ret;
+  }
   get isIos(){ return this.ica.isIos; }
   get docsleft(){ return this.subsData.checkForSub() ? this.subsManager.getDocAccountsLeft(this.subsData.subscription) : 0 ; }
   get cantidad(){ return this.subsData.checkForSub() ? Number(this.subsData.subscription.field_cantidad) : 0; }
@@ -332,11 +339,15 @@ get subsLeftOnNew(){
     console.log('editar end selectedplan',this.selectedPlan);
   }
 
-  planadmin(){
-    this.ica.directToWebApp();
-  }
-
   async guardar(){
+    switch(this.ica.ActivePlatform){
+      case CordovaAvailableProvider.PLATFORM_IOS: this.guardarIOS(); break;
+      default: this.guardarDefault();
+    }
+   
+  } 
+
+  async guardarDefault(){
     if(!this.guardar_basic_validation()) return false;
     if(!this.guardar_subusernumber_validation()) return false;
     //await this.checkBasicToGroup();
@@ -349,7 +360,40 @@ get subsLeftOnNew(){
     await this.suscribirse();
     }
     //this.onplanchange = false;
-  }  
+  }
+
+  async guardarIOS(){
+    //obtener id del plan a guardar
+    //obtener resultado y quedarse como pendejo
+    if(this.ica.isIos && this.planesData.iosLoad){
+      if(this.selected_ios_product_id){
+      this.iap.buy(this.selected_ios_product_id).then(data =>{ 
+      console.log("buy data", data );
+      }).catch((error)=>{
+      console.log('trailstore error buy',error);
+      });
+      }else{
+        console.log('No encontro un producto para esta combinacion');
+        this.alert.presentAlert('','No es posible ofrecer esta combinacion utilizando esta plataforma, porfavor seleccione otra combinacion');
+      }
+    }
+    
+  }
+  /**
+   * Regresa el id de la tienda de apple del product que se ajusta al plan seleccionado, si no lo encuentra regresa undefined
+   */
+  get selected_ios_product_id(){
+    let ret = undefined;
+    if(this.ica.isIos && this.planesData.iosLoad){
+      let product = this.planesData.triangulate_Iosproduct(this.selectedPlan,this.selectedAditionals,this.selectedAditionalsDocs);
+      if(product)
+      ret = product.iosid;
+    }
+    console.log('selected_ios_product_id ret is', ret);
+    return ret;
+  }
+  
+ 
 
   async guardarbtg(){
     if(!this.guardar_basic_validation()) return false;
@@ -449,13 +493,14 @@ get subsLeftOnNew(){
   operateExtra(operand:number){
     this.selectedAditionals += operand;
     if (this.selectedAditionals < 0) this.selectedAditionals = 0;
+    if (this.selectedAditionals > this.planesData.EXTRA_SUBUSERS_UPPERLIMIT){ this.selectedAditionals = this.planesData.EXTRA_SUBUSERS_UPPERLIMIT }
   }
 
   
   operateExtraDoc(operand:number){
-   
     this.selectedAditionalsDocs += operand;
     if (this.selectedAditionalsDocs < 0) this.selectedAditionalsDocs = 0;
+    if (this.selectedAditionalsDocs > this.planesData.EXTRA_DOCS_UPPERLIOMIT){ this.selectedAditionalsDocs = this.planesData.EXTRA_DOCS_UPPERLIOMIT }
    
   }
 
