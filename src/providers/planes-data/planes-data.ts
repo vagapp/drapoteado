@@ -85,6 +85,7 @@ export class PlanesDataProvider {
      * Carga los productos del appstore utilizando getProducts del plugin de in-app-purchase
      */
     load_inapppurchaseProducts(){
+      console.log('load_inapppurchaseProducts');
       this.iosLoad = false;
       this.plt.ready().then(()=>{
         if(this.cap.isIos){
@@ -96,8 +97,7 @@ export class PlanesDataProvider {
     }
 
     loadPlanes(){
-    this.load_inapppurchaseProducts();
-    this.requestPlanes().subscribe(
+      this.requestPlanes().subscribe(
       (val)=>{
         this.setPlanes(val);
       });

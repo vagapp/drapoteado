@@ -116,6 +116,7 @@ get subsLeftOnNew(){
     public iap: InAppPurchase
   ) {
     console.log('miplanactualpage');
+    this.planesData.load_inapppurchaseProducts();
       this.subuserManager.cargarSubusuarios();
       //conekta.init('https://cdn.conekta.io/js/latest/conekta.js','key_FSKYyuv2qSAEryHAMM7K1dA').then((c) => {
       let public_test ='key_GtbbRJpEKq8zTrtq3EPCTqQ';
@@ -347,7 +348,7 @@ get subsLeftOnNew(){
    
   } 
 
-  async guardarDefault(){
+  async guardarDefault(){ 
     if(!this.guardar_basic_validation()) return false;
     if(!this.guardar_subusernumber_validation()) return false;
     //await this.checkBasicToGroup();
