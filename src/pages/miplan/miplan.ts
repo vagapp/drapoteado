@@ -122,7 +122,7 @@ get subsLeftOnNew(){
       let public_test ='key_GtbbRJpEKq8zTrtq3EPCTqQ';
       let public_prod ='key_Wwir4csBhZwvzCny3TkeNUA';
       let public_bardo_test = 'key_NG1gDM4rychaJSjqha7KuHg';
-      conekta.init('https://cdn.conekta.io/js/latest/conekta.js', public_prod).then((c) => {    
+      conekta.init('https://cdn.conekta.io/js/latest/conekta.js', public_test).then((c) => {    
       //Este success se ejecuta con el javascript se cargó correctamente
       console.log('conekta successs',c);
 
@@ -342,7 +342,7 @@ get subsLeftOnNew(){
   }
 
   async guardar(){
-    this.guardarDefault();
+    //this.guardarDefault();
     switch(this.ica.ActivePlatform){
       case CordovaAvailableProvider.PLATFORM_IOS: this.guardarIOS(); break;
       default: this.guardarDefault();
@@ -519,7 +519,7 @@ get subsLeftOnNew(){
     //Tengo para crear una suscripcion, pero no para editar una suscripcion. vamos a hacer un codigo para editar suscripcion.
     //must set custom price.
     
-    if(this.subsManager.checkForSubscription()){ 
+    if(this.subsManager.checkForSubscription()){ //si tiene una suscripcion
 
       this.subsData.subscription.field_cantidad = this.selectedTotal;
       this.subsData.subscription.field_plan_sus = this.selectedPlan
@@ -542,7 +542,7 @@ get subsLeftOnNew(){
       aux_sus.field_plan_sus = this.selectedPlan;
       aux_sus.field_adicionales = Number(this.selectedAditionals);
       if(this.isgroup)aux_sus.field_docsadicionales = Number(this.selectedAditionalsDocs);
-      let res = await this.subsManager.subscribe( this.selectedPlanObject, aux_sus);
+      let res = await this.subsManager.subscribe_conekta( this.selectedPlanObject, aux_sus);
       this.loader.dismissLoader();
       //await this.CheckSuscriptionpayment();
     }

@@ -173,6 +173,7 @@ export class SubscriptionManagerProvider {
   
   /**
    * Este metodo subscribe el usuario actual al plan especificado pagando con el source especificado
+   * este metodo dejara de usarse en favor de metodos de suscripcion especificos de cada plataforma subscribe_conekta y subcribe_ios
    * @param plan 
    * @param source 
    */
@@ -182,6 +183,24 @@ export class SubscriptionManagerProvider {
     return ns_res;
     /*if(ns_res && this.checkForSubscription()) 
     await this.deletesSus(this.subsData.subscription).toPromise();*/
+  }
+
+/**
+   * Este metodo subscribe el usuario actual al plan especificado pagando con el source especificado en conekta
+   * @param plan 
+   * @param source 
+   */
+  async subscribe_conekta(plan:planes, suscription:subscriptions){
+    console.log('subscribe_conekta');
+    let ns_res = await this.getSubscribeObs(plan,suscription).toPromise();
+    console.log('trailcn1',ns_res['nid']);
+    let body = JSON.stringify({'susnid':9393/*Number(ns_res['nid'])*/,'costo':suscription.field_cantidad});
+    console.log('trailcn1',body);
+    let url = `${this.bu.endpointUrl}conektasus/`;
+    let ns_res_2 = await this.http.post(url,body).toPromise();
+    console.log(ns_res_2);
+    return ns_res_2
+    //return ns_res;
   }
 
   /**
@@ -221,6 +240,7 @@ export class SubscriptionManagerProvider {
     ret = this.generateNewSus(aux_sus);
     return ret;
   }
+
 
   /**
    * revisa que de plano este el dato de la suscripcion, si esto es falzo normalmente significa que no tiene suscripcion, aveces podria ser un error de plano.
