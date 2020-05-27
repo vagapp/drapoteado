@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UserDataProvider } from '../../providers/user-data/user-data';
-import { NavController, LoadingController, ModalController, PopoverController } from 'ionic-angular';
+import { NavController, LoadingController, ModalController, PopoverController, isActivatable } from 'ionic-angular';
 //import { Debugger } from '../../providers/user-data/debugger';
 import { Citas } from '../../providers/user-data/citas';
 import { NotificationsDataProvider } from '../../providers/notifications-data/notifications-data';
@@ -10,6 +10,7 @@ import { ReportPresentatorProvider } from '../../providers/report-presentator/re
 import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { StorageProvider } from '../../providers/storage/storage';
 import { PwaProvider } from '../../providers/pwa/pwa';
+import { CordovaAvailableProvider } from '../../providers/cordova-available/cordova-available';
 
 
 /**
@@ -44,7 +45,8 @@ export class HeaderComponent{
     public reportPresentator: ReportPresentatorProvider,
     public wss: WebsocketServiceProvider,
     public storage:StorageProvider,
-    public pwa: PwaProvider
+    public pwa: PwaProvider,
+    public ica: CordovaAvailableProvider
   ) {
     //this.pagename = this.navCtrl.getActive().name;
     this.authObservable = userData.AuthSubject;
@@ -190,7 +192,9 @@ export class HeaderComponent{
   }
 
 
-
+get showPlatfor(){
+  return this.ica.ActivePlatform;
+}
   
 
   get showPWA():Boolean{ return this.pwa.showInstall; }

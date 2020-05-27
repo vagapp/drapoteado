@@ -138,19 +138,20 @@ get subsLeftOnNew(){
   /**Especifica si esta tienda es la equivocada para la suscripcion que maneja este usuario */
   get wrong_store_mode():boolean{ 
     let ret = false; 
-    if(!(this.ica.ActivePlatform.localeCompare(this.subsData.platform) === 0)){
+    console.log(this.ica.ActivePlatform, this.subsData.platform);
+    if(this.subsData.platform.localeCompare(CordovaAvailableProvider.PLATFORM_NONE)!== 0 && !(this.ica.ActivePlatform.localeCompare(this.subsData.platform) === 0)){
       ret =true;       
     }
     return ret;
   }
   get wrong_store_msg():string{
     let ret = 'default';
-    console.log('wrongstoremsg plat',this.subsData.platform);
+    //console.log('wrongstoremsg plat',this.subsData.platform);
     switch(this.subsData.platform){
       case CordovaAvailableProvider.PLATFORM_IOS: ret = 'Adquiriste tu suscripcion utilizando la aplicacion de iOs, porfavor utiliza esta version de la aplicacion para editar tu plan'; break;
       default: ret = 'Tu suscripcion ha sido adquirida utilizando otra plataforma, por favor edita tu plan utilizando la version de TUAL de dicha plataforma';
     }
-    console.log('wrong_store_msg',ret);
+    //console.log('wrong_store_msg',ret);
     return ret;
   }
   get isIos(){ return this.ica.isIos; }
@@ -341,6 +342,7 @@ get subsLeftOnNew(){
   }
 
   async guardar(){
+    this.guardarDefault();
     switch(this.ica.ActivePlatform){
       case CordovaAvailableProvider.PLATFORM_IOS: this.guardarIOS(); break;
       default: this.guardarDefault();
@@ -364,8 +366,6 @@ get subsLeftOnNew(){
   }
 
   async guardarIOS(){
-    //obtener id del plan a guardar
-    //obtener resultado y quedarse como pendejo
     if(this.ica.isIos && this.planesData.iosLoad){
       if(this.selected_ios_product_id){
       this.iap.buy(this.selected_ios_product_id).then(data =>{ 
@@ -442,8 +442,14 @@ get subsLeftOnNew(){
     if(!this.selectedPlan){  ret = false; this.alert.presentAlert('','Es necesario seleccionar un plan'); }else{
       this.selectedPlanObject = this.planesData.getPlanById(this.selectedPlan);
     }
-   
-    if(!this.selectedMethod){ ret = false; this.alert.presentAlert('','Es necesario seleccionar un Método de Pago'); }
+    if(!this.guardar_payment_validation()){ ret = false;}
+    return ret;
+  }
+  guardar_payment_validation(){
+    let ret = true;
+    if(this.ica.ActivePlatform.localeCompare(CordovaAvailableProvider.PLATFORM_DEFAULT) === 0){
+      if(!this.selectedMethod){ ret = false; this.alert.presentAlert('','Es necesario seleccionar un Método de Pago'); }
+    }
     return ret;
   }
 
@@ -514,7 +520,7 @@ get subsLeftOnNew(){
     //must set custom price.
     
     if(this.subsManager.checkForSubscription()){ 
-   
+
       this.subsData.subscription.field_cantidad = this.selectedTotal;
       this.subsData.subscription.field_plan_sus = this.selectedPlan
       this.subsData.subscription.field_adicionales = Number(this.selectedAditionals);
@@ -527,17 +533,18 @@ get subsLeftOnNew(){
       this.loader.dismissLoader();
     }else{
       this.loader.dismissLoader();
-      await this.CheckSuscriptionpayment();
+      //await this.CheckSuscriptionpayment();
     }
     }else{
       let aux_sus = subscriptions.getEmptySuscription();
+      aux_sus.field_platform = this.ica.ActivePlatform;
       aux_sus.field_cantidad = this.selectedTotal;
       aux_sus.field_plan_sus = this.selectedPlan;
       aux_sus.field_adicionales = Number(this.selectedAditionals);
       if(this.isgroup)aux_sus.field_docsadicionales = Number(this.selectedAditionalsDocs);
       let res = await this.subsManager.subscribe( this.selectedPlanObject, aux_sus);
       this.loader.dismissLoader();
-      await this.CheckSuscriptionpayment();
+      //await this.CheckSuscriptionpayment();
     }
   }
 

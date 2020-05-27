@@ -48,9 +48,13 @@ export class SubscriptionDataProvider {
   get is_ios_inapp():boolean{ throw new Error("NOT IMPLEMENTED");  }
   /** retorna el string de la platafoma en que fue pagada esta suscripcion, de la lista de suscripciones en CordovaAvailableProvider provider */
   get platform():string{
-    return CordovaAvailableProvider.PLATFORM_DEFAULT;
+    
+    let ret = CordovaAvailableProvider.PLATFORM_NONE;
+    if(this.subscription)
+    ret = this.subscription.field_platform;
+    //return CordovaAvailableProvider.PLATFORM_IOS;
+    return ret;
   }
-  get PlatformComparer():boolean{ return true; }
 
   constructor() {
   }

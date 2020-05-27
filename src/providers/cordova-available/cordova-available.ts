@@ -6,15 +6,17 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 export class CordovaAvailableProvider {
   static PLATFORM_DEFAULT:string = 'default';
   static PLATFORM_IOS:string = 'ios';
+  static PLATFORM_NONE:string = 'none';
 
   constructor(public plt: Platform, public iab: InAppBrowser) {
   }
   /**Devuelve el nombre de la plataforma que esta activa */
-  get ActivePlatform():String{
+  get ActivePlatform():string{
     let ret = CordovaAvailableProvider.PLATFORM_DEFAULT;
     if(this.isIos){
       ret = CordovaAvailableProvider.PLATFORM_IOS;
     }
+    //ret = CordovaAvailableProvider.PLATFORM_IOS;
     return ret;
   }
   get isCordovaAvailable():boolean{

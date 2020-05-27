@@ -210,10 +210,6 @@ export class MyApp {
   openAviso(){this.nav.setRoot('AvisoprivacidadPage');}
   openFaq(){this.nav.setRoot('FaqPage');}
   openMiplan(){
-    if( this.ica.isIos){
-      this.ica.directToWebApp();
-    }
-    else
     this.nav.setRoot("MiplanPage");
   }
 

@@ -1,4 +1,7 @@
 import { planes } from './planes';
+import { IfObservable } from 'rxjs/observable/IfObservable';
+import { CordovaAvailableProvider } from '../cordova-available/cordova-available';
+
 //import { Debugger } from './debugger';
 
 
@@ -30,6 +33,7 @@ export class subscriptions{
     field_adicionales:number = 0;
     field_docsadicionales:number = 0;
     pay_state:string = null;
+    field_platform:string = null;
 
 
     constructor(){
@@ -74,6 +78,14 @@ export class subscriptions{
                 this.field_subusuarios.push(element['uid']);
             });
         }
+
+        console.log('fplttrail 1',input_data['field_platform']);
+        if(input_data['field_platform']){
+            this.field_platform = input_data['field_platform']['value'];
+            console.log('fplttrail 2 ',this.field_platform);
+        }else{
+            this.field_platform = CordovaAvailableProvider.PLATFORM_DEFAULT;
+        }
        
         //Debugger.log(['field_subusuarios at set data subscription',this.field_subusuarios]);
         try {
@@ -94,7 +106,6 @@ export class subscriptions{
     }
 
     getData():any{
-       
         let ret = null;
         if(this.nid !== null){
         ret =  {
@@ -114,7 +125,8 @@ export class subscriptions{
             field_cantidad:{und:[{value:this.field_cantidad}]},
             field_adicionales:{und:[{value:this.field_adicionales}]},
             field_docsadicionales:{und:[{value:this.field_docsadicionales}]},
-            field_pay_state:{und:[{value:this.pay_state}]}
+            field_pay_state:{und:[{value:this.pay_state}]},
+            field_platform:{und:[{value:this.field_platform}]}
         }
         if(this.field_doctores){
             this.field_doctores.forEach(element => {
@@ -126,8 +138,8 @@ export class subscriptions{
             ret.field_subusuarios.und.push(Number(element));
         });
         }
+
     }else{
-       
         ret =  {
             Nid:this.nid,
             type:"suscripcion",
@@ -144,7 +156,8 @@ export class subscriptions{
             field_cantidad:{und:[{value:this.field_cantidad}]},
             field_adicionales:{und:[{value:this.field_adicionales}]},
             field_docsadicionales:{und:[{value:this.field_docsadicionales}]},
-            field_pay_state:{und:[{value:this.pay_state}]}
+            field_pay_state:{und:[{value:this.pay_state}]},
+            field_platform:{und:[{value:this.field_platform}]}
         }
         if(this.field_doctores !== null){
             this.field_doctores.forEach(element => {
