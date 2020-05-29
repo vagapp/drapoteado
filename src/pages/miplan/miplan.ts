@@ -378,7 +378,6 @@ get subsLeftOnNew(){
         this.alert.presentAlert('','No es posible ofrecer esta combinacion utilizando esta plataforma, porfavor seleccione otra combinacion');
       }
     }
-    
   }
   /**
    * Regresa el id de la tienda de apple del product que se ajusta al plan seleccionado, si no lo encuentra regresa undefined
