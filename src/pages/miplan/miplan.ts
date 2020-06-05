@@ -371,15 +371,17 @@ get subsLeftOnNew(){
   async guardarIOS(){
     if(this.ica.isIos && this.planesData.iosLoad){
       if(this.selected_ios_product_id){
+        /*
       this.iap.buy(this.selected_ios_product_id).then(data =>{ 
       console.log("buy data", data );
       this.suscribirse();
-      this.transactionID =  data['TransactionId'];
+      this.transactionID =  data['transactionId'];
       }).catch((error)=>{
       console.log('trailstore error buy',error);
       });
+      */
+     this.transactionID =  'testTransactionID';//data['transactionId'];
       }else{
-        
         console.log('No encontro un producto para esta combinacion');
         this.alert.presentAlert('','No es posible ofrecer esta combinacion utilizando esta plataforma, porfavor seleccione otra combinacion');
       }
