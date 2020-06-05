@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ɵConsole } from '@angular/core';
 import { IonicPage, NavController, NavParams, Checkbox, Platform } from 'ionic-angular';
 import { UserDataProvider, userd } from '../../providers/user-data/user-data';
 import { PlanesDataProvider } from '../../providers/planes-data/planes-data';
@@ -26,6 +26,7 @@ import { TutorialProvider } from '../../providers/tutorial/tutorial';
 import { DrupalUserManagerProvider } from '../../providers/drupal-user-manager/drupal-user-manager';
 import { CordovaAvailableProvider } from '../../providers/cordova-available/cordova-available';
 import { InAppPurchase } from '@ionic-native/in-app-purchase';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 declare var Stripe;
 
@@ -61,7 +62,9 @@ export class MiplanPage {
   cantcancel = false;
 
   btgLayout:boolean = false;
-  wrongmsng='ptm';
+  wrongmsng='';
+
+  transactionID:string = null;
   
   //isgroup:boolean = false;
 
@@ -370,10 +373,13 @@ get subsLeftOnNew(){
       if(this.selected_ios_product_id){
       this.iap.buy(this.selected_ios_product_id).then(data =>{ 
       console.log("buy data", data );
+      this.suscribirse();
+      this.transactionID =  data['TransactionId'];
       }).catch((error)=>{
       console.log('trailstore error buy',error);
       });
       }else{
+        
         console.log('No encontro un producto para esta combinacion');
         this.alert.presentAlert('','No es posible ofrecer esta combinacion utilizando esta plataforma, porfavor seleccione otra combinacion');
       }
@@ -535,7 +541,9 @@ get subsLeftOnNew(){
       //await this.CheckSuscriptionpayment();
     }
     }else{
+      
       let aux_sus = subscriptions.getEmptySuscription();
+      if(this.ica.isIos){ aux_sus.apple_transaction_id = this.transactionID; }
       aux_sus.field_platform = this.ica.ActivePlatform;
       aux_sus.field_cantidad = this.selectedTotal;
       aux_sus.field_plan_sus = this.selectedPlan;

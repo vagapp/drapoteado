@@ -34,6 +34,7 @@ export class subscriptions{
     field_docsadicionales:number = 0;
     pay_state:string = null;
     field_platform:string = null;
+    apple_transaction_id:string = null;
 
 
     constructor(){
@@ -126,8 +127,10 @@ export class subscriptions{
             field_adicionales:{und:[{value:this.field_adicionales}]},
             field_docsadicionales:{und:[{value:this.field_docsadicionales}]},
             field_pay_state:{und:[{value:this.pay_state}]},
-            field_platform:{und:[{value:this.field_platform}]}
+            field_platform:{und:[{value:this.field_platform}]},
+            field_apple_transaction_id:{und:[{value:this.apple_transaction_id}]}
         }
+        if(this.apple_transaction_id){}
         if(this.field_doctores){
             this.field_doctores.forEach(element => {
             ret.field_doctores.und.push(Number(element));
@@ -157,7 +160,8 @@ export class subscriptions{
             field_adicionales:{und:[{value:this.field_adicionales}]},
             field_docsadicionales:{und:[{value:this.field_docsadicionales}]},
             field_pay_state:{und:[{value:this.pay_state}]},
-            field_platform:{und:[{value:this.field_platform}]}
+            field_platform:{und:[{value:this.field_platform}]},
+            field_apple_transaction_id:{und:[{value:this.apple_transaction_id}]}
         }
         if(this.field_doctores !== null){
             this.field_doctores.forEach(element => {
