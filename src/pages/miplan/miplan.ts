@@ -381,6 +381,7 @@ get subsLeftOnNew(){
       });
       */
      this.transactionID =  'testTransactionID';//data['transactionId'];
+     this.suscribirse();
       }else{
         console.log('No encontro un producto para esta combinacion');
         this.alert.presentAlert('','No es posible ofrecer esta combinacion utilizando esta plataforma, porfavor seleccione otra combinacion');
@@ -545,7 +546,7 @@ get subsLeftOnNew(){
     }else{
       
       let aux_sus = subscriptions.getEmptySuscription();
-      if(this.ica.isIos){ aux_sus.apple_transaction_id = this.transactionID; }
+      if(this.ica.isIos){ aux_sus.apple_transaction_id = this.transactionID; console.log('setting transaction id',this.transactionID); }
       aux_sus.field_platform = this.ica.ActivePlatform;
       aux_sus.field_cantidad = this.selectedTotal;
       aux_sus.field_plan_sus = this.selectedPlan;
