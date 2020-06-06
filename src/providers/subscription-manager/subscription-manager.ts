@@ -270,7 +270,7 @@ export class SubscriptionManagerProvider {
     console.log('sub removed and saved');
   }*/
 
-  generateNewSus( suscription ){return this.nodeManager.generateNewNode(suscription.getData());}
+  generateNewSus( suscription ){ console.log('generating sus data',suscription.getData()); return this.nodeManager.generateNewNode(suscription.getData());}
   updateSus( suscription ){return this.nodeManager.updateNode(suscription.getData());}
   deletesSus( suscription ){return this.nodeManager.deleteNode(suscription.getData());}
   generateUserSuscription(){

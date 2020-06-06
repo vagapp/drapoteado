@@ -141,7 +141,7 @@ get subsLeftOnNew(){
   /**Especifica si esta tienda es la equivocada para la suscripcion que maneja este usuario */
   get wrong_store_mode():boolean{ 
     let ret = false; 
-    console.log(this.ica.ActivePlatform, this.subsData.platform);
+    //console.log(this.ica.ActivePlatform, this.subsData.platform);
     if(this.subsData.platform.localeCompare(CordovaAvailableProvider.PLATFORM_NONE)!== 0 && !(this.ica.ActivePlatform.localeCompare(this.subsData.platform) === 0)){
       ret =true;       
     }
@@ -345,49 +345,46 @@ get subsLeftOnNew(){
   }
 
   async guardar(){
-    //this.guardarDefault();
+    if(!this.guardar_basic_validation()) return false;
+    if(!this.guardar_subusernumber_validation()) return false;
+        //await this.checkBasicToGroup();
+    if(this.isBasicToGroup() && this.checkShowUserList()){
+          this.setUsersSelected();
+          this.btgLayout = true;
+          console.log('changing from b to g');
+    }else{
+      this.guardarPlatforms();
+  }
+  } 
+
+  async guardarPlatforms(){
     switch(this.ica.ActivePlatform){
       case CordovaAvailableProvider.PLATFORM_IOS: this.guardarIOS(); break;
       default: this.guardarDefault();
     }
-   
-  } 
+  }
 
   async guardarDefault(){ 
-    if(!this.guardar_basic_validation()) return false;
-    if(!this.guardar_subusernumber_validation()) return false;
-    //await this.checkBasicToGroup();
-    if(this.isBasicToGroup() && this.checkShowUserList()){
-      this.setUsersSelected();
-      this.btgLayout = true;
-      console.log('changing from b to g');
-    }else{
-    //console.log('basictogroupcomplete');
     await this.suscribirse();
-    }
-    //this.onplanchange = false;
   }
 
   async guardarIOS(){
     if(this.ica.isIos && this.planesData.iosLoad){
       if(this.selected_ios_product_id){
-        /*
       this.iap.buy(this.selected_ios_product_id).then(data =>{ 
       console.log("buy data", data );
-      this.suscribirse();
       this.transactionID =  data['transactionId'];
+       this.suscribirse();
       }).catch((error)=>{
       console.log('trailstore error buy',error);
       });
-      */
-     this.transactionID =  'testTransactionID';//data['transactionId'];
-     this.suscribirse();
       }else{
         console.log('No encontro un producto para esta combinacion');
         this.alert.presentAlert('','No es posible ofrecer esta combinacion utilizando esta plataforma, porfavor seleccione otra combinacion');
       }
     }
   }
+
   /**
    * Regresa el id de la tienda de apple del product que se ajusta al plan seleccionado, si no lo encuentra regresa undefined
    */
@@ -526,9 +523,7 @@ get subsLeftOnNew(){
     this.loader.presentLoader('Suscribiendo ...');
     //Tengo para crear una suscripcion, pero no para editar una suscripcion. vamos a hacer un codigo para editar suscripcion.
     //must set custom price.
-    
     if(this.subsManager.checkForSubscription()){ //si tiene una suscripcion
-
       this.subsData.subscription.field_cantidad = this.selectedTotal;
       this.subsData.subscription.field_plan_sus = this.selectedPlan
       this.subsData.subscription.field_adicionales = Number(this.selectedAditionals);
@@ -544,15 +539,16 @@ get subsLeftOnNew(){
       //await this.CheckSuscriptionpayment();
     }
     }else{
-      
       let aux_sus = subscriptions.getEmptySuscription();
-      if(this.ica.isIos){ aux_sus.apple_transaction_id = this.transactionID; console.log('setting transaction id',this.transactionID); }
+      console.log('activeplatform', this.ica.ActivePlatform);
+      if(this.ica.ActivePlatform.localeCompare(CordovaAvailableProvider.PLATFORM_IOS) === 0){ aux_sus.apple_transaction_id = this.transactionID; console.log('setting transaction id',this.transactionID); }
       aux_sus.field_platform = this.ica.ActivePlatform;
       aux_sus.field_cantidad = this.selectedTotal;
       aux_sus.field_plan_sus = this.selectedPlan;
       aux_sus.field_adicionales = Number(this.selectedAditionals);
       if(this.isgroup)aux_sus.field_docsadicionales = Number(this.selectedAditionalsDocs);
-      let res = await this.subsManager.subscribe_conekta( this.selectedPlanObject, aux_sus);
+      console.log('selectedplan',this.selectedPlanObject);
+      let res = await this.subsManager.getSubscribeObs( this.selectedPlanObject, aux_sus).toPromise();
       this.loader.dismissLoader();
       //await this.CheckSuscriptionpayment();
     }
