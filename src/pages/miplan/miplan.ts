@@ -65,6 +65,7 @@ export class MiplanPage {
   wrongmsng='';
 
   transactionID:string = null;
+  receipt:string = null;
   
   //isgroup:boolean = false;
 
@@ -374,6 +375,7 @@ get subsLeftOnNew(){
       this.iap.buy(this.selected_ios_product_id).then(data =>{ 
       console.log("buy data", data );
       this.transactionID =  data['transactionId'];
+      this.receipt = data['receipt'];
        this.suscribirse();
       }).catch((error)=>{
       console.log('trailstore error buy',error);
@@ -541,7 +543,10 @@ get subsLeftOnNew(){
     }else{
       let aux_sus = subscriptions.getEmptySuscription();
       console.log('activeplatform', this.ica.ActivePlatform);
-      if(this.ica.ActivePlatform.localeCompare(CordovaAvailableProvider.PLATFORM_IOS) === 0){ aux_sus.apple_transaction_id = this.transactionID; console.log('setting transaction id',this.transactionID); }
+      if(this.ica.ActivePlatform.localeCompare(CordovaAvailableProvider.PLATFORM_IOS) === 0){ 
+        aux_sus.apple_transaction_id = this.transactionID; console.log('setting transaction id',this.transactionID); 
+        aux_sus.field_apple_receipt = this.receipt; console.log('setting transaction id',this.receipt); 
+      }
       aux_sus.field_platform = this.ica.ActivePlatform;
       aux_sus.field_cantidad = this.selectedTotal;
       aux_sus.field_plan_sus = this.selectedPlan;
