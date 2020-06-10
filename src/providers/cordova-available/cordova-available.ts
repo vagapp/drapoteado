@@ -16,7 +16,7 @@ export class CordovaAvailableProvider {
     if(this.isIos){
       ret = CordovaAvailableProvider.PLATFORM_IOS;
     }
-    ret = CordovaAvailableProvider.PLATFORM_IOS;
+    //ret = CordovaAvailableProvider.PLATFORM_IOS;
     return ret;
   }
   get isCordovaAvailable():boolean{

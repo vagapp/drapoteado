@@ -29,7 +29,8 @@ export class PlanesDataProvider {
   planes:planes[] = new Array(); //planes que ofrece drap.
   iosLoad:boolean = false; //bandera que especifica si ya se cargaron los productos de ios
   iosProducts:iosProduct[] = [ //lista que representa los productos que se venden en ios por medio de in-app-purchases.
-    {iosid:'com.tual.mx.pb1x',plannid:SubscriptionDataProvider.PLAN_BASIC,subusers:0,docs:0}
+    {iosid:'com.tual.mx.pb1x',plannid:SubscriptionDataProvider.PLAN_BASIC,subusers:0,docs:0},
+    {iosid:'com.tual.mx.pbx2',plannid:SubscriptionDataProvider.PLAN_GROUP,subusers:0,docs:0}
   ]
   static IOS_EXTRA_SUBUSERS_UPPERLIMIT = 5;
   static IOS_EXTRA_DOCS_UPPERLIOMIT = 5;

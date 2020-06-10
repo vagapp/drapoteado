@@ -340,7 +340,6 @@ get subsLeftOnNew(){
   }
 
   editar(){
-   
     this.activateChangePlanMode();
     console.log('editar end selectedplan',this.selectedPlan);
   }
@@ -376,7 +375,7 @@ get subsLeftOnNew(){
       console.log("buy data", data );
       this.transactionID =  data['transactionId'];
       this.receipt = data['receipt'];
-       this.suscribirse();
+      this.suscribirse();
       }).catch((error)=>{
       console.log('trailstore error buy',error);
       });
@@ -392,12 +391,11 @@ get subsLeftOnNew(){
    */
   get selected_ios_product_id(){
     let ret = undefined;
-    if(this.ica.isIos && this.planesData.iosLoad){
+    if(this.ica.ActivePlatform.localeCompare(CordovaAvailableProvider.PLATFORM_IOS) === 0 && this.planesData.iosLoad){
       let product = this.planesData.triangulate_Iosproduct(this.selectedPlan,this.selectedAditionals,this.selectedAditionalsDocs);
       if(product)
       ret = product.iosid;
     }
-    console.log('selected_ios_product_id ret is', ret);
     return ret;
   }
   
