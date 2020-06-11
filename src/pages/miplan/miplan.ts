@@ -536,7 +536,7 @@ get subsLeftOnNew(){
       this.loader.dismissLoader();
     }else{
       this.loader.dismissLoader();
-      //await this.CheckSuscriptionpayment();
+      await this.CheckSuscriptionpayment();
     }
     }else{
       let aux_sus = subscriptions.getEmptySuscription();
@@ -553,11 +553,12 @@ get subsLeftOnNew(){
       console.log('selectedplan',this.selectedPlanObject);
       let res = await this.subsManager.getSubscribeObs( this.selectedPlanObject, aux_sus).toPromise();
       this.loader.dismissLoader();
-      //await this.CheckSuscriptionpayment();
+      await this.CheckSuscriptionpayment();
     }
   }
 
   async CheckSuscriptionpayment(){
+    if(this.ica.ActivePlatform.localeCompare(CordovaAvailableProvider.PLATFORM_IOS) === 0 ){  window.location.reload(); return false;}
     let done = false;
     this.loader.presentLoader('Comprobando pago ...');
     while(!done){
