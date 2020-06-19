@@ -196,8 +196,8 @@
     </div>
 
 
-    <div class="informacion_pagos" >
-      <ng-container *ngIf="this.isIos">
+    <div class="informacion_pagos">
+      <ng-container  *ngIf="!isIos">
       <span class="spanBlock info_plan_title">Método de pago</span>
       <div class="bisectional pagos_block">
         <div class="bisectional_section metodos_pago"> 
@@ -207,7 +207,6 @@
          <div class="bisectional_section neuvo_metodo_pago"> 
             <div class="sources_wrapper"> <!-- INICIO STRIPE LISTED SOURCES-->
               <h3>Tarjetas activas</h3>
-              <div *ngIf="this.sources.length === 0" class="n
               <div *ngIf="this.sources.length === 0" class="nopayment_label"> No se ha agregado método de pago. </div>
               <ion-row *ngFor="let src of this.sources; let indice = index">
                 <ion-col col-10 [class.selectedsrc]="src.default" class="fact_src_unit">
@@ -228,18 +227,16 @@
                 <ion-col *ngIf="onplanchange == true " class="cont-buttons-srcs" col-2 no-padding>
                     <button ion-button icon-only full small clear (click)="selectCard(src)" tooltip="Predeterminar Tarjeta" positionV="bottom">
                         <ion-icon name="star"></ion-icon>
-                            
                   </button>
                   <button ion-button icon-only full small clear (click)="removeCard(indice,src)" tooltip="Eliminar Tarjeta" positionV="bottom">
                     <ion-icon name="close"></ion-icon>
-                   
                   </button>
                 </ion-col>
               </ion-row>
             </div> <!-- FIN STRIPE LISTED SOURCES-->  
         </div>
       </div>
-      </ng-container>
+    </ng-container>
       <div class="subtotal_pago">
         <span class="spanBlock midFont" *ngIf="this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{selectedTotal}}.00</span></span>
         <span class="spanBlock midFont" *ngIf="!this.onplanchange"> Total de suscripción mensual: <span class="fontPrimary">${{cantidad}}.00</span></span>

@@ -135,12 +135,8 @@ export class MyApp {
         if(this.userData.userData.uid !== 0){
           this.rootPage = 'HomePage';
           if(this.perm.checkUserPermission([UserDataProvider.TIPO_DOCTOR]) && !this.perm.checkUserSuscription([UserDataProvider.PLAN_ANY])){
-            if(this.ica.isIos){
-              this.ica.directToWebApp();
-            }else{
-            this.rootPage = 'MiplanPage';
-            }
-            }
+          this.rootPage = 'MiplanPage';
+          }
         }
         loading.dismiss();
         this.loaddate = new Date().getTime();

@@ -358,6 +358,7 @@ get subsLeftOnNew(){
   } 
 
   async guardarPlatforms(){
+    console.log("guardarPlatforms");
     switch(this.ica.ActivePlatform){
       case CordovaAvailableProvider.PLATFORM_IOS: this.guardarIOS(); break;
       default: this.guardarDefault();
@@ -365,10 +366,13 @@ get subsLeftOnNew(){
   }
 
   async guardarDefault(){ 
+    console.log("guardarDefault");
     await this.suscribirse();
   }
 
   async guardarIOS(){
+    console.log("guardarIOS");
+    console.log("this.planesData.iosLoad",this.planesData.iosLoad);
     if(this.ica.isIos && this.planesData.iosLoad){
       if(this.selected_ios_product_id){
       this.iap.buy(this.selected_ios_product_id).then(data =>{ 
@@ -402,6 +406,7 @@ get subsLeftOnNew(){
  
 
   async guardarbtg(){
+    console.log("guardarbtg");
     if(!this.guardar_basic_validation()) return false;
     if(!this.guardar_subusernumber_validation()) return false;
     await this.userTutorialSetup();
@@ -536,7 +541,7 @@ get subsLeftOnNew(){
       this.loader.dismissLoader();
     }else{
       this.loader.dismissLoader();
-      await this.CheckSuscriptionpayment();
+    await this.CheckSuscriptionpayment();
     }
     }else{
       let aux_sus = subscriptions.getEmptySuscription();

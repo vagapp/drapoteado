@@ -21,7 +21,6 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="CordovaWebViewEngine" value="CDVUIWebViewEngine" />
-    <preference name="WKWebViewOnly" value="true" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -44,6 +43,7 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <platform name="ios">
+        <preference name="WKWebViewOnly" value="true" />
         <config-file parent="NSAppTransportSecurity" platform="ios" target="*-Info.plist">
             <dict>
                 <key>NSAllowsArbitraryLoads</key>
