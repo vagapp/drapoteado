@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CordovaAvailableProvider } from '../cordova-available/cordova-available';
-import { OneSignal, OSNotificationPayload } from '@ionic-native/onesignal';
+//import { OneSignal, OSNotificationPayload } from '@ionic-native/onesignal';
 import { NotificationsManagerProvider } from '../notifications-manager/notifications-manager';
 import { UserDataProvider } from '../user-data/user-data';
 
@@ -17,7 +17,7 @@ export class OnesignalManagerProvider {
   onesignalSenderid:string = '470345987173';
 
   constructor(
-    private oneSignal: OneSignal,
+    //private oneSignal: OneSignal,
     private isco: CordovaAvailableProvider,
     private notiMan: NotificationsManagerProvider, 
     public userData: UserDataProvider
@@ -40,9 +40,9 @@ export class OnesignalManagerProvider {
       this.oneSignal.handleNotificationReceived().subscribe(data => this.onPushReceived(data.payload));
       this.oneSignal.handleNotificationOpened().subscribe(data => this.onPushOpened(data.notification.payload));
       this.oneSignal.endInit();
-    } */
+    }*/
   }
-
+/*
   private onPushReceived(payload: OSNotificationPayload) {
     //alert('Push recevied:' + payload.body);
     this.notiMan.cargarNotificaciones();
@@ -57,6 +57,6 @@ export class OnesignalManagerProvider {
     let saveres = await this.userData.getSavePlayerIDrequest(this.onseignalDid.userId).toPromise();
     console.log('resuñt of savind onesignal id',saveres);
   }
-  
+  */
 
 }
