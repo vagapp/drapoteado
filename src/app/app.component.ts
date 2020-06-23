@@ -24,6 +24,8 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { PwaProvider } from '../providers/pwa/pwa';
 import { SubscriptionDataProvider } from '../providers/subscription-data/subscription-data';
 import { InAppPurchase } from '@ionic-native/in-app-purchase';
+import { Device } from '@ionic-native/device/ngx';
+
 
 
 
@@ -51,7 +53,6 @@ export class MyApp {
   constructor(
     public platform: Platform, 
     public statusBar: StatusBar, 
-    public splashScreen: SplashScreen,
     public userData: UserDataProvider,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
@@ -75,9 +76,10 @@ export class MyApp {
     public keyboard: Keyboard,
     public pwa: PwaProvider,
     public iap: InAppPurchase,
-    public subsData: SubscriptionDataProvider
+    public subsData: SubscriptionDataProvider,
+    public dvic: Device
   ) {
-    
+    console.log('device vars',this.dvic.platform);
     this.rootPage = 'LoginPage';
     this.startdate = new Date().getTime();
     this.initializeApp();
@@ -95,7 +97,7 @@ export class MyApp {
 
   initializeApp(){
     
-    this.splashScreen.hide();
+    
     this.rootPage = 'LoginPage';
 
 /*
@@ -128,7 +130,7 @@ export class MyApp {
       this.statusBar.styleLightContent();
       this.statusBar.backgroundColorByHexString('#C1272D');
       this.OneMan.init();
-      if(this.ica.isCordovaAvailable){  this.splashScreen.hide();  }
+      if(this.ica.isCordovaAvailable){   }
       let loading = this.loadingCtrl.create({content: 'Bienvenido'});
       loading.present();
       this.initLoad().then(()=>{
@@ -201,7 +203,6 @@ export class MyApp {
   openServiciosPage(){this.nav.setRoot("ServiciosPage");}
   openUsuariosPage(){this.nav.setRoot("UsuariosPage");}
   openReportesPage(){this.nav.setRoot("ReportesgenPage");}
-  openFacturacionPage(){this.nav.setRoot("FacturacionPage");}
   openterminos(){this.nav.setRoot('TerminosycondicionesPage');}
   openAviso(){this.nav.setRoot('AvisoprivacidadPage');}
   openFaq(){this.nav.setRoot('FaqPage');}

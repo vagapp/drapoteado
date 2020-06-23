@@ -1,4 +1,4 @@
-import { Component, ɵConsole } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, LoadingController } from 'ionic-angular';
 import { UserDataProvider, userd  } from '../../providers/user-data/user-data';
 //import { Debugger } from '../../providers/user-data/debugger';
@@ -18,7 +18,7 @@ import { WsMessengerProvider } from '../../providers/ws-messenger/ws-messenger';
 import { StorageProvider } from '../../providers/storage/storage';
 
 
-declare var Stripe;
+//declare var Stripe;
 
 /**
  * Generated class for the RegisterModalPage page.
@@ -59,7 +59,7 @@ export class RegisterModalPage {
     return this.ica.isCordovaAvailable;
   }
 
-  stripe = Stripe('pk_test_4CJTbKZki9tC21cGTx4rLPLO');
+  //stripe = Stripe('pk_test_4CJTbKZki9tC21cGTx4rLPLO');
   card: any;
   sources:sources[] = new Array();
   selected_source:sources = null;

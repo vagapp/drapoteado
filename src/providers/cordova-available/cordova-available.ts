@@ -9,6 +9,9 @@ export class CordovaAvailableProvider {
   static PLATFORM_NONE:string = 'none';
 
   constructor(public plt: Platform, public iab: InAppBrowser) {
+    this.plt.ready().then((readySource) => {
+    console.log('platforms',this.plt.platforms());
+  });
   }
   /**Devuelve el nombre de la plataforma que esta activa */
   get ActivePlatform():string{
@@ -16,7 +19,7 @@ export class CordovaAvailableProvider {
     if(this.isIos){
       ret = CordovaAvailableProvider.PLATFORM_IOS;
     }
-    ret = CordovaAvailableProvider.PLATFORM_IOS;
+    //ret = CordovaAvailableProvider.PLATFORM_IOS;
     return ret;
   }
   get isCordovaAvailable():boolean{

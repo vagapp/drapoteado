@@ -28,7 +28,7 @@ import { CordovaAvailableProvider } from '../../providers/cordova-available/cord
 import { InAppPurchase } from '@ionic-native/in-app-purchase';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
-declare var Stripe;
+//declare var Stripe;
 
 
 /**
@@ -134,6 +134,7 @@ get subsLeftOnNew(){
       //Este error se ejecuta cuando el javascript no cargó, Ej. Error de conexión
       console.log(err);
     });
+    console.log(' miplan ISIOS', this.isIos);
   }
   
 

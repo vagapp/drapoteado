@@ -5,9 +5,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
 import { Clipboard } from '@ionic-native/clipboard';
-import { OneSignal } from '@ionic-native/onesignal';
+//import { OneSignal } from '@ionic-native/onesignal';
 
 import { ConektaComponent } from '../components/conekta/conekta';
 import { ComponentsModule } from '../components/components.module';
@@ -73,6 +72,7 @@ import { FileOpener } from '@ionic-native/file-opener';
 import { PwaProvider } from '../providers/pwa/pwa';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { InAppPurchase } from '@ionic-native/in-app-purchase';
+import { Device } from '@ionic-native/device/ngx';
 
 
 
@@ -138,11 +138,10 @@ import { InAppPurchase } from '@ionic-native/in-app-purchase';
     Calendar,
     StatusBar,
     Clipboard,
-    SplashScreen,
+    Device,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserDataProvider,
     HttpClient,
-    OneSignal,
     CitasDataProvider,
     DateProvider,
     BaseUrlProvider,

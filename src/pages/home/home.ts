@@ -87,9 +87,7 @@ export class HomePage {
     Modal.present({});
   }
 
-  openFacturacion(){
-    this.navCtrl.setRoot("FacturacionPage");
-  }
+  
   openRegister(){
     let Modal = this.modalCtrl.create("RegisterModalPage", undefined, { cssClass: "bigModal" });
     Modal.present({});
